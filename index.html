@@ -26,52 +26,41 @@
     <script type="module" src="scripts/database.js"></script>
 </head>
 
-<body id="top">
+<body id="top" >
     <div class="navbar-container">
         <div class="nav-bar">
             <div class="nav-bar-title">
-                <img src="assets/logo/UMKLlogo.webp" class="nav-bar-logo" alt="UMKL logo">
-                <h2>UMKL</h2>
+                <a class="nav-bar-link-no-padding" href="#top"><img src="assets/logo/UMKLlogo.webp" class="nav-bar-logo" alt="UMKL logo"></a>
+                <a class="nav-bar-link-no-padding" href="#top"><h2>UMKL</h2></a>
             </div>
             <nav class="nav-flex">
                 <ul>
                     <li><a href="#top">Home</a></li>
-                    <li><a href="#">Rules</a></li>
-                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Matches</a></li>
+                    <li><a href="pages/faq/">Rules/FAQ</a></li>
                     <li><a class="nav-bar-link" target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
                     <li><a href="#" class="settingsBoxOpener">Settings</a></li>
                 </ul>
             </nav>
         </div>
     </div>
-
     <div class="content">
-        <p><b>UMKL Home Page</b><br />
+        <h1 class="below-title">UMKL Home Page</h1>
         Welcome to the University Mario Kart League site.</p>
 
         <h3>About</h3>
-        <p>University Mario Kart League (UMKL) brings together students and universities across the UK
-        to compete in matches of Mario Kart as a team!</p>
-        <p>Matches of 6v6 Mario Kart and the team with the highest
-        amount of points will win that season!</p>
-
-
-
-        <br/><br/>
-        <div class="box">
-            <b>Test pages</b><br />
-            <a href="faq/">FAQ</a><br />
-        </div>
+        <p class="below-title">University Mario Kart League (UMKL) brings together students and universities across the UK
+        to compete in matches of Mario Kart as a team across seasons!</p>
+        <p >Strategy and teamwork is essential in these matches of 6v6 Mario Kart as the team with the most
+        points will emerge victorious!</p>
 
         <p>Welcome to my website! Feel free to execute some SQL...
-            try your best!
+        try your best!
         <input id="SQLBox" style="width: 50%;"></input>
         <button id="executeSQLButton">Execute SQL</button></p>
-        <code id="SQLOutput">
 
-        </code>
+        <div class="codeBox" id="SQLOutput"></div>
 
-        <br/><br/>
         <img src="assets/image/mariopiano.gif" alt="Mario wearing headphones playing a keyboard">
         <img src="assets/image/construction.gif" alt="under construction">
 
@@ -131,7 +120,7 @@
                 a
                 a
                 a
-            </pre>
+        </pre>
     </div>
 </body>
 

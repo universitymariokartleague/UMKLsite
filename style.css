@@ -12,6 +12,7 @@
 :root.light-theme {
     --text-color: #111111;
     --bg-color: #fff;
+    --scrollbar-color: #bc0839;
 
     --accent-color: #bc0839;
 
@@ -32,6 +33,7 @@
 :root.dark-theme {
     --text-color: #fff;
     --bg-color: #111111;
+    --scrollbar-color: #bc0839;
 
     --accent-color: #bc0839;
 
@@ -70,18 +72,22 @@ body {
     background-color: var(--bg-color);
 }
 
+.content {
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 65px 20px 20px 20px;
+    text-decoration: none;
+    word-wrap: break-word;
+    font-size: var(--default-font-size);
+}
+
 h1,h2,h3 {
     margin: 0;
     padding: 0;
 }
 
-.content {
-    margin: 0 auto;
-    max-width: 800px;
-    padding: 50px 20px 20px 20px;
-    text-decoration: none;
-    word-wrap: break-word;
-    font-size: var(--default-font-size);
+.below-title {
+    margin: 0;
 }
 
 /* nav bar */
@@ -98,7 +104,7 @@ h1,h2,h3 {
 .navbar-container {
     background-color: var(--accent-color);
     position: fixed;
-    z-index: 100px;
+    z-index: 100;
     width: 100%;
     top: 0;
 }
@@ -146,18 +152,31 @@ h1,h2,h3 {
     padding: 15px 0px 15px 0px;
 }
 
-.nav-bar a {
+.nav-selected {
+    background-color: #f785a4;
+}
+
+.nav-flex a {
     color: #fff !important;
     text-decoration: none;
     padding: 10px;
 }
 
-.nav-bar a:hover {
+.nav-flex a:hover {
     background-color: #f54876;
     transition: background-color 0.1s;
 }
 
-@media screen and (max-width: 620px) {
+.nav-bar-link-no-padding{
+    color: #fff !important;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 768px) {
+    .content {
+        padding: 115px 20px 20px 20px;
+    }    
+
     .navbar-container {
         padding-top: 10px;
     }
@@ -240,6 +259,12 @@ a[target="_blank"].nav-bar-link::after {
     vertical-align: sub;
 }
 
+@media screen and (max-width: 768px) {
+    a[target="_blank"].nav-bar-link::after {
+        content: inherit;
+    }
+}
+
 .box {
     border: 1px solid var(--text-color);
     border-radius: 10px;
@@ -289,3 +314,15 @@ code {
     border: var(--code-border);
     border-radius: 5px;
 }
+
+.codeBox {
+    font-size: 14px;
+    padding: 15px;
+    line-height: 1.6;
+    background-color: rgba(15, 15, 15, 0.5);
+    outline: 1px solid rgba(255, 255, 255, 0.3);
+    /* -webkit-backdrop-filter: blur(15px); */
+    /* backdrop-filter: blur(15px); */
+    border-radius: 10px;
+    color: #fff;
+  }

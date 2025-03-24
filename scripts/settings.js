@@ -48,9 +48,7 @@ function generateSettingsPanel() {
     try {
         settingsBoxJS.innerHTML = `
         <div class="setting-sub-heading">Apperance</div><hr />
-        Theme<button id="toggleTheme" class="settings-option">${localStorage.getItem("darktheme") == 1 ? "Dark" : "Light"} theme</button><br />
-        Ambient Mode <button class="settings-option">OFF</button>
-        <span class="settings-extra-info">(only available in dark theme)</span><br />
+        Page Theme<button id="toggleTheme" class="settings-option">${localStorage.getItem("darktheme") == 1 ? "Dark" : "Light"} theme</button><br />
 
         <div class="setting-sub-heading">Localstorage<span class="settings-extra-info"> (data stored on your device)</span></div><hr />
        
