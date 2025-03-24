@@ -10,7 +10,7 @@ const sqlPromise = initSqlJs(config);
 let db; // Define db in a broader scope
 
 async function initDatabase() {
-    const dataPromise = fetch("assets/database/umkl_db.db").then(res => res.arrayBuffer());
+    const dataPromise = fetch("database/umkl_db.db").then(res => res.arrayBuffer());
     const [SQL, buf] = await Promise.all([sqlPromise, dataPromise]);
     db = new SQL.Database(new Uint8Array(buf)); // Assign to the broader scoped db
 }

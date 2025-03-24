@@ -26,8 +26,8 @@
     --button-outline: 2px solid rgba(0, 0, 0, 0.6);
 
     --code-color: #000;
-    --code-bg-color: rgba(0, 0, 0, 0.1);
-    --code-border: 1px solid rgba(0, 0, 0, 0.8);
+    --code-bg-color: rgba(0, 0, 0, 0.02);
+    --code-border: 1px solid rgba(0, 0, 0, 0.6);
 }
 
 :root.dark-theme {
@@ -81,13 +81,17 @@ body {
     font-size: var(--default-font-size);
 }
 
-h1,h2,h3 {
+h1,
+h2,
+h3,
+h4 {
     margin: 0;
     padding: 0;
 }
 
 .below-title {
-    margin: 0;
+    margin-top: 0;
+
 }
 
 /* nav bar */
@@ -130,7 +134,8 @@ h1,h2,h3 {
     justify-content: center;
 }
 
-.nav-bar-title h1, .nav-bar-title h2 {
+.nav-bar-title h1,
+.nav-bar-title h2 {
     margin-left: 5px;
 }
 
@@ -167,7 +172,7 @@ h1,h2,h3 {
     transition: background-color 0.1s;
 }
 
-.nav-bar-link-no-padding{
+.nav-bar-link-no-padding {
     color: #fff !important;
     text-decoration: none;
 }
@@ -175,7 +180,7 @@ h1,h2,h3 {
 @media screen and (max-width: 768px) {
     .content {
         padding: 115px 20px 20px 20px;
-    }    
+    }
 
     .navbar-container {
         padding-top: 10px;
@@ -192,7 +197,7 @@ h1,h2,h3 {
 
     .navbar-container .nav-bar ul li {
         margin: 0;
-    }    
+    }
 }
 
 .rounding {
@@ -325,4 +330,4 @@ code {
     /* backdrop-filter: blur(15px); */
     border-radius: 10px;
     color: #fff;
-  }
+}
