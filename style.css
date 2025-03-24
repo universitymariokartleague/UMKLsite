@@ -158,7 +158,8 @@ h4 {
 }
 
 .nav-selected {
-    background-color: #f785a4;
+    background-color: #ffffff20;
+    border: #ffffff50 solid 1px;
 }
 
 .nav-flex a {
