@@ -172,11 +172,6 @@ h4 {
     transition: background-color 0.1s;
 }
 
-.nav-bar-link-no-padding {
-    color: #fff !important;
-    text-decoration: none;
-}
-
 @media screen and (max-width: 768px) {
     .content {
         padding: 115px 20px 20px 20px;
