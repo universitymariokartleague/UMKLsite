@@ -96,7 +96,6 @@ function generateEventListeners() {
 
 function checkTheme() {
     darkThemeEnabled = parseInt(localStorage.getItem("darktheme"));
-    console.log(darkThemeEnabled)
     if (isNaN(darkThemeEnabled)) {
         darkThemeEnabled = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 1 : 0;
     }
