@@ -1,3 +1,4 @@
+const SQLOutput = document.getElementById("SQLOutput")
 const initSqlJs = window.initSqlJs;
 
 const config = {
@@ -15,8 +16,16 @@ async function initDatabase() {
 }
 
 async function executeSQL(sqlcmd) {
+    SQLOutput.innerHTML = ""
+
     if (!db) {
         console.error("Database is not initialized.");
+        return;
+    }
+
+    // Check if the command is a SELECT statement
+    if (!sqlcmd.trim().toUpperCase().startsWith("SELECT")) {
+        console.error("Only SELECT commands are allowed.");
         return;
     }
 
@@ -28,7 +37,8 @@ async function executeSQL(sqlcmd) {
     stmt.bind({ $start: 1, $end: 2 });
     while (stmt.step()) {
         const row = stmt.getAsObject();
-        console.log('Here is a row: ' + JSON.stringify(row));
+        SQLOutput.innerHTML += JSON.stringify(row)
+        console.log(JSON.stringify(row));
     }
 }
 
