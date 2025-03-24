@@ -96,10 +96,17 @@ function generateEventListeners() {
 
 function checkTheme() {
     darkThemeEnabled = parseInt(localStorage.getItem("darktheme"));
+    console.log(darkThemeEnabled)
+    if (isNaN(darkThemeEnabled)) {
+        darkThemeEnabled = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 1 : 0;
+    }
     if (darkThemeEnabled == true) {
         meta.setAttribute('content', 'dark');
         root.classList.add('dark-theme');
+        localStorage.setItem("darktheme", darkThemeEnabled ? 1 : 0);
         console.log("Set dark theme");
+    } else {
+        meta.setAttribute('content', 'light');
     }
     setTimeout(() => {
         document.body.style.transition = "background-color 0.2s ease-out";
