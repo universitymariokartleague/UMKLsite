@@ -4,7 +4,8 @@
 }
 
 .discordRolePreviewContainer {
-    min-height: 340px;
+    height: 340px;
+    -webkit-overflow-scrolling: touch;
 }
 
 .discordRolePreview {
