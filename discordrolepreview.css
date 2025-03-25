@@ -1,0 +1,27 @@
+#discordRoleiFrame {
+    height: 310px;
+    width: 250px;
+}
+
+.discordRolePreviewContainer {
+    min-height: 340px;
+}
+
+.discordRolePreview {
+    padding: 0 0 0 1vw;
+    float: right;
+}
+
+/* For mobile devices */
+@media (max-width: 768px) {
+    #discordRoleiFrame {
+        width: 100%;
+    }
+
+    .discordRolePreview {
+        float: none;
+        margin-top: 0;
+        width: auto;
+        padding: 15px 0;
+    }
+}

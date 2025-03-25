@@ -10,6 +10,7 @@
     <link rel="shortcut icon" href="assets/brand/favicon.webp" type="image/webp">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="settings.css">
+    <link rel="stylesheet" href="discordrolepreview.css">
     <meta name="color-scheme" content="dark light">
 
     <meta property="og:title" content="University Mario Kart League" />
@@ -132,26 +133,31 @@
 
         <hr>
 
-        <h4>What is a hex colour code?</h4>
-        <p class="below-title">
-            A hex colour code is 6 (hexadecimal) characters that represent a colour. You can use the colour
-            picker below or a access a hex colour picker here: <a target="_blank"
-                href="https://www.google.com/search?q=hex+colour+picker">hex colour picker | google</a>.
-        </p>
+        <div class="discordRolePreviewContainer">
+            <h4>What is a hex colour code?</h4>
 
-        <input id="colorPicker" type="color" />
-        Current colour: <code><span id="currentColor">#1BAA8B</span></code>
+            <div class="discordRolePreview">
+                <iframe id="discordRoleiFrame" src="pages/faq/discordrole.html" frameborder="0"></iframe>
+            </div>
 
-        <iframe src="assets/pages/faq/discordrole.html" frameborder="0"></iframe>
+            <p class="below-title">
+                A hex colour code is 6 (hexadecimal) characters that represent a single colour. You can use the colour
+                picker below or a access a hex colour picker here: <br><a target="_blank"
+                    href="https://www.google.com/search?q=hex+colour+picker">hex colour picker | google</a>.
+            </p>
 
-        <img class="image" src="assets/image/faq/discordrole.gif"
-            alt="A gif of the Discord role colour screen, switching through colours on the rainbow">
-        <p>
-            Please note that Discord doesn't accept <code>#000000</code> (complete black) or <code>#FFFFFF</code>
-            (complete white)
-            as a hex code. Your team colour is the role colour your team will receive on Discord, so
-            consider colour contrast with dark and light modes when picking.
-        </p>
+            <div>
+                <input id="colorPicker" type="color" />
+                Current colour: <span id="currentColor"><code>#1BAA8B</code></span>    
+            </div>
+
+            <p>
+                Please note that Discord doesn't accept <code>#000000</code> (complete black) or <code>#FFFFFF</code>
+                (complete white)
+                as a hex code. Your team colour is the role colour your team will receive on Discord, so
+                consider colour contrast with dark and light modes when picking.
+            </p>
+        </div>
 
         <hr>
 
@@ -193,17 +199,63 @@
 </body>
 
 <script>
+    let colorAttractMode = true;
+    let attractIndex = 0;
+    let colorsToCycle = [
+        "#FF6262",
+        "#FFAE7F",
+        "#FFF588",
+        "#67FF8A",
+        "#65B5FF",
+        "#CF82FF",
+        "#FF9AD0"
+    ];
+
     const colorPicker = document.getElementById("colorPicker");
     const currentColor = document.getElementById("currentColor");
-
     const defaultColor = "#1BAA8B";
+
+    const iframe = document.getElementById("discordRoleiFrame");
 
     colorPicker.value = defaultColor;
     colorPicker.addEventListener("input", updateCurrentColor, false);
     colorPicker.addEventListener("change", updateCurrentColor, false);
 
+    iframe.addEventListener('load', function () {
+        sendColorToIframe(colorPicker.value);
+        cycleThroughAttractColors();
+    });
+
+    let attractInterval;
+
+    function cycleThroughAttractColors() {
+        attractInterval = setInterval(() => {
+            if (colorAttractMode) {
+                colorPicker.value = colorsToCycle[attractIndex];
+                sendColorToIframe(colorPicker.value);
+                currentColor.innerHTML = `<code>${colorPicker.value.toUpperCase()}</code>`;
+                attractIndex = (attractIndex + 1) % colorsToCycle.length;
+            } else {
+                clearInterval(attractInterval);
+            }
+        }, 1000);
+    }
+
     function updateCurrentColor(event) {
-        currentColor.innerHTML = colorPicker.value
+        colorAttractMode = false
+        if (colorPicker.value == "#ffffff" || colorPicker.value == "#000000") {
+            currentColor.innerHTML = `<code>${colorPicker.value.toUpperCase()}</code> ⚠︎`
+        } else {
+            currentColor.innerHTML = `<code>${colorPicker.value.toUpperCase()}</code>`
+        }
+        sendColorToIframe(colorPicker.value);
+    }
+
+    function sendColorToIframe(color) {
+        iframe.contentWindow.postMessage({
+            type: 'setRoleColor',
+            color: color
+        }, '*'); // Replace '*' with your iframe's origin for security
     }
 </script>
 
