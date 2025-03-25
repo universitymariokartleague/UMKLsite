@@ -1,10 +1,11 @@
 #discordRoleiFrame {
     height: 310px;
     width: 250px;
+    -webkit-overflow-scrolling: touch;
 }
 
 .discordRolePreviewContainer {
-    height: 340px;
+    min-height: 340px;
     -webkit-overflow-scrolling: touch;
 }
 
