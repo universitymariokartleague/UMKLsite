@@ -21,8 +21,11 @@
     <meta name="twitter:card" content="summary_large_image">
 
     <!-- Scripts -->
-    <link rel="modulepreload" href="scripts/settings.js" as="script" crossorigin>
     <script>
+        const meta = document.querySelector('meta[name="color-scheme"]');
+        const root = document.querySelector(":root");
+        let darkThemeEnabled;
+
         function checkTheme() {
             darkThemeEnabled = parseInt(localStorage.getItem("darktheme"));
             if (isNaN(darkThemeEnabled)) {
@@ -36,10 +39,8 @@
             } else {
                 meta.setAttribute('content', 'light');
             }
-            setTimeout(() => {
-                document.body.style.transition = "background-color 0.2s ease-out";
-            }, 0);
-        }
+        };
+
         checkTheme();
     </script>
     <script type="module" src="scripts/settings.js"></script>
