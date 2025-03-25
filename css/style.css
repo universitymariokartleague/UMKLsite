@@ -131,7 +131,7 @@ footer {
     align-items: center;
     justify-content: center;
     height: 100%;
-    width: 80%;
+    width: calc(100% - 40px);
     max-width: 800px;
     margin: auto;
 }
@@ -162,7 +162,7 @@ footer {
 }
 
 .navbar-container .nav-bar ul li {
-    margin: 0 10px;
+    margin: 0 2px;
     padding: 15px 0px 15px 0px;
 }
 
@@ -202,6 +202,7 @@ footer {
 
     .navbar-container .nav-bar ul li {
         margin: 0;
+        font-size: 0.9em;
     }
 }
 
