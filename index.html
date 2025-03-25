@@ -21,6 +21,27 @@
     <meta name="twitter:card" content="summary_large_image">
 
     <!-- Scripts -->
+    <link rel="modulepreload" href="scripts/settings.js" as="script" crossorigin>
+    <script>
+        function checkTheme() {
+            darkThemeEnabled = parseInt(localStorage.getItem("darktheme"));
+            if (isNaN(darkThemeEnabled)) {
+                darkThemeEnabled = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 1 : 0;
+            }
+            if (darkThemeEnabled == true) {
+                meta.setAttribute('content', 'dark');
+                root.classList.add('dark-theme');
+                localStorage.setItem("darktheme", darkThemeEnabled ? 1 : 0);
+                console.log("Set dark theme");
+            } else {
+                meta.setAttribute('content', 'light');
+            }
+            setTimeout(() => {
+                document.body.style.transition = "background-color 0.2s ease-out";
+            }, 0);
+        }
+        checkTheme();
+    </script>
     <script type="module" src="scripts/settings.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/sql-wasm.js'></script>
     <script type="module" src="scripts/database.js"></script>
