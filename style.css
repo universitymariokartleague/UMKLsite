@@ -158,7 +158,7 @@ h4 {
 
 .nav-selected {
     background-color: #ffffff20;
-    border: #ffffff50 solid 1px;
+    outline: #ffffff50 solid 1px;
 }
 
 .nav-flex a {
@@ -313,6 +313,7 @@ code {
     background-color: var(--code-bg-color);
     border: var(--code-border);
     border-radius: 5px;
+    user-select: all;
 }
 
 .codeBox {

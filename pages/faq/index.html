@@ -134,22 +134,23 @@
 
         <h4>What is a hex colour code?</h4>
         <p class="below-title">
-            A hex colour code is 6 (hexadecimal) characters that represent a colour. You can
-            access a hex colour picker here: <a target="_blank"
+            A hex colour code is 6 (hexadecimal) characters that represent a colour. You can use the colour
+            picker below or a access a hex colour picker here: <a target="_blank"
                 href="https://www.google.com/search?q=hex+colour+picker">hex colour picker | google</a>.
         </p>
 
         <input id="colorPicker" type="color" />
+        Current colour: <code><span id="currentColor">#1BAA8B</span></code>
 
+        <iframe src="assets/pages/faq/discordrole.html" frameborder="0"></iframe>
 
-        <img class="image" src="assets/image/faq/googlecolorpicker.png" alt="A screenshot of the Google colour picker">
         <img class="image" src="assets/image/faq/discordrole.gif"
             alt="A gif of the Discord role colour screen, switching through colours on the rainbow">
         <p>
             Please note that Discord doesn't accept <code>#000000</code> (complete black) or <code>#FFFFFF</code>
             (complete white)
             as a hex code. Your team colour is the role colour your team will receive on Discord, so
-            consider colour contrast with dark and light mode when picking.
+            consider colour contrast with dark and light modes when picking.
         </p>
 
         <hr>
@@ -192,33 +193,18 @@
 </body>
 
 <script>
-    let colorPicker;
-    const defaultColor = "#0000ff";
+    const colorPicker = document.getElementById("colorPicker");
+    const currentColor = document.getElementById("currentColor");
 
-    window.addEventListener("load", startup, false);
+    const defaultColor = "#1BAA8B";
 
-    function startup() {
-        colorPicker = document.getElementById("colorPicker");
-        colorPicker.value = defaultColor;
-        colorPicker.addEventListener("input", updateFirst, false);
-        colorPicker.addEventListener("change", updateAll, false);
-        colorPicker.select();
+    colorPicker.value = defaultColor;
+    colorPicker.addEventListener("input", updateCurrentColor, false);
+    colorPicker.addEventListener("change", updateCurrentColor, false);
+
+    function updateCurrentColor(event) {
+        currentColor.innerHTML = colorPicker.value
     }
-
-    function updateFirst(event) {
-        const p = document.querySelector("p");
-        if (p) {
-            p.style.color = event.target.value;
-        }
-    }
-
-    function updateAll(event) {
-        document.querySelectorAll("p").forEach((p) => {
-            p.style.color = event.target.value;
-        });
-    }
-
-
 </script>
 
 </html>

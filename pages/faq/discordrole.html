@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="../../">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Role Screen</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display");
+
+        body {
+            background-color: #36393f;
+            color: #dcddde;
+            font-family: "Red Hat Display", 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+        }
+        
+        .message {
+            display: flex;
+            padding: 16px;
+        }
+        
+        /* Discord Theme Colors */
+        .theme-light {
+            background-color: #fcfcfc;
+            color: #2e3338;
+        }
+        .theme-dark {
+            background-color: #333239;
+            color: #dcddde;
+        }
+        .theme-darker {
+            background-color: #212025;
+            color: #dcddde;
+        }
+        .theme-darkest {
+            background-color: #0d0c0f;
+            color: #dcddde;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 16px;
+            background-color: #5865f2;
+        }
+        
+        .message-content {
+            flex: 1;
+        }
+        
+        .username {
+            font-weight: 500;
+            margin-right: 8px;
+            color: #5865f2; /* Role color (blue in this case) */
+        }
+        
+        .timestamp {
+            color: #72767d;
+            font-size: 0.75em;
+            font-weight: 400;
+        }
+        
+        .message-text {
+            margin-bottom: 4px;
+            line-height: 1.375;
+        }
+    </style>
+</head>
+<body style="user-select: none;">
+    <!-- Light Theme -->
+    <div class="message theme-light">
+        <img src="assets/image/faq/wumpus.png" class="avatar" alt="Wumpus Avatar">
+        <div class="message-content">
+            <div>
+                <span class="username">Wumpus</span>
+                <span class="timestamp">12:20</span>
+            </div>
+            <div class="message-text">rocks are really old</div>
+        </div>
+    </div>
+    
+    <!-- Dark Theme -->
+    <div class="message theme-dark">
+        <img src="assets/image/faq/wumpus.png" class="avatar" alt="Wumpus Avatar">
+        <div class="message-content">
+            <div>
+                <span class="username">Wumpus</span>
+                <span class="timestamp">12:20</span>
+            </div>
+            <div class="message-text">rocks are really old</div>
+        </div>
+    </div>
+    
+    <!-- Darker Theme -->
+    <div class="message theme-darker">
+        <img src="assets/image/faq/wumpus.png" class="avatar" alt="Wumpus Avatar">
+        <div class="message-content">
+            <div>
+                <span class="username">Wumpus</span>
+                <span class="timestamp">12:20</span>
+            </div>
+            <div class="message-text">rocks are really old</div>
+        </div>
+    </div>
+
+    <!-- Darkest Theme -->
+    <div class="message theme-darkest">
+        <img src="assets/image/faq/wumpus.png" class="avatar" alt="Wumpus Avatar">
+        <div class="message-content">
+            <div>
+                <span class="username">Wumpus</span>
+                <span class="timestamp">12:20</span>
+            </div>
+            <div class="message-text">rocks are really old</div>
+        </div>
+    </div>
+</body>
+</html>
