@@ -115,8 +115,8 @@ checkTheme();
 
 
 // keyboard shortcuts
-document.addEventListener('keydown', (event) => {
-    if ( event.key === 't') {
-        toggleTheme();
-    }
-});
+// document.addEventListener('keydown', (event) => {
+//     if ( event.key === 't') {
+//         toggleTheme();
+//     }
+// });
