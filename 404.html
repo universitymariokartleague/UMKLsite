@@ -10,16 +10,6 @@
     <link rel="stylesheet" href="css/settings.css">
     <meta name="color-scheme" content="dark light">
 
-    <meta property="og:title" content="University Mario Kart League" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://umkl.co.uk" />
-    <meta property="og:image" content="https://umkl.co.uk/assets/brand/UMKL_Banner_embed.png" />
-    <meta property="og:description" content="The University Mario Kart League (UMKL) site" />
-    <meta name="theme-color" content="#bc0839">
-
-    <!-- Include this to make the og:image larger -->
-    <meta name="twitter:card" content="summary_large_image">
-
     <!-- Scripts -->
     <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){darkThemeEnabled=parseInt(localStorage.getItem("darktheme")),isNaN(darkThemeEnabled)&&(darkThemeEnabled=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1==darkThemeEnabled?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),localStorage.setItem("darktheme",darkThemeEnabled?1:0),console.log("Set dark theme")):meta.setAttribute("content","light")}checkTheme();</script>
     <script type="module" src="scripts/settings.js"></script>
