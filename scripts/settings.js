@@ -78,7 +78,6 @@ function toggleTheme() {
         root.classList.add("light-theme");
         root.classList.remove("dark-theme");  
     }
-
     localStorage.setItem("darktheme", darkThemeEnabled ? 1 : 0);
 
     generateSettingsPanel();
