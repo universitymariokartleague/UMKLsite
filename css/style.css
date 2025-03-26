@@ -28,6 +28,10 @@
     --code-color: #000;
     --code-bg-color: rgba(0, 0, 0, 0.02);
     --code-border: 1px solid rgba(0, 0, 0, 0.6);
+
+    --metion-color: #1f2e7f;
+    --mention-bg-color: rgba(88, 101, 242, 0.25);
+    --mention-border: 1px solid rgba(31, 46, 127, 0.6);
 }
 
 :root.dark-theme {
@@ -49,6 +53,10 @@
     --code-color: #fff;
     --code-bg-color: rgba(0, 0, 0, 0.3);
     --code-border: 1px solid rgba(255, 255, 255, 0.2);
+
+    --metion-color: #98acff;
+    --mention-bg-color: rgba(88, 101, 242, 0.25);
+    --mention-border: 1px solid rgba(152, 172, 255, 0.6);
 }
 
 /*adjust mobile text inflation*/
@@ -331,6 +339,33 @@ code {
 }
 
 .codeBox {
+    font-size: 14px;
+    padding: 15px;
+    line-height: 1.6;
+    background-color: rgba(15, 15, 15, 0.5);
+    outline: 1px solid rgba(255, 255, 255, 0.3);
+    /* -webkit-backdrop-filter: blur(15px); */
+    /* backdrop-filter: blur(15px); */
+    border-radius: 10px;
+    color: #fff;
+}
+
+mention,
+.mentionBox {
+    font-family: Cascadia Code, FMono-Regular, Consolas, DejaVu Sans Mono, Liberation Mono, Menlo, monospace !important;
+}
+
+mention {
+    color: var(--metion-color);
+    font-size: 15px;
+    padding: 2px 5px;
+    background-color: var(--mention-bg-color);
+    border: var(--mention-border);
+    border-radius: 5px;
+    user-select: all;
+}
+
+.mentionBox {
     font-size: 14px;
     padding: 15px;
     line-height: 1.6;
