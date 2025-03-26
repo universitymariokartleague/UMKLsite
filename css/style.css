@@ -190,7 +190,7 @@ footer {
     transition: background-color 0.1s;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 767px) {
     main {
         padding: 115px 20px 20px 20px;
     }
@@ -218,7 +218,7 @@ footer {
     border-radius: 10px;
 }
 
-.nolinkline {
+.no-underline-link {
     text-decoration: none;
 }
 
@@ -282,7 +282,7 @@ a[target="_blank"].nav-bar-link::after {
     vertical-align: sub;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 767px) {
     a[target="_blank"].nav-bar-link::after {
         content: inherit;
     }
@@ -303,7 +303,7 @@ button {
     color: var(--button-color);
     border: var(--button-border);
     cursor: pointer;
-    transition: transform 0.1s, color 0.08s linear;
+    transition: transform 0.1s, color 0.08s, outline 0.05s;
 }
 
 button:active {
@@ -351,12 +351,12 @@ code {
     color: #fff;
 }
 
-mention,
+.mention,
 .mentionBox {
     font-family: Cascadia Code, FMono-Regular, Consolas, DejaVu Sans Mono, Liberation Mono, Menlo, monospace !important;
 }
 
-mention {
+.mention {
     color: var(--metion-color);
     font-size: 15px;
     padding: 2px 5px;
@@ -378,12 +378,32 @@ mention {
     color: #fff;
 }
 
+.teamBoxContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 10px;
+    row-gap: 10px;
+}
 
 .teamBox {
+    border: 1px solid var(--text-color);
     border-radius: 10px;
     padding: 20px;
-    border: 1px solid;
-    margin: 20px 0;
+    min-width: 300px;
+    width: 100%;
+    text-decoration: none; 
+    color: inherit;
+}
+
+@media screen and (max-width: 767px) {
+    .teamBoxContainer {
+        grid-template-columns: 1fr;
+    }
+}
+
+button.teamBox {
+    border: 0px solid #FFFFFF00;
+    outline: 1px solid var(--text-color);
 }
 
 .positionBox {
@@ -408,4 +428,10 @@ hr {
     display:flex;
     justify-content: space-between;
     align-items: center;
+    border-left: 8px solid #FFF
+}
+
+.team-logo {
+    width: 40px; 
+    height: 40px;
 }

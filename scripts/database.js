@@ -1,3 +1,5 @@
+export { setupDB, isDBLoaded, runSQL };
+
 const SQLOutput = document.getElementById("SQLOutput")
 const initSqlJs = window.initSqlJs;
 
@@ -6,8 +8,7 @@ const config = {
 };
 
 const sqlPromise = initSqlJs(config);
-
-let db; // Define db in a broader scope
+let db;
 
 async function initDatabase() {
     const dataPromise = fetch("database/umkl_db.db").then(res => res.arrayBuffer());
@@ -16,8 +17,6 @@ async function initDatabase() {
 }
 
 async function executeSQL(sqlcmd) {
-    SQLOutput.innerHTML = ""
-
     if (!db) {
         console.error("Database is not initialized.");
         return;
@@ -33,23 +32,32 @@ async function executeSQL(sqlcmd) {
     const stmt = db.prepare(sqlcmd);
     stmt.getAsObject({ $start: 1, $end: 1 }); // {col1:1, col2:111}
 
+
     // Bind new values
     stmt.bind({ $start: 1, $end: 2 });
+    let data = [];
     while (stmt.step()) {
         const row = stmt.getAsObject();
-        SQLOutput.innerHTML += JSON.stringify(row)
-        console.log(JSON.stringify(row));
+        data.push(row);
     }
+
+    return data
 }
 
-async function main() {
+async function setupDB() {
+    console.log("Initialising database")
     await initDatabase(); // Ensure the database is initialized
     // executeSQL("SELECT * FROM tournament_entry");
 }
 
-main(); // Run the main function to initialize the database and execute SQL
+async function isDBLoaded() {
+    return !!db;
+}
 
-document.getElementById("executeSQLButton").addEventListener("click", async function() {
-    const sqlcmd = document.getElementById("SQLBox").value;
-    await executeSQL(sqlcmd);
-});
+async function runSQL(sqlcmd) {
+    console.log("Running: " + sqlcmd)
+    // await initDatabase();
+    return await executeSQL(sqlcmd);
+}
+
+setupDB();

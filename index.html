@@ -23,8 +23,6 @@
     <!-- Scripts -->
     <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){darkThemeEnabled=parseInt(localStorage.getItem("darktheme")),isNaN(darkThemeEnabled)&&(darkThemeEnabled=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1==darkThemeEnabled?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),localStorage.setItem("darktheme",darkThemeEnabled?1:0),console.log("Set dark theme")):meta.setAttribute("content","light")}checkTheme();</script>
     <script type="module" src="scripts/settings.js"></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/sql-wasm.js'></script>
-    <script type="module" src="scripts/database.js"></script>
 </head>
 
 
@@ -39,7 +37,7 @@
             <nav class="nav-flex">
                 <ul>
                     <li><a class="nav-selected" href="#top">Home</a></li>
-                    <li><a href="#">Teams</a></li>
+                    <li><a href="pages/teams/">Teams</a></li>
                     <li><a href="#">Matches</a></li>
                     <li><a href="pages/faq/">FAQs</a></li>
                     <li><a class="nav-bar-link" target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
@@ -56,13 +54,6 @@
         to compete in matches of Mario Kart as a team!</p>
         <p >Strategy and teamwork is essential in these matches of 6v6 Mario Kart, as the team with the most
         points across the season will emerge victorious!</p>
-
-        <p>Welcome to my website! Feel free to execute some SQL...
-        try your best!
-        <input id="SQLBox" style="width: 50%;"></input>
-        <button id="executeSQLButton">Execute SQL</button></p>
-
-        <div class="codeBox" id="SQLOutput"></div>
 
         <img src="assets/image/mariopiano.gif" alt="Mario wearing headphones playing a keyboard">
         <img src="assets/image/construction.gif" alt="under construction">
