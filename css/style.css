@@ -224,7 +224,7 @@ footer {
 
 .image {
     width: 100%;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
 .anchor {
@@ -351,12 +351,11 @@ code {
     color: #fff;
 }
 
-.mention,
-.mentionBox {
+mention {
     font-family: Cascadia Code, FMono-Regular, Consolas, DejaVu Sans Mono, Liberation Mono, Menlo, monospace !important;
 }
 
-.mention {
+mention {
     color: var(--metion-color);
     font-size: 15px;
     padding: 2px 5px;
@@ -364,18 +363,6 @@ code {
     border: var(--mention-border);
     border-radius: 5px;
     user-select: all;
-}
-
-.mentionBox {
-    font-size: 14px;
-    padding: 15px;
-    line-height: 1.6;
-    background-color: rgba(15, 15, 15, 0.5);
-    outline: 1px solid rgba(255, 255, 255, 0.3);
-    /* -webkit-backdrop-filter: blur(15px); */
-    /* backdrop-filter: blur(15px); */
-    border-radius: 10px;
-    color: #fff;
 }
 
 .teamBoxContainer {
