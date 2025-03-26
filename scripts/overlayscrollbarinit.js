@@ -7,7 +7,7 @@ const osInstance = OverlayScrollbars(document.body, {
         theme: "os-theme-dark",
         clickScroll: true,
         autoHide: 'scroll',
-        autoHideDelay: 2000,
+        autoHideDelay: 3000,
     },
 });
 
@@ -21,5 +21,6 @@ function changeScrollbarTheme(dark) {
 
 // Listen for theme change event
 document.addEventListener('themeChange', (event) => {
+    console.log("Changing scrollbar theme")
     changeScrollbarTheme(event.detail.darkThemeEnabled);
 });

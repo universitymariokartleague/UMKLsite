@@ -78,7 +78,6 @@ function toggleTheme() {
         root.classList.add("light-theme");
         root.classList.remove("dark-theme");  
     }
-    changeScrollbarTheme(darkThemeEnabled)
     localStorage.setItem("darktheme", darkThemeEnabled ? 1 : 0);
     sendThemeChangeEvent();
     generateSettingsPanel();
@@ -99,25 +98,11 @@ function generateEventListeners() {
     document.getElementById('clearLocalStorage').addEventListener('click', clearLocalStorage);
 }
 
-function checkTheme() {
+function checkThemeAfterLoaded() {
     darkThemeEnabled = parseInt(localStorage.getItem("darktheme"));
-    if (isNaN(darkThemeEnabled)) {
-        darkThemeEnabled = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 1 : 0;
-    }
-    if (darkThemeEnabled == true) {
-        meta.setAttribute('content', 'dark');
-        root.classList.add('dark-theme');
-        localStorage.setItem("darktheme", darkThemeEnabled ? 1 : 0);
-        console.log("Set dark theme");
-    } else {
-        meta.setAttribute('content', 'light');
-    }
     sendThemeChangeEvent();
-    setTimeout(() => {
-        document.body.style.transition = "background-color 0.2s ease-out";
-    }, 0);
 }
-checkTheme();
+checkThemeAfterLoaded();
 
 // keyboard shortcuts
 document.addEventListener('keydown', (event) => {
