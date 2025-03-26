@@ -434,4 +434,6 @@ hr {
 .team-logo {
     width: 40px; 
     height: 40px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
 }

@@ -9,7 +9,7 @@ const teamBoxFormatHTML = `
         <hr>
         <div class="{{className}} team">
             <span>{{teamName}}</span>
-            <img src="{{logoSrc}}" alt="{{teamName}} team logo" class="team-logo">
+            <img onload="this.style.opacity=1" src="{{logoSrc}}" alt="{{teamName}} team logo" class="team-logo">
         </div>
         <hr>
         <div class="Institution">{{institution}}</div>
@@ -52,39 +52,6 @@ function generateTeamBoxes(teamData) {
     console.info("Done teamdata boxes")
 }
 
-// generateTeamBox({
-//     teamName: "York",
-//     institution: "University of York",
-//     teamColor: "#1BAA8B",
-//     position: "1",
-//     points: "500",
-// })
-
-// generateTeamBox({
-//     teamName: "Staffs",
-//     institution: "University of Staffordshire",
-//     teamColor: "#A11212",
-//     position: "2",
-//     points: "200",
-// })
-
-// generateTeamBox({
-//     teamName: "Staffs",
-//     institution: "University of Staffordshire",
-//     teamColor: "#A11212",
-//     position: "2",
-//     points: "200",
-// })
-
-// generateTeamBox({
-//     teamName: "Staffs",
-//     institution: "University of Staffordshire",
-//     teamColor: "#A11212",
-//     position: "2",
-//     points: "200",
-// })
-
-// setupDB()
 document.addEventListener("DOMContentLoaded", () => {
     waitForDBToInit()
 });
@@ -95,7 +62,11 @@ async function waitForDBToInit() {
     if (!dbLoaded) {
         setTimeout(waitForDBToInit, 100); // Check again after 1 second
     } else {
-        let data = await runSQL("SELECT * FROM TEAM")
-        generateTeamBoxes(data)
+        dbDoneLoading()
     }
+}
+
+async function dbDoneLoading() {
+    let data = await runSQL("SELECT * FROM TEAM")
+    generateTeamBoxes(data)
 }
