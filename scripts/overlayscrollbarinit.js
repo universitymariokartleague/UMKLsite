@@ -1,20 +1,25 @@
 const { OverlayScrollbars, ClickScrollPlugin } = OverlayScrollbarsGlobal;
 
-// optional: use the ClickScrollPlugin to make the option "scrollbars.clickScroll: true" available
 OverlayScrollbars.plugin(ClickScrollPlugin);
 
-OverlayScrollbars(document.body, {
+const osInstance = OverlayScrollbars(document.body, {
     scrollbars: {
+        theme: "os-theme-dark",
         clickScroll: true,
+        autoHide: 'scroll',
+        autoHideDelay: 2000,
     },
 });
 
-const scrollElement = document.querySelector('#top');
-
-const osInstance = OverlayScrollbars(scrollElement, {
-    className: "os-theme-light"
-});
-
-function changeTheme(dark) {
-    osInstance.options({ className: dark ? 'os-theme-dark' : 'os-theme-light'})
+function changeScrollbarTheme(dark) {
+    osInstance.options({
+        scrollbars: {
+            theme: dark == 0 ? 'os-theme-dark' : 'os-theme-light'
+        }
+    });
 }
+
+// Listen for theme change event
+document.addEventListener('themeChange', (event) => {
+    changeScrollbarTheme(event.detail.darkThemeEnabled);
+});

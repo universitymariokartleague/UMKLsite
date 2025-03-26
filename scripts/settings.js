@@ -78,9 +78,15 @@ function toggleTheme() {
         root.classList.add("light-theme");
         root.classList.remove("dark-theme");  
     }
+    changeScrollbarTheme(darkThemeEnabled)
     localStorage.setItem("darktheme", darkThemeEnabled ? 1 : 0);
-
+    sendThemeChangeEvent();
     generateSettingsPanel();
+}
+
+function sendThemeChangeEvent() {
+    const themeChangeEvent = new CustomEvent('themeChange', { detail: { darkThemeEnabled } });
+    document.dispatchEvent(themeChangeEvent);
 }
 
 function clearLocalStorage() {
@@ -106,6 +112,7 @@ function checkTheme() {
     } else {
         meta.setAttribute('content', 'light');
     }
+    sendThemeChangeEvent();
     setTimeout(() => {
         document.body.style.transition = "background-color 0.2s ease-out";
     }, 0);
