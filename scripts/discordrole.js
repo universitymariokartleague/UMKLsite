@@ -1,58 +1,43 @@
-let colorAttractMode = true;
-let attractIndex = 0;
-let colorsToCycle = [
-    "#FF6262",
-    "#FFAE7F",
-    "#FFF588",
-    "#67FF8A",
-    "#65B5FF",
-    "#CF82FF",
-    "#FF9AD0"
+const colorsToCycle = [
+    "#FF6262", "#FFAE7F", "#FFF588", "#67FF8A", "#65B5FF", "#CF82FF", "#FF9AD0"
 ];
-
+const defaultColor = "#1BAA8B";
 const colorPicker = document.getElementById("colorPicker");
 const currentColor = document.getElementById("currentColor");
-const defaultColor = "#1BAA8B";
-
 const iframe = document.getElementById("discordRoleiFrame");
 
-colorPicker.value = defaultColor;
-colorPicker.addEventListener("input", updateCurrentColor, false);
-colorPicker.addEventListener("change", updateCurrentColor, false);
+let colorAttractMode = true;
+let attractIndex = 0;
+let attractInterval;
 
-iframe.addEventListener('load', function () {
+colorPicker.value = defaultColor;
+colorPicker.addEventListener("input", updateCurrentColor);
+colorPicker.addEventListener("change", updateCurrentColor);
+
+iframe.addEventListener('load', () => {
     sendColorToIframe(colorPicker.value);
     cycleThroughAttractColors();
 });
 
-let attractInterval;
-
 function cycleThroughAttractColors() {
     attractInterval = setInterval(() => {
-        if (colorAttractMode) {
-            colorPicker.value = colorsToCycle[attractIndex];
-            sendColorToIframe(colorPicker.value);
-            currentColor.innerHTML = `<code>${colorPicker.value.toUpperCase()}</code>`;
-            attractIndex = (attractIndex + 1) % colorsToCycle.length;
-        } else {
+        if (!colorAttractMode) {
             clearInterval(attractInterval);
+            return;
         }
+        colorPicker.value = colorsToCycle[attractIndex];
+        updateCurrentColor();
+        attractIndex = (attractIndex + 1) % colorsToCycle.length;
     }, 1000);
 }
 
 function updateCurrentColor() {
-    colorAttractMode = false
-    if (colorPicker.value == "#ffffff" || colorPicker.value == "#000000") {
-        currentColor.innerHTML = `<code>${colorPicker.value.toUpperCase()}</code> ⚠︎ See below note`
-    } else {
-        currentColor.innerHTML = `<code>${colorPicker.value.toUpperCase()}</code>`
-    }
+    colorAttractMode = false;
+    const colorValue = colorPicker.value.toUpperCase();
+    currentColor.innerHTML = `<code>${colorValue}</code>${(colorValue === "#FFFFFF" || colorValue === "#000000") ? ' ⚠︎ See below note' : ''}`;
     sendColorToIframe(colorPicker.value);
 }
 
 function sendColorToIframe(color) {
-    iframe.contentWindow.postMessage({
-        type: 'setRoleColor',
-        color: color
-    }, '*'); // Replace '*' with your iframe's origin for security
+    iframe.contentWindow.postMessage({ type: 'setRoleColor', color }, '*'); // Replace '*' with your iframe's origin for security
 }
