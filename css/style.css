@@ -101,7 +101,11 @@ h4 {
     padding: 0;
 }
 
-.below-title {
+.p-below-title {
+    margin: 0;
+}
+
+.p-no-spacing {
     margin-top: 0;
 }
 
@@ -380,6 +384,7 @@ mention {
     width: 100%;
     text-decoration: none; 
     color: inherit;
+    user-select: none;
 }
 
 @media screen and (max-width: 767px) {
@@ -406,6 +411,12 @@ button.teamBox {
 
 hr {
     margin: 20px 0;
+}
+
+hr.hr-below-title {
+    margin-top: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .team {

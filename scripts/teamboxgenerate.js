@@ -17,6 +17,7 @@ const teamBoxFormatHTML = `
 `;
 
 const JSTeamBox = document.getElementById("JSTeamBox")
+const styleSheet = document.createElement("style");
 
 function generateTeamBox(team) {
     team.logo_src = `assets/team_emblems/${team.team_name.toUpperCase()}.png`
@@ -28,9 +29,7 @@ function generateTeamBox(team) {
     .replaceAll("{{className}}", team.class_name)
     .replaceAll("{{teamColor}}", team.team_color)
 
-    const styleSheet = document.createElement("style");
-    styleSheet.innerText = teamBoxStyle;
-    document.head.appendChild(styleSheet);
+    styleSheet.innerText += teamBoxStyle;
 
     let tempTeamBox = teamBoxFormatHTML
         .replace("{{position}}", team.team_id) // TODO: placeholder
@@ -49,6 +48,7 @@ function generateTeamBoxes(teamData) {
     teamData.forEach(team => {
         generateTeamBox(team)
     });
+    document.head.appendChild(styleSheet);
     console.info("Done teamdata boxes")
 }
 
