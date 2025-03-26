@@ -114,7 +114,7 @@ checkTheme();
 
 // keyboard shortcuts
 document.addEventListener('keydown', (event) => {
-    if (event.ctrlKey && event.key === 't') {
+    if (event.ctrlKey && event.key === 'i') {
         toggleTheme();
     }
 });
