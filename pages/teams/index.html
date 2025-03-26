@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teams | University Mario Kart League</title>
+</head>
+<body>
+    <h1>Teams</h1>
+    <p>Here is a list of all the teams:</p>
+    <ul>
+        <?php foreach ($teams as $team): ?>
+            <li>
+                <a href="/teams/<?= $team->id ?>">
+                    <?= $team->name ?>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</body>
+</html>

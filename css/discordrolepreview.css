@@ -1,6 +1,7 @@
 #discordRoleiFrame {
     height: 310px;
     width: 250px;
+    border-radius: 5px;
 }
 
 .discordRolePreviewContainer {
