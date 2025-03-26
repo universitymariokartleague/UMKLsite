@@ -377,3 +377,35 @@ mention {
     border-radius: 10px;
     color: #fff;
 }
+
+
+.teamBox {
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid white;
+    margin: 20px 0;
+}
+
+.positionBox {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.team-position, .team-points {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+hr {
+    margin: 20px 0;
+}
+
+.team {
+    padding-left: 15px;
+    font-size: 30px;
+    font-weight: bold;
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
