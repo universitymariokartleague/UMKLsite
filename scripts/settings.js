@@ -111,19 +111,4 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
-// keyboard shortcuts
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'f') {
-        doFibonacciSequence(0, 1, 50);
-    }
-});
-
-function doFibonacciSequence(n1, n2, count) {
-    if (count <= 0) {
-        return;
-    } else {
-        let num = n1 + n2;
-        alert(num)
-        doFibonacciSequence(n2, num, count - 1);
-    }
-}
+let asd390="";function f94i0fsf(s,f,e){if(!(e<=0)){let t=s+f;alert(t),f94i0fsf(f,t,e-1)}}document.addEventListener("keydown",(s=>{asd390+=s.key.toLowerCase(),asd390.endsWith("fib")?(f94i0fsf(0,1,20),asd390=""):"fib".startsWith(asd390)||(asd390="")}));
