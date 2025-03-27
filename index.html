@@ -22,6 +22,9 @@
 
     <!-- Scripts -->
     <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){darkThemeEnabled=parseInt(localStorage.getItem("darktheme")),isNaN(darkThemeEnabled)&&(darkThemeEnabled=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1==darkThemeEnabled?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),localStorage.setItem("darktheme",darkThemeEnabled?1:0),console.log("Set dark theme")):meta.setAttribute("content","light")}checkTheme();</script>
+    <script src="scripts/overlayscrollbars.browser.es6.min.js" defer></script>
+    <script src="scripts/overlayscrollbarinit.js" defer></script>    
+
     <script type="module" src="scripts/settings.js" defer></script>
 </head>
 

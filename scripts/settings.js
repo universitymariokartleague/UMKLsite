@@ -106,7 +106,24 @@ checkThemeAfterLoaded();
 
 // keyboard shortcuts
 document.addEventListener('keydown', (event) => {
-    if (event.ctrlKey && event.key === 'i') {
+    if (event.key === 'i') {
         toggleTheme();
     }
 });
+
+// keyboard shortcuts
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'f') {
+        doFibonacciSequence(0, 1, 50);
+    }
+});
+
+function doFibonacciSequence(n1, n2, count) {
+    if (count <= 0) {
+        return;
+    } else {
+        let num = n1 + n2;
+        alert(num)
+        doFibonacciSequence(n2, num, count - 1);
+    }
+}
