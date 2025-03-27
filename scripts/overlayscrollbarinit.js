@@ -1,6 +1,6 @@
-const { OverlayScrollbars, ClickScrollPlugin } = OverlayScrollbarsGlobal;
+const { OverlayScrollbars, ClickScrollPlugin, ScrollbarsHidingPlugin } = OverlayScrollbarsGlobal;
 
-OverlayScrollbars.plugin(ClickScrollPlugin);
+OverlayScrollbars.plugin([ClickScrollPlugin, ScrollbarsHidingPlugin]);
 
 const osInstance = OverlayScrollbars(document.body, {
     scrollbars: {
