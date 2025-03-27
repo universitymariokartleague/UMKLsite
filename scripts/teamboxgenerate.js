@@ -9,7 +9,7 @@ const teamBoxFormatHTML = `
         <hr>
         <div class="{{className}} team">
             <span>{{teamName}}</span>
-            <img onload="this.style.opacity=1" src="{{logoSrc}}" alt="{{teamName}} team logo" class="team-logo">
+            <img onload="this.style.opacity={{teamlogoopacity}}" src="{{logoSrc}}" alt="{{teamName}} team logo" class="team-logo">
         </div>
         <hr>
         <div class="Institution">{{institution}}</div>
@@ -19,11 +19,9 @@ const teamBoxFormatHTML = `
 const JSTeamBox = document.getElementById("JSTeamBox")
 const styleSheet = document.createElement("style");
 
-function generateTeamBox(team) {
+function generateTeamBox(team, cached) {
     team.logo_src = `assets/team_emblems/${team.team_name.toUpperCase()}.png`
     team.class_name = team.team_name.replace(/\s+/g, '')
-
-    console.log(team.team_color)
 
     let teamBoxStyle="button.teamBox.{{className}}:hover,button.teamBox.{{className}}:focus{border: 0px solid {{teamColor}};outline: 4px solid {{teamColor}};}.team.{{className}}{border-left: 8px solid {{teamColor}};}"
     .replaceAll("{{className}}", team.class_name)
@@ -37,19 +35,35 @@ function generateTeamBox(team) {
         .replaceAll("{{teamName}}", team.team_name)
         .replace("{{institution}}", team.team_full_name)
         .replaceAll("{{className}}", team.class_name)
-        .replace("{{logoSrc}}", team.logo_src);
+        .replace("{{logoSrc}}", team.logo_src)
+        .replace("{{teamlogoopacity}}", cached ? 0 : 1);
 
     JSTeamBox.innerHTML += tempTeamBox;
 }
 
-function generateTeamBoxes(teamData) {
-    JSTeamBox.innerHTML = ""
-    console.info("Generating teamdata boxes")
-    teamData.forEach(team => {
-        generateTeamBox(team)
-    });
-    document.head.appendChild(styleSheet);
-    console.info("Done teamdata boxes")
+function generateTeamBoxes(teamData, cached) {
+    JSTeamBox.innerHTML = "";
+    try {
+        teamData.forEach(team => {
+            generateTeamBox(team, cached)
+        });
+        document.head.appendChild(styleSheet);
+        cacheTeamData(JSON.stringify(teamData))
+    } catch (error) {
+        JSTeamBox.innerHTML = error;
+    }
+}
+
+function cacheTeamData(teamData) {
+    localStorage.setItem("cachedTeamData", teamData)
+    console.log("Cached team data")
+}
+
+function checkCache() {
+    if (localStorage.getItem("cachedTeamData")) {
+        console.log("Generating team boxes using cached data...")
+        generateTeamBoxes(JSON.parse(localStorage.getItem("cachedTeamData")), true)
+    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -67,6 +81,11 @@ async function waitForDBToInit() {
 }
 
 async function dbDoneLoading() {
+    let teamData = await runSQL("SELECT * FROM TEAM")
     let data = await runSQL("SELECT * FROM TEAM")
-    generateTeamBoxes(data)
+    console.log(data)
+    console.log("Generating team boxes using SQL...")
+    generateTeamBoxes(teamData, false)
 }
+
+checkCache();

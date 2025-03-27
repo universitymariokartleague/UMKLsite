@@ -1,7 +1,7 @@
 // Setup
 const settingsBoxHTML = `
 <div class="hidden BGBlur" id="BGBlur"></div>
-<div class="hidden hide-settings-box" id="settingsBox">
+<div class="hidden hide-settings-box" id="settingsBox" data-overlayscrollbars-initialize>
     <div class="settings-box-close-button">
         <button id="settings-box-close-button">Close</button>
     </div>
@@ -44,26 +44,27 @@ let darkThemeEnabled;
 
 // Panel
 function generateSettingsPanel() {
-    let localStorageString = JSON.stringify(localStorage)
     try {
+        const localStorageData = Object.entries(localStorage).map(([key, value]) => {
+            return `<b>${key}</b>: ${value}<br/>`;
+        }).join('');
+
         settingsBoxJS.innerHTML = `
         <div class="setting-sub-heading">Apperance</div><hr />
         Page Theme<button id="toggleTheme" class="settings-option">${localStorage.getItem("darktheme") == 1 ? "Dark" : "Light"} theme</button><br />
 
         <div class="setting-sub-heading">Localstorage<span class="settings-extra-info"> (data stored on your device)</span></div><hr />
-       
-        <code>${localStorageString = {} ? "No data stored" : localStorageString}</code><br/>
+        <div class="codeBoxTight">${localStorageData || "No data stored"}</div>
         
         Clear settings<button id="clearLocalStorage" class="settings-option">Clear</button>
         <span class="settings-extra-info">(this will reload the page)</span></div><br />
-        `
+        `;
     } catch (error) {
-        settingsBoxJS.innerHTML = `<br/>Failed to load settings<br/><code>${error}</code>`
+        settingsBoxJS.innerHTML = `<br/>Failed to load settings<br/><code>${error}</code>`;
     }
     generateEventListeners();
 };
 generateSettingsPanel();
-
 
 function toggleTheme() {
     darkThemeEnabled = darkThemeEnabled ? 0 : 1;
@@ -84,8 +85,7 @@ function toggleTheme() {
 }
 
 function sendThemeChangeEvent() {
-    const themeChangeEvent = new CustomEvent('themeChange', { detail: { darkThemeEnabled } });
-    document.dispatchEvent(themeChangeEvent);
+    document.dispatchEvent(new CustomEvent('themeChange', { detail: { darkThemeEnabled } }));
 }
 
 function clearLocalStorage() {

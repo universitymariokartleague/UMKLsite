@@ -9,6 +9,9 @@ const osInstance = OverlayScrollbars(document.body, {
         autoHide: 'scroll',
         autoHideDelay: 3000,
     },
+    cancel: {
+        nativeScrollbarsOverlaid: true,
+    }
 });
 
 function changeScrollbarTheme(dark) {

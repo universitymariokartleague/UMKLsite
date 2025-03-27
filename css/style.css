@@ -332,7 +332,8 @@ button:focus {
 
 /* code */
 code,
-.codeBox {
+.codeBox,
+.codeBoxTight {
     font-family: Cascadia Code, FMono-Regular, Consolas, DejaVu Sans Mono, Liberation Mono, Menlo, monospace !important;
 }
 
@@ -354,6 +355,19 @@ code {
     outline: 1px solid rgba(255, 255, 255, 0.3);
     /* -webkit-backdrop-filter: blur(15px); */
     /* backdrop-filter: blur(15px); */
+    border-radius: 10px;
+    color: #fff;
+}
+
+.codeBoxTight {
+    font-size: 14px;
+    padding: 10px;
+    margin-bottom: 10px;
+    line-height: 1.6;
+    background-color: rgba(15, 15, 15, 0.5);
+    outline: 1px solid rgba(255, 255, 255, 0.3);
+    /* -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px); */
     border-radius: 10px;
     color: #fff;
 }
