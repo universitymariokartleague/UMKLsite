@@ -91,6 +91,7 @@
 }
 
 .settingsBoxOpener {
+    text-decoration: underline;
     cursor: pointer;
 }
 

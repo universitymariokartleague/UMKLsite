@@ -5,7 +5,7 @@
     
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Teams | University Mario Kart League</title>
+        <title>Map | University Mario Kart League</title>
         <link rel="shortcut icon" href="assets/brand/favicon.webp" type="image/webp">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
@@ -14,9 +14,9 @@
     
         <meta property="og:title" content="University Mario Kart League | Teams" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://umkl.co.uk/pages/teams/" />
+        <meta property="og:url" content="https://umkl.co.uk/pages/map/" />
         <meta property="og:image" content="https://umkl.co.uk/assets/brand/Cheep_Cheep_banner.png" />
-        <meta property="og:description" content="The teams page on the University Mario Kart League (UMKL) site" />
+        <meta property="og:description" content="The maps page on the University Mario Kart League (UMKL) site" />
         <meta name="theme-color" content="#bc0839">
     
         <!-- Include this to make the og:image larger -->
@@ -29,11 +29,6 @@
         <script type="module" src="scripts/settings.js" defer></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/sql-wasm.js' defer></script>
         <script type="module" src="scripts/teamboxgenerate.js" defer></script>
-        <style>
-            main {
-                max-width: 1000px!important;
-            }
-        </style>
     </head>
 
     <body id="top" data-overlayscrollbars-initialize>
@@ -46,7 +41,7 @@
                 <nav class="nav-flex">
                     <ul>
                         <li><a href="../../index.html">Home</a></li>
-                        <li><a class="nav-selected" href="#top">Teams</a></li>
+                        <li><a href="pages/teams/" href="#top">Teams</a></li>
                         <li><a href="#">Matches</a></li>
                         <li><a href="pages/faq/">FAQs</a></li>
                         <li><a class="nav-bar-link" target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
@@ -56,25 +51,16 @@
         </div>
 
         <main>
-            <h2>Teams</h2>
-            <h3>Season 2</h3>
-            <p class="p-below-title">
-                Below you can see the positions of each team, and view information 
-                about the teams partaking in the UMKL for 2025-2026.
-                <a href="pages/map/">View teams on map</a>
-            </p>
+            <h2>Map</h2>
+            <p class="p-below-title">See to location of the universities partaking in season 2 of the UMKL for 2025-2026.</p>
             <hr class="hr-below-title">
-
-            <div id="JSTeamBox" class="teamBoxContainer">
-                Loading team data...
-            </div>
+            <img class="image" src="assets/image/map/ukoutline.svg" alt="">
         </main>
 
-            <footer>
-                2025 University Mario Kart League | 
-                <a class="no-color-link" href="pages/credits/">Credits</a> |
-                <a class="settingsBoxOpener">Settings</a>
-            </footer>
-        </body>
-
+        <footer>
+            2025 University Mario Kart League | 
+            <a class="no-color-link" href="pages/credits/">Credits</a> |
+            <a class="settingsBoxOpener">Settings</a>
+        </footer>
+    </body>
 </html>
