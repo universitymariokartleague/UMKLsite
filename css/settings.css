@@ -102,6 +102,11 @@
     margin-right: auto;
 }
 
+.setting-selectable {
+    user-select: all;
+    -webkit-user-select: none;
+}
+
 @keyframes boxOpen { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); } 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
 @keyframes BGBlurOn { 0% { opacity: 0; } 100% { opacity: 1; } }
 @keyframes boxClose { 0% { opacity: 1; transform: translate(-50%, -50%) scale(1); visibility: visible; } 99% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); visibility: visible; } 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); visibility: hidden; } }

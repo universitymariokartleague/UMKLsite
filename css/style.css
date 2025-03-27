@@ -345,6 +345,7 @@ code {
     border: var(--code-border);
     border-radius: 5px;
     user-select: all;
+    -webkit-user-select: all;
 }
 
 .codeBox {
@@ -384,6 +385,7 @@ mention {
     border: var(--mention-border);
     border-radius: 5px;
     user-select: all;
+    -webkit-user-select: none;
 }
 
 .teamBoxContainer {

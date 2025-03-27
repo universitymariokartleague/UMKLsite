@@ -46,7 +46,7 @@ let darkThemeEnabled;
 function generateSettingsPanel() {
     try {
         const localStorageData = Object.entries(localStorage).map(([key, value]) => {
-            return `<b>${key}</b>: ${value}<br/>`;
+            return `<b>${key}</b>: <span class="setting-selectable">${value}</span><br/>`;
         }).join('');
 
         settingsBoxJS.innerHTML = `
