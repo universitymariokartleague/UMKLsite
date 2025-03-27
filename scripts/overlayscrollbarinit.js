@@ -11,6 +11,7 @@ const osInstance = OverlayScrollbars(document.body, {
     },
     cancel: {
         nativeScrollbarsOverlaid: true,
+        body: null,
     }
 });
 
