@@ -25,6 +25,6 @@ function changeScrollbarTheme(dark) {
 
 // Listen for theme change event
 document.addEventListener('themeChange', (event) => {
-    console.log("Changing scrollbar theme")
+    console.log(`%coverlayscrollbar.js %c> %cChanging scrollbar theme`, "color:#4599ff", "color:#fff", "color:#b3d5ff");
     changeScrollbarTheme(event.detail.darkThemeEnabled);
 });

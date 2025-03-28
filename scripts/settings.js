@@ -71,11 +71,11 @@ function toggleTheme() {
     meta.content = darkThemeEnabled ? "dark" : "light";
 
     if (darkThemeEnabled) {
-        console.log("Changing to dark theme...")
+        console.log(`%csettings.js %c> %cChanging to dark theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
         root.classList.add("dark-theme");
         root.classList.remove("light-theme");
     } else {
-        console.log("Changing to light theme...")
+        console.log(`%csettings.js %c> %cChanging to light theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
         root.classList.add("light-theme");
         root.classList.remove("dark-theme");  
     }
