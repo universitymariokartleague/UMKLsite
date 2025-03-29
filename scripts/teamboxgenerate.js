@@ -35,7 +35,7 @@ async function generateTeamBox(team, cached) {
 
     let tempTeamBox = teamBoxFormatHTML
         .replace("{{position}}", team.position)
-        .replace("{{points}}", `${team.points_override ? team.points_override : (team.points ? team.points : "0")} PTS` ) // TODO: placeholder
+        .replace("{{points}}", `${team.points_override ? team.points_override : (team.points ? team.points : "0")} PTS` )
         .replaceAll("{{teamName}}", team.team_name)
         .replace("{{institution}}", team.team_full_name)
         .replaceAll("{{className}}", team.class_name)

@@ -111,4 +111,8 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
-let asd390="";function f94i0fsf(s,f,e){if(!(e<=0)){let t=s+f;alert(t),f94i0fsf(f,t,e-1)}}document.addEventListener("keydown",(s=>{asd390+=s.key.toLowerCase(),asd390.endsWith("fib")?(f94i0fsf(0,1,20),asd390=""):"fib".startsWith(asd390)||(asd390="")}));
+// TODO: make a better easter egg
+let code="";document.addEventListener("keydown",(s=>{code+=s.key.toLowerCase(),code.endsWith("fib")?(doEEASCII(),code=""):"fib".startsWith(code)||(code="")}));
+function doEEASCII() {
+    console.log(``);        
+}
