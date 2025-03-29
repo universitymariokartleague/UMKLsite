@@ -145,29 +145,27 @@
 
     function pickNewTrack(initial, popOffFirst) {
         if (initial) {
-            console.log("New track")
             track1 = tracksLeft.pop();
             track2 = tracksLeft.pop();
         } else {
             if (popOffFirst) {
-                console.log("New track 1st picked")
                 track2 = tracksLeft.pop();
             } else {
-                console.log("New track 2nd picked")
                 track1 = track2
                 track2 = tracksLeft.pop();
             }
         }
 
         if (tracksLeft.length == 0) {
-            trackHTML.innerHTML = `Your favourite track is ${track1}!`;
+            trackHTML.innerHTML = `Your favourite courses is ${track1}!`;
             return;
         }
 
         trackHTML.innerHTML = `
-            Pick the track you prefer!<br/>
-            <button onClick="pickNewTrack(false, true)" class="track-button">${track1}</button>
-            <button onClick="pickNewTrack(false, false)" class="track-button">${track2}</button>
+            Pick the course you prefer!<br/>
+            <button onClick="pickNewTrack(false, true)" class="track-button">${track1}</button><br/>
+            <button onClick="pickNewTrack(false, false)" class="track-button">${track2}</button><br/>
+            <b>${tracksLeft.length} courses left</b>
         `;
     }
 
