@@ -459,3 +459,10 @@ hr.hr-below-title {
 .indent {
     padding-left: 20px;
 }
+
+/* hide OverlayScrollbars on mobile */
+@media (pointer: coarse) {
+    .os-scrollbar, .os-scrollbar-handle {
+        display: none !important;
+    }
+}
