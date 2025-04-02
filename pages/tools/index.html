@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" data-overlayscrollbars-initialize>
+    <head>
+        <base href="../../">
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Tools | University Mario Kart League</title>
+        <link rel="shortcut icon" href="assets/brand/favicon.webp" type="image/webp">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/settings.css">
+        <link rel="stylesheet" href="css/overlayscrollbars.min.css">
+        <meta name="color-scheme" content="dark light">
+
+        <meta property="og:title" content="University Mario Kart League | Tools" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://umkl.co.uk/pages/tools/" />
+        <meta property="og:image" content="https://umkl.co.uk/assets/brand/UMKL_Banner_embed.png" />
+        <meta property="og:description" content="Various tools on the University Mario Kart League (UMKL) site" />
+        <meta name="theme-color" content="#bc0839">
+
+        <!-- Include this to make the og:image larger -->
+        <meta name="twitter:card" content="summary_large_image">
+
+        <!-- Scripts -->
+        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){darkThemeEnabled=parseInt(localStorage.getItem("darktheme")),isNaN(darkThemeEnabled)&&(darkThemeEnabled=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1==darkThemeEnabled?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),localStorage.setItem("darktheme",darkThemeEnabled?1:0),console.log("%csettings.js %c> %cChanging to dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):meta.setAttribute("content","light")}checkTheme();</script>
+        <script src="scripts/overlayscrollbars.browser.es6.min.js" defer></script>
+        <script src="scripts/overlayscrollbar.js" defer></script>
+        
+        <script type="module" src="scripts/settings.js" defer></script>
+    </head>
+
+    <body id="top" data-overlayscrollbars-initialize>
+        <div class="navbar-container">
+            <div class="nav-bar">
+                <div class="nav-bar-title">
+                    <img src="assets/brand/UMKLlogo.webp" class="nav-bar-logo" alt="UMKL logo">
+                    <h2>UMKL</h2>
+                </div>
+                <nav class="nav-flex">
+                    <ul>
+                        <li><a href="">Home</a></li>
+                        <li><a href="pages/teams/">Teams</a></li>
+                        <li><a href="#">Matches</a></li>
+                        <li><a href="pages/faq/#top">FAQs</a></li>
+                        <li><a class="nav-bar-link" target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <main>
+            <h2>Tools</h2>
+            <p class="p-below-title">Various tools and pages</p>
+            <hr class="hr-below-title">
+
+            <p class="p-no-spacing">
+                <a href="pages/tools/favtrack/">pages/tools/favtrack/</a> | Favourite track<br>
+                <a href="pages/tools/trackrandomiser/">pages/tools/trackrandomiser/</a> | Track randomiser<br>
+            </p>
+        </main>
+
+        <footer>
+            2025 University Mario Kart League | 
+            <a class="no-color-link" href="pages/credits/">Credits</a> |
+            <a class="settingsBoxOpener">Settings</a>
+        </footer>
+    </body>
+</html>

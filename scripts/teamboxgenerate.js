@@ -62,8 +62,10 @@ async function generateTeamBoxes(teamData, cached) {
 }
 
 function cacheTeamData(teamData) {
-    localStorage.setItem("cachedTeamData", teamData)
-    console.log(`%cteamboxgenerate.js %c> %cCached team data`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    if (dbLoaded) {
+        localStorage.setItem("cachedTeamData", teamData)
+        console.log(`%cteamboxgenerate.js %c> %cCached team data`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    }
 }
 
 function checkCache() {

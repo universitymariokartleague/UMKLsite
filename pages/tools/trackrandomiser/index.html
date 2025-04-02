@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" data-overlayscrollbars-initialize>
+    <head>
+        <base href="../../../">
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Track Randomiser | University Mario Kart League</title>
+        <link rel="shortcut icon" href="assets/brand/favicon.webp" type="image/webp">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/settings.css">
+        <link rel="stylesheet" href="css/overlayscrollbars.min.css">
+        <meta name="color-scheme" content="dark light">
+
+        <meta property="og:title" content="University Mario Kart League | Track Randomiser" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://umkl.co.uk/pages/tools/trackrandomiser/" />
+        <meta property="og:image" content="https://umkl.co.uk/assets/brand/UMKL_Banner_embed.png" />
+        <meta property="og:description" content="Randomise a track pick across various games on the University Mario Kart League (UMKL) site" />
+        <meta name="theme-color" content="#bc0839">
+
+        <!-- Include this to make the og:image larger -->
+        <meta name="twitter:card" content="summary_large_image">
+
+        <!-- Scripts -->
+        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){darkThemeEnabled=parseInt(localStorage.getItem("darktheme")),isNaN(darkThemeEnabled)&&(darkThemeEnabled=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1==darkThemeEnabled?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),localStorage.setItem("darktheme",darkThemeEnabled?1:0),console.log("%csettings.js %c> %cChanging to dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):meta.setAttribute("content","light")}checkTheme();</script>
+        <script src="scripts/overlayscrollbars.browser.es6.min.js" defer></script>
+        <script src="scripts/overlayscrollbar.js" defer></script>
+        
+        <script type="module" src="scripts/settings.js" defer></script>
+        <script type="module" src="scripts/trackrandomiser.js" defer></script>
+    </head>
+
+    <body id="top" data-overlayscrollbars-initialize>
+        <div class="navbar-container">
+            <div class="nav-bar">
+                <div class="nav-bar-title">
+                    <img src="assets/brand/UMKLlogo.webp" class="nav-bar-logo" alt="UMKL logo">
+                    <h2>UMKL</h2>
+                </div>
+                <nav class="nav-flex">
+                    <ul>
+                        <li><a href="">Home</a></li>
+                        <li><a href="pages/teams/">Teams</a></li>
+                        <li><a href="#">Matches</a></li>
+                        <li><a href="pages/faq/#top">FAQs</a></li>
+                        <li><a class="nav-bar-link" target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <main>
+            <h2>Track randomiser</h2>
+            <p class="p-below-title">Randomise a track pick across various games.</p>
+            <hr class="hr-below-title">
+
+            <div class="game-selection"></div>
+                <label for="game-select">Select a game:</label>
+                <select id="game-select">
+                    <option value="SNES">Super Mario Kart (SNES)</option>
+                    <option value="N64">Mario Kart 64 (N64)</option>
+                    <option value="GBA">Mario Kart: Super Circuit (GBA)</option>
+                    <option value="GCN">Mario Kart: Double Dash!! (GCN)</option>
+                    <option value="DS">Mario Kart DS</option>
+                    <option value="Wii">Mario Kart Wii</option>
+                    <option value="3DS">Mario Kart 7 (3DS)</option>
+                    <option value="WiiU">Mario Kart 8 (Wii U)</option>
+                    <option value="Switch">Mario Kart 8 Deluxe (Switch)</option>
+                </select>
+            </div>
+
+            <br><button id="pickRandomTrack">Pick track!</button> | <code><span id="results">Nothing picked</span></code><br>
+
+            <label for="disableRepicks">Disable repicks:</label>
+            <input type="checkbox" id="disableRepicks" name="disableRepicks">
+            <button id="clearRepicks">Clear repicks list</button>
+            
+            <p><div id="pickedTracks"></div></p>
+        </main>
+
+        <footer>
+            2025 University Mario Kart League | 
+            <a class="no-color-link" href="pages/credits/">Credits</a> |
+            <a class="settingsBoxOpener">Settings</a>
+        </footer>
+    </body>
+</html>
