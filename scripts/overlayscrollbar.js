@@ -4,18 +4,17 @@ OverlayScrollbars.plugin(ClickScrollPlugin);
 
 const osInstance = OverlayScrollbars({
     target: document.body,
+}, {
     cancel: {
         nativeScrollbarsOverlaid: true,
         body: null,
-    }
-}, {
+    },
     scrollbars: {
         theme: "os-theme-dark",
         clickScroll: true,
         autoHide: 'scroll',
         autoHideDelay: 3000,
-    },
-    nativeScrollbarsOverlaid: { initialize: false }
+    }
 });
 
 function changeScrollbarTheme(dark) {
