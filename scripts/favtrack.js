@@ -82,9 +82,9 @@ function pickNewTrack(initial, popOffFirst) {
     }
 
     trackHTML.innerHTML = `
-        Pick the course you prefer!<br/>
-        <button id="pickNew1" class="track-button">${track1}</button><br/>
-        <button id="pickNew2" class="track-button">${track2}</button><br/>
+        Pick the course you prefer!<br>
+        <button id="pickNew1" class="track-button">${track1}</button><br>
+        <button id="pickNew2" class="track-button">${track2}</button><br>
         <b>${tracksLeft.length} courses left</b>
     `;
 
