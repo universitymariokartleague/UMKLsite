@@ -54,13 +54,12 @@ function generateSettingsPanel() {
         Page Theme<button id="toggleTheme" class="settings-option">${localStorage.getItem("darktheme") == 1 ? "Dark" : "Light"} theme</button><br>
 
         <div class="setting-sub-heading">Localstorage<span class="settings-extra-info"> (data stored on your device)</span></div><hr>
-        <div class="codeBoxTight">${localStorageData || "No data stored"}</div>
-        
         Clear settings<button id="clearLocalStorage" class="settings-option">Clear</button>
         <span class="settings-extra-info">(this will reload the page)</span></div><br>
+        <div class="codeBoxTight">${localStorageData || "No data stored"}</div>
         
         <div class="setting-sub-heading">Debug info<span class="settings-extra-info"> (for developers!)</span></div><hr>
-        <div class="codeBoxTight">${navigator.userAgent}</div><br>
+        <div class="codeBoxTight">${navigator.userAgent}</div>
         `;
     } catch (error) {
         settingsBoxJS.innerHTML = `<br>Failed to load settings<br><code>${error}</code>`;
