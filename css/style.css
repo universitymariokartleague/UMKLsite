@@ -459,14 +459,3 @@ hr.hr-below-title {
 .indent {
     padding-left: 20px;
 }
-
-/* Reset scrollbar styles on mobile */
-@media (pointer: coarse) {
-    body {
-        overflow: auto !important;
-        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-    }
-    .os-host, .os-viewport {
-        overflow: auto !important;
-    }
-}
