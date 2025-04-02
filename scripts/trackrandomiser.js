@@ -141,7 +141,7 @@ function pickRandomTrack() {
     if (document.getElementById("disableRepicks").checked) {
         let tempTracksList = tracksPicked.slice().reverse();
         if (tracksPicked.length == tracks[selectedGame].length) {
-            pickedTracksList.innerHTML = `<div class="codeBox"><b>Max tracks! Please clear!<br>Picked tracks (${tracksPicked.length} / ${tracks[selectedGame].length})</b><br><br>${tempTracksList.join(`<br>`)}</div>`;
+            pickedTracksList.innerHTML = `<div class="codeBoxTight"><b>Max tracks! Please clear!<br>Picked tracks (${tracksPicked.length} / ${tracks[selectedGame].length})</b><br><br>${tempTracksList.join(`<br>`)}</div>`;
             return;
         }
         while (tracksPicked.includes(randomTrack)) {
@@ -149,7 +149,7 @@ function pickRandomTrack() {
         }
         tracksPicked.push(randomTrack);
         tempTracksList = tracksPicked.slice().reverse();
-        pickedTracksList.innerHTML = `<div class="codeBox"><b>Picked tracks (${tracksPicked.length} / ${tracks[selectedGame].length})</b><br><br>${tempTracksList.join(`<br>`)}</div>`;
+        pickedTracksList.innerHTML = `<div class="codeBoxTight"><b>Picked tracks (${tracksPicked.length} / ${tracks[selectedGame].length})</b><br><br>${tempTracksList.join(`<br>`)}</div>`;
     }
 
     tracksContainer.innerHTML = `${randomTrack}`;

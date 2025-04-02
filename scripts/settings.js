@@ -8,9 +8,9 @@ const settingsBoxHTML = `
     <div class="settings-title">Settings</div>
     <div class="setting-options" id="settingsBoxJS">
         <div class="setting-sub-heading">Apperance</div><hr />
-        Theme<button class="settings-option">Dark theme</button><br />
+        Theme<button class="settings-option">Dark theme</button><br>
         Ambient Mode <button class="settings-option">OFF</button>
-        <span class="settings-extra-info">(only available in dark theme)</span><br />
+        <span class="settings-extra-info">(only available in dark theme)</span><br>
     </div>
 </div>`;
 document.body.insertAdjacentHTML('beforeend', settingsBoxHTML);
@@ -51,13 +51,16 @@ function generateSettingsPanel() {
 
         settingsBoxJS.innerHTML = `
         <div class="setting-sub-heading">Apperance</div><hr />
-        Page Theme<button id="toggleTheme" class="settings-option">${localStorage.getItem("darktheme") == 1 ? "Dark" : "Light"} theme</button><br />
+        Page Theme<button id="toggleTheme" class="settings-option">${localStorage.getItem("darktheme") == 1 ? "Dark" : "Light"} theme</button><br>
 
         <div class="setting-sub-heading">Localstorage<span class="settings-extra-info"> (data stored on your device)</span></div><hr />
         <div class="codeBoxTight">${localStorageData || "No data stored"}</div>
         
         Clear settings<button id="clearLocalStorage" class="settings-option">Clear</button>
-        <span class="settings-extra-info">(this will reload the page)</span></div><br />
+        <span class="settings-extra-info">(this will reload the page)</span></div><br>
+        
+        <div class="setting-sub-heading">Debug info<span class="settings-extra-info"> (for developers!)</span></div><hr />
+        <div class="codeBoxTight">${navigator.userAgent}</div><br>
         `;
     } catch (error) {
         settingsBoxJS.innerHTML = `<br/>Failed to load settings<br/><code>${error}</code>`;
