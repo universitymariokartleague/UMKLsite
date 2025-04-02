@@ -2,16 +2,18 @@ const { OverlayScrollbars, ClickScrollPlugin, ScrollbarsHidingPlugin } = Overlay
 
 OverlayScrollbars.plugin([ClickScrollPlugin, ScrollbarsHidingPlugin]);
 
-const osInstance = OverlayScrollbars(document.body, {
+const osInstance = OverlayScrollbars({
+    target: document.body,
+    cancel: {
+        nativeScrollbarsOverlaid: true,
+        body: null,
+    }
+}, {
     scrollbars: {
         theme: "os-theme-dark",
         clickScroll: true,
         autoHide: 'scroll',
         autoHideDelay: 3000,
-    },
-    cancel: {
-        nativeScrollbarsOverlaid: true,
-        body: null,
     }
 });
 
