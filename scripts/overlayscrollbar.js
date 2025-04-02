@@ -2,7 +2,7 @@ const { OverlayScrollbars, ClickScrollPlugin } = OverlayScrollbarsGlobal;
 
 OverlayScrollbars.plugin(ClickScrollPlugin);
 
-const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const isMobile = false
 
 const osInstance = !isMobile ? OverlayScrollbars({
     target: document.body,
@@ -13,7 +13,7 @@ const osInstance = !isMobile ? OverlayScrollbars({
         autoHide: 'scroll',
         autoHideDelay: 3000,
     },
-    showNativeOverlaidScrollbars: false
+    showNativeOverlaidScrollbars: true
 }) : null;
 
 function changeScrollbarTheme(dark) {
