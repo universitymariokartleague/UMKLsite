@@ -1,4 +1,26 @@
 const tracks = {
+    SNES: [
+        "Mario Circuit 1",
+        "Donut Plains 1",
+        "Ghost Valley 1",
+        "Bowser Castle 1",
+        "Mario Circuit 2",
+        "Choco Island 1",
+        "Ghost Valley 2",
+        "Donut Plains 2",
+        "Bowser Castle 2",
+        "Mario Circuit 3",
+        "Koopa Beach 1",
+        "Choco Island 2",
+        "Vanilla Lake 1",
+        "Bowser Castle 3",
+        "Mario Circuit 4",
+        "Donut Plains 3",
+        "Koopa Beach 2",
+        "Ghost Valley 3",
+        "Vanilla Lake 2",
+        "Rainbow Road",
+    ],
     N64: [
         "Luigi Raceway",
         "Moo Moo Farm",
@@ -17,6 +39,9 @@ const tracks = {
         "Banshee Boardwalk",
         "Rainbow Road",
     ],
+    GBA: [
+        
+    ]
     Wii: [
         "Luigi Circuit",
         "Moo Moo Meadows",
