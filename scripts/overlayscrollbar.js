@@ -2,7 +2,9 @@ const { OverlayScrollbars, ClickScrollPlugin } = OverlayScrollbarsGlobal;
 
 OverlayScrollbars.plugin(ClickScrollPlugin);
 
-const osInstance = OverlayScrollbars({
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+const osInstance = !isMobile ? OverlayScrollbars({
     target: document.body,
     cancel: {
         nativeScrollbarsOverlaid: true,
@@ -15,7 +17,7 @@ const osInstance = OverlayScrollbars({
         autoHide: 'scroll',
         autoHideDelay: 3000,
     }
-});
+}) : null;
 
 function changeScrollbarTheme(dark) {
     osInstance.options({
@@ -27,6 +29,8 @@ function changeScrollbarTheme(dark) {
 
 // Listen for theme change event
 document.addEventListener('themeChange', (event) => {
-    console.log(`%coverlayscrollbar.js %c> %cChanging scrollbar theme`, "color:#4599ff", "color:#fff", "color:#b3d5ff");
-    changeScrollbarTheme(event.detail.darkThemeEnabled);
+    if (!isMobile) {
+        console.log(`%coverlayscrollbar.js %c> %cChanging scrollbar theme`, "color:#4599ff", "color:#fff", "color:#b3d5ff");
+        changeScrollbarTheme(event.detail.darkThemeEnabled);
+    }
 });
