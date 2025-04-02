@@ -4,6 +4,9 @@ OverlayScrollbars.plugin(ClickScrollPlugin);
 
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
+let temp = `${navigator.userAgent} | ${isMobile}`;
+document.getElementById("top").innerHTML += temp
+
 const osInstance = !isMobile ? OverlayScrollbars({
     target: document.body,
     cancel: {
