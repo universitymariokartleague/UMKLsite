@@ -460,9 +460,13 @@ hr.hr-below-title {
     padding-left: 20px;
 }
 
-/* hide OverlayScrollbars on mobile */
+/* Reset scrollbar styles on mobile */
 @media (pointer: coarse) {
-    .os-scrollbar, .os-scrollbar-handle {
-        display: none !important;
+    body {
+        overflow: auto !important;
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    }
+    .os-host, .os-viewport {
+        overflow: auto !important;
     }
 }

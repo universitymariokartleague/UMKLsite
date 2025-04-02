@@ -55,7 +55,7 @@ function generateSettingsPanel() {
 
         <div class="setting-sub-heading">Localstorage<span class="settings-extra-info"> (data stored on your device)</span></div><hr>
         Clear settings<button id="clearLocalStorage" class="settings-option">Clear</button>
-        <span class="settings-extra-info">(this will reload the page)</span></div><br>
+        <span class="settings-extra-info"> (this will reload the page)</span></div><br>
         <div class="codeBoxTight">${localStorageData || "No data stored"}</div>
         
         <div class="setting-sub-heading">Debug info<span class="settings-extra-info"> (for developers!)</span></div><hr>
