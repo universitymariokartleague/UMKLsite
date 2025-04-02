@@ -6,17 +6,14 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 
 const osInstance = !isMobile ? OverlayScrollbars({
     target: document.body,
-    cancel: {
-        nativeScrollbarsOverlaid: true,
-        body: null,
-    }
 }, {
     scrollbars: {
         theme: "os-theme-dark",
         clickScroll: true,
         autoHide: 'scroll',
         autoHideDelay: 3000,
-    }
+    },
+    showNativeOverlaidScrollbars: false
 }) : null;
 
 function changeScrollbarTheme(dark) {
