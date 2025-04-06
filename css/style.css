@@ -394,7 +394,6 @@ mention {
     grid-template-columns: repeat(2, 1fr);
     column-gap: 15px;
     row-gap: 15px;
-    min-height: 90vh;
 }
 
 .teamBox {
@@ -473,9 +472,11 @@ hr.hr-below-title {
 .map-container {
     position: relative;
     display: inline-block;
+    width: fit-content;
 }
 
 .pulsing-dot {
+    position: absolute; 
     width: 15px;
     height: 15px;
     background-color: var(--button-color);

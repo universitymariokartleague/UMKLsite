@@ -32,35 +32,54 @@
     </head>
 
     <body id="top" data-overlayscrollbars-initialize>
-        <div class="navbar-container">
-            <div class="nav-bar">
-                <div class="nav-bar-title">
-                    <img src="assets/brand/UMKLlogo.webp" class="nav-bar-logo" alt="UMKL logo">
-                    <h2>UMKL</h2>
-                </div>
-                <nav class="nav-flex">
-                    <ul>
-                        <li><a href="../../index.html">Home</a></li>
-                        <li><a href="pages/teams/" href="#top">Teams</a></li>
-                        <li><a href="#">Matches</a></li>
-                        <li><a href="pages/faq/">FAQs</a></li>
-                        <li><a class="nav-bar-link" target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
-                    </ul>
-                </nav>
-            </div>
+        // TODO: make JS
+
+        <style>
+            .YORKLOCATION {
+                top: 58.5%; 
+                left: 77%
+            }
+
+            .STAFFSLOCATION {
+                top: 67%; 
+                left: 69%
+            }
+
+            .BIRMINGHAMSLOCATION {
+                top: 73%; 
+                left: 71%
+            }
+
+            .BRISTOLBOB-OMBSLOCATION {
+                top: 78%; 
+                left: 61%
+            }
+
+            .EDINBURGHLOCATION {
+                top: 40%; 
+                left: 66%
+            }
+
+            .GLASGOWLOCATION {
+                top: 40.5%; 
+                left: 59.5%
+            }
+
+            .KEELELOCATION {
+                top: 66.5%; 
+                left: 68%
+            }
+        </style>
+
+        <div class="map-container">
+            <div class="pulsing-dot YORKLOCATION"></div>
+            <div class="pulsing-dot STAFFSLOCATION"></div>
+            <div class="pulsing-dot BIRMINGHAMSLOCATION"></div>
+            <div class="pulsing-dot BRISTOLBOB-OMBSLOCATION"></div>
+            <div class="pulsing-dot GLASGOWLOCATION"></div>
+            <div class="pulsing-dot KEELELOCATION"></div>
+            <div class="pulsing-dot EDINBURGHLOCATION"></div>
+            <img class="UKmap" src="assets/image/map/UKNoBG.svg" alt="Map of the UK with a red outline">
         </div>
-
-        <main>
-            <div class="map-container"></div>
-                <div class="pulsing-dot" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
-                <img class="UKmap" src="assets/image/map/UKNoBG.svg" alt="Map of the UK with a red outline">
-            </div>
-        </main>
-
-        <footer>
-            UMKL 2025 | 
-            <a class="no-color-link" href="pages/credits/">Credits</a> |
-            <a class="settingsBoxOpener">Settings</a>
-        </footer>
     </body>
 </html>

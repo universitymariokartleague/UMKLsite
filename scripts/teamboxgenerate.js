@@ -1,4 +1,4 @@
-import { setupDB, isDBLoaded, runSQL } from './database.js';
+import { isDBLoaded, runSQL } from './database.js';
 
 const teamBoxFormatHTML = `
     <button href="#" class="{{className}} teamBox">
