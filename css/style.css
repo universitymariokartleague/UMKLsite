@@ -456,46 +456,6 @@ hr.hr-below-title {
     margin-right: auto;
 }
 
-
 .indent {
     padding-left: 20px;
-}
-
-.UKmap {
-    display: block;
-    width: 100%;
-    height: 85vh;
-    user-select: none;
-    -webkit-user-select: none;
-}
-
-.map-container {
-    position: relative;
-    display: inline-block;
-    width: fit-content;
-}
-
-.pulsing-dot {
-    position: absolute; 
-    width: 15px;
-    height: 15px;
-    background-color: var(--button-color);
-    border-radius: 50%;
-    animation: breathing 2.5s infinite cubic-bezier(0.25, 0.1, 0.25, 1);
-    box-shadow: 0 0 10px var(--button-color);
-}
-
-@keyframes breathing {
-    0% {
-        transform: scale(1);
-        opacity: 1;
-    }
-    50% {
-        transform: scale(1.5);
-        opacity: 0.8;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
 }
