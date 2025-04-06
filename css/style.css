@@ -290,7 +290,7 @@ a[target="_blank"].nav-bar-link::after {
     vertical-align: sub;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 402px) {
     a[target="_blank"].nav-bar-link::after {
         content: inherit;
     }
@@ -392,9 +392,9 @@ mention {
 .teamBoxContainer {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    column-gap: 10px;
-    row-gap: 10px;
-    min-height: 1000px;
+    column-gap: 15px;
+    row-gap: 15px;
+    min-height: 90vh;
 }
 
 .teamBox {
@@ -430,16 +430,6 @@ button.teamBox {
     font-weight: bold;
 }
 
-hr {
-    margin: 20px 0;
-}
-
-hr.hr-below-title {
-    margin-top: 0.5em;
-    margin-left: auto;
-    margin-right: auto;
-}
-
 .team {
     padding-left: 15px;
     font-size: 30px;
@@ -457,6 +447,54 @@ hr.hr-below-title {
     transition: opacity 0.2s ease-in;
 }
 
+hr {
+    margin: 20px 0;
+}
+
+hr.hr-below-title {
+    margin-top: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
 .indent {
     padding-left: 20px;
+}
+
+.UKmap {
+    display: block;
+    width: 100%;
+    height: 85vh;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.map-container {
+    position: relative;
+    display: inline-block;
+}
+
+.pulsing-dot {
+    width: 15px;
+    height: 15px;
+    background-color: var(--button-color);
+    border-radius: 50%;
+    animation: breathing 2.5s infinite cubic-bezier(0.25, 0.1, 0.25, 1);
+    box-shadow: 0 0 10px var(--button-color);
+}
+
+@keyframes breathing {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 0.6;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
