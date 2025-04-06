@@ -27,6 +27,7 @@ function cycleThroughAttractColors() {
         }
         colorPicker.value = colorsToCycle[attractIndex];
         updateCurrentColor();
+        colorAttractMode = true;
         attractIndex = (attractIndex + 1) % colorsToCycle.length;
     }, 1000);
 }
