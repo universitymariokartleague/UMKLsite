@@ -58,7 +58,7 @@
 		animation: slideUp 0.5s ease-in-out;
 		padding: 10px;
 		padding-left: max(10px, calc(env(safe-area-inset-left) - 10px));
-		padding-bottom: 35px;
+		margin-bottom: 25px;
 	}
 
 	#playIcon {
