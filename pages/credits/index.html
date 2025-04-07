@@ -11,6 +11,7 @@
     <link rel="shortcut icon" href="assets/brand/favicon.jpg" type="image/jpg">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/audioplayer.css">
     <link rel="stylesheet" href="css/overlayscrollbars.min.css">
     <meta name="color-scheme" content="dark light">
 
@@ -30,15 +31,16 @@
     <script src="scripts/overlayscrollbar.js" defer></script>
     
     <script type="module" src="scripts/settings.js" defer></script>
+    <script src="scripts/audioplayer.js" defer></script>
 </head>
 
 <body id="top" data-overlayscrollbars-initialize>
     <div class="navbar-container">
         <div class="nav-bar">
-            <div class="nav-bar-title">
+            <a href="../../index.html" class="nav-bar-title no-color-link no-underline-link">
                 <img src="assets/brand/UMKLlogo.webp" class="nav-bar-logo" alt="UMKL logo">
                 <h2>UMKL</h2>
-            </div>
+            </a>
             <nav class="nav-flex">
                 <ul>
                     <li><a href="">Home</a></li>
@@ -72,7 +74,6 @@
             <a href="https://github.com/Mario-Kart-Society-York/UMKLsite">https://github.com/Mario-Kart-Society-York/UMKLsite</a><br>
             zy, Tushar Sundarka (so far)
         </p>
-
         <hr>
         <a href="pages/sitemap">View sitemap</a>
     </main>
@@ -82,5 +83,21 @@
         <a class="no-color-link" href="pages/credits/">Credits</a> |
         <a class="settingsBoxOpener">Settings</a>
     </footer>
+
+    <audio id="audio" src="loading playlist.mp3" preload="auto"></audio>
+    <script type="text/javascript" src="audioPlayer.js" id="audioPlayerScript" defer></script>
+    <div id="audioStatus" data-playlist="assets/bgm/TESTTRACKS-ミックス-/bgm.txt" class="hidden">
+        <span id="BGMName">Music</span></br>
+        <button style="vertical-align: middle"><img src="" id="playIcon"></button>
+        <span id="audioProgressBar"></span>
+        &nbsp;<span id="currentTime" class="time">0:00</span> / <span id="totalTime" class="time">0:00</span>
+        <p id="playlistText" class="hidden"></p>
+    </div>
+    <noscript>
+        <blockquote class="fail"><b>JAVASCRIPT DISABLED</b><br />
+            Javascript is needed to use this page<br />
+            <a href="../changelog.html#jslicense">Javascript license information</a>
+        </blockquote>
+    </noscript>
 </body>
 </html>
