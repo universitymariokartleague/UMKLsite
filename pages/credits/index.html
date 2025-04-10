@@ -31,7 +31,6 @@
     <script src="scripts/overlayscrollbar.js" defer></script>
     
     <script type="module" src="scripts/settings.js" defer></script>
-    <script src="scripts/audioplayer.js" defer></script>
 </head>
 
 <body id="top" data-overlayscrollbars-initialize>
@@ -84,9 +83,9 @@
         <a class="settingsBoxOpener">Settings</a>
     </footer>
 
-    <audio id="audio" src="loading playlist.mp3" preload="auto"></audio>
-    <script type="text/javascript" src="audioPlayer.js" id="audioPlayerScript" defer></script>
-    <div id="audioStatus" data-playlist="assets/bgm/TESTTRACKS-ミックス-/bgm.txt" class="hidden">
+    <audio id="audio" src="assets/bgm/credits/loading playlist.mp3" preload="auto"></audio>
+    <script type="text/javascript" src="scripts/audioPlayer.js" id="audioPlayerScript" defer></script>
+    <div id="audioStatus" data-playlist="bgm.txt" class="hidden">
         <span id="BGMName">Music</span></br>
         <button style="vertical-align: middle"><img src="" id="playIcon"></button>
         <span id="audioProgressBar"></span>
