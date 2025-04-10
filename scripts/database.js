@@ -57,7 +57,7 @@ async function executeSQL(sqlcmd, params = {}) {
 }
 
 async function setupDB() {
-    console.log("%cdatabase.js%c > %cInitialising database", "color:#27fc6e", "color:#fff", "color:#c4ffd8");
+    console.debug("%cdatabase.js%c > %cInitialising database", "color:#27fc6e", "color:#fff", "color:#c4ffd8");
     await initDatabase(); // Ensure the database is initialized
     // executeSQL("SELECT * FROM tournament_entry");
 }
@@ -67,9 +67,9 @@ async function isDBLoaded() {
 }
 
 async function runSQL(sqlcmd) {
-    console.log(`%cdatabase.js%c > %cRunning: %c${sqlcmd.replace(/\s+/g, ' ').trim()}`, "color:#27fc6e", "color:#fff", "color:#27fc6e", "color:#c4ffd8");
+    console.debug(`%cdatabase.js%c > %cRunning: %c${sqlcmd.replace(/\s+/g, ' ').trim()}`, "color:#27fc6e", "color:#fff", "color:#27fc6e", "color:#c4ffd8");
     let result = await executeSQL(sqlcmd);
-    console.log(`%cdatabase.js%c > %cResult: %c${JSON.stringify(result)}`, "color:#27fc6e", "color:#fff", "color:#27fc6e", "color:#c4ffd8");
+    console.debug(`%cdatabase.js%c > %cResult: %c${JSON.stringify(result)}`, "color:#27fc6e", "color:#fff", "color:#27fc6e", "color:#c4ffd8");
     return result;
 }
 

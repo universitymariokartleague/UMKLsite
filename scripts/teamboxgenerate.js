@@ -64,13 +64,13 @@ async function generateTeamBoxes(teamData, cached) {
 function cacheTeamData(teamData) {
     if (dbLoaded) {
         localStorage.setItem("cachedTeamData", teamData)
-        console.log(`%cteamboxgenerate.js %c> %cCached team data`, "color:#9452ff", "color:#fff", "color:#c29cff");
+        console.debug(`%cteamboxgenerate.js %c> %cCached team data`, "color:#9452ff", "color:#fff", "color:#c29cff");
     }
 }
 
 function checkCache() {
     if (localStorage.getItem("cachedTeamData")) {
-        console.log(`%cteamboxgenerate.js %c> %cGenerating team boxes using cached data...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+        console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using cached data...`, "color:#9452ff", "color:#fff", "color:#c29cff");
         generateTeamBoxes(JSON.parse(localStorage.getItem("cachedTeamData")), true)
     }
 }
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function waitForDBToInit() {
     dbLoaded = await isDBLoaded();
-    console.log(`%cteamboxgenerate.js %c> %c${dbLoaded ? "Database loaded" : "Database is loading..."}`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    console.debug(`%cteamboxgenerate.js %c> %c${dbLoaded ? "Database loaded" : "Database is loading..."}`, "color:#9452ff", "color:#fff", "color:#c29cff");
     if (!dbLoaded) {
         setTimeout(waitForDBToInit, 100); // Check again after 1 second
     } else {
@@ -92,7 +92,7 @@ async function waitForDBToInit() {
 async function dbDoneLoading() {
     // let teamData = await getSeasonTeamStandings(season_id)
     let teamData = await runSQL("SELECT * FROM team")
-    console.log(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     generateTeamBoxes(teamData, false)
 }
 
@@ -124,7 +124,7 @@ async function getSeasonTeamStandings(season_id) {
     `);
 
     if (!teamData || teamData.length === 0) {
-        console.log(`%cteamboxgenerate.js %c> %cNo teams found for season ${season_id}`, "color:#9452ff", "color:#fff", "color:#ff6b6b");
+        console.debug(`%cteamboxgenerate.js %c> %cNo teams found for season ${season_id}`, "color:#9452ff", "color:#fff", "color:#ff6b6b");
         return [];
     }
 

@@ -41,7 +41,7 @@ function loadJSZipScript() {
         script.src = "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";
         document.head.appendChild(script);
 
-        console.log(`%caudioplayer.js%c > %cJSZip script loaded`, "color:#fcce27", "color:#fff", "color:#ffefb5")
+        console.debug(`%caudioplayer.js%c > %cJSZip script loaded`, "color:#fcce27", "color:#fff", "color:#ffefb5")
     });
 }
 
@@ -53,7 +53,7 @@ audio.addEventListener('loadedmetadata', () => { // wait for data to load
 });
 
 function loadedMetadata(message) { // reset sin value
-    console.log(`%caudioplayer.js%c > %c${message}: ${audioName}`, "color:#fcce27", "color:#fff", "color:#ffefb5")
+    console.debug(`%caudioplayer.js%c > %c${message}: ${audioName}`, "color:#fcce27", "color:#fff", "color:#ffefb5")
     loaded = true;
     tick = -70;
 }
@@ -197,7 +197,7 @@ timesAsLoadingIndicators();
 audio.addEventListener('timeupdate', () => { // fired at browser discretion (anti-fingerprinting)
     if (loaded) {
         if (isLiveLoading == -1) {
-            console.log(`%caudioplayer.js%c > %cLive scrubbing done`, "color:#fcce27", "color:#fff", "color:#ffefb5")
+            console.debug(`%caudioplayer.js%c > %cLive scrubbing done`, "color:#fcce27", "color:#fff", "color:#ffefb5")
             isLiveLoading = 0;
             liveLoadingCount = 0;
         }
@@ -349,7 +349,7 @@ setInterval(function checkKeysDown() { // still more efficient and pleasing than
         if (isLiveLoading == -1) {
             liveLoadingCount++;
             if (liveLoadingCount > 450) {
-                console.log(`%caudioplayer.js%c > %cLive scrubbing taking too long - reloading audio`, "color:#fcce27", "color:#fff", "color:#ffefb5")
+                console.debug(`%caudioplayer.js%c > %cLive scrubbing taking too long - reloading audio`, "color:#fcce27", "color:#fff", "color:#ffefb5")
                 reloadBGM();
                 isLiveLoading = 0;
                 liveLoadingCount = 0;
@@ -439,7 +439,7 @@ async function setPlaylistData() {
         playlist[i] = playlist[i].split("|")[0];
     }
     if (playlist.length > 0) {
-        console.log(`%caudioplayer.js%c > %cGot playlist`, "color:#fcce27", "color:#fff", "color:#ffefb5");
+        console.debug(`%caudioplayer.js%c > %cGot playlist`, "color:#fcce27", "color:#fff", "color:#ffefb5");
         isLive = false;
         isLiveOnce = false;
         document.getElementById("playlistText").className = "visible"; // show playlist HTML code
@@ -543,10 +543,10 @@ function startSpecificBGM(BGM) { // for buttons that can be placed around the pa
         }
     }
     else {
-        console.log(`%caudioplayer.js%c > %cPlaylist mode isn't active!`, "color:#fcce27", "color:#fff", "color:#ffefb5")
+        console.debug(`%caudioplayer.js%c > %cPlaylist mode isn't active!`, "color:#fcce27", "color:#fff", "color:#ffefb5")
         if (audioName == BGM) { // error checking
             startNewBGM();
-            console.log(`%caudioplayer.js%c > %cPlayed anyways: despite the error (wrong function set)`, "color:#fcce27", "color:#fff", "color:#ffefb5")
+            console.debug(`%caudioplayer.js%c > %cPlayed anyways: despite the error (wrong function set)`, "color:#fcce27", "color:#fff", "color:#ffefb5")
         }
     }
 }
