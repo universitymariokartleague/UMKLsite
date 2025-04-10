@@ -115,5 +115,3 @@ async function getTeamSeasonPoints(teamId, season_id) {
 
     return result[0]?.total_points || 0;
 }
-
-// async function 

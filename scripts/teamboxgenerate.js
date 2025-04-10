@@ -18,10 +18,11 @@ const teamBoxFormatHTML = `
 
 const JSTeamBox = document.getElementById("JSTeamBox")
 const styleSheet = document.createElement("style");
+const seasonPicker = document.getElementById("season-select")
 
 let dbLoaded = false;
-const season_id = 2; // TODO: fetch current season
-let currentSeason = season_id;
+let currentSeason = 1;
+let maxSeason = 10;
 
 async function generateTeamBox(team, cached) {
     team.logo_src = `assets/team_emblems/${team.team_name.toUpperCase()}.png`
@@ -51,7 +52,7 @@ async function generateTeamBoxes(teamData, cached) {
         for (let i = 0; i < teamData.length; i++) {
             const team = teamData[i];
             team.position = i + 1;
-            if (dbLoaded) team.points_override = await getTeamSeasonPoints(team.team_id, season_id);
+            if (dbLoaded) team.points_override = await getTeamSeasonPoints(team.team_id, currentSeason);
             generateTeamBox(team, cached);
         }
         document.head.appendChild(styleSheet);
@@ -91,9 +92,34 @@ async function waitForDBToInit() {
 
 async function dbDoneLoading() {
     // let teamData = await getSeasonTeamStandings(season_id)
+    currentSeason, maxSeason = await getCurrentSeason();
+    generateSeasonPicker();
     let teamData = await runSQL("SELECT * FROM team")
     console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     generateTeamBoxes(teamData, false)
+}
+
+async function generateSeasonPicker() {
+    seasonPicker.innerHTML = ""; // Clear existing options
+    for (let season = 1; season <= maxSeason; season++) {
+        const option = document.createElement("option");
+        option.value = season;
+        option.textContent = `Season ${season}`;
+        if (season === currentSeason) {
+            option.selected = true;
+        }
+        seasonPicker.appendChild(option);
+    }
+}
+
+async function getCurrentSeason() {
+    /** Fetch the ID of the most recent season from the database. */
+    const result = await runSQL(`
+        SELECT MAX(season_id)
+        FROM season`
+    )
+
+    return result[0]["MAX(season_id)"];
 }
 
 async function getTeamSeasonPoints(teamId, season_id) {
@@ -130,7 +156,7 @@ async function getSeasonTeamStandings(season_id) {
 
     // Get points for each team and build standings
     for (const team of teamData) {
-        const teamPoints = await getTeamSeasonPoints(team.team_id, season_id);
+        const teamPoints = await getTeamSeasonPoints(team.team_id, currentSeason);
         standings.push({
             team_id: team.team_id,
             team_name: team.team_name,
@@ -146,15 +172,9 @@ async function getSeasonTeamStandings(season_id) {
 
 checkCache();
 
-// extra
-const s1Button = document.getElementById("s1-button");
-s1Button.addEventListener('click', switchSeasons)
-
-async function switchSeasons() {
-    if (currentSeason == 2) {
-        currentSeason = 1;
-    } else {
-        currentSeason = 2;
-    }
+// season picker
+seasonPicker.addEventListener("change", async function () {
+    currentSeason = this.value;
+    console.debug(`%cteamboxgenerate.js %c> %cSelected season ${currentSeason}`, "color:#9452ff", "color:#fff", "color:#c29cff");
     generateTeamBoxes(await getSeasonTeamStandings(currentSeason), false)
-}
+});
