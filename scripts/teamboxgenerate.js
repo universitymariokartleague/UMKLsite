@@ -1,7 +1,7 @@
 import { isDBLoaded, runSQL } from './database.js';
 
 const teamBoxFormatHTML = `
-    <button href="#" class="{{className}} teamBox">
+    <button onClick="location.href='pages/teams/{{teamName}}/'" class="{{className}} teamBox">
         <div class="positionBox">
             <div class="team-position">{{position}}</div>
             <div class="team-points">{{points}}</div>
@@ -20,7 +20,7 @@ const JSTeamBox = document.getElementById("JSTeamBox")
 const styleSheet = document.createElement("style");
 
 let dbLoaded = false;
-const season_id = 2;
+const season_id = 2; // TODO: fetch current season
 let currentSeason = season_id;
 
 async function generateTeamBox(team, cached) {
