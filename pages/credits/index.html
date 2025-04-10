@@ -34,6 +34,26 @@
 </head>
 
 <body id="top" data-overlayscrollbars-initialize>
+    <div> 
+        <audio id="audio" src="assets/bgm/credits/loading playlist.mp3" preload="auto"></audio>
+        <script type="text/javascript" src="scripts/audioPlayer.js" id="audioPlayerScript" defer></script>
+        <div id="audioStatus" data-playlist="bgm.txt" class="hidden">
+            <span id="BGMName">Music</span></br>
+            <span class="playContainer">
+                <img src="" id="playIcon">
+            </span>
+            <span id="audioProgressBar"></span>
+            <span id="currentTime" class="time">0:00</span> / <span id="totalTime" class="time">0:00</span>
+            <p id="playlistText" class="hidden"></p>
+        </div>
+        <noscript>
+            <blockquote class="fail"><b>JAVASCRIPT DISABLED</b><br />
+                Javascript is needed to use this page<br />
+                <a href="../changelog.html#jslicense">Javascript license information</a>
+            </blockquote>
+        </noscript>
+    </div>
+
     <div class="navbar-container">
         <div class="nav-bar">
             <a href="../../index.html" class="nav-bar-title no-color-link no-underline-link">
@@ -79,26 +99,8 @@
 
     <footer>
         UMKL 2025 | 
-        <a onclick="playAudio()">▶</a> |
+        <a style="cursor: pointer;" onclick="playAudio()">▶</a> |
         <a class="settingsBoxOpener">Settings</a>
     </footer>
-
-    <audio id="audio" src="assets/bgm/credits/loading playlist.mp3" preload="auto"></audio>
-    <script type="text/javascript" src="scripts/audioPlayer.js" id="audioPlayerScript" defer></script>
-    <div id="audioStatus" data-playlist="bgm.txt" class="hidden">
-        <span id="BGMName">Music</span></br>
-        <span class="playContainer">
-            <img src="" id="playIcon">
-        </span>
-        <span id="audioProgressBar"></span>
-        <span id="currentTime" class="time">0:00</span> / <span id="totalTime" class="time">0:00</span>
-        <p id="playlistText" class="hidden"></p>
-    </div>
-    <noscript>
-        <blockquote class="fail"><b>JAVASCRIPT DISABLED</b><br />
-            Javascript is needed to use this page<br />
-            <a href="../changelog.html#jslicense">Javascript license information</a>
-        </blockquote>
-    </noscript>
 </body>
 </html>
