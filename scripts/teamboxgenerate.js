@@ -126,12 +126,12 @@ async function getCurrentSeason() {
     return result[0]["MAX(season_id)"];
 }
 
-async function getTeamSeasonPoints(teamId, season_id) {
+async function getTeamSeasonPoints(team_id, season_id) {
     /** Calculate the total points for a team in a specific season. */
     const result = await runSQL(`
         SELECT SUM(points) as total_points
         FROM tournament_result, tournament_entry, tournament
-        WHERE team_id = ${teamId}
+        WHERE team_id = ${team_id}
         AND tournament_result.tournament_entry_id = tournament_entry.tournament_entry_id
         AND tournament_entry.tournament_id = tournament.tournament_id
         AND approved = 1
