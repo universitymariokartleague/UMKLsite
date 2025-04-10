@@ -18,13 +18,13 @@ async function initDatabase() {
 
 async function executeSQL(sqlcmd, params = {}) {
     if (!db) {
-        console.error("Database is not initialized.");
+        console.error(`%cdatabase.js%c > %cDatabase is not initialized`, "color:#27fc6e", "color:#fff", "color:#c4ffd8");
         return [];
     }
 
     // Check if the command is a SELECT statement
     if (!sqlcmd.trim().toUpperCase().startsWith("SELECT")) {
-        console.error("Only SELECT commands are allowed.");
+        console.error(`%cdatabase.js%c > %cOnly SELECT commands are allowed`, "color:#27fc6e", "color:#fff", "color:#c4ffd8");
         return [];
     }
 
@@ -51,7 +51,7 @@ async function executeSQL(sqlcmd, params = {}) {
         stmt.free();
         return data;
     } catch (error) {
-        console.error("SQL execution error:", error);
+        console.error(`%cdatabase.js%c > %cSQL execution ${error}:`, "color:#27fc6e", "color:#fff", "color:#c4ffd8");
         return [];
     }
 }

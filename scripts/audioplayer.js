@@ -41,7 +41,7 @@ function loadJSZipScript() {
         script.src = "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";
         document.head.appendChild(script);
 
-        console.log("JSZip script loaded");
+        console.log(`%caudioplayer.js%c > %cJSZip script loaded`, "color:#fcce27", "color:#fff", "color:#ffefb5")
     });
 }
 
@@ -53,7 +53,7 @@ audio.addEventListener('loadedmetadata', () => { // wait for data to load
 });
 
 function loadedMetadata(message) { // reset sin value
-    console.log(`${message}: ${audioName}`);
+    console.log(`%caudioplayer.js%c > %c${message}: ${audioName}`, "color:#fcce27", "color:#fff", "color:#ffefb5")
     loaded = true;
     tick = -70;
 }
@@ -136,8 +136,7 @@ function setBGMText() {
         }
     }
     catch (err) {
-        console.log("Playlist track text placeholder doesn't exist");
-        console.log(err)
+        console.error(`%caudioplayer.js%c > %cPlaylist track text placeholder doesn't exist: ${error}`, "color:#fcce27", "color:#fff", "color:#ffefb5")
     }
 }
 
@@ -198,7 +197,7 @@ timesAsLoadingIndicators();
 audio.addEventListener('timeupdate', () => { // fired at browser discretion (anti-fingerprinting)
     if (loaded) {
         if (isLiveLoading == -1) {
-            console.log("Live scrubbing done")
+            console.log(`%caudioplayer.js%c > %cLive scrubbing done`, "color:#fcce27", "color:#fff", "color:#ffefb5")
             isLiveLoading = 0;
             liveLoadingCount = 0;
         }
@@ -350,7 +349,7 @@ setInterval(function checkKeysDown() { // still more efficient and pleasing than
         if (isLiveLoading == -1) {
             liveLoadingCount++;
             if (liveLoadingCount > 450) {
-                console.log("Live scrubbing taking too long - reloading audio")
+                console.log(`%caudioplayer.js%c > %cLive scrubbing taking too long - reloading audio`, "color:#fcce27", "color:#fff", "color:#ffefb5")
                 reloadBGM();
                 isLiveLoading = 0;
                 liveLoadingCount = 0;
@@ -399,7 +398,7 @@ async function getPlaylist() {
 
     path + playlistData // make a full path to the playlist .txt file
     fetch(path + playlistData)
-        .then((response) => response.ok ? response.text() : console.log("Playlist file doesn't exist!"))
+        .then((response) => response.ok ? response.text() : console.error(`%caudioplayer.js%c > %cPlaylist file doesn't exist!`, "color:#fcce27", "color:#fff", "color:#ffefb5"))
         .then((data) => setData(data)); // javascript fetching protocol
 }
 
@@ -440,7 +439,7 @@ async function setPlaylistData() {
         playlist[i] = playlist[i].split("|")[0];
     }
     if (playlist.length > 0) {
-        console.log("Got playlist");
+        console.log(`%caudioplayer.js%c > %cGot playlist`, "color:#fcce27", "color:#fff", "color:#ffefb5");
         isLive = false;
         isLiveOnce = false;
         document.getElementById("playlistText").className = "visible"; // show playlist HTML code
@@ -455,7 +454,7 @@ async function setPlaylistData() {
         setBGMText();
     }
     else {
-        console.log("Playlist file is invalid"); // an error in the playlist .txt file has occured
+        console.error(`%caudioplayer.js%c > %cPlaylist file is invalid`, "color:#fcce27", "color:#fff", "color:#ffefb5"); // an error in the playlist .txt file has occured
     }
 }
 
@@ -544,10 +543,10 @@ function startSpecificBGM(BGM) { // for buttons that can be placed around the pa
         }
     }
     else {
-        console.log("Playlist mode isn't active!");
+        console.log(`%caudioplayer.js%c > %cPlaylist mode isn't active!`, "color:#fcce27", "color:#fff", "color:#ffefb5")
         if (audioName == BGM) { // error checking
             startNewBGM();
-            console.log("Played anyways: despite the error (wrong function set)");
+            console.log(`%caudioplayer.js%c > %cPlayed anyways: despite the error (wrong function set)`, "color:#fcce27", "color:#fff", "color:#ffefb5")
         }
     }
 }
@@ -568,7 +567,7 @@ function downloadAllTracks() {
     loadJSZipScript().then(() => {
         zipTracksToDownload();
     }).catch(error => {
-        console.error(error);
+        console.error(`%caudioplayer.js%c > %c${error}`, "color:#fcce27", "color:#fff", "color:#ffefb5")
         currentlyDownloadingAllTracks = false;
         document.getElementById('downloadAllButton').innerHTML = `Download All`;
     });
@@ -591,11 +590,11 @@ async function zipTracksToDownload() {
                             updateDownloadProgress(index + 1);
                         });
                     } else {
-                        console.error(`Failed to fetch ${url}`);
+                        console.error(`%caudioplayer.js%c > %cFailed to fetch ${url}`, "color:#fcce27", "color:#fff", "color:#ffefb5")
                     }
                 })
                 .catch(error => {
-                    console.error(`Error fetching ${url}: ${error}`);
+                    console.error(`%caudioplayer.js%c > %cError fetching ${url}: ${error}`, "color:#fcce27", "color:#fff", "color:#ffefb5")
                 })
         );
     });
@@ -616,7 +615,7 @@ async function zipTracksToDownload() {
         URL.revokeObjectURL(zipUrl);
         currentlyDownloadingAllTracks = false;
     } catch (error) {
-        console.error(error);
+        console.error(`%caudioplayer.js%c > %c${error}`, "color:#fcce27", "color:#fff", "color:#ffefb5")
         currentlyDownloadingAllTracks = false;
         document.getElementById('downloadAllButton').innerHTML = `Download All`;
     }
