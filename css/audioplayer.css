@@ -35,13 +35,27 @@
 }
 
 #playIcon {
-	margin-top: 5px;
+	width: 50px;
+	height: 50px;
+	margin: 5px 5px 0 0;
 	border-radius: 100px;
+	cursor: pointer;
+    transition: transform 0.1s, outline 0.05s;
 }
 
 #playIcon:hover {
 	outline: 2px solid rgba(255, 255, 255, 0.8);
 	filter: drop-shadow(0 0 0.2rem rgba(255, 255, 255));
+}
+
+#playIcon:active {
+    transform: scale(0.9);
+}
+
+@media (prefers-reduced-motion) {
+    #playIcon:active {
+        transform: none;
+    }
 }
 
 @media screen and (max-width: 1000px) {
@@ -100,7 +114,7 @@
 }
 
 #audioProgressBar:hover {
-	filter: drop-shadow(0em 0em 0.75rem var(--audiohovercolour));
+	filter: drop-shadow(0em 0em 0.75rem #f86f6f);
 }
 
 #audioBufferBar {

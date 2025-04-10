@@ -1,10 +1,8 @@
 credits|true|false|false
+Mario Paint - Mysterious.mp3|itembox.gif
 Wii Food Delivery Channel - Ordering Party Food.mp3|itembox.gif
 Yume 2kki - Green Neon World.mp3|itembox.gif
-Casey Lee Williams - Without You.mp3|itembox.gif
-Wii Food Delivery Channel - Ordering Fast Food.mp3|itembox.gif
-Tekken 4 OST - Authentic Sky.mp3|itembox.gif
-Super Mario Galaxy 2 - World 3.flac|itembox.gif
-Persona 3 - Mistic.flac|itembox.gif
-STAGNATION - 13 Sentinels ： Aegis Rim.mp3|itembox.gif
-Wii U - Initial Setup.flac|itembox.gif
+Wii U Transfer Tool - Menus.mp3|itembox.gif
+Super Mario Galaxy 2 - World 3.mp3|itembox.gif
+Wii U - Initial Setup.mp3|itembox.gif
+Wii Room - Television.mp3|itembox.gif

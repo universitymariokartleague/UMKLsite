@@ -332,7 +332,6 @@ button:focus {
     outline: var(--button-outline);
 }
 
-
 /* code */
 code,
 .codeBox,

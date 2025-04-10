@@ -1,12 +1,6 @@
 // This code was written by my very long ago and probably needs updating
 // - zy
 
-// play buttons svg
-const playButton = [
-    `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="46.88888" height="46.88888" viewBox="0,0,46.88888,46.88888"><g transform="translate(-216.55556,-156.55556)"><g data-paper-data="{&quot;isPaintingLayer&quot;:true}" fill-rule="nonzero" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" style="mix-blend-mode: normal"><path d="M216.80556,180c0,-12.80994 10.38451,-23.19444 23.19444,-23.19444c12.80994,0 23.19444,10.38451 23.19444,23.19444c0,12.80994 -10.38451,23.19444 -23.19444,23.19444c-12.80994,0 -23.19444,-10.38451 -23.19444,-23.19444z" fill-opacity="0.10196" fill="#000000" stroke="#ffffff" stroke-width="0.5"/><path d="M233.24898,191.08696v-22.17391l16.11073,10.91372z" fill="#ffffff" stroke="none" stroke-width="0"/></g></g></svg>`,
-    `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="46.88888" height="46.88888" viewBox="0,0,46.88888,46.88888"><g transform="translate(-216.55555,-156.55555)"><g data-paper-data="{&quot;isPaintingLayer&quot;:true}" fill-rule="nonzero" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" style="mix-blend-mode: normal"><g fill="#ffffff" stroke="none" stroke-width="0"><path d="M232.4439,190.93489v-21.86977h4.9044v21.86977z"/><path d="M242.6517,190.93489v-21.86977h4.9044v21.86977z"/></g><path d="M216.80556,180c0,-12.80994 10.38451,-23.19444 23.19444,-23.19444c12.80994,0 23.19444,10.38451 23.19444,23.19444c0,12.80994 -10.38451,23.19444 -23.19444,23.19444c-12.80994,0 -23.19444,-10.38451 -23.19444,-23.19444z" fill-opacity="0.10196" fill="#000000" stroke="#ffffff" stroke-width="0.5"/></g></g></svg>`
-]
-
 // setup elements
 const playIcon = document.getElementById("playIcon");
 const BGMText = document.getElementById("BGMName");
@@ -185,7 +179,7 @@ function togglePause() {
 };
 
 function setPlayIcon() {
-    playIcon.src = `play${playState}.svg`; // set the svg play icon
+    playIcon.src = `https://umkl.co.uk/assets/audioplayer/play${playState}.png`; // set the svg play icon
     if (audioStatus.className == "hidden") audioStatus.className = ""; // show the whole audio player if a pause happened (space pressed)
 }
 
