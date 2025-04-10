@@ -1,10 +1,10 @@
 credits|true|false|false
-Wii Food Delivery Channel - Ordering Party Food.mp3|UMKLlogo.webp
-Yume 2kki - Green Neon World.mp3|UMKLlogo.webp
-Casey Lee Williams - Without You.mp3|UMKLlogo.webp
-Wii Food Delivery Channel - Ordering Fast Food.mp3|UMKLlogo.webp
-Tekken 4 OST - Authentic Sky.mp3|UMKLlogo.webp
-Super Mario Galaxy 2 - World 3.flac|UMKLlogo.webp
-Persona 3 - Mistic.flac|UMKLlogo.webp
-STAGNATION - 13 Sentinels ： Aegis Rim.mp3|UMKLlogo.webp
-Wii U - Initial Setup.flac|UMKLlogo.webp
+Wii Food Delivery Channel - Ordering Party Food.mp3|itembox.gif
+Yume 2kki - Green Neon World.mp3|itembox.gif
+Casey Lee Williams - Without You.mp3|itembox.gif
+Wii Food Delivery Channel - Ordering Fast Food.mp3|itembox.gif
+Tekken 4 OST - Authentic Sky.mp3|itembox.gif
+Super Mario Galaxy 2 - World 3.flac|itembox.gif
+Persona 3 - Mistic.flac|itembox.gif
+STAGNATION - 13 Sentinels ： Aegis Rim.mp3|itembox.gif
+Wii U - Initial Setup.flac|itembox.gif
