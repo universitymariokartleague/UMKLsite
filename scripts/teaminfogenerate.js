@@ -3,8 +3,7 @@ import { isDBLoaded, runSQL } from './database.js';
 const teamBoxFormatHTML = `
     <button class="{{className}} teamBox">
         <div class="positionBox">
-            <div class="team-position">{{position}}</div>
-            <div class="team-points">{{points}}</div>
+            <div class="team-position">{{institution}}</div>
         </div>
         <hr>
         <div class="{{className}} team">
@@ -12,7 +11,7 @@ const teamBoxFormatHTML = `
             <img onload="this.style.opacity={{teamlogoopacity}}" src="{{logoSrc}}" alt="{{teamName}} team logo" class="team-logo">
         </div>
         <hr>
-        <div class="Institution">{{institution}}</div>
+        <div class="institution">{{extraData}}</div>
     </button>
 `;
 
@@ -20,15 +19,19 @@ const JSTeamBox = document.getElementById("JSTeamBox")
 const styleSheet = document.createElement("style");
 
 let dbLoaded = false;
-const season_id = 2;
+let currentSeason, maxSeason = 1;
 
 async function generateTeamBox(teamData) {
     JSTeamBox.innerHTML = "";
 
-    console.log(teamData.team_color)
+    console.log(teamData)
 
     teamData.logo_src = `assets/team_emblems/${teamData.team_name.toUpperCase()}.png`
     teamData.class_name = teamData.team_name.replace(/\s+/g, '')
+
+    let extraData = `
+        Life time points: ${await getTeamCareerPoints(teamData.team_id)}<br/>
+        Season ${currentSeason} points: ${await getTeamSeasonPoints(teamData.team_id, currentSeason)}<br/>`
 
     let teamBoxStyle="button.teamBox.{{className}}:hover,button.teamBox.{{className}}:focus{border: 0px solid {{teamColor}};outline: 4px solid {{teamColor}};}.team.{{className}}{border-left: 8px solid {{teamColor}};}"
         .replaceAll("{{className}}", teamData.class_name)
@@ -38,30 +41,15 @@ async function generateTeamBox(teamData) {
 
     let tempTeamBox = teamBoxFormatHTML
         .replace("{{position}}", teamData.position)
-        .replace("{{points}}", `${teamData.points_override ? teamData.points_override : (teamData.points ? teamData.points : "0")} PTS` )
         .replaceAll("{{teamName}}", teamData.team_name)
         .replace("{{institution}}", teamData.team_full_name)
         .replaceAll("{{className}}", teamData.class_name)
         .replace("{{logoSrc}}", teamData.logo_src)
-        .replace("{{teamlogoopacity}}", 1);
+        .replace("{{teamlogoopacity}}", 1)
+        .replace("{{extraData}}", extraData);
 
     JSTeamBox.innerHTML += tempTeamBox;
     document.head.appendChild(styleSheet);
-}
-
-async function generateTeamBoxes(teamData, cached) {
-    JSTeamBox.innerHTML = "";
-    try {
-        for (let i = 0; i < teamData.length; i++) {
-            const team = teamData[i];
-            team.position = i + 1;
-            if (dbLoaded) team.points_override = await getTeamSeasonPoints(team.team_id, season_id);
-            generateTeamBox(team, cached);
-        }
-        document.head.appendChild(styleSheet);
-    } catch (error) {
-        JSTeamBox.innerHTML = error;
-    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -70,23 +58,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function waitForDBToInit() {
     dbLoaded = await isDBLoaded();
-    console.debug(`%cteamboxgenerate.js %c> %c${dbLoaded ? "Database loaded" : "Database is loading..."}`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    console.debug(`%cteaminfogenerate.js %c> %c${dbLoaded ? "Database loaded" : "Database is loading..."}`, "color:#9452ff", "color:#fff", "color:#c29cff");
     if (!dbLoaded) {
-        setTimeout(waitForDBToInit, 100); // Check again after 1 second
+        setTimeout(waitForDBToInit, 100); // Check again after 0.1 seconds
     } else {
         dbDoneLoading()
     }
 }
 
 async function dbDoneLoading() {
-    let currentTeam = JSTeamBox.dataset.team
+    maxSeason = await getCurrentSeason();
+    currentSeason = maxSeason;
 
-    let teamData = await runSQL(`SELECT * FROM team WHERE team_name = '${currentTeam}'`)
-    console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    console.log(currentSeason)
+
+    let currentTeam = JSTeamBox.dataset.team
+    let teamData = (await runSQL(`SELECT * FROM team WHERE team_name = '${currentTeam}'`))[0];
     
-    let totalPoints = getTeamCareerPoints(teamData[0].team_id);
-    
-    generateTeamBox(teamData[0]); //attempt to retrieve playlist file from audioStatus class data
+    console.debug(`%cteaminfogenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    generateTeamBox(teamData); //attempt to retrieve playlist file from audioStatus class data
+}
+
+async function getCurrentSeason() {
+    /** Fetch the ID of the most recent season from the database. */
+    const result = await runSQL(`
+        SELECT MAX(season_id)
+        FROM season`
+    )
+
+    return result[0]["MAX(season_id)"];
 }
 
 async function getTeamCareerPoints(teamId) {
@@ -98,7 +98,7 @@ async function getTeamCareerPoints(teamId) {
         AND approved = 1
     `);
 
-    return result[0]?.total_points || 0;
+    return result[0]["SUM(points)"] || 0;
 }
 
 async function getTeamSeasonPoints(teamId, season_id) {

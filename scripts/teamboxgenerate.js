@@ -1,7 +1,7 @@
 import { isDBLoaded, runSQL } from './database.js';
 
 const teamBoxFormatHTML = `
-    <button onClick="location.href='pages/teams/{{teamName}}/'" class="{{className}} teamBox">
+    <button onClick="location.href='pages/teams/{{LinkName}}/'" class="{{className}} teamBox">
         <div class="positionBox">
             <div class="team-position">{{position}}</div>
             <div class="team-points">{{points}}</div>
@@ -12,7 +12,7 @@ const teamBoxFormatHTML = `
             <img onload="this.style.opacity={{teamlogoopacity}}" src="{{logoSrc}}" alt="{{teamName}} team logo" class="team-logo">
         </div>
         <hr>
-        <div class="Institution">{{institution}}</div>
+        <div class="institution">{{institution}}</div>
     </button>
 `;
 
@@ -21,12 +21,12 @@ const styleSheet = document.createElement("style");
 const seasonPicker = document.getElementById("season-select")
 
 let dbLoaded = false;
-let currentSeason = 1;
-let maxSeason = 10;
+let currentSeason, maxSeason = 1;
 
 async function generateTeamBox(team, cached) {
     team.logo_src = `assets/team_emblems/${team.team_name.toUpperCase()}.png`
     team.class_name = team.team_name.replace(/\s+/g, '')
+    team.link_name = team.team_name.replace(/\s+/g, '-').toLowerCase()
 
     let teamBoxStyle="button.teamBox.{{className}}:hover,button.teamBox.{{className}}:focus{border: 0px solid {{teamColor}};outline: 4px solid {{teamColor}};}.team.{{className}}{border-left: 8px solid {{teamColor}};}"
         .replaceAll("{{className}}", team.class_name)
@@ -40,6 +40,7 @@ async function generateTeamBox(team, cached) {
         .replaceAll("{{teamName}}", team.team_name)
         .replace("{{institution}}", team.team_full_name)
         .replaceAll("{{className}}", team.class_name)
+        .replace("{{LinkName}}", team.link_name)
         .replace("{{logoSrc}}", team.logo_src)
         .replace("{{teamlogoopacity}}", cached ? 0 : 1);
 
@@ -92,7 +93,8 @@ async function waitForDBToInit() {
 
 async function dbDoneLoading() {
     // let teamData = await getSeasonTeamStandings(season_id)
-    currentSeason, maxSeason = await getCurrentSeason();
+    maxSeason = await getCurrentSeason();
+    currentSeason = maxSeason;
     generateSeasonPicker();
     let teamData = await runSQL("SELECT * FROM team")
     console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
