@@ -24,7 +24,7 @@
         <meta name="twitter:card" content="summary_large_image">
     
         <!-- Scripts -->
-        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){darkThemeEnabled=parseInt(localStorage.getItem("darktheme")),isNaN(darkThemeEnabled)&&(darkThemeEnabled=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1==darkThemeEnabled?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),localStorage.setItem("darktheme",darkThemeEnabled?1:0),console.log("%csettings.js %c> %cChanging to dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):meta.setAttribute("content","light")}checkTheme();</script>
+        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),localStorage.setItem("darktheme",1),console.log("%csettings.js %c> %cChanging to dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),localStorage.setItem("darktheme",0),console.log("%csettings.js %c> %cChanging to light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
         <script src="scripts/overlayscrollbars.browser.es6.min.js" defer></script>
         <script src="scripts/overlayscrollbar.js" defer></script>    
         
@@ -57,6 +57,8 @@
         </div>
 
         <main>
+            <noscript><blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as is it used on this page<br></blockquote></noscript>
+
             <h2>Teams</h2>
             <h3>Season 2</h3>
             <p class="p-below-title">

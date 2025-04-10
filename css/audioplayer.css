@@ -40,7 +40,7 @@
 	margin: 5px 5px 0 0;
 	border-radius: 100px;
 	cursor: pointer;
-    transition: transform 0.1s, outline 0.05s;
+	transition: transform 0.1s, outline 0.05s;
 }
 
 #playIcon:hover {
@@ -49,13 +49,13 @@
 }
 
 #playIcon:active {
-    transform: scale(0.9);
+	transform: scale(0.9);
 }
 
 @media (prefers-reduced-motion) {
-    #playIcon:active {
-        transform: none;
-    }
+	#playIcon:active {
+		transform: none;
+	}
 }
 
 @media screen and (max-width: 1000px) {

@@ -34,6 +34,33 @@
     --mention-border: 1px solid rgba(31, 46, 127, 0.6);
 }
 
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-color: #fff;
+        --bg-color: #111111;
+        --scrollbar-color: #bc0839;
+    
+        --accent-color: #bc0839;
+    
+        --link-color: #fa5252;
+        --link-hover-color: #fff;
+        --highlight-color: #ffffff80;
+    
+        --button-color: #fa5252;
+        --button-background: rgba(0, 0, 0, 0.4);
+        --button-border: 1px solid rgba(255, 255, 255, 0.3);
+        --button-outline: 2px solid rgba(255, 255, 255, 0.6);
+    
+        --code-color: #fff;
+        --code-bg-color: rgba(0, 0, 0, 0.3);
+        --code-border: 1px solid rgba(255, 255, 255, 0.2);
+    
+        --metion-color: #98acff;
+        --mention-bg-color: rgba(88, 101, 242, 0.25);
+        --mention-border: 1px solid rgba(152, 172, 255, 0.6);
+    }
+}
+
 :root.dark-theme {
     --text-color: #fff;
     --bg-color: #111111;
@@ -460,3 +487,55 @@ hr.hr-below-title {
 .indent {
     padding-left: 20px;
 }
+
+
+/*blockquote*/
+blockquote {
+	border-left: 5px solid rgba(255, 102, 102, 0.9);
+	padding: 15px;
+	margin-left: 0px;
+	margin-right: 0px;
+	background-color: rgba(0, 0, 0, 0.4);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: 10px;
+}
+
+.miniquote {
+	border-left: 3px solid rgb(255, 255, 255, 0.8);
+	background-color: rgba(0, 0, 0, 0.5);
+	width: fit-content;
+	border: 0;
+	border-radius: 0;
+	padding: 10px;
+	-webkit-backdrop-filter: blur(5px);
+	backdrop-filter: blur(5px);
+}
+
+.success {
+	border: 2px solid rgba(8, 255, 111, 0.5);
+	background-color: rgba(8, 255, 111, 0.3);
+}
+
+.info {
+	border: 2px solid rgba(33, 150, 243, 0.5);
+	background-color: rgba(33, 150, 243, 0.3);
+}
+
+.warning {
+	border: 2px solid rgba(255, 152, 0, 0.5);
+	background-color: rgba(255, 152, 0, 0.3);
+}
+
+.fail {
+	border: 2px solid rgba(253, 60, 26, 0.5);
+	background-color: rgba(253, 60, 26, 0.3);
+}
+
+.rainbow {
+	border-left: 0px;
+	border: 1px solid rgba(253, 60, 26, 0.5);
+	box-shadow: 0px 0px 15px 5px rgba(255, 255, 255, 0.2);
+	animation: rainbow 4s infinite;
+}
+
+@keyframes rainbow{0%,100%{border-color:rgba(255,0,0,.7);background-color:rgba(255,0,0,.15)}8%{border-color:rgba(255,127,0,.7);background-color:rgba(255,127,0,.15)}16%{border-color:rgba(255,255,0,.7);background-color:rgba(255,255,0,.15)}25%{border-color:rgba(127,255,0,.7);background-color:rgba(127,255,0,.15)}33%{border-color:rgba(0,255,0,.7);background-color:rgba(0,255,0,.15)}41%{border-color:rgba(0,255,127,.7);background-color:rgba(0,255,127,.15)}50%{border-color:rgba(0,255,255,.7);background-color:rgba(0,255,255,.15)}58%{border-color:rgba(0,127,255,.7);background-color:rgba(0,127,255,.15)}66%{border-color:rgba(0,0,255,.7);background-color:rgba(0,0,255,.15)}75%{border-color:rgba(127,0,255,.7);background-color:rgba(127,0,255,.15)}83%{border-color:rgba(255,0,255,.7);background-color:rgba(255,0,255,.15)}91%{border-color:rgba(255,0,127,.7);background-color:rgba(255,0,127,.15)}}

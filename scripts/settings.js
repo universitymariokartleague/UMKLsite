@@ -24,7 +24,7 @@ const toggleSettingsPanel = () => {
     BGBlur.classList.toggle("hidden");
     settingsBox.classList.toggle('hide-settings-box');
     if (settingsOpen) {
-        
+
     } else {
         generateSettingsPanel();
         settingsBox.classList.remove('hidden');
@@ -79,7 +79,7 @@ function toggleTheme() {
     } else {
         console.log(`%csettings.js %c> %cChanging to light theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
         root.classList.add("light-theme");
-        root.classList.remove("dark-theme");  
+        root.classList.remove("dark-theme");
     }
     localStorage.setItem("darktheme", darkThemeEnabled ? 1 : 0);
     sendThemeChangeEvent();
@@ -114,7 +114,7 @@ document.addEventListener('keydown', (event) => {
 });
 
 // TODO: make a better easter egg
-let code="";document.addEventListener("keydown",(s=>{code+=s.key.toLowerCase(),code.endsWith("fib")?(doEEASCII(),code=""):"fib".startsWith(code)||(code="")}));
+let code = ""; document.addEventListener("keydown", (s => { code += s.key.toLowerCase(), code.endsWith("fib") ? (doEEASCII(), code = "") : "fib".startsWith(code) || (code = "") }));
 function doEEASCII() {
-    console.log(``);        
+    console.log(``);
 }
