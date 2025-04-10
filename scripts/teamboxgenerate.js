@@ -19,6 +19,7 @@ const teamBoxFormatHTML = `
 const JSTeamBox = document.getElementById("JSTeamBox")
 const styleSheet = document.createElement("style");
 const seasonPicker = document.getElementById("season-select")
+const currentSeasonText = document.getElementById("current-season")
 
 let dbLoaded = false;
 let currentSeason, maxSeason = 1;
@@ -96,6 +97,7 @@ async function dbDoneLoading() {
     maxSeason = await getCurrentSeason();
     currentSeason = maxSeason;
     generateSeasonPicker();
+    updateSeasonText();
     let teamData = await runSQL("SELECT * FROM team")
     console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     generateTeamBoxes(teamData, false)
@@ -177,6 +179,11 @@ checkCache();
 // season picker
 seasonPicker.addEventListener("change", async function () {
     currentSeason = this.value;
+    updateSeasonText();
     console.debug(`%cteamboxgenerate.js %c> %cSelected season ${currentSeason}`, "color:#9452ff", "color:#fff", "color:#c29cff");
     generateTeamBoxes(await getSeasonTeamStandings(currentSeason), false)
 });
+
+function updateSeasonText() {
+    currentSeasonText.innerText = `Season ${currentSeason} (${(2023 + Number(currentSeason))} - ${(2024 + Number(currentSeason))})`;
+}

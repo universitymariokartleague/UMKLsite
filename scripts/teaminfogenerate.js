@@ -30,8 +30,11 @@ async function generateTeamBox(teamData) {
     teamData.class_name = teamData.team_name.replace(/\s+/g, '')
 
     let extraData = `
-        Life time points: ${await getTeamCareerPoints(teamData.team_id)}<br/>
-        Season ${currentSeason} points: ${await getTeamSeasonPoints(teamData.team_id, currentSeason)}<br/>`
+        Season ${currentSeason} points: ${await getTeamSeasonPoints(teamData.team_id, currentSeason)}<br/>
+        Lifetime points: ${await getTeamCareerPoints(teamData.team_id)}<br/>
+        Current season position: ${getOrdinal(teamData.season_position)}<br/>
+        Wins/Losses: ${teamData.wins}/${teamData.losses}<br/>
+    `
 
     let teamBoxStyle="button.teamBox.{{className}}:hover,button.teamBox.{{className}}:focus{border: 0px solid {{teamColor}};outline: 4px solid {{teamColor}};}.team.{{className}}{border-left: 8px solid {{teamColor}};}"
         .replaceAll("{{className}}", teamData.class_name)
@@ -70,11 +73,13 @@ async function dbDoneLoading() {
     maxSeason = await getCurrentSeason();
     currentSeason = maxSeason;
 
-    console.log(currentSeason)
-
     let currentTeam = JSTeamBox.dataset.team
-    let teamData = (await runSQL(`SELECT * FROM team WHERE team_name = '${currentTeam}'`))[0];
+    let allTeamData = await getSeasonTeamStandings(currentSeason);
+    let teamData = allTeamData.find(team => team.team_name === 'York');
+    console.log(allTeamData)
+    // let teamData = (await runSQL(`SELECT * FROM team WHERE team_name = '${currentTeam}'`))[0];
     
+
     console.debug(`%cteaminfogenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     generateTeamBox(teamData); //attempt to retrieve playlist file from audioStatus class data
 }
@@ -114,4 +119,50 @@ async function getTeamSeasonPoints(teamId, season_id) {
     `);
 
     return result[0]?.total_points || 0;
+}
+
+async function getSeasonTeamStandings(season_id) {
+    /** Get the standings of all teams in a specific season, sorted by points. */
+    let standings = [];
+
+    // Get team data for the season
+    const teamData = await runSQL(`
+        SELECT team.team_id, team_name, team_full_name, team_color 
+        FROM team, season_entry 
+        WHERE season_id = ${season_id} 
+        AND team.team_id = season_entry.team_id
+    `);
+
+    if (!teamData || teamData.length === 0) {
+        console.debug(`%cteamboxgenerate.js %c> %cNo teams found for season ${season_id}`, "color:#9452ff", "color:#fff", "color:#ff6b6b");
+        return [];
+    }
+
+    // Get points for each team and build standings
+    for (const team of teamData) {
+        const teamPoints = await getTeamSeasonPoints(team.team_id, currentSeason);
+        standings.push({
+            team_id: team.team_id,
+            team_name: team.team_name,
+            team_full_name: team.team_full_name,
+            team_color: team.team_color,
+            points: teamPoints
+        });
+    }
+
+    // Sort by points in descending order
+    standings.sort((a, b) => b.points - a.points);
+
+    // Add position to each team in standings
+    standings.forEach((team, index) => {
+        team.season_position = index + 1;
+    });
+
+    return standings;
+}
+
+function getOrdinal(num) {
+    const suffixes = ["th", "st", "nd", "rd"];
+    const value = num % 100;
+    return num + (suffixes[(value - 20) % 10] || suffixes[value] || suffixes[0]);
 }
