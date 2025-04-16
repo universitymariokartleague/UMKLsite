@@ -78,8 +78,8 @@ async function dbDoneLoading() {
 
     let currentTeam = JSTeamBox.dataset.team
     let allTeamData = await getSeasonTeamStandings(currentSeason);
-    let teamData = allTeamData.find(team => team.team_name === 'York');
-    console.log(allTeamData)
+    let teamData = allTeamData.find(team => team.team_name === currentTeam);
+    // console.log(allTeamData)
     // let teamData = (await runSQL(`SELECT * FROM team WHERE team_name = '${currentTeam}'`))[0];
     
 
