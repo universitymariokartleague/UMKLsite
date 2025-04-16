@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" data-overlayscrollbars-initialize>
     <head>
-        <base href="../../">
+        <base href="../../../">
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Tools | University Mario Kart League</title>
-        <meta name="description" content="Various tools on the University Mario Kart League (UMKL) site">
+        <title>6v6 Score Calculator | University Mario Kart League</title>
+        <meta name="description" content="Quickly calculate point scores in a 6v6 on the University Mario Kart League (UMKL) site">
         <link rel="shortcut icon" href="assets/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
         <link rel="stylesheet" href="css/overlayscrollbars.min.css">
         <meta name="color-scheme" content="dark light">
 
-        <meta property="og:title" content="University Mario Kart League | Tools" />
+        <meta property="og:title" content="University Mario Kart League | 6v6 Score Calculator" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://umkl.co.uk/pages/tools/" />
+        <meta property="og:url" content="https://umkl.co.uk/pages/tools/trackrandomiser/" />
         <meta property="og:image" content="https://umkl.co.uk/assets/brand/UMKL_Banner_embed.png" />
-        <meta property="og:description" content="Various tools on the University Mario Kart League (UMKL) site" />
+        <meta property="og:description" content="Quickly calculate point scores in a 6v6 on the University Mario Kart League (UMKL) site" />
         <meta name="theme-color" content="#bc0839">
 
         <!-- Include this to make the og:image larger -->
@@ -29,6 +29,7 @@
         <script src="scripts/overlayscrollbar.js" defer></script>
         
         <script type="module" src="scripts/settings.js" defer></script>
+        <script type="module" src="scripts/6v6scorecalculator.js" defer></script>
     </head>
 
     <body id="top" data-overlayscrollbars-initialize>
@@ -51,15 +52,14 @@
         </div>
 
         <main>
-            <h2>Tools</h2>
-            <p class="p-below-title">Various tools and pages</p>
+            <h2>6v6 Score Calculator</h2>
+            <p class="p-below-title">Quickly calculate point scores in a 6v6.</p>
             <hr class="hr-below-title">
 
-            <p class="p-no-spacing">
-                <a href="pages/tools/6v6scorecalculator/">pages/tools/6v6scorecalculator/</a> | 6v6 Score Calculator<br>
-                <a href="pages/tools/favtrack/">pages/tools/favtrack/</a> | Favourite track<br>
-                <a href="pages/tools/trackrandomiser/">pages/tools/trackrandomiser/</a> | Track randomiser<br>
-            </p>
+            <label for="positions-input">Input your teams positions (one line = one race)</label><br>
+            <textarea style="width: 400px; height: 200px;" id="positions-input">1,2,3,4,5,6</textarea>
+            
+            <p><div id="result">Result: No data</div></p>
         </main>
 
         <footer>
