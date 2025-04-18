@@ -51,7 +51,7 @@ async function executeSQL(sqlcmd, params = {}) {
         stmt.free();
         return data;
     } catch (error) {
-        console.error(`%cdatabase.js%c > %cSQL execution ${error}:`, "color:#27fc6e", "color:#fff", "color:#c4ffd8");
+        console.error(`%cdatabase.js%c > %cSQL execution failed - ${error}`, "color:#27fc6e", "color:#fff", "color:#c4ffd8");
         return [];
     }
 }

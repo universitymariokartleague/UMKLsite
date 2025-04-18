@@ -1,7 +1,7 @@
 import { isDBLoaded, runSQL } from './database.js';
 
 const teamBoxFormatHTML = `
-    <button href="#" class="{{className}} teamBox">
+    <button onClick="location.href='pages/teams/{{LinkName}}/'" class="{{className}} teamBox">
         <div class="positionBox">
             <div class="team-position">{{position}}</div>
             <div class="team-points">{{points}}</div>
@@ -12,20 +12,22 @@ const teamBoxFormatHTML = `
             <img onload="this.style.opacity={{teamlogoopacity}}" src="{{logoSrc}}" alt="{{teamName}} team logo" class="team-logo">
         </div>
         <hr>
-        <div class="Institution">{{institution}}</div>
+        <div class="institution">{{institution}}</div>
     </button>
 `;
 
 const JSTeamBox = document.getElementById("JSTeamBox")
 const styleSheet = document.createElement("style");
+const seasonPicker = document.getElementById("season-select")
+const currentSeasonText = document.getElementById("current-season")
 
 let dbLoaded = false;
-const season_id = 2;
-let currentSeason = season_id;
+let currentSeason, maxSeason = 1;
 
 async function generateTeamBox(team, cached) {
     team.logo_src = `assets/team_emblems/${team.team_name.toUpperCase()}.png`
     team.class_name = team.team_name.replace(/\s+/g, '')
+    team.link_name = team.team_name.replace(/\s+/g, '-').toLowerCase()
 
     let teamBoxStyle="button.teamBox.{{className}}:hover,button.teamBox.{{className}}:focus{border: 0px solid {{teamColor}};outline: 4px solid {{teamColor}};}.team.{{className}}{border-left: 8px solid {{teamColor}};}"
         .replaceAll("{{className}}", team.class_name)
@@ -39,6 +41,7 @@ async function generateTeamBox(team, cached) {
         .replaceAll("{{teamName}}", team.team_name)
         .replace("{{institution}}", team.team_full_name)
         .replaceAll("{{className}}", team.class_name)
+        .replace("{{LinkName}}", team.link_name)
         .replace("{{logoSrc}}", team.logo_src)
         .replace("{{teamlogoopacity}}", cached ? 0 : 1);
 
@@ -51,7 +54,7 @@ async function generateTeamBoxes(teamData, cached) {
         for (let i = 0; i < teamData.length; i++) {
             const team = teamData[i];
             team.position = i + 1;
-            if (dbLoaded) team.points_override = await getTeamSeasonPoints(team.team_id, season_id);
+            if (dbLoaded) team.points_override = await getTeamSeasonPoints(team.team_id, currentSeason);
             generateTeamBox(team, cached);
         }
         document.head.appendChild(styleSheet);
@@ -91,17 +94,44 @@ async function waitForDBToInit() {
 
 async function dbDoneLoading() {
     // let teamData = await getSeasonTeamStandings(season_id)
+    maxSeason = await getCurrentSeason();
+    currentSeason = maxSeason;
+    generateSeasonPicker();
+    updateSeasonText();
     let teamData = await runSQL("SELECT * FROM team")
     console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     generateTeamBoxes(teamData, false)
 }
 
-async function getTeamSeasonPoints(teamId, season_id) {
+async function generateSeasonPicker() {
+    seasonPicker.innerHTML = ""; // Clear existing options
+    for (let season = 1; season <= maxSeason; season++) {
+        const option = document.createElement("option");
+        option.value = season;
+        option.textContent = `Season ${season}`;
+        if (season === currentSeason) {
+            option.selected = true;
+        }
+        seasonPicker.appendChild(option);
+    }
+}
+
+async function getCurrentSeason() {
+    /** Fetch the ID of the most recent season from the database. */
+    const result = await runSQL(`
+        SELECT MAX(season_id)
+        FROM season`
+    )
+
+    return result[0]["MAX(season_id)"];
+}
+
+async function getTeamSeasonPoints(team_id, season_id) {
     /** Calculate the total points for a team in a specific season. */
     const result = await runSQL(`
         SELECT SUM(points) as total_points
         FROM tournament_result, tournament_entry, tournament
-        WHERE team_id = ${teamId}
+        WHERE team_id = ${team_id}
         AND tournament_result.tournament_entry_id = tournament_entry.tournament_entry_id
         AND tournament_entry.tournament_id = tournament.tournament_id
         AND approved = 1
@@ -130,7 +160,7 @@ async function getSeasonTeamStandings(season_id) {
 
     // Get points for each team and build standings
     for (const team of teamData) {
-        const teamPoints = await getTeamSeasonPoints(team.team_id, season_id);
+        const teamPoints = await getTeamSeasonPoints(team.team_id, currentSeason);
         standings.push({
             team_id: team.team_id,
             team_name: team.team_name,
@@ -146,15 +176,14 @@ async function getSeasonTeamStandings(season_id) {
 
 checkCache();
 
-// extra
-const s1Button = document.getElementById("s1-button");
-s1Button.addEventListener('click', switchSeasons)
-
-async function switchSeasons() {
-    if (currentSeason == 2) {
-        currentSeason = 1;
-    } else {
-        currentSeason = 2;
-    }
+// season picker
+seasonPicker.addEventListener("change", async function () {
+    currentSeason = this.value;
+    updateSeasonText();
+    console.debug(`%cteamboxgenerate.js %c> %cSelected season ${currentSeason}`, "color:#9452ff", "color:#fff", "color:#c29cff");
     generateTeamBoxes(await getSeasonTeamStandings(currentSeason), false)
+});
+
+function updateSeasonText() {
+    currentSeasonText.innerText = `Season ${currentSeason} (${(2023 + Number(currentSeason))} - ${(2024 + Number(currentSeason))})`;
 }

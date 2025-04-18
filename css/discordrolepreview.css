@@ -14,16 +14,27 @@
     float: right;
 }
 
+#cheepCheepRoleiFrame {
+    height: 250px;
+    width: 500px;
+    border-radius: 10px;
+    outline: 1px solid var(--text-color);
+}
+
 /* For mobile devices */
 @media (max-width: 767px) {
-    #discordRoleiFrame {
+    #discordRoleiFrame, #cheepCheepRoleiFrame {
         width: 100%;
     }
 
-    .discordRolePreview {
+    .discordRolePreview, .cheepCheepRolePreview {
         float: none;
         margin-top: 0;
         width: auto;
         padding: 15px 0;
+    }
+
+    .cheepCheepRolePreview {
+        padding: 0;
     }
 }
