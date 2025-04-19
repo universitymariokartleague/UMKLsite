@@ -558,41 +558,39 @@ blockquote {
 	display: flex;
 	/* justify-content: center; */
 	flex-direction: row;
-	flex-wrap: wrap;
+	/* flex-wrap: wrap; */
 
     border-radius: 15px;
     background-color: var(--news-box-bg-color);
     border: var(--button-outline);
-    padding: 5px;;
+    padding: 5px;
+    overflow-x: auto;
 }
 
 .news-box {
     border: var(--button-outline);
-	background-color: var(--bg-color);
-	padding: 10px;
-	margin: 5px;
-	width: 200px;
-	height: 250px;
-	border-radius: 10px;
+    background-color: var(--bg-color);
+    padding: 10px;
+    margin: 5px;
+    min-width: 200px;
+    width: 200px;
+    height: 250px;
+    border-radius: 10px;
+    overflow: hidden;
     position: relative;
-	overflow: hidden;
-	filter: drop-shadow(0em 0em 0.5rem #ffffff00);
+    isolation: isolate;
+    contain: paint;
 }
 
 .news-box .news-image img,
 .news-box .news-image video,
 .news-box .news-image video {
-    height: 100px;
-    width: auto;
-    object-fit: cover;
-    overflow-clip-margin: unset;
-	position: absolute;
+	width: 220px;
+    height: 110px;
+    position: absolute;
 	top: 0;
 	left: 0;
-	margin: auto;
 	z-index: -1;
-	min-width: 100%;
-	/* opacity: 0.5; */
 }
 
 .news-box .news-text {
