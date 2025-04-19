@@ -333,7 +333,7 @@ a[target="_blank"].nav-bar-link::after {
     vertical-align: sub;
 }
 
-@media screen and (max-width: 402px) {
+@media screen and (max-width: 395px) {
     a[target="_blank"].nav-bar-link::after {
         content: inherit;
     }
@@ -644,12 +644,20 @@ blockquote {
 
 .team-box {
     flex: 1;
-    min-width: 100px;
+    min-width: 50px;
     max-width: 300px;
     margin: auto;
     text-align: center;
     padding: 10px;
     border-radius: 15px;
+}
+
+.team-box-image {
+    height: 25vw;
+    width: 25vw;
+    max-height: 100px;
+    max-width: 100px;
+    margin-top: 0.5em;
 }
 
 .vs-box {
@@ -661,13 +669,26 @@ blockquote {
 
 @media screen and (max-width: 767px) {
     .team-box h3 {
-        font-size: clamp(10px, 4vw, 20px);
+        font-size: clamp(14px, 4vw, 20px);
     }
 
     .vs-box {
         flex: 0 0 45px;
         font-size: 14px;
         padding: 0px;    
+    }
+}
+
+@media screen and (max-width: 340px) {
+    .team-box h3 {
+        font-size: 20px;
+    }
+
+    .team-box {
+        flex: unset;
+        min-width: unset;
+        max-width: unset;    
+        width: 100vw;
     }
 }
 
