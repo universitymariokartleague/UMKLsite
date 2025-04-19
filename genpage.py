@@ -82,7 +82,7 @@ TEAM_PAGE = """
         <footer>
             UMKL 2025 | 
             <a class="no-color-link" href="pages/credits/">Credits</a> |
-            <a class="settingsBoxOpener">Settings</a>
+            <a class="fa fa-gear no-color-link settingsBoxOpener"></a>
         </footer>
     </body>
 </html>
