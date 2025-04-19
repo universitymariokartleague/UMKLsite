@@ -653,6 +653,13 @@ blockquote {
     margin: auto 0;
 }
 
+@media screen and (max-width: 767px) {
+    .vs-box {
+        font-size: 15px;
+        padding: 0px;    
+    }
+}
+
 .info-container {
 	display: flex;
 	justify-content: center;
