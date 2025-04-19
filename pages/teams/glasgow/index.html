@@ -1,6 +1,4 @@
-import os
 
-TEAM_PAGE = """
 <!DOCTYPE html>
 <html lang="en" data-overlayscrollbars-initialize>
     <head>
@@ -8,8 +6,8 @@ TEAM_PAGE = """
     
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Team {TEAMNAME} | University Mario Kart League</title>
-        <meta name="description" content="Information about Team {TEAMNAME}, which are participating in the University Mario Kart League (UMKL)">
+        <title>Team Glasgow | University Mario Kart League</title>
+        <meta name="description" content="Information about Team Glasgow, which are participating in the University Mario Kart League (UMKL)">
         <link rel="shortcut icon" href="assets/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
@@ -20,7 +18,7 @@ TEAM_PAGE = """
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://umkl.co.uk/pages/teams/" />
         <meta property="og:image" content="https://umkl.co.uk/assets/brand/Cheep_Cheep_banner.png" />
-        <meta property="og:description" content="Information about Team {TEAMNAME}, which are participating in the University Mario Kart League (UMKL)" />
+        <meta property="og:description" content="Information about Team Glasgow, which are participating in the University Mario Kart League (UMKL)" />
         <meta name="theme-color" content="#bc0839">
     
         <!-- Include this to make the og:image larger -->
@@ -55,13 +53,13 @@ TEAM_PAGE = """
         </div>
 
         <main>
-            <h2>{TEAMNAME}</h2>
+            <h2>Glasgow</h2>
             <p class="p-below-title">
-                Team information about {TEAMNAME}.   
+                Team information about Glasgow.   
             </p>
             <hr class="hr-below-title">
 
-            <div id="JSTeamBox" class="teamBoxContainer" data-team="{TEAMNAME}">
+            <div id="JSTeamBox" class="teamBoxContainer" data-team="Glasgow">
                 Loading team data...
             </div>
 
@@ -86,25 +84,3 @@ TEAM_PAGE = """
         </footer>
     </body>
 </html>
-"""
-
-def main():
-    print("What page would you like to create?")
-    print("1 | Uni team page")
-    print("2 | Blog page")
-    selection = int(input("Selection > "))
-    match selection:
-        case 1:
-            create_team_page()
-            
-def create_team_page():
-    print("ーーーーーーーーーー")
-    print("Generating uni team page")
-    team_name = input("Enter team name > ")
-    team_name_file_path = team_name.lower().replace(" ", "-")
-    os.makedirs(f"pages/teams/{team_name_file_path}", exist_ok=True)
-    with open(f"pages/teams/{team_name_file_path}/index.html", "a+") as f:
-        f.write(TEAM_PAGE.replace("{TEAMNAME}", team_name))
-
-if __name__ == "__main__":
-    main()

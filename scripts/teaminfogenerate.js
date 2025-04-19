@@ -24,10 +24,12 @@ let currentSeason, maxSeason = 1;
 async function generateTeamBox(teamData) {
     JSTeamBox.innerHTML = "";
 
-    console.log(teamData)
-
-    teamData.logo_src = `assets/team_emblems/${teamData.team_name.toUpperCase()}.png`
-    teamData.class_name = teamData.team_name.replace(/\s+/g, '')
+    try {
+        teamData.logo_src = `assets/team_emblems/${teamData.team_name.toUpperCase()}.png`
+        teamData.class_name = teamData.team_name.replace(/\s+/g, '')    
+    } catch (error) {
+        JSTeamBox.innerHTML = error.stack;
+    }
 
     let winslosses = await getTeamWinsAndLosses(teamData.team_id);
 

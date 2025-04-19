@@ -62,7 +62,7 @@ function generateSettingsPanel() {
         <div class="codeBoxTight">${navigator.userAgent}</div>
         `;
     } catch (error) {
-        settingsBoxJS.innerHTML = `<br>Failed to load settings<br><code>${error}</code>`;
+        settingsBoxJS.innerHTML = `<br>Failed to load settings<br><code>${error.stack}</code>`;
     }
     generateEventListeners();
 };

@@ -135,7 +135,7 @@ function setBGMText() {
             playlistText.innerHTML += `<button onclick="prevBGM()"><<< Previous</button> <button class="blankButton" onclick="pickRandomTrack()"> ${playlistNumPlaying + 1} / ${playlistLength} </button> <button onclick="nextBGM()">Next >>></button> ${downloadingAllEnabled ? ' | <button onclick="downloadAllTracks()" id="downloadAllButton">Download All</button>' : ''}`;
         }
     }
-    catch (err) {
+    catch (error) {
         console.error(`%caudioplayer.js%c > %cPlaylist track text placeholder doesn't exist: ${error}`, "color:#fcce27", "color:#fff", "color:#ffefb5")
     }
 }

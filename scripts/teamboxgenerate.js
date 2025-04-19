@@ -60,7 +60,7 @@ async function generateTeamBoxes(teamData, cached) {
         document.head.appendChild(styleSheet);
         cacheTeamData(JSON.stringify(teamData));
     } catch (error) {
-        JSTeamBox.innerHTML = error;
+        JSTeamBox.innerHTML = error.stack;
     }
 }
 
@@ -98,8 +98,8 @@ async function dbDoneLoading() {
     currentSeason = maxSeason;
     generateSeasonPicker();
     updateSeasonText();
-    // let teamData = await runSQL("SELECT * FROM team")
-    let teamData = await getSeasonTeamStandings(currentSeason)
+    let teamData = await runSQL("SELECT * FROM team")
+    // let teamData = await getSeasonTeamStandings(currentSeason)
     console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     generateTeamBoxes(teamData, false)
 }
