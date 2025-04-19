@@ -480,6 +480,10 @@ button.teamBox {
 
 hr {
     margin: 20px 0;
+    height: 2px;
+    border-width: 0;
+    background-color: var(--text-color);
+    color: var(--text-color);
 }
 
 hr.hr-below-title {
