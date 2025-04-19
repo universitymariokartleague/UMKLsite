@@ -61,7 +61,7 @@
         --mention-bg-color: rgba(88, 101, 242, 0.25);
         --mention-border: 1px solid rgba(152, 172, 255, 0.6);
 
-        --news-box-bg-color: rgba(255, 255, 255, 0.05);
+        --news-box-bg-color: rgba(255, 255, 255, 0.02);
     }
 }
 
@@ -89,7 +89,7 @@
     --mention-bg-color: rgba(88, 101, 242, 0.25);
     --mention-border: 1px solid rgba(152, 172, 255, 0.6);
 
-    --news-box-bg-color: rgba(255, 255, 255, 0.05);
+    --news-box-bg-color: rgba(255, 255, 255, 0.02);
 }
 
 /*adjust mobile text inflation*/
@@ -563,17 +563,17 @@ blockquote {
     border-radius: 15px;
     background-color: var(--news-box-bg-color);
     border: var(--button-outline);
-    margin-bottom: 10px;
+    padding: 5px;;
 }
 
 .news-box {
-    border: 2px solid var(--accent-color);
+    border: var(--button-outline);
 	background-color: var(--bg-color);
 	padding: 10px;
 	margin: 5px;
 	width: 200px;
-	height: 200px;
-	border-radius: 15px;
+	height: 250px;
+	border-radius: 10px;
 	filter: drop-shadow(0em 0em 0.5rem #ffffff00);
 	overflow: hidden;
 }
@@ -581,19 +581,20 @@ blockquote {
 .news-box .news-image img,
 .news-box .news-image video,
 .news-box .news-image video {
-    max-height: 100%;
-    max-width: 100%;
-    object-fit: contain;
-	border-radius: 5px;
+    /* max-height: 100%; */
+    /* max-width: 100%; */
+    height: 100px;
+    width: auto;
+    object-fit: cover;
+	/* border-radius: 5px; */
 	position: absolute;
 	right: 0;
 	top: 0;
 	margin: auto;
 	z-index: -1;
-	height: auto;
 	min-width: 100%;
-	opacity: 0.3;
-	filter: drop-shadow(0em 0em 0.75rem var(--text-color));
+    overflow-clip-margin: unset;
+	/* opacity: 0.5; */
 }
 
 .news-box .news-text {
@@ -620,12 +621,13 @@ blockquote {
 	bottom: 0;
 	margin-left: 10px;
 	margin-bottom: 10px;
+    opacity: 0.8;
 }
 
 
 
 .match-container {
-	display: flex;
+    display: flex;
 	justify-content: center;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -634,7 +636,6 @@ blockquote {
     background-color: var(--news-box-bg-color);
     border: var(--button-outline);
 
-    margin: 20px 0px;
 
     padding:10px;
 }
@@ -647,13 +648,9 @@ blockquote {
 }
 
 .vs-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    font-size: 30px;
     padding: 10px;
     margin: auto 0;
-    text-align:center;
 }
 
 .info-container {
@@ -662,7 +659,21 @@ blockquote {
 	flex-direction: row;
 	flex-wrap: wrap;
 
-    border-radius: 15px;
-    margin: 20px 0px;
-    padding:10px;
+    text-align:center;
+    margin-top: 10px;
+    border-radius: 10px;
+    padding: 10px;
+
+    background-color: var(--news-box-bg-color);
+
+    width: 100vw;
+}
+
+
+.test-disclaimer {
+    font-style: italic;
+}
+
+.after-title {
+    margin-top: 0.5em;
 }
