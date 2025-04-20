@@ -84,7 +84,11 @@
                     <option value="1">Season 1</option>
                 </select>
             </div>
-            <p>Click a team to view their profile</p>
+
+            <p>
+                Click a team to view their profile<br>
+                <button id="shareButton">Share current results</button>
+            </p>
 
             <div id="JSTeamBox" class="teamBoxContainer">
                 Loading team data...
@@ -101,4 +105,18 @@
             <a href="https://discord.gg/6jS7YUqnbh" title="UMKL Discord Server" class="no-color-link no-underline-link fa-brands fa-discord"></a>            
         </footer>
     </body>
+
+    <script>
+        const shareButton = document.getElementById("shareButton")
+
+        // Share must be triggered by "user activation"
+        btn.addEventListener("click", async () => {
+            try {
+                await navigator.share(shareData);
+                resultPara.textContent = "MDN shared successfully";
+            } catch (err) {
+                resultPara.textContent = `Error: ${err}`;
+            }
+        });
+    </script>
 </html>

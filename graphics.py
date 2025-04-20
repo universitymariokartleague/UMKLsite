@@ -200,7 +200,7 @@ def create_team_standings_image(
     add_text(f"SEASON {logic.get_current_season()}", (TITLE_POSITION[0], TITLE_POSITION[1] - 50), DEFAULT_FONT, TITLE_FONT_SIZE - 15, TITLE_COLOR, anchor="lm")
     add_text("TEAM STANDINGS", TITLE_POSITION, DEFAULT_FONT, TITLE_FONT_SIZE, TITLE_COLOR, anchor="lm")
     timestamp = datetime.now().strftime("%d/%m/%Y")
-    add_text(f"Correct as of\n{timestamp}", (TITLE_POSITION[0] + 900, TITLE_POSITION[1] - 90), DEFAULT_FONT, TITLE_FONT_SIZE - 35, TITLE_COLOR, anchor="rt")
+    add_text(f"Results as of\n{timestamp}", (TITLE_POSITION[0] + 900, TITLE_POSITION[1] - 85), DEFAULT_FONT, TITLE_FONT_SIZE - 35, TITLE_COLOR, anchor="rt")
 
     # Draw team standings
     for i, (team_id, current_points) in enumerate(team_standings[:MAX_TEAMS]):

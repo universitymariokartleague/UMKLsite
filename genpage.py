@@ -109,7 +109,7 @@ BLANK_NEWS_PAGE = """
 <!DOCTYPE html>
 <html lang="en" data-overlayscrollbars-initialize>
     <head>
-        <base href="../../">
+        <base href="../../../../">
     
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -234,7 +234,7 @@ def create_new_blog():
     new_blog = f"""
                 <div class="news-box">
                     <article class="news-text">
-                        <a href="pages/news/{url_date}/{link}/" class="ref" target="_blank"><span class="news-title">{title}</span></a><br>
+                        <a href="pages/news/{url_date}/{link}/" class="ref"><span class="news-title">{title}</span></a><br>
                         <span class="news-desc">{desc}</span>
                     </article>
                     <div class="news-image"><img loading="lazy" src="{image}"></div>
@@ -289,7 +289,7 @@ def create_new_blog():
     print("News articles added to front page and sites/news/")
 
     os.makedirs(f"pages/news/{url_date}/{link}", exist_ok=True)
-    with open(f"pages/teams/{url_date}/{link}/index.html", "a+") as f:
+    with open(f"pages/news/{url_date}/{link}/index.html", "a+", encoding='utf-8') as f:
         content = BLANK_NEWS_PAGE.replace("{TITLE}", title).replace("{DESC}", desc).replace("{IMAGE}", image).replace("{DATE}", date).replace("{LINK}", f"pages/news/{url_date}/{link}")
         f.write(content)
 
