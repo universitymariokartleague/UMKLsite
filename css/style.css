@@ -572,7 +572,7 @@ blockquote {
     border-radius: 15px;
     background-color: var(--news-box-bg-color);
     border: var(--button-outline);
-    padding: 5px;
+    padding: 2px;
     overflow-x: auto;
 }
 
@@ -620,7 +620,9 @@ blockquote {
 }
 
 .news-box .news-desc {
-	font-size: 15px;
+    font-size: 15px;
+    line-height: 1.25;
+    display: inline-block;
 }
 
 .news-box .news-date {
