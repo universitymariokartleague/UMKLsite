@@ -7,9 +7,9 @@ from datetime import datetime
 # File paths
 DEFAULT_ICON_PATH = "assets/teamemblems/DEFAULT.png"
 TEAM_ICON_DIR = "assets/teamemblems/"
-DEFAULT_FONT = "assets/fonts/SF-Pro/SF-Pro-Display-Bold.otf"
-DEFAULT_FONT_HEAVY = "assets/fonts/SF-Pro/SF-Pro-Display-Black.otf"
-FALLBACK_FONT = "assets/fonts/FOT-RodinNTLG Pro DB.otf"
+DEFAULT_FONT = "assets/pythongraphics/fonts/SF-Pro/SF-Pro-Display-Bold.otf"
+DEFAULT_FONT_HEAVY = "assets/pythongraphics/fonts/SF-Pro/SF-Pro-Display-Black.otf"
+FALLBACK_FONT = "assets/pythongraphics/fonts/FOT-RodinNTLG Pro DB.otf"
 
 FALLBACK_FONT_SIZE_DIF = [0.9, 1.05]
 FETCH_ERROR_MESSAGE = "Failed to fetch..."
@@ -175,7 +175,7 @@ def create_team_standings_image(
         season_id (int): The ID of the current season.
     """
     # Load base image
-    base = Image.open("assets/graphics/teamstandingbgtall.png").convert("RGBA")
+    base = Image.open("assets/pythongraphics/graphics/teamstandingbgtall.png").convert("RGBA")
     global draw
     draw = ImageDraw.Draw(base)
 
@@ -199,6 +199,8 @@ def create_team_standings_image(
     # Add title
     add_text(f"SEASON {logic.get_current_season()}", (TITLE_POSITION[0], TITLE_POSITION[1] - 50), DEFAULT_FONT, TITLE_FONT_SIZE - 15, TITLE_COLOR, anchor="lm")
     add_text("TEAM STANDINGS", TITLE_POSITION, DEFAULT_FONT, TITLE_FONT_SIZE, TITLE_COLOR, anchor="lm")
+    timestamp = datetime.now().strftime("%d/%m/%Y")
+    add_text(f"Correct as of\n{timestamp}", (TITLE_POSITION[0] + 900, TITLE_POSITION[1] - 90), DEFAULT_FONT, TITLE_FONT_SIZE - 35, TITLE_COLOR, anchor="rt")
 
     # Draw team standings
     for i, (team_id, current_points) in enumerate(team_standings[:MAX_TEAMS]):
@@ -235,7 +237,7 @@ def create_team_standings_image(
     cropped_base = base.crop((0, 0, 1125, final_height))
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    cropped_base.save(f"assets/pythonoutput/{timestamp}_team_standings.png")
+    cropped_base.save(f"assets/pythongraphics/output/team_standings.png")
 
 def create_event_versus_image(
     team_IDs: list[int]
@@ -247,7 +249,7 @@ def create_event_versus_image(
         team_IDs (list[int]): List containing the IDs of the two teams.
     """
     # Load base image
-    base = Image.open("assets/graphics/vsbg.png").convert("RGBA")
+    base = Image.open("assets/pythongraphics/graphics/vsbg.png").convert("RGBA")
     global draw
     draw = ImageDraw.Draw(base)
 
@@ -258,7 +260,7 @@ def create_event_versus_image(
     team_colors = [team[3] for team in team_data]
     
     # Constants
-    OVERLAY_PATH = "assets/graphics/vsoverlay.png"
+    OVERLAY_PATH = "assets/pythongraphics/graphics/vsoverlay.png"
     ACCENT_COLOR = "#fff"
     TEXT_POS = [(1022, 600), (3378, 600)]
     FULL_TEXT_Y_OFFSET = 1275
@@ -284,7 +286,7 @@ def create_event_versus_image(
         icon = load_image(emblem_path).resize((EMBLEM_WIDTH, EMBLEM_WIDTH), Image.BILINEAR)
         base.paste(icon, (TEXT_POS[i][0] - (EMBLEM_WIDTH // 2), EMBLEM_Y), icon)
     
-    base.save("output/versus.png")
+    base.save("assets/pythongraphics/output/versus.png")
 
 async def create_results_image(
     bot: discord.ext.commands.Bot,
@@ -298,7 +300,7 @@ async def create_results_image(
         tournament_id (int): The ID of the tournament.
     """
     # Load base image
-    base = Image.open("assets/graphics/resultsbg.png").convert("RGBA")
+    base = Image.open("assets/pythongraphics/graphics/resultsbg.png").convert("RGBA")
     global draw
     draw = ImageDraw.Draw(base)
 
@@ -336,7 +338,7 @@ async def create_results_image(
     PLAYER_FONT_SIZE = 100
     PLAYER_MAX_WIDTH = 900
     POSITION_FONT_SIZE = 75
-    OVERLAY_PATH = "assets/graphics/resultsoverlay.png"
+    OVERLAY_PATH = "assets/pythongraphics/graphics/resultsoverlay.png"
     ACCENT_COLOR = "#fff"
     TEXT_POS = [(465, 1215 + -270), (465, 2430 + -270)] # split at y = 1215
     FULL_TEXT_X_OFFSET = 2300
@@ -411,7 +413,7 @@ async def create_results_image(
         icon = load_image(emblem_path).resize((EMBLEM_WIDTH, EMBLEM_WIDTH), Image.BILINEAR)
         base.paste(icon, (TEXT_POS[i][0] - (EMBLEM_WIDTH // 2),  (TEXT_POS[i][1] - 700)), icon)
 
-    base.save("output/results.png")
+    base.save("assets/pythongraphics/output/results.png")
 
 def create_winner_image(
     tournament_id: int
@@ -423,7 +425,7 @@ def create_winner_image(
         tournament_id (int): The ID of the tournament.
     """
     # Load base image
-    base = Image.open("assets/graphics/winnerbg.png").convert("RGBA")
+    base = Image.open("assets/pythongraphics/graphics/winnerbg.png").convert("RGBA")
     global draw
     draw = ImageDraw.Draw(base)
 
@@ -437,7 +439,7 @@ def create_winner_image(
     team_colors = [team[3] for team in team_data]
 
     # Constants
-    OVERLAY_PATH = "assets/graphics/winneroverlay.png"
+    OVERLAY_PATH = "assets/pythongraphics/graphics/winneroverlay.png"
     ACCENT_COLOR = "#fff"
     MATCH_FONT_SIZE = 135
     SCORE_FONT_SIZE = 90
@@ -460,7 +462,7 @@ def create_winner_image(
     icon = load_image(emblem_path).resize((EMBLEM_WIDTH, EMBLEM_WIDTH), Image.BILINEAR)
     base.paste(icon, (1237 - (EMBLEM_WIDTH // 2), 235), icon)
 
-    base.save("output/winner.png")
+    base.save("assets/pythongraphics/output/winner.png")
 
 def create_welcome_image(
     user: discord.User
@@ -472,7 +474,7 @@ def create_welcome_image(
         user (discord.User): The user to create the welcome image for.
     """
     # Load base image
-    base = Image.open("assets/graphics/welcomebg.png").convert("RGBA")
+    base = Image.open("assets/pythongraphics/graphics/welcomebg.png").convert("RGBA")
     global draw
     draw = ImageDraw.Draw(base)
 
@@ -512,7 +514,7 @@ def create_welcome_image(
     # Add username
     add_text(username, TEXT_POS, DEFAULT_FONT, PLAYER_FONT_SIZE, ACCENT_COLOR, anchor="mm")
 
-    base.save("output/welcome.png")
+    base.save("assets/pythongraphics/output/welcome.png")
 
 def crop_to_circle(
     image: Image
