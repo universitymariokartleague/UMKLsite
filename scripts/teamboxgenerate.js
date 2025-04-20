@@ -25,7 +25,7 @@ let dbLoaded = false;
 let currentSeason, maxSeason = 1;
 
 async function generateTeamBox(team, cached) {
-    team.logo_src = `assets/team_emblems/${team.team_name.toUpperCase()}.png`
+    team.logo_src = `assets/teamemblems/${team.team_name.toUpperCase()}.png`
     team.class_name = team.team_name.replace(/\s+/g, '')
     team.link_name = team.team_name.replace(/\s+/g, '-').toLowerCase()
 
