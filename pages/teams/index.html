@@ -32,6 +32,7 @@
         <script type="module" src="scripts/settings.js" defer></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/sql-wasm.js' defer></script>
         <script type="module" src="scripts/teamboxgenerate.js" defer></script>
+        <script type="module" src="scripts/copystandingsimage.js" defer></script>
     </head>
     <body id="top" data-overlayscrollbars-initialize>
         <div class="navbar-container">
@@ -74,7 +75,6 @@
             </p>
 
             <hr class="hr-below-title">
-
             
             <h3 id="current-season">Season 1 (2024 - 2025)</h3>
             <p class="p-below-title">Season 1 has concluded, it ran from October 2024 to February 2025.</p>
@@ -105,36 +105,4 @@
             <a href="https://discord.gg/6jS7YUqnbh" title="UMKL Discord Server" class="no-color-link no-underline-link fa-brands fa-discord"></a>            
         </footer>
     </body>
-
-    <script>
-        async function shareImage(title, text, blob) {
-            const shareData = {
-                files: [
-                    new File([blob], "team_standings.png", {
-                        type: blob.type,
-                    })
-                ],
-                title: title,
-                text: text,
-            };
-
-            try {
-                await navigator.share(shareData);
-                console.log("Shared successfully");
-            } catch (err) {
-                console.error(`Error: ${err}`);
-            };
-        };
-
-        const shareButton = document.getElementById("shareButton");
-
-        // Share must be triggered by "user activation"
-        shareButton.addEventListener("click", async () => {
-            const blob = await fetch('https://umkl.co.uk/assets/pythongraphics/output/team_standings.png').then(r=>r.blob())
-            shareImage(
-                "UMKL Team Standings", 
-                "Check out the latest team standings in the UMKL!", 
-                blob);
-        });
-    </script>
 </html>
