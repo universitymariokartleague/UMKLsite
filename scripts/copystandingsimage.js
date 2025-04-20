@@ -28,14 +28,17 @@ async function shareImage(title, text, blob) {
     };
 };
 
-function isWindows() {
-    return navigator.platform.indexOf('Win') > -1;
+function isWindowsOrLinux() {
+    if (navigator.userAgentData) {
+        return navigator.userAgentData.platform.includes('Windows') || navigator.userAgentData.platform.includes('Linux');
+    }
+    return navigator.userAgent.includes('Windows') || navigator.userAgent.includes('Linux');
 }
 
 shareButton.addEventListener("click", async () => {
     const blob = await fetch('https://umkl.co.uk/assets/pythongraphics/output/team_standings.png').then(r=>r.blob())
     
-    if (isWindows()) {
+    if (isWindowsOrLinux()) {
         const success = await copyImageToClipboard(blob);
         if (success) {
             let originalMessage = shareButton.innerText
