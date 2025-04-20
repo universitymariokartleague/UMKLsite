@@ -107,16 +107,34 @@
     </body>
 
     <script>
-        const shareButton = document.getElementById("shareButton")
+        async function shareImage(title, text, blob) {
+            const shareData = {
+                files: [
+                    new File([blob], "team_standings.png", {
+                        type: blob.type,
+                    })
+                ],
+                title: title,
+                text: text,
+            };
 
-        // Share must be triggered by "user activation"
-        btn.addEventListener("click", async () => {
             try {
                 await navigator.share(shareData);
-                resultPara.textContent = "MDN shared successfully";
+                console.log("Shared successfully");
             } catch (err) {
-                resultPara.textContent = `Error: ${err}`;
-            }
+                console.error(`Error: ${err}`);
+            };
+        };
+
+        const shareButton = document.getElementById("shareButton");
+
+        // Share must be triggered by "user activation"
+        shareButton.addEventListener("click", async () => {
+            const blob = await fetch('https://umkl.co.uk/assets/pythongraphics/output/team_standings.png').then(r=>r.blob())
+            shareImage(
+                "UMKL Team Standings", 
+                "Check out the latest team standings in the UMKL!", 
+                blob);
         });
     </script>
 </html>
