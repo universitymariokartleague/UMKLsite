@@ -188,7 +188,7 @@ def create_team_page():
         f.write(TEAM_PAGE.replace("{TEAMNAME}", team_name))
 
 def create_blog():
-    read_current_blogs()
+    create_new_blog()
 
 def create_slug(title):
     """Generate a URL-friendly slug from the title"""
@@ -197,7 +197,7 @@ def create_slug(title):
     slug = re.sub(r'-+', '-', slug)
     return slug.strip('-')
 
-def read_current_blogs():
+def create_new_blog():
     title = input("Enter blog title > ")
     desc = input("Enter blog description > ")
     image = input("Enter blog image link > ")
@@ -236,10 +236,6 @@ def read_current_blogs():
     if old_container and new_container:
         old_container.replace_with(new_container)
 
-    os.makedirs(f"pages/news/{url_date}/{link}", exist_ok=True)
-    # with open(f"pages/teams/{url_date}/{link}/index.html", "a+") as f:
-    #     f.write(NEWS_PAGE.replace("{NEWSCONTAINER}", news_container))
-
     with open("pages/news/index.html", "w", encoding='utf-8') as f:
         f.write(soup.prettify())
 
@@ -264,6 +260,14 @@ def read_current_blogs():
 
     with open("index.html", "w", encoding='utf-8') as f:
         f.write(soup.prettify())
+
+    print("News articles added to front page and sites/news/")
+
+    os.makedirs(f"pages/news/{url_date}/{link}", exist_ok=True)
+    # with open(f"pages/teams/{url_date}/{link}/index.html", "a+") as f:
+    #     f.write(NEWS_PAGE.replace("{NEWSCONTAINER}", news_container))
+
+    print(f"pages/news/{url_date}/{link}/index.html page has been created")
 
 if __name__ == "__main__":
     main()
