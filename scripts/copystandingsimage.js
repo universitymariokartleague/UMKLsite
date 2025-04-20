@@ -55,4 +55,3 @@ shareButton.addEventListener("click", async () => {
         );
     }
 });
-
