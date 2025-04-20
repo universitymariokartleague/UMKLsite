@@ -576,6 +576,10 @@ blockquote {
     overflow-x: auto;
 }
 
+.news-container-override {
+	flex-wrap: wrap;
+}
+
 .news-box {
     border: var(--button-outline);
     background-color: var(--bg-color);

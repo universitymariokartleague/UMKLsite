@@ -1,95 +1,60 @@
 <!DOCTYPE html>
 <html lang="en" data-overlayscrollbars-initialize>
     <head>
+        <base href="../../">
+    
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Home | University Mario Kart League</title>
-        <meta name="description" content="The main hub for all things University Mario Kart League (UMKL)!">
+        <title>News | University Mario Kart League</title>
+        <meta name="description" content="See all the news concerning the University Mario Kart League (UMKL)">
         <link rel="shortcut icon" href="assets/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
         <link rel="stylesheet" href="css/overlayscrollbars.min.css">
         <meta name="color-scheme" content="dark light">
-
-        <meta property="og:title" content="University Mario Kart League" />
+    
+        <meta property="og:title" content="University Mario Kart League | Matches" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://umkl.co.uk" />
-        <meta property="og:image" content="https://umkl.co.uk/assets/brand/UMKL_Banner_embed.png" />
-        <meta property="og:description" content="The main hub for all things University Mario Kart League (UMKL)!" />
+        <meta property="og:url" content="https://umkl.co.uk/pages/news/" />
+        <meta property="og:image" content="https://umkl.co.uk/assets/brand/Cheep_Cheep_banner.png" />
+        <meta property="og:description" content="See all the news concerning the University Mario Kart League (UMKL)" />
         <meta name="theme-color" content="#bc0839">
-
+    
         <!-- Include this to make the og:image larger -->
         <meta name="twitter:card" content="summary_large_image">
-
+    
         <!-- Scripts -->
         <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),localStorage.setItem("darktheme",1),console.debug("%csettings.js %c> %cChanging to dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),localStorage.setItem("darktheme",0),console.debug("%csettings.js %c> %cChanging to light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
         <script src="scripts/overlayscrollbars.browser.es6.min.js" defer></script>
-        <script src="scripts/overlayscrollbar.js" defer></script>
-
-        <!-- <script type="module" src="scripts/navbar.js" defer></script> -->
+        <script src="scripts/overlayscrollbar.js" defer></script>    
+        
         <script type="module" src="scripts/settings.js" defer></script>
     </head>
-
     <body id="top" data-overlayscrollbars-initialize>
         <div class="navbar-container">
             <div class="nav-bar">
-                <a href="#top" class="nav-bar-title no-color-link no-underline-link">
+                <a href="../../index.html" class="nav-bar-title no-color-link no-underline-link">
                     <img src="assets/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
                     <h2>UMKL</h2>
                 </a>
                 <nav class="nav-flex">
-                    <ul id="nav-bar">
-                        <li><a class="nav-selected" href="#top">Home</a></li>
-                        <li><a href="pages/teams/">Teams</a></li>
-                        <li><a href="pages/matches/">Matches</a></li>
-                        <li><a href="pages/faq/">FAQs</a></li>
+                    <ul>
+                        <li><a href="../../index.html">Home</a></li>
+                        <li><a href="../../pages/teams/">Teams</a></li>
+                        <li><a href="../../pages/matches/">Matches</a></li>
+                        <li><a href="../../pages/faq/">FAQs</a></li>
                         <li><a class="nav-bar-link" target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
                     </ul>
                 </nav>
             </div>
         </div>
-        
+
         <main>
-            <img src="assets/brand/UMKL_Season_2_Teaser.png" class="image" style="margin-top: 0.5em;">
-            <hr class="hr-below-title">
-            <h2>Welcome</h2>
-            <p class="after-title p-no-spacing">The University Mario Kart League (UMKL) brings together students from across 8 (and counting) universities around 
-                the UK to compete as teams of six in Mario Kart 8 Deluxe!</p>
-            <p>Strategy and teamwork is essential in these matches. The team with the most
-                points across the season will emerge victorious!</p>
-            <hr>
-
-            <h2>Next Match</h2>
-            <a href="pages/matches/">View upcoming matches</a>
-            <div class="after-title match-container">
-                
-                <div class="team-box">
-                    <img src="assets/team_emblems/STAFFS.png" class="team-box-image">
-                    <h3>Staffs</h3>
-                </div>
-
-                <div class="vs-box">
-                    <h1>VS</h1>
-                </div>
-
-                <div class="team-box">
-                    <img src="assets/team_emblems/BIRMINGHAM.png" class="team-box-image">
-                    <h3>Birmingham</h3>
-                </div>
-
-                <div class="info-container">
-                    <div class="date-box">
-                        <h2>21 April 2025</h2>
-                        <p class="p-below-title test-disclaimer">Test Match</p>
-                    </div>
-                </div>
-                
-            </div>            
-            <hr>
-            
             <h2>News</h2>
-            <a href="pages/news/">View all news</a>
-            <div id="news-container" class="news-container after-title">
+            <p class="p-below-title">View past UMKL news</p>
+            <hr class="hr-below-title">
+
+            <div id="news-container" class="news-container after-title news-container-override">
                 <div class="news-box">
                     <article class="news-text">
                         <a href="pages/news/2025-04-19/umkl-discord/" class="ref" target="_blank"><span class="news-title">📌 Information for universities wanting to join</span></a><br>
