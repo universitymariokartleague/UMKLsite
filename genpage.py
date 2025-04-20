@@ -218,7 +218,11 @@ def read_current_blogs():
     """
 
     # news page
-    soup = BeautifulSoup(open(f"pages/news/index.html", "r", encoding='utf-8'), 'html.parser')
+    soup = BeautifulSoup(
+        open(f"pages/news/index.html", "r", encoding='utf-8'), 
+        'html.parser', 
+        preserve_whitespace_tags={'html'}
+    )
     
     news_container = soup.find('div', id='news-container')
     news_container.insert(0, BeautifulSoup(new_blog, 'html.parser'))
@@ -237,12 +241,14 @@ def read_current_blogs():
     #     f.write(NEWS_PAGE.replace("{NEWSCONTAINER}", news_container))
 
     with open("pages/news/index.html", "w", encoding='utf-8') as f:
-        f.write(prettify_with_tabs(soup))
-
-
+        f.write(soup.prettify())
 
     # home page
-    soup = BeautifulSoup(open(f"index.html", "r", encoding='utf-8'), 'html.parser')
+    soup = BeautifulSoup(
+        open(f"index.html", "r", encoding='utf-8'), 
+        'html.parser', 
+        preserve_whitespace_tags={'html'}
+    )
     
     news_container = soup.find('div', id='news-container')
     news_container.insert(0, BeautifulSoup(new_blog, 'html.parser'))
@@ -257,22 +263,7 @@ def read_current_blogs():
         old_container.replace_with(new_container)
 
     with open("index.html", "w", encoding='utf-8') as f:
-        f.write(prettify_with_tabs(soup))
-    
-def prettify_with_tabs(soup, indent_tabs=1):
-    """Prettify the HTML with tab indentation"""
-    pretty_html = soup.prettify(formatter=None)
-    # Replace spaces with tabs while preserving structure
-    lines = []
-    for line in pretty_html.split('\n'):
-        if line.strip():
-            # Count leading spaces (4 spaces per level in prettify)
-            leading_spaces = len(line) - len(line.lstrip())
-            indent_level = leading_spaces // 4
-            lines.append('\t' * indent_level * indent_tabs + line.strip())
-        else:
-            lines.append('')
-    return '\n'.join(lines)
+        f.write(soup.prettify())
 
 if __name__ == "__main__":
     main()
