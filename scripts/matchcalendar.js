@@ -9,7 +9,10 @@ let currentlyShownDate = [2000, 0];
 let dailyLogData = {};
 
 function generateCalendar(month, year, startDay) {
-    if (startDay == null) startDay = DEFAULTSTARTDAY;
+    console.log(startDay)
+    
+    if (startDay == null || isNaN(startDay)) startDay = DEFAULTSTARTDAY;
+    console.log(startDay)
 
     const monthYear = document.getElementById('monthYear');
     const calendarDays = document.getElementById('calendarDays');
