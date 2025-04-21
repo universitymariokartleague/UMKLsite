@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/settings.css">
     <link rel="stylesheet" href="css/audioplayer.css">
     <link rel="stylesheet" href="css/overlayscrollbars.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <meta name="color-scheme" content="dark light">
 
     <meta property="og:title" content="University Mario Kart League | Credits" />
@@ -36,19 +37,30 @@
 <body id="top" data-overlayscrollbars-initialize>
     <div class="navbar-container">
         <div class="nav-bar">
-            <a href="../../index.html" class="nav-bar-title no-color-link no-underline-link">
+            <a href="index.html" class="nav-bar-title no-color-link no-underline-link">
                 <img src="assets/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
                 <h2>UMKL</h2>
             </a>
             <nav class="nav-flex">
                 <ul>
-                    <li><a href="../../index.html">Home</a></li>
+                    <li><a href="index.html">Home</a></li>
                     <li><a href="pages/teams/">Teams</a></li>
                     <li><a href="pages/matches/">Matches</a></li>
                     <li><a href="pages/faq/#top">FAQs</a></li>
                     <li><a class="nav-bar-link" target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
                 </ul>
-            </nav>
+            </nav>                
+            <!-- Dropdown navigation (shown on mobile) -->
+            <div class="nav-dropdown">
+                <div class="nav-dropdown-button">☰</div>
+                <div class="nav-dropdown-content">
+                    <a href="index.html">Home</a>
+                    <a href="pages/teams/">Teams</a>
+                    <a href="pages/matches/">Matches</a>
+                    <a href="pages/faq/">FAQs</a>
+                    <a class="nav-bar-link" target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -72,20 +84,25 @@
         <p class="p-below-title">A list of people who worked on and contributed to UMKL.</p>
         <hr class="hr-below-title">
 
-        <h3 class="p-no-spacing">Event Organisation</h3>
+        <h3 class="p-no-spacing">UMKL Founding</h3>
         <p class="p-no-spacing">
-            2024/2025 committee from York and Staffordshire.
+            ???
         </p>
 
-        <h3>Cheep Cheep Bot development</h3>
+        <h3 class="p-no-spacing">Event Organisation</h3>
+        <p class="p-no-spacing">
+            Committee and board members from York and Staffordshire.
+        </p>
+
+        <h3>Cheep Cheep Bot Development</h3>
         <p class="p-no-spacing">
             The Cheep Cheep Discord Bot was
             developed by Adeola Adeniji, zy and Tushar Sundarka
         </p>
 
-        <h3>Site development</h3>
+        <h3>Site Development</h3>
         <p class="p-no-spacing">
-            <a href="https://github.com/Mario-Kart-Society-York/UMKLsite">https://github.com/Mario-Kart-Society-York/UMKLsite</a><br>
+            Github repository (code): <a href="https://github.com/universitymariokartleague/UMKLsite">https://github.com/universitymariokartleague/UMKLsite</a><br>
             zy, Tushar Sundarka (so far)
         </p>
         <hr>
@@ -93,13 +110,13 @@
     </main>
 
     <footer>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         © UMKL 2025 |
         <a style="cursor: pointer;" class="fa fa-play" onclick="playAudio()"></a> |
         <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |
-        <a href="https://www.youtube.com/@universitymariokartleague" title="UMKL YouTube Channel" class="no-color-link no-underline-link fa fa-youtube-play"></a>
-        <a href="https://www.instagram.com/universitymariokartleague" title="UMKL Instagram Account" class="no-color-link no-underline-link fa fa-instagram"></a>
-        <a href="https://www.facebook.com/profile.php?id=61575273336011" title="UMKL Facebook Page" class="no-color-link no-underline-link fa fa-facebook"></a>
+        <a href="https://www.youtube.com/@universitymariokartleague" title="UMKL YouTube Channel" class="no-color-link no-underline-link fa-brands fa-youtube"></a>
+        <a href="https://www.instagram.com/universitymariokartleague" title="UMKL Instagram Account" class="no-color-link no-underline-link fa-brands fa-instagram"></a>
+        <a href="https://www.facebook.com/profile.php?id=61575273336011" title="UMKL Facebook Page" class="no-color-link no-underline-link fa-brands fa-facebook"></a>    
+        <a href="https://discord.gg/6jS7YUqnbh" title="UMKL Discord Server" class="no-color-link no-underline-link fa-brands fa-discord"></a>        
     </footer>
 </body>
 </html>

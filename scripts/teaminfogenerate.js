@@ -25,10 +25,10 @@ async function generateTeamBox(teamData) {
     JSTeamBox.innerHTML = "";
 
     try {
-        teamData.logo_src = `assets/team_emblems/${teamData.team_name.toUpperCase()}.png`
+        teamData.logo_src = `assets/teamemblems/${teamData.team_name.toUpperCase()}.png`
         teamData.class_name = teamData.team_name.replace(/\s+/g, '')    
     } catch (error) {
-        JSTeamBox.innerHTML = error.stack;
+        JSTeamBox.innerHTML = `No team data available!<br/><div class="codeBox">${error.stack}</div>`;
     }
 
     let winslosses = await getTeamWinsAndLosses(teamData.team_id);

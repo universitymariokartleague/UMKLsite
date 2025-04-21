@@ -29,8 +29,6 @@
     box-shadow: var(--settings-shadow);
     animation: boxOpen 0.15s cubic-bezier(0.22, 0.61, 0.36, 1);
     overflow-y: auto;
-    transition: color 0.2s ease-out;
-    transition: background-color 0.2s ease-out;
 }
 
 .BGBlur {
@@ -94,7 +92,7 @@
     cursor: pointer;
 }
 
-#settingsBox hr {
+#settingsBox hr, .settings-hr {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
     margin-left: auto;

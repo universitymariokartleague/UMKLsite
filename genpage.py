@@ -15,6 +15,7 @@ TEAM_PAGE = """
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
         <link rel="stylesheet" href="css/overlayscrollbars.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
         <meta name="color-scheme" content="dark light">
     
         <meta property="og:title" content="University Mario Kart League | Teams" />
@@ -39,19 +40,30 @@ TEAM_PAGE = """
     <body id="top" data-overlayscrollbars-initialize>
         <div class="navbar-container">
             <div class="nav-bar">
-                <a href="../../index.html" class="nav-bar-title no-color-link no-underline-link">
+                <a href="index.html" class="nav-bar-title no-color-link no-underline-link">
                     <img src="assets/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
                     <h2>UMKL</h2>
                 </a>
                 <nav class="nav-flex">
                     <ul>
-                        <li><a href="../../index.html">Home</a></li>
+                        <li><a href="index.html">Home</a></li>
                         <li><a href="pages/teams/">Teams</a></li>
                         <li><a href="pages/matches/">Matches</a></li>
                         <li><a href="pages/faq/">FAQs</a></li>
                         <li><a class="nav-bar-link" target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
                     </ul>
                 </nav>
+                <!-- Dropdown navigation (shown on mobile) -->
+                <div class="nav-dropdown">
+                    <div class="nav-dropdown-button">☰</div>
+                    <div class="nav-dropdown-content">
+                        <a href="index.html">Home</a>
+                        <a href="pages/teams/">Teams</a>
+                        <a href="pages/matches/">Matches</a>
+                        <a href="pages/faq/">FAQs</a>
+                        <a class="nav-bar-link" target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -81,35 +93,40 @@ TEAM_PAGE = """
         </main>
 
         <footer>
-            UMKL 2025 | 
+            © UMKL 2025 |
             <a class="no-color-link" href="pages/credits/">Credits</a> |
-            <a class="fa fa-gear no-color-link settingsBoxOpener"></a>
+            <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |
+            <a href="https://www.youtube.com/@universitymariokartleague" title="UMKL YouTube Channel" class="no-color-link no-underline-link fa-brands fa-youtube"></a>
+            <a href="https://www.instagram.com/universitymariokartleague" title="UMKL Instagram Account" class="no-color-link no-underline-link fa-brands fa-instagram"></a>
+            <a href="https://www.facebook.com/profile.php?id=61575273336011" title="UMKL Facebook Page" class="no-color-link no-underline-link fa-brands fa-facebook"></a>            
+            <a href="https://discord.gg/6jS7YUqnbh" title="UMKL Discord Server" class="no-color-link no-underline-link fa-brands fa-discord"></a>            
         </footer>
     </body>
 </html>
 """
 
-NEWS_PAGE = """
+BLANK_NEWS_PAGE = """
 <!DOCTYPE html>
 <html lang="en" data-overlayscrollbars-initialize>
     <head>
-        <base href="../../">
+        <base href="../../../../">
     
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>News | University Mario Kart League</title>
-        <meta name="description" content="See all the news concerning the University Mario Kart League (UMKL)">
+        <title>{TITLE} | University Mario Kart League</title>
+        <meta name="description" content="{TITLE} news article on University Mario Kart League (UMKL)">
         <link rel="shortcut icon" href="assets/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
         <link rel="stylesheet" href="css/overlayscrollbars.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
         <meta name="color-scheme" content="dark light">
     
         <meta property="og:title" content="University Mario Kart League | Matches" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://umkl.co.uk/pages/news/" />
-        <meta property="og:image" content="https://umkl.co.uk/assets/brand/Cheep_Cheep_banner.png" />
-        <meta property="og:description" content="See all the news concerning the University Mario Kart League (UMKL)" />
+        <meta property="og:url" content="https://umkl.co.uk/{LINK}" />
+        <meta property="og:image" content="{IMAGE}" />
+        <meta property="og:description" content="{TITLE} news article on University Mario Kart League (UMKL)" />
         <meta name="theme-color" content="#bc0839">
     
         <!-- Include this to make the og:image larger -->
@@ -125,41 +142,49 @@ NEWS_PAGE = """
     <body id="top" data-overlayscrollbars-initialize>
         <div class="navbar-container">
             <div class="nav-bar">
-                <a href="../../index.html" class="nav-bar-title no-color-link no-underline-link">
+                <a href="index.html" class="nav-bar-title no-color-link no-underline-link">
                     <img src="assets/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
                     <h2>UMKL</h2>
                 </a>
                 <nav class="nav-flex">
                     <ul>
-                        <li><a href="../../index.html">Home</a></li>
-                        <li><a href="../../pages/teams/">Teams</a></li>
-                        <li><a href="../../pages/matches/">Matches</a></li>
-                        <li><a href="../../pages/faq/">FAQs</a></li>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="pages/teams/">Teams</a></li>
+                        <li><a href="pages/matches/">Matches</a></li>
+                        <li><a href="pages/faq/">FAQs</a></li>
                         <li><a class="nav-bar-link" target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
                     </ul>
                 </nav>
+                <!-- Dropdown navigation (shown on mobile) -->
+                <div class="nav-dropdown">
+                    <div class="nav-dropdown-button">☰</div>
+                    <div class="nav-dropdown-content">
+                        <a href="index.html">Home</a>
+                        <a href="pages/teams/">Teams</a>
+                        <a href="pages/matches/">Matches</a>
+                        <a href="pages/faq/">FAQs</a>
+                        <a class="nav-bar-link" target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a>
+                    </div>
+                </div>
             </div>
         </div>
 
         <main>
-            <h2>News</h2>
-            <p class="p-below-title">View past UMKL news</p>
+            <h2>{TITLE}</h2>
+            <p class="p-below-title">{DATE}</p>
             <hr class="hr-below-title">
 
-            <div id="news-container" class="news-container after-title news-container-override">                
-                {NEWSCONTAINER}
-            </div>
+            <p>{DESC}</p>
         </main>
 
         <footer>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
             © UMKL 2025 |
             <a class="no-color-link" href="pages/credits/">Credits</a> |
             <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |
-            <a href="https://www.youtube.com/@universitymariokartleague" title="UMKL YouTube Channel" class="no-color-link no-underline-link fa fa-youtube-play"></a>
-            <a href="https://www.instagram.com/universitymariokartleague" title="UMKL Instagram Account" class="no-color-link no-underline-link fa fa-instagram"></a>
-            <a href="https://www.facebook.com/profile.php?id=61575273336011" title="UMKL Facebook Page" class="no-color-link no-underline-link fa fa-facebook"></a>
-            
+            <a href="https://www.youtube.com/@universitymariokartleague" title="UMKL YouTube Channel" class="no-color-link no-underline-link fa-brands fa-youtube"></a>
+            <a href="https://www.instagram.com/universitymariokartleague" title="UMKL Instagram Account" class="no-color-link no-underline-link fa-brands fa-instagram"></a>
+            <a href="https://www.facebook.com/profile.php?id=61575273336011" title="UMKL Facebook Page" class="no-color-link no-underline-link fa-brands fa-facebook"></a>            
+            <a href="https://discord.gg/6jS7YUqnbh" title="UMKL Discord Server" class="no-color-link no-underline-link fa-brands fa-discord"></a>            
         </footer>
     </body>
 </html>
@@ -188,7 +213,7 @@ def create_team_page():
         f.write(TEAM_PAGE.replace("{TEAMNAME}", team_name))
 
 def create_blog():
-    read_current_blogs()
+    create_new_blog()
 
 def create_slug(title):
     """Generate a URL-friendly slug from the title"""
@@ -197,7 +222,7 @@ def create_slug(title):
     slug = re.sub(r'-+', '-', slug)
     return slug.strip('-')
 
-def read_current_blogs():
+def create_new_blog():
     title = input("Enter blog title > ")
     desc = input("Enter blog description > ")
     image = input("Enter blog image link > ")
@@ -209,10 +234,10 @@ def read_current_blogs():
     new_blog = f"""
                 <div class="news-box">
                     <article class="news-text">
-                        <a href="pages/news/{url_date}/{link}/" class="ref" target="_blank"><span class="news-title">{title}</span></a><br>
+                        <a href="pages/news/{url_date}/{link}/" class="ref"><span class="news-title">{title}</span></a><br>
                         <span class="news-desc">{desc}</span>
                     </article>
-                    <div class="news-image"><img loading="lazy" src="{image}"></div>
+                    <div class="news-image"><img onload="this.style.opacity=1" loading="lazy" src="{image}"></div>
                     <span class="news-date">{date}</span>
                 </div>
     """
@@ -235,10 +260,6 @@ def read_current_blogs():
 
     if old_container and new_container:
         old_container.replace_with(new_container)
-
-    os.makedirs(f"pages/news/{url_date}/{link}", exist_ok=True)
-    # with open(f"pages/teams/{url_date}/{link}/index.html", "a+") as f:
-    #     f.write(NEWS_PAGE.replace("{NEWSCONTAINER}", news_container))
 
     with open("pages/news/index.html", "w", encoding='utf-8') as f:
         f.write(soup.prettify())
@@ -264,6 +285,15 @@ def read_current_blogs():
 
     with open("index.html", "w", encoding='utf-8') as f:
         f.write(soup.prettify())
+
+    print("News articles added to front page and sites/news/")
+
+    os.makedirs(f"pages/news/{url_date}/{link}", exist_ok=True)
+    with open(f"pages/news/{url_date}/{link}/index.html", "a+", encoding='utf-8') as f:
+        content = BLANK_NEWS_PAGE.replace("{TITLE}", title).replace("{DESC}", desc).replace("{IMAGE}", image).replace("{DATE}", date).replace("{LINK}", f"pages/news/{url_date}/{link}")
+        f.write(content)
+
+    print(f"pages/news/{url_date}/{link}/index.html page has been created")
 
 if __name__ == "__main__":
     main()

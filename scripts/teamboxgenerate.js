@@ -25,7 +25,7 @@ let dbLoaded = false;
 let currentSeason, maxSeason = 1;
 
 async function generateTeamBox(team, cached) {
-    team.logo_src = `assets/team_emblems/${team.team_name.toUpperCase()}.png`
+    team.logo_src = `assets/teamemblems/${team.team_name.toUpperCase()}.png`
     team.class_name = team.team_name.replace(/\s+/g, '')
     team.link_name = team.team_name.replace(/\s+/g, '-').toLowerCase()
 
@@ -98,8 +98,8 @@ async function dbDoneLoading() {
     currentSeason = maxSeason;
     generateSeasonPicker();
     updateSeasonText();
-    let teamData = await runSQL("SELECT * FROM team")
-    // let teamData = await getSeasonTeamStandings(currentSeason)
+    // let teamData = await runSQL("SELECT * FROM team")
+    let teamData = await getSeasonTeamStandings(currentSeason)
     console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     generateTeamBoxes(teamData, false)
 }

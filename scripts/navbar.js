@@ -4,7 +4,7 @@ function fillNavbar() {
     console.log(navbar)
 
     navbar.innerHTML = ""
-    addNavPage(`<li><a href="../../index.html">Home</a></li>`)
+    addNavPage(`<li><a href="index.html">Home</a></li>`)
     addNavPage(`<li><a href="pages/news/">News</a></li>`)
     addNavPage(`<li><a href="pages/teams/">Teams</a></li>`)
     addNavPage(`<li><a href="pages/matches/">Matches</a></li>`)
