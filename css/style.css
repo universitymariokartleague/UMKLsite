@@ -712,3 +712,28 @@ blockquote {
 .test-disclaimer {
     font-style: italic;
 }
+
+.result-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: var(--news-box-bg-color);
+}
+
+.result-box {
+    border: var(--button-outline);
+    background-color: var(--bg-color);
+    padding: 10px;
+    margin: auto;
+    width: 100%;
+    border-radius: 10px;
+    position: relative;
+}
+
+.points-diff {
+    text-align: center;
+    width: 250px;
+    margin: auto 30px;
+}
