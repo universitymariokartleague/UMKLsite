@@ -61,10 +61,6 @@ function renderResults() {
     const sign = diff > 0 ? "+" : "";
     
     pointsDifference.innerHTML = `<h2 style="color: ${color};">${sign}${diff}</h2>`;
-        
-
-    
-
 }
 
 positionsInput.addEventListener("input", renderResults);
