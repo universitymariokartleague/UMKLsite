@@ -237,7 +237,7 @@ def create_new_blog():
                         <a href="pages/news/{url_date}/{link}/" class="ref"><span class="news-title">{title}</span></a><br>
                         <span class="news-desc">{desc}</span>
                     </article>
-                    <div class="news-image"><img loading="lazy" src="{image}"></div>
+                    <div class="news-image"><img onload="this.style.opacity=1" loading="lazy" src="{image}"></div>
                     <span class="news-date">{date}</span>
                 </div>
     """
