@@ -33,6 +33,7 @@
     
     <script type="module" src="scripts/settings.js" defer></script>
     <script type="module" src="scripts/discordrole.js" defer></script>
+    <script type="module" src="scripts/lostworldeasteregg.js" defer></script>
 </head>
 
 <body id="top" data-overlayscrollbars-initialize>
@@ -181,43 +182,45 @@
             In addition to the above commands, each team should have a logo. Please submit a logo to a member of the
             board to have it added to your team's profile.
         </p>
+        
+        <div id="hex" class="hidden">
+            <hr>
 
-        <hr>
-
-        <h4>What the hell is a "hex"? Like… the "Lost Hex" from Sonic Lost World?</h4>
-        <br><a href="assets/image/faq/losthex.webp"><img class="image" src="assets/image/faq/losthex.webp" alt=""></a>
-        <p>
-            No. Shut up. Stop it. Well you know how our decimal system has 10 possible numbers (0-9), this is called a
-            base-10
-            numbering system. Hexadecimal (hex) is a base-16 numbering system, meaning its possible values are from 0-9
-            and
-            A-F (A-F essentially representing 10-15).
-        </p>
-        <p>
-            Software developers and system designers widely use hexadecimal numbers because they provide a convenient
-            representation
-            of binary-coded values. Each hexadecimal digit represents four bits (binary digits), also known as a nibble.
-            For example,
-            an 8-bit byte is two hexadecimal digits and its value can be written as <code>00</code> to <code>FF</code>
-            in hexadecimal.
-            <sup><a href="https://en.wikipedia.org/wiki/Hexadecimal">[I stole this paragraph from Wikipedia – The Free
-                    Encyclopedia]</a></sup>
-        </p>
-        <p>
-            A hex code is split into three parts, Let's say we have the hex colour code <code>#1BAA8B</code>.
-            Ignore the # and split the string into three parts of two.
-        </p>
-        <p>
-            We get <code>1B</code>, <code>AA</code> and <code>8B</code>. Since these are hexadecimal values, this means
-            that two hexadecimal numbers cover 162 values,
-            so 0-255 as denary. If we convert each group into denary, we get <code>27</code>, <code>170</code> and
-            <code>139</code>.
-        </p>
-        <p>
-            Each of these numbers we got represent the <code>RGB</code> values of a colour - red, green and blue. AKA
-            <code>RGB(27, 170, 139)</code>. This is another colour format also used,
-            so essentially, a hex colour code is a compact version of RGB.
-        </p>
+            <h4>What the hell is a "hex"? Like… the "Lost Hex" from Sonic Lost World?</h4>
+            <br><a href="assets/image/faq/losthex.webp"><img class="image" src="assets/image/faq/losthex.webp" alt=""></a>
+            <p>
+                No. Shut up. Stop it. Well you know how our decimal system has 10 possible numbers (0-9), this is called a
+                base-10
+                numbering system. Hexadecimal (hex) is a base-16 numbering system, meaning its possible values are from 0-9
+                and
+                A-F (A-F essentially representing 10-15).
+            </p>
+            <p>
+                Software developers and system designers widely use hexadecimal numbers because they provide a convenient
+                representation
+                of binary-coded values. Each hexadecimal digit represents four bits (binary digits), also known as a nibble.
+                For example,
+                an 8-bit byte is two hexadecimal digits and its value can be written as <code>00</code> to <code>FF</code>
+                in hexadecimal.
+                <sup><a href="https://en.wikipedia.org/wiki/Hexadecimal">[I stole this paragraph from Wikipedia – The Free
+                        Encyclopedia]</a></sup>
+            </p>
+            <p>
+                A hex code is split into three parts, Let's say we have the hex colour code <code>#1BAA8B</code>.
+                Ignore the # and split the string into three parts of two.
+            </p>
+            <p>
+                We get <code>1B</code>, <code>AA</code> and <code>8B</code>. Since these are hexadecimal values, this means
+                that two hexadecimal numbers cover 162 values,
+                so 0-255 as denary. If we convert each group into denary, we get <code>27</code>, <code>170</code> and
+                <code>139</code>.
+            </p>
+            <p>
+                Each of these numbers we got represent the <code>RGB</code> values of a colour - red, green and blue. AKA
+                <code>RGB(27, 170, 139)</code>. This is another colour format also used,
+                so essentially, a hex colour code is a compact version of RGB.
+            </p>
+        </div>
     </main>
 
     <footer>

@@ -101,6 +101,9 @@ async function dbDoneLoading() {
     // let teamData = await runSQL("SELECT * FROM team")
     let teamData = await getSeasonTeamStandings(currentSeason)
     console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+
+    console.log(await runSQL("SELECT team_name, team_color FROM team"))
+
     generateTeamBoxes(teamData, false)
 }
 

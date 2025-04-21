@@ -109,9 +109,3 @@ document.addEventListener('keydown', (event) => {
         toggleTheme();
     }
 });
-
-// TODO: make a better easter egg
-let code = ""; document.addEventListener("keydown", (s => { code += s.key.toLowerCase(), code.endsWith("fib") ? (doEEASCII(), code = "") : "fib".startsWith(code) || (code = "") }));
-function doEEASCII() {
-    console.debug(``);
-}

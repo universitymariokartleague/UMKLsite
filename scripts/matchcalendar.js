@@ -7,12 +7,10 @@ const expandedLog = document.getElementById('expandedLog');
 
 let currentlyShownDate = [2000, 0];
 let dailyLogData = {};
+let teamColorsData = {};
 
-function generateCalendar(month, year, startDay) {
-    console.log(startDay)
-    
+function generateCalendar(month, year, startDay) {    
     if (startDay == null || isNaN(startDay)) startDay = DEFAULTSTARTDAY;
-    console.log(startDay)
 
     const monthYear = document.getElementById('monthYear');
     const calendarDays = document.getElementById('calendarDays');
@@ -52,7 +50,8 @@ function generateCalendar(month, year, startDay) {
         dayCell.classList.add('day');
         const dateToCheck = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         if (dailyLogData[dateToCheck]) {
-            dayCell.classList.add('logged');
+            const [team1, team2] = dailyLogData[dateToCheck][0].teamsInvolved;
+            dayCell.classList.add('logged', team1, team2);
             dayCell.addEventListener('click', () => showDailyLog(dateToCheck));
         }
         dayCell.textContent = day;
@@ -70,7 +69,14 @@ function showDailyLog(date) {
     expandedLog.innerHTML = `
         <div class="settingSubheading">
         <hr class="settings-hr">
-        ${log.length ? log.map((entry, index) => `<b>${entry.title} | ${date} (${weekdayNames[new Date(date).getDay()]})</b><br/>${entry.description.replace(/(?:\r\n|\r|\n)/g, '<br/>')}`).join('<br/><hr/>') : 'No logs for this day'}
+        ${log.length ? log.map((entry, index) => `
+            <b>
+                <span class=${entry.teamsInvolved[0]}>${entry.teamsInvolved[0]}</span> 
+                VS 
+                <span class="${entry.teamsInvolved[1]}">${entry.teamsInvolved[1]}</span> | ${date} (${weekdayNames[new Date(date).getDay()]})</b>
+                <br/>
+                ${entry.description.replace(/(?:\r\n|\r|\n)/g, '<br/>')}`).join('<br/><hr/>') : 'No logs for this day'
+        }
     `;
 }
 
@@ -153,24 +159,59 @@ function addDailyLogData() {
 //     input.click();
 // }
 
+function makeTeamsColorStyles() {
+    const styleSheet = document.createElement("style");
+
+    Object.entries(teamColorsData).forEach(([team, color]) => {
+        console.log(`Team: ${team}, Color: ${color}`);
+        styleSheet.innerText += `
+            .${team} {
+                cursor: pointer;
+                border: 2px solid ${color};
+                background-color: ${color}50;
+            }
+        `
+    });
+
+    document.head.appendChild(styleSheet);
+}
+
 function displayCalendar() {
     let dailyLogPath = "database/matchdata.json"
-    fetch(dailyLogPath)
+    let teamColorsPath = "database/teamcolors.json";
+
+    fetch(teamColorsPath)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
         })
-        .then(data => {
-            dailyLogData = data;
-            const currentDate = new Date();
-            generateCalendar(currentDate.getMonth(), currentDate.getFullYear(), parseInt(localStorage.getItem("startDay")));        
-            console.log('Match data loaded:', dailyLogData);
+        .then(colorsData => {
+            teamColorsData = colorsData
+            makeTeamsColorStyles();
+            console.log('Team colors loaded:', teamColorsData);
         })
         .catch(error => {
-            console.error('Error loading match data:', error);
+            console.error('Error loading team colors:', error);
         });
+
+        fetch(dailyLogPath)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                dailyLogData = data;
+                const currentDate = new Date();
+                generateCalendar(currentDate.getMonth(), currentDate.getFullYear(), parseInt(localStorage.getItem("startDay")));        
+                console.log('Match data loaded:', dailyLogData);
+            })
+            .catch(error => {
+                console.error('Error loading match data:', error);
+            });
 }
 
 displayCalendar();
