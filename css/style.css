@@ -398,7 +398,8 @@ button:focus {
 /* code */
 code,
 .codeBox,
-.codeBoxTight {
+.codeBoxTight,
+mention {
     font-family: Cascadia Code, FMono-Regular, Consolas, DejaVu Sans Mono, Liberation Mono, Menlo, monospace !important;
 }
 
@@ -439,13 +440,20 @@ code {
 }
 
 mention {
-    font-family: Cascadia Code, FMono-Regular, Consolas, DejaVu Sans Mono, Liberation Mono, Menlo, monospace !important;
-}
-
-mention {
     color: var(--metion-color);
     font-size: 15px;
     padding: 2px 5px;
+    background-color: var(--mention-bg-color);
+    border: var(--mention-border);
+    border-radius: 5px;
+    user-select: all;
+    -webkit-user-select: all;
+}
+
+tag {
+    color: var(--metion-color);
+    font-size: 15px;
+    padding: 1px 6px;
     background-color: var(--mention-bg-color);
     border: var(--mention-border);
     border-radius: 5px;
