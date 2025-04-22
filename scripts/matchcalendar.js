@@ -47,14 +47,23 @@ function generateCalendar(month, year, startDay) {
 
     for (let day = 1; day <= daysInMonth; day++) {
         const dayCell = document.createElement('div');
+        dayCell.textContent = day;
         dayCell.classList.add('day');
+        
+        const today = new Date();
+        if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+            console.log(dayCell)
+            dayCell.innerHTML = "☆" + day;
+            dayCell.classList.add('today');
+        }
+        
         const dateToCheck = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         if (dailyLogData[dateToCheck]) {
             const [team1, team2] = dailyLogData[dateToCheck][0].teamsInvolved;
+            // dayCell.classList.remove('today');
             dayCell.classList.add('logged', team1, team2);
             dayCell.addEventListener('click', () => showDailyLog(dateToCheck));
         }
-        dayCell.textContent = day;
         calendarDays.appendChild(dayCell);
     }
 }

@@ -3,6 +3,7 @@
     margin: 0 auto;
     border: 1px solid #ccc;
     border-radius: 10px;
+    overflow: hidden; /* Ensures the border-radius applies to child elements */
 }
 
 .calendar-header {
@@ -15,12 +16,28 @@
 .calendar-body {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(6, 1fr);
 }
 
 .day {
-    padding: 10px;
+    aspect-ratio: 1/1; /* Makes cells square (equal width and height) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 1px solid #ccc;
+    padding: 0; /* Remove padding to ensure exact sizing */
+    min-height: 0; /* Allows cells to shrink properly */
+}
+
+/* Adjust font size and abbreviate text on smaller screens */
+@media (max-width: 450px) {
+    .day {
+        font-size: clamp(4px, 4vw, 14px);        /* Slightly smaller font */
+    }
+}
+
+.today {
+    font-weight: bold;
+    border: 2px solid var(--text-color);
 }
 
 .logged {
