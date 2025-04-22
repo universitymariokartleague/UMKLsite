@@ -74,6 +74,11 @@ function changeMonth(change) {
 }
 
 function showDailyLog(date) {
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('date', date);
+    const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+    window.history.pushState({}, '', newUrl);
+
     const log = dailyLogData[date] || [];
     expandedLog.innerHTML = `
         <div class="settingSubheading">
@@ -143,6 +148,13 @@ function displayCalendar() {
                 const currentDate = new Date();
                 generateCalendar(currentDate.getMonth(), currentDate.getFullYear(), parseInt(localStorage.getItem("startDay")));        
                 console.debug(`%cmatchcalendar.js %c> %cMatch data loaded: ${JSON.stringify(dailyLogData)}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+
+                const urlParams = new URLSearchParams(window.location.search);
+                const dateParam = urlParams.get('date');
+                if (dateParam && dailyLogData[dateParam]) {
+                    console.debug(`%cmatchcalendar.js %c> %cURL parameter detected: ${dateParam}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+                    showDailyLog(dateParam);
+                }
             })
             .catch(error => {
                 console.debug(`%cmatchcalendar.js %c> %cError loading match data: ${error}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
