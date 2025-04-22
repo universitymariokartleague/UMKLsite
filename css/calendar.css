@@ -1,7 +1,7 @@
 .calendar {
     max-width: 375px;
     margin: 0 auto;
-    border: 1px solid #ccc;
+    border: var(--button-outline);
     border-radius: 10px;
     overflow: hidden; /* Ensures the border-radius applies to child elements */
 }
@@ -27,7 +27,7 @@
 }
 
 /* Adjust font size and abbreviate text on smaller screens */
-@media (max-width: 450px) {
+@media (max-width: 767px) {
     .day {
         font-size: clamp(4px, 4vw, 14px);        /* Slightly smaller font */
     }
