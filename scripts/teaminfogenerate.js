@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function waitForDBToInit() {
     dbLoaded = await isDBLoaded();
-    console.debug(`%cteaminfogenerate.js %c> %c${dbLoaded ? "Database loaded" : "Database is loading..."}`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    console.debug(`%cteaminfogenerate.js %c> %c${dbLoaded ? "Database loaded" : "Database is loading..."}`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
     if (!dbLoaded) {
         setTimeout(waitForDBToInit, 100); // Check again after 0.1 seconds
     } else {
@@ -83,9 +83,8 @@ async function dbDoneLoading() {
     let teamData = allTeamData.find(team => team.team_name === currentTeam);
     // console.log(allTeamData)
     // let teamData = (await runSQL(`SELECT * FROM team WHERE team_name = '${currentTeam}'`))[0];
-    
 
-    console.debug(`%cteaminfogenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    console.debug(`%cteaminfogenerate.js %c> %cGenerating team boxes using SQL...`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
     generateTeamBox(teamData); //attempt to retrieve playlist file from audioStatus class data
 }
 
