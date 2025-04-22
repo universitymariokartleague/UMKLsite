@@ -671,6 +671,10 @@ blockquote {
     padding: 10px;
 }
 
+.match-container.special {
+    animation: rainbow 4s linear infinite;
+}
+
 .team-box {
     flex: 1;
     min-width: 50px;
