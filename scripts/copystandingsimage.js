@@ -38,7 +38,7 @@ function isWindowsOrLinux() {
 shareButton.addEventListener("click", async () => {
     const blob = await fetch('https://umkl.co.uk/assets/pythongraphics/output/team_standings.png').then(r=>r.blob())
     
-    if (isWindowsOrLinux()) {
+    if (isWindowsOrLinux() || !navigator.canShare) {
         const success = await copyImageToClipboard(blob);
         if (success) {
             let originalMessage = shareButton.innerText
