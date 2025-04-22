@@ -765,3 +765,25 @@ blockquote {
     width: 250px;
     margin: auto 30px;
 }
+
+
+.settingsBoxOpener:hover {
+    rotate: 60deg;
+    transition: rotate 0.2s ease-in-out;
+    
+}
+
+.settingsBoxOpener:active {
+    rotate: 180deg;
+    transition: rotate 0.2s ease-in-out;
+}
+
+.fa:hover, .fa-brands:hover {
+    opacity: 70%;
+    transition: 0.2s ease-in-out;
+}
+
+.fa:active, .fa-brands:active {
+    opacity: 100%;
+    transition: 0.1s ease-in-out;
+}
