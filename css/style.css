@@ -361,12 +361,6 @@ a[target="_blank"].nav-bar-link::after {
     vertical-align: sub;
 }
 
-@media screen and (max-width: 395px) {
-    a[target="_blank"].nav-bar-link::after {
-        content: inherit;
-    }
-}
-
 .box {
     border: 1px solid var(--text-color);
     border-radius: 10px;
