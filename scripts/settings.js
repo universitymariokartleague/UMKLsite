@@ -20,6 +20,10 @@ const settingsBox = document.getElementById('settingsBox');
 const settingsBoxJS = document.getElementById('settingsBoxJS');
 let settingsOpen = false;
 
+const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const weekdayNamesFull = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const DEFAULTSTARTDAY = 1;
+
 const toggleSettingsPanel = () => {
     BGBlur.classList.toggle("hidden");
     settingsBox.classList.toggle('hide-settings-box');
@@ -49,9 +53,15 @@ function generateSettingsPanel() {
             return `<b>${key}</b>: <span class="setting-selectable">${value.slice(0, 100)}${value.length > 100 ? '...' : ''}</span><br>`;
         }).join('');
 
+        const tempStartDay = localStorage.getItem("startDay") || DEFAULTSTARTDAY;
+
         settingsBoxJS.innerHTML = `
             <div class="setting-sub-heading">Apperance</div><hr>
             Page Theme<button id="toggleTheme" class="settings-option">${localStorage.getItem("darktheme") == 1 ? "Dark" : "Light"} theme</button><br>
+
+            <div class="setting-sub-heading">${tempStartDay == 1 ? "Localisation" : "Localization"}</div><hr class="settings-hr">
+            First day of week <button id="toggleStartDayButton" class="settings-option">${weekdayNamesFull[tempStartDay]}</button>
+            <span class="settingsExtraInfo">(Monday or Sunday)</span><br/>
 
             <div class="setting-sub-heading">Localstorage<span class="settings-extra-info"> (data stored on your device)</span></div><hr>
             Clear settings<button id="clearLocalStorage" class="settings-option">Clear</button>
@@ -70,11 +80,11 @@ function toggleTheme() {
     meta.content = darkThemeEnabled ? "dark" : "light";
 
     if (darkThemeEnabled) {
-        console.debug(`%csettings.js %c> %cChanging to dark theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
+        console.debug(`%csettings.js %c> %cSetting dark theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
         root.classList.add("dark-theme");
         root.classList.remove("light-theme");
     } else {
-        console.debug(`%csettings.js %c> %cChanging to light theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
+        console.debug(`%csettings.js %c> %cSetting light theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
         root.classList.add("light-theme");
         root.classList.remove("dark-theme");
     }
@@ -87,6 +97,14 @@ function sendThemeChangeEvent() {
     document.dispatchEvent(new CustomEvent('themeChange', { detail: { darkThemeEnabled } }));
 }
 
+function toggleStartDay() {
+    const newStartDay = localStorage.getItem("startDay") == 0 ? 1 : 0;
+    localStorage.setItem("startDay", newStartDay);
+    console.debug(`%csettings.js %c> %cset startDay to ${newStartDay} (${weekdayNamesFull[newStartDay]})`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
+    document.dispatchEvent(new CustomEvent('startDayChange', { detail: { darkThemeEnabled } }));
+    generateSettingsPanel();
+}
+
 function clearLocalStorage() {
     localStorage.clear();
     window.location.reload();
@@ -94,6 +112,7 @@ function clearLocalStorage() {
 
 function generateEventListeners() {
     document.getElementById('toggleTheme').addEventListener('click', toggleTheme);
+    document.getElementById('toggleStartDayButton').addEventListener('click', toggleStartDay);
     document.getElementById('clearLocalStorage').addEventListener('click', clearLocalStorage);
 }
 

@@ -80,90 +80,16 @@ function showDailyLog(date) {
     `;
 }
 
-function updateSettings() {
-    const tempStartDay = localStorage.getItem("startDay") || DEFAULTSTARTDAY;
-
-    calendarSettings.innerHTML = `
-        <div class="setting-sub-heading">Localization</div><hr class="settings-hr">
-        First day of week <a href="javascript:void(0)" id="toggleStartDayButton" class="settings-option">${weekdayNamesFull[tempStartDay]}</a>
-        <span class="settingsExtraInfo">(Monday or Sunday)</span><br/>
-
-        <div class="setting-sub-heading">Data</div><hr class="settings-hr">
-        Add daily log <input type="text" placeholder="Enter log" id="dailyLogText"> <input type="date" placeholder="Enter date" id="dailyLogDate"> <a href="javascript:void(0)" id="addDailyLogButton" class="settings-option">Add</a><br/>
-    `;
-    generateEventListeners();
-}
-
-function generateEventListeners() {
-    document.getElementById('toggleStartDayButton').addEventListener('click', toggleStartDay);
-    document.getElementById('addDailyLogButton').addEventListener('click', addDailyLogData);
-}
-function toggleStartDay() {
-    const newStartDay = localStorage.getItem("startDay") == 0 ? 1 : 0;
-    localStorage.setItem("startDay", newStartDay);
-    console.log(`Set startDay to ${newStartDay} (${weekdayNamesFull[newStartDay]})`);
+// Listen for theme change event
+document.addEventListener('startDayChange', (event) => {
     displayCalendar();
-    updateSettings();
-}
-
-function addDailyLogData() {
-    const dailyLogText = document.getElementById('dailyLogText').value;
-    const dailyLogDate = document.getElementById('dailyLogDate').value;
-
-    if (!dailyLogText || !dailyLogDate) {
-        alert('Please enter both a log and a date');
-        return;
-    }
-
-    if (!dailyLogData[dailyLogDate]) {
-        dailyLogData[dailyLogDate] = [];
-    }
-
-    dailyLogData[dailyLogDate].push(dailyLogText);
-
-    console.log(`Added daily log to ${dailyLogDate}`);
-    updateSettings();
-    displayCalendar();
-
-    console.log(JSON.stringify(dailyLogData))
-}
-
-// function downloadDailyLogData() {
-//     const data = JSON.stringify(dailyLogData, null, 4);
-//     const blob = new Blob([data], { type: 'application/json' });
-//     const url = URL.createObjectURL(blob);
-//     const a = document.createElement('a');
-//     a.href = url;
-//     a.download = 'dailyLogData.json';
-//     document.body.appendChild(a);
-//     a.click();
-//     document.body.removeChild(a);
-//     console.log('Downloaded daily log data');
-// }
-
-// function uploadDailyLogData() {
-//     const input = document.createElement('input');
-//     input.type = 'file';
-//     input.accept = '.json';
-//     input.onchange = e => {
-//         const file = e.target.files[0];
-//         const reader = new FileReader();
-//         reader.onload = () => {
-//             dailyLogData = JSON.parse(reader.result);
-//             console.log('Uploaded daily log data');
-//             updateSettings();
-//             displayCalendar();
-//         };
-//         reader.readAsText(file);
-//     };
-//     input.click();
-// }
+});
 
 function makeTeamsColorStyles() {
     const styleSheet = document.createElement("style");
 
     Object.entries(teamColorsData).forEach(([team, color]) => {
-        console.log(`Team: ${team}, Color: ${color}`);
+        // console.log(`Team: ${team}, Color: ${color}`);
         styleSheet.innerText += `
             .${team} {
                 cursor: pointer;
@@ -190,10 +116,10 @@ function displayCalendar() {
         .then(colorsData => {
             teamColorsData = colorsData
             makeTeamsColorStyles();
-            console.log('Team colors loaded:', teamColorsData);
+            console.debug(`%cmatchcalendar.js %c> %cTeam colors loaded: ${JSON.stringify(teamColorsData)}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
         })
         .catch(error => {
-            console.error('Error loading team colors:', error);
+            console.debug(`%cmatchcalendar.js %c> %cError loading team colors: ${error}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
         });
 
         fetch(dailyLogPath)
@@ -207,12 +133,11 @@ function displayCalendar() {
                 dailyLogData = data;
                 const currentDate = new Date();
                 generateCalendar(currentDate.getMonth(), currentDate.getFullYear(), parseInt(localStorage.getItem("startDay")));        
-                console.log('Match data loaded:', dailyLogData);
+                console.debug(`%cmatchcalendar.js %c> %cMatch data loaded: ${JSON.stringify(dailyLogData)}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
             })
             .catch(error => {
-                console.error('Error loading match data:', error);
+                console.debug(`%cmatchcalendar.js %c> %cError loading match data: ${error}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
             });
 }
 
 displayCalendar();
-updateSettings();
