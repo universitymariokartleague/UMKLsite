@@ -24,8 +24,6 @@
     align-items: center;
     justify-content: center;
     border: 1px solid #ccc;
-    padding: 0; /* Remove padding to ensure exact sizing */
-    min-height: 0; /* Allows cells to shrink properly */
 }
 
 /* Adjust font size and abbreviate text on smaller screens */
