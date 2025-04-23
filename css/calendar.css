@@ -24,6 +24,8 @@
     align-items: center;
     justify-content: center;
     border: 1px solid #ccc;
+    -webkit-user-select: text;
+    user-select: all;
 }
 
 /* Adjust font size and abbreviate text on smaller screens */

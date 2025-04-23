@@ -334,7 +334,7 @@ a:hover {
     transition: none!important;
 }
 
-.no-underline-link-footer-footer {
+.no-underline-link-footer {
     text-decoration: none;
 }
 
@@ -600,9 +600,7 @@ blockquote {
 /* news */
 .news-container {
 	display: flex;
-	/* justify-content: center; */
 	flex-direction: row;
-	/* flex-wrap: wrap; */
 
     border-radius: 15px;
     background-color: var(--news-box-bg-color);
@@ -612,6 +610,8 @@ blockquote {
 }
 
 .news-container-override {
+    max-width: 702px;
+    margin: 0 auto;
 	flex-wrap: wrap;
 }
 
@@ -769,7 +769,7 @@ blockquote {
     background-color: var(--bg-color);
     padding: 10px;
     margin: auto;
-    width: 100%;
+    width: 100vw;
     border-radius: 10px;
     position: relative;
 }
@@ -778,6 +778,20 @@ blockquote {
     text-align: center;
     width: 250px;
     margin: auto 30px;
+}
+
+@media screen and (max-width: 767px) {
+    .result-container {
+        flex-wrap: wrap; /* Ensure flex items wrap to the next line */
+    }
+
+    .result-box {
+        width: 100%; /* Make each flex item take full width */
+    }
+
+    .points-diff {
+        margin: 15px;
+    }
 }
 
 .settingsBoxOpener {

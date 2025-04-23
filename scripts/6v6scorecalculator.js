@@ -49,11 +49,11 @@ function renderResults() {
     });
 
     teamResult.innerHTML = `<h3>Your Team</h3><br/>${teamRaceResults.join("")}
-        <br><br><b>Total</b><br/>
+        <br><b>Total</b><br/>
         ${yourTeamTotal}<br/>`;
 
     opponentResult.innerHTML = `<h3>Opponent Team</h3><br/>${opponentRaceResults.join("")}
-        <br><br><b>Total</b><br/>
+        <br><b>Total: </b><br/>
         ${opponentTeamTotal}<br/>`;
 
     const diff = yourTeamTotal - opponentTeamTotal;

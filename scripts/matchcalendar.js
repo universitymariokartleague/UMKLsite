@@ -119,7 +119,21 @@ function createTeamStyleSheet(team1, team2) {
     styleSheet.innerText = `
         .${team1}-vs-${team2} {
             color: #FFF;
-            background: linear-gradient(to bottom right, ${team1Color}EE, ${team2Color}EE);
+            background: linear-gradient(to bottom right, ${team1Color}EE, ${team1Color}EE, var(--bg-color), ${team2Color}EE, ${team2Color}EE);
+            background-size: 300% 300%;
+            animation: gradient 8s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
     `
 
