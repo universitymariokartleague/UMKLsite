@@ -61,7 +61,8 @@ function generateCalendar(month, year, startDay) {
         if (dailyLogData[dateToCheck]) {
             const [team1, team2] = dailyLogData[dateToCheck][0].teamsInvolved;
             // dayCell.classList.remove('today');
-            dayCell.classList.add('logged', team1, team2);
+            createTeamStyleSheet(team1, team2)
+            dayCell.classList.add('logged', `${team1}-vs-${team2}`);
             dayCell.addEventListener('click', () => showDailyLog(dateToCheck));
         }
         calendarDays.appendChild(dayCell);
@@ -99,11 +100,32 @@ document.addEventListener('startDayChange', (event) => {
     displayCalendar();
 });
 
+function createTeamStyleSheet(team1, team2) {
+    const styleSheet = document.createElement("style");
+
+    const team1Color = teamColorsData[team1];
+    const team2Color = teamColorsData[team2];
+
+    styleSheet.innerText = `
+        .${team1}-vs-${team2} {
+            color: #FFF;
+            background: linear-gradient(to bottom right, ${team1Color}EE, ${team2Color}EE);
+        }
+    `
+
+    document.head.appendChild(styleSheet);
+}
+
 function makeTeamsColorStyles() {
+    // .${team} {
+    //     cursor: pointer;
+    //     border: 2px solid ${color};
+    //     background-color: ${color}50;
+    // }
+
     const styleSheet = document.createElement("style");
 
     Object.entries(teamColorsData).forEach(([team, color]) => {
-        // console.log(`Team: ${team}, Color: ${color}`);
         styleSheet.innerText += `
             .${team} {
                 cursor: pointer;
