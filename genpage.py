@@ -122,15 +122,15 @@ BLANK_NEWS_PAGE = """
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
         <meta name="color-scheme" content="dark light">
     
-        <meta property="og:title" content="University Mario Kart League | Matches" />
+        <meta property="og:title" content="University Mario Kart League | {TITLE} - News" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://umkl.co.uk/{LINK}" />
         <meta property="og:image" content="{IMAGE}" />
         <meta property="og:description" content="{TITLE} news article on University Mario Kart League (UMKL)" />
-        <meta name="theme-color" content="#bc0839">
+        <meta name="theme-color" content="#bc0839" />
     
         <!-- Include this to make the og:image larger -->
-        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:card" content="summary_large_image" />
     
         <!-- Scripts -->
         <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),localStorage.setItem("darktheme",1),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),localStorage.setItem("darktheme",0),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
@@ -170,8 +170,12 @@ BLANK_NEWS_PAGE = """
         </div>
 
         <main>
+            <a href="pages/news/">Back</a>
             <h2>{TITLE}</h2>
-            <p class="p-below-title">{DATE}</p>
+            <p class="p-below-title">
+                {DATE} | 
+                <tag>Intro</tag>
+            </p>
             <hr class="hr-below-title">
 
             <p>{DESC}</p>

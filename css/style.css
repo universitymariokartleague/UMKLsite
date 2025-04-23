@@ -664,6 +664,7 @@ blockquote {
 	margin-left: 10px;
 	margin-bottom: 10px;
     opacity: 0.8;
+    width: max-content;
 }
 
 /* next match box */
