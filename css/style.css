@@ -250,6 +250,7 @@ footer {
         color: white;
         cursor: pointer;
         font-size: 22px;
+        padding-left: 25vw;
     }
     
     .nav-dropdown {
