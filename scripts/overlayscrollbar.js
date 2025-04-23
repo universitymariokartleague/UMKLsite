@@ -1,6 +1,4 @@
-const { OverlayScrollbars, ClickScrollPlugin } = OverlayScrollbarsGlobal;
-
-OverlayScrollbars.plugin(ClickScrollPlugin);
+const { OverlayScrollbars } = OverlayScrollbarsGlobal;
 
 const osInstance = OverlayScrollbars({
     target: document.body,
@@ -11,7 +9,6 @@ const osInstance = OverlayScrollbars({
 }, {
     scrollbars: {
         theme: "os-theme-dark",
-        clickScroll: true,
         autoHide: 'scroll',
         autoHideDelay: 3000,
     }
@@ -25,7 +22,6 @@ function changeScrollbarTheme(dark) {
     });
 }
 
-// Listen for theme change event
 document.addEventListener('themeChange', (event) => {
     console.debug(`%coverlayscrollbar.js %c> %cChanging scrollbar theme`, "color:#4599ff", "color:#fff", "color:#b3d5ff");
     changeScrollbarTheme(event.detail.darkThemeEnabled);

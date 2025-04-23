@@ -1,4 +1,6 @@
 window.addEventListener('load', function() {
+    const newsContainer = document.getElementById("news-container");
+
     document.querySelectorAll('.news-date').forEach((element, index) => {
         const rect = element.getBoundingClientRect();
         const width = rect.width;
@@ -14,6 +16,6 @@ window.addEventListener('load', function() {
             `;
             document.head.appendChild(style);
             element.style.animation = `news-date${index}scrollBackForth 5s ease-in-out infinite`;
-        }
+        };
     });
 });
