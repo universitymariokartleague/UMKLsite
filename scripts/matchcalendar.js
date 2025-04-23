@@ -18,7 +18,7 @@ function generateCalendar(month, year, startDay) {
 
     monthYear.innerHTML = `
         <button id="previousMonthButton">Prev</button>
-        ${Intl.DateTimeFormat('en', { month: 'short' }).format(new Date(year, month)).toUpperCase()} ${year}
+        ${Intl.DateTimeFormat('en', { month: 'long' }).format(new Date(year, month))} ${year}
         <button id="nextMonthButton">Next</button>
     `;
 
@@ -43,7 +43,7 @@ function generateCalendar(month, year, startDay) {
         const emptyCell = document.createElement('div');
         emptyCell.classList.add('day');
         calendarDays.appendChild(emptyCell);
-    }
+    };
 
     for (let day = 1; day <= daysInMonth; day++) {
         const dayCell = document.createElement('div');
@@ -65,13 +65,13 @@ function generateCalendar(month, year, startDay) {
             dayCell.addEventListener('click', () => showDailyLog(dateToCheck));
         }
         calendarDays.appendChild(dayCell);
-    }
-}
+    };
+};
 
 function changeMonth(change) {
     const newDate = new Date(currentlyShownDate[0], currentlyShownDate[1] + change);
     generateCalendar(newDate.getMonth(), newDate.getFullYear(), parseInt(localStorage.getItem("startDay")));
-}
+};
 
 function showDailyLog(date) {
     const urlParams = new URLSearchParams(window.location.search);
@@ -135,7 +135,7 @@ function createTeamStyleSheet(team1, team2) {
                 background-position: 0% 50%;
             }
         }
-    `
+    `;
 
     document.head.appendChild(styleSheet);
     console.debug(`%cmatchcalendar.js %c> %cAdded style sheet: .${team1}-vs-${team2}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
@@ -158,7 +158,7 @@ function makeTeamsColorStyles() {
 }
 
 function displayCalendar() {
-    let dailyLogPath = "database/matchdata.json"
+    let dailyLogPath = "database/matchdata.json";
     let teamColorsPath = "database/teamcolors.json";
 
     fetch(teamColorsPath)
