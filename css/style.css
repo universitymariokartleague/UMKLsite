@@ -329,9 +329,14 @@ a:hover {
 }
 
 .no-underline-link {
+    color: var(--text-color)!important; 
     text-decoration: none;
+    transition: none!important;
 }
 
+.no-underline-link-footer-footer {
+    text-decoration: none;
+}
 
 @media (prefers-reduced-motion) {
     a:link {

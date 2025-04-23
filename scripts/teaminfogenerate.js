@@ -28,7 +28,7 @@ async function generateTeamBox(teamData) {
         teamData.logo_src = `assets/teamemblems/${teamData.team_name.toUpperCase()}.png`
         teamData.class_name = teamData.team_name.replace(/\s+/g, '')    
     } catch (error) {
-        JSTeamBox.innerHTML = `No team data available!<br/><div class="codeBox">${error.stack}</div>`;
+        JSTeamBox.innerHTML = `<div class="codeBox">No team data available!<br/>${error.stack}</div>`;
     }
 
     let winslosses = await getTeamWinsAndLosses(teamData.team_id);

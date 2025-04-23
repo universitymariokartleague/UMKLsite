@@ -52,7 +52,6 @@ function generateCalendar(month, year, startDay) {
         
         const today = new Date();
         if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
-            console.log(dayCell)
             dayCell.innerHTML = "☆" + day;
             dayCell.classList.add('today');
         }
@@ -84,14 +83,25 @@ function showDailyLog(date) {
     expandedLog.innerHTML = `
         <div class="settingSubheading">
         <hr class="settings-hr">
-        ${log.length ? log.map((entry, index) => `
-            <b>
-                <span class=${entry.teamsInvolved[0]}>${entry.teamsInvolved[0]}</span> 
-                VS 
-                <span class="${entry.teamsInvolved[1]}">${entry.teamsInvolved[1]}</span> | ${date} (${weekdayNames[new Date(date).getDay()]})</b>
-                <br/>
-                ${entry.description.replace(/(?:\r\n|\r|\n)/g, '<br/>')}`).join('<br/><hr/>') : 'No logs for this day'
-        }
+        ${log.length ? log.map((entry, index) => {
+            function createTeamObject(teamName) {
+                return {
+                    team_name: teamName,
+                    class_name: teamName.replace(/\s+/g, ''),
+                    link: `pages/teams/${teamName.replace(/\s+/g, '-').toLowerCase()}/`
+                };
+            }
+
+            const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
+            return `
+                <b>
+                    <span class=${team1.class_name}><a class="no-color-link no-underline-link" href="${team1.link}">${team1.team_name}</a></span> 
+                    VS 
+                    <span class="${team2.class_name}"><a class="no-color-link no-underline-link" href="${team2.link}">${team2.team_name}</a></span> 
+                    | ${date} (${weekdayNames[new Date(date).getDay()]})</b>
+                    <br/>
+                    ${entry.description.replace(/(?:\r\n|\r|\n)/g, '<br/>')}`;
+        }).join('<br/><hr/>') : 'No logs for this day'}
     `;
 }
 
@@ -114,15 +124,10 @@ function createTeamStyleSheet(team1, team2) {
     `
 
     document.head.appendChild(styleSheet);
+    console.debug(`%cmatchcalendar.js %c> %cAdded style sheet: .${team1}-vs-${team2}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
 }
 
 function makeTeamsColorStyles() {
-    // .${team} {
-    //     cursor: pointer;
-    //     border: 2px solid ${color};
-    //     background-color: ${color}50;
-    // }
-
     const styleSheet = document.createElement("style");
 
     Object.entries(teamColorsData).forEach(([team, color]) => {
@@ -153,34 +158,36 @@ function displayCalendar() {
             teamColorsData = colorsData
             makeTeamsColorStyles();
             console.debug(`%cmatchcalendar.js %c> %cTeam colors loaded: ${JSON.stringify(teamColorsData)}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+            fetch(dailyLogPath)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    dailyLogData = data;
+                    const currentDate = new Date();
+                    generateCalendar(currentDate.getMonth(), currentDate.getFullYear(), parseInt(localStorage.getItem("startDay")));        
+                    console.debug(`%cmatchcalendar.js %c> %cMatch data loaded`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+        
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const dateParam = urlParams.get('date');
+                    if (dateParam && dailyLogData[dateParam]) {
+                        console.debug(`%cmatchcalendar.js %c> %cURL parameter detected`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+                        showDailyLog(dateParam);
+                    }
+                })
+                .catch(error => {
+                    console.debug(`%cmatchcalendar.js %c> %cError loading match data: ${error}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+                });    
         })
         .catch(error => {
             console.debug(`%cmatchcalendar.js %c> %cError loading team colors: ${error}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
         });
-
-        fetch(dailyLogPath)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                dailyLogData = data;
-                const currentDate = new Date();
-                generateCalendar(currentDate.getMonth(), currentDate.getFullYear(), parseInt(localStorage.getItem("startDay")));        
-                console.debug(`%cmatchcalendar.js %c> %cMatch data loaded: ${JSON.stringify(dailyLogData)}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-
-                const urlParams = new URLSearchParams(window.location.search);
-                const dateParam = urlParams.get('date');
-                if (dateParam && dailyLogData[dateParam]) {
-                    console.debug(`%cmatchcalendar.js %c> %cURL parameter detected: ${dateParam}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-                    showDailyLog(dateParam);
-                }
-            })
-            .catch(error => {
-                console.debug(`%cmatchcalendar.js %c> %cError loading match data: ${error}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-            });
 }
 
-displayCalendar();
+window.addEventListener('load', function() {
+    console.debug(`%cmatchcalendar.js %c> %cLoading calendar...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+    displayCalendar();
+});
