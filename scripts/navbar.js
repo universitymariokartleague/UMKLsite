@@ -1,19 +1,40 @@
-const navbar = document.getElementById("nav-bar")
+export { fillNavbar }
 
 function fillNavbar() {
-    console.log(navbar)
+    console.debug(`%cnavbar.js %c> %cLoading nav bar...`, "color:#ff6145", "color:#fff", "color:#ffa494");
 
-    navbar.innerHTML = ""
-    addNavPage(`<li><a href="index.html">Home</a></li>`)
-    addNavPage(`<li><a href="pages/news/">News</a></li>`)
-    addNavPage(`<li><a href="pages/teams/">Teams</a></li>`)
-    addNavPage(`<li><a href="pages/matches/">Matches</a></li>`)
-    addNavPage(`<li><a href="pages/faq/">FAQ</a></li>`)
-    addNavPage(`<li><a class="nav-bar-link" target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>`)
+    const navbar = document.getElementById("nav-bar");
+    const navdropdownbar = document.getElementById("nav-dropdown-bar");
+    const currentPage = window.location.pathname.replace(/\/$/, "").split("/").pop().replace(".html", "");
+
+    const navItems = [
+        { href: "index.html", label: "Home", page: "index" },
+        { href: "pages/teams/", label: "Teams", page: "teams" },
+        { href: "pages/matches/", label: "Matches", page: "matches" },
+        { href: "pages/rules/", label: "Rules", page: "rules" },
+        { href: "pages/faq/", label: "FAQs", page: "faq" },
+        { href: "https://discord.gg/6jS7YUqnbh", label: "Discord", external: true }
+    ];
+
+    if (navbar) {
+        navbar.innerHTML = navItems.map(item => {
+            const isSelected = currentPage === item.page ? 'nav-selected' : '';
+            const targetAttr = item.external ? ' target="_blank"' : '';
+            return `<li><a href="${item.href}" class="${item.external ? `nav-bar-link` : ``}${isSelected}"${targetAttr}>${item.label}</a></li>`;
+        }).join('');
+    } else {
+        console.debug(`%cnavbar.js %c> %cNavbar element with ID 'nav-bar' not found`, "color:#ff6145", "color:#fff", "color:#ffa494");
+    }
+
+    if (navdropdownbar) {
+        navdropdownbar.innerHTML = navItems.map(item => {
+            const isSelected = currentPage === item.page ? 'nav-dropdown-selected' : '';
+            const targetAttr = item.external ? ' target="_blank"' : '';
+            return `<a href="${item.href}" class="${item.external ? `nav-bar-link` : ``}${isSelected}"${targetAttr}>${item.label}</a>`;
+        }).join('');
+    } else {
+        console.debug(`%cnavbar.js %c> %cNavbar element with ID 'nav-dropdown-bar' not found`, "color:#ff6145", "color:#fff", "color:#ffa494");
+    }
+
+    console.debug(`%cnavbar.js %c> %cLoaded nav bar`, "color:#ff6145", "color:#fff", "color:#ffa494");
 }
-
-function addNavPage(HTML) {
-    navbar.innerHTML += HTML
-}
-
-fillNavbar();

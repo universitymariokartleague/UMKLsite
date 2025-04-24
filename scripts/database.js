@@ -1,6 +1,5 @@
 export { isDBLoaded, runSQL };
 
-const SQLOutput = document.getElementById("SQLOutput")
 const initSqlJs = window.initSqlJs;
 
 const config = {

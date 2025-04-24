@@ -33,7 +33,7 @@ TEAM_PAGE = """
         <script src="scripts/overlayscrollbars.browser.es6.min.js" defer></script>
         <script src="scripts/overlayscrollbar.js" defer></script>    
         
-        <script type="module" src="scripts/settings.js" defer></script>
+        <script type="module" src="scripts/settings.js"></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/sql-wasm.js' defer></script>
         <script type="module" src="scripts/teaminfogenerate.js" defer></script>
     </head>
@@ -45,7 +45,7 @@ TEAM_PAGE = """
                     <h2>UMKL</h2>
                 </a>
                 <nav class="nav-flex">
-                    <ul>
+                    <ul id="nav-bar">
                         <li><a href="index.html">Home</a></li>
                         <li><a href="pages/teams/">Teams</a></li>
                         <li><a href="pages/matches/">Matches</a></li>
@@ -56,7 +56,7 @@ TEAM_PAGE = """
                 <!-- Dropdown navigation (shown on mobile) -->
                 <div class="nav-dropdown">
                     <div class="nav-dropdown-button">☰</div>
-                    <div class="nav-dropdown-content">
+                    <div class="nav-dropdown-content" id="nav-dropdown-bar">
                         <a href="index.html">Home</a>
                         <a href="pages/teams/">Teams</a>
                         <a href="pages/matches/">Matches</a>
@@ -137,7 +137,7 @@ BLANK_NEWS_PAGE = """
         <script src="scripts/overlayscrollbars.browser.es6.min.js" defer></script>
         <script src="scripts/overlayscrollbar.js" defer></script>    
         
-        <script type="module" src="scripts/settings.js" defer></script>
+        <script type="module" src="scripts/settings.js"></script>
     </head>
     <body id="top" data-overlayscrollbars-initialize>
         <div class="navbar-container">
@@ -147,7 +147,7 @@ BLANK_NEWS_PAGE = """
                     <h2>UMKL</h2>
                 </a>
                 <nav class="nav-flex">
-                    <ul>
+                    <ul id="nav-bar">
                         <li><a href="index.html">Home</a></li>
                         <li><a href="pages/teams/">Teams</a></li>
                         <li><a href="pages/matches/">Matches</a></li>
@@ -158,7 +158,7 @@ BLANK_NEWS_PAGE = """
                 <!-- Dropdown navigation (shown on mobile) -->
                 <div class="nav-dropdown">
                     <div class="nav-dropdown-button">☰</div>
-                    <div class="nav-dropdown-content">
+                    <div class="nav-dropdown-content" id="nav-dropdown-bar">
                         <a href="index.html">Home</a>
                         <a href="pages/teams/">Teams</a>
                         <a href="pages/matches/">Matches</a>

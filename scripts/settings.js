@@ -1,4 +1,6 @@
 // Setup
+import { fillNavbar } from './navbar.js';
+
 const settingsBoxHTML = `
 <div class="hidden BGBlur" id="BGBlur"></div>
 <div class="hidden hide-settings-box" id="settingsBox" data-overlayscrollbars-initialize>
@@ -130,6 +132,10 @@ function checkThemeAfterLoaded() {
     sendThemeChangeEvent();
 }
 checkThemeAfterLoaded();
+
+window.addEventListener('load', function() {
+    fillNavbar();
+});
 
 // keyboard shortcuts
 document.addEventListener('keydown', (event) => {
