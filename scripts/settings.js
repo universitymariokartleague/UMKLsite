@@ -7,7 +7,7 @@ const settingsBoxHTML = `
     </div>
     <div class="settings-title">Settings</div>
     <div class="setting-options" id="settingsBoxJS">
-        <div class="setting-sub-heading">Apperance</div><hr>
+        <div class="setting-sub-heading">Appearance</div><hr>
         Theme<button class="settings-option">Dark theme</button><br>
         Ambient Mode <button class="settings-option">OFF</button>
         <span class="settings-extra-info">(only available in dark theme)</span><br>
