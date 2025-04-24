@@ -11,6 +11,7 @@ let teamColorsData = {};
 
 function generateCalendar(month, year, startDay) {    
     if (startDay == null || isNaN(startDay)) startDay = DEFAULTSTARTDAY;
+    const tempMonthType = localStorage.getItem("monthType") || "long";
 
     const monthYear = document.getElementById('monthYear');
     const calendarDays = document.getElementById('calendarDays');
@@ -18,7 +19,7 @@ function generateCalendar(month, year, startDay) {
 
     monthYear.innerHTML = `
         <button id="previousMonthButton">Prev</button>
-        ${Intl.DateTimeFormat('en', { month: 'long' }).format(new Date(year, month))} ${year}
+        ${Intl.DateTimeFormat('en', { month: tempMonthType }).format(new Date(year, month))} ${year}
         <button id="nextMonthButton">Next</button>
     `;
 

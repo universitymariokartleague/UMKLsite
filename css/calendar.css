@@ -35,6 +35,16 @@
     }
 }
 
+.logged:hover {
+    outline: 2px solid var(--text-color);
+    z-index: 0;
+}
+
+.active-selection {
+    outline: 2px solid var(--text-color);
+    z-index: 0;
+}
+
 .today {
     font-weight: bold;
     border: 2px solid var(--text-color);
