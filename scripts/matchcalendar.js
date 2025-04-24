@@ -127,7 +127,7 @@ function createTeamStyleSheet(team1, team2) {
             color: #FFF;
             background: linear-gradient(to bottom right, ${team1Color}EE, ${team1Color}EE, var(--bg-color), ${team2Color}EE, ${team2Color}EE);
             background-size: 300% 300%;
-            animation: gradient 8s ease infinite;
+            animation: gradient 5s ease infinite;
         }
 
         @keyframes gradient {
