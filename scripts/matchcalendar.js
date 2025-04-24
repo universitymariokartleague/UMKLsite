@@ -155,6 +155,7 @@ function makeTeamsColorStyles() {
                 cursor: pointer;
                 border: 2px solid ${color};
                 background-color: ${color}50;
+                border-radius: 5px;
             }
         `
     });

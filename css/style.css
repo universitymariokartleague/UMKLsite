@@ -220,15 +220,16 @@ footer {
     padding: 15px 0px 15px 0px;
 }
 
-.nav-selected {
-    background-color: #ffffff20;
-    outline: #ffffff50 solid 1px;
-}
-
 .nav-flex a {
     color: #fff !important;
     text-decoration: none;
     padding: 10px;
+    border-radius: 5px;
+}
+
+.nav-selected {
+    background-color: #ffffff20;
+    outline: #ffffff50 solid 1px;
 }
 
 .nav-flex a:hover {
