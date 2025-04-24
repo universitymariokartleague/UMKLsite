@@ -1,5 +1,5 @@
 // Setup
-import { fillNavbar } from './navbar.js';
+// import { fillNavbar } from './navbar.js';
 
 const settingsBoxHTML = `
 <div class="hidden BGBlur" id="BGBlur"></div>
