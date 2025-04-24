@@ -744,7 +744,7 @@ blockquote {
 	justify-content: center;
 	flex-direction: row;
 	flex-wrap: wrap;
-    text-align:center;
+    text-align: center;
     margin-top: 10px;
     border-radius: 10px;
     padding: 10px;
@@ -783,11 +783,11 @@ blockquote {
 
 @media screen and (max-width: 767px) {
     .result-container {
-        flex-wrap: wrap; /* Ensure flex items wrap to the next line */
+        flex-wrap: wrap;
     }
 
     .result-box {
-        width: 100%; /* Make each flex item take full width */
+        width: 100%;
     }
 
     .points-diff {

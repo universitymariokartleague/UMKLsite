@@ -2,7 +2,6 @@ const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const weekdayNamesFull = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const DEFAULTSTARTDAY = 1;
 
-const calendarSettings = document.getElementById('calendarSettings');
 const expandedLog = document.getElementById('expandedLog');
 
 let currentlyShownDate = [2000, 0];
@@ -83,7 +82,6 @@ function showDailyLog(date) {
     const log = dailyLogData[date] || [];
     expandedLog.innerHTML = `
         <div class="settingSubheading">
-        <hr class="settings-hr">
         ${log.length ? log.map((entry, index) => {
             function createTeamObject(teamName) {
                 return {

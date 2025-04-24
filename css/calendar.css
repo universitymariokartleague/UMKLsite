@@ -1,9 +1,38 @@
+.calendar-container {
+    display: flex;
+    height: fit-content;
+}
+
 .calendar {
-    max-width: 375px;
-    margin: 0 auto;
+    flex: 0 0 375px;
+    height: fit-content;
+    margin-right: 10px;
     border: var(--button-outline);
     border-radius: 10px;
-    overflow: hidden; /* Ensures the border-radius applies to child elements */
+    overflow: hidden;
+}
+
+#expandedLog {
+    margin-top: 5px;
+    min-width: 100px;
+}
+
+@media screen and (max-width: 767px) {
+    .calendar-container {
+        display: unset;
+        flex-wrap: wrap;
+        height: unset;
+    }
+
+    .calendar {
+        min-width: unset;
+        margin: 0 auto;
+    }
+
+    #expandedLog {
+        margin-top: 15px;
+        max-width: unset;
+    }
 }
 
 .calendar-header {
