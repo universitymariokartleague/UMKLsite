@@ -133,9 +133,9 @@ function checkThemeAfterLoaded() {
 }
 checkThemeAfterLoaded();
 
-window.addEventListener('load', function() {
-    fillNavbar();
-});
+// window.addEventListener('load', function() {
+//     fillNavbar();
+// });
 
 // keyboard shortcuts
 document.addEventListener('keydown', (event) => {
