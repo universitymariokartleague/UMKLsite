@@ -8,7 +8,9 @@ let currentlyShownDate = [2000, 0];
 let dailyLogData = {};
 let teamColorsData = {};
 
-function generateCalendar(month, year, startDay) {    
+let generatedStyleSheets = false;
+
+function generateCalendar(month, year, startDay) {
     if (startDay == null || isNaN(startDay)) startDay = DEFAULTSTARTDAY;
     const tempMonthType = localStorage.getItem("monthType") || "long";
 
@@ -18,15 +20,16 @@ function generateCalendar(month, year, startDay) {
 
     monthYear.innerHTML = `
         <button id="previousMonthButton">Prev</button>
-        ${Intl.DateTimeFormat('en', { month: tempMonthType }).format(new Date(year, month))} ${year}
+        <button id="goToCurrentMonthButton">${Intl.DateTimeFormat('en', { month: tempMonthType }).format(new Date(year, month))} ${year}</button>
         <button id="nextMonthButton">Next</button>
     `;
 
+    const currentDate = new Date();
+    document.getElementById('goToCurrentMonthButton').addEventListener('click', () => generateCalendar(currentDate.getMonth(), currentDate.getFullYear(), parseInt(localStorage.getItem("startDay"))));
     document.getElementById('previousMonthButton').addEventListener('click', () => changeMonth(-1));
     document.getElementById('nextMonthButton').addEventListener('click', () => changeMonth(1));
 
     calendarDays.innerHTML = '';
-    // expandedLog.innerHTML = '';
     currentlyShownDate = [year, month];
 
     const firstDay = (new Date(year, month, 1).getDay() - startDay + 7) % 7;
@@ -60,12 +63,15 @@ function generateCalendar(month, year, startDay) {
         if (dailyLogData[dateToCheck]) {
             const [team1, team2] = dailyLogData[dateToCheck][0].teamsInvolved;
             // dayCell.classList.remove('today');
-            createTeamStyleSheet(team1, team2)
+            if (!generatedStyleSheets) {
+                createTeamStyleSheet(team1, team2);
+            }
             dayCell.classList.add('logged', `${team1}-vs-${team2}`);
             dayCell.addEventListener('click', () => showDailyLog(dateToCheck));
         }
         calendarDays.appendChild(dayCell);
     };
+    generatedStyleSheets = true;
 };
 
 function changeMonth(change) {
