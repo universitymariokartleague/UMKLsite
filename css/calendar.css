@@ -1,12 +1,13 @@
 .calendar-container {
     display: flex;
     height: fit-content;
+    flex-direction: row-reverse;
 }
 
 .calendar {
     flex: 0 0 375px;
     height: fit-content;
-    margin-right: 10px;
+    margin-left: 10px;
     border: var(--button-outline);
     border-radius: 10px;
     overflow: hidden;
@@ -53,8 +54,6 @@
     align-items: center;
     justify-content: center;
     border: 1px solid #ccc;
-    -webkit-user-select: text;
-    user-select: all;
 }
 
 /* Adjust font size and abbreviate text on smaller screens */
@@ -62,6 +61,20 @@
     .day {
         font-size: clamp(4px, 4vw, 14px);        /* Slightly smaller font */
     }
+}
+
+.logged {
+    cursor: pointer;
+}
+
+.today {
+    font-weight: bold;
+    border: 2px solid var(--text-color);
+}
+
+.logged, .today {
+    -webkit-user-select: text;
+    user-select: all;
 }
 
 .logged:hover {
@@ -72,13 +85,4 @@
 .active-selection {
     outline: 2px solid var(--text-color);
     z-index: 0;
-}
-
-.today {
-    font-weight: bold;
-    border: 2px solid var(--text-color);
-}
-
-.logged {
-    cursor: pointer;
 }
