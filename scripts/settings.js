@@ -1,5 +1,5 @@
 // Setup
-// import { fillNavbar } from './navbar.js';
+import { fillNavbar } from './navbar.js';
 
 const settingsBoxHTML = `
 <div class="hidden BGBlur" id="BGBlur"></div>
@@ -133,9 +133,9 @@ function checkThemeAfterLoaded() {
 }
 checkThemeAfterLoaded();
 
-// window.addEventListener('load', function() {
-//     fillNavbar();
-// });
+window.addEventListener('load', function() {
+    fillNavbar();
+});
 
 // keyboard shortcuts
 document.addEventListener('keydown', (event) => {

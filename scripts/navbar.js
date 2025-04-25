@@ -9,6 +9,7 @@ function fillNavbar() {
 
     const navItems = [
         { href: "index.html", label: "Home", page: "index" },
+        { href: "pages/news/", label: "News", page: "news" },
         { href: "pages/teams/", label: "Teams", page: "teams" },
         { href: "pages/matches/", label: "Matches", page: "matches" },
         { href: "pages/rules/", label: "Rules", page: "rules" },

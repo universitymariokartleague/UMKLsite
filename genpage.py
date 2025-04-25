@@ -47,10 +47,12 @@ TEAM_PAGE = """
                 <nav class="nav-flex">
                     <ul id="nav-bar">
                         <li><a href="index.html">Home</a></li>
+                        <li><a href="pages/news/">News</a></li>
                         <li><a href="pages/teams/">Teams</a></li>
                         <li><a href="pages/matches/">Matches</a></li>
+                        <li><a href="pages/rules/">Rules</a></li>
                         <li><a href="pages/faq/">FAQs</a></li>
-                        <li><a class="nav-bar-link" target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
+                        <li><a target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
                     </ul>
                 </nav>
                 <!-- Dropdown navigation (shown on mobile) -->
@@ -58,13 +60,14 @@ TEAM_PAGE = """
                     <div class="nav-dropdown-button">☰</div>
                     <div class="nav-dropdown-content" id="nav-dropdown-bar">
                         <a href="index.html">Home</a>
+                        <a href="pages/news/">News</a>
                         <a href="pages/teams/">Teams</a>
                         <a href="pages/matches/">Matches</a>
+                        <a href="pages/rules/">Rules</a>
                         <a href="pages/faq/">FAQs</a>
-                        <a class="nav-bar-link" target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a>
+                        <a target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a>
                     </div>
-                </div>
-            </div>
+                </div>            </div>
         </div>
 
         <main>
@@ -149,10 +152,12 @@ BLANK_NEWS_PAGE = """
                 <nav class="nav-flex">
                     <ul id="nav-bar">
                         <li><a href="index.html">Home</a></li>
+                        <li><a href="pages/news/">News</a></li>
                         <li><a href="pages/teams/">Teams</a></li>
                         <li><a href="pages/matches/">Matches</a></li>
+                        <li><a href="pages/rules/">Rules</a></li>
                         <li><a href="pages/faq/">FAQs</a></li>
-                        <li><a class="nav-bar-link" target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
+                        <li><a target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
                     </ul>
                 </nav>
                 <!-- Dropdown navigation (shown on mobile) -->
@@ -160,13 +165,14 @@ BLANK_NEWS_PAGE = """
                     <div class="nav-dropdown-button">☰</div>
                     <div class="nav-dropdown-content" id="nav-dropdown-bar">
                         <a href="index.html">Home</a>
+                        <a href="pages/news/">News</a>
                         <a href="pages/teams/">Teams</a>
                         <a href="pages/matches/">Matches</a>
+                        <a href="pages/rules/">Rules</a>
                         <a href="pages/faq/">FAQs</a>
-                        <a class="nav-bar-link" target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a>
+                        <a target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a>
                     </div>
-                </div>
-            </div>
+                </div>            </div>
         </div>
 
         <main>
