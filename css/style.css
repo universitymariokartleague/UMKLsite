@@ -832,7 +832,9 @@ blockquote {
     font-weight: bold;
 }
 
-
+.h-below-image {
+    margin-top: 50px;
+}
 
 .brand-container {
     display: flex;
@@ -848,8 +850,12 @@ blockquote {
     margin: 10px;
     width: 100%;
     border-radius: 20px;
-    padding: 30px;
+    padding: 25px;
     padding-bottom: 100px;
+}
+
+.brand-logo {
+    
 }
 
 .brand-standard {
@@ -862,6 +868,3 @@ blockquote {
     color: var(--accent-color);
 }
 
-.h-below-image {
-    margin-top: 50px;
-}
