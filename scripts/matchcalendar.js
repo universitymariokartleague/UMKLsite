@@ -103,10 +103,10 @@ function showDailyLog(date) {
                 <b>
                     <span class=${team1.class_name}><a class="no-color-link no-underline-link" href="${team1.link}">${team1.team_name}</a></span> 
                     VS 
-                    <span class="${team2.class_name}"><a class="no-color-link no-underline-link" href="${team2.link}">${team2.team_name}</a></span> 
-                    | ${date} (${weekdayNames[new Date(date).getDay()]})</b>
-                    <br/>
-                    ${entry.description.replace(/(?:\r\n|\r|\n)/g, '<br/>')}`;
+                    <span class="${team2.class_name}"><a class="no-color-link no-underline-link" href="${team2.link}">${team2.team_name}</a></span>
+                    | ${entry.time} ${date} (${weekdayNames[new Date(date).getDay()]})
+                </b><br/>
+                ${entry.description.replace(/(?:\r\n|\r|\n)/g, '<br/>')}`;
         }).join('<br/><hr/>') : 'No logs for this day'}
     `;
 }
