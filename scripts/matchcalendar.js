@@ -55,7 +55,8 @@ function generateCalendar(month, year, startDay) {
         dayCell.classList.add('day');
         
         const today = new Date();
-        if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+        const isToday = (year === today.getFullYear() && month === today.getMonth() && day === today.getDate());
+        if (isToday) {
             dayCell.innerHTML = "☆" + day;
             dayCell.classList.add('today');
         }
@@ -63,7 +64,6 @@ function generateCalendar(month, year, startDay) {
         const dateToCheck = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         if (dailyLogData[dateToCheck]) {
             const [team1, team2] = dailyLogData[dateToCheck][0].teamsInvolved;
-            // dayCell.classList.remove('today');
             if (!generatedStyleSheets) {
                 createTeamStyleSheet(team1, team2);
             }
