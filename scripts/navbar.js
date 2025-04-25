@@ -7,10 +7,8 @@ function fillNavbar() {
     const navdropdownbar = document.getElementById("nav-dropdown-bar");
     const currentPage = window.location.pathname.replace(/\/$/, "").split("/").pop().replace(".html", "");
 
-    console.log(currentPage)
-
     const navItems = [
-        { href: "index.html", label: "Home", page: "index" },
+        { href: "index.html", label: "Home", page: "" },
         { href: "pages/news/", label: "News", page: "news" },
         { href: "pages/teams/", label: "Teams", page: "teams" },
         { href: "pages/matches/", label: "Matches", page: "matches" },
