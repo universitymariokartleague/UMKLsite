@@ -70,9 +70,11 @@
         <hr class="hr-below-title">
 
         <h2>Our Logo</h2>
-        <p class="p-below-title">Please use our logo in white or in colour</p>
+        <p class="p-below-title">
+            Please use our logo and wordmark in white or in colour
+        </p>
         <div class="brand-container">
-            <div class="brand-element brand-standard">
+            <div class="brand-element brand-standard image-container">
                 <img src="assets\brand\guidelines\Logo Transparent White.png" alt="UMKL Logo" style="height: 100%;" class="brand-logo"></img>
             </div>
             <div class="brand-element brand-white">
@@ -80,9 +82,16 @@
             </div>
         </div>
 
-        <h2 class="h-below-image">Colours</h2>
-        <p class="p-below-title">Our official colours</p>
+        <h2 class="h-below-image">Wordmark</h2>
+        <p class="p-below-title">Our wordmark must always feature the symbol. The typeface is <b>Montserratt Bold</b></p>
+        <div class="brand-container">
+            <div class="brand-element brand-standard image-container">
+                <img src="assets\brand\guidelines\Wordmark White.png" alt="UMKL Logo" style="width: 40%;" class="brand-logo"></img>
+            </div>
+        </div>
 
+        <h2 class="h-below-image">Colours</h2>
+        <p class="p-below-title">Any content regarding the league as a whole must feature our colours</p>
         <div class="brand-container">
                 <div class="brand-element brand-standard">
                     <h2>Red</h2>
@@ -106,3 +115,13 @@
     </footer>
 </body>
 </html>
+
+<script>
+    function copyColor(color) {
+        navigator.clipboard.writeText(color).then(() => {
+            alert(`Copied ${color} to clipboard!`);
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+        });
+    }
+</script>
