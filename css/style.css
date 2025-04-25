@@ -834,29 +834,27 @@ blockquote {
 
 /* Branding */
 .h-below-image {
-    margin-top: 50px;
+    margin-top: 25px;
 }
 
 .brand-container {
     display: flex;
+    justify-content: center;
     align-items: center;
-}
-
-.column {
-    margin: 10px;
-    width: 100%;
 }
 
 .brand-element {
     margin: 10px;
-    width: 100%;
-    border-radius: 20px;
-    padding: 25px;
-    padding-bottom: 100px;
+    border-radius: 15px;
+    width:100%;
+    height: 150px;
+    padding: 20px;
+   
 }
 
 .brand-logo {
-    
+    margin: auto;
+    display: block;
 }
 
 .brand-standard {
@@ -870,3 +868,15 @@ blockquote {
     color: var(--accent-color);
 }
 
+
+@media screen and (max-width: 767px) {
+    .brand-container {
+        flex-direction: column;
+    }
+
+    .brand-element {
+        width: 100%;
+        margin: 10px auto;
+    }
+    
+}
