@@ -831,3 +831,37 @@ blockquote {
     margin-right: 10px;
     font-weight: bold;
 }
+
+
+
+.brand-container {
+    display: flex;
+    align-items: center;
+}
+
+.column {
+    margin: 10px;
+    width: 100%;
+}
+
+.brand-element {
+    margin: 10px;
+    width: 100%;
+    border-radius: 20px;
+    padding: 30px;
+    padding-bottom: 100px;
+}
+
+.brand-standard {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.brand-white {
+    background-color: white;
+    color: var(--accent-color);
+}
+
+.h-below-image {
+    margin-top: 50px;
+}
