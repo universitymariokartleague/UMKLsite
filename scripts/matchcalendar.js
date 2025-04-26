@@ -83,6 +83,10 @@ function changeMonth(change) {
 function showDailyLog(date) {
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.set('date', date);
+    const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+    if (window.location.href !== newUrl) {
+        window.history.pushState({}, '', newUrl);
+    }
 
     const log = dailyLogData[date] || [];
     expandedLog.innerHTML = `
@@ -161,6 +165,17 @@ function makeTeamsColorStyles() {
 
     document.head.appendChild(styleSheet);
 }
+
+window.addEventListener('popstate', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const dateParam = urlParams.get('date');
+    if (dateParam && dailyLogData[dateParam]) {
+        console.debug(`%cmatchcalendar.js %c> %cURL parameter changed`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+        showDailyLog(dateParam);
+    } else {
+        expandedLog.innerHTML = 'No logs for this day';
+    }
+});
 
 function displayCalendar() {
     let dailyLogPath = "database/matchdata.json";
