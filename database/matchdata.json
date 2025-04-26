@@ -9,7 +9,7 @@
     ],
     "2025-04-21": [
         {
-            "title": "Staffs VS Birmingham 18:00",
+            "title": "Staffs VS Birmingham",
             "time": "18:00",
             "description": "A 6v6 test match between Staffs and Birmingham. This served as a test of the Cheep Cheep bot and YouTube streaming.\n\nThis match was streamed from both team's perspectives on the UMKL YouTube channel. You can watch those archived streams here: <a href='https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH'>https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH</a>",
             "teamsInvolved": ["Staffs", "Birmingham"]
@@ -17,7 +17,7 @@
     ],
     "2025-04-25": [
         {
-            "title": "Staffs VS Keele 18:00",
+            "title": "Staffs VS Keele",
             "time": "18:00",
             "description": "A 6v6 test match between Staffs and Keele. This served as a test of the Cheep Cheep bot and YouTube streaming.\n\nYou can watch those archived streams here: <a href='https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH'>https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH</a>",
             "teamsInvolved": ["Staffs", "Keele"]
@@ -25,7 +25,7 @@
     ],
     "2025-04-26": [
         {
-            "title": "York VS Glasgow 18:00",
+            "title": "York VS Glasgow",
             "time": "18:00",
             "description": "A 6v6 test match between York and Glasgow. This will serve as a test of the Cheep Cheep bot and YouTube streaming. Members of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed from both team's perspectives on the UMKL YouTube channel. You can visit it here: <a href='https://www.youtube.com/@universitymariokartleague'>https://www.youtube.com/@universitymariokartleague</a>",
             "teamsInvolved": ["York", "Glasgow"]
@@ -33,10 +33,16 @@
     ],
     "2025-04-27": [
         {
-            "title": "Staffs VS Glasgow 18:00",
+            "title": "Staffs VS Glasgow",
             "time": "18:00",
             "description": "A 6v6 test match between Staffs and Glasgow. This will serve as a test of the Cheep Cheep bot and YouTube streaming. Members of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed from both team's perspectives on the UMKL YouTube channel. You can visit it here: <a href='https://www.youtube.com/@universitymariokartleague'>https://www.youtube.com/@universitymariokartleague</a>",
             "teamsInvolved": ["Staffs", "Glasgow"]
+        },
+        {
+            "title": "York VS Birmingham",
+            "time": "19:30",
+            "description": "A 6v6 test match between York and Birmingham. This will serve as a test of the Cheep Cheep bot and YouTube streaming. Members of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed from both team's perspectives on the UMKL YouTube channel. You can visit it here: <a href='https://www.youtube.com/@universitymariokartleague'>https://www.youtube.com/@universitymariokartleague</a>",
+            "teamsInvolved": ["York", "Birmingham"]
         }
     ]
 }
