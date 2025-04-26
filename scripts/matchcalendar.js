@@ -83,7 +83,6 @@ function changeMonth(change) {
 function showDailyLog(date) {
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.set('date', date);
-    const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
 
     const log = dailyLogData[date] || [];
     expandedLog.innerHTML = `
