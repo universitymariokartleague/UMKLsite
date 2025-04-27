@@ -2,14 +2,20 @@
 :root.light-theme {
     --settings-box-color: #ffffffA5;
     --settings-shadow: 0 0 1rem #0f0f0f;
-
     --settings-extra-info: #00000080;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --settings-box-color: rgba(0, 0, 0, 0.6);
+        --settings-shadow: 0 0 1rem #e9e9e986;
+        --settings-extra-info: #ffffff80;    
+    }
 }
 
 :root.dark-theme {
     --settings-box-color: rgba(0, 0, 0, 0.6);
     --settings-shadow: 0 0 1rem #e9e9e986;
-
     --settings-extra-info: #ffffff80;
 }
 
