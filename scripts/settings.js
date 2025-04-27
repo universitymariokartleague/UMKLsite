@@ -54,12 +54,13 @@ function generateSettingsPanel() {
             return `<b>${key}</b>: <span class="setting-selectable">${value.slice(0, 100)}${value.length > 100 ? '...' : ''}</span><br>`;
         }).join('');
 
+        const tempTheme = (localStorage.getItem("darktheme") == 1 || darkThemeEnabled == 1) ? "Dark" : "Light";
         const tempStartDay = localStorage.getItem("startDay") || 1;
         const tempMonthType = localStorage.getItem("monthType") || "long";
 
         settingsBoxJS.innerHTML = `
             <div class="setting-sub-heading">Appearance</div><hr>
-            Page Theme<button id="toggleTheme" class="settings-option">${localStorage.getItem("darktheme") == 1 ? "Dark" : "Light"} theme</button><br>
+            Page Theme<button id="toggleTheme" class="settings-option">${tempTheme} theme</button><br>
 
             <div class="setting-sub-heading">${tempStartDay == 1 ? "Localisation" : "Localization"}</div><hr class="settings-hr">
             First day of week <span class="settings-extra-info">(Monday or Sunday)</span><button id="toggleStartDayButton" class="settings-option">${weekdayNamesFull[tempStartDay]}</button><br/>
@@ -82,11 +83,11 @@ function toggleTheme() {
     meta.content = darkThemeEnabled ? "dark" : "light";
 
     if (darkThemeEnabled) {
-        console.debug(`%csettings.js %c> %cSetting dark theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
+        console.debug(`%csettings.js %c> %cSetting and saving dark theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
         root.classList.add("dark-theme");
         root.classList.remove("light-theme");
     } else {
-        console.debug(`%csettings.js %c> %cSetting light theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
+        console.debug(`%csettings.js %c> %cSetting and saving light theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
         root.classList.add("light-theme");
         root.classList.remove("dark-theme");
     }
@@ -128,7 +129,13 @@ function generateEventListeners() {
 }
 
 function checkThemeAfterLoaded() {
-    darkThemeEnabled = parseInt(localStorage.getItem("darktheme"));
+    let themePreference = parseInt(localStorage.getItem("darktheme"));
+    if (isNaN(themePreference)) {
+        const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        themePreference = prefersDark ? 1 : 0;
+    }
+    darkThemeEnabled = themePreference;
+
     sendThemeChangeEvent();
 }
 checkThemeAfterLoaded();
