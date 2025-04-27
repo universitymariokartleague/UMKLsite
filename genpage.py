@@ -51,7 +51,7 @@ TEAM_PAGE = """
                         <li><a href="pages/matches/">Matches</a></li>
                         <li><a href="pages/rules/">Rules</a></li>
                         <li><a href="pages/faq/">FAQs</a></li>
-                        <li><a target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
+                        <li><a target="_blank" class="nav-bar-link" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
                     </ul>
                 </nav>
                 <!-- Dropdown navigation (shown on mobile) -->
@@ -64,7 +64,7 @@ TEAM_PAGE = """
                         <a href="pages/matches/">Matches</a>
                         <a href="pages/rules/">Rules</a>
                         <a href="pages/faq/">FAQs</a>
-                        <a target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a>
+                        <a target="_blank" class="nav-bar-link" href="https://discord.gg/6jS7YUqnbh">Discord</a>
                     </div>
                 </div>            </div>
         </div>
@@ -155,7 +155,7 @@ BLANK_NEWS_PAGE = """
                         <li><a href="pages/matches/">Matches</a></li>
                         <li><a href="pages/rules/">Rules</a></li>
                         <li><a href="pages/faq/">FAQs</a></li>
-                        <li><a target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
+                        <li><a target="_blank" class="nav-bar-link" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
                     </ul>
                 </nav>
                 <!-- Dropdown navigation (shown on mobile) -->
@@ -168,7 +168,7 @@ BLANK_NEWS_PAGE = """
                         <a href="pages/matches/">Matches</a>
                         <a href="pages/rules/">Rules</a>
                         <a href="pages/faq/">FAQs</a>
-                        <a target="_blank" href="https://discord.gg/6jS7YUqnbh">Discord</a>
+                        <a target="_blank" class="nav-bar-link" href="https://discord.gg/6jS7YUqnbh">Discord</a>
                     </div>
                 </div>            </div>
         </div>
