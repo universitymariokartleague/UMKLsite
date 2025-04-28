@@ -136,8 +136,6 @@ function checkThemeAfterLoaded() {
     }
     darkThemeEnabled = themePreference;
 
-    console.debug(`%csettings.js %c> %cTheme preference: ${darkThemeEnabled}`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
-
     if (darkThemeEnabled) {
         console.debug(`%csettings.js %c> %cSetting dark theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
         root.classList.add("dark-theme");
