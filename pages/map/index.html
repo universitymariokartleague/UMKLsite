@@ -30,6 +30,8 @@
     <script defer src="scripts/overlayscrollbar.js"></script>
 
     <script defer src="scripts/settings.js" type="module"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three-globe@2.24.1/dist/three-globe.min.js"></script>
 </head>
 
 <body data-overlayscrollbars-initialize="" id="top">
@@ -70,6 +72,38 @@
         <h2>Map</h2>
         <p class="p-below-title">View a map with teams</p>
         <hr class="hr-below-title" />
+
+        <div id="globe-container" style="width: 100%; height: 500px;"></div>
+
+        <script>
+            const container = document.getElementById('globe-container');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer();
+            renderer.setSize(container.offsetWidth, container.offsetHeight);
+            container.appendChild(renderer.domElement);
+
+            const globe = new ThreeGlobe()
+                .globeImageUrl('//unpkg.com/three-globe/example/img/earth-dark.jpg')
+                .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png');
+
+            scene.add(globe);
+            camera.position.z = 300;
+
+            const animate = function () {
+                requestAnimationFrame(animate);
+                globe.rotation.y += 0.001;
+                renderer.render(scene, camera);
+            };
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = container.offsetWidth / container.offsetHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.offsetWidth, container.offsetHeight);
+            });
+        </script>
     </main>
 
     <footer>
