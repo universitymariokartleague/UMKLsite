@@ -31,21 +31,16 @@
         <script type="module" src="scripts/settings.js" defer></script>
     <style>
         #map-container {
-            position: fixed;
-            width: 100%;
-            height: 100%;
+            position: absolute;
+            width: 90%;
+            max-width: 800px;
+            height: 90%;
             overflow: hidden;
-            margin: 0 auto;
+            border: 1px solid #BC0839;
         }
         
         #uk-map {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform-origin: 0 0;
             fill: transparent;
-            stroke: #BC0839;
-            stroke-width: 2;
         }
         
         .controls {
@@ -118,13 +113,6 @@
         <div id="map-container">
             <img id="uk-map" src="../../assets/image/map/UKNoBG.svg" width="800" height="1000" style="user-select: none; pointer-events: none;">
         </div>
-        
-        <div class="controls">
-            <button id="zoom-in">Zoom In</button>
-            <button id="zoom-out">Zoom Out</button>
-            <button id="reset">Reset</button>
-            <div class="zoom-level">Zoom: <span id="zoom-value">100</span>%</div>
-        </div>
     </main>
 
     <footer>
@@ -145,16 +133,15 @@
         const resetBtn = document.getElementById('reset');
         const zoomValue = document.getElementById('zoom-value');
         
-        let scale = 0.9;
-        let posX = -450;
-        let posY = -450;
+        let scale = 0.8;
+        let posX = 0;
+        let posY = -50;
         let isDragging = false;
         let startX, startY;
         
         // Update the map transformation
         function updateTransform() {
             map.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
-            zoomValue.textContent = Math.round(scale * 100);
         }
         
         // Zoom functions
@@ -182,24 +169,6 @@
             
             updateTransform();
         }
-        
-        // Event listeners for buttons
-        zoomInBtn.addEventListener('click', () => {
-            const rect = mapContainer.getBoundingClientRect();
-            zoom(1.2, rect.left + rect.width / 2, rect.top + rect.height / 2);
-        });
-        
-        zoomOutBtn.addEventListener('click', () => {
-            const rect = mapContainer.getBoundingClientRect();
-            zoom(1/1.2, rect.left + rect.width / 2, rect.top + rect.height / 2);
-        });
-        
-        resetBtn.addEventListener('click', () => {
-            scale = 0.9;
-            posX = -450;
-            posY = -450;
-            updateTransform();
-        });
         
         // Mouse wheel for zoom
         mapContainer.addEventListener('wheel', (e) => {
