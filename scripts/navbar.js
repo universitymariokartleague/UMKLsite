@@ -3,6 +3,9 @@ export { fillNavbar }
 function fillNavbar() {
     console.debug(`%cnavbar.js %c> %cLoading nav bar...`, "color:#ff6145", "color:#fff", "color:#ffa494");
 
+    const base = document.querySelector('base')?.getAttribute('href') || '/';
+    if (base == "/") return;
+
     const navbar = document.getElementById("nav-bar");
     const navdropdownbar = document.getElementById("nav-dropdown-bar");
     const currentPage = window.location.pathname.replace(/\/$/, "").split("/").pop().replace(".html", "");
