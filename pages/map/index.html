@@ -1,44 +1,90 @@
 <!DOCTYPE html>
-<html data-overlayscrollbars-initialize="" lang="en">
+<html lang="en" data-overlayscrollbars-initialize>
+    <head>
+        <base href="../../">
 
-<head>
-    <base href="../../" />
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Map | University Mario Kart League</title>
+        <meta name="description" content="The map page for the University Mario Kart League (UMKL)">
+        <link rel="shortcut icon" href="assets/brand/favicon.png" type="image/png">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/settings.css">
+        <link rel="stylesheet" href="css/overlayscrollbars.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        <meta name="color-scheme" content="dark light">
 
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <title>Map | University Mario Kart League</title>
-    <meta content="View a map with the locations of our teams on the University Mario Kart League (UMKL)" name="description" />
-    <link href="assets/brand/favicon.png" rel="shortcut icon" type="image/png" />
-    <link href="css/style.css" rel="stylesheet" />
-    <link href="css/settings.css" rel="stylesheet" />
-    <link href="css/overlayscrollbars.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
-    <meta content="dark light" name="color-scheme" />
+        <meta property="og:title" content="University Mario Kart League | Map" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://umkl.co.uk/pages/map/" />
+        <meta property="og:image" content="https://umkl.co.uk/assets/brand/UMKL_Banner_embed.png" />
+        <meta property="og:description" content="The map for University Mario Kart League (UMKL)" />
+        <meta name="theme-color" content="#bc0839">
 
-    <meta content="University Mario Kart League | Map" property="og:title" />
-    <meta content="website" property="og:type" />
-    <meta content="https://umkl.co.uk/pages/map/" property="og:url" />
-    <meta content="https://umkl.co.uk/assets/brand/UMKL_Banner_embed.png" property="og:image" />
-    <meta content="View a map with the locations of our teams on the University Mario Kart League (UMKL)" property="og:description" />
-    <meta content="#bc0839" name="theme-color" />
+        <!-- Include this to make the og:image larger -->
+        <meta name="twitter:card" content="summary_large_image">
 
-    <!-- Include this to make the og:image larger -->
-    <meta content="summary_large_image" name="twitter:card" />
-
-    <!-- Scripts -->
-    <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
-    <script defer src="scripts/overlayscrollbar.js"></script>
-
-    <script defer src="scripts/settings.js" type="module"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three-globe@2.24.1/dist/three-globe.min.js"></script>
+        <!-- Scripts -->
+            <script src="scripts/overlayscrollbars.browser.es6.min.js" defer></script>
+        <script src="scripts/overlayscrollbar.js" defer></script>
+        
+        <script type="module" src="scripts/settings.js" defer></script>
+    <style>
+        #map-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        
+        #uk-map {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-origin: 0 0;
+            fill: transparent;
+            stroke: #BC0839;
+            stroke-width: 2;
+        }
+        
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #BC0839;
+        }
+        
+        button {
+            background: #BC0839;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            margin: 0 5px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #9a062f;
+        }
+        
+        .zoom-level {
+            color: white;
+            text-align: center;
+            margin: 5px 0;
+        }
+    </style>
 </head>
-
-<body data-overlayscrollbars-initialize="" id="top">
+<body id="top" data-overlayscrollbars-initialize>
     <div class="navbar-container">
         <div class="nav-bar">
-            <a class="nav-bar-title no-color-link no-underline-link-footer" href="index.html">
-                <img alt="UMKL logo" class="nav-bar-logo" src="assets/brand/UMKLlogonav.webp" />
+            <a href="index.html" class="nav-bar-title no-color-link no-underline-link-footer">
+                <img src="assets/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
                 <h2>UMKL</h2>
             </a>
             <nav class="nav-flex">
@@ -64,61 +110,154 @@
                     <a href="pages/faq/">FAQs</a>
                     <a target="_blank" class="nav-bar-link" href="https://discord.gg/6jS7YUqnbh">Discord</a>
                 </div>
-            </div>        
+            </div>
         </div>
     </div>
 
     <main>
-        <h2>Map</h2>
-        <p class="p-below-title">View a map with teams</p>
-        <hr class="hr-below-title" />
-
-        <div id="globe-container" style="width: 100%; height: 500px;"></div>
-
-        <script>
-            const container = document.getElementById('globe-container');
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer();
-            renderer.setSize(container.offsetWidth, container.offsetHeight);
-            container.appendChild(renderer.domElement);
-
-            const globe = new ThreeGlobe()
-                .globeImageUrl('//unpkg.com/three-globe/example/img/earth-dark.jpg')
-                .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png');
-
-            scene.add(globe);
-            camera.position.z = 300;
-
-            const animate = function () {
-                requestAnimationFrame(animate);
-                globe.rotation.y += 0.001;
-                renderer.render(scene, camera);
-            };
-
-            animate();
-
-            window.addEventListener('resize', () => {
-                camera.aspect = container.offsetWidth / container.offsetHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(container.offsetWidth, container.offsetHeight);
-            });
-        </script>
+        <div id="map-container">
+            <img id="uk-map" src="../../assets/image/map/UKNoBG.svg" width="800" height="1000" style="user-select: none; pointer-events: none;">
+        </div>
+        
+        <div class="controls">
+            <button id="zoom-in">Zoom In</button>
+            <button id="zoom-out">Zoom Out</button>
+            <button id="reset">Reset</button>
+            <div class="zoom-level">Zoom: <span id="zoom-value">100</span>%</div>
+        </div>
     </main>
 
     <footer>
         © UMKL 2025 |
         <a class="no-color-link" href="pages/credits/">Credits</a> |
         <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |
-        <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
-            href="https://www.youtube.com/@universitymariokartleague" title="UMKL YouTube Channel"></a>
-        <a class="no-color-link no-underline-link-footer fa-brands fa-instagram"
-            href="https://www.instagram.com/universitymariokartleague" title="UMKL Instagram Account"></a>
-        <a class="no-color-link no-underline-link-footer fa-brands fa-facebook"
-            href="https://www.facebook.com/profile.php?id=61575273336011" title="UMKL Facebook Page"></a>
-        <a class="no-color-link no-underline-link-footer fa-brands fa-discord" href="https://discord.gg/6jS7YUqnbh"
-            title="UMKL Discord Server"></a>
+        <a href="https://www.youtube.com/@universitymariokartleague" title="UMKL YouTube Channel" class="no-color-link no-underline-link-footer fa-brands fa-youtube"></a>
+        <a href="https://www.instagram.com/universitymariokartleague" title="UMKL Instagram Account" class="no-color-link no-underline-link-footer fa-brands fa-instagram"></a>
+        <a href="https://www.facebook.com/profile.php?id=61575273336011" title="UMKL Facebook Page" class="no-color-link no-underline-link-footer fa-brands fa-facebook"></a>            
+        <a href="https://discord.gg/6jS7YUqnbh" title="UMKL Discord Server" class="no-color-link no-underline-link-footer fa-brands fa-discord"></a>            
     </footer>
-</body>
 
+    <script>
+        const map = document.getElementById('uk-map');
+        const mapContainer = document.getElementById('map-container');
+        const zoomInBtn = document.getElementById('zoom-in');
+        const zoomOutBtn = document.getElementById('zoom-out');
+        const resetBtn = document.getElementById('reset');
+        const zoomValue = document.getElementById('zoom-value');
+        
+        let scale = 0.9;
+        let posX = -450;
+        let posY = -450;
+        let isDragging = false;
+        let startX, startY;
+        
+        // Update the map transformation
+        function updateTransform() {
+            map.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+            zoomValue.textContent = Math.round(scale * 100);
+        }
+        
+        // Zoom functions
+        function zoom(zoomFactor, clientX, clientY) {
+            const rect = mapContainer.getBoundingClientRect();
+            const containerCenterX = rect.width / 2;
+            const containerCenterY = rect.height / 2;
+            
+            // Calculate mouse position relative to container center
+            const mouseX = clientX - rect.left - containerCenterX;
+            const mouseY = clientY - rect.top - containerCenterY;
+            
+            // Calculate the current mouse position in map coordinates
+            const mapX = (mouseX - posX) / scale;
+            const mapY = (mouseY - posY) / scale;
+            
+            // Apply zoom
+            const newScale = Math.max(0.1, Math.min(5, scale * zoomFactor));
+            const scaleChange = newScale / scale;
+            scale = newScale;
+            
+            // Adjust position to zoom toward mouse
+            posX = mouseX - mapX * scale;
+            posY = mouseY - mapY * scale;
+            
+            updateTransform();
+        }
+        
+        // Event listeners for buttons
+        zoomInBtn.addEventListener('click', () => {
+            const rect = mapContainer.getBoundingClientRect();
+            zoom(1.2, rect.left + rect.width / 2, rect.top + rect.height / 2);
+        });
+        
+        zoomOutBtn.addEventListener('click', () => {
+            const rect = mapContainer.getBoundingClientRect();
+            zoom(1/1.2, rect.left + rect.width / 2, rect.top + rect.height / 2);
+        });
+        
+        resetBtn.addEventListener('click', () => {
+            scale = 0.9;
+            posX = -450;
+            posY = -450;
+            updateTransform();
+        });
+        
+        // Mouse wheel for zoom
+        mapContainer.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomFactor = e.deltaY > 0 ? 1/1.1 : 1.1;
+            zoom(zoomFactor, e.clientX, e.clientY);
+        });
+        
+        // Mouse drag for panning
+        mapContainer.addEventListener('mousedown', (e) => {
+            if (e.button === 0) { // Left mouse button
+                isDragging = true;
+                startX = e.clientX - posX;
+                startY = e.clientY - posY;
+                mapContainer.style.cursor = 'grabbing';
+            }
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                posX = e.clientX - startX;
+                posY = e.clientY - startY;
+                updateTransform();
+            }
+        });
+        
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            mapContainer.style.cursor = 'grab';
+        });
+        
+        // Touch events for mobile
+        let touchStartX, touchStartY, touchStartPosX, touchStartPosY;
+        
+        mapContainer.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                const touch = e.touches[0];
+                touchStartX = touch.clientX;
+                touchStartY = touch.clientY;
+                touchStartPosX = posX;
+                touchStartPosY = posY;
+                e.preventDefault();
+            }
+        });
+        
+        mapContainer.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1) {
+                const touch = e.touches[0];
+                posX = touchStartPosX + (touch.clientX - touchStartX);
+                posY = touchStartPosY + (touch.clientY - touchStartY);
+                updateTransform();
+                e.preventDefault();
+            }
+        });
+        
+        // Initialize
+        updateTransform();
+        mapContainer.style.cursor = 'grab';
+    </script>
+</body>
 </html>
