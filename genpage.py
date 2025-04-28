@@ -52,7 +52,7 @@ TEAM_PAGE = """
                         <li><a href="pages/matches/">Matches</a></li>
                         <li><a href="pages/rules/">Rules</a></li>
                         <li><a href="pages/faq/">FAQs</a></li>
-                        <li><a target="_blank" class="nav-bar-link" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
+                        <li><a target="_blank" class="nav-bar-link" href="https://discord.gg/DTjbBzgkhr">Discord</a></li>
                     </ul>
                 </nav>
                 <!-- Dropdown navigation (shown on mobile) -->
@@ -65,7 +65,7 @@ TEAM_PAGE = """
                         <a href="pages/matches/">Matches</a>
                         <a href="pages/rules/">Rules</a>
                         <a href="pages/faq/">FAQs</a>
-                        <a target="_blank" class="nav-bar-link" href="https://discord.gg/6jS7YUqnbh">Discord</a>
+                        <a target="_blank" class="nav-bar-link" href="https://discord.gg/DTjbBzgkhr">Discord</a>
                     </div>
                 </div>            </div>
         </div>
@@ -102,7 +102,7 @@ TEAM_PAGE = """
             <a href="https://www.youtube.com/@universitymariokartleague" title="UMKL YouTube Channel" class="no-color-link no-underline-link-footer fa-brands fa-youtube"></a>
             <a href="https://www.instagram.com/universitymariokartleague" title="UMKL Instagram Account" class="no-color-link no-underline-link-footer fa-brands fa-instagram"></a>
             <a href="https://www.facebook.com/profile.php?id=61575273336011" title="UMKL Facebook Page" class="no-color-link no-underline-link-footer fa-brands fa-facebook"></a>            
-            <a href="https://discord.gg/6jS7YUqnbh" title="UMKL Discord Server" class="no-color-link no-underline-link-footer fa-brands fa-discord"></a>            
+            <a href="https://discord.gg/DTjbBzgkhr" title="UMKL Discord Server" class="no-color-link no-underline-link-footer fa-brands fa-discord"></a>            
         </footer>
     </body>
 </html>
@@ -157,7 +157,7 @@ BLANK_NEWS_PAGE = """
                         <li><a href="pages/matches/">Matches</a></li>
                         <li><a href="pages/rules/">Rules</a></li>
                         <li><a href="pages/faq/">FAQs</a></li>
-                        <li><a target="_blank" class="nav-bar-link" href="https://discord.gg/6jS7YUqnbh">Discord</a></li>
+                        <li><a target="_blank" class="nav-bar-link" href="https://discord.gg/DTjbBzgkhr">Discord</a></li>
                     </ul>
                 </nav>
                 <!-- Dropdown navigation (shown on mobile) -->
@@ -170,7 +170,7 @@ BLANK_NEWS_PAGE = """
                         <a href="pages/matches/">Matches</a>
                         <a href="pages/rules/">Rules</a>
                         <a href="pages/faq/">FAQs</a>
-                        <a target="_blank" class="nav-bar-link" href="https://discord.gg/6jS7YUqnbh">Discord</a>
+                        <a target="_blank" class="nav-bar-link" href="https://discord.gg/DTjbBzgkhr">Discord</a>
                     </div>
                 </div>            </div>
         </div>
@@ -194,7 +194,7 @@ BLANK_NEWS_PAGE = """
             <a href="https://www.youtube.com/@universitymariokartleague" title="UMKL YouTube Channel" class="no-color-link no-underline-link-footer fa-brands fa-youtube"></a>
             <a href="https://www.instagram.com/universitymariokartleague" title="UMKL Instagram Account" class="no-color-link no-underline-link-footer fa-brands fa-instagram"></a>
             <a href="https://www.facebook.com/profile.php?id=61575273336011" title="UMKL Facebook Page" class="no-color-link no-underline-link-footer fa-brands fa-facebook"></a>            
-            <a href="https://discord.gg/6jS7YUqnbh" title="UMKL Discord Server" class="no-color-link no-underline-link-footer fa-brands fa-discord"></a>            
+            <a href="https://discord.gg/DTjbBzgkhr" title="UMKL Discord Server" class="no-color-link no-underline-link-footer fa-brands fa-discord"></a>            
         </footer>
     </body>
 </html>

@@ -17,7 +17,7 @@ function fillNavbar() {
         { href: "pages/matches/", label: "Matches", page: "matches" },
         { href: "pages/rules/", label: "Rules", page: "rules" },
         { href: "pages/faq/", label: "FAQs", page: "faq" },
-        { href: "https://discord.gg/6jS7YUqnbh", label: "Discord", external: true }
+        { href: "https://discord.gg/DTjbBzgkhr", label: "Discord", external: true }
     ];
 
     if (navbar) {
