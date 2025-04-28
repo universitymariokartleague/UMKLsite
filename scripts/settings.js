@@ -136,15 +136,15 @@ function checkThemeAfterLoaded() {
     }
     darkThemeEnabled = themePreference;
 
-    if (darkThemeEnabled) {
-        console.debug(`%csettings.js %c> %cSetting dark theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
-        root.classList.add("dark-theme");
-        root.classList.remove("light-theme");
-    } else {
-        console.debug(`%csettings.js %c> %cSetting light theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
-        root.classList.add("light-theme");
-        root.classList.remove("dark-theme");
-    }
+    // if (darkThemeEnabled) {
+    //     console.debug(`%csettings.js %c> %cSetting dark theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
+    //     root.classList.add("dark-theme");
+    //     root.classList.remove("light-theme");
+    // } else {
+    //     console.debug(`%csettings.js %c> %cSetting light theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
+    //     root.classList.add("light-theme");
+    //     root.classList.remove("dark-theme");
+    // }
 
     sendThemeChangeEvent();
 }
