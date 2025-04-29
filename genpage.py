@@ -11,7 +11,7 @@ TEAM_PAGE = """
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Team {TEAMNAME} | University Mario Kart League</title>
         <meta name="description" content="Information about Team {TEAMNAME}, which are participating in the University Mario Kart League (UMKL)">
-        <link rel="shortcut icon" href="assets/brand/favicon.png" type="image/png">
+        <link rel="shortcut icon" href="assets/image/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
         <link rel="stylesheet" href="css/overlayscrollbars.min.css">
@@ -21,7 +21,7 @@ TEAM_PAGE = """
         <meta property="og:title" content="University Mario Kart League | Teams" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://umkl.co.uk/pages/teams/" />
-        <meta property="og:image" content="https://umkl.co.uk/assets/brand/Cheep_Cheep_banner.png" />
+        <meta property="og:image" content="https://umkl.co.uk/assets/image/brand/Cheep_Cheep_banner.png" />
         <meta property="og:description" content="Information about Team {TEAMNAME}, which are participating in the University Mario Kart League (UMKL)" />
         <meta name="theme-color" content="#bc0839">
     
@@ -41,7 +41,7 @@ TEAM_PAGE = """
         <div class="navbar-container">
             <div class="nav-bar">
                 <a href="index.html" class="nav-bar-title no-color-link no-underline-link-footer">
-                    <img src="assets/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
+                    <img src="assets/image/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
                     <h2>UMKL</h2>
                 </a>
                 <nav class="nav-flex">
@@ -118,7 +118,7 @@ BLANK_NEWS_PAGE = """
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{TITLE} | University Mario Kart League</title>
         <meta name="description" content="{TITLE} news article on University Mario Kart League (UMKL)">
-        <link rel="shortcut icon" href="assets/brand/favicon.png" type="image/png">
+        <link rel="shortcut icon" href="assets/image/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
         <link rel="stylesheet" href="css/overlayscrollbars.min.css">
@@ -146,7 +146,7 @@ BLANK_NEWS_PAGE = """
         <div class="navbar-container">
             <div class="nav-bar">
                 <a href="index.html" class="nav-bar-title no-color-link no-underline-link-footer">
-                    <img src="assets/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
+                    <img src="assets/image/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
                     <h2>UMKL</h2>
                 </a>
                 <nav class="nav-flex">

@@ -846,7 +846,7 @@ blockquote {
 .brand-element {
     margin: 10px;
     border-radius: 15px;
-    width:100%;
+    width: 100%;
     height: 150px;
     padding: 20px;
 }
@@ -879,8 +879,10 @@ blockquote {
     }
 
     .brand-element {
-        width: 100%;
-        margin: 10px auto;
+        padding: 0px;
     }
-    
+
+    .brand-element-text {
+        padding: 10px;
+    }
 }
