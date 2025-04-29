@@ -91,7 +91,9 @@
 @media (max-width: 767px) {
     .day {
         font-size: clamp(4px, 4vw, 14px);        /* Slightly smaller font */
+        aspect-ratio: 2/3;
     }
+
 }
 
 .logged {
