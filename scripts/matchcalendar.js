@@ -13,8 +13,7 @@ let generatedStyleSheets = false;
 function createEmptyCells(count) {
     for (let i = 0; i < count; i++) {
         const emptyCell = document.createElement('div');
-        emptyCell.classList.add('day');
-        emptyCell.classList.add('empty');
+        emptyCell.classList.add('day', 'empty');
         calendarDays.appendChild(emptyCell);
     }
 }
