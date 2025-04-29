@@ -25,7 +25,7 @@ async function generateTeamBox(teamData) {
     JSTeamBox.innerHTML = "";
 
     try {
-        teamData.logo_src = `assets/teamemblems/${teamData.team_name.toUpperCase()}.png`
+        teamData.logo_src = `assets/image/teamemblems/${teamData.team_name.toUpperCase()}.png`
         teamData.class_name = teamData.team_name.replace(/\s+/g, '')    
     } catch (error) {
         JSTeamBox.innerHTML = `<div class="codeBox">No team data available!<br/>${error.stack}</div>`;

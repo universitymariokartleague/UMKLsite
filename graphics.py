@@ -5,8 +5,8 @@ import discord.ext.commands
 from datetime import datetime
 
 # File paths
-DEFAULT_ICON_PATH = "assets/teamemblems/DEFAULT.png"
-TEAM_ICON_DIR = "assets/teamemblems/"
+DEFAULT_ICON_PATH = "assets/image/teamemblems/DEFAULT.png"
+TEAM_ICON_DIR = "assets/image/teamemblems/"
 DEFAULT_FONT = "assets/pythongraphics/fonts/SF-Pro/SF-Pro-Display-Bold.otf"
 DEFAULT_FONT_HEAVY = "assets/pythongraphics/fonts/SF-Pro/SF-Pro-Display-Black.otf"
 FALLBACK_FONT = "assets/pythongraphics/fonts/FOT-RodinNTLG Pro DB.otf"
