@@ -48,7 +48,7 @@ TEAM_PAGE = """
                     <ul id="nav-bar">
                         <li><a href="index.html">Home</a></li>
                         <li><a href="pages/news/">News</a></li>
-                        <li><a href="pages/teams/">Teams</a></li>
+                        <li><a class="nav-selected" href="pages/teams/">Teams</a></li>
                         <li><a href="pages/matches/">Matches</a></li>
                         <li><a href="pages/rules/">Rules</a></li>
                         <li><a href="pages/faq/">FAQs</a></li>
@@ -152,7 +152,7 @@ BLANK_NEWS_PAGE = """
                 <nav class="nav-flex">
                     <ul id="nav-bar">
                         <li><a href="index.html">Home</a></li>
-                        <li><a href="pages/news/">News</a></li>
+                        <li><a class="nav-selected" href="pages/news/">News</a></li>
                         <li><a href="pages/teams/">Teams</a></li>
                         <li><a href="pages/matches/">Matches</a></li>
                         <li><a href="pages/rules/">Rules</a></li>
@@ -172,7 +172,8 @@ BLANK_NEWS_PAGE = """
                         <a href="pages/faq/">FAQs</a>
                         <a target="_blank" class="nav-bar-link" href="https://discord.gg/DTjbBzgkhr">Discord</a>
                     </div>
-                </div>            </div>
+                </div>            
+            </div>
         </div>
 
         <main>
