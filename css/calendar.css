@@ -73,8 +73,11 @@
     cursor: pointer;
 }
 
-.today {
+.today{
     font-weight: bold;
+    background-image: url("../assets/image/calendar/today.png");
+    background-size: cover;
+    background-position: center;
     background-color: var(--accent-color);
     color: white;
 }
