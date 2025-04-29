@@ -87,15 +87,6 @@
     opacity: 0.2;
 }
 
-/* Adjust font size and abbreviate text on smaller screens */
-@media (max-width: 767px) {
-    .day {
-        font-size: clamp(4px, 4vw, 14px);        /* Slightly smaller font */
-        aspect-ratio: 2/3;
-    }
-
-}
-
 .logged {
     cursor: pointer;
 }
@@ -125,4 +116,37 @@
     border-radius: 10px;
     border:1px solid #cccccc4f;
     margin-right: 3px;
+}
+
+@media screen and (max-width: 767px) {
+    .month-name {
+        font-size: clamp(10px, 7vw, 30px);
+    }
+    
+    .calendar-body {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+    }
+
+    .day-header {
+        margin: 0px;
+        font-size: clamp(5px, 2.5vw, 16px)    
+    }
+
+    .day {
+        aspect-ratio: 1;
+        padding: 0px;
+        margin: 1px;
+        align-items: center;
+        justify-content: left;
+        font-size: clamp(5px, 3.5vw, 16px);
+    }
+
+    .team-color-bar {
+        width: clamp(2px, 2vw, 10px);
+        height: clamp(2px, 2vw, 10px);
+        border-radius: 10px;
+        border:1px solid #cccccc4f;
+        margin-right: 3px;
+    }
 }
