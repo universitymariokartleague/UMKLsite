@@ -66,25 +66,27 @@ function generateCalendar(month, year, startDay) {
         
         const dateToCheck = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         if (dailyLogData[dateToCheck]) {
-            const [team1, team2] = dailyLogData[dateToCheck][0].teamsInvolved;
-            const color1 = teamColorsData[team1];
-            const color2 = teamColorsData[team2];
-        
-            const colorBarContainer = document.createElement('div');
-            colorBarContainer.classList.add('color-bar-container');
-        
-            const team1Div = document.createElement('div');
-            team1Div.classList.add('team-color-bar');
-            team1Div.style.backgroundColor = color1;
-        
-            const team2Div = document.createElement('div');
-            team2Div.classList.add('team-color-bar');
-            team2Div.style.backgroundColor = color2;
-        
-            colorBarContainer.appendChild(team1Div);
-            colorBarContainer.appendChild(team2Div);
-        
-            dayCell.appendChild(colorBarContainer);
+            dailyLogData[dateToCheck].forEach(entry => {
+                const [team1, team2] = entry.teamsInvolved;
+                const color1 = teamColorsData[team1];
+                const color2 = teamColorsData[team2];
+            
+                const colorBarContainer = document.createElement('div');
+                colorBarContainer.classList.add('color-bar-container');
+            
+                const team1Div = document.createElement('div');
+                team1Div.classList.add('team-color-bar');
+                team1Div.style.backgroundColor = color1;
+            
+                const team2Div = document.createElement('div');
+                team2Div.classList.add('team-color-bar');
+                team2Div.style.backgroundColor = color2;
+            
+                colorBarContainer.appendChild(team1Div);
+                colorBarContainer.appendChild(team2Div);
+            
+                dayCell.appendChild(colorBarContainer);
+            });
             dayCell.classList.add('logged');
             dayCell.addEventListener('click', () => showDailyLog(dateToCheck));
         }

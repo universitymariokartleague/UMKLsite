@@ -97,15 +97,14 @@
 .color-bar-container {
     display: flex;
     align-items: center;
-    margin: 5px 0;
-    
+    margin: 5px 0;   
 }
 
 .team-color-bar {
     width: 10px;
     height: 10px;
     border-radius: 10px;
-    border:1px solid #cccccc4f;
+    border: 1px solid #cccccc4f;
     margin-right: 3px;
 }
 
@@ -135,11 +134,16 @@
         align-items: center;
     }
 
+    .color-bar-container {
+        margin: 2px;
+    }
+
     .team-color-bar {
         width: clamp(2px, 1.5vw, 10px);
         height: clamp(2px, 1.5vw, 10px);
         border-radius: 10px;
         border: unset;
+        margin: unset;
         margin-right: 2px;
     }
 }
