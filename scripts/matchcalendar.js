@@ -10,7 +10,17 @@ let teamColorsData = {};
 
 let generatedStyleSheets = false;
 
+function createEmptyCells(count) {
+    for (let i = 0; i < count; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.classList.add('day');
+        emptyCell.classList.add('empty');
+        calendarDays.appendChild(emptyCell);
+    }
+}
+
 function generateCalendar(month, year, startDay) {
+
     if (startDay == null || isNaN(startDay)) startDay = DEFAULTSTARTDAY;
     const tempMonthType = localStorage.getItem("monthType") || "long";
 
@@ -43,12 +53,7 @@ function generateCalendar(month, year, startDay) {
         calendarDays.appendChild(weekdayCell);
     });
 
-    for (let i = 0; i < firstDay; i++) {
-        const emptyCell = document.createElement('div');
-        emptyCell.classList.add('day');
-        emptyCell.classList.add('empty');
-        calendarDays.appendChild(emptyCell);
-    };
+    createEmptyCells(firstDay);
 
     for (let day = 1; day <= daysInMonth; day++) {
         const dayCell = document.createElement('div');
@@ -92,12 +97,7 @@ function generateCalendar(month, year, startDay) {
     const totalCells = firstDay + daysInMonth;
     const remainingCells = 7 - (totalCells % 7);
     if (remainingCells < 7) {
-        for (let i = 0; i < remainingCells; i++) {
-            const emptyCell = document.createElement('div');
-            emptyCell.classList.add('day');
-            emptyCell.classList.add('empty');
-            calendarDays.appendChild(emptyCell);
-        }
+        createEmptyCells(remainingCells);
     }
 
     generatedStyleSheets = true;
