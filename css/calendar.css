@@ -32,24 +32,6 @@
 
 }
 
-@media screen and (max-width: 767px) {
-    .calendar-container {
-        display: unset;
-        flex-wrap: wrap;
-        height: unset;
-    }
-
-    .calendar {
-        min-width: unset;
-        margin: 0 auto;
-    }
-
-    #expandedLog {
-        margin-top: 15px;
-        max-width: unset;
-    }
-}
-
 .calendar-header {
     padding: 10px;
 }
