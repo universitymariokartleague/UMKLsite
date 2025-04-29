@@ -46,6 +46,7 @@ function generateCalendar(month, year, startDay) {
     for (let i = 0; i < firstDay; i++) {
         const emptyCell = document.createElement('div');
         emptyCell.classList.add('day');
+        emptyCell.classList.add('empty');
         calendarDays.appendChild(emptyCell);
     };
 
@@ -57,19 +58,38 @@ function generateCalendar(month, year, startDay) {
         const today = new Date();
         const isToday = (year === today.getFullYear() && month === today.getMonth() && day === today.getDate());
         if (isToday) {
-            dayCell.innerHTML = "☆" + day;
             dayCell.classList.add('today');
         }
         
         const dateToCheck = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         if (dailyLogData[dateToCheck]) {
             const [team1, team2] = dailyLogData[dateToCheck][0].teamsInvolved;
-            if (!generatedStyleSheets) {
-                createTeamStyleSheet(team1, team2);
-            }
-            dayCell.classList.add('logged', `${team1}-vs-${team2}`);
+            const color1 = teamColorsData[team1];
+            const color2 = teamColorsData[team2];
+        
+            const colorBarContainer = document.createElement('div');
+            colorBarContainer.classList.add('color-bar-container');
+        
+            const team1Div = document.createElement('div');
+            team1Div.classList.add('team-color-bar');
+            team1Div.style.backgroundColor = color1;
+            // team1Div.style.borderTopLeftRadius = '5px';
+            // team1Div.style.borderBottomLeftRadius = '5px';
+        
+            const team2Div = document.createElement('div');
+            team2Div.classList.add('team-color-bar');
+            team2Div.style.backgroundColor = color2;
+            // team2Div.style.borderTopRightRadius = '5px';
+            // team2Div.style.borderBottomRightRadius = '5px';
+        
+            colorBarContainer.appendChild(team1Div);
+            colorBarContainer.appendChild(team2Div);
+        
+            dayCell.appendChild(colorBarContainer);
+            dayCell.classList.add('logged');
             dayCell.addEventListener('click', () => showDailyLog(dateToCheck));
         }
+        
         calendarDays.appendChild(dayCell);
     };
     generatedStyleSheets = true;
@@ -118,36 +138,38 @@ document.addEventListener('startDayChange', (event) => {
     displayCalendar();
 });
 
-function createTeamStyleSheet(team1, team2) {
-    const styleSheet = document.createElement("style");
+// function createTeamDots(team1, team2) {
+//     const team1Dot = document.createElement('div');
+//     const team2Dot = document.createElement('div');
 
-    const team1Color = teamColorsData[team1];
-    const team2Color = teamColorsData[team2];
 
-    styleSheet.innerText = `
-        .${team1}-vs-${team2} {
-            color: #FFF;
-            background: linear-gradient(to bottom right, ${team1Color}EE, ${team1Color}EE, var(--bg-color), ${team2Color}EE, ${team2Color}EE);
-            background-size: 300% 300%;
-            animation: gradient 5s ease infinite;
-        }
+//     const team1Color = teamColorsData[team1];
+//     const team2Color = teamColorsData[team2];
 
-        @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-    `;
+//     styleSheet.innerText = `
+//         .${team1}-vs-${team2} {
+//             color: #FFF;
+//             background: linear-gradient(to bottom right, ${team1Color}EE, ${team1Color}EE, var(--bg-color), ${team2Color}EE, ${team2Color}EE);
+//             background-size: 300% 300%;
+//             animation: gradient 5s ease infinite;
+//         }
 
-    document.head.appendChild(styleSheet);
-    console.debug(`%cmatchcalendar.js %c> %cAdded style sheet: .${team1}-vs-${team2}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-}
+//         @keyframes gradient {
+//             0% {
+//                 background-position: 0% 50%;
+//             }
+//             50% {
+//                 background-position: 100% 50%;
+//             }
+//             100% {
+//                 background-position: 0% 50%;
+//             }
+//         }
+//     `;
+
+//     document.head.appendChild(styleSheet);
+//     console.debug(`%cmatchcalendar.js %c> %cAdded style sheet: .${team1}-vs-${team2}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+// }
 
 function makeTeamsColorStyles() {
     const styleSheet = document.createElement("style");

@@ -2,14 +2,14 @@
 .calendar {
     flex: 0 0 375px;
     height: fit-content;
-    margin-left: 10px;
-    border: var(--button-outline);
     border-radius: 10px;
     overflow: hidden;
+    padding: 20px;
+    border:1px solid #cccccc2f;
 }
 
 #expandedLog {
-    margin-top: 5px;
+    margin-top: 20px;
     min-width: 100px;
 }
 
@@ -20,6 +20,16 @@
 
 .month-name {
     font-size: 30px;
+    margin: 0 auto;
+    font-weight: 600;
+}
+
+
+.month-arrow:hover {
+    cursor: pointer;
+    color: var(--accent-color);
+    transition: 0.2s;
+
 }
 
 @media screen and (max-width: 767px) {
@@ -63,11 +73,18 @@
 .day {
     aspect-ratio: 3/2;
     display: flex;
+    flex-direction: column;
     padding: 10px;
-    background-color:#cccccc2f;
+    border:1px solid #cccccc7f;
+    background-color:#cccccc0f;
     margin: 2px;
     border-radius: 5px;
     font-weight: bold;
+    user-select: none;
+}
+
+.empty {
+    opacity: 0.2;
 }
 
 /* Adjust font size and abbreviate text on smaller screens */
@@ -83,7 +100,8 @@
 
 .today {
     font-weight: bold;
-    border: 2px solid var(--text-color);
+    background-color: var(--accent-color);
+    color: white;
 }
 
 .logged, .today {
@@ -92,11 +110,22 @@
 }
 
 .logged:hover {
-    outline: 2px solid var(--text-color);
-    z-index: 0;
+    background-color: #cccccc6f;
+    cursor: pointer;
+    transition: 0.2s;
 }
 
-.active-selection {
-    outline: 2px solid var(--text-color);
-    z-index: 0;
+.color-bar-container {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+    
+}
+
+.team-color-bar {
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    border:1px solid #cccccc4f;
+    margin-right: 3px;
 }
