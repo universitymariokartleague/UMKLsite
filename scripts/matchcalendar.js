@@ -88,6 +88,18 @@ function generateCalendar(month, year, startDay) {
         
         calendarDays.appendChild(dayCell);
     };
+
+    const totalCells = firstDay + daysInMonth;
+    const remainingCells = 7 - (totalCells % 7);
+    if (remainingCells < 7) {
+        for (let i = 0; i < remainingCells; i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.classList.add('day');
+            emptyCell.classList.add('empty');
+            calendarDays.appendChild(emptyCell);
+        }
+    }
+
     generatedStyleSheets = true;
 };
 
