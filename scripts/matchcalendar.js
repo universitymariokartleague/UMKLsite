@@ -8,7 +8,7 @@ let currentlyShownDate = [2000, 0];
 let dailyLogData = {};
 let teamColorsData = {};
 
-let generatedStyleSheets = false;
+let discardLogOnChange = false;
 
 function createEmptyCells(count) {
     for (let i = 0; i < count; i++) {
@@ -19,7 +19,6 @@ function createEmptyCells(count) {
 }
 
 function generateCalendar(month, year, startDay) {
-
     if (startDay == null || isNaN(startDay)) startDay = DEFAULTSTARTDAY;
     const tempMonthType = localStorage.getItem("monthType") || "long";
 
@@ -39,7 +38,7 @@ function generateCalendar(month, year, startDay) {
     document.getElementById('nextMonthButton').addEventListener('click', () => changeMonth(1));
 
     calendarDays.innerHTML = '';
-    if (generatedStyleSheets) expandedLog.innerHTML = '';
+    if (discardLogOnChange) expandedLog.innerHTML = '';
     currentlyShownDate = [year, month];
 
     const firstDay = (new Date(year, month, 1).getDay() - startDay + 7) % 7;
@@ -99,7 +98,7 @@ function generateCalendar(month, year, startDay) {
         createEmptyCells(remainingCells);
     }
 
-    generatedStyleSheets = true;
+    discardLogOnChange = true;
 };
 
 function changeMonth(change) {
