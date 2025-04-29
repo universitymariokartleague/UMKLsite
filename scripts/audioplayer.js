@@ -178,7 +178,7 @@ function togglePause() {
 };
 
 function setPlayIcon() {
-    playIcon.src = `https://umkl.co.uk/assets/audioplayer/play${playState}.png`; // set the svg play icon
+    playIcon.src = `https://umkl.co.uk/assets/image/audioplayer/play${playState}.png`; // set the svg play icon
     if (audioStatus.className == "hidden") audioStatus.className = ""; // show the whole audio player if a pause happened (space pressed)
 }
 
