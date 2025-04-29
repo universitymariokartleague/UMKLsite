@@ -1,8 +1,3 @@
-.calendar-container {
-    display: flex;
-    height: fit-content;
-    flex-direction: row-reverse;
-}
 
 .calendar {
     flex: 0 0 375px;
@@ -16,6 +11,15 @@
 #expandedLog {
     margin-top: 5px;
     min-width: 100px;
+}
+
+.month {
+    display: flex;
+    align-items: center;
+}
+
+.month-name {
+    font-size: 30px;
 }
 
 @media screen and (max-width: 767px) {
@@ -38,9 +42,6 @@
 
 .calendar-header {
     padding: 10px;
-    text-align: center;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
 }
 
 .calendar-body {
@@ -48,12 +49,25 @@
     grid-template-columns: repeat(7, 1fr);
 }
 
-.day {
-    aspect-ratio: 1/1; /* Makes cells square (equal width and height) */
+.day-header {
+    font-weight: 600;
+    opacity: 0.6;
     display: flex;
+    padding: 5px;
+    margin: 2px;
+    border-radius: 5px;
     align-items: center;
     justify-content: center;
-    border: 1px solid #ccc;
+}
+
+.day {
+    aspect-ratio: 3/2;
+    display: flex;
+    padding: 10px;
+    background-color:#cccccc2f;
+    margin: 2px;
+    border-radius: 5px;
+    font-weight: bold;
 }
 
 /* Adjust font size and abbreviate text on smaller screens */

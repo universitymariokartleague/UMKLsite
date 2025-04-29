@@ -1,4 +1,4 @@
-const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const weekdayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const weekdayNamesFull = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const DEFAULTSTARTDAY = 1;
 
@@ -19,9 +19,9 @@ function generateCalendar(month, year, startDay) {
     const adjustedWeekdayNames = weekdayNames.slice(startDay).concat(weekdayNames.slice(0, startDay));
 
     monthYear.innerHTML = `
-        <button id="previousMonthButton">Prev</button>
-        <button id="goToCurrentMonthButton">${Intl.DateTimeFormat('en', { month: tempMonthType }).format(new Date(year, month))} ${year}</button>
-        <button id="nextMonthButton">Next</button>
+        <a class="month-arrow fa-solid fa-arrow-left" id="previousMonthButton"></a>
+        <span class="month-name" id="goToCurrentMonthButton">${Intl.DateTimeFormat('en', { month: tempMonthType }).format(new Date(year, month))} ${year}</span>
+        <a class="month-arrow fa-solid fa-arrow-right" id="nextMonthButton"></a>
     `;
 
     const currentDate = new Date();
@@ -38,7 +38,7 @@ function generateCalendar(month, year, startDay) {
 
     adjustedWeekdayNames.forEach(day => {
         const weekdayCell = document.createElement('div');
-        weekdayCell.classList.add('day');
+        weekdayCell.classList.add('day-header');
         weekdayCell.textContent = day;
         calendarDays.appendChild(weekdayCell);
     });
