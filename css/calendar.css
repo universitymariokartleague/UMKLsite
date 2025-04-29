@@ -104,11 +104,6 @@
     color: white;
 }
 
-.logged, .today {
-    -webkit-user-select: text;
-    user-select: all;
-}
-
 .logged:hover {
     background-color: #cccccc6f;
     cursor: pointer;
