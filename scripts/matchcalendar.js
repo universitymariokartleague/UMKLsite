@@ -218,8 +218,9 @@ function displayCalendar() {
         })
         .then(colorsData => {
             teamColorsData = colorsData
-            makeTeamsColorStyles();
             console.debug(`%cmatchcalendar.js %c> %cTeam colors loaded: ${JSON.stringify(teamColorsData)}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+            makeTeamsColorStyles();
+            console.debug(`%cmatchcalendar.js %c> %cTeam css created`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
             fetch(dailyLogPath)
                 .then(response => {
                     if (!response.ok) {
