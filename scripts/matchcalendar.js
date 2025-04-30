@@ -120,9 +120,11 @@ function showDailyLog(date) {
         window.history.pushState({}, '', newUrl);
     }
 
+    const tempLocale = localStorage.getItem("locale") || "en-GB";
+
     const log = dailyLogData[date] || [];
     if (log.length) {
-        const formattedDate = new Date(`${date}`).toLocaleString('en-GB', { dateStyle: 'full' });
+        const formattedDate = new Date(`${date}`).toLocaleString(tempLocale, { dateStyle: 'full' });
         expandedLog.innerHTML = `
             <div class="settingSubheading">
                 <h3>${formattedDate}</h3>
@@ -139,7 +141,7 @@ function showDailyLog(date) {
                     const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
                     return `
                         <div class="event">
-                            <p style="margin: 3px 0; font-size:20px; opacity:70%;">${new Date(`1970-01-01T${entry.time || '00:00'}:00`).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit'})}</p>
+                            <p style="margin: 3px 0; font-size:20px; opacity:70%;">${new Date(`1970-01-01T${entry.time || '00:00'}:00`).toLocaleTimeString(tempLocale, { hour: 'numeric', minute: '2-digit'})}</p>
                             <h2 style="margin-bottom: 10px;">
                                 <span class=${team1.class_name}><a class="no-color-link no-underline-link" href="${team1.link}">${team1.team_name}</a></span> 
                                 VS 

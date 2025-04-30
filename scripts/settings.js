@@ -57,6 +57,8 @@ function generateSettingsPanel() {
         const tempTheme = (localStorage.getItem("darktheme") == 1 || darkThemeEnabled == 1) ? "Dark" : "Light";
         const tempStartDay = localStorage.getItem("startDay") || 1;
         const tempMonthType = localStorage.getItem("monthType") || "long";
+        const tempLocale = localStorage.getItem("locale") || "en-GB";
+        const tempLocaleDisplay = tempLocale === "en-GB" ? "English (UK)" : "English (US)";
 
         settingsBoxJS.innerHTML = `
             <div class="setting-sub-heading">Appearance</div><hr>
@@ -64,9 +66,9 @@ function generateSettingsPanel() {
 
             <div class="setting-sub-heading">${tempStartDay == 1 ? "Localisation" : "Localization"}</div><hr class="settings-hr">
             First day of week <span class="settings-extra-info">(Monday or Sunday)</span><button id="toggleStartDayButton" class="settings-option">${weekdayNamesFull[tempStartDay]}</button><br/>
-            Month type <span class="settings-extra-info">(eg: April or Apr)</span><button id="toggleMonthTypeButton" class="settings-option">${tempMonthType}</button>
+            Month type <span class="settings-extra-info">(eg: April or Apr)</span><button id="toggleMonthTypeButton" class="settings-option">${tempMonthType}</button><br/>
+            Locale <span class="settings-extra-info">(UK or US date/time format)</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button>
             
-
             <div class="setting-sub-heading">Website Data</div><hr>
             Reset settings to default <span class="settings-extra-info"> (this will reload the page)</span></div><button id="clearLocalStorage" class="settings-option">Clear</button>
             <!-- <div class="codeBoxTight">${localStorageData || "No data stored"}</div> -->
@@ -104,7 +106,7 @@ function toggleStartDay() {
     const newStartDay = localStorage.getItem("startDay") == 0 ? 1 : 0;
     localStorage.setItem("startDay", newStartDay);
     console.debug(`%csettings.js %c> %cset startDay to ${newStartDay} (${weekdayNamesFull[newStartDay]})`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
-    document.dispatchEvent(new CustomEvent('startDayChange', { detail: { darkThemeEnabled } }));
+    document.dispatchEvent(new CustomEvent('startDayChange'));
     generateSettingsPanel();
 }
 
@@ -112,7 +114,17 @@ function toggleMonthType() {
     const newMonthType = localStorage.getItem("monthType") == "short" ? "long" : "short";
     localStorage.setItem("monthType", newMonthType);
     console.debug(`%csettings.js %c> %cset monthType to ${newMonthType}`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
-    document.dispatchEvent(new CustomEvent('startDayChange', { detail: { darkThemeEnabled } }));
+    document.dispatchEvent(new CustomEvent('startDayChange'));
+    generateSettingsPanel();
+}
+
+function toggleLocale() {    
+    const currentLocale = localStorage.getItem("locale") || "en-GB";
+    const locales = ["en-GB", "en-US"];
+    const newLocale = locales[(locales.indexOf(currentLocale) + 1) % locales.length];
+    localStorage.setItem("locale", newLocale);
+    console.debug(`%csettings.js %c> %cset locale to ${newLocale}`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
+    document.dispatchEvent(new CustomEvent('startDayChange'));
     generateSettingsPanel();
 }
 
@@ -125,6 +137,7 @@ function generateEventListeners() {
     document.getElementById('toggleTheme').addEventListener('click', toggleTheme);
     document.getElementById('toggleStartDayButton').addEventListener('click', toggleStartDay);
     document.getElementById('toggleMonthTypeButton').addEventListener('click', toggleMonthType);
+    document.getElementById('toggleLocaleTypeButton').addEventListener('click', toggleLocale);
     document.getElementById('clearLocalStorage').addEventListener('click', clearLocalStorage);
 }
 
