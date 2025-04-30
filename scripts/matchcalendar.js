@@ -77,10 +77,14 @@ function generateCalendar(month, year, startDay) {
                 const team1Div = document.createElement('div');
                 team1Div.classList.add('team-color-bar');
                 team1Div.style.backgroundColor = color1;
+                team1Div.style.borderTopLeftRadius = '5px';
+                team1Div.style.borderBottomLeftRadius = '5px';
             
                 const team2Div = document.createElement('div');
                 team2Div.classList.add('team-color-bar');
                 team2Div.style.backgroundColor = color2;
+                team2Div.style.borderTopRightRadius = '5px';
+                team2Div.style.borderBottomRightRadius = '5px';
             
                 colorBarContainer.appendChild(team1Div);
                 colorBarContainer.appendChild(team2Div);

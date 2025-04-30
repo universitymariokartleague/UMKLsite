@@ -5,7 +5,7 @@
     border-radius: 10px;
     overflow: hidden;
     padding: 20px;
-    border:1px solid #cccccc2f;
+    border:1px solid #cccccc7f;
 }
 
 #expandedLog {
@@ -25,11 +25,10 @@
 }
 
 
-.month-arrow:hover {
+.month-arrow:hover, .month-name:hover {
     cursor: pointer;
     color: var(--accent-color);
     transition: 0.2s;
-
 }
 
 .calendar-header {
@@ -66,7 +65,8 @@
 }
 
 .empty {
-    opacity: 0.2;
+    opacity: 0.3;
+    cursor: none;
 }
 
 .logged {
@@ -101,14 +101,18 @@
 }
 
 .team-color-bar {
-    width: 10px;
-    height: 10px;
-    border-radius: 10px;
+    width: 15px;
+    height: 5px;
     border: 1px solid #cccccc4f;
-    margin-right: 3px;
 }
 
 @media screen and (max-width: 767px) {
+    .calendar {
+        flex: 0 0 100%;
+        height: fit-content;
+        padding: 10px;
+    }
+
     .month-name {
         font-size: clamp(10px, 7vw, 30px);
     }
@@ -135,15 +139,12 @@
     }
 
     .color-bar-container {
-        margin: 2px;
+        margin: 0.5px;
     }
 
     .team-color-bar {
-        width: clamp(2px, 1.5vw, 10px);
-        height: clamp(2px, 1.5vw, 10px);
-        border-radius: 10px;
-        border: unset;
-        margin: unset;
-        margin-right: 2px;
+        width: clamp(3px, 2vw, 15px);
+        height: clamp(1px, 0.5vw, 5px);
+        margin: 0;
     }
 }
