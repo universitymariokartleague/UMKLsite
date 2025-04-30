@@ -155,8 +155,17 @@ checkThemeAfterLoaded();
 // });
 
 // keyboard shortcuts
+let keyPressed = false;
+
 document.addEventListener('keydown', (event) => {
-    if (event.key === 'i') {
+    if (event.key === 'i' && !keyPressed) {
+        keyPressed = true;
         toggleTheme();
+    }
+});
+
+document.addEventListener('keyup', (event) => {
+    if (event.key === 'i') {
+        keyPressed = false;
     }
 });
