@@ -134,12 +134,14 @@ function showDailyLog(date) {
 
             const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
             return `
-                <b>
+                <h3>${new Date(`${date}`).toLocaleString('en-US', { dateStyle: 'full'})}</h3>
+                <hr class="after-title">
+                <p style="margin: 3px 0; font-size:20px; opacity:70%;">${new Date(`1970-01-01T${entry.time || '00:00'}:00`).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}</p>
+                <h2 style="margin-bottom: 10px;">
                     <span class=${team1.class_name}><a class="no-color-link no-underline-link" href="${team1.link}">${team1.team_name}</a></span> 
                     VS 
                     <span class="${team2.class_name}"><a class="no-color-link no-underline-link" href="${team2.link}">${team2.team_name}</a></span>
-                    | ${entry.time} ${date} (${weekdayNames[new Date(date).getDay()]})
-                </b><br/>
+                </h2>
                 ${entry.description.replace(/(?:\r\n|\r|\n)/g, '<br/>')}`;
         }).join('<br/><hr/>') : 'No logs for this day'}
     `;
@@ -150,39 +152,6 @@ document.addEventListener('startDayChange', (event) => {
     displayCalendar();
 });
 
-// function createTeamDots(team1, team2) {
-//     const team1Dot = document.createElement('div');
-//     const team2Dot = document.createElement('div');
-
-
-//     const team1Color = teamColorsData[team1];
-//     const team2Color = teamColorsData[team2];
-
-//     styleSheet.innerText = `
-//         .${team1}-vs-${team2} {
-//             color: #FFF;
-//             background: linear-gradient(to bottom right, ${team1Color}EE, ${team1Color}EE, var(--bg-color), ${team2Color}EE, ${team2Color}EE);
-//             background-size: 300% 300%;
-//             animation: gradient 5s ease infinite;
-//         }
-
-//         @keyframes gradient {
-//             0% {
-//                 background-position: 0% 50%;
-//             }
-//             50% {
-//                 background-position: 100% 50%;
-//             }
-//             100% {
-//                 background-position: 0% 50%;
-//             }
-//         }
-//     `;
-
-//     document.head.appendChild(styleSheet);
-//     console.debug(`%cmatchcalendar.js %c> %cAdded style sheet: .${team1}-vs-${team2}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-// }
-
 function makeTeamsColorStyles() {
     const styleSheet = document.createElement("style");
 
@@ -190,8 +159,9 @@ function makeTeamsColorStyles() {
         styleSheet.innerText += `
             .${team} {
                 cursor: pointer;
+                padding: 0 3px;
                 border: 2px solid ${color};
-                background-color: ${color}50;
+                background-color: ${color}aa;
                 border-radius: 5px;
             }
         `
