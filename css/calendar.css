@@ -5,7 +5,7 @@
     border-radius: 10px;
     overflow: hidden;
     padding: 20px;
-    border:1px solid #cccccc7f;
+    border: 1px solid #cccccccc;
 }
 
 #expandedLog {
@@ -51,47 +51,41 @@
     justify-content: center;
 }
 
+.empty {
+    opacity: 0.3;
+    cursor: none;
+}
+
 .day {
     aspect-ratio: 3/2;
     display: flex;
     flex-direction: column;
     padding: 10px;
-    border:1px solid #cccccc7f;
-    background-color:#cccccc0f;
+    border:1px solid #ccccccaa;
+    background-color:#cccccc1f;
     margin: 2px;
     border-radius: 5px;
     font-weight: bold;
     user-select: none;
 }
 
-.empty {
-    opacity: 0.3;
-    cursor: none;
-}
-
-.logged {
+.day:hover {
+    background-color: #cccccc6f;
     cursor: pointer;
+    transition: 0.1s;
 }
 
 .today{
-    font-weight: bold;
-    background-image: url("../assets/image/calendar/today.png");
-    background-size: cover;
-    background-position: center;
     background-color: var(--accent-color);
     color: white;
 }
 
-.day:hover {
-    background-color: #cccccc1f;
-    cursor: pointer;
-    transition: 0.2s;
+.today:hover {
+    background-color: #dd2153;
 }
 
 .logged:hover {
     background-color: #cccccc6f;
-    cursor: pointer;
-    transition: 0.2s;
 }
 
 .color-bar-container {
@@ -147,4 +141,11 @@
         height: clamp(1px, 0.5vw, 5px);
         margin: 0;
     }
+}
+
+.event {
+    border: 1px solid #ccccccaa;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 10px 0;
 }

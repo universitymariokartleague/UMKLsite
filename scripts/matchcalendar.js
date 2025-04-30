@@ -121,30 +121,40 @@ function showDailyLog(date) {
     }
 
     const log = dailyLogData[date] || [];
-    expandedLog.innerHTML = `
-        <div class="settingSubheading">
-        ${log.length ? log.map((entry, index) => {
-            function createTeamObject(teamName) {
-                return {
-                    team_name: teamName,
-                    class_name: teamName.replace(/\s+/g, ''),
-                    link: `pages/teams/${teamName.replace(/\s+/g, '-').toLowerCase()}/`
-                };
-            }
-
-            const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
-            return `
-                <h3>${new Date(`${date}`).toLocaleString('en-US', { dateStyle: 'full'})}</h3>
-                <hr class="after-title">
-                <p style="margin: 3px 0; font-size:20px; opacity:70%;">${new Date(`1970-01-01T${entry.time || '00:00'}:00`).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}</p>
-                <h2 style="margin-bottom: 10px;">
-                    <span class=${team1.class_name}><a class="no-color-link no-underline-link" href="${team1.link}">${team1.team_name}</a></span> 
-                    VS 
-                    <span class="${team2.class_name}"><a class="no-color-link no-underline-link" href="${team2.link}">${team2.team_name}</a></span>
-                </h2>
-                ${entry.description.replace(/(?:\r\n|\r|\n)/g, '<br/>')}`;
-        }).join('<br/><hr/>') : 'No logs for this day'}
-    `;
+    if (log.length) {
+        const formattedDate = new Date(`${date}`).toLocaleString('en-US', { dateStyle: 'full' });
+        expandedLog.innerHTML = `
+            <div class="settingSubheading">
+                <h3>${formattedDate}</h3>
+                <hr class="after-title" style="margin-bottom:0;">
+                ${log.map((entry, index) => {
+                    function createTeamObject(teamName) {
+                        return {
+                            team_name: teamName,
+                            class_name: teamName.replace(/\s+/g, ''),
+                            link: `pages/teams/${teamName.replace(/\s+/g, '-').toLowerCase()}/`
+                        };
+                    }
+    
+                    const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
+                    return `
+                        <div class="event">
+                            <p style="margin: 3px 0; font-size:20px; opacity:70%;">${new Date(`1970-01-01T${entry.time || '00:00'}:00`).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}</p>
+                            <h2 style="margin-bottom: 10px;">
+                                <span class=${team1.class_name}><a class="no-color-link no-underline-link" href="${team1.link}">${team1.team_name}</a></span> 
+                                VS 
+                                <span class="${team2.class_name}"><a class="no-color-link no-underline-link" href="${team2.link}">${team2.team_name}</a></span>
+                            </h2>
+                            ${entry.description.replace(/(?:\r\n|\r|\n)/g, '<br/>')}
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+    } else {
+        expandedLog.innerHTML = `<div class="settingSubheading"><h3>No events scheduled</h3></div>`;
+    }
+    
 }
 
 // Listen for theme change event

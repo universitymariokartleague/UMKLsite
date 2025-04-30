@@ -496,11 +496,6 @@ tag {
     margin-bottom: 20px;
 }
 
-button.teamBox {
-    border: 0px solid #FFFFFF00;
-    outline: 1px solid var(--text-color);
-}
-
 .positionBox {
     display: flex;
     justify-content: space-between;
