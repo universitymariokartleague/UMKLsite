@@ -8,7 +8,7 @@ TEAM_PAGE = """
         <base href="../../../">
     
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <title>Team {TEAMNAME} | University Mario Kart League</title>
         <meta name="description" content="Information about Team {TEAMNAME}, which are participating in the University Mario Kart League (UMKL)">
         <link rel="shortcut icon" href="assets/image/brand/favicon.png" type="image/png">
@@ -115,7 +115,7 @@ BLANK_NEWS_PAGE = """
         <base href="../../../../">
     
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <title>{TITLE} | University Mario Kart League</title>
         <meta name="description" content="{TITLE} news article on University Mario Kart League (UMKL)">
         <link rel="shortcut icon" href="assets/image/brand/favicon.png" type="image/png">
