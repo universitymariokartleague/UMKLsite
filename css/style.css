@@ -638,7 +638,7 @@ blockquote {
     min-width: 200px;
     width: 200px;
     height: 250px;
-    border-radius: 5px;
+    border-radius: 10px;
     overflow: hidden;
     position: relative;
     isolation: isolate;

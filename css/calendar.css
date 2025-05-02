@@ -105,15 +105,16 @@
         flex: 0 0 100%;
         height: fit-content;
         padding: 10px;
+        padding-bottom: 15px;
     }
 
     .month-name {
         font-size: clamp(10px, 7vw, 30px);
     }
-    
     .calendar-body {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
+        gap: clamp(1px, 1vw, 5px);
     }
 
     .day-header {
@@ -124,7 +125,7 @@
     .day {
         aspect-ratio: 1;
         padding: 0px;
-        margin: 1px;
+        margin: 0px;
         font-size: clamp(1px, 3vw, 16px);
         display: flex;
         flex-direction: column;
