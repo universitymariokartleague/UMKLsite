@@ -469,6 +469,16 @@ tag {
     -webkit-user-select: all;
 }
 
+.tag-link {
+    text-decoration: none;
+}
+
+.tag-link-text:hover {
+    color: #FFF!important;
+    text-decoration: none;
+    transition: color 0.10s;
+}
+
 .teamBoxContainer {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -605,7 +615,7 @@ blockquote {
 .news-container {
     display: flex;
     flex-direction: row;
-    padding: 5px;
+    padding: 0 5px 5px 5px;
     overflow: auto;
 }
 

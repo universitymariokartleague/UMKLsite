@@ -1,7 +1,18 @@
 window.addEventListener('load', function() {
-    const newsContainer = document.getElementById("news-container");
-
     document.querySelectorAll('.news-date').forEach((element, index) => {
+        // Wrap each <tag> inside .news-date with a hyperlink
+        element.querySelectorAll('tag').forEach(tag => {
+            const tagText = tag.textContent.trim();
+            const anchor = document.createElement('a');
+            anchor.href = `/pages/news/?tag=${encodeURIComponent(tagText)}`;
+            anchor.className = 'tag-link';
+
+            // Move the <tag> inside the <a>
+            tag.className = 'tag-link-text';
+            tag.parentNode.replaceChild(anchor, tag);
+            anchor.appendChild(tag);
+        });
+
         const rect = element.getBoundingClientRect();
         const width = rect.width;
 
