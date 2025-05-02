@@ -9,10 +9,7 @@ const settingsBoxHTML = `
     </div>
     <div class="settings-title">Settings</div>
     <div class="setting-options" id="settingsBoxJS">
-        <div class="setting-sub-heading">Appearance</div><hr>
-        Theme<button class="settings-option">Dark theme</button><br>
-        Ambient Mode <button class="settings-option">OFF</button>
-        <span class="settings-extra-info">(only available in dark theme)</span><br>
+
     </div>
 </div>`;
 document.body.insertAdjacentHTML('beforeend', settingsBoxHTML);
@@ -63,17 +60,18 @@ function generateSettingsPanel() {
 
         settingsBoxJS.innerHTML = `
             <div class="setting-sub-heading">Appearance</div><hr>
-            Page Theme<button id="toggleTheme" class="settings-option">${tempTheme} theme</button><br>
+            <span class="settings-hover-info" data-info="Light or dark theme">Page Theme</span><button id="toggleTheme" class="settings-option">${tempTheme} theme</button><br>
 
             <div class="setting-sub-heading">${tempLocale == "en-GB" ? "Localisation" : "Localization"}</div><hr class="settings-hr">
-            <span class="settings-hover-info" data-info="UK or US">Locale</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button><br/>
-            <span class="settings-hover-info" data-info="Monday or Sunday">First day of week</span><button id="toggleStartDayButton" class="settings-option">${weekdayNamesFull[tempStartDay]}</button><br/>
-            <span class="settings-hover-info" data-info="April or Apr">Month type</span><button id="toggleMonthTypeButton" class="settings-option">${tempMonthTypeDisplay}</button><br/>
+            <span class="settings-hover-info" data-info="UK or US date/time format">Locale</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button><br/>
+            <span class="settings-hover-info" data-info="eg: Monday or Sunday">First day of week</span><button id="toggleStartDayButton" class="settings-option">${weekdayNamesFull[tempStartDay]}</button><br/>
+            <span class="settings-hover-info" data-info="eg: April or Apr">Month type</span><button id="toggleMonthTypeButton" class="settings-option">${tempMonthTypeDisplay}</button><br/>
             
             <div class="setting-sub-heading">Website Data</div><hr>
-            Reset settings to default <button id="clearLocalStorage" class="settings-option">Clear</button>
-            <span class="settings-extra-info">(this will reload the page)</span>
+            <span class="settings-hover-info" data-info="reloads the page">Reset settings to default</span><button id="clearLocalStorage" class="settings-option">Clear</button>
             <!-- <div class="codeBoxTight">${localStorageData || "No data stored"}</div> -->
+
+            <div class="settings-instructions">Hover/tap the options to see more information</div>
         `;
     } catch (error) {
         settingsBoxJS.innerHTML = `<br>Failed to load settings<br><code>${error.stack}</code>`;

@@ -73,6 +73,15 @@
     right: 15px;
 }
 
+.settings-instructions {
+    font-style: italic;
+    font-weight: normal;
+    color: var(--settings-extra-info);
+    position: relative;
+    text-align: center;
+    display: none;
+}
+
 .settings-extra-info {
     font-style: italic;
     font-weight: normal;
@@ -89,30 +98,43 @@
 }
 
 .settings-hover-info::after {
-    content: attr(data-info);
+    content: "(" attr(data-info) ")";
     position: absolute;
     top: 50%;
-    left: calc(100% + 10px);
+    left: calc(100% + 5px);
     transform: translateY(-50%);
     color: var(--settings-extra-info);
     font-style: italic;
     font-weight: normal;
-    background-color: var(--button-background);
-    border: var(--button-border);
-    padding: 1px;
-    border-radius: 5px;
     white-space: nowrap;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.1s ease-in-out, visibility 0.1s ease-in-out;
-    z-index: 10;
 }
 
-.settings-hover-info:hover::after {
-    opacity: 1;
-    visibility: visible;
-}
+@media screen and (max-width: 767px) {
+    .settings-hover-info::after {
+        white-space: unset;
+        width: 100px;
+    }
 
+    .settings-instructions {
+        display: block;
+    }
+
+    .settings-hover-info::after {
+        background-color: var(--bg-color);
+        border: var(--button-border);
+        padding: 0 5px 0 5px;
+        border-radius: 5px;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.1s ease-in-out, visibility 0.1s ease-in-out;
+        z-index: 10;
+    }
+
+    .settings-hover-info:hover::after {
+        opacity: 1;
+        visibility: visible;
+    }
+}
 
 .settings-option {
     float: right;
