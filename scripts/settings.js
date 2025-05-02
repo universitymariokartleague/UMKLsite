@@ -55,22 +55,24 @@ function generateSettingsPanel() {
         }).join('');
 
         const tempTheme = (localStorage.getItem("darktheme") == 1 || darkThemeEnabled == 1) ? "Dark" : "Light";
-        const tempStartDay = localStorage.getItem("startDay") || 1;
-        const tempMonthType = localStorage.getItem("monthType") || "long";
         const tempLocale = localStorage.getItem("locale") || "en-GB";
         const tempLocaleDisplay = tempLocale === "en-GB" ? "English (UK)" : "English (US)";
+        const tempStartDay = localStorage.getItem("startDay") || 1;
+        const tempMonthType = localStorage.getItem("monthType") || "long";
+        const tempMonthTypeDisplay = tempMonthType === "long" ? "Long" : "Short";
 
         settingsBoxJS.innerHTML = `
             <div class="setting-sub-heading">Appearance</div><hr>
             Page Theme<button id="toggleTheme" class="settings-option">${tempTheme} theme</button><br>
 
-            <div class="setting-sub-heading">${tempStartDay == 1 ? "Localisation" : "Localization"}</div><hr class="settings-hr">
-            First day of week <span class="settings-extra-info">(Monday or Sunday)</span><button id="toggleStartDayButton" class="settings-option">${weekdayNamesFull[tempStartDay]}</button><br/>
-            Month type <span class="settings-extra-info">(eg: April or Apr)</span><button id="toggleMonthTypeButton" class="settings-option">${tempMonthType}</button><br/>
-            Locale <span class="settings-extra-info">(date/time format)</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button>
+            <div class="setting-sub-heading">${tempLocale == "en-GB" ? "Localisation" : "Localization"}</div><hr class="settings-hr">
+            Locale <span class="settings-extra-info">(UK or US)</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button><br/>
+            First day of week <span class="settings-extra-info"></span><button id="toggleStartDayButton" class="settings-option">${weekdayNamesFull[tempStartDay]}</button><br/>
+            Month type <span class="settings-extra-info"></span><button id="toggleMonthTypeButton" class="settings-option">${tempMonthTypeDisplay}</button><br/>
             
             <div class="setting-sub-heading">Website Data</div><hr>
-            Reset settings to default <span class="settings-extra-info"> (this will reload the page)</span></div><button id="clearLocalStorage" class="settings-option">Clear</button>
+            Reset settings to default <button id="clearLocalStorage" class="settings-option">Clear</button>
+            <span class="settings-extra-info">(this will reload the page)</span>
             <!-- <div class="codeBoxTight">${localStorageData || "No data stored"}</div> -->
         `;
     } catch (error) {

@@ -24,6 +24,9 @@
     font-weight: 600;
 }
 
+.month-arrow {
+    font-size: 25px;
+}
 
 .month-arrow:hover, .month-name:hover {
     cursor: pointer;
@@ -75,7 +78,7 @@
     transition: 0.1s;
 }
 
-.today{
+.today {
     background-color: var(--accent-color);
     color: white;
 }
@@ -108,9 +111,14 @@
         padding-bottom: 15px;
     }
 
+    .month-arrow {
+        font-size: 20px;
+    }
+
     .month-name {
         font-size: clamp(10px, 7vw, 30px);
     }
+
     .calendar-body {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
