@@ -32,8 +32,6 @@
     --metion-color: #1f2e7f;
     --mention-bg-color: rgba(88, 101, 242, 0.25);
     --mention-border: 1px solid rgba(31, 46, 127, 0.6);
-
-    --news-box-bg-color: rgba(0, 0, 0, 0.05);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -60,8 +58,6 @@
         --metion-color: #98acff;
         --mention-bg-color: rgba(88, 101, 242, 0.25);
         --mention-border: 1px solid rgba(152, 172, 255, 0.6);
-
-        --news-box-bg-color: rgba(255, 255, 255, 0.02);
     }
 }
 
@@ -599,11 +595,26 @@ blockquote {
 	display: flex;
 	flex-direction: row;
 
-    border-radius: 15px;
-    background-color: var(--news-box-bg-color);
-    border: var(--button-outline);
-    padding: 2px;
+    border-radius: 10px;
+    border: 1px solid #cccccccc;
+    padding: 5px;
     overflow-x: auto;
+}
+
+.news-container::-webkit-scrollbar {
+    height: 5px;
+}
+
+.news-container::-webkit-scrollbar-thumb {
+    background-color: #ccccccaa;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+}
+
+.news-container::-webkit-scrollbar-track {
+    background-color: #cccccc48;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
 .news-container-override {
@@ -613,14 +624,13 @@ blockquote {
 }
 
 .news-box {
-    border: var(--button-outline);
-    background-color: var(--bg-color);
+    border:1px solid #ccccccaa;
     padding: 10px;
     margin: 5px;
     min-width: 200px;
     width: 200px;
     height: 250px;
-    border-radius: 10px;
+    border-radius: 5px;
     overflow: hidden;
     position: relative;
     isolation: isolate;
