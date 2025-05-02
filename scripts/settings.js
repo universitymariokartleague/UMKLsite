@@ -66,9 +66,9 @@ function generateSettingsPanel() {
             Page Theme<button id="toggleTheme" class="settings-option">${tempTheme} theme</button><br>
 
             <div class="setting-sub-heading">${tempLocale == "en-GB" ? "Localisation" : "Localization"}</div><hr class="settings-hr">
-            Locale <span class="settings-extra-info">(UK or US)</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button><br/>
-            First day of week <span class="settings-extra-info"></span><button id="toggleStartDayButton" class="settings-option">${weekdayNamesFull[tempStartDay]}</button><br/>
-            Month type <span class="settings-extra-info"></span><button id="toggleMonthTypeButton" class="settings-option">${tempMonthTypeDisplay}</button><br/>
+            <span class="settings-hover-info" data-info="UK or US">Locale</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button><br/>
+            <span class="settings-hover-info" data-info="Monday or Sunday">First day of week</span><button id="toggleStartDayButton" class="settings-option">${weekdayNamesFull[tempStartDay]}</button><br/>
+            <span class="settings-hover-info" data-info="April or Apr">Month type</span><button id="toggleMonthTypeButton" class="settings-option">${tempMonthTypeDisplay}</button><br/>
             
             <div class="setting-sub-heading">Website Data</div><hr>
             Reset settings to default <button id="clearLocalStorage" class="settings-option">Clear</button>

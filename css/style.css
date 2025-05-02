@@ -32,6 +32,8 @@
     --metion-color: #1f2e7f;
     --mention-bg-color: rgba(88, 101, 242, 0.25);
     --mention-border: 1px solid rgba(31, 46, 127, 0.6);
+
+    --news-box-bg-color: rgba(0, 0, 0, 0.02);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -58,6 +60,8 @@
         --metion-color: #98acff;
         --mention-bg-color: rgba(88, 101, 242, 0.25);
         --mention-border: 1px solid rgba(152, 172, 255, 0.6);
+
+        --news-box-bg-color: rgba(255, 255, 255, 0.03);
     }
 }
 
@@ -85,7 +89,7 @@
     --mention-bg-color: rgba(88, 101, 242, 0.25);
     --mention-border: 1px solid rgba(152, 172, 255, 0.6);
 
-    --news-box-bg-color: rgba(255, 255, 255, 0.02);
+    --news-box-bg-color: rgba(255, 255, 255, 0.03);
 }
 
 /*adjust mobile text inflation*/
@@ -617,6 +621,7 @@ blockquote {
     flex-direction: row;
     padding: 0 5px 5px 5px;
     overflow: auto;
+    background-color: var(--news-box-bg-color);
 }
 
 .news-container::-webkit-scrollbar {
