@@ -28,7 +28,7 @@
 .month-arrow:hover, .month-name:hover {
     cursor: pointer;
     color: var(--accent-color);
-    transition: 0.2s;
+    transition: 0.1s;
 }
 
 .calendar-header {
