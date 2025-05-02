@@ -18,8 +18,8 @@ function createEmptyCells(count) {
     }
 }
 
-function generateCalendar(month, year, startDay) {
-    if (startDay == null || isNaN(startDay)) startDay = DEFAULTSTARTDAY;
+function generateCalendar(month, year) {
+    const startDay = localStorage.getItem("startDay") || DEFAULTSTARTDAY;
     const tempMonthType = localStorage.getItem("monthType") || "long";
 
     const monthYear = document.getElementById('monthYear');
@@ -33,7 +33,7 @@ function generateCalendar(month, year, startDay) {
     `;
 
     const currentDate = new Date();
-    document.getElementById('goToCurrentMonthButton').addEventListener('click', () => generateCalendar(currentDate.getMonth(), currentDate.getFullYear(), parseInt(localStorage.getItem("startDay"))));
+    document.getElementById('goToCurrentMonthButton').addEventListener('click', () => generateCalendar(currentDate.getMonth(), currentDate.getFullYear()));
     document.getElementById('previousMonthButton').addEventListener('click', () => changeMonth(-1));
     document.getElementById('nextMonthButton').addEventListener('click', () => changeMonth(1));
 
@@ -109,7 +109,7 @@ function generateCalendar(month, year, startDay) {
 
 function changeMonth(change) {
     const newDate = new Date(currentlyShownDate[0], currentlyShownDate[1] + change);
-    generateCalendar(newDate.getMonth(), newDate.getFullYear(), parseInt(localStorage.getItem("startDay")));
+    generateCalendar(newDate.getMonth(), newDate.getFullYear());
 };
 
 function showDailyLog(date) {
@@ -219,13 +219,15 @@ function displayCalendar() {
                 .then(data => {
                     dailyLogData = data;
                     const currentDate = new Date();
-                    generateCalendar(currentDate.getMonth(), currentDate.getFullYear(), parseInt(localStorage.getItem("startDay")));        
+                    generateCalendar(currentDate.getMonth(), currentDate.getFullYear());        
                     console.debug(`%cmatchcalendar.js %c> %cMatch data loaded`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
         
                     const urlParams = new URLSearchParams(window.location.search);
                     const dateParam = urlParams.get('date');
                     if (dateParam && dailyLogData[dateParam]) {
                         console.debug(`%cmatchcalendar.js %c> %cURL parameter detected`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+                        const dateObj = new Date(dateParam);
+                        generateCalendar(dateObj.getMonth(), dateObj.getFullYear());
                         showDailyLog(dateParam);
                     }
                 })

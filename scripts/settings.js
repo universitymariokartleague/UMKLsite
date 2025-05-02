@@ -67,7 +67,7 @@ function generateSettingsPanel() {
             <div class="setting-sub-heading">${tempStartDay == 1 ? "Localisation" : "Localization"}</div><hr class="settings-hr">
             First day of week <span class="settings-extra-info">(Monday or Sunday)</span><button id="toggleStartDayButton" class="settings-option">${weekdayNamesFull[tempStartDay]}</button><br/>
             Month type <span class="settings-extra-info">(eg: April or Apr)</span><button id="toggleMonthTypeButton" class="settings-option">${tempMonthType}</button><br/>
-            Locale <span class="settings-extra-info">(UK or US date/time format)</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button>
+            Locale <span class="settings-extra-info">(date/time format)</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button>
             
             <div class="setting-sub-heading">Website Data</div><hr>
             Reset settings to default <span class="settings-extra-info"> (this will reload the page)</span></div><button id="clearLocalStorage" class="settings-option">Clear</button>

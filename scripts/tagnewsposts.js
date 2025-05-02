@@ -7,7 +7,6 @@ window.addEventListener('load', function() {
             anchor.href = `/pages/news/?tag=${encodeURIComponent(tagText)}`;
             anchor.className = 'tag-link';
 
-            // Move the <tag> inside the <a>
             tag.className = 'tag-link-text';
             tag.parentNode.replaceChild(anchor, tag);
             anchor.appendChild(tag);
