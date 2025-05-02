@@ -4,7 +4,7 @@ window.addEventListener('load', function() {
         element.querySelectorAll('tag').forEach(tag => {
             const tagText = tag.textContent.trim();
             const anchor = document.createElement('a');
-            anchor.href = `/pages/news/?tag=${encodeURIComponent(tagText)}`;
+            anchor.href = `/pages/news/?tag=${encodeURIComponent(tagText.toLowerCase())}`;
             anchor.className = 'tag-link';
 
             tag.className = 'tag-link-text';
