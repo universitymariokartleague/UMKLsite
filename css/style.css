@@ -596,14 +596,17 @@ blockquote {
 @keyframes rainbow{0%,100%{border-color:rgba(255,0,0,.7);background-color:rgba(255,0,0,.15)}8%{border-color:rgba(255,127,0,.7);background-color:rgba(255,127,0,.15)}16%{border-color:rgba(255,255,0,.7);background-color:rgba(255,255,0,.15)}25%{border-color:rgba(127,255,0,.7);background-color:rgba(127,255,0,.15)}33%{border-color:rgba(0,255,0,.7);background-color:rgba(0,255,0,.15)}41%{border-color:rgba(0,255,127,.7);background-color:rgba(0,255,127,.15)}50%{border-color:rgba(0,255,255,.7);background-color:rgba(0,255,255,.15)}58%{border-color:rgba(0,127,255,.7);background-color:rgba(0,127,255,.15)}66%{border-color:rgba(0,0,255,.7);background-color:rgba(0,0,255,.15)}75%{border-color:rgba(127,0,255,.7);background-color:rgba(127,0,255,.15)}83%{border-color:rgba(255,0,255,.7);background-color:rgba(255,0,255,.15)}91%{border-color:rgba(255,0,127,.7);background-color:rgba(255,0,127,.15)}}
 
 /* news */
-.news-container {
-	display: flex;
-	flex-direction: row;
-
+.news-wrapper {
     border-radius: 10px;
     border: 1px solid #cccccccc;
+    overflow: hidden; /* This contains the scrollbar within the rounded corners */
+}
+
+.news-container {
+    display: flex;
+    flex-direction: row;
     padding: 5px;
-    overflow-x: auto;
+    overflow: auto;
 }
 
 .news-container::-webkit-scrollbar {
@@ -612,8 +615,6 @@ blockquote {
 
 .news-container::-webkit-scrollbar-thumb {
     background-color: #cccccc7c;
-    border-bottom-left-radius: 50px;
-    border-bottom-right-radius: 50px;
 }
 
 .news-container::-webkit-scrollbar-thumb:hover {
@@ -626,8 +627,6 @@ blockquote {
 
 .news-container::-webkit-scrollbar-track {
     background-color: #cccccc48;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
 }
 
 .news-container-override {
