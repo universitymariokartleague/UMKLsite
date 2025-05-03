@@ -5,6 +5,28 @@
     outline: 1px solid var(--text-color);
 }
 
+.color-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#colorPicker {
+    height: 50px;
+    width: 50px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    border-radius: 5px;
+    margin:5px;
+}
+
+#colorPicker:hover {
+    outline: 1px solid var(--text-color);
+    transition: 0.2s;
+}
+
 .discordRolePreviewContainer {
     min-height: 340px;
 }
