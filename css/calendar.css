@@ -70,12 +70,12 @@
     border-radius: 5px;
     font-weight: bold;
     user-select: none;
+    transition: background-color 0.2s, color 0.2s; /* Add color to the transition */
 }
 
 .day:hover {
     background-color: #cccccc6f;
     cursor: pointer;
-    transition: 0.1s;
 }
 
 .today {

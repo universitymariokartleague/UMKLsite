@@ -61,7 +61,10 @@ function generateCalendar(month, year) {
         const today = new Date();
         const isToday = (year === today.getFullYear() && month === today.getMonth() && day === today.getDate());
         if (isToday) {
-            dayCell.classList.add('today');
+            dayCell.classList.add('day');
+            setTimeout(() => {
+                dayCell.classList.add('today');
+            }, 50);
         }
         
         const dateToCheck = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
