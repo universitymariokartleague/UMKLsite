@@ -78,21 +78,20 @@ function checkCache() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    waitForDBToInit()
+document.addEventListener("DOMContentLoaded", async () => {
+    await waitForDBToInit();
+    await readTeamsData()
 });
 
 async function waitForDBToInit() {
-    dbLoaded = await isDBLoaded();
-    console.debug(`%cteamboxgenerate.js %c> %c${dbLoaded ? "Database loaded" : "Database is loading..."}`, "color:#9452ff", "color:#fff", "color:#c29cff");
-    if (!dbLoaded) {
-        setTimeout(waitForDBToInit, 100); // Check again after 1 second
-    } else {
-        dbDoneLoading()
+    while (!(await isDBLoaded())) {
+        console.debug(`%cteamboxgenerate.js %c> %cDatabase is loading...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+        await new Promise(resolve => setTimeout(resolve, 50)); // Wait for 0.05 seconds
     }
+    console.debug(`%cteamboxgenerate.js %c> %cDatabase loaded`, "color:#9452ff", "color:#fff", "color:#c29cff");
 }
 
-async function dbDoneLoading() {
+async function readTeamsData() {
     // let teamData = await getSeasonTeamStandings(season_id)
     maxSeason = await getCurrentSeason();
     currentSeason = maxSeason;
