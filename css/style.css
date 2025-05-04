@@ -154,6 +154,10 @@ footer {
     z-index: 1;
 }
 
+[id] {
+    scroll-margin-top: 60px; /* Adjust this to match your navbar height */
+}
+
 /* nav bar */
 .navbar-container *,
 .navbar-container *::before,
