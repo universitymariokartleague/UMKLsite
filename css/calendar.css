@@ -79,6 +79,9 @@
 }
 
 .today {
+    background-image: url("../assets/image/calendar/today.png"); /* tests code dont remove */
+    background-size: cover;
+    background-position: center;
     background-color: var(--accent-color);
     color: white;
 }
