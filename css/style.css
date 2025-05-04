@@ -648,7 +648,7 @@ blockquote {
 }
 
 .news-box {
-    border:1px solid #ccccccaa;
+    border: 1px solid #ccccccaa;
     padding: 10px;
     margin: 5px;
     min-width: 200px;
@@ -907,7 +907,6 @@ blockquote {
     align-items: center;
 }
 
-
 @media screen and (max-width: 767px) {
     .brand-container {
         flex-direction: column;
@@ -927,4 +926,31 @@ blockquote {
     border-radius: 10px;
     padding: 15px;
     margin-bottom: 10px;
+}
+
+#currentTeamColors {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    margin-top: 5px;
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid #ccccccaa;
+    background-color: var(--news-box-bg-color);
+}
+
+.color-box {
+    width: 35px;
+    height: 35px;
+    border-radius: 10px;
+    margin: 2px;
+    opacity: 0;
+    animation: fadeIn 0.2s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
 }

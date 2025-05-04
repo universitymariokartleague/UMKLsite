@@ -60,21 +60,21 @@ async function generateTeamBox(teamData) {
     document.head.appendChild(styleSheet);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    waitForDBToInit()
+document.addEventListener("DOMContentLoaded", async () => {
+    await waitForDBToInit();
+    await getTeamData();
 });
 
 async function waitForDBToInit() {
-    dbLoaded = await isDBLoaded();
-    console.debug(`%cteaminfogenerate.js %c> %c${dbLoaded ? "Database loaded" : "Database is loading..."}`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
-    if (!dbLoaded) {
-        setTimeout(waitForDBToInit, 100); // Check again after 0.1 seconds
-    } else {
-        dbDoneLoading()
+    while (!(await isDBLoaded())) {
+        console.debug(`%cteaminfogenerate.js %c> %cDatabase is loading...`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
+        await new Promise(resolve => setTimeout(resolve, 50)); // Wait for 0.05 seconds
     }
+    console.debug(`%cteaminfogenerate.js %c> %cDatabase loaded`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
 }
 
-async function dbDoneLoading() {
+async function getTeamData() {
+    console.debug(`%cteaminfogeenrate.js %c> %cGenerating team info box using SQL...`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
     maxSeason = await getCurrentSeason();
     currentSeason = maxSeason;
 
@@ -84,8 +84,8 @@ async function dbDoneLoading() {
     // console.log(allTeamData)
     // let teamData = (await runSQL(`SELECT * FROM team WHERE team_name = '${currentTeam}'`))[0];
 
-    console.debug(`%cteaminfogenerate.js %c> %cGenerating team boxes using SQL...`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
-    generateTeamBox(teamData); //attempt to retrieve playlist file from audioStatus class data
+    await generateTeamBox(teamData);
+    console.debug(`%cteaminfogeenrate.js %c> %cGenerated team info box`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
 }
 
 function getOrdinal(num) {

@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" data-overlayscrollbars-initialize>
     <head>    
+        <base href="../../../">
+
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <title>Team Guidelines | University Mario Kart League</title>
         <meta name="description" content="The team creation rules for the University Mario Kart League (UMKL)">
-        <link rel="shortcut icon" href="../../../assets/image/brand/favicon.png" type="image/png">
-        <link rel="stylesheet" href="../../../css/style.css">
-        <link rel="stylesheet" href="../../../css/settings.css">
-        <link rel="stylesheet" href="../../../css/calendar.css">
-        <link rel="stylesheet" href="../../../css/discordrolepreview.css">
-        <link rel="stylesheet" href="../../../css/overlayscrollbars.min.css">
+        <link rel="shortcut icon" href="assets/image/brand/favicon.png" type="image/png">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/settings.css">
+        <link rel="stylesheet" href="css/calendar.css">
+        <link rel="stylesheet" href="css/discordrolepreview.css">
+        <link rel="stylesheet" href="css/overlayscrollbars.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
         <meta name="color-scheme" content="dark light">
     
@@ -26,28 +28,29 @@
     
         <!-- Scripts -->
         <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-        <script src="../../../scripts/overlayscrollbars.browser.es6.min.js" defer></script>
-        <script src="../../../scripts/overlayscrollbar.js" defer></script> 
+        <script src="scripts/overlayscrollbars.browser.es6.min.js" defer></script>
+        <script src="scripts/overlayscrollbar.js" defer></script> 
         
-        <script type="module" src="../../../scripts/settings.js" defer></script>
-        <script type="module" src="../../../scripts/discordrole.js" defer></script>
-
+        <script type="module" src="scripts/settings.js" defer></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/sql-wasm.js' defer></script>
+        <script type="module" src="scripts/getteamcolors.js" defer></script>
+        <script type="module" src="scripts/discordrole.js" defer></script>
     </head>
     <body id="top" data-overlayscrollbars-initialize>
         <div class="navbar-container">
             <div class="nav-bar">
-                <a href="../../../index.html" class="nav-bar-title no-color-link no-underline-link-footer">
-                    <img src="../../../assets/image/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
+                <a href="index.html" class="nav-bar-title no-color-link no-underline-link-footer">
+                    <img src="assets/image/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
                     <h2>UMKL</h2>
                 </a>
                 <nav class="nav-flex">
                     <ul id="nav-bar">
-                        <li><a href="../../../index.html">Home</a></li>
-                        <li><a href="../../news/">News</a></li>
-                        <li><a href="../../teams/">Teams</a></li>
-                        <li><a href="../../matches/">Matches</a></li>
-                        <li><a class="nav-selected" href="../../rules/">Rules</a></li>
-                        <li><a href="../../faq/">FAQs</a></li>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="pages/news/">News</a></li>
+                        <li><a href="pages/teams/">Teams</a></li>
+                        <li><a href="pages/matches/">Matches</a></li>
+                        <li><a class="nav-selected" href="pages/rules/">Rules</a></li>
+                        <li><a href="pages/faq/">FAQs</a></li>
                         <li><a target="_blank" class="nav-bar-link" href="https://discord.gg/DTjbBzgkhr">Discord</a></li>
                     </ul>
                 </nav>
@@ -55,12 +58,12 @@
                 <div class="nav-dropdown">
                     <div class="nav-dropdown-button">☰</div>
                     <div class="nav-dropdown-content" id="nav-dropdown-bar">
-                        <a href="../../../index.html">Home</a>
-                        <a href="../../news/">News</a>
-                        <a href="../../teams/">Teams</a>
-                        <a href="../../matches/">Matches</a>
-                        <a href="../../rules/">Rules</a>
-                        <a href="../../faq/">FAQs</a>
+                        <a href="index.html">Home</a>
+                        <a href="pages/news/">News</a>
+                        <a href="pages/teams/">Teams</a>
+                        <a href="pages/matches/">Matches</a>
+                        <a href="pages/rules/">Rules</a>
+                        <a href="pages/faq/">FAQs</a>
                         <a target="_blank" class="nav-bar-link" href="https://discord.gg/DTjbBzgkhr">Discord</a>
                     </div>
                 </div>            
@@ -68,14 +71,14 @@
         </div>
 
         <main>
-            <a href="../../rules/">Back</a>
+            <a href="pages/rules/">Back</a>
             <h2>Team Guidelines</h2>
             <p class="p-below-title">Rules and guidelines for new teams wanting to join the UMKL</p>
             <hr class="hr-below-title">
 
             <blockquote class="info">
                 <b>Note</b><br>
-                Please visit <a href="../../../pages/news/2025-04-19/uni-joining-info/">Information for universities wanting to join</a> 
+                Please visit <a href="pages/news/2025-04-19/uni-joining-info/">Information for universities wanting to join</a> 
                 for general information about joining the UMKL.    
             </blockquote>
 
@@ -97,7 +100,7 @@
             <p class="p-below-title">The colour is a core part of a team's identity</p>
 
             <div class="discordRolePreview">
-                <iframe id="discordRoleiFrame" src="../../../pages/faq/discordrole.html" frameborder="0"></iframe>
+                <iframe id="discordRoleiFrame" src="pages/faq/discordrole.html" frameborder="0"></iframe>
             </div>
 
             <ul>
@@ -113,6 +116,11 @@
             <div class="color-container">
                 <input id="colorPicker" type="color" />
                 <span id="currentColor"><code>#1BAA8B</code></span>    
+            </div>
+
+            <br/><p class="p-below-title">Below are already existing team colours:</p>
+            <div id="currentTeamColors">
+
             </div>
 
             <ul>
@@ -145,7 +153,7 @@
 
         <footer>
             © UMKL 2025 |
-            <a class="no-color-link" href="../../../pages/credits/">Credits</a> |
+            <a class="no-color-link" href="pages/credits/">Credits</a> |
             <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |
             <a href="https://www.youtube.com/@universitymariokartleague" title="UMKL YouTube Channel" class="no-color-link no-underline-link-footer fa-brands fa-youtube"></a>
             <a href="https://www.instagram.com/universitymariokartleague" title="UMKL Instagram Account" class="no-color-link no-underline-link-footer fa-brands fa-instagram"></a>

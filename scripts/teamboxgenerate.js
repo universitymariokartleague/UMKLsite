@@ -78,32 +78,29 @@ function checkCache() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    waitForDBToInit()
+document.addEventListener("DOMContentLoaded", async () => {
+    await waitForDBToInit();
+    await getTeamsData();
 });
 
 async function waitForDBToInit() {
-    dbLoaded = await isDBLoaded();
-    console.debug(`%cteamboxgenerate.js %c> %c${dbLoaded ? "Database loaded" : "Database is loading..."}`, "color:#9452ff", "color:#fff", "color:#c29cff");
-    if (!dbLoaded) {
-        setTimeout(waitForDBToInit, 100); // Check again after 1 second
-    } else {
-        dbDoneLoading()
+    while (!(await isDBLoaded())) {
+        console.debug(`%cteamboxgenerate.js %c> %cDatabase is loading...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+        await new Promise(resolve => setTimeout(resolve, 50)); // Wait for 0.05 seconds
     }
+    console.debug(`%cteamboxgenerate.js %c> %cDatabase loaded`, "color:#9452ff", "color:#fff", "color:#c29cff");
 }
 
-async function dbDoneLoading() {
+async function getTeamsData() {
+    console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     maxSeason = await getCurrentSeason();
     currentSeason = maxSeason;
     generateSeasonPicker();
     updateSeasonText();
     // let teamData = await runSQL("SELECT * FROM team")
     let teamData = await getSeasonTeamStandings(currentSeason)
-    console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
-
-    console.log(await runSQL("SELECT team_name, team_color FROM team"))
-
-    generateTeamBoxes(teamData, false)
+    await generateTeamBoxes(teamData, false)
+    console.debug(`%cteamboxgenerate.js %c> %cGenerated team boxes`, "color:#9452ff", "color:#fff", "color:#c29cff");
 }
 
 async function generateSeasonPicker() {
