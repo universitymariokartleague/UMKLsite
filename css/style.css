@@ -703,6 +703,12 @@ blockquote {
     width: max-content;
 }
 
+.news-credits {
+    margin-top: 5px;
+    font-size: 0.9em;
+    font-style: italic;
+}
+
 /* next match box */
 .match-container {
     display: flex;

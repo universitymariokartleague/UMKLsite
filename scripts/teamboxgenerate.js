@@ -93,7 +93,6 @@ async function waitForDBToInit() {
 }
 
 async function dbDoneLoading() {
-    // let teamData = await getSeasonTeamStandings(season_id)
     maxSeason = await getCurrentSeason();
     currentSeason = maxSeason;
     generateSeasonPicker();
