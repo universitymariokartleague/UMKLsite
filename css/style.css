@@ -155,7 +155,7 @@ footer {
 }
 
 [id] {
-    scroll-margin-top: 60px; /* Adjust this to match your navbar height */
+    scroll-margin-top: 60px; /* fix anchors */
 }
 
 /* nav bar */
