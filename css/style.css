@@ -118,7 +118,7 @@ main {
     flex: 1;
     width: calc(100vw - 40px);
     max-width: calc(800px - env(safe-area-inset-left));
-    padding: 65px 20px 20px 20px;
+    margin-top: 65px;
     font-size: var(--default-font-size);
 }
 
