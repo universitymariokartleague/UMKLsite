@@ -25,8 +25,8 @@
         <meta name="twitter:card" content="summary_large_image">
     
         <!-- Scripts -->
-        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-        <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
+                <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+    <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
         <script src="scripts/overlayscrollbar.js" defer></script>    
         
         <script type="module" src="scripts/settings.js" defer></script>
@@ -64,8 +64,7 @@
                         <a href="pages/faq/">FAQs</a>
                         <a target="_blank" class="nav-bar-link" href="https://discord.gg/DTjbBzgkhr">Discord</a>
                     </div>
-                </div>            
-            </div>
+                </div>            </div>
         </div>
 
         <main>
@@ -79,20 +78,16 @@
             </p>
 
             <hr class="hr-below-title">
-            
-            <h3 id="current-season">Season 1 (2024 - 2025)</h3>
-            <p class="p-below-title">Season 1 has concluded, it ran from October 2024 to February 2025.</p>
+                        
             <div class="season-selection">
-                <label for="season-select">Select a season:</label>
                 <select id="season-select">
+                    <option value="2">Season 2</option>
                     <option value="1">Season 1</option>
                 </select>
+                <div id="current-season">Upcoming (2025-2026)</div>
             </div>
 
-            <p>
-                Click a team to view their profile<br>
-                <button id="shareButton">Share current results</button>
-            </p>
+            <!-- <button id="shareButton">Share current results</button> -->
 
             <div id="JSTeamBox" class="teamBoxContainer">
                 Loading team data...

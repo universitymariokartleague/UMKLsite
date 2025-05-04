@@ -78,29 +78,33 @@ function checkCache() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-    await waitForDBToInit();
-    await getTeamsData();
+document.addEventListener("DOMContentLoaded", () => {
+    waitForDBToInit()
 });
 
 async function waitForDBToInit() {
-    while (!(await isDBLoaded())) {
-        console.debug(`%cteamboxgenerate.js %c> %cDatabase is loading...`, "color:#9452ff", "color:#fff", "color:#c29cff");
-        await new Promise(resolve => setTimeout(resolve, 50)); // Wait for 0.05 seconds
+    dbLoaded = await isDBLoaded();
+    console.debug(`%cteamboxgenerate.js %c> %c${dbLoaded ? "Database loaded" : "Database is loading..."}`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    if (!dbLoaded) {
+        setTimeout(waitForDBToInit, 100); // Check again after 1 second
+    } else {
+        dbDoneLoading()
     }
-    console.debug(`%cteamboxgenerate.js %c> %cDatabase loaded`, "color:#9452ff", "color:#fff", "color:#c29cff");
 }
 
-async function getTeamsData() {
-    console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+async function dbDoneLoading() {
+    // let teamData = await getSeasonTeamStandings(season_id)
     maxSeason = await getCurrentSeason();
     currentSeason = maxSeason;
     generateSeasonPicker();
     updateSeasonText();
     // let teamData = await runSQL("SELECT * FROM team")
     let teamData = await getSeasonTeamStandings(currentSeason)
-    await generateTeamBoxes(teamData, false)
-    console.debug(`%cteamboxgenerate.js %c> %cGenerated team boxes`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+
+    console.log(await runSQL("SELECT team_name, team_color FROM team"))
+
+    generateTeamBoxes(teamData, false)
 }
 
 async function generateSeasonPicker() {
@@ -124,6 +128,31 @@ async function getCurrentSeason() {
     )
 
     return result[0]["MAX(season_id)"];
+}
+
+async function getSeasonStatus(season_id) {
+    /** Fetch the status of a specific season from the database. */
+    const result = await runSQL(`
+        SELECT season_id
+        FROM season
+    `);
+
+    if (result.length > season_id) {
+        return "Concluded";
+    }
+    else {
+        const matches = await runSQL(`
+            SELECT *
+            FROM tournament
+            WHERE season_id = ${season_id}
+        `);
+
+        if (matches.length === 0) {
+            return "Upcoming";
+        } else {
+            return "Ongoing";
+        }
+    }
 }
 
 async function getTeamSeasonPoints(team_id, season_id) {
@@ -179,11 +208,12 @@ checkCache();
 // season picker
 seasonPicker.addEventListener("change", async function () {
     currentSeason = this.value;
-    updateSeasonText();
+    await updateSeasonText();
     console.debug(`%cteamboxgenerate.js %c> %cSelected season ${currentSeason}`, "color:#9452ff", "color:#fff", "color:#c29cff");
     generateTeamBoxes(await getSeasonTeamStandings(currentSeason), false)
 });
 
-function updateSeasonText() {
-    currentSeasonText.innerText = `Season ${currentSeason} (${(2023 + Number(currentSeason))} - ${(2024 + Number(currentSeason))})`;
+async function updateSeasonText() {
+    const seasonStatus = await getSeasonStatus(currentSeason);
+    currentSeasonText.innerText = `${seasonStatus} (${(2023 + Number(currentSeason))}-${(2024 + Number(currentSeason))})`;
 }

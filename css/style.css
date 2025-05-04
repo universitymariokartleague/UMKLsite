@@ -485,6 +485,30 @@ tag {
     transition: color 0.10s;
 }
 
+.season-selection {
+    display: flex;
+    flex-direction: column;
+    background-color: #cccccc1f;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 20px 0;
+}
+
+#season-select {
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 5px;
+    border: 1px solid #cccccc;
+    font-weight: bold;
+    margin-bottom: 5px;
+    outline: none;
+}
+
+#current-season {
+    margin: 5px 10px;
+}
+
 .teamBoxContainer {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -493,7 +517,7 @@ tag {
 }
 
 .teamBox {
-    border: 1px solid var(--text-color);
+    border: 1px solid #cccccc;
     border-radius: 10px;
     padding: 20px;
     min-width: 300px;
@@ -502,6 +526,8 @@ tag {
     user-select: none;
     -webkit-user-select: none;
 }
+
+
 
 @media screen and (max-width: 767px) {
     .teamBoxContainer {
