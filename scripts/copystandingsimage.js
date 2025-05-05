@@ -69,6 +69,7 @@ function cleanupPreview() {
         } finally {
             currentPreview = null;
             isPopupShowing = false;
+            shareButton.innerHTML = originalMessage;
         }
     }
 }
