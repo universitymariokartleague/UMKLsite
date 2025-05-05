@@ -575,28 +575,39 @@ function downloadAllTracks() {
 
 async function zipTracksToDownload() {
     const zip = new JSZip();
-    const promises = [];
+    let completedDownloads = 0; // Track actual completed downloads
+    
+    // Update progress function that uses the actual count
+    function updateProgress() {
+        const percent = Math.ceil(completedDownloads / playlist.length * 100);
+        document.getElementById('downloadAllButton').innerHTML = `Downloading... ${percent}%`;
+        if (completedDownloads >= playlist.length) {
+            document.getElementById('downloadAllButton').innerHTML = "Compressing...";
+        }
+    }
 
-    playlist.forEach((url, index) => {
-        // Extract the filename from the URL
+    const promises = playlist.map((url, index) => {
         const filename = decodeURI(url.substring(url.lastIndexOf('/') + 1).replace(/\?.*/, ''));
 
-        promises.push(
-            fetch((path + url).replaceAll('#', '%23'))
-                .then(response => {
-                    if (response.ok) {
-                        return response.blob().then(blob => {
-                            zip.file(filename, blob);
-                            updateDownloadProgress(index + 1);
-                        });
-                    } else {
-                        console.error(`%caudioplayer.js%c > %cFailed to fetch ${url}`, "color:#fcce27", "color:#fff", "color:#ffefb5")
-                    }
-                })
-                .catch(error => {
-                    console.error(`%caudioplayer.js%c > %cError fetching ${url}: ${error}`, "color:#fcce27", "color:#fff", "color:#ffefb5")
-                })
-        );
+        return fetch((path + url).replaceAll('#', '%23'))
+            .then(response => {
+                if (response.ok) {
+                    return response.blob().then(blob => {
+                        zip.file(filename, blob);
+                        completedDownloads++; // Increment when a file is actually added
+                        updateProgress();
+                    });
+                } else {
+                    console.error(`%caudioplayer.js%c > %cFailed to fetch ${url}`, "color:#fcce27", "color:#fff", "color:#ffefb5");
+                    completedDownloads++; // Still count as completed (even if failed)
+                    updateProgress();
+                }
+            })
+            .catch(error => {
+                console.error(`%caudioplayer.js%c > %cError fetching ${url}: ${error}`, "color:#fcce27", "color:#fff", "color:#ffefb5");
+                completedDownloads++; // Still count as completed (even if error)
+                updateProgress();
+            });
     });
 
     try {
@@ -615,13 +626,8 @@ async function zipTracksToDownload() {
         URL.revokeObjectURL(zipUrl);
         currentlyDownloadingAllTracks = false;
     } catch (error) {
-        console.error(`%caudioplayer.js%c > %c${error}`, "color:#fcce27", "color:#fff", "color:#ffefb5")
+        console.error(`%caudioplayer.js%c > %c${error}`, "color:#fcce27", "color:#fff", "color:#ffefb5");
         currentlyDownloadingAllTracks = false;
         document.getElementById('downloadAllButton').innerHTML = `Download All`;
     }
-}
-
-function updateDownloadProgress(count) {
-    document.getElementById('downloadAllButton').innerHTML = `Downloading... ${Math.ceil(count / playlist.length * 100)}%`;
-    if (count >= playlist.length) document.getElementById('downloadAllButton').innerHTML = "Compressing...";
 }

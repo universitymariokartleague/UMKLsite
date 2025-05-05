@@ -1,8 +1,8 @@
-credits|true|false|false
-Mario Paint - Mysterious.mp3|itembox.gif
-Wii Food Delivery Channel - Ordering Party Food.mp3|itembox.gif
-Yume 2kki - Green Neon World.mp3|itembox.gif
-Wii U Transfer Tool - Menus.mp3|itembox.gif
-Super Mario Galaxy 2 - World 3.mp3|itembox.gif
-Wii U - Initial Setup.mp3|itembox.gif
-Wii Room - Television.mp3|itembox.gif
+credits|true|false|true
+Mario Paint - Mysterious.mp3|ab.jpeg
+Wii Food Delivery Channel - Ordering Party Food.mp3|ab.jpeg
+Yume 2kki - Green Neon World.mp3|ab.jpeg
+Wii U Transfer Tool - Menus.mp3|ab.jpeg
+Super Mario Galaxy 2 - World 3.mp3|ab.jpeg
+Wii U - Initial Setup.mp3|ab.jpeg
+Wii Room - Television.mp3|ab.jpeg
