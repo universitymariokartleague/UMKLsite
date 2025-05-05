@@ -179,10 +179,10 @@ shareButton.addEventListener("click", async () => {
     if (isPopupShowing) return;
     
     try {
+        shareButton.innerHTML = "Loading shareable image...";
         const blob = await fetch(`assets/pythongraphics/output/team_standings_season${currentSeason.value}.png`).then(r => r.blob());
 
         if (isWindowsOrLinux() || !navigator.canShare) {
-            shareButton.innerHTML = "Loading clipboard image...";
             const success = await copyImageToClipboard(blob);
             shareButton.innerText = success ? "Image copied to clipboard!" : "Failed to copy!";
 
