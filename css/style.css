@@ -119,6 +119,7 @@ main {
     width: calc(100vw - 40px);
     max-width: calc(800px - env(safe-area-inset-left));
     margin-top: 65px;
+    margin-bottom: 20px;
     font-size: var(--default-font-size);
 }
 
