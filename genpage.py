@@ -220,7 +220,7 @@ def create_team_page():
     team_name = input("Enter team name > ")
     team_name_file_path = team_name.lower().replace(" ", "-")
     os.makedirs(f"pages/teams/{team_name_file_path}", exist_ok=True)
-    with open(f"pages/teams/{team_name_file_path}/index.html", "a+") as f:
+    with open(f"pages/teams/{team_name_file_path}/index.html", "a+", encoding="utf8") as f:
         f.write(TEAM_PAGE.replace("{TEAMNAME}", team_name))
 
 def create_blog():
