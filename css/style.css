@@ -506,8 +506,22 @@ tag {
     outline: none;
 }
 
+.current-season-area {
+    display: flex;
+}
+
 #current-season {
     margin: 5px;
+}
+
+#shareButton {
+    margin-left: auto;
+}
+
+@media screen and (max-width: 767px) {
+    .current-season-area {
+        display: unset;
+    }
 }
 
 .teamBoxContainer {
@@ -527,8 +541,6 @@ tag {
     user-select: none;
     -webkit-user-select: none;
 }
-
-
 
 @media screen and (max-width: 767px) {
     .teamBoxContainer {
