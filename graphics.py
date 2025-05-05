@@ -197,10 +197,14 @@ def create_team_standings_image(
     MAX_TEAMS = 20
 
     # Add title
-    add_text(f"SEASON {logic.get_current_season()}", (TITLE_POSITION[0], TITLE_POSITION[1] - 50), DEFAULT_FONT, TITLE_FONT_SIZE - 15, TITLE_COLOR, anchor="lm")
+    add_text(f"SEASON {season_id}", (TITLE_POSITION[0], TITLE_POSITION[1] - 50), DEFAULT_FONT, TITLE_FONT_SIZE - 15, TITLE_COLOR, anchor="lm")
     add_text("TEAM STANDINGS", TITLE_POSITION, DEFAULT_FONT, TITLE_FONT_SIZE, TITLE_COLOR, anchor="lm")
     timestamp = datetime.now().strftime("%d/%m/%Y")
-    add_text(f"Results as of\n{timestamp}", (TITLE_POSITION[0] + 900, TITLE_POSITION[1] - 85), DEFAULT_FONT, TITLE_FONT_SIZE - 35, TITLE_COLOR, anchor="rt")
+    
+    if (season_id == logic.get_current_season()):
+        add_text(f"Standings as of\n{timestamp}", (TITLE_POSITION[0] + 900, TITLE_POSITION[1] - 85), DEFAULT_FONT, TITLE_FONT_SIZE - 35, TITLE_COLOR, anchor="rt")
+    else:
+        add_text(f"This season\nhas concluded", (TITLE_POSITION[0] + 900, TITLE_POSITION[1] - 85), DEFAULT_FONT, TITLE_FONT_SIZE - 35, TITLE_COLOR, anchor="rt")
 
     # Draw team standings
     for i, (team_id, current_points) in enumerate(team_standings[:MAX_TEAMS]):
@@ -237,7 +241,7 @@ def create_team_standings_image(
     cropped_base = base.crop((0, 0, 1125, final_height))
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    cropped_base.save(f"assets/pythongraphics/output/team_standings.png")
+    cropped_base.save(f"assets/pythongraphics/output/team_standings_season{season_id}.png")
 
 def create_event_versus_image(
     team_IDs: list[int]
@@ -586,7 +590,10 @@ def process_bytes_image(image_path):
         raise ValueError(f"Failed to process image: {e}")
 
 async def main():
-    create_team_standings_image(season_id=logic.get_current_season())
+    max_season = logic.get_current_season()
+    for i in range(1, max_season + 1):
+        create_team_standings_image(season_id=i)
+
     # create_event_versus_image(team_IDs=[1, 2])
     # await create_results_image(None, tournament_id=7)
     # create_winner_image(tournament_id=7)

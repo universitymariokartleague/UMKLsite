@@ -47,10 +47,6 @@ let darkThemeEnabled;
 // Panel
 function generateSettingsPanel() {
     try {
-        const localStorageData = Object.entries(localStorage).map(([key, value]) => {
-            return `<b>${key}</b>: <span class="setting-selectable">${value.slice(0, 100)}${value.length > 100 ? '...' : ''}</span><br>`;
-        }).join('');
-
         const tempTheme = (localStorage.getItem("darktheme") == 1 || darkThemeEnabled == 1) ? "Dark" : "Light";
         const tempLocale = localStorage.getItem("locale") || "en-GB";
         const tempLocaleDisplay = tempLocale === "en-GB" ? "English (UK)" : "English (US)";
@@ -69,7 +65,6 @@ function generateSettingsPanel() {
             
             <div class="setting-sub-heading">Website Data</div><hr>
             <span class="settings-hover-info" data-info="reloads the page">Reset settings to default</span><button id="clearLocalStorage" class="settings-option">Clear</button>
-            <!-- <div class="codeBoxTight">${localStorageData || "No data stored"}</div> -->
 
             <div class="settings-instructions">Hover/tap the options to see more information</div>
         `;
@@ -148,17 +143,6 @@ function checkThemeAfterLoaded() {
         themePreference = prefersDark ? 1 : 0;
     }
     darkThemeEnabled = themePreference;
-
-    // if (darkThemeEnabled) {
-    //     console.debug(`%csettings.js %c> %cSetting dark theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
-    //     root.classList.add("dark-theme");
-    //     root.classList.remove("light-theme");
-    // } else {
-    //     console.debug(`%csettings.js %c> %cSetting light theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
-    //     root.classList.add("light-theme");
-    //     root.classList.remove("dark-theme");
-    // }
-
     sendThemeChangeEvent();
 }
 checkThemeAfterLoaded();

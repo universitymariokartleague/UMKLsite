@@ -1,4 +1,3 @@
-
 const shareButton = document.getElementById("shareButton");
 
 async function copyImageToClipboard(blob) {
@@ -45,7 +44,9 @@ function isWindowsOrLinux() {
 }
 
 shareButton.addEventListener("click", async () => {
-    const blob = await fetch('https://umkl.co.uk/assets/pythongraphics/output/team_standings.png').then(r => r.blob());
+    const currentSeason = document.getElementById("season-select").value;
+    
+    const blob = await fetch(`assets/pythongraphics/output/team_standings_season${currentSeason}.png`).then(r => r.blob());
     const originalMessage = shareButton.innerText;
 
     if (isWindowsOrLinux() || !navigator.canShare) {

@@ -67,6 +67,8 @@ async function generateTeamBoxes(teamData, cached) {
 function cacheTeamData(teamData) {
     if (dbLoaded) {
         localStorage.setItem("cachedTeamData", teamData)
+        const timestamp = new Date().toISOString().replace('T', ' ').split('.')[0];
+        localStorage.setItem("lastCached", timestamp);
         console.debug(`%cteamboxgenerate.js %c> %cCached team data`, "color:#9452ff", "color:#fff", "color:#c29cff");
     }
 }
@@ -89,6 +91,7 @@ async function waitForDBToInit() {
         await new Promise(resolve => setTimeout(resolve, 50)); // Wait for 0.05 seconds
     }
     console.debug(`%cteamboxgenerate.js %c> %cDatabase loaded`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    dbLoaded = true;
 }
 
 async function readTeamsData() {

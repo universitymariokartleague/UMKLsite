@@ -18,7 +18,6 @@ const teamBoxFormatHTML = `
 const JSTeamBox = document.getElementById("JSTeamBox")
 const styleSheet = document.createElement("style");
 
-let dbLoaded = false;
 let currentSeason, maxSeason = 1;
 
 async function generateTeamBox(teamData) {
