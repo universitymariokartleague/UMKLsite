@@ -193,7 +193,7 @@ shareButton.addEventListener("click", async () => {
         } else {
             await shareImage(
                 "UMKL Team Standings",
-                "Check out the latest team standings in the UMKL!",
+                `Check out the Season ${currentSeason.value} team standings in the UMKL!`,
                 blob
             );
         }
