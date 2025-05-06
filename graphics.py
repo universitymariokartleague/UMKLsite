@@ -602,3 +602,5 @@ async def main():
 if __name__ == "__main__":
     import asyncio
     asyncio.run(main())
+
+# Run this file to generate updated team standings
