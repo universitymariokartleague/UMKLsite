@@ -717,6 +717,8 @@ blockquote {
 	z-index: -1;
     opacity: 0;
     transition: opacity 0.2s ease-in;
+    object-fit: cover;
+    overflow-clip-margin: unset;
 }
 
 .news-box .news-text {
