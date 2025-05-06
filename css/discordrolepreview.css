@@ -2,7 +2,7 @@
     height: 308px;
     width: 250px;
     border-radius: 10px;
-    outline: 1px solid var(--text-color);
+    outline: 1px solid #ccccccaa;
 }
 
 .color-container {
@@ -24,7 +24,6 @@
 
 #colorPicker:hover {
     outline: 1px solid var(--text-color);
-    transition: 0.2s;
 }
 
 .discordRolePreviewContainer {
@@ -40,7 +39,7 @@
     height: 250px;
     width: 500px;
     border-radius: 10px;
-    outline: 1px solid var(--text-color);
+    outline: 1px solid #ccccccaa;
 }
 
 /* For mobile devices */

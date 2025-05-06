@@ -22,6 +22,7 @@
     font-size: 30px;
     margin: 0 auto;
     font-weight: 600;
+    user-select: none;
 }
 
 .month-arrow {
@@ -75,11 +76,11 @@
 
 .day:hover {
     background-color: #cccccc6f;
-    cursor: pointer;
+
 }
 
 .today {
-    background-image: url("../assets/image/calendar/today.png"); /* test code dont remove */
+    /* background-image: url("../assets/image/calendar/today.png"); */ /* test code dont remove */
     background-size: cover;
     background-position: center;
     background-color: var(--accent-color);
@@ -87,11 +88,11 @@
 }
 
 .today:hover {
-    background-color: #dd2153;
+    background-color: #e9436f;
 }
 
 .logged:hover {
-    background-color: #cccccc6f;
+    cursor: pointer;
 }
 
 .color-bar-container {

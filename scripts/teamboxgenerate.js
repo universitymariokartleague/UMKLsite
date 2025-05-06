@@ -4,7 +4,9 @@ const teamBoxFormatHTML = `
     <button onClick="location.href='pages/teams/{{LinkName}}/'" class="{{className}} teamBox">
         <div class="positionBox">
             <div class="team-position">{{position}}</div>
-            <div class="team-points">{{points}}</div>
+            <div class="team-points">
+                <div class="points-value">{{points}} PTS</div>
+            </div>
         </div>
         <hr>
         <div class="{{className}} team">
@@ -37,7 +39,7 @@ async function generateTeamBox(team, cached) {
 
     let tempTeamBox = teamBoxFormatHTML
         .replace("{{position}}", team.position)
-        .replace("{{points}}", `${team.points_override ? team.points_override : (team.points ? team.points : "0")} PTS` )
+        .replace("{{points}}", `${team.points_override ? team.points_override : (team.points ? team.points : "0")}` )
         .replaceAll("{{teamName}}", team.team_name)
         .replace("{{institution}}", team.team_full_name)
         .replaceAll("{{className}}", team.class_name)

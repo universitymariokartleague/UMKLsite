@@ -556,16 +556,12 @@ tag {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-}
-
-.team-position, .team-points {
     font-size: 25px;
-    font-weight: bold;
 }
 
 .team {
-    padding-left: 15px;
-    font-size: 30px;
+    padding-left: 10px;
+    font-size: 25px;
     font-weight: bold;
     display:flex;
     justify-content: space-between;
@@ -990,7 +986,7 @@ blockquote {
 .color-box {
     width: 35px;
     height: 35px;
-    border-radius: 10px;
+    border-radius: 5px;
     margin: 2px;
     opacity: 0;
     animation: fadeIn 0.2s ease-in-out forwards;
