@@ -1,4 +1,4 @@
-credits|true|false|true
+credits|true|false|false
 Mario Paint - Mysterious.mp3|_alariko.jpeg
 Wii Food Delivery Channel - Ordering Party Food.mp3|_alariko.jpeg
 Yume 2kki - Green Neon World.mp3|_alariko.jpeg
