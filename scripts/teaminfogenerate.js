@@ -1,18 +1,18 @@
 import { isDBLoaded, runSQL } from './database.js';
 
 const teamBoxFormatHTML = `
-    <button class="{{className}} teamBox">
-        <div class="positionBox">
-            <div class="team-position">{{institution}}</div>
+        <div class="team-info-wrapper">
+            <img onload="this.style.opacity={{teamlogoopacity}}" src="{{logoSrc}}" alt="{{teamName}} team logo" class="team-info-logo">
+            <hr>
+            <div class="team-info-text">
+                {{extraFields}}
+            </div>
         </div>
-        <hr>
-        <div class="{{className}} team">
-            <span>{{teamName}}</span>
-            <img onload="this.style.opacity={{teamlogoopacity}}" src="{{logoSrc}}" alt="{{teamName}} team logo" class="team-logo">
+
+        <div class="map">
+            <img src="assets/image/map/{{teamName}}_map.png">
         </div>
-        <hr>
-        <div class="institution">{{extraData}}</div>
-    </button>
+
 `;
 
 const JSTeamBox = document.getElementById("JSTeamBox")
@@ -32,19 +32,24 @@ async function generateTeamBox(teamData) {
 
     let winslosses = await getTeamWinsAndLosses(teamData.team_id);
 
-    let extraData = `
-        Season ${currentSeason} points: ${await getTeamSeasonPoints(teamData.team_id, currentSeason)}<br/>
-        Lifetime points: ${await getTeamCareerPoints(teamData.team_id)}<br/>
-        Current season position: ${getOrdinal(teamData.season_position)}<br/>
-        Matches played: ${await getTeamMatchesPlayed(teamData.team_id, currentSeason)}<br/>
-        Wins/Losses: ${winslosses[0]}/${winslosses[1]}<br/>
-    `
+    let extraFields = `
+        <table class="team-info-table">
+            <tr><td><b>Location</b></td><td>[LOCATION]</td></tr>
+            <tr><td><b>Institution</b></td><td>${teamData.team_full_name}</td></tr>
+            <tr><td><b>First Entry</b></td><td>Season X (202X-202X)</td></tr>
+            <tr><td><b>Championships</b></td><td>X</td></tr>
+            <tr><td><b>Wins-Losses</b></td><td>${winslosses[0]}-${winslosses[1]}</td></tr>
+            <tr><td><b>Lifetime Points</b></td><td>${await getTeamCareerPoints(teamData.team_id)}</td></tr>
+        </table>
+    `;
 
     let teamBoxStyle="button.teamBox.{{className}}:hover,button.teamBox.{{className}}:focus{border: 0px solid {{teamColor}};outline: 4px solid {{teamColor}};}.team.{{className}}{border-left: 8px solid {{teamColor}};}"
         .replaceAll("{{className}}", teamData.class_name)
         .replaceAll("{{teamColor}}", teamData.team_color);
 
-    styleSheet.innerText += teamBoxStyle;
+    const teamStyleSheet = document.createElement("style");
+    teamStyleSheet.innerText = teamBoxStyle;
+    document.head.appendChild(teamStyleSheet);
 
     let tempTeamBox = teamBoxFormatHTML
         .replace("{{position}}", teamData.position)
@@ -53,7 +58,7 @@ async function generateTeamBox(teamData) {
         .replaceAll("{{className}}", teamData.class_name)
         .replace("{{logoSrc}}", teamData.logo_src)
         .replace("{{teamlogoopacity}}", 1)
-        .replace("{{extraData}}", extraData);
+        .replace("{{extraFields}}", extraFields)
 
     JSTeamBox.innerHTML += tempTeamBox;
     document.head.appendChild(styleSheet);
