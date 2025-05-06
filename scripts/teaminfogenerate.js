@@ -10,9 +10,8 @@ const teamBoxFormatHTML = `
         </div>
 
         <div class="map">
-            <img src="assets/image/map/{{teamName}}_map.png">
+            <img src="assets/image/map/{{teamNameLower}}_map.png">
         </div>
-
 `;
 
 const JSTeamBox = document.getElementById("JSTeamBox")
@@ -53,9 +52,9 @@ async function generateTeamBox(teamData) {
 
     let tempTeamBox = teamBoxFormatHTML
         .replace("{{position}}", teamData.position)
-        .replaceAll("{{teamName}}", teamData.team_name)
+        .replace("{{teamName}}", teamData.team_name)
+        .replace("{{teamNameLower}}", teamData.team_name.toLowerCase())
         .replace("{{institution}}", teamData.team_full_name)
-        .replaceAll("{{className}}", teamData.class_name)
         .replace("{{logoSrc}}", teamData.logo_src)
         .replace("{{teamlogoopacity}}", 1)
         .replace("{{extraFields}}", extraFields)
