@@ -37,10 +37,11 @@ async function generateTeamBox(teamData) {
     }
 
     let winslosses = await getTeamWinsAndLosses(teamData.team_id);
+    let teamPlace = await getPlace(await getTeamPlace(teamData.team_id));
 
     let extraFields = `
         <table class="team-info-table">
-            <tr><td><b>Location</b></td><td>[LOCATION]</td></tr>
+            <tr><td><b>Location</b></td><td>${teamPlace}</td></tr>
             <tr><td><b>Institution</b></td><td>${teamData.team_full_name}</td></tr>
             <tr><td><b>First Entry</b></td><td>Season X (202X-202X)</td></tr>
             <tr><td><b>Championships</b></td><td>X</td></tr>
@@ -124,6 +125,26 @@ async function getTeamCareerPoints(team_id) {
     `);
 
     return result[0]["SUM(points)"] || 0;
+}
+
+async function getTeamPlace(team_id) {
+    const result = await runSQL(`
+        SELECT place_id
+        FROM team
+        WHERE team_id = ${team_id}
+    `);
+
+    return result[0]?.place_id || null;
+}
+
+async function getPlace(place_id) {
+    const result = await runSQL(`
+        SELECT place_name, country
+        FROM uk_places
+        WHERE place_id = ${place_id}
+    `);
+
+    return `${result[0]?.place_name || "Unknown"}, ${result[0]?.country || "Unknown"}`;
 }
 
 async function getTeamSeasonPoints(team_id, season_id) {
