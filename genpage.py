@@ -67,7 +67,8 @@ TEAM_PAGE = """
                         <a href="pages/faq/">FAQs</a>
                         <a target="_blank" class="nav-bar-link" href="https://discord.gg/DTjbBzgkhr">Discord</a>
                     </div>
-                </div>            </div>
+                </div>            
+            </div>
         </div>
 
         <main>
@@ -80,14 +81,6 @@ TEAM_PAGE = """
             <div id="JSTeamBox" class="teamBoxContainer" data-team="{TEAMNAME}">
                 Loading team data...
             </div>
-
-            <h3 class="p-no-spacing">Socials</h3>
-            <p class="p-no-spacing">
-                <a href="{NEEDSCHANGING}">{NEEDSCHANGING}</a><br>
-                <a href="{NEEDSCHANGING}">{NEEDSCHANGING}</a><br>
-                <a href="{NEEDSCHANGING}">{NEEDSCHANGING}</a><br>
-                <a href="{NEEDSCHANGING}">{NEEDSCHANGING}</a><br>
-            </p>
 
             <h3 class="p-no-spacing">Clips and media</h3>
             <p class="p-no-spacing">
@@ -136,8 +129,8 @@ BLANK_NEWS_PAGE = """
         <meta name="twitter:card" content="summary_large_image" />
     
         <!-- Scripts -->
-                <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-    <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
+        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+        <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
         <script src="scripts/overlayscrollbar.js" defer></script>    
         
         <script type="module" src="scripts/settings.js" defer></script>
@@ -179,10 +172,11 @@ BLANK_NEWS_PAGE = """
         <main>
             <a href="pages/news/">Back</a>
             <h2>{TITLE}</h2>
-            <p class="p-below-title">
+            <div class="p-below-title">
                 {DATE} | 
                 <tag>Intro</tag>
-            </p>
+                <div class="news-credits">Written by {AUTHOR1}, {AUTHOR2}.<br>Edited by {EDITOR}</div>
+            </div>
             <hr class="hr-below-title">
 
             <p>{DESC}</p>
@@ -202,6 +196,15 @@ BLANK_NEWS_PAGE = """
 """
 
 def main():
+    """
+    Main function to prompt the user for page creation options and execute the corresponding action.
+
+    Prompts:
+        - Asks the user to select the type of page to create.
+        - Options:
+            1. Create a university team page.
+            2. Create a blog page.
+    """
     print("What page would you like to create?")
     print("1 | Uni team page")
     print("2 | Blog page")
@@ -210,21 +213,33 @@ def main():
         case 1:
             create_team_page()
         case 2:
-            create_blog()
+            create_new_blog()
         case _:
             print("Invalid selection")
             
 def create_team_page():
+    """
+    Generates a university team page by creating a directory and an HTML file 
+    for the specified team.
+
+    Prompts the user to input a team name, converts it to a lowercase, 
+    hyphen-separated format for the directory name, and creates the directory 
+    if it does not already exist. An HTML file is then created or appended 
+    within the directory, with its content based on a predefined template.
+
+    The template should include a placeholder "{TEAMNAME}" that will be 
+    replaced with the provided team name.
+
+    Raises:
+        OSError: If there is an issue creating the directory or writing to the file.
+    """
     print("ーーーーーーーーーー")
     print("Generating uni team page")
-    team_name = input("Enter team name > ")
+    team_name = input("Enter team name (make sure capitalisation is correct) > ")
     team_name_file_path = team_name.lower().replace(" ", "-")
     os.makedirs(f"pages/teams/{team_name_file_path}", exist_ok=True)
     with open(f"pages/teams/{team_name_file_path}/index.html", "a+", encoding="utf8") as f:
         f.write(TEAM_PAGE.replace("{TEAMNAME}", team_name))
-
-def create_blog():
-    create_new_blog()
 
 def create_slug(title):
     """Generate a URL-friendly slug from the title"""
@@ -234,10 +249,33 @@ def create_slug(title):
     return slug.strip('-')
 
 def create_new_blog():
+    """
+    Creates a new blog entry and updates the website's news and home pages.
+    This function prompts the user for blog details such as title, description, 
+    image link, and date. It generates a new blog entry, updates the news 
+    container on both the news page and the home page, and creates a dedicated 
+    page for the new blog entry.
+
+    Raises:
+        FileNotFoundError: If the required HTML files (`index.html` or `pages/news/index.html`) 
+                           are not found.
+        Exception: If there are issues with parsing or modifying the HTML files.
+    
+    Inputs:
+        - Blog title (str): The title of the blog.
+        - Blog description (str): A short description of the blog.
+        - Blog image link (str): A URL to the blog's image.
+        - Blog date (str): The date of the blog in `dd/mm/yyyy` format.
+    
+    Outputs:
+        - Updates the `pages/news/index.html` file with the new blog entry.
+        - Updates the `index.html` file (home page) with the new blog entry.
+        - Creates a new HTML file for the blog entry in the appropriate directory.
+    """
     title = input("Enter blog title > ")
     desc = input("Enter blog description > ")
     image = input("Enter blog image link > ")
-    date = input("Enter blog date (dd/mm/yyyy) > ")
+    date = input("Enter blog date (DD/MM/YYYY) > ")
 
     link = create_slug(title)
     url_date = "-".join(reversed(date.split("/")))
