@@ -1,5 +1,8 @@
-// Setup
-// import { fillNavbar } from './navbar.js';
+/*
+    This script manages the settings panel for the website. It creates a settings 
+    menu that allows users to change the theme, locale, and various other settings.
+    It saves the settings in local storage and applies them to the page. 
+*/
 
 const settingsBoxHTML = `
 <div class="hidden BGBlur" id="BGBlur"></div>

@@ -1,3 +1,9 @@
+/*
+    This script is responsible for displaying a clickable calendar with upcoming matches on the 
+    matches page. It fetches match data from a JSON file and displays it in a calendar format.
+    The calendar allows users to click on a date to view the matches scheduled for that day.
+*/
+
 const weekdayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const weekdayNamesFull = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const DEFAULTSTARTDAY = 1;

@@ -1,3 +1,8 @@
+/*
+    This script is for a tools page where you pick your favorite Mario Kart track using pairwise 
+    comparison.
+*/
+
 const tracks = [
     // Super Mario Kart
     "SNES Mario Circuit 1", "SNES Donut Plains 1", "SNES Ghost Valley 1", "SNES Bowser Castle 1", "SNES Mario Circuit 2",

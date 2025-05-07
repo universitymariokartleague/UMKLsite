@@ -1,5 +1,13 @@
-// This code was written by my very long ago and probably needs updating
-// - zy
+/* 
+    A javascript audio player that can play a playlist of audio files, with a custom UI 
+    playlist, and download functionality. It supports live radio streams, scrubbing, 
+    and keyboard controls. The player can be embedded in a webpage and is responsive 
+    to screen size changes.
+
+    This code was written a long time ago and probably needs updating -_-
+    but this shouldn't be in prod anyways...?! 
+    - zy
+*/
 
 // setup elements
 const playIcon = document.getElementById("playIcon");

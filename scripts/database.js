@@ -1,3 +1,8 @@
+/*
+    DB functions for Javascript, other scripts import this file to use the functions.
+    This script is responsible for loading the database and executing SQL commands.
+*/
+
 export { isDBLoaded, runSQL };
 
 const initSqlJs = window.initSqlJs;

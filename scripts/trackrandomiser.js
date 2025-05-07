@@ -1,3 +1,9 @@
+/*
+    This script is for a tools page where you tracks can be randomised, 
+    with the option to disable repicks. It also has the option to show PAL names
+    for tracks that have different names in PAL regions.
+*/
+
 const tracks = {
     SNES: [
         "Mario Circuit 1",

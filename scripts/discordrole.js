@@ -1,3 +1,12 @@
+/*
+    This script is used for the Discord role colour preview iframe embeds.
+    It allows users to select a color using a color picker, and the 
+    selected color is sent to the iframe, allowing them to preview what
+    a potential team colour would look like in Discord in all themes.
+    
+    The script also includes an "attract mode" feature that cycles through a set of colors
+*/
+
 const colorsToCycle = [
     "#FF6262", "#FFAE7F", "#FFF588", "#67FF8A", "#65B5FF", "#CF82FF", "#FF9AD0"
 ];

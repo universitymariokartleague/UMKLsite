@@ -1,3 +1,9 @@
+/*
+    This script is currently unused.
+    It is intended to fill the navbar with links to the pages on the website, with the
+    potential for user customization in the future.
+*/
+
 export { fillNavbar }
 
 function fillNavbar() {

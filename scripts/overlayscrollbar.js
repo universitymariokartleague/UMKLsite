@@ -1,3 +1,8 @@
+/*
+    This script initializes the OverlayScrollbars library for custom scrollbars on all pages.
+    It also listens for a custom event to change the scrollbar theme based on user preference.
+*/
+
 const { OverlayScrollbars } = OverlayScrollbarsGlobal;
 
 const osInstance = OverlayScrollbars({

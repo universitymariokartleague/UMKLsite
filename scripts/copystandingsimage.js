@@ -1,3 +1,13 @@
+/*
+    This script handles the sharing of images using the Web Share API or the Clipboard API.
+    Since the web share API is doesn't work well on Windows/Linux, they get a nice little
+    preview of the image before it's copied to the clipboard instead. It works as expected 
+    on mobile devices and MacOS.
+
+    The preview is a small popup that shows the image and a message indicating 
+    that it has been copied.
+*/
+
 const shareButton = document.getElementById("shareButton");
 const currentSeason = document.getElementById("season-select");
 const originalMessage = shareButton.innerHTML;
@@ -214,7 +224,6 @@ currentSeason.addEventListener("change", () => {
     cleanupPreview();
 });
 
-// Clean up when the page is unloaded
 window.addEventListener('beforeunload', () => {
     cleanupPreview();
 });

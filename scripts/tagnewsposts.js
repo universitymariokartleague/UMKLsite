@@ -1,3 +1,8 @@
+/*
+    This script makes <tag> elements clickable, sending you to the news 
+    page with the tag as a query parameter (to be used as a filter).
+*/
+
 window.addEventListener('load', function() {
     document.querySelectorAll('.news-date').forEach((element, index) => {
         // Wrap each <tag> inside .news-date with a hyperlink

@@ -1,3 +1,10 @@
+/*
+    This script generates the team info page for each team's individual page.
+    It is similar to teamboxgenerate.js, but it focuses on displaying detailed information
+    about a specific team, including their logo, location, institution,
+    championships, wins-losses, and lifetime points. HTML elements are created dynamically.
+*/
+
 import { isDBLoaded, runSQL } from './database.js';
 
 const teamBoxFormatHTML = `

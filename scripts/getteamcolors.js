@@ -1,3 +1,8 @@
+/*
+    A script that gets the team colors from the database and displays them on the page,
+    this is used on the team creation guidelines page to show the current team colors.
+*/
+
 import { isDBLoaded, runSQL } from './database.js';
 
 const currentTeamColors = document.getElementById("currentTeamColors");

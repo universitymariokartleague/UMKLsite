@@ -1,8 +1,12 @@
+/* 
+    This script calculates the points difference in 6v6. It dynamically updates
+    the results for both teams and the points difference as the user inputs data. 
+*/
+
 const positionsInput = document.getElementById("positions-input");
 const teamResult = document.getElementById("team-result");
 const opponentResult = document.getElementById("opponent-result");
 const pointsDifference = document.getElementById("points-diff");
-
 
 const scoreMap = [15, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 
