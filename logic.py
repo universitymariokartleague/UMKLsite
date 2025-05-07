@@ -1,7 +1,6 @@
-import sqlite3
-import discord
-import re
+import re, sqlite3
 from multipledispatch import dispatch
+import discord
 
 connection = sqlite3.connect('database/umkl_db.db')
 cursor = connection.cursor()

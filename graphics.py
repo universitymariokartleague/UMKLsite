@@ -1,8 +1,10 @@
-from PIL import Image, ImageDraw, ImageFont
-import io, requests, discord
+# Please use .runbeforecommit.py
+
 import logic
-import discord.ext.commands
+import io, requests
 from datetime import datetime
+from PIL import Image, ImageDraw, ImageFont
+import discord, discord.ext.commands
 
 # File paths
 DEFAULT_ICON_PATH = "assets/image/teamemblems/DEFAULT.png"
@@ -589,18 +591,16 @@ def process_bytes_image(image_path):
     except Exception as e:
         raise ValueError(f"Failed to process image: {e}")
 
-async def main():
-    max_season = logic.get_current_season()
-    for i in range(1, max_season + 1):
-        create_team_standings_image(season_id=i)
+# async def main():
+    # max_season = logic.get_current_season()
+    # for i in range(1, max_season + 1):
+        # create_team_standings_image(season_id=i)
 
     # create_event_versus_image(team_IDs=[1, 2])
     # await create_results_image(None, tournament_id=7)
     # create_winner_image(tournament_id=7)
     # create_welcome_image(None)
 
-if __name__ == "__main__":
-    import asyncio
-    asyncio.run(main())
-
-# Run this file to generate updated team standings
+# if __name__ == "__main__":
+#     import asyncio
+#     asyncio.run(main())

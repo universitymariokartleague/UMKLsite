@@ -1,0 +1,9 @@
+discord
+python-dotenv
+pillow
+audioop-lts
+requests
+discord-ext-modal-paginator
+multipledispatch
+gitpython
+bs4
