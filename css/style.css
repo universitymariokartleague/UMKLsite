@@ -823,7 +823,6 @@ blockquote {
     border-radius: 10px;
     border: 1px solid #ccccccaa;
     background-color: #cccccc99;
-
 }
 
 .team-info .map img {
@@ -843,8 +842,6 @@ blockquote {
         flex-direction: column;
     }
 }
-
-
 
 @media screen and (max-width: 767px) {
     .team-box h3 {
