@@ -25,8 +25,8 @@
         <meta name="twitter:card" content="summary_large_image">
 
         <!-- Scripts -->
-                <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-    <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
+        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+        <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
         <script src="scripts/overlayscrollbar.js" defer></script>
         
         <script type="module" src="scripts/settings.js" defer></script>
@@ -63,11 +63,12 @@
                         <a href="pages/faq/">FAQs</a>
                         <a target="_blank" class="nav-bar-link" href="https://discord.gg/DTjbBzgkhr">Discord</a>
                     </div>
-                </div>            </div>
+                </div>            
+            </div>
         </div>
 
         <main>
-            <h2>6v6 Score Calculator</h2>
+            <h1>6v6 Score Calculator</h1>
             <p class="p-below-title">Quickly calculate point scores in a 6v6.</p>
             <hr class="hr-below-title">
 

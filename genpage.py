@@ -72,7 +72,8 @@ TEAM_PAGE = """
         </div>
 
         <main>
-            <h2>{TEAMNAME}</h2>
+            <a href="pages/teams/">Back</a>
+            <h1>{TEAMNAME}</h1>
             <p class="p-below-title">
                 Team information about {TEAMNAME}.   
             </p>
@@ -171,7 +172,7 @@ BLANK_NEWS_PAGE = """
 
         <main>
             <a href="pages/news/">Back</a>
-            <h2>{TITLE}</h2>
+            <h1>{TITLE}</h1>
             <div class="p-below-title">
                 {DATE} | 
                 <tag>Intro</tag>
