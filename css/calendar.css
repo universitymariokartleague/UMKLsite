@@ -42,6 +42,7 @@
 .calendar-body {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
 }
 
 .day-header {
@@ -64,14 +65,13 @@
     aspect-ratio: 3/2;
     display: flex;
     flex-direction: column;
-    padding: 10px;
     border: 1px solid #ccccccaa;
     background-color: #cccccc1f;
-    margin: 2px;
     border-radius: 5px;
     font-weight: bold;
     user-select: none;
-    transition: background-color 0.2s, color 0.2s; /* Add color to the transition */
+    padding: 10px;
+    transition: background-color 0.2s, color 0.2s;
 }
 
 .day:hover {
@@ -111,8 +111,7 @@
     .calendar {
         flex: 0 0 100%;
         height: fit-content;
-        padding: 10px;
-        padding-bottom: 15px;
+        padding: 15px;
     }
 
     .month-arrow {
@@ -124,8 +123,6 @@
     }
 
     .calendar-body {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
         gap: clamp(1px, 1vw, 5px);
     }
 
