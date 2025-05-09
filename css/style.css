@@ -1,9 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-:root {
-    --default-font-size: 16px;
-}
-
 :root,
 :root.light-theme {
     --text-color: #111111;
@@ -120,7 +116,7 @@ main {
     max-width: calc(800px - env(safe-area-inset-left));
     margin-top: 65px;
     margin-bottom: 20px;
-    font-size: var(--default-font-size);
+    font-size: 16px;
 }
 
 h1,
