@@ -21,6 +21,8 @@ let settingsOpen = false;
 
 const weekdayNamesFull = ["Sunday", "Monday"];
 
+let easterEgg = null;
+
 const toggleSettingsPanel = () => {
     BGBlur.classList.toggle("hidden");
     settingsBox.classList.toggle('hide-settings-box');
@@ -124,18 +126,81 @@ function generateEventListeners() {
     document.getElementById('clearLocalStorage').addEventListener('click', clearLocalStorage);
 }
 
+function checkEasterEggs() {
+    function checkDate(month, day) {
+        return currentDate.getMonth() === month && currentDate.getDate() === day;
+    }
+
+    let currentDate = new Date();
+    // currentDate = new Date(currentDate.getFullYear(), 9, 31);
+
+    if (checkDate(3, 1)) {
+        easterEgg = "aprilfools";
+    } else if (checkDate(9, 31)) {
+        easterEgg = "halloween";
+    } else if (checkDate(11, 24)) {
+        easterEgg = "xmaseve";
+    } else if (checkDate(11, 25)) {
+        easterEgg = "xmas";
+    } else if (checkDate(11, 31)) {
+        easterEgg = "newyearseve";
+    } else if (checkDate(0, 1)) {
+        easterEgg = "newyear";
+    }
+
+    switch (easterEgg) {
+        case "aprilfools":
+            console.log("Happy April Fools' Day!");
+            break;
+        case "halloween":
+            console.log("Happy Halloween!");
+
+            meta.content = "dark";
+            root.classList.toggle("dark-theme", true);
+            root.classList.toggle("light-theme", false);
+        
+            root.style.setProperty('--accent-color', '#ff640a');
+            root.style.setProperty('--link-color', '#ff640a');
+            root.style.setProperty('--link-hover-color', '#ffcaab');
+            root.style.setProperty('--highlight-color', '#ff640ad0');
+
+            document.querySelectorAll('img').forEach(img => {
+                img.style.filter = 'hue-rotate(30deg)';
+                img.style.boxShadow = '0 0 100px 10px rgba(255, 255, 255, 0.25)';
+            });
+
+            break;
+        case "xmaseve":
+            console.log("Merry Christmas Eve!");
+            break;
+        case "xmas":
+            console.log("Merry Christmas!");
+            break;
+        case "newyearseve":
+            console.log("Happy New Year's Eve!");
+            break;
+        case "newyear":
+            console.log("Happy New Year!");
+            break;
+        default:
+            break;
+    }
+}
+checkEasterEggs();
+
 // Keyboard shortcuts for toggling theme
 let isKeyPressed = false;
-
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'i' && !isKeyPressed) {
-        isKeyPressed = true;
-        toggleTheme();
-    }
-});
-
-document.addEventListener('keyup', (event) => {
-    if (event.key === 'i') {
-        isKeyPressed = false;
-    }
-});
+if (!easterEgg) {
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'i' && !isKeyPressed) {
+            isKeyPressed = true;
+            toggleTheme();
+        }
+    });
+    
+    document.addEventListener('keyup', (event) => {
+        if (event.key === 'i') {
+            isKeyPressed = false;
+        }
+    });
+}
