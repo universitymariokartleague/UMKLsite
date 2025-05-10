@@ -3,7 +3,6 @@
     menu that allows users to change the theme, locale, and various other settings.
     It saves the settings in local storage and applies them to the page. 
 */
-
 const settingsBoxHTML = `
 <div class="hidden BGBlur" id="BGBlur"></div>
 <div class="hidden hide-settings-box" id="settingsBox" data-overlayscrollbars-initialize>
@@ -11,9 +10,7 @@ const settingsBoxHTML = `
         <button id="settings-box-close-button">Close</button>
     </div>
     <div class="settings-title">Settings</div>
-    <div class="setting-options" id="settingsBoxJS">
-
-    </div>
+    <div class="setting-options" id="settingsBoxJS"></div>
 </div>`;
 document.body.insertAdjacentHTML('beforeend', settingsBoxHTML);
 
@@ -22,15 +19,12 @@ const settingsBox = document.getElementById('settingsBox');
 const settingsBoxJS = document.getElementById('settingsBoxJS');
 let settingsOpen = false;
 
-const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const weekdayNamesFull = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const weekdayNamesFull = ["Sunday", "Monday"];
 
 const toggleSettingsPanel = () => {
     BGBlur.classList.toggle("hidden");
     settingsBox.classList.toggle('hide-settings-box');
-    if (settingsOpen) {
-
-    } else {
+    if (!settingsOpen) {
         generateSettingsPanel();
         settingsBox.classList.remove('hidden');
         BGBlur.addEventListener("click", toggleSettingsPanel);
@@ -39,9 +33,7 @@ const toggleSettingsPanel = () => {
 };
 
 document.getElementById('settings-box-close-button').addEventListener('click', toggleSettingsPanel);
-document.querySelectorAll('.settingsBoxOpener').forEach(opener => {
-    opener.addEventListener('click', toggleSettingsPanel);
-});
+document.querySelectorAll('.settingsBoxOpener').forEach(opener => opener.addEventListener('click', toggleSettingsPanel));
 
 const meta = document.querySelector('meta[name="color-scheme"]');
 const root = document.querySelector(":root");
@@ -79,18 +71,11 @@ function generateSettingsPanel() {
 generateSettingsPanel();
 
 function toggleTheme() {
-    darkThemeEnabled = darkThemeEnabled ? 0 : 1;
+    darkThemeEnabled = !darkThemeEnabled;
     meta.content = darkThemeEnabled ? "dark" : "light";
-
-    if (darkThemeEnabled) {
-        console.debug(`%csettings.js %c> %cSetting and saving dark theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
-        root.classList.add("dark-theme");
-        root.classList.remove("light-theme");
-    } else {
-        console.debug(`%csettings.js %c> %cSetting and saving light theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
-        root.classList.add("light-theme");
-        root.classList.remove("dark-theme");
-    }
+    root.classList.toggle("dark-theme", darkThemeEnabled);
+    root.classList.toggle("light-theme", !darkThemeEnabled);
+    console.debug(`%csettings.js %c> %cSetting and saving ${meta.content} theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
     localStorage.setItem("darktheme", darkThemeEnabled ? 1 : 0);
     sendThemeChangeEvent();
     generateSettingsPanel();
@@ -117,8 +102,8 @@ function toggleMonthType() {
 }
 
 function toggleLocale() {    
-    const currentLocale = localStorage.getItem("locale") || "en-GB";
     const locales = ["en-GB", "en-US"];
+    const currentLocale = localStorage.getItem("locale") || "en-GB";
     const newLocale = locales[(locales.indexOf(currentLocale) + 1) % locales.length];
     localStorage.setItem("locale", newLocale);
     console.debug(`%csettings.js %c> %cset locale to ${newLocale}`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
@@ -139,33 +124,18 @@ function generateEventListeners() {
     document.getElementById('clearLocalStorage').addEventListener('click', clearLocalStorage);
 }
 
-function checkThemeAfterLoaded() {
-    let themePreference = parseInt(localStorage.getItem("darktheme"));
-    if (isNaN(themePreference)) {
-        const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-        themePreference = prefersDark ? 1 : 0;
-    }
-    darkThemeEnabled = themePreference;
-    sendThemeChangeEvent();
-}
-checkThemeAfterLoaded();
-
-// window.addEventListener('load', function() {
-//     fillNavbar();
-// });
-
-// keyboard shortcuts
-let keyPressed = false;
+// Keyboard shortcuts for toggling theme
+let isKeyPressed = false;
 
 document.addEventListener('keydown', (event) => {
-    if (event.key === 'i' && !keyPressed) {
-        keyPressed = true;
+    if (event.key === 'i' && !isKeyPressed) {
+        isKeyPressed = true;
         toggleTheme();
     }
 });
 
 document.addEventListener('keyup', (event) => {
     if (event.key === 'i') {
-        keyPressed = false;
+        isKeyPressed = false;
     }
 });
