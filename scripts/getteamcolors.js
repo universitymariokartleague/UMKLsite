@@ -22,12 +22,13 @@ async function waitForDBToInit() {
 
 async function loadTeamColors() {
     console.debug(`%cgetteamcolors.js %c> %cGetting team colors...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
-    const teamColors = await runSQL("SELECT team_color FROM team");
+    const teamColors = await runSQL("SELECT team_name, team_color FROM team");
 
-    teamColors.forEach(({ team_color: color }) => {
+    teamColors.forEach(({ team_name: name, team_color: color }) => {
         const colorDiv = document.createElement("div");
         colorDiv.className = "color-box";
         colorDiv.style.backgroundColor = color;
+        colorDiv.title = name;
         currentTeamColors.appendChild(colorDiv);
     });
 
