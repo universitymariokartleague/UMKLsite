@@ -2,232 +2,90 @@
 <html lang="en" data-overlayscrollbars-initialize>
     <head>
         <base href="../../">
-
+    
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <title>Map | University Mario Kart League</title>
-        <meta name="description" content="The map page for the University Mario Kart League (UMKL)">
+        <meta name="description" content="The map page for the University Mario Kart League (UMKL) site">
         <link rel="shortcut icon" href="assets/image/brand/favicon.png" type="image/png">
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/settings.css">
-        <link rel="stylesheet" href="css/overlayscrollbars.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-        <meta name="color-scheme" content="dark light">
-
-        <meta property="og:title" content="University Mario Kart League | Map" />
+        <link rel="stylesheet" href="css/ukmap.css">
+    
+        <meta property="og:title" content="University Mario Kart League | Teams" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://umkl.co.uk/pages/map/" />
-        <meta property="og:image" content="https://umkl.co.uk/assets/image/brand/UMKL_Banner_embed.png" />
-        <meta property="og:description" content="The map for University Mario Kart League (UMKL)" />
+        <meta property="og:image" content="https://umkl.co.uk/assets/image/brand/Cheep_Cheep_banner.png" />
+        <meta property="og:description" content="The map page on the University Mario Kart League (UMKL) site" />
         <meta name="theme-color" content="#bc0839">
-
+    
         <!-- Include this to make the og:image larger -->
         <meta name="twitter:card" content="summary_large_image">
+    </head>
 
-        <!-- Scripts -->
-        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-        <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
-        <script src="scripts/overlayscrollbar.js" defer></script>
-        
-        <script type="module" src="scripts/settings.js" defer></script>
-    <style>
-        #map-container {
-            position: absolute;
-            width: 90%;
-            max-width: 800px;
-            height: 90%;
-            overflow: hidden;
-            border: 1px solid #BC0839;
-        }
-        
-        #uk-map {
-            fill: transparent;
-        }
-        
-        .controls {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            z-index: 100;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #BC0839;
-        }
-        
-        button {
-            background: #BC0839;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            margin: 0 5px;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        
-        button:hover {
-            background: #9a062f;
-        }
-        
-        .zoom-level {
-            color: white;
-            text-align: center;
-            margin: 5px 0;
-        }
-    </style>
-</head>
-<body id="top" data-overlayscrollbars-initialize>
-    <div class="navbar-container">
-        <div class="nav-bar">
-            <a href="index.html" class="nav-bar-title no-color-link no-underline-link-footer">
-                <img src="assets/image/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
-                <h2>UMKL</h2>
-            </a>
-            <nav class="nav-flex">
-                <ul id="nav-bar">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="pages/news/">News</a></li>
-                    <li><a href="pages/teams/">Teams</a></li>
-                    <li><a href="pages/matches/">Matches</a></li>
-                    <li><a href="pages/rules/">Rules</a></li>
-                    <li><a href="pages/faq/">FAQs</a></li>
-                    <li><a target="_blank" class="nav-bar-link" href="https://discord.gg/DTjbBzgkhr">Discord</a></li>
-                </ul>
-            </nav>
-            <!-- Dropdown navigation (shown on mobile) -->
-            <div class="nav-dropdown">
-                <div class="nav-dropdown-button">☰</div>
-                <div class="nav-dropdown-content" id="nav-dropdown-bar">
-                    <a href="index.html">Home</a>
-                    <a href="pages/news/">News</a>
-                    <a href="pages/teams/">Teams</a>
-                    <a href="pages/matches/">Matches</a>
-                    <a href="pages/rules/">Rules</a>
-                    <a href="pages/faq/">FAQs</a>
-                    <a target="_blank" class="nav-bar-link" href="https://discord.gg/DTjbBzgkhr">Discord</a>
-                </div>
-            </div>
+    <body id="top" data-overlayscrollbars-initialize>
+        <style>
+            body {
+                background-color: transparent;
+            }
+
+            .YORKLOCATION {
+                top: 58.5%; 
+                left: 77%;
+                background-color: #1BAA8B;
+                box-shadow: 0 0 10px #1BAA8B;
+            }
+
+            .STAFFSLOCATION {
+                top: 67%; 
+                left: 69%;
+                background-color: #A11212;
+                box-shadow: 0 0 10px #A11212;
+            }
+
+            .EDINBURGHLOCATION {
+                top: 40%; 
+                left: 66%;
+                background-color: #287AC8;
+                box-shadow: 0 0 10px #287AC8;
+            }
+
+            .KEELELOCATION {
+                top: 66.5%; 
+                left: 68%;
+                background-color: #61B6CB;
+                box-shadow: 0 0 10px #61B6CB;
+            }
+
+            .BIRMINGHAMSLOCATION {
+                top: 73%; 
+                left: 71%;
+                background-color: #C1D82F;
+                box-shadow: 0 0 10px #C1D82F;
+            }
+
+            .BRISTOLBOB-OMBSLOCATION {
+                top: 78%; 
+                left: 61%;
+                background-color: #000000;
+                box-shadow: 0 0 10px #000000;
+            }
+
+            .GLASGOWLOCATION {
+                top: 40.5%; 
+                left: 59.5%;
+                background-color: #140A59;
+                box-shadow: 0 0 10px #140A59;
+            }
+        </style>
+
+        <div class="map-container">
+            <div class="pulsing-dot YORKLOCATION"></div>
+            <div class="pulsing-dot STAFFSLOCATION"></div>
+            <div class="pulsing-dot EDINBURGHLOCATION"></div>
+            <div class="pulsing-dot KEELELOCATION"></div>
+            <div class="pulsing-dot BIRMINGHAMSLOCATION"></div>
+            <div class="pulsing-dot BRISTOLBOB-OMBSLOCATION"></div>
+            <div class="pulsing-dot GLASGOWLOCATION"></div>
+            <img class="UKmap" src="assets/image/map/UKNoBG.svg" alt="A transparent map of the UK with a red outline">
         </div>
-    </div>
-
-    <main>
-        <div id="map-container">
-            <img id="uk-map" src="../../assets/image/map/UKNoBG.svg" width="800" height="1000" style="user-select: none; pointer-events: none;">
-        </div>
-    </main>
-
-    <footer>
-        © UMKL 2025 |
-        <a class="no-color-link" href="pages/credits/">Credits</a> |
-        <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |
-        <a href="https://www.youtube.com/@universitymariokartleague" title="UMKL YouTube Channel" class="no-color-link no-underline-link-footer fa-brands fa-youtube"></a>
-        <a href="https://www.instagram.com/universitymariokartleague" title="UMKL Instagram Account" class="no-color-link no-underline-link-footer fa-brands fa-instagram"></a>
-        <a href="https://www.facebook.com/profile.php?id=61575273336011" title="UMKL Facebook Page" class="no-color-link no-underline-link-footer fa-brands fa-facebook"></a>            
-        <a href="https://discord.gg/DTjbBzgkhr" title="UMKL Discord Server" class="no-color-link no-underline-link-footer fa-brands fa-discord"></a>            
-    </footer>
-
-    <script>
-        const map = document.getElementById('uk-map');
-        const mapContainer = document.getElementById('map-container');
-        const zoomInBtn = document.getElementById('zoom-in');
-        const zoomOutBtn = document.getElementById('zoom-out');
-        const resetBtn = document.getElementById('reset');
-        const zoomValue = document.getElementById('zoom-value');
-        
-        let scale = 0.8;
-        let posX = 0;
-        let posY = -50;
-        let isDragging = false;
-        let startX, startY;
-        
-        // Update the map transformation
-        function updateTransform() {
-            map.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
-        }
-        
-        // Zoom functions
-        function zoom(zoomFactor, clientX, clientY) {
-            const rect = mapContainer.getBoundingClientRect();
-            const containerCenterX = rect.width / 2;
-            const containerCenterY = rect.height / 2;
-            
-            // Calculate mouse position relative to container center
-            const mouseX = clientX - rect.left - containerCenterX;
-            const mouseY = clientY - rect.top - containerCenterY;
-            
-            // Calculate the current mouse position in map coordinates
-            const mapX = (mouseX - posX) / scale;
-            const mapY = (mouseY - posY) / scale;
-            
-            // Apply zoom
-            const newScale = Math.max(0.1, Math.min(5, scale * zoomFactor));
-            const scaleChange = newScale / scale;
-            scale = newScale;
-            
-            // Adjust position to zoom toward mouse
-            posX = mouseX - mapX * scale;
-            posY = mouseY - mapY * scale;
-            
-            updateTransform();
-        }
-        
-        // Mouse wheel for zoom
-        mapContainer.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            const zoomFactor = e.deltaY > 0 ? 1/1.1 : 1.1;
-            zoom(zoomFactor, e.clientX, e.clientY);
-        });
-        
-        // Mouse drag for panning
-        mapContainer.addEventListener('mousedown', (e) => {
-            if (e.button === 0) { // Left mouse button
-                isDragging = true;
-                startX = e.clientX - posX;
-                startY = e.clientY - posY;
-                mapContainer.style.cursor = 'grabbing';
-            }
-        });
-        
-        document.addEventListener('mousemove', (e) => {
-            if (isDragging) {
-                posX = e.clientX - startX;
-                posY = e.clientY - startY;
-                updateTransform();
-            }
-        });
-        
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-            mapContainer.style.cursor = 'grab';
-        });
-        
-        // Touch events for mobile
-        let touchStartX, touchStartY, touchStartPosX, touchStartPosY;
-        
-        mapContainer.addEventListener('touchstart', (e) => {
-            if (e.touches.length === 1) {
-                const touch = e.touches[0];
-                touchStartX = touch.clientX;
-                touchStartY = touch.clientY;
-                touchStartPosX = posX;
-                touchStartPosY = posY;
-                e.preventDefault();
-            }
-        });
-        
-        mapContainer.addEventListener('touchmove', (e) => {
-            if (e.touches.length === 1) {
-                const touch = e.touches[0];
-                posX = touchStartPosX + (touch.clientX - touchStartX);
-                posY = touchStartPosY + (touch.clientY - touchStartY);
-                updateTransform();
-                e.preventDefault();
-            }
-        });
-        
-        // Initialize
-        updateTransform();
-        mapContainer.style.cursor = 'grab';
-    </script>
-</body>
+    </body>
 </html>
