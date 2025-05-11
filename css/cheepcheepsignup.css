@@ -1,0 +1,171 @@
+@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display");
+
+body {
+    background-color: #0d0c0f;
+    color: #dcddde;
+    font-family: "Red Hat Display", 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding-right: 10px;
+    min-width: 500px;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    animation: fade-in 0.2s ease-in-out;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.message {
+    display: flex;
+    padding: 15px;
+}
+
+/* Discord Theme Colors */
+.theme-light {
+    background-color: #fcfcfc;
+    color: #2e3338;
+}
+.theme-dark {
+    background-color: #333239;
+    color: #dcddde;
+}
+.theme-darker {
+    background-color: #212025;
+    color: #dcddde;
+}
+.theme-darkest {
+    background-color: #0d0c0f;
+    color: #dcddde;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 16px;
+}
+
+.message-content {
+    flex: 1;
+}
+
+.username {
+    font-weight: 500;
+    margin-right: 4px;
+    color: #bb0939; /* Role color (blue in this case) */
+}
+
+.apptag {
+    font-weight: 600;
+    margin-right: 4px;
+    color: #ffffff;
+    font-size: 0.75em;
+    padding: 0px 5px;
+    background-color: #5865f2;
+    border-radius: 5px;
+}
+
+.modal-button {
+    width: fit-content;
+    color: #ffffff;
+    font-size: 0.875em;
+    margin: 5px 0 0 0;
+    padding: 7.5px 15px;
+    background-color: #00863a;
+    border-radius: 8px;
+}
+
+.timestamp {
+    color: #72767d;
+    font-size: 0.75em;
+    font-weight: 400;
+}
+
+.message-text {
+    margin-bottom: 4px;
+    line-height: 1.375;
+}
+
+.embed-container {
+    background-color: #131416;
+    outline: 1px solid #ffffff25;
+    border-radius: 4px;
+    border-left: 4px solid #bb0939;
+    padding: 12px 16px 16px 12px;
+    margin-top: 8px;
+    max-width: 520px;
+}
+
+.embed-author {
+    display: flex;
+    align-items: center;
+    font-size: 0.875em;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.embed-author-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-right: 7px;
+}
+
+.embed-title {
+    font-weight: 600;
+    font-size: 1em;
+    margin-bottom: 8px;
+    color: #ffffff;
+}
+
+.embed-description {
+    font-size: 0.875em;
+    line-height: 1.4;
+    margin-bottom: 8px;
+}
+
+.embed-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.embed-field {
+    font-size: 0.875em;
+}
+
+.embed-field.inline {
+    display: inline-block;
+    width: calc(50% - 4px);
+    vertical-align: top;
+}
+
+.embed-field-name {
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.embed-footer {
+    display: flex;
+    align-items: center;
+    font-size: 0.75em;
+}
+
+.embed-footer-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.embed-timestamp {
+    margin-left: auto;
+}
