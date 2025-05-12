@@ -38,12 +38,13 @@ async function generateTeamBox(teamData) {
 
     let winslosses = await getTeamWinsAndLosses(teamData.team_id);
     let teamPlace = await getPlace(await getTeamPlace(teamData.team_id));
+    let firstEntry = await getFirstEntry(teamData.team_id)
 
     let extraFields = `
         <table class="team-info-table">
             <tr><td><b>Location</b></td><td>${teamPlace}</td></tr>
             <tr><td><b>Institution</b></td><td>${teamData.team_full_name}</td></tr>
-            <tr><td><b>First Entry</b></td><td>Season X (202X-202X)</td></tr>
+            <tr><td><b>First Entry</b></td><td>Season ${firstEntry} (${2023 + firstEntry}-${2024 + firstEntry})</td></tr>
             <tr><td><b>Championships</b></td><td>X</td></tr>
             <tr><td><b>Wins-Losses</b></td><td>${winslosses[0]}-${winslosses[1]}</td></tr>
             <tr><td><b>Lifetime Points</b></td><td>${await getTeamCareerPoints(teamData.team_id)}</td></tr>
@@ -113,6 +114,14 @@ async function getCurrentSeason() {
     )
 
     return result[0]["MAX(season_id)"];
+}
+
+async function getFirstEntry(team_id) {
+    const result = await runSQL(`SELECT MIN(season_id)
+        FROM season_entry 
+        WHERE team_id = ${team_id}`);
+
+        return result[0]["MIN(season_id)"] || 0;
 }
 
 async function getTeamCareerPoints(team_id) {
