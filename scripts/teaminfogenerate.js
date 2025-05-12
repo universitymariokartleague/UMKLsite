@@ -45,7 +45,7 @@ async function generateTeamBox(teamData) {
             <tr><td><b>Location</b></td><td>${teamPlace}</td></tr>
             <tr><td><b>Institution</b></td><td>${teamData.team_full_name}</td></tr>
             <tr><td><b>First Entry</b></td><td>Season ${firstEntry} (${2023 + firstEntry}-${2024 + firstEntry})</td></tr>
-            <tr><td><b>Championships</b></td><td>X</td></tr>
+            <tr><td><b>Championships</b></td><td>${await getTeamChampionships(teamData.team_id)}</td></tr>
             <tr><td><b>Wins-Losses</b></td><td>${winslosses[0]}-${winslosses[1]}</td></tr>
             <tr><td><b>Lifetime Points</b></td><td>${await getTeamCareerPoints(teamData.team_id)}</td></tr>
         </table>
@@ -209,6 +209,18 @@ async function getSeasonTeamStandings(season_id) {
     });
 
     return standings;
+}
+
+async function getTeamChampionships(team_id) {
+    let championships = 0;
+    const currentSeason = await getCurrentSeason();
+    for (let i = 0; i < currentSeason; i++) {
+        const standings = await getSeasonTeamStandings(i);
+        if (standings.length > 0 && standings[0].team_id === team_id) {
+            championships++;
+        }
+    }
+    return championships;
 }
 
 async function getTeamMatchesPlayed(team_id, season_id) {
