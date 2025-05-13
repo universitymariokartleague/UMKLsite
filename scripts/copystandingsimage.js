@@ -66,28 +66,37 @@ function isWindowsOrLinux() {
     return navigator.userAgent.includes('Windows') || navigator.userAgent.includes('Linux');
 }
 
+function handleDocumentClick(event) {
+    if (isPopupShowing && currentPreview && !currentPreview.contains(event.target) && event.target !== shareButton) {
+        if (currentPreview.parentNode) {
+            currentPreview.style.transform = 'scale(0.95) translateY(-10px)';
+            currentPreview.style.opacity = '0';
+            setTimeout(() => {
+                cleanupPreview();
+            }, 150);
+        } else {
+            cleanupPreview();
+        }
+    }
+}
+
 function cleanupPreview() {
     if (previewTimeout) {
         clearTimeout(previewTimeout);
         previewTimeout = null;
     }
-    
+
     if (currentPreview) {
-        try {
-            if (document.body.contains(currentPreview)) {
-                currentPreview.remove();
-            }
-            const img = currentPreview.querySelector('img');
-            if (img && img.src.startsWith('blob:')) {
-                URL.revokeObjectURL(img.src);
-            }
-        } catch (error) {
-            console.debug(`%ccopystandingsimage.js %c> %cError cleaning up preview: ${error}`, "color:#525eff", "color:#fff", "color:#969dff");
-        } finally {
-            currentPreview = null;
-            isPopupShowing = false;
-            shareButton.innerHTML = originalMessage;
+        if (currentPreview.parentNode) {
+            currentPreview.remove();
         }
+        const img = currentPreview.querySelector('img');
+        if (img?.src.startsWith('blob:')) {
+            URL.revokeObjectURL(img.src);
+        }
+        currentPreview = null;
+        isPopupShowing = false;
+        shareButton.innerHTML = originalMessage;
     }
 }
 
@@ -124,8 +133,9 @@ function showImagePreview(blob) {
     preview.appendChild(arrowBorder);
     preview.appendChild(img);
     preview.appendChild(message);
+    document.addEventListener('click', handleDocumentClick);
     document.body.appendChild(preview);
-    
+
     currentPreview = preview;
     isPopupShowing = true;
     
@@ -140,7 +150,6 @@ function showImagePreview(blob) {
         if (preview.parentNode) {
             preview.style.transform = 'scale(0.95) translateY(-10px)';
             preview.style.opacity = '0';
-            
             setTimeout(() => {
                 cleanupPreview();
             }, 150);
