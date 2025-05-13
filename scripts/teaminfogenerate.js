@@ -91,8 +91,6 @@ async function getTeamData() {
     let currentTeam = JSTeamBox.dataset.team
     let allTeamData = await getSeasonTeamStandings(currentSeason);
     let teamData = allTeamData.find(team => team.team_name === currentTeam);
-    // console.log(allTeamData)
-    // let teamData = (await runSQL(`SELECT * FROM team WHERE team_name = '${currentTeam}'`))[0];
 
     await generateTeamBox(teamData);
     console.debug(`%cteaminfogeenrate.js %c> %cGenerated team info box`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
@@ -257,7 +255,6 @@ async function getTeamWinsAndLosses(team_id) {
 
     for (const tournament of tournaments) {
         const results = await getTournamentTeamResults(tournament["tournament_id"], 1);
-        console.log(results)
         if (results.length > 0) {
             if (results[0]["team_id"] === team_id) {
                 wins++;
