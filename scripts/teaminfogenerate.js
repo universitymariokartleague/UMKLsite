@@ -206,7 +206,7 @@ async function getSeasonTeamStandings(season_id) {
 async function getTeamChampionships(team_id) {
     let championships = 0;
     const currentSeason = await getCurrentSeason();
-    for (let i = 0; i < currentSeason; i++) {
+    for (let i = 1; i < currentSeason; i++) {
         const standings = await getSeasonTeamStandings(i);
         if (standings.length > 0 && standings[0].team_id === team_id) {
             championships++;
