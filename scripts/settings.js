@@ -3,6 +3,8 @@
     menu that allows users to change the theme, locale, and various other settings.
     It saves the settings in local storage and applies them to the page. 
 */
+import { halloweenEasterEgg, xmasEasterEgg } from './eastereggs.js';
+
 const settingsBoxHTML = `
 <div class="hidden BGBlur" id="BGBlur"></div>
 <div class="hidden hide-settings-box" id="settingsBox" data-overlayscrollbars-initialize>
@@ -153,28 +155,13 @@ function checkEasterEggs() {
             console.log("Happy April Fools' Day!");
             break;
         case "halloween":
-            console.log("Happy Halloween!");
-
-            meta.content = "dark";
-            root.classList.toggle("dark-theme", true);
-            root.classList.toggle("light-theme", false);
-        
-            root.style.setProperty('--accent-color', '#ff640a');
-            root.style.setProperty('--link-color', '#ff640a');
-            root.style.setProperty('--link-hover-color', '#ffcaab');
-            root.style.setProperty('--highlight-color', '#ff640ad0');
-
-            document.querySelectorAll('img').forEach(img => {
-                img.style.filter = 'hue-rotate(30deg)';
-                img.style.boxShadow = '0 0 100px 10px rgba(255, 255, 255, 0.25)';
-            });
-
+            halloweenEasterEgg();
             break;
         case "xmaseve":
             console.log("Merry Christmas Eve!");
             break;
         case "xmas":
-            console.log("Merry Christmas!");
+            xmasEasterEgg();
             break;
         case "newyearseve":
             console.log("Happy New Year's Eve!");

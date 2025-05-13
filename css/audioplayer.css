@@ -10,7 +10,7 @@
 	position: fixed;
 	top: 60px;
 	right: 0;
-	width: 500px;
+	width: 450px;
 	border-radius: 15px 0px 0px 15px;
 	border: var(--button-outline);
 	background-color: var(--news-box-bg-color);
@@ -21,8 +21,8 @@
 	padding: 10px;
 	padding-right: calc(env(safe-area-inset-right) - 10px);
 	z-index: 100;
-	-webkit-backdrop-filter: blur(10px);
-	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(25px);
+	backdrop-filter: blur(25px);
 }
 
 #audioStatus button {
@@ -106,6 +106,7 @@
 #audioBufferBar {
 	width: 200px;
 	height: 10px;
+	margin-left: 5px;
 	background-color: rgba(255, 91, 91, 0.2);
 	border-left: 0px solid #fa5252;
 	border-radius: 2.5px;

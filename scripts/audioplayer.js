@@ -57,7 +57,7 @@ function loadJSZipScript() {
 audio.addEventListener('loadedmetadata', () => { // wait for data to load
     displayDuration(); // calculate audio duration in minutes:seconds (only applys for audio html and not rest of playlist)
     setTimeTexts(); // calculates currently elapsed audio in the same format and set the texts
-    loadedMetadata("LOADED METADATA");
+    loadedMetadata("Loaded metadata");
 });
 
 function loadedMetadata(message) { // reset sin value
@@ -195,7 +195,7 @@ var durationContainer = "0:00";
 const currentTimeContainer = document.getElementById('currentTime');
 const totalTimeContainer = document.getElementById('totalTime');
 const audioBar = document.getElementById("audioProgressBar");
-var multiplier = 1; // based on size of the screen (on low-width mode)
+let multiplier = 1; // based on size of the screen (on low-width mode)
 var mouseDown = false;
 var scrubKeyArray = [false, false]; // used for calculating left/right key scrubbing speeds
 var heldCount = 0;
@@ -217,7 +217,7 @@ audio.addEventListener('timeupdate', () => { // fired at browser discretion (ant
         audioBar.style = "width: " + 200 * multiplier + "px";
         if (!playlistMode) {
             displayDuration();
-            loadedMetadata("LOADED METADATA (LATE)")
+            loadedMetadata("Loaded metadata (LATE)")
             audio.play() //this is getting hacky now
         }
     }
@@ -251,21 +251,31 @@ const whilePlaying = () => {
         setTimeTexts(); // sets time and width of playing bar
     } catch { // sometimes the browser bugs out and loads audio in a different order if using back/forward cache
         displayDuration();
-        loadedMetadata("LOADED METADATA (LATE)")
+        loadedMetadata("Loaded metadata (LATE)")
     }
 };
 
 function setMultiplier() {
-    if (window.innerWidth <= 1000) { // activate the 'small-width' mode of the audio player
+    if (window.innerWidth <= 1000) {
         let safeAreaRight = 0;
-        try { //incase browser doesn't support this
-            safeAreaRight = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--sar"));
+        let safeAreaLeft = 0;
+        
+        // Try to get safe area values
+        try {
+            const style = getComputedStyle(document.documentElement);
+            safeAreaRight = parseInt(style.getPropertyValue("--safe-area-inset-right") || 
+                                   style.getPropertyValue("env(safe-area-inset-right)")) || 0;
+            safeAreaLeft = parseInt(style.getPropertyValue("--safe-area-inset-left") || 
+                                  style.getPropertyValue("env(safe-area-inset-left)")) || 0;
+        } catch {
+            // Fallback values if env() isn't supported
+            safeAreaRight = 0;
+            safeAreaLeft = 0;
         }
-        catch { }
-        return (document.documentElement.clientWidth - 200 - safeAreaRight) / 200; //account for phones with a notch
-    }
-    else {
-        return 1;
+        
+        return (document.documentElement.clientWidth - 200 - safeAreaRight - safeAreaLeft) / 200;
+    } else {
+        return 1.2;
     }
 }
 
@@ -310,7 +320,9 @@ function positionBar(event, isTouch) {
     if (!loaded) return; // dont do anything for unloaded audio
     if (isTouch) var posX = event.touches[0].clientX - event.target.getBoundingClientRect().left; //x position within the element.
     else var posX = event.clientX - event.target.getBoundingClientRect().left; //x position within the element.
+    
     let seekingTime = (posX / 200 / multiplier) * audio.duration
+        
     if (isLiveOnce) isLiveLoading = 1; // count ticks incase loading fails
     if ('fastSeek' in audio) {
         audio.fastSeek(seekingTime);
