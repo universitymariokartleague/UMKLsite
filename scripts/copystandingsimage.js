@@ -36,7 +36,7 @@ async function copyImageToClipboard(blob) {
 function generateMessage() {
     const randomChance = Math.random();
     return randomChance < 0.01
-        ? `今、イースターエッグはないけど...シーズン${currentSeason.value}の結果を見てよ！`
+        ? `今、イースターエッグはないけど... シーズン${currentSeason.value}の結果を見てよ！`
         : `Take a look at Season ${currentSeason.value}'s team standings in the University Mario Kart League!`;
 }
 
@@ -161,7 +161,7 @@ function showImagePreview(blob) {
 
 shareButton.addEventListener("click", async () => {    
     if (isPopupShowing) return;
-    
+
     try {
         const useClipboard = isWindowsOrLinux() || !navigator.canShare;
 
