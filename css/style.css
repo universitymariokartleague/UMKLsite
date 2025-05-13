@@ -427,8 +427,8 @@ code {
     background-color: var(--code-bg-color);
     border: var(--code-border);
     border-radius: 5px;
-    user-select: all;
     -webkit-user-select: all;
+    user-select: all;
 }
 
 .codeBox {
@@ -463,8 +463,8 @@ mention {
     background-color: var(--mention-bg-color);
     border: var(--mention-border);
     border-radius: 5px;
-    user-select: all;
     -webkit-user-select: all;
+    user-select: all;
 }
 
 tag {
@@ -474,8 +474,8 @@ tag {
     background-color: var(--mention-bg-color);
     border: var(--mention-border);
     border-radius: 5px;
-    user-select: all;
     -webkit-user-select: all;
+    user-select: all;
 }
 
 .tag-link {
@@ -807,6 +807,11 @@ blockquote {
     border-collapse: separate;
     border-spacing: 5px 0;
     width: 100%;
+}
+
+.team-info-table .table-key {
+    font-weight: bold;
+    vertical-align: top;
 }
 
 .team-info-wrapper {

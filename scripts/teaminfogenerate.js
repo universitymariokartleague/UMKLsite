@@ -42,12 +42,12 @@ async function generateTeamBox(teamData) {
 
     let extraFields = `
         <table class="team-info-table">
-            <tr><td><b>Location</b></td><td>${teamPlace}</td></tr>
-            <tr><td><b>Institution</b></td><td>${teamData.team_full_name}</td></tr>
-            <tr><td><b>First Entry</b></td><td>Season ${firstEntry} (${2023 + firstEntry}-${2024 + firstEntry})</td></tr>
-            <tr><td><b>Championships</b></td><td>${await getTeamChampionships(teamData.team_id)}</td></tr>
-            <tr><td><b>Wins-Losses</b></td><td>${winslosses[0]}-${winslosses[1]}</td></tr>
-            <tr><td><b>Lifetime Points</b></td><td>${await getTeamCareerPoints(teamData.team_id)}</td></tr>
+            <tr><td class="table-key">Location</td><td>${teamPlace}</td></tr>
+            <tr><td class="table-key">Institution</td><td>${teamData.team_full_name}</td></tr>
+            <tr><td class="table-key">First Entry</td><td>Season ${firstEntry} (${2023 + firstEntry}-${2024 + firstEntry})</td></tr>
+            <tr><td class="table-key">Championships</td><td>${await getTeamChampionships(teamData.team_id)}</td></tr>
+            <tr><td class="table-key">Wins-Losses</td><td>${winslosses[0]}-${winslosses[1]}</td></tr>
+            <tr><td class="table-key">Lifetime Points</td><td>${await getTeamCareerPoints(teamData.team_id)}</td></tr>
         </table>
     `;
 
