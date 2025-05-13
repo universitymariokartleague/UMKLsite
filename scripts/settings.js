@@ -41,7 +41,7 @@ document.querySelectorAll('.settingsBoxOpener').forEach(opener => opener.addEven
 
 const meta = document.querySelector('meta[name="color-scheme"]');
 const root = document.querySelector(":root");
-let darkThemeEnabled;
+let darkThemeEnabled = meta.content == "dark" ? 1 : 0;
 
 // Panel
 function generateSettingsPanel() {
@@ -84,6 +84,18 @@ function toggleTheme() {
     sendThemeChangeEvent();
     generateSettingsPanel();
 }
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+    if (!localStorage.getItem("darktheme")) {
+        darkThemeEnabled = event.matches ? 1 : 0;
+        meta.content = darkThemeEnabled ? "dark" : "light";
+        root.classList.toggle("dark-theme", darkThemeEnabled);
+        root.classList.toggle("light-theme", !darkThemeEnabled);
+        console.debug(`%csettings.js %c> %cDevice theme changed to ${meta.content}`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
+        sendThemeChangeEvent();
+        generateSettingsPanel();
+    }
+});
 
 function sendThemeChangeEvent() {
     document.dispatchEvent(new CustomEvent('themeChange', { detail: { darkThemeEnabled } }));
