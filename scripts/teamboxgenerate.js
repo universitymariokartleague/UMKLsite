@@ -18,22 +18,23 @@ const teamBoxFormatHTML = `
         <hr>
         <div class="{{className}} team">
             <span>{{teamName}}</span>
-            <img onload="this.style.opacity={{teamlogoopacity}}" src="{{logoSrc}}" alt="{{teamName}} team logo" class="team-logo">
+            <img src="{{logoSrc}}" alt="{{teamName}} team logo" class="team-logo">
         </div>
         <hr>
         <div class="institution">{{institution}}</div>
     </button>
 `;
-
 const JSTeamBox = document.getElementById("JSTeamBox")
 const styleSheet = document.createElement("style");
 const seasonPicker = document.getElementById("season-select")
 const currentSeasonText = document.getElementById("current-season")
 
+const startYear = 2023;
 let dbLoaded = false;
+let firstLoad = true;
 let currentSeason, maxSeason = 1;
 
-async function generateTeamBox(team, cached) {
+async function generateTeamBox(team, cached, count) {
     team.logo_src = `assets/image/teamemblems/${team.team_name.toUpperCase()}.png`
     team.class_name = team.team_name.replace(/\s+/g, '')
     team.link_name = team.team_name.replace(/\s+/g, '-').toLowerCase()
@@ -52,22 +53,36 @@ async function generateTeamBox(team, cached) {
         .replaceAll("{{className}}", team.class_name)
         .replace("{{LinkName}}", team.link_name)
         .replace("{{logoSrc}}", team.logo_src)
-        .replace("{{teamlogoopacity}}", cached ? 0 : 1);
+        .replace("{{teamlogoopacity}}", cached);
 
-    JSTeamBox.innerHTML += tempTeamBox;
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = tempTeamBox;
+
+    JSTeamBox.appendChild(tempDiv);
+    if (firstLoad) {
+        tempDiv.style.opacity = 0;
+        setTimeout(() => {
+            tempDiv.style.transition = "opacity 0.2s ease-in-out";
+            tempDiv.style.opacity = 1;
+        }, count * 25);
+    }
 }
 
 async function generateTeamBoxes(teamData, cached) {
     JSTeamBox.innerHTML = "";
+    JSTeamBox.classList.add('fade-in');
     try {
         for (let i = 0; i < teamData.length; i++) {
             const team = teamData[i];
             team.position = i + 1;
             if (dbLoaded) team.points_override = await getTeamSeasonPoints(team.team_id, currentSeason);
-            generateTeamBox(team, cached);
+            generateTeamBox(team, cached, i);
         }
         document.head.appendChild(styleSheet);
         cacheTeamData(JSON.stringify(teamData));
+        setTimeout(() => {
+            firstLoad = false;
+        }, 100);
     } catch (error) {
         JSTeamBox.innerHTML = error.stack;
     }
@@ -104,17 +119,12 @@ async function waitForDBToInit() {
 }
 
 async function readTeamsData() {
-    // let teamData = await getSeasonTeamStandings(season_id)
     maxSeason = await getCurrentSeason();
     currentSeason = maxSeason;
     generateSeasonPicker();
     updateSeasonText();
-    // let teamData = await runSQL("SELECT * FROM team")
     let teamData = await getSeasonTeamStandings(currentSeason)
     console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
-
-    console.log(await runSQL("SELECT team_name, team_color FROM team"))
-
     generateTeamBoxes(teamData, false)
 }
 
@@ -136,7 +146,7 @@ async function getCurrentSeason() {
     const result = await runSQL(`
         SELECT MAX(season_id)
         FROM season`
-    )
+    );
 
     return result[0]["MAX(season_id)"];
 }
@@ -214,9 +224,6 @@ async function getSeasonTeamStandings(season_id) {
     return standings.sort((a, b) => b.points - a.points);
 }
 
-checkCache();
-
-// season picker
 seasonPicker.addEventListener("change", async function () {
     currentSeason = this.value;
     await updateSeasonText();
@@ -226,5 +233,7 @@ seasonPicker.addEventListener("change", async function () {
 
 async function updateSeasonText() {
     const seasonStatus = await getSeasonStatus(currentSeason);
-    currentSeasonText.innerText = `${seasonStatus} (${(2023 + Number(currentSeason))}-${(2024 + Number(currentSeason))})`;
+    currentSeasonText.innerText = `${seasonStatus} (${(startYear + Number(currentSeason))}-${(startYear + 1 + Number(currentSeason))})`;
 }
+
+checkCache();

@@ -574,8 +574,6 @@ tag {
 .team-logo {
     width: 40px; 
     height: 40px;
-    opacity: 0;
-    transition: opacity 0.2s ease-in;
 }
 
 hr {
@@ -795,6 +793,15 @@ blockquote {
     text-align: center;
 }
 
+#JSTeamBox {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#JSTeamBox.fade-in {
+    opacity: 1;
+}
+
 .team-info {
     border: 1px solid #ccccccaa;
     border-radius: 10px;
@@ -832,7 +839,6 @@ blockquote {
     width: 90%;
     margin: 20px auto;
     object-fit: cover;
-    overflow-clip-margin: unset;
 }
 
 .team-info-logo {

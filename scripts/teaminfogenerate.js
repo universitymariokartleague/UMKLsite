@@ -8,26 +8,26 @@
 import { isDBLoaded, runSQL } from './database.js';
 
 const teamBoxFormatHTML = `
-        <div class="team-info-wrapper">
-            <img onload="this.style.opacity={{teamlogoopacity}}" src="{{logoSrc}}" alt="{{teamName}} team logo" class="team-info-logo">
-            <hr>
-            <div class="team-info-text">
-                {{extraFields}}
-            </div>
+    <div class="team-info-wrapper">
+        <img src="{{logoSrc}}" alt="{{teamName}} team logo" class="team-info-logo">
+        <hr>
+        <div class="team-info-text">
+            {{extraFields}}
         </div>
+    </div>
 
-        <div class="map">
-            <img src="assets/image/map/{{teamNameLower}}_map.png">
-        </div>
+    <div class="map">
+        <img src="assets/image/map/{{teamNameLower}}_map.png">
+    </div>
 `;
-
 const JSTeamBox = document.getElementById("JSTeamBox")
-const styleSheet = document.createElement("style");
 
+const startYear = 2023;
 let currentSeason, maxSeason = 1;
 
 async function generateTeamBox(teamData) {
     JSTeamBox.innerHTML = "";
+    JSTeamBox.classList.remove('fade-in');
 
     try {
         teamData.logo_src = `assets/image/teamemblems/${teamData.team_name.toUpperCase()}.png`
@@ -44,7 +44,7 @@ async function generateTeamBox(teamData) {
         <table class="team-info-table">
             <tr><td class="table-key">Location</td><td>${teamPlace}</td></tr>
             <tr><td class="table-key">Institution</td><td>${teamData.team_full_name}</td></tr>
-            <tr><td class="table-key">First Entry</td><td>Season ${firstEntry} (${2023 + firstEntry}-${2024 + firstEntry})</td></tr>
+            <tr><td class="table-key">First Entry</td><td>Season ${firstEntry} (${startYear + firstEntry}-${startYear + 1 + firstEntry})</td></tr>
             <tr><td class="table-key">Championships</td><td>${await getTeamChampionships(teamData.team_id)}</td></tr>
             <tr><td class="table-key">Wins-Losses</td><td>${winslosses[0]}-${winslosses[1]}</td></tr>
             <tr><td class="table-key">Lifetime Points</td><td>${await getTeamCareerPoints(teamData.team_id)}</td></tr>
@@ -55,21 +55,19 @@ async function generateTeamBox(teamData) {
         .replaceAll("{{className}}", teamData.class_name)
         .replaceAll("{{teamColor}}", teamData.team_color);
 
-    const teamStyleSheet = document.createElement("style");
-    teamStyleSheet.innerText = teamBoxStyle;
-    document.head.appendChild(teamStyleSheet);
-
     let tempTeamBox = teamBoxFormatHTML
         .replace("{{position}}", teamData.position)
         .replace("{{teamName}}", teamData.team_name)
         .replace("{{teamNameLower}}", teamData.team_name.toLowerCase())
         .replace("{{institution}}", teamData.team_full_name)
         .replace("{{logoSrc}}", teamData.logo_src)
-        .replace("{{teamlogoopacity}}", 1)
         .replace("{{extraFields}}", extraFields)
 
+    const teamStyleSheet = document.createElement("style");
+    teamStyleSheet.innerText = teamBoxStyle;
+    document.head.appendChild(teamStyleSheet);
     JSTeamBox.innerHTML += tempTeamBox;
-    document.head.appendChild(styleSheet);
+    JSTeamBox.classList.add('fade-in');
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -98,12 +96,6 @@ async function getTeamData() {
 
     await generateTeamBox(teamData);
     console.debug(`%cteaminfogeenrate.js %c> %cGenerated team info box`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
-}
-
-function getOrdinal(num) {
-    const suffixes = ["th", "st", "nd", "rd"];
-    const value = num % 100;
-    return num + (suffixes[(value - 20) % 10] || suffixes[value] || suffixes[0]);
 }
 
 async function getCurrentSeason() {
