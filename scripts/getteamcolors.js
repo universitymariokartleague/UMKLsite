@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function waitForDBToInit() {
     while (!(await isDBLoaded())) {
         console.debug(`%cgetteamcolors.js %c> %cDatabase is loading...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
-        await new Promise(resolve => setTimeout(resolve, 50)); // Wait for 0.05 seconds
+        await new Promise(resolve => setTimeout(resolve, 20));
     }
     console.debug(`%cgetteamcolors.js %c> %cDatabase loaded`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
 }
