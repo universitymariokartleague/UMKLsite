@@ -14,6 +14,16 @@ const teamBoxFormatHTML = `
         <div class="team-info-text">
             {{extraFields}}
         </div>
+        <div class="current-season-info">
+            <div class="heading-wrapper" style="margin-left: 3px;">
+                <h2>Season 2</h2>
+                <div class="green-dot"></div>
+            </div>
+            <div class="team-info-text">
+                {{currentFields}}
+            </div>
+        </div>
+
     </div>
 
     <div class="map">
@@ -51,6 +61,17 @@ async function generateTeamBox(teamData) {
         </table>
     `;
 
+    let currentFields = `
+        <table class="team-info-table">
+            <tr><td class="table-key">Matches Played</td><td>${await getTeamMatchesPlayed(teamData.team_id, currentSeason)}</td></tr>
+            <tr><td class="table-key">Wins-Losses</td><td>${(await getTeamWinsAndLossesForSeason(teamData.team_id, currentSeason))[0]}-${(await getTeamWinsAndLossesForSeason(teamData.team_id, currentSeason))[1]}</td></tr>
+            <tr><td class="table-key">Points</td><td>${await getTeamSeasonPoints(teamData.team_id, currentSeason)} (${toOrdinal(teamData.season_position)})</td></tr>
+            <tr><td class="table-key">Penalties</td><td>X</td></tr>
+            <tr><td class="table-key">Last Match</td><td>X</td></tr>
+            <tr><td class="table-key">Next Match</td><td>X</td></tr>
+        </table>
+    `;
+
     let teamBoxStyle="button.teamBox.{{className}}:hover,button.teamBox.{{className}}:focus{border: 0px solid {{teamColor}};outline: 4px solid {{teamColor}};}.team.{{className}}{border-left: 8px solid {{teamColor}};}"
         .replaceAll("{{className}}", teamData.class_name)
         .replaceAll("{{teamColor}}", teamData.team_color);
@@ -62,6 +83,7 @@ async function generateTeamBox(teamData) {
         .replace("{{institution}}", teamData.team_full_name)
         .replace("{{logoSrc}}", teamData.logo_src)
         .replace("{{extraFields}}", extraFields)
+        .replace("{{currentFields}}", currentFields)
 
     const teamStyleSheet = document.createElement("style");
     teamStyleSheet.innerText = teamBoxStyle;
@@ -106,12 +128,38 @@ async function getCurrentSeason() {
     return result[0]["MAX(season_id)"];
 }
 
+function toOrdinal(n) {
+    const s = ["th", "st", "nd", "rd"],
+        v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
 async function getFirstEntry(team_id) {
     const result = await runSQL(`SELECT MIN(season_id)
         FROM season_entry 
         WHERE team_id = ${team_id}`);
 
         return result[0]["MIN(season_id)"] || 0;
+}
+
+async function getTeamWinsAndLossesForSeason(team_id, season_id) {
+    const tournaments = await runSQL(`
+        SELECT tournament_id FROM tournament_entry
+        WHERE team_id = ${team_id}
+        AND tournament_id IN (SELECT tournament_id FROM tournament WHERE season_id = ${season_id})
+    `);
+    let wins = 0, losses = 0;
+    for (const tournament of tournaments) {
+        const results = await getTournamentTeamResults(tournament["tournament_id"], 1);
+        if (results.length > 0) {
+            if (results[0]["team_id"] === team_id) {
+                wins++;
+            } else {
+                losses++;
+            }
+        }
+    }
+    return [wins, losses];
 }
 
 async function getTeamCareerPoints(team_id) {

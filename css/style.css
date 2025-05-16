@@ -812,8 +812,44 @@ blockquote {
 
 .team-info-table {
     border-collapse: separate;
-    border-spacing: 5px 0;
     width: 100%;
+}
+
+.current-season-info {
+    margin-top: 10px;
+    border: 1px solid #ccccccaa;
+    border-radius: 10px;
+    padding: 12px;
+}
+.heading-wrapper {
+    display: flex;
+}
+.green-dot {
+    width: 10px;
+    height: 10px;
+    background-color: var(--accent-color);
+    margin: auto 0;
+    margin-left: 10px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(188, 8, 57, 0.7);
+    animation: green-dot-pulse 2.0s infinite;
+}
+
+@keyframes green-dot-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(188, 8, 57, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 8px rgba(188, 8, 57, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(188, 8, 57, 0);
+    }
+}
+
+.team-info-table td {
+    padding: 0;
+    width: 50%;
 }
 
 .team-info-table .table-key {
