@@ -34,6 +34,8 @@ let dbLoaded = false;
 let firstLoad = true;
 let currentSeason, maxSeason = 1;
 
+let startTime;
+
 async function generateTeamBox(team, cached, count) {
     team.logo_src = `assets/image/teamemblems/${team.team_name.toUpperCase()}.png`
     team.class_name = team.team_name.replace(/\s+/g, '')
@@ -93,7 +95,7 @@ function cacheTeamData(teamData) {
         localStorage.setItem("cachedTeamData", teamData)
         const timestamp = new Date().toISOString().replace('T', ' ').split('.')[0];
         localStorage.setItem("lastCached", timestamp);
-        console.debug(`%cteamboxgenerate.js %c> %cCached team data`, "color:#9452ff", "color:#fff", "color:#c29cff");
+        console.debug(`%cteamboxgenerate.js %c> %cGenerated and cached team data in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9452ff", "color:#fff", "color:#c29cff");
     }
 }
 
@@ -105,6 +107,7 @@ function checkCache() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+    startTime = performance.now();
     await waitForDBToInit();
     await readTeamsData()
 });

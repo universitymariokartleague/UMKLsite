@@ -6,8 +6,10 @@
 import { isDBLoaded, runSQL } from './database.js';
 
 const currentTeamColors = document.getElementById("currentTeamColors");
+let startTime;
 
 document.addEventListener("DOMContentLoaded", async () => {
+    startTime = performance.now();
     await waitForDBToInit();
     await loadTeamColors();
 });
@@ -32,5 +34,5 @@ async function loadTeamColors() {
         currentTeamColors.appendChild(colorDiv);
     });
 
-    console.debug(`%cgetteamcolors.js %c> %cGenerated team colors div`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
+    console.debug(`%cgetteamcolors.js %c> %cGenerated team colors in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
 }

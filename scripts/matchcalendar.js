@@ -16,6 +16,8 @@ let teamColorsData = {};
 
 let discardLogOnChange = false;
 
+let startTime;
+
 function createEmptyCells(count) {
     for (let i = 0; i < count; i++) {
         const emptyCell = document.createElement('div');
@@ -229,7 +231,7 @@ function displayCalendar() {
                     dailyLogData = data;
                     const currentDate = new Date();
                     generateCalendar(currentDate.getMonth(), currentDate.getFullYear());        
-                    console.debug(`%cmatchcalendar.js %c> %cMatch data loaded`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+                    console.debug(`%cmatchcalendar.js %c> %cMatch data loaded in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
         
                     const urlParams = new URLSearchParams(window.location.search);
                     const dateParam = urlParams.get('date');
@@ -250,6 +252,7 @@ function displayCalendar() {
 }
 
 window.addEventListener('load', function() {
+    startTime = performance.now();
     console.debug(`%cmatchcalendar.js %c> %cLoading calendar...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
     displayCalendar();
 });

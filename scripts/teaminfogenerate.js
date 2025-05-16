@@ -35,6 +35,8 @@ const JSTeamBox = document.getElementById("JSTeamBox")
 const startYear = 2023;
 let currentSeason, maxSeason = 1;
 
+let startTime;
+
 async function generateTeamBox(teamData) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.remove('fade-in');
@@ -93,6 +95,7 @@ async function generateTeamBox(teamData) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+    startTime = performance.now();
     await waitForDBToInit();
     await getTeamData();
 });
@@ -115,7 +118,7 @@ async function getTeamData() {
     let teamData = allTeamData.find(team => team.team_name === currentTeam);
 
     await generateTeamBox(teamData);
-    console.debug(`%cteaminfogeenrate.js %c> %cGenerated team info box`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
+    console.debug(`%cteaminfogeenrate.js %c> %cGenerated team info box in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
 }
 
 async function getCurrentSeason() {
