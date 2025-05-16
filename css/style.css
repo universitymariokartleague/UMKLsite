@@ -870,13 +870,13 @@ blockquote {
     display: flex;
     border-radius: 10px;
     border: 1px solid #ccccccaa;
-    background-color: #cccccc99;
+    background-color: var(--news-box-bg-color);
 }
 
 .team-info .map img {
-    width: 90%;
-    margin: 20px auto;
-    object-fit: cover;
+    width: 95%;
+    height: auto;
+    margin: auto;
 }
 
 .team-info-logo {
