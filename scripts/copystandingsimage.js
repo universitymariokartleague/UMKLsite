@@ -1,6 +1,6 @@
 /*
     This script handles the sharing of images using the Web Share API or the Clipboard API.
-    Since the web share API is doesn't work well on Windows/Linux, they get a nice little
+    Since the web share API doesn't work well on Windows/Linux, they get a nice little
     preview of the image before it's copied to the clipboard instead. It works as expected 
     on mobile devices and MacOS.
 
