@@ -58,7 +58,6 @@
 
 .empty {
     opacity: 0.3;
-    cursor: none;
 }
 
 .day {
@@ -71,12 +70,11 @@
     font-weight: bold;
     user-select: none;
     padding: 10px;
-    transition: background-color 0.2s, color 0.2s;
+    transition: background-color 0.2s
 }
 
-.day:hover {
+.day:not(.empty):not(.today):hover {
     background-color: #cccccc6f;
-
 }
 
 .today {
