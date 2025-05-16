@@ -1,6 +1,6 @@
 # This script is intended to be run before committing changes to ensure that the latest graphics and JSON files are generated.
 
-import genteamcolorsjson, graphics, logic
+import genteamcolorsjson, graphics, logic, makesitemap
 
 def run_pre_commit_tasks():
     """
@@ -18,6 +18,9 @@ def run_pre_commit_tasks():
     # Generate the team colors JSON file
     print("Generating team colors JSON file...")
     genteamcolorsjson.generate_team_colors_json()
+
+    # Generate sitemap
+    makesitemap.generate_sitemap()
 
     print("All tasks completed successfully!")
 
