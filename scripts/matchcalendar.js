@@ -4,6 +4,8 @@
     The calendar allows users to click on a date to view the matches scheduled for that day.
 */
 
+import { isWindowsOrLinux, copyTextToClipboard } from './shareAPIhelper.js';
+
 const weekdayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const weekdayNamesFull = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const DEFAULTSTARTDAY = 1;
@@ -138,7 +140,10 @@ function showDailyLog(date) {
         const formattedDate = new Date(`${date}`).toLocaleString(tempLocale, { dateStyle: 'full' });
         expandedLog.innerHTML = `
             <div class="settingSubheading">
-                <h3>${formattedDate}</h3>
+                <div class="current-season-area"> 
+                    <h3 style="margin: 3px">${formattedDate}</h3>                            
+                    <button id="shareButton"><span class="fa-solid fa-share"></span> Share this date</button>
+                </div>
                 <hr class="after-title" style="margin-bottom:0;">
                 ${log.map((entry, index) => {
                     function createTeamObject(teamName) {
@@ -164,10 +169,25 @@ function showDailyLog(date) {
                 }).join('')}
             </div>
         `;
+
+        createShareButtonListener(date);
     } else {
         expandedLog.innerHTML = `<div class="settingSubheading"><h3>No events scheduled</h3></div>`;
     }
-    
+}
+
+function createShareButtonListener(date) {
+    document.getElementById("shareButton").addEventListener("click", async () => {    
+        const originalMessage = shareButton.innerHTML;
+        const useClipboard = isWindowsOrLinux() || !navigator.canShare;
+
+        const success = await copyTextToClipboard(`Today is the best day! ${window.location.href}`)
+        shareButton.innerText = success ? "Link copied to clipboard!" : "Failed to copy!";
+
+        setTimeout(() => {
+            shareButton.innerHTML = originalMessage;
+        }, 2000);
+    });
 }
 
 // Listen for theme change event

@@ -821,15 +821,17 @@ blockquote {
     border-radius: 10px;
     padding: 12px;
 }
+
 .heading-wrapper {
     display: flex;
 }
+
 .green-dot {
     width: 10px;
     height: 10px;
     background-color: var(--accent-color);
     margin: auto 0;
-    margin-left: 10px;
+    margin-left: 12px;
     border-radius: 50%;
     box-shadow: 0 0 0 0 rgba(188, 8, 57, 0.7);
     animation: green-dot-pulse 2.0s infinite;
