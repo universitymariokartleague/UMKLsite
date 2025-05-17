@@ -868,12 +868,14 @@ blockquote {
     display: flex;
     border-radius: 10px;
     border: 1px solid #ccccccaa;
+    background-color: #ccccccbb;
+
 }
 
 .team-info .map img {
     width: 95%;
     height: auto;
-    margin: auto;
+    margin: 10px auto;
 }
 
 .team-info-logo {

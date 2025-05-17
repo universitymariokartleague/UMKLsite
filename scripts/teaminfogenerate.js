@@ -86,7 +86,6 @@ async function generateTeamBox(teamData) {
     const highlightColor = `${teamData.team_color}80`;
     document.documentElement.style.setProperty('--highlight-color', highlightColor);
     const teamStyleSheet = document.createElement("style");
-    teamStyleSheet.innerText = `.${teamData.class_name}{background-color:${highlightColor}}`;
     document.head.appendChild(teamStyleSheet);
     JSTeamBox.innerHTML += tempTeamBox;
     JSTeamBox.classList.add('fade-in');
