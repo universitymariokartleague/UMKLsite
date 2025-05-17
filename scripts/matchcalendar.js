@@ -105,7 +105,7 @@ function generateCalendar(month, year) {
                 dayCell.appendChild(colorBarContainer);
             });
             dayCell.classList.add('logged');
-            dayCell.addEventListener('click', () => showDailyLog(dateToCheck));
+            dayCell.addEventListener('click', () => showDailyLog(dateToCheck, dayCell));
         }
         
         calendarDays.appendChild(dayCell);
@@ -125,7 +125,7 @@ function changeMonth(change) {
     generateCalendar(newDate.getMonth(), newDate.getFullYear());
 };
 
-function showDailyLog(date) {
+function showDailyLog(date, dayCell) {
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.set('date', date);
     const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
@@ -187,7 +187,7 @@ function createShareButtonListener(formattedDate) {
         
         const message = `Check out these UMKL matches on ${formattedDate}! ${window.location.href}`
         
-        const imagePath = 'assets/image/test/mikuheadshake.gif'
+        const imagePath = 'assets/image/calendar/mikuheadshake.gif'
         const blob = await fetch(imagePath).then(r => r.blob());
 
         if (useClipboard) {
