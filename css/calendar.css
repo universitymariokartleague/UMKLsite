@@ -77,8 +77,21 @@
     background-color: #cccccc6f;
 }
 
+.day.selected {
+    /* background-image: url("../assets/image/calendar/mikuheadshake.gif"); */
+    /* background-size: cover; */
+    /* background-position: center; */
+    background-color: #F0185130!important;
+    outline: 1px solid #F01851D0;
+    border: 1px solid #F01851D0;
+}
+
+.day.selected:hover {
+    background-color: #F0185180!important;
+}
+
 .today {
-    /* background-image: url("../assets/image/calendar/today.png"); */ /* test code dont remove */
+    background-image: url("../assets/image/calendar/today.gif"); /* test code dont remove */
     background-size: cover;
     background-position: center;
     background-color: var(--accent-color);

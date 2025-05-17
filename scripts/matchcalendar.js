@@ -126,6 +126,16 @@ function changeMonth(change) {
 };
 
 function showDailyLog(date, dayCell) {
+    // Remove highlight from all previously selected days
+    document.querySelectorAll('.day.selected').forEach(day => {
+        day.classList.remove('selected');
+    });
+    
+    // Add highlight to the newly selected day
+    if (dayCell) {
+        dayCell.classList.add('selected');
+    }
+
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.set('date', date);
     const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
