@@ -1,4 +1,4 @@
-export { isWindowsOrLinux, copyTextToClipboard, copyImageToClipboard, shareImage, showImagePreview, setOriginalMessage, getOriginalMessage, getIsPopupShowing };
+export { isWindowsOrLinux, copyTextToClipboard, copyImageToClipboard, shareText, shareImage, showTextPopup, showImagePreview, setOriginalMessage, getOriginalMessage, getIsPopupShowing };
 
 let previewTimeout = null;
 let isPopupShowing = false;
@@ -55,7 +55,21 @@ async function copyImageToClipboard(blob) {
     }
 }
 
-async function shareImage(title, filename, text, blob) {
+async function shareText(title, text) {
+    const shareData = {
+        title: title,
+        text: text,
+    };
+
+    try {
+        await navigator.share(shareData);
+        console.debug(`%cshareAPIhelper.js %c> %cShared successfully`, "color:#525eff", "color:#fff", "color:#969dff");
+    } catch (error) {
+        console.debug(`%cshareAPIhelper.js %c> %cError: ${error}`, "color:#525eff", "color:#fff", "color:#969dff");
+    };
+};
+
+async function shareImage(title, text, blob, filename) {
     const shareData = {
         files: [
             new File([blob], filename, {
@@ -74,59 +88,66 @@ async function shareImage(title, filename, text, blob) {
     };
 };
 
-function showImagePreview(blob, imageMessage) {
+function showTextPopup(input) {
+    showPreview(input, false);
+}
+
+function showImagePreview(blob, imagePath, input) {
+    showPreview(input, true, imagePath, blob);
+}
+
+function showPreview(message, isImage, imagePath, blob) {
     cleanupPreview();
     const buttonRect = shareButton.getBoundingClientRect();
     const scrollX = window.scrollX || window.pageXOffset;
     const scrollY = window.scrollY || window.pageYOffset;
-    
+
     const preview = document.createElement('div');
-    preview.classList.add('image-preview');
-    preview.style.left = `${Math.max(10, buttonRect.left + scrollX + buttonRect.width/2 - 110)}px`;
+    preview.classList.add('preview');
+    preview.classList.add(isImage ? 'image-preview' : 'text-preview');
+    preview.style.left = `${Math.max(10, buttonRect.left + scrollX + buttonRect.width / 2 - 110)}px`;
     preview.style.top = `${buttonRect.bottom + scrollY + 10}px`;
 
     const arrow = document.createElement('div');
     arrow.classList.add('arrow');
-    
     const arrowBorder = document.createElement('div');
     arrowBorder.classList.add('arrow-border');
-    
-    const img = document.createElement('img');
-    const blobUrl = URL.createObjectURL(blob);
-    img.src = blobUrl;
-    img.classList.add('preview-image');
-    img.addEventListener('click', () => {
-        window.open(blobUrl, '_blank');
-    });
-    
-    const message = document.createElement('div');
-    message.innerText = imageMessage;
-    message.classList.add('preview-message');
-    
     preview.appendChild(arrow);
     preview.appendChild(arrowBorder);
-    preview.appendChild(img);
-    preview.appendChild(message);
+
+    if (isImage && blob) {
+        const img = document.createElement('img');
+        const blobUrl = URL.createObjectURL(blob);
+        img.src = blobUrl;
+        img.classList.add('preview-image');
+        img.addEventListener('click', () => window.open(imagePath ? imagePath : blobUrl, '_blank'));
+        preview.appendChild(img);
+    }
+
+    const msgDiv = document.createElement('div');
+    msgDiv.innerHTML = `${message}`;
+    msgDiv.classList.add('preview-message');
+    if (isImage) msgDiv.classList.add('preview-message-image');
+    preview.appendChild(msgDiv);
+
     document.addEventListener('click', handleDocumentClick);
     document.body.appendChild(preview);
 
     currentPreview = preview;
     isPopupShowing = true;
-    
+
     setTimeout(() => {
         if (preview.parentNode) {
             preview.style.transform = 'scale(1) translateY(0)';
             preview.style.opacity = '1';
         }
     }, 10);
-    
+
     previewTimeout = setTimeout(() => {
         if (preview.parentNode) {
             preview.style.transform = 'scale(0.95) translateY(-10px)';
             preview.style.opacity = '0';
-            setTimeout(() => {
-                cleanupPreview();
-            }, 150);
+            setTimeout(cleanupPreview, 150);
         } else {
             cleanupPreview();
         }

@@ -4,7 +4,7 @@
     The calendar allows users to click on a date to view the matches scheduled for that day.
 */
 
-import { isWindowsOrLinux, copyTextToClipboard } from './shareAPIhelper.js';
+import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareText, shareImage, showTextPopup, showImagePreview, setOriginalMessage } from './shareAPIhelper.js';
 
 const weekdayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const weekdayNamesFull = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -170,23 +170,39 @@ function showDailyLog(date) {
             </div>
         `;
 
-        createShareButtonListener(date);
+        createShareButtonListener(formattedDate);
     } else {
         expandedLog.innerHTML = `<div class="settingSubheading"><h3>No events scheduled</h3></div>`;
     }
 }
 
-function createShareButtonListener(date) {
-    document.getElementById("shareButton").addEventListener("click", async () => {    
-        const originalMessage = shareButton.innerHTML;
+function createShareButtonListener(formattedDate) {
+    const shareButton = document.getElementById("shareButton");
+
+    setOriginalMessage(shareButton.innerHTML);
+
+    shareButton.addEventListener("click", async () => {
+        if (getIsPopupShowing()) return;
         const useClipboard = isWindowsOrLinux() || !navigator.canShare;
+        
+        const message = `Check out these UMKL matches on ${formattedDate}! ${window.location.href}`
+        
+        const imagePath = 'assets/image/test/mikuheadshake.gif'
+        const blob = await fetch(imagePath).then(r => r.blob());
 
-        const success = await copyTextToClipboard(`Today is the best day! ${window.location.href}`)
-        shareButton.innerText = success ? "Link copied to clipboard!" : "Failed to copy!";
-
-        setTimeout(() => {
-            shareButton.innerHTML = originalMessage;
-        }, 2000);
+        if (useClipboard) {
+            const success = await copyTextToClipboard(message);
+            shareButton.innerText = success ? "Text copied to clipboard!" : "Failed to copy!";
+            const messageWithURL = `Check out these UMKL matches on ${formattedDate}! <a href="${window.location.href}">${window.location.href}</a>`
+            showImagePreview(blob, imagePath, messageWithURL)
+        } else {
+            await shareImage(
+                `UMKL Matches on ${formattedDate}`,
+                message,
+                blob,
+                "mikuheadshake.gif"
+            );
+        }
     });
 }
 

@@ -26,24 +26,26 @@ shareButton.addEventListener("click", async () => {
 
     try {
         const useClipboard = isWindowsOrLinux() || !navigator.canShare;
-
         if (useClipboard) shareButton.innerHTML = "Loading shareable image...";
-        const blob = await fetch(`assets/pythongraphics/output/team_standings_season${currentSeason.value}.png`).then(r => r.blob());
+
+        const imagePath = `assets/pythongraphics/output/team_standings_season${currentSeason.value}.png`
+        const blob = await fetch(imagePath).then(r => r.blob());
+
         if (useClipboard) {
             const success = await copyImageToClipboard(blob);
             shareButton.innerText = success ? "Image copied to clipboard!" : "Failed to copy!";
-
             if (success) {
-                showImagePreview(blob, generateMessage());
+                showImagePreview(blob, imagePath, generateMessage());
             }
         } else {
             await shareImage(
                 "UMKL Team Standings",
-                `team_standings_season${currentSeason.value}.png`,
                 generateMessage(),
                 blob
+                `team_standings_season${currentSeason.value}.png`,
             );
         }
+
     } catch (error) {
         console.error('Error in share button click:', error);
         shareButton.innerText = "Error occurred!";

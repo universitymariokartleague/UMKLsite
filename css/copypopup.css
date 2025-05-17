@@ -1,11 +1,14 @@
 .preview-message {
     max-width: 200px;
-    margin: 4px auto 0;
     font-size: 12px;
     color: var(--text-color);
     text-align: center;
     -webkit-user-select: all;
     user-select: all;
+}
+
+.preview-message-image {
+    margin: 4px auto 0;
 }
 
 .preview-image {
@@ -16,10 +19,9 @@
     cursor: pointer;
 }
 
-.image-preview {
+.preview {
     position: absolute;
     z-index: 1;
-    padding: 10px 10px 6px 10px;
     background-color: var(--bg-color);
     border-radius: 10px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
@@ -28,6 +30,14 @@
     transform-origin: center top;
     opacity: 0;
     transition: transform 0.2s cubic-bezier(0.2, 0, 0.1, 1), opacity 0.2s cubic-bezier(0.2, 0, 0.1, 1);
+}
+
+.text-preview {
+    padding: 6px;
+}
+
+.image-preview {
+    padding: 10px 10px 6px 10px;
 }
 
 .arrow {
