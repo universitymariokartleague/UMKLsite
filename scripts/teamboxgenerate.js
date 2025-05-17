@@ -24,6 +24,7 @@ const teamBoxFormatHTML = `
         <div class="institution">{{institution}}</div>
     </button>
 `;
+
 const JSTeamBox = document.getElementById("JSTeamBox")
 const styleSheet = document.createElement("style");
 const seasonPicker = document.getElementById("season-select")

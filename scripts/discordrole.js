@@ -7,9 +7,7 @@
     The script also includes an "attract mode" feature that cycles through a set of colors
 */
 
-const colorsToCycle = [
-    "#FF6262", "#FFAE7F", "#FFF588", "#67FF8A", "#65B5FF", "#CF82FF", "#FF9AD0"
-];
+const colorsToCycle = ["#FF6262", "#FFAE7F", "#FFF588", "#67FF8A", "#65B5FF", "#CF82FF", "#FF9AD0"];
 const defaultColor = "#1BAA8B";
 const colorPicker = document.getElementById("colorPicker");
 const currentColor = document.getElementById("currentColor");

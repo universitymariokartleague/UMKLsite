@@ -30,6 +30,7 @@ const teamBoxFormatHTML = `
         <img src="assets/image/map/{{teamNameLower}}_map.png">
     </div>
 `;
+
 const JSTeamBox = document.getElementById("JSTeamBox")
 
 const startYear = 2023;
@@ -82,13 +83,9 @@ async function generateTeamBox(teamData) {
         .replace("{{extraFields}}", extraFields)
         .replace("{{currentFields}}", currentFields)
 
-        
     const highlightColor = `${teamData.team_color}80`;
-    console.log(highlightColor)
-
     document.documentElement.style.setProperty('--highlight-color', highlightColor);
     const teamStyleSheet = document.createElement("style");
-    
     teamStyleSheet.innerText = `.${teamData.class_name}{background-color:${highlightColor}}`;
     document.head.appendChild(teamStyleSheet);
     JSTeamBox.innerHTML += tempTeamBox;

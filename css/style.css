@@ -21,9 +21,7 @@
     --code-bg-color: rgba(0, 0, 0, 0.02);
     --code-border: 1px solid rgba(0, 0, 0, 0.6);
 
-    --metion-color: #1f2e7f;
-    --mention-bg-color: rgba(88, 101, 242, 0.25);
-    --mention-border: 1px solid rgba(31, 46, 127, 0.6);
+    --metion-color: #3246b4;
 
     --box-area-bg-color: rgba(0, 0, 0, 0.02);
 }
@@ -50,8 +48,6 @@
         --code-border: 1px solid rgba(255, 255, 255, 0.2);
     
         --metion-color: #98acff;
-        --mention-bg-color: rgba(88, 101, 242, 0.25);
-        --mention-border: 1px solid rgba(152, 172, 255, 0.6);
 
         --box-area-bg-color: rgba(255, 255, 255, 0.03);
     }
@@ -78,8 +74,6 @@
     --code-border: 1px solid rgba(255, 255, 255, 0.2);
 
     --metion-color: #98acff;
-    --mention-bg-color: rgba(88, 101, 242, 0.25);
-    --mention-border: 1px solid rgba(152, 172, 255, 0.6);
 
     --box-area-bg-color: rgba(255, 255, 255, 0.03);
 }
@@ -460,8 +454,8 @@ mention {
     color: var(--metion-color);
     font-size: 15px;
     padding: 2px 5px;
-    background-color: var(--mention-bg-color);
-    border: var(--mention-border);
+    background-color: rgba(88, 101, 242, 0.25);
+    border: 1px solid rgba(152, 172, 255, 0.6);
     border-radius: 5px;
     -webkit-user-select: all;
     user-select: all;
@@ -471,11 +465,15 @@ tag {
     color: var(--metion-color);
     font-size: 15px;
     padding: 1px 6px;
-    background-color: var(--mention-bg-color);
-    border: var(--mention-border);
+    background-color: rgba(88, 101, 242, 0.25);
+    border: 1px solid rgba(152, 172, 255, 0.6);
     border-radius: 5px;
     -webkit-user-select: all;
     user-select: all;
+}
+
+mention::selection, tag::selection {
+    background-color: rgba(88, 101, 242, 0.5);
 }
 
 .tag-link {

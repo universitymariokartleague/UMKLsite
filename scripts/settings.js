@@ -6,14 +6,16 @@
 import { halloweenEasterEgg, xmasEasterEgg } from './eastereggs.js';
 
 const settingsBoxHTML = `
-<div class="hidden BGBlur" id="BGBlur"></div>
-<div class="hidden hide-settings-box" id="settingsBox" data-overlayscrollbars-initialize>
-    <div class="settings-box-close-button">
-        <button id="settings-box-close-button">Close</button>
+    <div class="hidden BGBlur" id="BGBlur"></div>
+    <div class="hidden hide-settings-box" id="settingsBox" data-overlayscrollbars-initialize>
+        <div class="settings-box-close-button">
+            <button id="settings-box-close-button">Close</button>
+        </div>
+        <div class="settings-title">Settings</div>
+        <div class="setting-options" id="settingsBoxJS"></div>
     </div>
-    <div class="settings-title">Settings</div>
-    <div class="setting-options" id="settingsBoxJS"></div>
-</div>`;
+`;
+
 document.body.insertAdjacentHTML('beforeend', settingsBoxHTML);
 
 const BGBlur = document.getElementById('BGBlur');
