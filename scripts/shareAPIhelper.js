@@ -1,12 +1,27 @@
-export { isWindowsOrLinux, copyTextToClipboard, copyImageToClipboard, shareImage, showImagePreview };
+export { isWindowsOrLinux, copyTextToClipboard, copyImageToClipboard, shareImage, showImagePreview, setOriginalMessage, getOriginalMessage, getIsPopupShowing };
 
 let previewTimeout = null;
+let isPopupShowing = false;
+let currentPreview = null;
+let originalMessage = "";
 
 function isWindowsOrLinux() {
     if (navigator.userAgentData) {
         return navigator.userAgentData.platform.includes('Windows') || navigator.userAgentData.platform.includes('Linux');
     }
     return navigator.userAgent.includes('Windows') || navigator.userAgent.includes('Linux');
+}
+
+function setOriginalMessage(input) {
+    originalMessage = input;
+}
+
+function getOriginalMessage() {
+    return originalMessage;
+}
+
+function getIsPopupShowing() {
+    return isPopupShowing;
 }
 
 async function copyTextToClipboard(text) {
@@ -59,7 +74,7 @@ async function shareImage(title, filename, text, blob) {
     };
 };
 
-function showImagePreview(blob) {
+function showImagePreview(blob, imageMessage) {
     cleanupPreview();
     const buttonRect = shareButton.getBoundingClientRect();
     const scrollX = window.scrollX || window.pageXOffset;
@@ -85,7 +100,7 @@ function showImagePreview(blob) {
     });
     
     const message = document.createElement('div');
-    message.innerText = generateMessage();
+    message.innerText = imageMessage;
     message.classList.add('preview-message');
     
     preview.appendChild(arrow);
@@ -135,5 +150,19 @@ function cleanupPreview() {
         currentPreview = null;
         isPopupShowing = false;
         shareButton.innerHTML = originalMessage;
+    }
+}
+
+function handleDocumentClick(event) {
+    if (isPopupShowing && currentPreview && !currentPreview.contains(event.target) && event.target !== shareButton) {
+        if (currentPreview.parentNode) {
+            currentPreview.style.transform = 'scale(0.95) translateY(-10px)';
+            currentPreview.style.opacity = '0';
+            setTimeout(() => {
+                cleanupPreview();
+            }, 150);
+        } else {
+            cleanupPreview();
+        }
     }
 }

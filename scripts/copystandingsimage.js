@@ -8,14 +8,11 @@
     that it has been copied.
 */
 
-import { isWindowsOrLinux, copyImageToClipboard, shareImage, showImagePreview } from "./shareAPIhelper.js";
+import { isWindowsOrLinux, copyImageToClipboard, shareImage, showImagePreview, setOriginalMessage, getOriginalMessage, getIsPopupShowing } from "./shareAPIhelper.js";
 
 const shareButton = document.getElementById("shareButton");
 const currentSeason = document.getElementById("season-select");
-const originalMessage = shareButton.innerHTML;
-
-let isPopupShowing = false;
-let currentPreview = null;
+setOriginalMessage(shareButton.innerHTML);
 
 function generateMessage() {
     const randomChance = Math.random();
@@ -24,22 +21,8 @@ function generateMessage() {
         : `Take a look at Season ${currentSeason.value}'s team standings in the University Mario Kart League!`;
 }
 
-function handleDocumentClick(event) {
-    if (isPopupShowing && currentPreview && !currentPreview.contains(event.target) && event.target !== shareButton) {
-        if (currentPreview.parentNode) {
-            currentPreview.style.transform = 'scale(0.95) translateY(-10px)';
-            currentPreview.style.opacity = '0';
-            setTimeout(() => {
-                cleanupPreview();
-            }, 150);
-        } else {
-            cleanupPreview();
-        }
-    }
-}
-
 shareButton.addEventListener("click", async () => {    
-    if (isPopupShowing) return;
+    if (getIsPopupShowing()) return;
 
     try {
         const useClipboard = isWindowsOrLinux() || !navigator.canShare;
@@ -51,7 +34,7 @@ shareButton.addEventListener("click", async () => {
             shareButton.innerText = success ? "Image copied to clipboard!" : "Failed to copy!";
 
             if (success) {
-                showImagePreview(blob);
+                showImagePreview(blob, generateMessage());
             }
         } else {
             await shareImage(
@@ -65,15 +48,7 @@ shareButton.addEventListener("click", async () => {
         console.error('Error in share button click:', error);
         shareButton.innerText = "Error occurred!";
         setTimeout(() => {
-            shareButton.innerHTML = originalMessage;
+            shareButton.innerHTML = getOriginalMessage();
         }, 2000);
     }
-});
-
-currentSeason.addEventListener("change", () => {
-    cleanupPreview();
-});
-
-window.addEventListener('beforeunload', () => {
-    cleanupPreview();
 });
