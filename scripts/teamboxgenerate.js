@@ -35,8 +35,6 @@ let dbLoaded = false;
 let firstLoad = true;
 let currentSeason, maxSeason = 1;
 
-let BFCache = false;
-
 let startTime;
 
 async function generateTeamBox(team, cached, count) {
@@ -132,19 +130,6 @@ async function readTeamsData() {
     let teamData = await getSeasonTeamStandings(currentSeason)
     console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     generateTeamBoxes(teamData, false)
-    
-    if (BFCache) {
-        const BFCacheScrollPosition = localStorage.getItem('teamPageBFCacheScrollPosition');
-        if (BFCacheScrollPosition) {
-            setTimeout(() => {
-                window.scrollTo({
-                    top: parseInt(BFCacheScrollPosition),
-                    behavior: 'smooth'
-                });
-                localStorage.removeItem('teamPageBFCacheScrollPosition');
-            }, 50);
-        }
-    }
 }
 
 async function generateSeasonPicker() {
@@ -254,15 +239,5 @@ async function updateSeasonText() {
     const seasonStatus = await getSeasonStatus(currentSeason);
     currentSeasonText.innerText = `${seasonStatus} (${(startYear + Number(currentSeason))}-${(startYear + 1 + Number(currentSeason))})`;
 }
-
-window.addEventListener('beforeunload', function() {
-    localStorage.setItem('teamPageBFCacheScrollPosition', window.scrollY);
-});
-
-window.addEventListener('pageshow', function (event) {
-    if (event.persisted || performance.getEntriesByType("navigation")[0].type === 'back_forward') {
-        BFCache = true
-    }
-});
 
 checkCache();
