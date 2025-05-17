@@ -26,7 +26,7 @@ const teamBoxFormatHTML = `
 
     </div>
 
-    <div class="map">
+    <div class="map {{className}}">
         <img src="assets/image/map/{{teamNameLower}}_map.png">
     </div>
 `;
@@ -43,7 +43,7 @@ async function generateTeamBox(teamData) {
 
     try {
         teamData.logo_src = `assets/image/teamemblems/${teamData.team_name.toUpperCase()}.png`
-        teamData.class_name = teamData.team_name.replace(/\s+/g, '')    
+        teamData.class_name = teamData.team_name.replace(/\s+/g, '')
     } catch (error) {
         JSTeamBox.innerHTML = `<div class="codeBox">No team data available!<br/>${error.stack}</div>`;
     }
@@ -74,21 +74,22 @@ async function generateTeamBox(teamData) {
         </table>
     `;
 
-    let teamBoxStyle="button.teamBox.{{className}}:hover,button.teamBox.{{className}}:focus{border: 0px solid {{teamColor}};outline: 4px solid {{teamColor}};}.team.{{className}}{border-left: 8px solid {{teamColor}};}"
-        .replaceAll("{{className}}", teamData.class_name)
-        .replaceAll("{{teamColor}}", teamData.team_color);
-
     let tempTeamBox = teamBoxFormatHTML
-        .replace("{{position}}", teamData.position)
         .replace("{{teamName}}", teamData.team_name)
+        .replace("{{className}}", teamData.class_name)
         .replace("{{teamNameLower}}", teamData.team_name.toLowerCase())
-        .replace("{{institution}}", teamData.team_full_name)
         .replace("{{logoSrc}}", teamData.logo_src)
         .replace("{{extraFields}}", extraFields)
         .replace("{{currentFields}}", currentFields)
 
+        
+    const highlightColor = `${teamData.team_color}80`;
+    console.log(highlightColor)
+
+    document.documentElement.style.setProperty('--highlight-color', highlightColor);
     const teamStyleSheet = document.createElement("style");
-    teamStyleSheet.innerText = teamBoxStyle;
+    
+    teamStyleSheet.innerText = `.${teamData.class_name}{background-color:${highlightColor}}`;
     document.head.appendChild(teamStyleSheet);
     JSTeamBox.innerHTML += tempTeamBox;
     JSTeamBox.classList.add('fade-in');

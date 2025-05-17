@@ -10,7 +10,7 @@
 
     --link-color: #fa5252;
     --link-hover-color: #ffb4b4;
-    --highlight-color: #f5255cd0;
+    --highlight-color: #f5255cA0;
 
     --button-color: #fa5252;
     --button-background: rgba(255, 255, 255, 0.1);
@@ -25,7 +25,7 @@
     --mention-bg-color: rgba(88, 101, 242, 0.25);
     --mention-border: 1px solid rgba(31, 46, 127, 0.6);
 
-    --news-box-bg-color: rgba(0, 0, 0, 0.02);
+    --box-area-bg-color: rgba(0, 0, 0, 0.02);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -38,7 +38,7 @@
     
         --link-color: #fa5252;
         --link-hover-color: #fff;
-        --highlight-color: #ffffff50;
+        --highlight-color: #BC0839D0;
     
         --button-color: #fa5252;
         --button-background: rgba(0, 0, 0, 0.4);
@@ -53,7 +53,7 @@
         --mention-bg-color: rgba(88, 101, 242, 0.25);
         --mention-border: 1px solid rgba(152, 172, 255, 0.6);
 
-        --news-box-bg-color: rgba(255, 255, 255, 0.03);
+        --box-area-bg-color: rgba(255, 255, 255, 0.03);
     }
 }
 
@@ -66,7 +66,7 @@
 
     --link-color: #fa5252;
     --link-hover-color: #fff;
-    --highlight-color: #ffffff50;
+    --highlight-color: #BC0839D0;
 
     --button-color: #fa5252;
     --button-background: rgba(0, 0, 0, 0.4);
@@ -81,7 +81,7 @@
     --mention-bg-color: rgba(88, 101, 242, 0.25);
     --mention-border: 1px solid rgba(152, 172, 255, 0.6);
 
-    --news-box-bg-color: rgba(255, 255, 255, 0.03);
+    --box-area-bg-color: rgba(255, 255, 255, 0.03);
 }
 
 /*adjust mobile text inflation*/
@@ -651,7 +651,7 @@ blockquote {
     border-radius: 10px;
     border: 1px solid #cccccccc;
     overflow: hidden; /* This contains the scrollbar within the rounded corners */
-    background-color: var(--news-box-bg-color);
+    background-color: var(--box-area-bg-color);
 }
 
 .news-container {
@@ -760,7 +760,7 @@ blockquote {
     flex-wrap: wrap;
     
     border-radius: 15px;
-    background-color: var(--news-box-bg-color);
+    background-color: var(--box-area-bg-color);
     border: var(--button-outline);
     padding: 10px;
 }
@@ -870,7 +870,6 @@ blockquote {
     display: flex;
     border-radius: 10px;
     border: 1px solid #ccccccaa;
-    background-color: var(--news-box-bg-color);
 }
 
 .team-info .map img {
@@ -924,7 +923,7 @@ blockquote {
     margin-top: 10px;
     border-radius: 10px;
     padding: 10px;
-    background-color: var(--news-box-bg-color);
+    background-color: var(--box-area-bg-color);
     width: 100vw;
 }
 
@@ -938,7 +937,7 @@ blockquote {
     margin-top: 10px;
     border-radius: 10px;
     padding: 10px;
-    background-color: var(--news-box-bg-color);
+    background-color: var(--box-area-bg-color);
 }
 
 .result-box {
@@ -1077,7 +1076,7 @@ blockquote {
     border-radius: 10px;
     padding: 10px;
     border: 1px solid #ccccccaa;
-    background-color: var(--news-box-bg-color);
+    background-color: var(--box-area-bg-color);
 }
 
 .color-box {
