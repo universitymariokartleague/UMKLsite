@@ -64,7 +64,7 @@ async function generateTeamBox(team, cached, count) {
     tempDiv.innerHTML = tempTeamBox;
 
     JSTeamBox.appendChild(tempDiv);
-    if (firstLoad && !BFCache) {
+    if (firstLoad) {
         tempDiv.style.opacity = 0;
         setTimeout(() => {
             tempDiv.style.transition = "opacity 0.2s ease-in-out";
