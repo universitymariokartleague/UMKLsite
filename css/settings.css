@@ -76,6 +76,7 @@
 .settings-instructions {
     font-style: italic;
     font-weight: normal;
+    line-height: 1.2;
     color: var(--settings-extra-info);
     position: relative;
     text-align: center;
