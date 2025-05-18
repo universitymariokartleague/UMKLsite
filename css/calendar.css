@@ -91,7 +91,7 @@
 }
 
 .today {
-    background-image: url("../assets/image/calendar/today.gif"); /* test code dont remove */
+    /* background-image: url("../assets/image/calendar/today.gif");  I'll design a better gif for this at some point */
     background-size: cover;
     background-position: center;
     background-color: var(--accent-color);

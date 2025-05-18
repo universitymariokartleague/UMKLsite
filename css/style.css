@@ -791,15 +791,6 @@ blockquote {
     text-align: center;
 }
 
-#JSTeamBox {
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
-}
-
-#JSTeamBox.fade-in {
-    opacity: 1;
-}
-
 .team-info {
     border: 1px solid #ccccccaa;
     border-radius: 10px;
@@ -881,6 +872,8 @@ blockquote {
 .team-info-logo {
     margin: 0 auto;
     width: 200px;
+    opacity: 0;
+    animation: fadeIn 0.1s ease-in-out forwards;
 }
 
 @media screen and (max-width: 767px) {
