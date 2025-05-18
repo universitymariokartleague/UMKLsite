@@ -69,9 +69,7 @@ async function generateTeamBox(teamData) {
             <tr><td class="table-key">Matches Played</td><td>${await getTeamMatchesPlayed(teamData.team_id, currentSeason)}</td></tr>
             <tr><td class="table-key">Wins-Losses</td><td>${(await getTeamWinsAndLossesForSeason(teamData.team_id, currentSeason))[0]}-${(await getTeamWinsAndLossesForSeason(teamData.team_id, currentSeason))[1]}</td></tr>
             <tr><td class="table-key">Points</td><td>${await getTeamSeasonPoints(teamData.team_id, currentSeason)} (${toOrdinal(teamData.season_position)})</td></tr>
-            <tr><td class="table-key">Penalties</td><td>X</td></tr>
-            <tr><td class="table-key">Last Match</td><td>X</td></tr>
-            <tr><td class="table-key">Next Match</td><td>X</td></tr>
+            <tr><td class="table-key">Penalties</td><td>${await getSeasonPenalties(teamData.team_id, currentSeason)}</td></tr>
         </table>
     `;
 
@@ -160,6 +158,16 @@ async function getTeamWinsAndLossesForSeason(team_id, season_id) {
         }
     }
     return [wins, losses];
+}
+
+async function getSeasonPenalties(team_id, season_id) {
+    const result = await runSQL(`SELECT SUM(penalty_amount) as total_penalties
+        FROM penalty
+        JOIN tournament_entry ON penalty.tournament_entry_id = tournament_entry.tournament_entry_id
+        JOIN tournament ON tournament_entry.tournament_id = tournament.tournament_id
+        WHERE tournament_entry.team_id = ${team_id}
+        AND tournament.season_id = ${season_id}`);
+    return result[0]?.total_penalties || 0;
 }
 
 async function getTeamCareerPoints(team_id) {
