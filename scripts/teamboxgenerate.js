@@ -6,7 +6,24 @@
 */
 
 import { isDBLoaded, runSQL } from './database.js';
-import { getTeamWinsAndLossesForSeason, getTeamMatchesPlayed } from './teamboxhelper.js'
+import {
+    toOrdinal,
+    getCurrentSeason,
+    getSeasonStatus,
+    getFirstEntry,
+    getTeamWinsAndLossesForSeason,
+    getSeasonPenalties,
+    getTeamCareerPoints,
+    getTeamPlace,
+    getPlace,
+    getTeamSeasonPoints,
+    getSeasonTeamStandings,
+    getTeamChampionships,
+    getTeamMatchesPlayed,
+    getTeamTournaments,
+    getTournamentTeamResults,
+    getTeamWinsAndLosses
+} from './teamboxhelper.js';
 
 const teamBoxFormatHTML = `
     <button onClick="location.href='pages/teams/{{linkName}}/'" class="{{className}} teamBox">
@@ -87,17 +104,12 @@ async function generateTeamBoxes(teamData, cached) {
     if (listView) {
         JSTeamBox.classList.remove('teamBoxContainer');
 
-        console.log(teamData)
-
-        // Create a table element
         const table = document.createElement('table');
-
         table.classList.add("team-list-view-table")
         
-        // Create table header
         const thead = document.createElement('thead');
         const headerRow = document.createElement('tr');
-        ['Pos', 'Team', 'Win - Losses', 'Pts'].forEach(headerText => {
+        ['Pos.', 'Team Name', "Matches played", 'Win - Losses', 'Pts'].forEach(headerText => {
             const th = document.createElement('th');
             th.textContent = headerText;
             headerRow.appendChild(th);
@@ -105,11 +117,8 @@ async function generateTeamBoxes(teamData, cached) {
         thead.appendChild(headerRow);
         table.appendChild(thead);
         
-        // Create table body
         const tbody = document.createElement('tbody');
         teamData.forEach(async team => {
-            console.log(team.team_id)
-
             const row = document.createElement('tr');
             row.style.backgroundColor = team.team_color;
             row.style.color = "#FFF";
@@ -128,10 +137,12 @@ async function generateTeamBoxes(teamData, cached) {
             row.setAttribute('role', 'button');
             row.setAttribute('aria-label', `View ${team.team_name} details`);
             
-            const winsAndLosses = await getTeamWinsAndLossesForSeason(team.team_id, currentSeason);
+            const matchesPlayed = await getTeamMatchesPlayed(team.team_id, currentSeason);
+            const winsAndLosses = cached ? ["     ","     "] : await getTeamWinsAndLossesForSeason(team.team_id, currentSeason);
             [
                 team.position, 
                 `<div class="team-name-grid-flex"><img src="${team.logo_src}" alt="${team.team_name} team logo" class="team-logo-grid">${team.team_name} <span class="team-list-full-institution">(${team.team_full_name})</span></div>`, 
+                `${matchesPlayed}`,
                 `${winsAndLosses[0]} - ${winsAndLosses[1]}`,
                 `${team.points_override ? team.points_override : (team.points ? team.points : "0")}`,
             ].forEach(text => {
@@ -144,7 +155,6 @@ async function generateTeamBoxes(teamData, cached) {
             tbody.appendChild(row);
         });
         table.appendChild(tbody);
-        
         JSTeamBox.appendChild(table);
     } else {
         JSTeamBox.classList.add('teamBoxContainer');
@@ -157,14 +167,15 @@ async function generateTeamBoxes(teamData, cached) {
                 generateTeamBox(team, cached, i);
             }
             document.head.appendChild(styleSheet);
-            cacheTeamData(JSON.stringify(teamData));
-            setTimeout(() => {
-                firstLoad = false;
-            }, 100);
         } catch (error) {
             JSTeamBox.innerHTML = error.stack;
         }
     }
+
+    cacheTeamData(JSON.stringify(teamData));
+    setTimeout(() => {
+        firstLoad = false;
+    }, 100);
 }
 
 function cacheTeamData(teamData) {
@@ -227,89 +238,6 @@ async function generateSeasonPicker() {
     }
 }
 
-async function getCurrentSeason() {
-    /** Fetch the ID of the most recent season from the database. */
-    const result = await runSQL(`
-        SELECT MAX(season_id)
-        FROM season`
-    );
-
-    return result[0]["MAX(season_id)"];
-}
-
-async function getSeasonStatus(season_id) {
-    /** Fetch the status of a specific season from the database. */
-    const result = await runSQL(`
-        SELECT season_id
-        FROM season
-    `);
-
-    if (result.length > season_id) {
-        return "Concluded";
-    }
-    else {
-        const matches = await runSQL(`
-            SELECT *
-            FROM tournament
-            WHERE season_id = ${season_id}
-        `);
-
-        if (matches.length === 0) {
-            return "Upcoming";
-        } else {
-            return "Ongoing";
-        }
-    }
-}
-
-async function getTeamSeasonPoints(team_id, season_id) {
-    /** Calculate the total points for a team in a specific season. */
-    const result = await runSQL(`
-        SELECT SUM(points) as total_points
-        FROM tournament_result, tournament_entry, tournament
-        WHERE team_id = ${team_id}
-        AND tournament_result.tournament_entry_id = tournament_entry.tournament_entry_id
-        AND tournament_entry.tournament_id = tournament.tournament_id
-        AND approved = 1
-        AND season_id = ${season_id}
-    `);
-
-    return result[0]?.total_points || 0;
-}
-
-async function getSeasonTeamStandings(season_id) {
-    /** Get the standings of all teams in a specific season, sorted by points. */
-    const standings = [];
-
-    // Get team data for the season
-    const teamData = await runSQL(`
-        SELECT team.team_id, team_name, team_full_name, team_color 
-        FROM team, season_entry 
-        WHERE season_id = ${season_id} 
-        AND team.team_id = season_entry.team_id
-    `);
-
-    if (!teamData || teamData.length === 0) {
-        console.debug(`%cteamboxgenerate.js %c> %cNo teams found for season ${season_id}`, "color:#9452ff", "color:#fff", "color:#ff6b6b");
-        return [];
-    }
-
-    // Get points for each team and build standings
-    for (const team of teamData) {
-        const teamPoints = await getTeamSeasonPoints(team.team_id, currentSeason);
-        standings.push({
-            team_id: team.team_id,
-            team_name: team.team_name,
-            team_full_name: team.team_full_name,
-            team_color: team.team_color,
-            points: teamPoints
-        });
-    }
-
-    // Sort by points in descending order
-    return standings.sort((a, b) => b.points - a.points);
-}
-
 seasonPicker.addEventListener("change", async function () {
     currentSeason = this.value;
     await updateSeasonText();
@@ -325,7 +253,8 @@ async function updateSeasonText() {
 checkCache();
 
 const listViewButton = document.getElementById("listViewButton");
-listViewButton.addEventListener("click", async () => {    
+listViewButton.addEventListener("click", async () => {
+    firstLoad = false;
     const newListView = localStorage.getItem("teamsListView") == 1 ? 0 : 1;
     localStorage.setItem("teamsListView", newListView);
     document.dispatchEvent(new CustomEvent('listViewChange'));

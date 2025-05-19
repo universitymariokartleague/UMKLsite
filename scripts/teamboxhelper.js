@@ -1,7 +1,8 @@
 import { isDBLoaded, runSQL } from './database.js';
 export {
-    getCurrentSeason,
     toOrdinal,
+    getCurrentSeason,
+    getSeasonStatus,
     getFirstEntry,
     getTeamWinsAndLossesForSeason,
     getSeasonPenalties,
@@ -17,6 +18,12 @@ export {
     getTeamWinsAndLosses
 };
 
+function toOrdinal(n) {
+    const s = ["th", "st", "nd", "rd"],
+        v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
 async function getCurrentSeason() {
     /** Fetch the ID of the most recent season from the database. */
     const result = await runSQL(`
@@ -27,10 +34,29 @@ async function getCurrentSeason() {
     return result[0]["MAX(season_id)"];
 }
 
-function toOrdinal(n) {
-    const s = ["th", "st", "nd", "rd"],
-        v = n % 100;
-    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+async function getSeasonStatus(season_id) {
+    /** Fetch the status of a specific season from the database. */
+    const result = await runSQL(`
+        SELECT season_id
+        FROM season
+    `);
+
+    if (result.length > season_id) {
+        return "Concluded";
+    }
+    else {
+        const matches = await runSQL(`
+            SELECT *
+            FROM tournament
+            WHERE season_id = ${season_id}
+        `);
+
+        if (matches.length === 0) {
+            return "Upcoming";
+        } else {
+            return "Ongoing";
+        }
+    }
 }
 
 async function getFirstEntry(team_id) {

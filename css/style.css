@@ -1104,6 +1104,30 @@ blockquote {
     border-radius: 10px;
 }
 
+.team-list-view-table th:nth-child(1),
+.team-list-view-table td:nth-child(1) {
+    width: 30px;
+    text-align: center;
+}
+
+.team-list-view-table th:nth-child(3),
+.team-list-view-table td:nth-child(3) {
+    width: 50px;
+    text-align: center;
+}
+
+.team-list-view-table th:nth-child(4),
+.team-list-view-table td:nth-child(4) {
+    width: 50px;
+    text-align: center;
+}
+
+.team-list-view-table th:nth-child(5),
+.team-list-view-table td:nth-child(5) {
+    width: 50px;
+    text-align: center;
+}
+
 .team-list-view-table thead {
     color: var(--text-color);
     text-align: left;
@@ -1168,14 +1192,22 @@ blockquote {
 
 @media screen and (max-width: 767px) {
     .team-list-view-table th {
-        padding: 10px;
+        padding: 5px;
     }
 
     .team-list-view-table td {
-        padding: 10px;
+        padding: 5px 0px;
     }
 
     .team-list-full-institution {
         display: none;
+    }
+
+    .team-list-view-table th {
+        font-size: clamp(0.6rem, 3vw, 0.85em);
+    }
+
+    .team-list-view-table td {
+        font-size: clamp(0.6rem, 2.5vw, 0.95em);
     }
 }
