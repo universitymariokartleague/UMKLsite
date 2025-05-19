@@ -153,6 +153,8 @@ function generateEventListeners() {
     document.getElementById('clearLocalStorage').addEventListener('click', clearLocalStorage);
 }
 
+sendThemeChangeEvent();
+
 function checkEasterEggs() {
     function checkDate(month, day) {
         return currentDate.getMonth() === month && currentDate.getDate() === day;
