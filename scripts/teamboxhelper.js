@@ -121,7 +121,7 @@ async function getTeamPlace(team_id) {
 
 async function getPlace(place_id) {
     const result = await runSQL(`
-        SELECT place_name, country
+        SELECT place_name, admin_name, country
         FROM uk_places
         WHERE place_id = ${place_id}
     `);
