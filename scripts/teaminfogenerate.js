@@ -76,7 +76,7 @@ async function generateTeamBox(teamData) {
             <tr><td class="table-key">Institution</td><td>${teamData.team_full_name}</td></tr>
             <tr><td class="table-key">First Entry</td><td>Season ${firstEntry} (${startYear + firstEntry}-${startYear + 1 + firstEntry})</td></tr>
             <tr><td class="table-key">Championships</td><td>${await getTeamChampionships(teamData.team_id)}</td></tr>
-            <tr><td class="table-key">Wins-Losses</td><td>${winslosses[0]}-${winslosses[1]}</td></tr>
+            <tr><td class="table-key">Wins-Losses</td><td>${winslosses[0]} - ${winslosses[1]}</td></tr>
             <tr><td class="table-key">Lifetime Points</td><td>${await getTeamCareerPoints(teamData.team_id)}</td></tr>
         </table>
     `;
@@ -84,7 +84,7 @@ async function generateTeamBox(teamData) {
     let currentFields = `
         <table class="team-info-table">
             <tr><td class="table-key">Matches Played</td><td>${await getTeamMatchesPlayed(teamData.team_id, currentSeason)}</td></tr>
-            <tr><td class="table-key">Wins-Losses</td><td>${(await getTeamWinsAndLossesForSeason(teamData.team_id, currentSeason))[0]}-${(await getTeamWinsAndLossesForSeason(teamData.team_id, currentSeason))[1]}</td></tr>
+            <tr><td class="table-key">Wins-Losses</td><td>${(await getTeamWinsAndLossesForSeason(teamData.team_id, currentSeason))[0]} - ${(await getTeamWinsAndLossesForSeason(teamData.team_id, currentSeason))[1]}</td></tr>
             <tr><td class="table-key">Points</td><td>${await getTeamSeasonPoints(teamData.team_id, currentSeason)} (${toOrdinal(teamData.season_position)})</td></tr>
             <tr><td class="table-key">Penalties</td><td>${await getSeasonPenalties(teamData.team_id, currentSeason)}</td></tr>
         </table>
