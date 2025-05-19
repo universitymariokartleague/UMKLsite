@@ -183,7 +183,6 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 48px;
     width: calc(100% - 40px);
     max-width: 800px;
     margin: auto;
@@ -247,6 +246,10 @@ footer {
 
 /* Mobile styles */
 @media screen and (max-width: 767px) {
+    .nav-bar {
+        height: 48px;
+    }
+
     .nav-bar ul {
         display: none;
     }
