@@ -42,7 +42,7 @@ shareButton.addEventListener("click", async () => {
                 "UMKL Team Standings",
                 generateMessage(),
                 blob,
-                `team_standings_season${currentSeason.value}.png`,
+                `team_standings_season_${currentSeason.value}.png`,
             );
         }
 
