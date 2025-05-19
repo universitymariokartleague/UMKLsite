@@ -575,7 +575,7 @@ mention::selection, tag::selection {
     padding-left: 10px;
     font-size: 25px;
     font-weight: bold;
-    display:flex;
+    display: flex;
     justify-content: space-between;
     align-items: center;
     border-left: 8px solid #FFF
@@ -1110,9 +1110,14 @@ blockquote {
 
 .team-list-view-table {
     width: 100%;
-    border-collapse: collapse;
+    border-spacing: 0;
     margin: 20px 0;
-    outline: 1px solid #cccccc;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.team-list-view-table th {
     border-radius: 10px;
 }
 
@@ -1206,6 +1211,7 @@ blockquote {
     width: 35px; 
     height: 35px;
 }
+
 
 @media screen and (max-width: 767px) {
     .team-list-view-table th {
