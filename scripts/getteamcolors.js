@@ -31,6 +31,10 @@ async function loadTeamColors() {
         colorDiv.className = "color-box";
         colorDiv.style.backgroundColor = color;
         colorDiv.title = name;
+        colorDiv.style.cursor = "pointer";
+        colorDiv.addEventListener("click", () => {
+            document.dispatchEvent(new CustomEvent('changeDiscordRoleColor', { detail: { color } }));
+        });
         currentTeamColors.appendChild(colorDiv);
     });
 

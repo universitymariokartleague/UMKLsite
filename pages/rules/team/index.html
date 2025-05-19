@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
         <link rel="stylesheet" href="css/calendar.css">
+        <link rel="stylesheet" href="css/colorpicker.css">
         <link rel="stylesheet" href="css/discordrolepreview.css">
         <link rel="stylesheet" href="css/overlayscrollbars.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -31,12 +32,10 @@
         <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
         <script src="scripts/overlayscrollbars.browser.es6.min.js" defer></script>
         <script src="scripts/overlayscrollbar.js" defer></script> 
-        
+        <script type="module" src="scripts/coloris.js" defer></script>
         <script type="module" src="scripts/settings.js" defer></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/sql-wasm.js' defer></script>
-        <script type="module" src="scripts/coloris.js"></script>
         <script type="module" src="scripts/getteamcolors.js" defer></script>
-        <script type="module" src="scripts/discordrole.js" defer></script>
     </head>
     <body id="top" data-overlayscrollbars-initialize>
         <div class="navbar-container">
@@ -98,7 +97,6 @@
             <div class="discordRolePreviewContainer">
             <h2 class="h-below-ul">Colour</h2>
 
-
             <p class="p-below-title">The colour is a core part of a team's identity</p>
 
             <div class="discordRolePreview">
@@ -118,17 +116,13 @@
                 <a target="_blank" href="https://www.google.com/search?q=hex+colour+picker">hex colour picker on google</a>.
             </p>
             
-            <input type="text" data-coloris>
+            <p style="display: flex; gap: 10px" class="square">
+                <input value="#1baa8b" id="color-picker" class="coloris" type="text" data-coloris>
+                <span id="colorMessage"></span>
+            </p>
 
-            <div class="color-container">
-                <input id="colorPicker" type="color" />
-                <span id="currentColor"><code>#1BAA8B</code></span>    
-            </div>
-
-            <br/><p class="p-below-title">Below are already existing team colours:</p>
-            <div id="currentTeamColors">
-
-            </div>
+            <p class="p-below-title">Below are already existing team colours:</p>
+            <div id="currentTeamColors"></div>
 
             <ul>
                 <li>Must be used in the command as a hex colour code</li>

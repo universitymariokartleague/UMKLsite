@@ -1,0 +1,14 @@
+.coloris {
+    width: 75px;
+    height: 20px;
+}
+
+.square .clr-field button {
+    left: 0px;
+    right: auto;
+    border-radius: 0px;
+}
+
+.square .clr-field input {
+    padding-left: 36px;
+}
