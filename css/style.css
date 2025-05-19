@@ -515,13 +515,14 @@ mention::selection, tag::selection {
 }
 
 #shareButton {
+    margin-left: 5px;
+}
+
+#listViewButton{
     margin-left: auto;
 }
 
 @media screen and (max-width: 767px) {
-    .current-season-area {
-        display: unset;
-    }
 }
 
 .teamBoxContainer {
@@ -1166,28 +1167,30 @@ blockquote {
 
 .team-list-view-table td:first-child {
     font-weight: bold;
+    font-size: 20px;
 }
 
 /* Color contrast for team rows - ensures text is readable */
 .team-list-view-table tbody tr[style*="background-color"] {
     color: white;
-    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
 }
 
 .team-list-full-institution {
-    color: #ffffff80;
-    font-style: italic;
+    font-weight:normal;
 }
 
 .team-name-grid-flex {
     display: flex;
     align-items: center;
-    gap: 4px;
+}
+
+.team-text-flex {
+    margin-left: 15px;
 }
 
 .team-logo-grid {
-    width: 25px; 
-    height: 25px;
+    width: 40px; 
+    height: 40px;
 }
 
 @media screen and (max-width: 767px) {
@@ -1196,7 +1199,7 @@ blockquote {
     }
 
     .team-list-view-table td {
-        padding: 5px 0px;
+        padding: 10px 0px;
     }
 
     .team-list-full-institution {

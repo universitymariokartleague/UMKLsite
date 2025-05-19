@@ -109,7 +109,7 @@ async function generateTeamBoxes(teamData, cached) {
         
         const thead = document.createElement('thead');
         const headerRow = document.createElement('tr');
-        ['Pos.', 'Team Name', "Matches played", 'Win - Losses', 'Pts'].forEach(headerText => {
+        ['POS', 'TEAM', "MATCHES", 'W - L', 'PTS'].forEach(headerText => {
             const th = document.createElement('th');
             th.textContent = headerText;
             headerRow.appendChild(th);
@@ -141,7 +141,13 @@ async function generateTeamBoxes(teamData, cached) {
             const winsAndLosses = cached ? ["     ","     "] : await getTeamWinsAndLossesForSeason(team.team_id, currentSeason);
             [
                 team.position, 
-                `<div class="team-name-grid-flex"><img src="${team.logo_src}" alt="${team.team_name} team logo" class="team-logo-grid">${team.team_name} <span class="team-list-full-institution">(${team.team_full_name})</span></div>`, 
+                `<div class="team-name-grid-flex">
+                    <img src="${team.logo_src}" alt="${team.team_name} team logo" class="team-logo-grid">
+                        <div class="team-text-flex">
+                        <h3>${team.team_name}</h3>
+                    <span class="team-list-full-institution">${team.team_full_name}</span>
+                    </div>
+                </div>`, 
                 `${matchesPlayed}`,
                 `${winsAndLosses[0]} - ${winsAndLosses[1]}`,
                 `${team.points_override ? team.points_override : (team.points ? team.points : "0")}`,
