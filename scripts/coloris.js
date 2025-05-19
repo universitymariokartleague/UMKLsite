@@ -4,12 +4,12 @@ const iframe = document.getElementById("discordRoleiFrame");
 const colorPicker = document.getElementById("color-picker");
 const colorMessage = document.getElementById("colorMessage");
 const attractColors = [
-    "#FF6262", 
-    "#FFAE7F", 
-    "#FFF588",
-    "#67FF8A", 
-    "#65B5FF", 
-    "#FF9AD0"
+    "#ff6262", 
+    "#ffae7f", 
+    "#fff588",
+    "#67ff8a", 
+    "#65b5ff", 
+    "#ff9ad0"
 ];
 let attractMode = true;
 let attractIndex = 0;
@@ -21,7 +21,7 @@ function setupColoris(themeMode = 'dark') {
         themeMode,
         alpha: false,
         swatches: attractColors,
-        defaultColor: '#1BAA8B',
+        defaultColor: '#1baa8b',
         onChange: changeColor
     });
 }
