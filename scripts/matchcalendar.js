@@ -216,8 +216,7 @@ function createShareButtonListener(formattedDate) {
     });
 }
 
-// Listen for theme change event
-document.addEventListener('startDayChange', (event) => {
+document.addEventListener('startDayChange', () => {
     displayCalendar();
 });
 

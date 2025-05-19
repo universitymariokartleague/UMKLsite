@@ -94,10 +94,6 @@
     position: relative;
 }
 
-.settings-hover-info {
-    cursor: pointer;
-}
-
 .settings-hover-info::after {
     content: "(" attr(data-info) ")";
     position: absolute;
@@ -120,7 +116,12 @@
         display: block;
     }
 
+    .settings-hover-info {
+        cursor: pointer;
+    }
+
     .settings-hover-info::after {
+        content: attr(data-info);
         background-color: var(--bg-color);
         border: var(--button-border);
         padding: 0 5px 0 5px;

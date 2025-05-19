@@ -6,9 +6,10 @@
 */
 
 import { isDBLoaded, runSQL } from './database.js';
+import { getTeamWinsAndLossesForSeason, getTeamMatchesPlayed } from './teamboxhelper.js'
 
 const teamBoxFormatHTML = `
-    <button onClick="location.href='pages/teams/{{LinkName}}/'" class="{{className}} teamBox">
+    <button onClick="location.href='pages/teams/{{linkName}}/'" class="{{className}} teamBox">
         <div class="positionBox">
             <div class="team-position">{{position}}</div>
             <div class="team-points">
@@ -30,6 +31,8 @@ const styleSheet = document.createElement("style");
 const seasonPicker = document.getElementById("season-select")
 const currentSeasonText = document.getElementById("current-season")
 
+let listView = localStorage.getItem("teamsListView") == 1 || false;
+
 const startYear = 2023;
 let dbLoaded = false;
 let firstLoad = true;
@@ -38,10 +41,6 @@ let currentSeason, maxSeason = 1;
 let startTime;
 
 async function generateTeamBox(team, cached, count) {
-    team.logo_src = `assets/image/teamemblems/${team.team_name.toUpperCase()}.png`
-    team.class_name = team.team_name.replace(/\s+/g, '')
-    team.link_name = team.team_name.replace(/\s+/g, '-').toLowerCase()
-
     let teamBoxStyle="button.teamBox.{{className}}:hover,button.teamBox.{{className}}:focus{border: 0px solid {{teamColor}};outline: 4px solid {{teamColor}};}.team.{{className}}{border-left: 8px solid {{teamColor}};}"
         .replaceAll("{{className}}", team.class_name)
         .replaceAll("{{teamColor}}", team.team_color);
@@ -54,7 +53,7 @@ async function generateTeamBox(team, cached, count) {
         .replaceAll("{{teamName}}", team.team_name)
         .replace("{{institution}}", team.team_full_name)
         .replaceAll("{{className}}", team.class_name)
-        .replace("{{LinkName}}", team.link_name)
+        .replace("{{linkName}}", team.link_name)
         .replace("{{logoSrc}}", team.logo_src)
         .replace("{{teamlogoopacity}}", cached);
 
@@ -74,20 +73,97 @@ async function generateTeamBox(team, cached, count) {
 async function generateTeamBoxes(teamData, cached) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.add('fade-in');
-    try {
-        for (let i = 0; i < teamData.length; i++) {
-            const team = teamData[i];
-            team.position = i + 1;
-            if (dbLoaded) team.points_override = await getTeamSeasonPoints(team.team_id, currentSeason);
-            generateTeamBox(team, cached, i);
+    listView = localStorage.getItem("teamsListView") == 1 || false;
+
+    for (let i = 0; i < teamData.length; i++) {
+        const team = teamData[i];
+        team.position = i + 1;
+        if (dbLoaded) team.points_override = await getTeamSeasonPoints(team.team_id, currentSeason);
+        team.logo_src = `assets/image/teamemblems/${team.team_name.toUpperCase()}.png`
+        team.class_name = team.team_name.replace(/\s+/g, '')
+        team.link_name = team.team_name.replace(/\s+/g, '-').toLowerCase()
+    }
+
+    if (listView) {
+        JSTeamBox.classList.remove('teamBoxContainer');
+
+        console.log(teamData)
+
+        // Create a table element
+        const table = document.createElement('table');
+
+        table.classList.add("team-list-view-table")
+        
+        // Create table header
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        ['Pos', 'Team', 'Win - Losses', 'Pts'].forEach(headerText => {
+            const th = document.createElement('th');
+            th.textContent = headerText;
+            headerRow.appendChild(th);
+        });
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+        
+        // Create table body
+        const tbody = document.createElement('tbody');
+        teamData.forEach(async team => {
+            console.log(team.team_id)
+
+            const row = document.createElement('tr');
+            row.style.backgroundColor = team.team_color;
+            row.style.color = "#FFF";
+
+            row.addEventListener('click', () => {
+                window.location.href = `pages/teams/${team.link_name}/`
+            });
+
+            row.setAttribute('tabindex', '0');
+            row.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    window.location.href = `pages/teams/${team.link_name}/`
+                }
+            });
+
+            row.setAttribute('role', 'button');
+            row.setAttribute('aria-label', `View ${team.team_name} details`);
+            
+            const winsAndLosses = await getTeamWinsAndLossesForSeason(team.team_id, currentSeason);
+            [
+                team.position, 
+                `<div class="team-name-grid-flex"><img src="${team.logo_src}" alt="${team.team_name} team logo" class="team-logo-grid">${team.team_name} <span class="team-list-full-institution">(${team.team_full_name})</span></div>`, 
+                `${winsAndLosses[0]} - ${winsAndLosses[1]}`,
+                `${team.points_override ? team.points_override : (team.points ? team.points : "0")}`,
+            ].forEach(text => {
+                const td = document.createElement('td');
+                td.innerHTML = text;
+                td.classList.add("custom-selection");
+                row.appendChild(td);
+            });
+            
+            tbody.appendChild(row);
+        });
+        table.appendChild(tbody);
+        
+        JSTeamBox.appendChild(table);
+    } else {
+        JSTeamBox.classList.add('teamBoxContainer');
+
+        try {
+            for (let i = 0; i < teamData.length; i++) {
+                const team = teamData[i];
+                team.position = i + 1;
+                if (dbLoaded) team.points_override = await getTeamSeasonPoints(team.team_id, currentSeason);
+                generateTeamBox(team, cached, i);
+            }
+            document.head.appendChild(styleSheet);
+            cacheTeamData(JSON.stringify(teamData));
+            setTimeout(() => {
+                firstLoad = false;
+            }, 100);
+        } catch (error) {
+            JSTeamBox.innerHTML = error.stack;
         }
-        document.head.appendChild(styleSheet);
-        cacheTeamData(JSON.stringify(teamData));
-        setTimeout(() => {
-            firstLoad = false;
-        }, 100);
-    } catch (error) {
-        JSTeamBox.innerHTML = error.stack;
     }
 }
 
@@ -108,6 +184,12 @@ function checkCache() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+    startTime = performance.now();
+    await waitForDBToInit();
+    await readTeamsData()
+});
+
+document.addEventListener('listViewChange', async () => {
     startTime = performance.now();
     await waitForDBToInit();
     await readTeamsData()
@@ -241,3 +323,10 @@ async function updateSeasonText() {
 }
 
 checkCache();
+
+const listViewButton = document.getElementById("listViewButton");
+listViewButton.addEventListener("click", async () => {    
+    const newListView = localStorage.getItem("teamsListView") == 1 ? 0 : 1;
+    localStorage.setItem("teamsListView", newListView);
+    document.dispatchEvent(new CustomEvent('listViewChange'));
+});

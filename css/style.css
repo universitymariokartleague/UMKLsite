@@ -538,8 +538,8 @@ mention::selection, tag::selection {
     min-width: 300px;
     width: 100%;
     color: inherit;
-    user-select: none;
     -webkit-user-select: none;
+    user-select: none;
 }
 
 @media screen and (max-width: 767px) {
@@ -1093,5 +1093,89 @@ blockquote {
 @keyframes fadeIn {
     to {
         opacity: 1;
+    }
+}
+
+.team-list-view-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    outline: 1px solid #cccccc;
+    border-radius: 10px;
+}
+
+.team-list-view-table thead {
+    color: var(--text-color);
+    text-align: left;
+}
+
+.team-list-view-table th {
+    padding: 15px 20px;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.team-list-view-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.team-list-view-table tbody tr {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.team-list-view-table tbody tr:hover {
+    background-color: var(--link-color) !important;
+}
+
+.team-list-view-table tbody tr:active {
+    transform: scale(0.95);
+    transition: transform 0.1s, color 0.08s;
+}
+
+.team-list-view-table td {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.team-list-view-table td:first-child {
+    font-weight: bold;
+}
+
+/* Color contrast for team rows - ensures text is readable */
+.team-list-view-table tbody tr[style*="background-color"] {
+    color: white;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
+}
+
+.team-list-full-institution {
+    color: #ffffff80;
+    font-style: italic;
+}
+
+.team-name-grid-flex {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.team-logo-grid {
+    width: 25px; 
+    height: 25px;
+}
+
+@media screen and (max-width: 767px) {
+    .team-list-view-table th {
+        padding: 10px;
+    }
+
+    .team-list-view-table td {
+        padding: 10px;
+    }
+
+    .team-list-full-institution {
+        display: none;
     }
 }
