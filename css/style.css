@@ -1105,6 +1105,14 @@ blockquote {
     border-radius: 10px;
 }
 
+.team-list-view-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+.team-list-view-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
 .team-list-view-table th:nth-child(1),
 .team-list-view-table td:nth-child(1) {
     width: 30px;
