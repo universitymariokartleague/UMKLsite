@@ -791,10 +791,19 @@ blockquote {
     text-align: center;
 }
 
+#JSTeamBox {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#JSTeamBox.fade-in {
+    opacity: 1;
+}
+
 .team-info {
     border: 1px solid #ccccccaa;
     border-radius: 10px;
-    display:flex;
+    display: flex;
     gap: 20px;
     padding: 20px;
 }
