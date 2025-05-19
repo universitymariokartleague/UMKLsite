@@ -257,11 +257,23 @@ async function updateSeasonText() {
 }
 
 checkCache();
+generateListViewButton();
 
-const listViewButton = document.getElementById("listViewButton");
-listViewButton.addEventListener("click", async () => {
-    firstLoad = false;
-    const newListView = localStorage.getItem("teamsListView") == 1 ? 0 : 1;
-    localStorage.setItem("teamsListView", newListView);
-    document.dispatchEvent(new CustomEvent('listViewChange'));
-});
+function generateListViewButton() {
+    const listViewButton = document.getElementById("listViewButton");
+
+    function updateButton() {
+        const isListView = localStorage.getItem("teamsListView") == 1;
+        listViewButton.innerHTML = `<span class="fa-solid ${isListView ? 'fa-table-cells-large' : 'fa-bars'}"></span> ${isListView ? 'Switch to grid' : 'Switch to list'}`;
+    }
+
+    updateButton();
+
+    listViewButton.onclick = () => {
+        firstLoad = false;
+        const isListView = localStorage.getItem("teamsListView") == 1;
+        localStorage.setItem("teamsListView", isListView ? 0 : 1);
+        updateButton();
+        document.dispatchEvent(new CustomEvent('listViewChange'));
+    };
+}
