@@ -34,7 +34,7 @@ function changeColor(color) {
     } else if (color === "#000000") {
         colorMessage.textContent = '⚠︎ Pure black (#000000) is not allowed';
     } else {
-        colorMessage.textContent = '';
+        colorMessage.innerHTML = `Current colour: <code>${color}</code>`;
     }
     iframe.contentWindow.postMessage({ type: 'setRoleColor', color }, '*');
 }

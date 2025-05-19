@@ -1,14 +1,26 @@
+.color-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 15px;
+    justify-content: center;
+    align-items: center;
+}
+
 .coloris {
     width: 75px;
-    height: 20px;
+    height: 25px;
+    border: 1px solid #ccccccaa;
+    background-color: var(--box-area-bg-color);
+    border-radius: 5px;
 }
 
 .square .clr-field button {
     left: 0px;
     right: auto;
-    border-radius: 0px;
+
 }
 
 .square .clr-field input {
-    padding-left: 36px;
+    padding-left: 48px;
 }
