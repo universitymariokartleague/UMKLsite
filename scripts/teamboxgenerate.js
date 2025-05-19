@@ -207,9 +207,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 document.addEventListener('listViewChange', async () => {
-    startTime = performance.now();
-    await waitForDBToInit();
-    await readTeamsData()
+    let teamData = await getSeasonTeamStandings(currentSeason)
+    console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    generateTeamBoxes(teamData, false)
 });
 
 async function waitForDBToInit() {
