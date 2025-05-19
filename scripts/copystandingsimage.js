@@ -41,7 +41,7 @@ shareButton.addEventListener("click", async () => {
             await shareImage(
                 "UMKL Team Standings",
                 generateMessage(),
-                blob
+                blob,
                 `team_standings_season${currentSeason.value}.png`,
             );
         }
