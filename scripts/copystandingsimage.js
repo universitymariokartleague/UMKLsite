@@ -28,7 +28,7 @@ shareButton.addEventListener("click", async () => {
         const useClipboard = isWindowsOrLinux() || !navigator.canShare;
         if (useClipboard) shareButton.innerHTML = "Loading shareable image...";
 
-        const imagePath = `assets/pythongraphics/output/team_standings_season${currentSeason.value}.png`
+        const imagePath = `assets/pythongraphics/output/team_standings_season_${currentSeason.value}.png`
         const blob = await fetch(imagePath).then(r => r.blob());
 
         if (useClipboard) {

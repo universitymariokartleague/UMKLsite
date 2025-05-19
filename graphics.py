@@ -243,7 +243,7 @@ def create_team_standings_image(
     cropped_base = base.crop((0, 0, 1125, final_height))
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    cropped_base.save(f"assets/pythongraphics/output/team_standings_season{season_id}.png")
+    cropped_base.save(f"assets/pythongraphics/output/team_standings_season_{season_id}.png")
 
 def create_event_versus_image(
     team_IDs: list[int]
