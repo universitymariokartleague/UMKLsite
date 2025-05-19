@@ -29,11 +29,18 @@ function setupColoris(themeMode = 'dark') {
 setupColoris();
 
 function changeColor(color) {
-    colorMessage.textContent = (color === "#ffffff" || color === "#000000") ? '⚠︎ See below notes' : '';
+    if (color === "#ffffff") {
+        colorMessage.textContent = '⚠︎ Pure white (#ffffff) is not allowed';
+    } else if (color === "#000000") {
+        colorMessage.textContent = '⚠︎ Pure black (#000000) is not allowed';
+    } else {
+        colorMessage.textContent = '';
+    }
     iframe.contentWindow.postMessage({ type: 'setRoleColor', color }, '*');
 }
 
 function updateColor(color) {
+    color = color.toLowerCase();
     attractMode = false;
     colorPicker.value = color;
     colorPicker.dispatchEvent(new Event('input', { bubbles: true }));
