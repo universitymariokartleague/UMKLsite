@@ -264,7 +264,7 @@ function generateListViewButton() {
 
     function updateButton() {
         const isListView = localStorage.getItem("teamsListView") == 1;
-        listViewButton.innerHTML = `<span class="fa-solid ${isListView ? 'fa-table-cells-large' : 'fa-bars'}"></span> ${isListView ? 'Switch to grid' : 'Switch to list'}`;
+        listViewButton.innerHTML = `<span class="fa-solid ${isListView ? 'fa-table-cells-large' : 'fa-bars'}"></span> ${isListView ? 'Grid View' : 'List View'}`;
     }
 
     updateButton();

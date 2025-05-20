@@ -30,6 +30,7 @@
         <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
     <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
     <script src="scripts/overlayscrollbar.js" defer></script>
+    <script src="scripts/creditsgenerate.js" defer></script>
     
     <script type="module" src="scripts/settings.js" defer></script>
 </head>
@@ -85,35 +86,12 @@
         </div>
 
         <h1>Credits</h1>
-        <p class="p-below-title">A list of people who worked on and contributed to UMKL.</p>
+        <p class="p-below-title">People who worked on and contributed to the University Mario Kart League</p>
+        <a href="pages/sitemap">View Sitemap</a>
         <hr class="hr-below-title">
+        
 
-        <h3 class="p-no-spacing">Creation</h3>
-        <p class="p-no-spacing">
-            Committee and board members from York and Staffordshire.<br>
-            UMKL started with Season 1 in October 2024.
-        </p>
-
-        <h3>Cheep Cheep Bot Development</h3>
-        <p class="p-no-spacing">
-            The Cheep Cheep Discord Bot was
-            developed by Adeola Adeniji, zy and Tushar Sundarka
-        </p>
-
-        <h3>Site Development</h3>
-        <p class="p-no-spacing">
-            zy, Tushar Sundarka, Adeola Adeniji
-            <br><br>
-            Please report any issues here: <a href="https://github.com/universitymariokartleague/UMKLsite">https://github.com/universitymariokartleague/UMKLsite</a>
-            or send an email to <a href="mailto:webmaster@umkl.co.uk">webmaster@umkl.co.uk</a>
-        </p>
-
-        <h3>News Blog Writing</h3>
-        <p class="p-no-spacing">
-            zy, skjamm, untitledgoosegame, Tushar Sundarka
-        </p>
-        <hr>
-        <a href="pages/sitemap">View sitemap</a>
+        <div id="creditGenerate"></div>
     </main>
 
     <footer>

@@ -347,6 +347,12 @@ a:hover {
     text-decoration: none;
 }
 
+.credit-socials {
+    margin: 2px 0;
+    display: flex;
+    gap: 5px;
+}
+
 @media (prefers-reduced-motion) {
     a:link {
         transition: none;
@@ -1244,5 +1250,31 @@ blockquote {
     .team-logo-grid {
         width: 25px; 
         height: 25px;
+    }
+}
+
+.credits-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.credit-container {
+    border: 1px solid #ccccccaa;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.credit-container img {
+    border-radius: 5px;
+}
+
+
+@media screen and (max-width: 767px) {
+    .credits-wrapper {
+        display: flex;
+        flex-direction: column;
     }
 }
