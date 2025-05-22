@@ -91,7 +91,7 @@ function renderCreditsSection(section) {
     return html;
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", () => {
     const creditGenerate = document.getElementById("creditGenerate");
     let creditsHTML = "";
     sections.forEach(section => {
