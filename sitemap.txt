@@ -26,6 +26,7 @@ https://umkl.co.uk/teams/oxford/
 https://umkl.co.uk/teams/staffs/
 https://umkl.co.uk/teams/warwick/
 https://umkl.co.uk/teams/york/
+https://umkl.co.uk/test/jsimagegen/
 https://umkl.co.uk/tools/
 https://umkl.co.uk/tools/6v6scorecalculator/
 https://umkl.co.uk/tools/colourpicker/

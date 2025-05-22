@@ -168,13 +168,15 @@ def draw_box_custom(
     draw.rounded_rectangle((pos[0], pos[1], pos[0]+width, pos[1]+height), radius=corner_radius, fill=fill_color, outline=outline_color, width=outline_width)
 
 def create_team_standings_image(
-    season_id: int
+    season_id: int,
+    add_timestamp: bool = False
 ) -> None:
     """
     Create a team standings image for the current season.
 
     Args:
         season_id (int): The ID of the current season.
+        timestamp (bool): Whether to include timestamps.
     """
     # Load base image
     base = Image.open("assets/pythongraphics/graphics/teamstandingbgtall.png").convert("RGBA")
@@ -201,12 +203,13 @@ def create_team_standings_image(
     # Add title
     add_text(f"SEASON {season_id}", (TITLE_POSITION[0], TITLE_POSITION[1] - 50), DEFAULT_FONT, TITLE_FONT_SIZE - 15, TITLE_COLOR, anchor="lm")
     add_text("TEAM STANDINGS", TITLE_POSITION, DEFAULT_FONT, TITLE_FONT_SIZE, TITLE_COLOR, anchor="lm")
-    timestamp = datetime.now().strftime("%d/%m/%Y")
-    
-    if (season_id == logic.get_current_season()):
-        add_text(f"Standings as of\n{timestamp}", (TITLE_POSITION[0] + 900, TITLE_POSITION[1] - 85), DEFAULT_FONT, TITLE_FONT_SIZE - 35, TITLE_COLOR, anchor="rt")
-    else:
-        add_text(f"This season\nhas concluded", (TITLE_POSITION[0] + 900, TITLE_POSITION[1] - 85), DEFAULT_FONT, TITLE_FONT_SIZE - 35, TITLE_COLOR, anchor="rt")
+
+    if add_timestamp:
+        timestamp = datetime.now().strftime("%d/%m/%Y")
+        if (season_id == logic.get_current_season()):
+            add_text(f"Standings as of\n{timestamp}", (TITLE_POSITION[0] + 900, TITLE_POSITION[1] - 85), DEFAULT_FONT, TITLE_FONT_SIZE - 35, TITLE_COLOR, anchor="rt")
+        else:
+            add_text(f"This season\nhas concluded", (TITLE_POSITION[0] + 900, TITLE_POSITION[1] - 85), DEFAULT_FONT, TITLE_FONT_SIZE - 35, TITLE_COLOR, anchor="rt")
 
     # Draw team standings
     for i, (team_id, current_points) in enumerate(team_standings[:MAX_TEAMS]):
