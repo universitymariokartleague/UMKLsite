@@ -194,7 +194,7 @@ async function createTeamStandingsImage(seasonId, isCurrentSeason, teamStandings
 
         // Add team emblem
         try {
-            const emblemPath = `${TEAM_ICON_DIR}${teamData.name}.png`;
+            const emblemPath = `${TEAM_ICON_DIR}${teamData.name.toUpperCase()}.png`;
             const icon = await loadImage(emblemPath);
             ctx.drawImage(icon, INIT_POS[0] - 35, INIT_POS[1] - 57, TEAM_ICON_SIZE[0], TEAM_ICON_SIZE[1]);
         } catch (error) {
