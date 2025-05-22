@@ -244,7 +244,7 @@ async function generateAndDisplayStandings() {
     }
 
     document.getElementById("timeTook").innerHTML = `${(performance.now() - startTime).toFixed(2)}ms`
-    console.debug(`%cgenerateteamstandingsimage.js %c> %cGenerated team standings ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    console.debug(`%cgenerateteamstandingsimage.js %c> %cGenerated team standings ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
 }
 
 async function waitForDBToInit() {
