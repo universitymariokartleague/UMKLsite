@@ -78,7 +78,7 @@ function addText(ctx, text, pos, font, size, color, anchor = "left", spacing = 5
     // Handle multi-line text
     if (text.includes("\n")) {
         const lines = text.split("\n");
-        const lineHeight = size * 1.2; // Approximate line height
+        const lineHeight = size * 1; // Approximate line height
         
         for (const line of lines) {
             const lineMetrics = ctx.measureText(line);
@@ -129,12 +129,12 @@ async function createTeamStandingsImage(seasonId, isCurrentSeason, teamStandings
     await loadFonts();
 
     // Constants
-    const TITLE_POSITION = [200, 120];
+    const TITLE_POSITION = [200, 125];
     const TITLE_FONT_SIZE = 60;
     const INIT_POS = [200, 240];
     const TEAM_ICON_SIZE = [72, 72];
     const TEAM_COLOR_BOX_SIZE = [18, 72];
-    const POINTS_X_OFFSET = 875;
+    const POINTS_X_OFFSET = 865;
     const POINTS_Y_OFFSET = -15;
     const TEAM_NAME_OFFSET = 55;
     const POSITION_OFFSET = 118;
@@ -157,7 +157,7 @@ async function createTeamStandingsImage(seasonId, isCurrentSeason, teamStandings
     }
 
     // Add title
-    addText(ctx, `SEASON ${seasonId}`, [TITLE_POSITION[0], TITLE_POSITION[1] - 50], 
+    addText(ctx, `SEASON ${seasonId}`, [TITLE_POSITION[0], TITLE_POSITION[1] - 55], 
            DEFAULT_FONT, TITLE_FONT_SIZE - 15, TITLE_COLOR, "l");
     addText(ctx, "TEAM STANDINGS", TITLE_POSITION, 
            DEFAULT_FONT, TITLE_FONT_SIZE, TITLE_COLOR, "l");
@@ -165,10 +165,10 @@ async function createTeamStandingsImage(seasonId, isCurrentSeason, teamStandings
     // Add timestamp or season status
     const timestamp = new Date().toLocaleDateString('en-GB');
     if (isCurrentSeason) {
-        addText(ctx, `Standings as of\n${timestamp}`, [TITLE_POSITION[0] + 1200, TITLE_POSITION[1] - 85], 
+        addText(ctx, `Standings as of\n${timestamp}`, [TITLE_POSITION[0] + 1220, TITLE_POSITION[1] - 80], 
                DEFAULT_FONT, TITLE_FONT_SIZE - 35, TITLE_COLOR, "r");
     } else {
-        addText(ctx, "This season\nhas concluded", [TITLE_POSITION[0] + 1200, TITLE_POSITION[1] - 85], 
+        addText(ctx, "This season\nhas concluded", [TITLE_POSITION[0] + 1220, TITLE_POSITION[1] - 80], 
                DEFAULT_FONT, TITLE_FONT_SIZE - 35, TITLE_COLOR, "r");
     }
 
