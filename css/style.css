@@ -1253,6 +1253,15 @@ blockquote {
     }
 }
 
+#creditGenerate {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#creditGenerate.fade-in {
+    opacity: 1;
+}
+
 .credits-wrapper {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

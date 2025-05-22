@@ -97,5 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
     sections.forEach(section => {
         creditsHTML += renderCreditsSection(section);
     });
+    creditGenerate.classList.add('fade-in');
     creditGenerate.innerHTML = creditsHTML;
 });
