@@ -28,5 +28,6 @@ https://umkl.co.uk/teams/warwick/
 https://umkl.co.uk/teams/york/
 https://umkl.co.uk/tools/
 https://umkl.co.uk/tools/6v6scorecalculator/
+https://umkl.co.uk/tools/colourpicker/
 https://umkl.co.uk/tools/favtrack/
 https://umkl.co.uk/tools/trackrandomiser/

@@ -1,6 +1,6 @@
 # Please use .runbeforecommit.py
 
-import logic
+import logic as logic
 import io, requests
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont

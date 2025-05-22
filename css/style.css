@@ -1259,6 +1259,11 @@ blockquote {
     gap: 10px;
 }
 
+.credits-title {
+    margin-top: 0.5em;
+    margin-bottom: 0.2em;
+}
+
 .credit-container {
     border: 1px solid #ccccccaa;
     border-radius: 10px;
@@ -1270,7 +1275,6 @@ blockquote {
 .credit-container img {
     border-radius: 5px;
 }
-
 
 @media screen and (max-width: 767px) {
     .credits-wrapper {

@@ -1,6 +1,6 @@
 # Please use .runbeforecommit.py
 
-import logic
+import logic as logic
 import json
 
 def generate_team_colors_json():

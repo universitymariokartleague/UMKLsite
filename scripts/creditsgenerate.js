@@ -3,7 +3,7 @@ const contributors = [
         name: "h.omeless",
         img: "https://cdn.discordapp.com/avatars/330762336669532161/05a6769f5dc50de87d584c49bcc9adf6?size=1024",
         discord: "https://discordapp.com/users/330762336669532161",
-        github: "https://github.com/h-omeless"
+        github: "https://github.com/h-omeless/"
     },
     {
         name: "redthe1",
@@ -24,42 +24,53 @@ const contributors = [
         name: "tsun1509",
         img: "https://cdn.discordapp.com/avatars/342974732938903563/a_ecd8f2918246d6d90ab60629764e9151?size=1024",
         discord: "https://discordapp.com/users/342974732938903563",
-        github: "https://github.com/TusharSundarka"
+        github: "https://github.com/TusharSundarka/"
     },
     {
         name: "zyposts",
         img: "https://cdn.discordapp.com/avatars/1202021758685949994/64d75ad82deb314036e6b5113ae95a58?size=1024",
         discord: "https://discordapp.com/users/1202021758685949994",
-        github: "https://github.com/zydezu"
+        github: "https://github.com/zydezu/",
+        email: "mailto:kinomaxxing@gmail.com"
     }
-];
-
-const socialPlatforms = [
-    { key: "discord", icon: "fa-discord", title: "Discord"},
-    { key: "github", icon: "fa-github", title: "GitHub" },
-    { key: "twitter", icon: "fa-twitter", title: "Twitter" },
-    { key: "linkedin", icon: "fa-linkedin", title: "LinkedIn" }
 ];
 
 const sections = [
     {
         title: "Founding",
+        description: `People responsible for the creation and growth of the UMKL.`,
         contributorIndexes: [0, 1, 2, 3, 4, 5]
     },
     {
         title: "Cheep Cheep App",
+        description: `Development of the Cheep Cheep Discord bot, which is used in the UMKL Discord server`,
         contributorIndexes: [0, 4, 5]
     },
     {
         title: "Website",
+        description: `The Github repository, where the source code for the website is located, can be found <a href="https://github.com/universitymariokartleague/UMKLsite">here</a>`,
         contributorIndexes: [0, 4, 5]
     }
 ];
 
+const socialPlatforms = [
+    { key: "discord", icon: "fa-brands fa-discord", title: "Discord"},
+    { key: "github", icon: "fa-brands fa-github", title: "GitHub" },
+    { key: "twitter", icon: "fa-brands fa-twitter", title: "Twitter" },
+    { key: "linkedin", icon: "fa-brands fa-linkedin", title: "LinkedIn" },
+    { key: "email", icon: "fa-solid fa-envelope", title: "Email" }
+];
+
 function renderCreditsSection(section) {
-    let html = `<h2${section.title !== "Founding" ? ' class="after-title"' : ''}>${section.title}</h2><div class="credits-wrapper">`;
-    section.contributorIndexes.forEach(idx => {
-        const person = contributors[idx];
+    let html = `
+        <div class="credits-title">
+            <h2 ${section.title !== "Founding" ? ' class="after-title"' : ''}>${section.title}</h2>
+            <p class="p-below-title">${section.description}</p>
+        </div>
+        <div class="credits-wrapper">
+    `;
+    section.contributorIndexes.forEach(i => {
+        const person = contributors[i];
         html += `
         <div class="credit-container">
             <img src="${person.img}" width="50px" height="50px">
@@ -68,7 +79,7 @@ function renderCreditsSection(section) {
                 <div class="credit-socials">
                     ${socialPlatforms.map(social =>
                         person[social.key]
-                            ? `<a class="no-underline-link" href="${person[social.key]}" title="${social.title}"><span class="fa-brands ${social.icon}"></a></span>`
+                            ? `<a class="no-underline-link" href="${person[social.key]}" title="${social.title}"><span class="${social.icon}"></a></span>`
                             : ""
                     ).join("")}
                 </div>
@@ -87,5 +98,4 @@ document.addEventListener("DOMContentLoaded", function() {
         creditsHTML += renderCreditsSection(section);
     });
     creditGenerate.innerHTML = creditsHTML;
-
 });
