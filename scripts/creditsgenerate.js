@@ -31,7 +31,7 @@ const contributors = [
         img: "https://cdn.discordapp.com/avatars/1202021758685949994/64d75ad82deb314036e6b5113ae95a58?size=1024",
         discord: "https://discordapp.com/users/1202021758685949994",
         github: "https://github.com/zydezu/",
-        email: "mailto:kinomaxxing@gmail.com"
+        email: "mailto:webmaster@umkl.co.uk"
     }
 ];
 
