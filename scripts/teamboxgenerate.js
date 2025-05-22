@@ -207,9 +207,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 document.addEventListener('listViewChange', async () => {
-    let teamData = await getSeasonTeamStandings(currentSeason)
+    let teamData = await getSeasonTeamStandings(currentSeason);
+    updateButton();
     console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
-    generateTeamBoxes(teamData, false)
+    generateTeamBoxes(teamData, false);
 });
 
 async function waitForDBToInit() {
@@ -259,13 +260,13 @@ async function updateSeasonText() {
 checkCache();
 generateListViewButton();
 
+function updateButton() {
+    const isListView = localStorage.getItem("teamsListView") == 1;
+    listViewButton.innerHTML = `<span class="fa-solid ${isListView ? 'fa-table-cells-large' : 'fa-bars'}"></span> ${isListView ? 'Grid View' : 'List View'}`;
+}
+
 function generateListViewButton() {
     const listViewButton = document.getElementById("listViewButton");
-
-    function updateButton() {
-        const isListView = localStorage.getItem("teamsListView") == 1;
-        listViewButton.innerHTML = `<span class="fa-solid ${isListView ? 'fa-table-cells-large' : 'fa-bars'}"></span> ${isListView ? 'Grid View' : 'List View'}`;
-    }
 
     updateButton();
 
