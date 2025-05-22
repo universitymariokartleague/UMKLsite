@@ -5,20 +5,23 @@
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-        <title>6v6 Score Calculator | University Mario Kart League</title>
-        <meta name="description" content="Quickly calculate point scores in a 6v6 on the University Mario Kart League (UMKL) site">
+        <title>Colour Picker | University Mario Kart League</title>
+        <meta name="description" content="Pick a colour on the University Mario Kart League (UMKL) site">
         <link rel="shortcut icon" href="assets/image/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
+        <link rel="stylesheet" href="css/colorpicker.css">
+        <link rel="stylesheet" href="css/discordrolepreview.css">
         <link rel="stylesheet" href="css/overlayscrollbars.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        <link rel="stylesheet" href="css/coloris.min.css">
         <meta name="color-scheme" content="dark light">
 
-        <meta property="og:title" content="University Mario Kart League | 6v6 Score Calculator" />
+        <meta property="og:title" content="University Mario Kart League | Track Randomiser" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://umkl.co.uk/pages/tools/trackrandomiser/" />
         <meta property="og:image" content="https://umkl.co.uk/assets/image/brand/UMKL_Banner_embed.png" />
-        <meta property="og:description" content="Quickly calculate point scores in a 6v6 on the University Mario Kart League (UMKL) site" />
+        <meta property="og:description" content="Pick a colour on the University Mario Kart League (UMKL) site" />
         <meta name="theme-color" content="#bc0839">
 
         <!-- Include this to make the og:image larger -->
@@ -30,7 +33,7 @@
         <script src="scripts/overlayscrollbar.js" defer></script>
         
         <script type="module" src="scripts/settings.js" defer></script>
-        <script type="module" src="scripts/6v6scorecalculator.js" defer></script>
+        <script type="module" src="scripts/coloris.js" defer></script>
     </head>
 
     <body id="top" data-overlayscrollbars-initialize>
@@ -63,23 +66,23 @@
                         <a href="pages/faq/">FAQs</a>
                         <a target="_blank" class="nav-bar-link" href="https://discord.gg/jz3hKEmDss">Discord</a>
                     </div>
-                </div>            
+                </div>
             </div>
         </div>
 
         <main>
-            <h1>6v6 Score Calculator</h1>
-            <p class="p-below-title">Quickly calculate point scores in a 6v6</p>
+            <h1>Colour Picker</h1>
+            <p class="p-below-title">Pick and visualise colours here</p>
             <hr class="hr-below-title">
 
-            <label for="positions-input">Input your teams positions (one line = one race)</label><br>
-            <textarea placeholder="1,2,3,4,5,6" style="width: 400px; height: 200px;" id="positions-input"></textarea>
-            <div class="result-container">
-                <div class="result-box" id="team-result"><h3>Your Team</h3></div>
-                <div class="points-diff" id="points-diff"><h2>±0</h2></div>
-                <div class="result-box" id="opponent-result"><h3>Opponent Team</h3></div>
+            <div class="discordRolePreview">
+                <iframe id="discordRoleiFrame" src="pages/faq/discordrole.html" frameborder="0"></iframe>
             </div>
-            
+
+            <p class="color-picker square">
+                <input value="#1baa8b" id="color-picker" class="coloris" type="text" data-coloris>
+                <span id="colorMessage">Current colour: <code>#1baa8b</code></span>
+            </p>
         </main>
 
         <footer>

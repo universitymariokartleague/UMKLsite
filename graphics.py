@@ -493,13 +493,6 @@ def create_welcome_image(
 
     # Add user avatar
     useravatarimage = Image.open(requests.get(user.avatar, stream=True).raw) if user else Image.open(DEFAULT_ICON_PATH)
-    
-    # # Get accent_color from profile picture
-    # accent_color = get_accent_color(useravatarimage)
-    # draw_box_custom((0, 0), 1920, 10, 0, accent_color, ACCENT_COLOR, 0)
-    # draw_box_custom((0, 1070), 1920, 10, 0, accent_color, ACCENT_COLOR, 0)
-    # draw_box_custom((0, 0), 10, 1080, 0, accent_color, ACCENT_COLOR, 0)
-    # draw_box_custom((1910, 0), 10, 1080, 0, accent_color, ACCENT_COLOR, 0)
 
     avatar_image = crop_to_circle(useravatarimage).resize((CIRCLE_WIDTH, CIRCLE_WIDTH), resample=Image.BICUBIC)
     base.paste(avatar_image, (460 - CIRCLE_WIDTH // 2, 452 - CIRCLE_WIDTH // 2), avatar_image)
@@ -547,38 +540,6 @@ def crop_to_circle(
 
     return result
 
-# def get_luminance(rgb):
-#     """Calculate the perceived luminance of an RGB color."""
-#     r, g, b = rgb
-#     return 0.299 * r + 0.587 * g + 0.114 * b
-
-# def get_accent_color(image, min_luminance=50, max_luminance=200):
-#     """Get the accent color of an image, excluding very dark and very light colors."""
-#     from collections import Counter
-
-#     # Resize the image to speed up processing
-#     image = image.resize((100, 100))
-    
-#     # Convert the image to RGB if it's not already
-#     image = image.convert('RGB')
-    
-#     # Get all pixels from the image
-#     pixels = list(image.getdata())
-    
-#     # Filter out dark colors based on luminance
-#     filtered_pixels = [
-#         pixel for pixel in pixels 
-#         if min_luminance <= get_luminance(pixel) <= max_luminance
-#     ]
-    
-#     if not filtered_pixels:
-#         return "#bc0839" # default color
-    
-#     # Find the most common color among the filtered pixels
-#     most_common_color = Counter(filtered_pixels).most_common(1)[0][0]
-    
-#     return most_common_color
-
 def process_bytes_image(image_path):
     """Process an image and return it as bytes."""
     try:
@@ -590,17 +551,3 @@ def process_bytes_image(image_path):
                 return image_buffer.read()
     except Exception as e:
         raise ValueError(f"Failed to process image: {e}")
-
-# async def main():
-    # max_season = logic.get_current_season()
-    # for i in range(1, max_season + 1):
-        # create_team_standings_image(season_id=i)
-
-    # create_event_versus_image(team_IDs=[1, 2])
-    # await create_results_image(None, tournament_id=7)
-    # create_winner_image(tournament_id=7)
-    # create_welcome_image(None)
-
-# if __name__ == "__main__":
-#     import asyncio
-#     asyncio.run(main())
