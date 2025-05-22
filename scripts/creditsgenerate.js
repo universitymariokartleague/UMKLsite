@@ -38,17 +38,17 @@ const contributors = [
 const sections = [
     {
         title: "Founding",
-        description: `People responsible for the creation and growth of the UMKL.`,
+        description: `People responsible for the creation of the University Mario Kart League`,
         contributorIndexes: [0, 1, 2, 3, 4, 5]
     },
     {
         title: "Cheep Cheep App",
-        description: `Development of the Cheep Cheep Discord bot, which is used in the UMKL Discord server`,
+        description: `Development of the Cheep Cheep app, which is used on the Discord server`,
         contributorIndexes: [0, 4, 5]
     },
     {
         title: "Website",
-        description: `The Github repository, where the source code for the website is located, can be found <a href="https://github.com/universitymariokartleague/UMKLsite">here</a>`,
+        description: `All the source code for the website can be found on our <a href="https://github.com/universitymariokartleague/UMKLsite">GitHub repository</a>`,
         contributorIndexes: [0, 4, 5]
     }
 ];

@@ -152,7 +152,7 @@ function showDailyLog(date, dayCell) {
             <div class="settingSubheading">
                 <div class="current-season-area"> 
                     <h3 style="margin: 3px">${formattedDate}</h3>                            
-                    <button id="shareButton"><span class="fa-solid fa-share"></span> Share this date</button>
+                    <button id="shareButton"><span class="fa-solid fa-share"></span> Share Date</button>
                 </div>
                 <hr class="after-title" style="margin-bottom:0;">
                 ${log.map((entry, index) => {
