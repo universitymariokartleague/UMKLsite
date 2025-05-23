@@ -563,6 +563,11 @@ mention::selection, tag::selection {
     user-select: none;
 }
 
+.teamBox:active {
+    transform: scale(0.95);
+    transition: transform 0.1s;
+}
+
 @media screen and (max-width: 767px) {
     .teamBoxContainer {
         grid-template-columns: 1fr;
