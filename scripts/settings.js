@@ -59,7 +59,7 @@ function generateSettingsPanel() {
 
         settingsBoxJS.innerHTML = `
             <div class="setting-sub-heading">Appearance</div><hr>
-            <span class="settings-hover-info" data-info="Light or dark theme">Page Theme</span><button id="toggleTheme" class="settings-option">${tempTheme} theme</button><br>
+            <span class="settings-hover-info" data-info="Light or dark theme">Page theme</span><button id="toggleTheme" class="settings-option">${tempTheme} theme</button><br>
             <span class="settings-hover-info" data-info="Grid or list view">Teams page layout</span><button id="toggleListView" class="settings-option">${listView ? "List view" : "Grid view"}</button><br>
             <span class="settings-hover-info" data-info="Experiment!">experimentalListView</span><button id="toggleExperimentalListView" class="settings-option">${experimentalListView ? "On" : "Off"}</button><br>
 
