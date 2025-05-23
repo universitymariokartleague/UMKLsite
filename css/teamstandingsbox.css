@@ -1,0 +1,80 @@
+.teamStandingsBox {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 25px;
+    
+    color: #bc0839;
+    background-color: #bc0839;
+    min-height: 100px;
+    border-radius: 10px;
+
+    font-family: "SF-Pro-Display-Bold";
+}
+
+.teamStandingsBox .teamStanding {
+    display: flex;
+    gap: 7px;
+    padding: 10px;
+    cursor: pointer;
+    outline: 1px #bc0839 solid;
+    background-color: #fff;
+    height: 50px;
+    border-radius: 10px;
+    transition: background-color 0.2s ease, outline 0.2s ease, color 0.2s ease;
+}
+
+.teamStandingsBox .teamStanding:hover {
+    color: #fff;
+    outline: 1px #fff solid;
+    background-color: var(--accent-color) !important;
+}
+
+.teamStandingsBox .teamStanding:active {
+    transform: scale(0.95);
+    transition: transform 0.1s;
+}
+
+.teamStandingsBox .teamPosition {
+    display: flex;
+    color: #fff;
+    outline: 1px #fff solid;
+    background-color: #bc0839;
+    border-radius: 5px;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
+    height: 50px;
+    width: 50px;
+}
+
+.teamStandingsBox .teamColour {
+    border-radius: 3px;
+    width: 12px;
+}
+
+.teamStandingsBox .teamLogo {
+    margin-left: 5px;
+    height: 50px;
+    width: 50px;
+}
+
+.teamStandingsBox .teamName {
+    margin-left: 6px;
+    font-size: 42px;
+}
+
+.teamStandingsBox .teamPointsArea {
+    margin-left: auto;
+    margin-right: 10px;
+    text-align: right;
+    line-height: 1;
+}
+
+.teamStandingsBox .teamPointsArea .teamPoints {
+    font-size: 35px;
+}
+
+.teamStandingsBox .teamPointsArea .teamStandings {
+    font-size: 14.5px;
+}
