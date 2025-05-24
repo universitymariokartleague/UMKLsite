@@ -67,7 +67,7 @@ async function executeSQL(sqlcmd, params = {}) {
             return [];
         }
     } else {
-        return fetch('https://api.umkl.co.uk/query/', {
+        return fetch('https://api.umkl.co.uk/query', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

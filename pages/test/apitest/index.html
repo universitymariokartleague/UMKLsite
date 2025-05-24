@@ -81,12 +81,12 @@
 <script>
     const apiTest = document.getElementById("apiTest");
 
-    fetch('https://api.umkl.co.uk/query/')
+    fetch('https://api.umkl.co.uk/query')
         .then(response => response.json())
         .then(data => apiTest.innerHTML += `${JSON.stringify(data)}<br>`);
 
     function runSQL(sql) {
-        fetch('https://api.umkl.co.uk/query/', {
+        fetch('https://api.umkl.co.uk/query', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
