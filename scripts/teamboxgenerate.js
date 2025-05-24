@@ -5,7 +5,7 @@
     HTML elements dynamically. It also handles caching of the data to improve performance.
 */
 
-import { isDBLoaded, runSQL } from './database.js';
+import { isDBLoaded } from './database.js';
 import {
     toOrdinal,
     getCurrentSeason,

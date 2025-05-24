@@ -1,4 +1,4 @@
-import { isDBLoaded, runSQL } from './database.js';
+import { runSQL } from './database.js';
 export {
     toOrdinal,
     getCurrentSeason,

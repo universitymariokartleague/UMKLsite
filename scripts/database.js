@@ -6,11 +6,9 @@
 export { isDBLoaded, runSQL };
 
 const initSqlJs = window.initSqlJs;
-
 const config = {
     locateFile: filename => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/${filename}`
 };
-
 const sqlPromise = initSqlJs(config);
 let db;
 
@@ -84,8 +82,7 @@ async function executeSQL(sqlcmd, params = {}) {
 
 async function setupDB() {
     console.debug("%cdatabase.js%c > %cInitialising database", "color:#27fc6e", "color:#fff", "color:#c4ffd8");
-    await initDatabase(); // Ensure the database is initialized
-    // executeSQL("SELECT * FROM tournament_entry");
+    await initDatabase();
 }
 
 async function isDBLoaded() {
