@@ -15,48 +15,70 @@ const sqlPromise = initSqlJs(config);
 let db;
 
 async function initDatabase() {
+    let newDBFetch = localStorage.getItem("newDBFetch") == 1 || false;
+    if (newDBFetch) {
+        db = [];
+        return;
+    }
+
     const dataPromise = fetch("database/umkl_db.db").then(res => res.arrayBuffer());
     const [SQL, buf] = await Promise.all([sqlPromise, dataPromise]);
     db = new SQL.Database(new Uint8Array(buf)); // Assign to the broader scoped db
 }
 
 async function executeSQL(sqlcmd, params = {}) {
-    if (!db) {
-        console.error(`%cdatabase.js%c > %cDatabase is not initialized`, "color:#27fc6e", "color:#fff", "color:#c4ffd8");
-        return [];
-    }
-
-    // Check if the command is a SELECT statement
-    if (!sqlcmd.trim().toUpperCase().startsWith("SELECT")) {
-        console.error(`%cdatabase.js%c > %cOnly SELECT commands are allowed`, "color:#27fc6e", "color:#fff", "color:#c4ffd8");
-        return [];
-    }
-
-    try {
-        const stmt = db.prepare(sqlcmd);
-        let data = [];
-        
-        // Only bind parameters if they exist in the query
-        const paramNames = sqlcmd.match(/\$\w+/g) || [];
-        if (paramNames.length > 0) {
-            const bindParams = {};
-            paramNames.forEach(name => {
-                if (params[name]) {
-                    bindParams[name] = params[name];
-                }
-            });
-            stmt.bind(bindParams);
+    let newDBFetch = localStorage.getItem("newDBFetch") == 1 || false;
+    if (!newDBFetch) {
+        if (!db) {
+            console.error(`%cdatabase.js%c > %cDatabase is not initialized`, "color:#27fc6e", "color:#fff", "color:#c4ffd8");
+            return [];
         }
-        
-        while (stmt.step()) {
-            data.push(stmt.getAsObject());
+
+        // Check if the command is a SELECT statement
+        if (!sqlcmd.trim().toUpperCase().startsWith("SELECT")) {
+            console.error(`%cdatabase.js%c > %cOnly SELECT commands are allowed`, "color:#27fc6e", "color:#fff", "color:#c4ffd8");
+            return [];
         }
-        
-        stmt.free();
-        return data;
-    } catch (error) {
-        console.error(`%cdatabase.js%c > %cSQL execution failed - ${error}`, "color:#27fc6e", "color:#fff", "color:#c4ffd8");
-        return [];
+
+        try {
+            const stmt = db.prepare(sqlcmd);
+            let data = [];
+            
+            // Only bind parameters if they exist in the query
+            const paramNames = sqlcmd.match(/\$\w+/g) || [];
+            if (paramNames.length > 0) {
+                const bindParams = {};
+                paramNames.forEach(name => {
+                    if (params[name]) {
+                        bindParams[name] = params[name];
+                    }
+                });
+                stmt.bind(bindParams);
+            }
+            
+            while (stmt.step()) {
+                data.push(stmt.getAsObject());
+            }
+            
+            stmt.free();
+            return data;
+        } catch (error) {
+            console.error(`%cdatabase.js%c > %cSQL execution failed - ${error}`, "color:#27fc6e", "color:#fff", "color:#c4ffd8");
+            return [];
+        }
+    } else {
+        return fetch('http://zyserver.hopto.org:5555/api/query', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: `${sqlcmd}`,
+                params: []
+            })
+            })
+        .then(response => response.json())
+        .then(text => text)
     }
 }
 
