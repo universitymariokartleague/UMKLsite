@@ -67,7 +67,7 @@ async function executeSQL(sqlcmd, params = {}) {
             return [];
         }
     } else {
-        return fetch('http://zyserver.hopto.org:5555/api/query', {
+        return fetch('https://api.umkl.co.uk/query/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
