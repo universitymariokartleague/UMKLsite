@@ -59,11 +59,9 @@
             <h1>apitest</h1>
             <hr class="hr-below-title">
 
-            <p>
-                <input id="sqlInput" type="text"> <button onclick="submitSQL()">Go!</button>
-            </p>
-
-            <div class="codeBox" id="apiTest"></div>
+            Tables from API (live)
+            <br>Took: <span id="timeTaken"></span>ms to generate
+            <div id="DBTables"></div>
         </main>
 
         <footer>
@@ -79,14 +77,39 @@
 </html>
 
 <script>
-    const apiTest = document.getElementById("apiTest");
+    const DBTables = document.getElementById("DBTables");
 
-    fetch('https://api.umkl.co.uk/query')
-        .then(response => response.json())
-        .then(data => apiTest.innerHTML += `${JSON.stringify(data)}<br>`);
+    async function constructSQLJSON() {
+        try {
+            const tableQueries = [
+                { name: "Game", query: "SELECT * FROM game" },
+                { name: "Penalty", query: "SELECT * FROM penalty" },
+                { name: "Season", query: "SELECT * FROM season" },
+                { name: "Season Entry", query: "SELECT * FROM season_entry" },
+                { name: "Team", query: "SELECT * FROM team" },
+                { name: "Tournament", query: "SELECT * FROM tournament" },
+                { name: "Tournament Entry", query: "SELECT * FROM tournament_entry" },
+                { name: "Tournament Result", query: "SELECT * FROM tournament_result" },
+                { name: "UK Places", query: "SELECT * FROM uk_places" },
+                { name: "User", query: "SELECT * FROM user" }
+            ];
+
+            let startTime = performance.now();
+            for (const table of tableQueries) {
+                const data = await runSQL(table.query);
+                if (data && data.length > 0) {
+                    createHTMLTable(table.name, data);
+                }
+            }
+            document.getElementById("timeTaken").innerHTML = performance.now() - startTime;
+        } catch (error) {
+            console.error("Error constructing tables:", error);
+            DBTables.innerHTML = `<div class="error">Error loading data: ${error.message}</div>`;
+        }
+    }
 
     function runSQL(sql) {
-        fetch('https://api.umkl.co.uk/query', {
+        return fetch('https://api.umkl.co.uk/query', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -94,14 +117,104 @@
             body: JSON.stringify({
                 query: `${sql}`
             })
-            })
-        .then(response => response.json())
-        .then(data => apiTest.innerHTML += `${JSON.stringify(data)}<br>`);
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        });
     }
 
-    function submitSQL() {
-        const sqlInput = document.getElementById("sqlInput");
-        console.log(sqlInput.value)
-        runSQL(sqlInput.value)
+    function createHTMLTable(tableName, data) {
+        // Create table container
+        const tableContainer = document.createElement('div');
+        tableContainer.className = 'table-container';
+        
+        // Create table title
+        const title = document.createElement('h2');
+        title.textContent = tableName;
+        tableContainer.appendChild(title);
+
+        // Create the table element
+        const table = document.createElement('table');
+        table.className = 'data-table';
+
+        // Create table header
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        
+        // Add column headers
+        if (data.length > 0) {
+            Object.keys(data[0]).forEach(key => {
+                const th = document.createElement('th');
+                th.textContent = key;
+                headerRow.appendChild(th);
+            });
+        }
+        
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        // Create table body
+        const tbody = document.createElement('tbody');
+        
+        // Add data rows
+        data.forEach(row => {
+            const tr = document.createElement('tr');
+            
+            Object.values(row).forEach(value => {
+                const td = document.createElement('td');
+                // Handle null/undefined values
+                td.textContent = value !== null && value !== undefined ? value.toString() : 'NULL';
+                tr.appendChild(td);
+            });
+            
+            tbody.appendChild(tr);
+        });
+        
+        table.appendChild(tbody);
+        tableContainer.appendChild(table);
+        DBTables.appendChild(tableContainer);
     }
+
+    // Add some basic CSS
+    const style = document.createElement('style');
+    style.textContent = `
+        .table-container {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        
+        .data-table th {
+            background-color: var(--accent-color);
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+        
+        .error {
+            color: #e74c3c;
+            padding: 10px;
+            background: #ffebee;
+            border-radius: 4px;
+        }
+    `;
+    document.head.appendChild(style);
+
+    constructSQLJSON();
 </script>
