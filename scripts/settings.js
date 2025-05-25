@@ -51,7 +51,6 @@ function generateSettingsPanel() {
         const tempTheme = (localStorage.getItem("darktheme") == 1 || darkThemeEnabled == 1) ? "Dark" : "Light";
         const listView = localStorage.getItem("teamsListView") == 1 || false;
         const experimentalListView = localStorage.getItem("experimentalListView") == 1 || false;
-        const newDBFetch = localStorage.getItem("newDBFetch") == 1 || false;
         
         const tempLocale = localStorage.getItem("locale") || "en-GB";
         const tempLocaleDisplay = tempLocale === "en-GB" ? "English (UK)" : "English (US)";
@@ -64,7 +63,6 @@ function generateSettingsPanel() {
             <span class="settings-hover-info" data-info="Light or dark theme">Page theme</span><button id="toggleTheme" class="settings-option">${tempTheme} theme</button><br>
             <span class="settings-hover-info" data-info="Grid or list view">Teams page layout</span><button id="toggleListView" class="settings-option">${listView ? "List view" : "Grid view"}</button><br>
             <span class="settings-hover-info" data-info="Experiment!">experimentalListView</span><button id="toggleExperimentalListView" class="settings-option">${experimentalListView ? "On" : "Off"}</button><br>
-            <span class="settings-hover-info" data-info="Use the API for database fetching">newDBFetch</span><button id="togglenewDBFetch" class="settings-option">${newDBFetch ? "On" : "Off"}</button><br>
 
             <div class="setting-sub-heading">${tempLocale == "en-GB" ? "Localisation" : "Localization"}</div><hr class="settings-hr">
             <span class="settings-hover-info" data-info="UK or US date/time format">Locale</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button><br/>
@@ -106,14 +104,6 @@ function toggleExperimentalListView() {
     const newExperimentalListView = localStorage.getItem("experimentalListView") == 1 ? 0 : 1;
     localStorage.setItem("experimentalListView", newExperimentalListView);
     console.debug(`%csettings.js %c> %cset experimentalListView to ${newExperimentalListView}`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
-    document.dispatchEvent(new CustomEvent('listViewChange'));
-    generateSettingsPanel();
-}
-
-function togglenewDBFetch() {
-    const newnewDBFetch = localStorage.getItem("newDBFetch") == 1 ? 0 : 1;
-    localStorage.setItem("newDBFetch", newnewDBFetch);
-    console.debug(`%csettings.js %c> %cset newDBFetch to ${newnewDBFetch}`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
     document.dispatchEvent(new CustomEvent('listViewChange'));
     generateSettingsPanel();
 }
@@ -169,7 +159,6 @@ function generateEventListeners() {
     document.getElementById('toggleTheme').addEventListener('click', toggleTheme);
     document.getElementById('toggleListView').addEventListener('click', toggleListView);
     document.getElementById('toggleExperimentalListView').addEventListener('click', toggleExperimentalListView);
-    document.getElementById('togglenewDBFetch').addEventListener('click', togglenewDBFetch);
     document.getElementById('toggleStartDayButton').addEventListener('click', toggleStartDay);
     document.getElementById('toggleMonthTypeButton').addEventListener('click', toggleMonthType);
     document.getElementById('toggleLocaleTypeButton').addEventListener('click', toggleLocale);
