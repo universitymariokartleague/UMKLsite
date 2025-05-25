@@ -115,7 +115,7 @@
     async function constructSQLJSON() {
         try {
             const tableQueries = [
-                { name: "Game", query: "SELECT * FROM game" },
+                // { name: "Game", query: "SELECT * FROM game" },
                 { name: "Penalty", query: "SELECT * FROM penalty" },
                 { name: "Season", query: "SELECT * FROM season" },
                 { name: "Season Entry", query: "SELECT * FROM season_entry" },
@@ -123,8 +123,8 @@
                 { name: "Tournament", query: "SELECT * FROM tournament" },
                 { name: "Tournament Entry", query: "SELECT * FROM tournament_entry" },
                 { name: "Tournament Result", query: "SELECT * FROM tournament_result" },
-                { name: "UK Places", query: "SELECT * FROM uk_places" },
-                { name: "User", query: "SELECT * FROM user" }
+                // { name: "UK Places", query: "SELECT * FROM uk_places" },
+                // { name: "User", query: "SELECT * FROM user" }
             ];
 
             let startTime = performance.now();
@@ -288,6 +288,6 @@
     document.head.appendChild(style);
 
     printCurrentSeason();
-    constructTeamdataJSON("York");
+    constructTeamdataJSON();
     constructSQLJSON();
 </script>
