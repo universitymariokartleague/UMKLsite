@@ -59,8 +59,20 @@
             <h1>apitest</h1>
             <hr class="hr-below-title">
 
-            Tables from API (live)
+            Current season (/currentseason) (live)
+            <br>Took: <span id="timeTaken3"></span>ms to generate
+            <div id="currentseason"></div>
+
+            <hr>
+
+            Tables from API (/teamdata) (live)
             <br>Took: <span id="timeTaken"></span>ms to generate
+            <div id="teamdataTable"></div>
+
+            <hr>
+
+            Tables from API (/query) (live)
+            <br>Took: <span id="timeTaken2"></span>ms to generate
             <div id="DBTables"></div>
         </main>
 
@@ -77,7 +89,28 @@
 </html>
 
 <script>
+    const currentSeason = document.getElementById("currentseason");
+    const teamdataTable = document.getElementById("teamdataTable");
     const DBTables = document.getElementById("DBTables");
+
+    async function printCurrentSeason() {
+        let startTime = performance.now();
+        currentSeason.innerHTML = await getCurrentSeason();
+        document.getElementById("timeTaken3").innerHTML = performance.now() - startTime;
+    }
+
+    async function constructTeamdataJSON(team = "") {
+        try {
+            let startTime = performance.now();
+            const data = await runTeamdata(team);
+            document.getElementById("timeTaken").innerHTML = performance.now() - startTime;
+            createHTMLTable("team", data, teamdataTable)
+
+        } catch (error) {
+            console.error("Error constructing tables:", error);
+            teamdataTable.innerHTML = `<div class="error">Error loading data: ${error.message}</div>`;
+        }
+    }
 
     async function constructSQLJSON() {
         try {
@@ -98,10 +131,10 @@
             for (const table of tableQueries) {
                 const data = await runSQL(table.query);
                 if (data && data.length > 0) {
-                    createHTMLTable(table.name, data);
+                    createHTMLTable(table.name, data, DBTables);
                 }
             }
-            document.getElementById("timeTaken").innerHTML = performance.now() - startTime;
+            document.getElementById("timeTaken2").innerHTML = performance.now() - startTime;
         } catch (error) {
             console.error("Error constructing tables:", error);
             DBTables.innerHTML = `<div class="error">Error loading data: ${error.message}</div>`;
@@ -126,7 +159,44 @@
         });
     }
 
-    function createHTMLTable(tableName, data) {
+    function runTeamdata(team = "", season = 2) {
+        return fetch('https://api.umkl.co.uk/teamdata', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                team: `${team}`,
+                season: `${season}`
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        });
+    }
+
+    function getCurrentSeason(season = 0) {
+        return fetch('https://api.umkl.co.uk/seasoninfo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                season: season
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        });
+    }
+
+    function createHTMLTable(tableName, data, group) {
         // Create table container
         const tableContainer = document.createElement('div');
         tableContainer.className = 'table-container';
@@ -175,7 +245,7 @@
         
         table.appendChild(tbody);
         tableContainer.appendChild(table);
-        DBTables.appendChild(tableContainer);
+        group.appendChild(tableContainer);
     }
 
     // Add some basic CSS
@@ -186,6 +256,7 @@
             padding: 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 0.6em;
         }
         
         .data-table {
@@ -216,5 +287,7 @@
     `;
     document.head.appendChild(style);
 
+    printCurrentSeason();
+    constructTeamdataJSON("York");
     constructSQLJSON();
 </script>

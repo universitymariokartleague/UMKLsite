@@ -5,25 +5,6 @@
     championships, wins-losses, and lifetime points. HTML elements are created dynamically.
 */
 
-import { isDBLoaded, runSQL } from './database.js';
-import {
-    getCurrentSeason,
-    toOrdinal,
-    getFirstEntry,
-    getTeamWinsAndLossesForSeason,
-    getSeasonPenalties,
-    getTeamCareerPoints,
-    getTeamPlace,
-    getPlace,
-    getTeamSeasonPoints,
-    getSeasonTeamStandings,
-    getTeamChampionships,
-    getTeamMatchesPlayed,
-    getTeamTournaments,
-    getTournamentTeamResults,
-    getTeamWinsAndLosses
-} from './teamboxhelper.js';
-
 const teamBoxFormatHTML = `
     <div class="team-info-wrapper">
         <img src="{{logoSrc}}" alt="{{teamName}} team logo" class="team-info-logo">
@@ -66,27 +47,25 @@ async function generateTeamBox(teamData) {
         JSTeamBox.innerHTML = `<div class="codeBox">No team data available!<br/>${error.stack}</div>`;
     }
 
-    let winslosses = await getTeamWinsAndLosses(teamData.team_id);
-    let teamPlace = await getPlace(await getTeamPlace(teamData.team_id));
-    let firstEntry = await getFirstEntry(teamData.team_id)
+    let firstEntry = teamData.first_entry
 
     let extraFields = `
         <table class="team-info-table">
-            <tr><td class="table-key">Location</td><td>${teamPlace}</td></tr>
+            <tr><td class="table-key">Location</td><td>${teamData.team_place}</td></tr>
             <tr><td class="table-key">Institution</td><td>${teamData.team_full_name}</td></tr>
             <tr><td class="table-key">First Entry</td><td>Season ${firstEntry} (${startYear + firstEntry}-${startYear + 1 + firstEntry})</td></tr>
-            <tr><td class="table-key">Championships</td><td>${await getTeamChampionships(teamData.team_id)}</td></tr>
-            <tr><td class="table-key">Wins-Losses</td><td>${winslosses[0]} - ${winslosses[1]}</td></tr>
-            <tr><td class="table-key">Lifetime Points</td><td>${await getTeamCareerPoints(teamData.team_id)}</td></tr>
+            <tr><td class="table-key">Championships</td><td>${teamData.team_championships}</td></tr>
+            <tr><td class="table-key">Wins-Losses</td><td>${teamData.career_wins_losses[0]} - ${teamData.career_wins_losses[1]}</td></tr>
+            <tr><td class="table-key">Lifetime Points</td><td>${teamData.team_career_points}</td></tr>
         </table>
     `;
 
     let currentFields = `
         <table class="team-info-table">
-            <tr><td class="table-key">Matches Played</td><td>${await getTeamMatchesPlayed(teamData.team_id, currentSeason)}</td></tr>
-            <tr><td class="table-key">Wins-Losses</td><td>${(await getTeamWinsAndLossesForSeason(teamData.team_id, currentSeason))[0]} - ${(await getTeamWinsAndLossesForSeason(teamData.team_id, currentSeason))[1]}</td></tr>
-            <tr><td class="table-key">Points</td><td>${await getTeamSeasonPoints(teamData.team_id, currentSeason)} (${toOrdinal(teamData.season_position)})</td></tr>
-            <tr><td class="table-key">Penalties</td><td>${await getSeasonPenalties(teamData.team_id, currentSeason)}</td></tr>
+            <tr><td class="table-key">Matches Played</td><td>${teamData.season_matches_played}</td></tr>
+            <tr><td class="table-key">Wins-Losses</td><td>${teamData.season_wins_losses[0]} - ${teamData.season_wins_losses[1]}</td></tr>
+            <tr><td class="table-key">Points</td><td>${teamData.team_season_points} (${toOrdinal(teamData.season_position)})</td></tr>
+            <tr><td class="table-key">Penalties</td><td>${teamData.season_penalties}</td></tr>
         </table>
     `;
 
@@ -106,28 +85,38 @@ async function generateTeamBox(teamData) {
     JSTeamBox.classList.add('fade-in');
 }
 
+function toOrdinal(n) {
+    const s = ["th", "st", "nd", "rd"],
+        v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
+async function getTeamdata(team = "", season = 0) {
+    return fetch('https://api.umkl.co.uk/teamdata', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            team: `${team}`,
+            season: `${season}`
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    });
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
-    await waitForDBToInit();
-    await getTeamData();
-});
-
-async function waitForDBToInit() {
-    while (!(await isDBLoaded())) {
-        console.debug(`%cteaminfogenerate.js %c> %cDatabase is loading...`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
-        await new Promise(resolve => setTimeout(resolve, 20));
-    }
-    console.debug(`%cteaminfogenerate.js %c> %cDatabase loaded`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
-}
-
-async function getTeamData() {
-    console.debug(`%cteaminfogeenrate.js %c> %cGenerating team info box using SQL...`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
-    currentSeason = await getCurrentSeason();
+    console.debug(`%cteaminfogeenrate.js %c> %cGenerating team info box`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
 
     let currentTeam = JSTeamBox.dataset.team
-    let allTeamData = await getSeasonTeamStandings(currentSeason);
-    let teamData = allTeamData.find(team => team.team_name === currentTeam);
+    const teamData = await getTeamdata(currentTeam);
+    await generateTeamBox(teamData[0]);
 
-    await generateTeamBox(teamData);
     console.debug(`%cteaminfogeenrate.js %c> %cGenerated team info box in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
-}
+});

@@ -5,26 +5,6 @@
     HTML elements dynamically. It also handles caching of the data to improve performance.
 */
 
-import { isDBLoaded } from './database.js';
-import {
-    toOrdinal,
-    getCurrentSeason,
-    getSeasonStatus,
-    getFirstEntry,
-    getTeamWinsAndLossesForSeason,
-    getSeasonPenalties,
-    getTeamCareerPoints,
-    getTeamPlace,
-    getPlace,
-    getTeamSeasonPoints,
-    getSeasonTeamStandings,
-    getTeamChampionships,
-    getTeamMatchesPlayed,
-    getTeamTournaments,
-    getTournamentTeamResults,
-    getTeamWinsAndLosses
-} from './teamboxhelper.js';
-
 const teamBoxFormatHTML = `
     <button onClick="location.href='pages/teams/{{linkName}}/'" class="{{className}} teamBox">
         <div class="positionBox">
@@ -50,9 +30,8 @@ const currentSeasonText = document.getElementById("current-season")
 
 let listView = localStorage.getItem("teamsListView") == 1 || false;
 
+let teamData;
 const startYear = 2023;
-let dbLoaded = false;
-let firstLoad = true;
 let currentSeason, maxSeason = 1;
 
 let startTime;
@@ -64,7 +43,7 @@ async function loadFont(name, url) {
     return font;
 }
 
-async function generateTeamBox(team, cached, count) {
+async function generateTeamBox(team) {
     let teamBoxStyle="button.teamBox.{{className}}:hover,button.teamBox.{{className}}:focus{border: 0px solid {{teamColor}};outline: 4px solid {{teamColor}};}.team.{{className}}{border-left: 8px solid {{teamColor}};}"
         .replaceAll("{{className}}", team.class_name)
         .replaceAll("{{teamColor}}", team.team_color);
@@ -72,37 +51,28 @@ async function generateTeamBox(team, cached, count) {
     styleSheet.innerText += teamBoxStyle;
 
     let tempTeamBox = teamBoxFormatHTML
-        .replace("{{position}}", team.position)
-        .replace("{{points}}", `${team.points_override ? team.points_override : (team.points ? team.points : "0")}` )
+        .replace("{{position}}", team.season_position)
+        .replace("{{points}}", team.team_season_points )
         .replaceAll("{{teamName}}", team.team_name)
         .replace("{{institution}}", team.team_full_name)
         .replaceAll("{{className}}", team.class_name)
         .replace("{{linkName}}", team.link_name)
         .replace("{{logoSrc}}", team.logo_src)
-        .replace("{{teamlogoopacity}}", cached);
+        .replace("{{teamlogoopacity}}", 1);
 
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = tempTeamBox;
 
     JSTeamBox.appendChild(tempDiv);
-    if (firstLoad) {
-        tempDiv.style.opacity = 0;
-        setTimeout(() => {
-            tempDiv.style.transition = "opacity 0.2s ease-in-out";
-            tempDiv.style.opacity = 1;
-        }, count * 25);
-    }
 }
 
-async function generateTeamBoxes(teamData, cached) {
+async function generateTeamBoxes(teamData) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.add('fade-in');
     listView = localStorage.getItem("teamsListView") == 1 || false;
 
     for (let i = 0; i < teamData.length; i++) {
         const team = teamData[i];
-        team.position = i + 1;
-        if (dbLoaded) team.points_override = await getTeamSeasonPoints(team.team_id, currentSeason);
         team.logo_src = `assets/image/teamemblems/${team.team_name.toUpperCase()}.png`
         team.class_name = team.team_name.replace(/\s+/g, '')
         team.link_name = team.team_name.replace(/\s+/g, '-').toLowerCase()
@@ -146,10 +116,8 @@ async function generateTeamBoxes(teamData, cached) {
                 row.setAttribute('role', 'button');
                 row.setAttribute('aria-label', `View ${team.team_name} details`);
                 
-                const matchesPlayed = await getTeamMatchesPlayed(team.team_id, currentSeason);
-                const winsAndLosses = cached ? ["     ","     "] : await getTeamWinsAndLossesForSeason(team.team_id, currentSeason);
                 [
-                    team.position, 
+                    team.season_position, 
                     `<div class="team-name-grid-flex">
                         <img src="${team.logo_src}" alt="${team.team_name} team logo" class="team-logo-grid">
                             <div class="team-text-flex">
@@ -157,9 +125,9 @@ async function generateTeamBoxes(teamData, cached) {
                         <span class="team-list-full-institution">${team.team_full_name}</span>
                         </div>
                     </div>`, 
-                    `${matchesPlayed}`,
-                    `${winsAndLosses[0]} - ${winsAndLosses[1]}`,
-                    `${team.points_override ? team.points_override : (team.points ? team.points : "0")}`,
+                    `${team.season_matches_played}`,
+                    `${team.season_wins_losses[0]} - ${team.season_wins_losses[1]}`,
+                    `${team.team_season_points}`,
                 ].forEach(text => {
                     const td = document.createElement('td');
                     td.innerHTML = text;
@@ -178,8 +146,7 @@ async function generateTeamBoxes(teamData, cached) {
             teamStandingsBox.classList.add("teamStandingsBox")
 
             teamData.forEach(async team => {
-                const matchesPlayed = await getTeamMatchesPlayed(team.team_id, currentSeason);
-                const winsAndLosses = cached ? ["     ","     "] : await getTeamWinsAndLossesForSeason(team.team_id, currentSeason);
+                const matchesPlayed = team.season_matches_played
 
                 const row = document.createElement('div');
                 row.classList.add("teamStanding");
@@ -195,13 +162,13 @@ async function generateTeamBoxes(teamData, cached) {
                 });
 
                 row.innerHTML = `
-                    <div class="teamPosition">${team.position}</div>
+                    <div class="teamPosition">${team.season_position}</div>
                     <div class="teamColour" style="background-color:${team.team_color}"></div>
                     <img class="teamLogo" src="${team.logo_src}" alt="${team.team_name} team logo">
                     <div class="teamName">${team.team_name.toUpperCase()}</div>
                     <div class="teamPointsArea">
                         <div class="teamPoints">${team.points_override ? team.points_override : (team.points ? team.points : "0")}</div>
-                        <div class="teamStandings">${winsAndLosses[0]} - ${winsAndLosses[1]} (${matchesPlayed} MATCH${matchesPlayed == 1 ? "" : "ES"})</div>
+                        <div class="teamStandings">${team.season_wins_losses[0]} - ${team.season_wins_losses[1]} (${matchesPlayed} MATCH${matchesPlayed == 1 ? "" : "ES"})</div>
                     </div>
                 `
 
@@ -216,70 +183,92 @@ async function generateTeamBoxes(teamData, cached) {
         try {
             for (let i = 0; i < teamData.length; i++) {
                 const team = teamData[i];
-                team.position = i + 1;
-                if (dbLoaded) team.points_override = await getTeamSeasonPoints(team.team_id, currentSeason);
-                generateTeamBox(team, cached, i);
+                generateTeamBox(team, i);
             }
             document.head.appendChild(styleSheet);
         } catch (error) {
             JSTeamBox.innerHTML = error.stack;
         }
     }
-
-    cacheTeamData(JSON.stringify(teamData));
-    setTimeout(() => {
-        firstLoad = false;
-    }, 100);
 }
 
-function cacheTeamData(teamData) {
-    if (dbLoaded) {
-        localStorage.setItem("cachedTeamData", teamData)
-        const timestamp = new Date().toISOString().replace('T', ' ').split('.')[0];
-        localStorage.setItem("lastCached", timestamp);
-        console.debug(`%cteamboxgenerate.js %c> %cGenerated and cached team data in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9452ff", "color:#fff", "color:#c29cff");
-    }
+async function getCurrentSeason() {
+    return fetch('https://api.umkl.co.uk/seasoninfo', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            season: 0
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    });
 }
 
-function checkCache() {
-    if (localStorage.getItem("cachedTeamData")) {
-        console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using cached data...`, "color:#9452ff", "color:#fff", "color:#c29cff");
-        generateTeamBoxes(JSON.parse(localStorage.getItem("cachedTeamData")), true)
-    }
+async function getSeasonStatus(season = 0) {
+    return fetch('https://api.umkl.co.uk/seasoninfo', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            season: season
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    });
+}
+
+async function getTeamdata(team = "", season) {
+    return fetch('https://api.umkl.co.uk/teamdata', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            team: `${team}`,
+            season: `${season}`
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    });
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
+    console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     await loadFont('SF-Pro-Display-Bold', 'assets/pythongraphics/fonts/SF-Pro/SF-Pro-Display-Bold.otf');
-    await waitForDBToInit();
-    await readTeamsData()
+    
+    currentSeason = parseInt(await getCurrentSeason());
+    maxSeason = currentSeason
+    teamData = await getTeamdata("", currentSeason);
+
+    generateSeasonPicker();
+    updateSeasonText();
+
+    generateTeamBoxes(teamData)
+    console.debug(`%cteamboxgenerate.js %c> %cGenerated team data in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9452ff", "color:#fff", "color:#c29cff");
 });
 
 document.addEventListener('listViewChange', async () => {
-    let teamData = await getSeasonTeamStandings(currentSeason);
+    let teamData = await getTeamdata("", currentSeason);
     updateButton();
-    console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     generateTeamBoxes(teamData, false);
 });
-
-async function waitForDBToInit() {
-    while (!(await isDBLoaded())) {
-        console.debug(`%cteamboxgenerate.js %c> %cDatabase is loading...`, "color:#9452ff", "color:#fff", "color:#c29cff");
-        await new Promise(resolve => setTimeout(resolve, 20));
-    }
-    console.debug(`%cteamboxgenerate.js %c> %cDatabase loaded`, "color:#9452ff", "color:#fff", "color:#c29cff");
-    dbLoaded = true;
-}
-
-async function readTeamsData() {
-    maxSeason = await getCurrentSeason();
-    currentSeason = maxSeason;
-    generateSeasonPicker();
-    updateSeasonText();
-    let teamData = await getSeasonTeamStandings(currentSeason)
-    console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes using SQL...`, "color:#9452ff", "color:#fff", "color:#c29cff");
-    generateTeamBoxes(teamData, false)
-}
 
 async function generateSeasonPicker() {
     seasonPicker.innerHTML = ""; // Clear existing options
@@ -295,18 +284,17 @@ async function generateSeasonPicker() {
 }
 
 seasonPicker.addEventListener("change", async function () {
-    currentSeason = this.value;
+    currentSeason = parseInt(this.value);
     await updateSeasonText();
     console.debug(`%cteamboxgenerate.js %c> %cSelected season ${currentSeason}`, "color:#9452ff", "color:#fff", "color:#c29cff");
-    generateTeamBoxes(await getSeasonTeamStandings(currentSeason), false)
+    generateTeamBoxes(await getTeamdata("", currentSeason))
 });
 
 async function updateSeasonText() {
-    const seasonStatus = await getSeasonStatus(currentSeason);
+    const seasonStatus = (await getSeasonStatus(currentSeason))[1];
     currentSeasonText.innerText = `${seasonStatus} (${(startYear + Number(currentSeason))}-${(startYear + 1 + Number(currentSeason))})`;
 }
 
-checkCache();
 generateListViewButton();
 
 function updateButton() {
@@ -320,7 +308,6 @@ function generateListViewButton() {
     updateButton();
 
     listViewButton.onclick = () => {
-        firstLoad = false;
         const isListView = localStorage.getItem("teamsListView") == 1;
         localStorage.setItem("teamsListView", isListView ? 0 : 1);
         updateButton();
