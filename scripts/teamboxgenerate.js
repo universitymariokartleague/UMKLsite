@@ -24,6 +24,7 @@ const teamBoxFormatHTML = `
 `;
 
 const JSTeamBox = document.getElementById("JSTeamBox")
+const JSTeamBoxLoading = document.getElementById("JSTeamBoxLoading")
 const styleSheet = document.createElement("style");
 const seasonPicker = document.getElementById("season-select")
 const currentSeasonText = document.getElementById("current-season")
@@ -211,6 +212,7 @@ async function getCurrentSeason() {
 }
 
 async function getSeasonStatus(season = 0) {
+    console.debug(`%cteamboxgenerate.js %c> %cFetching seasoninfo from API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     return fetch('https://api.umkl.co.uk/seasoninfo', {
         method: 'POST',
         headers: {
@@ -228,7 +230,18 @@ async function getSeasonStatus(season = 0) {
     });
 }
 
+async function getTeamdataSafe(season) {
+    try {
+        teamData = await getTeamdata("", currentSeason); 
+    } catch (error) {
+        console.debug(`%cteamboxgenerate.js %c> %cAPI failed - using fallback information...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+        JSTeamBoxLoading.innerHTML = `<blockquote class="warning"><b>API error</b><br>The below information may not be up to date!</blockquote>`;
+        await getTeamdataFallback(season)
+    }
+}
+
 async function getTeamdata(team = "", season) {
+    console.debug(`%cteamboxgenerate.js %c> %cFetching teamdata from API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     return fetch('https://api.umkl.co.uk/teamdata', {
         method: 'POST',
         headers: {
@@ -247,14 +260,32 @@ async function getTeamdata(team = "", season) {
     });
 }
 
+async function getTeamdataFallback(season) {
+    await fetch(`database/teamdatafallbacks${season}.json`)
+    .then(async response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        teamData = await response.json();
+    })
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    generateListViewButton();
     await loadFont('SF-Pro-Display-Bold', 'assets/pythongraphics/fonts/SF-Pro/SF-Pro-Display-Bold.otf');
     
-    currentSeason = parseInt(await getCurrentSeason());
-    maxSeason = currentSeason
-    teamData = await getTeamdata("", currentSeason);
+    try {
+        currentSeason = parseInt(await getCurrentSeason());
+        maxSeason = currentSeason
+        teamData = await getTeamdata("", currentSeason);
+        JSTeamBoxLoading.innerHTML = ""
+    } catch (error) {
+        console.debug(`%cteamboxgenerate.js %c> %cAPI failed - using fallback information...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+        JSTeamBoxLoading.innerHTML = `<blockquote class="warning"><b>API error</b><br>The below information may not be up to date!</blockquote>`;
+        await getTeamdataFallback(currentSeason);
+    }
 
     generateSeasonPicker();
     updateSeasonText();
@@ -264,7 +295,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 document.addEventListener('listViewChange', async () => {
-    let teamData = await getTeamdata("", currentSeason);
+    await getTeamdataSafe(currentSeason)
     updateButton();
     console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     generateTeamBoxes(teamData, false);
@@ -284,18 +315,26 @@ async function generateSeasonPicker() {
 }
 
 seasonPicker.addEventListener("change", async function () {
+    JSTeamBox.classList.remove('fade-in');
+    currentSeasonText.classList.remove('fade-in');
     currentSeason = parseInt(this.value);
     await updateSeasonText();
     console.debug(`%cteamboxgenerate.js %c> %cSelected season ${currentSeason}`, "color:#9452ff", "color:#fff", "color:#c29cff");
-    generateTeamBoxes(await getTeamdata("", currentSeason))
+    await getTeamdataSafe(currentSeason)
+    generateTeamBoxes(teamData)
+    // console.log(JSON.stringify(teamData))
 });
 
 async function updateSeasonText() {
-    const seasonStatus = (await getSeasonStatus(currentSeason))[1];
+    currentSeasonText.classList.add('fade-in');
+    let seasonStatus = "";
+    try {
+        seasonStatus = (await getSeasonStatus(currentSeason))[1];
+    } catch (error) {
+        seasonStatus = "API error";
+    }
     currentSeasonText.innerText = `${seasonStatus} (${(startYear + Number(currentSeason))}-${(startYear + 1 + Number(currentSeason))})`;
 }
-
-generateListViewButton();
 
 function updateButton() {
     const isListView = localStorage.getItem("teamsListView") == 1;
@@ -304,9 +343,9 @@ function updateButton() {
 
 function generateListViewButton() {
     const listViewButton = document.getElementById("listViewButton");
-
+    
     updateButton();
-
+    
     listViewButton.onclick = () => {
         const isListView = localStorage.getItem("teamsListView") == 1;
         localStorage.setItem("teamsListView", isListView ? 0 : 1);

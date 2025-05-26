@@ -1,0 +1,106 @@
+[
+    {
+        "career_wins_losses": [
+            3,
+            0
+        ],
+        "first_entry": 1,
+        "place_id": 1826149980,
+        "season_matches_played": 3,
+        "season_penalties": 0,
+        "season_position": 1,
+        "season_wins_losses": [
+            3,
+            0
+        ],
+        "team_career_points": 1781,
+        "team_championships": 1,
+        "team_color": "#1baa8b",
+        "team_full_name": "University of York",
+        "team_id": 1,
+        "team_name": "York",
+        "team_place": "York, England",
+        "team_season_points": 1781,
+        "logo_src": "assets/image/teamemblems/YORK.png",
+        "class_name": "York",
+        "link_name": "york"
+    },
+    {
+        "career_wins_losses": [
+            2,
+            1
+        ],
+        "first_entry": 1,
+        "place_id": 1826799578,
+        "season_matches_played": 3,
+        "season_penalties": 0,
+        "season_position": 2,
+        "season_wins_losses": [
+            2,
+            1
+        ],
+        "team_career_points": 1485,
+        "team_championships": 0,
+        "team_color": "#A11212",
+        "team_full_name": "University of Staffordshire",
+        "team_id": 2,
+        "team_name": "Staffs",
+        "team_place": "Stoke-on-Trent, England",
+        "team_season_points": 1485,
+        "logo_src": "assets/image/teamemblems/STAFFS.png",
+        "class_name": "Staffs",
+        "link_name": "staffs"
+    },
+    {
+        "career_wins_losses": [
+            1,
+            2
+        ],
+        "first_entry": 1,
+        "place_id": 1826492520,
+        "season_matches_played": 3,
+        "season_penalties": 0,
+        "season_position": 3,
+        "season_wins_losses": [
+            1,
+            2
+        ],
+        "team_career_points": 1425,
+        "team_championships": 0,
+        "team_color": "#287AC8",
+        "team_full_name": "University of Edinburgh",
+        "team_id": 3,
+        "team_name": "Edinburgh",
+        "team_place": "Edinburgh, Scotland",
+        "team_season_points": 1425,
+        "logo_src": "assets/image/teamemblems/EDINBURGH.png",
+        "class_name": "Edinburgh",
+        "link_name": "edinburgh"
+    },
+    {
+        "career_wins_losses": [
+            0,
+            3
+        ],
+        "first_entry": 1,
+        "place_id": 1826124765,
+        "season_matches_played": 3,
+        "season_penalties": 0,
+        "season_position": 4,
+        "season_wins_losses": [
+            0,
+            3
+        ],
+        "team_career_points": 1213,
+        "team_championships": 0,
+        "team_color": "#61B6CB",
+        "team_full_name": "Keele University",
+        "team_id": 4,
+        "team_name": "Keele",
+        "team_place": "Newcastle under Lyme, England",
+        "team_season_points": 1213,
+        "logo_src": "assets/image/teamemblems/KEELE.png",
+        "class_name": "Keele",
+        "link_name": "keele"
+    }
+]

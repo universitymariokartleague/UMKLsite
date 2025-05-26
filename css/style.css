@@ -826,6 +826,15 @@ blockquote {
     opacity: 1;
 }
 
+#current-season {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#current-season.fade-in {
+    opacity: 1;
+}
+
 .team-info {
     border: 1px solid #ccccccaa;
     border-radius: 10px;
