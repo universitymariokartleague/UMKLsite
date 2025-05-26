@@ -34,8 +34,7 @@ TEAM_PAGE = """
         <script src="scripts/overlayscrollbar.js" defer></script>    
         
         <script type="module" src="scripts/settings.js" defer></script>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/sql-wasm.js' defer></script>
-        <script type="module" src="scripts/teaminfogenerate.js" defer></script>
+            <script type="module" src="scripts/teaminfogenerate.js" defer></script>
     </head>
     <body id="top" data-overlayscrollbars-initialize>
         <div class="navbar-container">

@@ -1,23 +1,3 @@
-import { isDBLoaded, runSQL } from './database.js';
-import {
-    toOrdinal,
-    getCurrentSeason,
-    getSeasonStatus,
-    getFirstEntry,
-    getTeamWinsAndLossesForSeason,
-    getSeasonPenalties,
-    getTeamCareerPoints,
-    getTeamPlace,
-    getPlace,
-    getTeamSeasonPoints,
-    getSeasonTeamStandings,
-    getTeamChampionships,
-    getTeamMatchesPlayed,
-    getTeamTournaments,
-    getTournamentTeamResults,
-    getTeamWinsAndLosses
-} from './teamboxhelper.js';
-
 const JSImagegen = document.getElementById("JSImagegen");
 let startTime;
 let currentSeason;
@@ -247,16 +227,7 @@ async function generateAndDisplayStandings() {
     console.debug(`%cgenerateteamstandingsimage.js %c> %cGenerated team standings ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
 }
 
-async function waitForDBToInit() {
-    while (!(await isDBLoaded())) {
-        console.debug(`%cgenerateteamstandingsimage.js %c> %cDatabase is loading...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
-        await new Promise(resolve => setTimeout(resolve, 20));
-    }
-    console.debug(`%cgenerateteamstandingsimage.js %c> %cDatabase loaded`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
-}
-
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
-    await waitForDBToInit();
     await generateAndDisplayStandings();
 });

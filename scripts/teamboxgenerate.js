@@ -1,7 +1,7 @@
 /*
     This script generates the team boxes on the teams page. These boxes display
     information about each team, including their team name, logo, position, points,
-    and institution. The script fetches data from the database and creates the
+    and institution. The script fetches data from the API and creates the
     HTML elements dynamically. It also handles caching of the data to improve performance.
 */
 
