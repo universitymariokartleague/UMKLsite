@@ -38,7 +38,7 @@ function createColorBox(name, color) {
     colorDiv.title = name;
     colorDiv.style.cursor = "pointer";
     colorDiv.addEventListener("click", () => {
-        document.dispatchEvent(new CustomEvent('changeDiscordRoleColor', { detail: { tecoloramColor } }));
+        document.dispatchEvent(new CustomEvent('changeDiscordRoleColor', { detail: { color } }));
     });
     currentTeamColors.appendChild(colorDiv);
 }
