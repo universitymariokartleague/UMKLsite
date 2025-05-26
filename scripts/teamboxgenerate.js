@@ -31,7 +31,7 @@ const currentSeasonText = document.getElementById("current-season")
 
 let listView = localStorage.getItem("teamsListView") == 1 || false;
 
-let teamData;
+let teamData = [];
 const startYear = 2023;
 let currentSeason, maxSeason = 1;
 
@@ -283,7 +283,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         JSTeamBoxLoading.innerHTML = ""
     } catch (error) {
         console.debug(`%cteamboxgenerate.js %c> %cAPI failed - using fallback information...`, "color:#9452ff", "color:#fff", "color:#c29cff");
-        JSTeamBoxLoading.innerHTML = `<blockquote class="warning"><b>API error</b><br>The below information may not be up to date!</blockquote>`;
+        JSTeamBoxLoading.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch team data from API, the below information may not be up to date!</blockquote>`;
         await getTeamdataFallback(currentSeason);
     }
 

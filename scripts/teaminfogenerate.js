@@ -21,7 +21,7 @@ const teamBoxFormatHTML = `
                 {{currentFields}}
             </div>
         </div>
-
+        {{errorMessage}}
     </div>
 
     <div class="map {{className}}">
@@ -32,11 +32,12 @@ const teamBoxFormatHTML = `
 const JSTeamBox = document.getElementById("JSTeamBox")
 const startYear = 2023;
 
-let currentSeason = 1;
+let teamData = [];
+const currentSeason = 2;
 
 let startTime;
 
-async function generateTeamBox(teamData) {
+async function generateTeamBox(teamData, showError) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.remove('fade-in');
 
@@ -44,7 +45,7 @@ async function generateTeamBox(teamData) {
         teamData.logo_src = `assets/image/teamemblems/${teamData.team_name.toUpperCase()}.png`
         teamData.class_name = teamData.team_name.replace(/\s+/g, '')
     } catch (error) {
-        JSTeamBox.innerHTML = `<div class="codeBox">No team data available!<br/>${error.stack}</div>`;
+        JSTeamBox.innerHTML = `<blockquote class="fail">No team data available!<br/>${error.stack}</blockquote>`;
     }
 
     let firstEntry = teamData.first_entry
@@ -76,6 +77,7 @@ async function generateTeamBox(teamData) {
         .replace("{{logoSrc}}", teamData.logo_src)
         .replace("{{extraFields}}", extraFields)
         .replace("{{currentFields}}", currentFields)
+        .replace("{{errorMessage}}", showError ? `<blockquote style="margin-top:5px;margin-bottom:0px;padding:5px;" class="fail">Failed to fetch team data from API, the above information may not be up to date!</blockquote>` : "");
 
     const highlightColor = `${teamData.team_color}80`;
     document.documentElement.style.setProperty('--highlight-color', highlightColor);
@@ -110,13 +112,30 @@ async function getTeamdata(team = "", season = 0) {
     });
 }
 
+async function getTeamdataFallback(currentTeam) {
+    const response = await fetch(`database/teamdatafallbacks${currentSeason}.json`);
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const allTeams = await response.json();
+    // Filter to only the current team
+    return allTeams.filter(team => team.team_name === currentTeam);
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     console.debug(`%cteaminfogeenrate.js %c> %cGenerating team info box`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
-
+    
+    let showError = false;
     let currentTeam = JSTeamBox.dataset.team
-    const teamData = await getTeamdata(currentTeam);
-    await generateTeamBox(teamData[0]);
+    try {
+        teamData = await getTeamdata(currentTeam);
+    } catch (error) {
+        console.debug(`%cteaminfogeenrate.js %c> %cAPI failed - using fallback information...`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
+        teamData = await getTeamdataFallback(currentTeam);
+        showError = true;
+    }
+    await generateTeamBox(teamData[0], showError);
 
     console.debug(`%cteaminfogeenrate.js %c> %cGenerated team info box in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
 });
