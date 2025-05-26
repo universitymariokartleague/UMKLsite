@@ -251,7 +251,7 @@ window.addEventListener('popstate', () => {
 
 function displayCalendar() {
     let dailyLogPath = "database/matchdata.json";
-    let teamColorsPath = "database/teamcolors.json";
+    let teamColorsPath = "database/teamcolorsfallback.json";
 
     fetch(teamColorsPath)
         .then(response => {

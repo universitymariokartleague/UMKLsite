@@ -319,7 +319,6 @@ seasonPicker.addEventListener("change", async function () {
     currentSeasonText.classList.remove('fade-in');
     currentSeason = parseInt(this.value);
     await updateSeasonText();
-    console.debug(`%cteamboxgenerate.js %c> %cSelected season ${currentSeason}`, "color:#9452ff", "color:#fff", "color:#c29cff");
     await getTeamdataSafe(currentSeason)
     generateTeamBoxes(teamData)
     // console.log(JSON.stringify(teamData))
