@@ -5,23 +5,25 @@
     HTML elements dynamically. It also handles caching of the data to improve performance.
 */
 
-const teamBoxFormatHTML = `
-    <button onClick="location.href='pages/teams/{{linkName}}/'" class="{{className}} teamBox">
-        <div class="positionBox">
-            <div class="team-position">{{position}}</div>
-            <div class="team-points">
-                <div class="points-value">{{points}} PTS</div>
+function generateTeamHTML(team) {
+    return `
+        <button onClick="location.href='pages/teams/${team.link_name}/'" class="${team.class_name} teamBox">
+            <div class="positionBox">
+                <div class="team-position">${team.season_position}</div>
+                <div class="team-points">
+                    <div class="points-value">${team.team_season_points} PTS</div>
+                </div>
             </div>
-        </div>
-        <hr>
-        <div class="{{className}} team">
-            <span>{{teamName}}</span>
-            <img src="{{logoSrc}}" alt="{{teamName}} team logo" class="team-logo">
-        </div>
-        <hr>
-        <div class="institution">{{institution}}</div>
-    </button>
-`;
+            <hr>
+            <div class="${team.class_name} team">
+                <span>${team.team_name}</span>
+                <img src="${team.logo_src}" alt="${team.team_name} team logo" class="team-logo">
+            </div>
+            <hr>
+            <div class="institution">${team.team_full_name}</div>
+        </button>
+    `;
+}
 
 const JSTeamBox = document.getElementById("JSTeamBox")
 const JSTeamBoxLoading = document.getElementById("JSTeamBoxLoading")
@@ -45,30 +47,20 @@ async function loadFont(name, url) {
     return font;
 }
 
-async function generateTeamBox(team) {
+function generateTeamBox(team) {
     let teamBoxStyle="button.teamBox.{{className}}:hover,button.teamBox.{{className}}:focus{border: 0px solid {{teamColor}};outline: 4px solid {{teamColor}};}.team.{{className}}{border-left: 8px solid {{teamColor}};}"
         .replaceAll("{{className}}", team.class_name)
         .replaceAll("{{teamColor}}", team.team_color);
 
     styleSheet.innerText += teamBoxStyle;
 
-    let tempTeamBox = teamBoxFormatHTML
-        .replace("{{position}}", team.season_position)
-        .replace("{{points}}", team.team_season_points )
-        .replaceAll("{{teamName}}", team.team_name)
-        .replace("{{institution}}", team.team_full_name)
-        .replaceAll("{{className}}", team.class_name)
-        .replace("{{linkName}}", team.link_name)
-        .replace("{{logoSrc}}", team.logo_src)
-        .replace("{{teamlogoopacity}}", 1);
-
     const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = tempTeamBox;
+    tempDiv.innerHTML = generateTeamHTML(team);
 
-    JSTeamBox.appendChild(tempDiv);
+    return tempDiv;
 }
 
-async function generateTeamBoxes(teamData) {
+function generateTeamBoxes(teamData) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.add('fade-in');
     listView = localStorage.getItem("teamsListView") == 1 || false;
@@ -98,8 +90,9 @@ async function generateTeamBoxes(teamData) {
             thead.appendChild(headerRow);
             table.appendChild(thead);
             
-            const tbody = document.createElement('tbody');
-            teamData.forEach(async team => {
+            const fragment = document.createDocumentFragment();
+
+            teamData.forEach(team => {
                 const row = document.createElement('tr');
                 row.style.backgroundColor = team.team_color;
                 row.style.color = "#FFF";
@@ -137,29 +130,32 @@ async function generateTeamBoxes(teamData) {
                     row.appendChild(td);
                 });
                 
-                tbody.appendChild(row);
+                fragment.appendChild(row);
             });
-            table.appendChild(tbody);
+
+            table.appendChild(fragment);
             JSTeamBox.appendChild(table);
         } else {
             JSTeamBox.classList.remove('teamBoxContainer');
 
             const teamStandingsBox = document.createElement('div');
-            teamStandingsBox.classList.add("teamStandingsBox")
+            teamStandingsBox.classList.add("teamStandingsBox");
 
-            teamData.forEach(async team => {
-                const matchesPlayed = team.season_matches_played
+            const fragment = document.createDocumentFragment();
+
+            teamData.forEach(team => {
+                const matchesPlayed = team.season_matches_played;
 
                 const row = document.createElement('div');
                 row.classList.add("teamStanding");
 
                 row.addEventListener('click', () => {
-                    window.location.href = `pages/teams/${team.link_name}/`
+                    window.location.href = `pages/teams/${team.link_name}/`;
                 });
                 row.setAttribute('tabindex', '0');
                 row.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
-                        window.location.href = `pages/teams/${team.link_name}/`
+                        window.location.href = `pages/teams/${team.link_name}/`;
                     }
                 });
 
@@ -169,28 +165,30 @@ async function generateTeamBoxes(teamData) {
                     <img class="teamLogo" src="${team.logo_src}" alt="${team.team_name} team logo">
                     <div class="teamName">${team.team_name.toUpperCase()}</div>
                     <div class="teamPointsArea">
-                        <div class="teamPoints">${team.points_override ? team.points_override : (team.points ? team.points : "0")}</div>
-                        <div class="teamStandings">${team.season_wins_losses[0]} - ${team.season_wins_losses[1]} (${matchesPlayed} MATCH${matchesPlayed == 1 ? "" : "ES"})</div>
+                        <div class="teamPoints">${team.points_override ?? team.points ?? "0"}</div>
+                        <div class="teamStandings">${team.season_wins_losses[0]} - ${team.season_wins_losses[1]} (${matchesPlayed} MATCH${matchesPlayed === 1 ? "" : "ES"})</div>
                     </div>
-                `
+                `;
 
-                teamStandingsBox.appendChild(row);
+                fragment.appendChild(row);
             });
 
+            teamStandingsBox.appendChild(fragment);
             JSTeamBox.appendChild(teamStandingsBox);
         }
     } else {
         JSTeamBox.classList.add('teamBoxContainer');
-
+        const fragment = document.createDocumentFragment();
         try {
             for (let i = 0; i < teamData.length; i++) {
                 const team = teamData[i];
-                generateTeamBox(team, i);
+                fragment.appendChild(generateTeamBox(team, i));
             }
             document.head.appendChild(styleSheet);
         } catch (error) {
             JSTeamBox.innerHTML = error.stack;
         }
+        JSTeamBox.appendChild(fragment);
     }
 }
 
@@ -273,7 +271,6 @@ async function getTeamdataFallback(season) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-    fetchData();
     startTime = performance.now();
     console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     generateListViewButton();
@@ -307,7 +304,7 @@ document.addEventListener('listViewChange', async () => {
     generateTeamBoxes(teamData, false);
 });
 
-async function generateSeasonPicker() {
+function generateSeasonPicker() {
     seasonPicker.innerHTML = ""; // Clear existing options
     for (let season = 1; season <= maxSeason; season++) {
         const option = document.createElement("option");
