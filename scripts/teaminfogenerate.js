@@ -7,7 +7,7 @@
 
 const teamBoxFormatHTML = `
     <div class="team-info-wrapper">
-        <img src="{{logoSrc}}" alt="{{teamName}} team logo" class="team-info-logo">
+        <img width=200 height=200 src="{{logoSrc}}" alt="{{teamName}} team logo" class="team-info-logo">
         <hr>
         <div class="team-info-text">
             {{extraFields}}
@@ -83,7 +83,7 @@ async function generateTeamBox(teamData, showError) {
     document.documentElement.style.setProperty('--highlight-color', highlightColor);
     const teamStyleSheet = document.createElement("style");
     document.head.appendChild(teamStyleSheet);
-    JSTeamBox.innerHTML += tempTeamBox;
+    JSTeamBox.innerHTML = tempTeamBox;
     JSTeamBox.classList.add('fade-in');
 }
 
@@ -125,7 +125,8 @@ async function getTeamdataFallback(currentTeam) {
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     console.debug(`%cteaminfogeenrate.js %c> %cGenerating team info box`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
-    
+    JSTeamBox.innerHTML = "Loading team information...";
+
     let showError = false;
     let currentTeam = JSTeamBox.dataset.team
     try {
