@@ -34,7 +34,7 @@ let listView = localStorage.getItem("teamsListView") == 1 || false;
 let teamData = [];
 const startYear = 2023;
 let currentSeason = 2;
-let maxSeason = 2;
+let maxSeason = currentSeason;
 
 let startTime;
 
@@ -279,15 +279,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadFont('SF-Pro-Display-Bold', 'assets/pythongraphics/fonts/SF-Pro/SF-Pro-Display-Bold.otf');
     
     try {
-        currentSeason = parseInt(await getCurrentSeason());
-        maxSeason = currentSeason
         teamData = await getTeamdata("", currentSeason);
-    } catch (error) {
+    } catch {
         console.debug(`%cteamboxgenerate.js %c> %cAPI failed - using fallback information...`, "color:#9452ff", "color:#fff", "color:#c29cff");
         JSTeamBoxLoading.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch team data from API, the below information may not be up to date!</blockquote>`;
         await getTeamdataFallback(currentSeason);
     }
 
+    try {
+        currentSeason = parseInt(await getCurrentSeason());
+        maxSeason = currentSeason
+    } catch {
+        console.debug(`%cteamboxgenerate.js %c> %cAPI failed - using fallback information...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    }
     generateSeasonPicker();
     updateSeasonText();
 
