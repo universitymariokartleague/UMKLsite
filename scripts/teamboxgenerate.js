@@ -285,6 +285,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         JSTeamBoxLoading.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch team data from API, the below information may not be up to date!</blockquote>`;
         await getTeamdataFallback(currentSeason);
     }
+    
+    console.debug(`%cteamboxgenerate.js %c> %cGenerated team data in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    generateTeamBoxes(teamData)
 
     try {
         currentSeason = parseInt(await getCurrentSeason());
@@ -294,9 +297,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     generateSeasonPicker();
     updateSeasonText();
-
-    generateTeamBoxes(teamData)
-    console.debug(`%cteamboxgenerate.js %c> %cGenerated team data in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9452ff", "color:#fff", "color:#c29cff");
 });
 
 document.addEventListener('listViewChange', async () => {
