@@ -257,6 +257,7 @@ async function getTeamdata(team = "", season) {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+        JSTeamBoxLoading.innerHTML = ""
         return response.json();
     });
 }
@@ -281,7 +282,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         currentSeason = parseInt(await getCurrentSeason());
         maxSeason = currentSeason
         teamData = await getTeamdata("", currentSeason);
-        JSTeamBoxLoading.innerHTML = ""
     } catch (error) {
         console.debug(`%cteamboxgenerate.js %c> %cAPI failed - using fallback information...`, "color:#9452ff", "color:#fff", "color:#c29cff");
         JSTeamBoxLoading.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch team data from API, the below information may not be up to date!</blockquote>`;
