@@ -272,7 +272,8 @@ async function getTeamdataFallback(season) {
     })
 }
 
-async function fetchData() {
+document.addEventListener("DOMContentLoaded", async () => {
+    fetchData();
     startTime = performance.now();
     console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     generateListViewButton();
@@ -297,10 +298,6 @@ async function fetchData() {
     }
     generateSeasonPicker();
     updateSeasonText();
-}
-
-document.addEventListener("DOMContentLoaded", async () => {
-    // await fetchData();
 });
 
 document.addEventListener('listViewChange', async () => {
@@ -361,5 +358,3 @@ function generateListViewButton() {
         document.dispatchEvent(new CustomEvent('listViewChange'));
     };
 }
-
-await fetchData();
