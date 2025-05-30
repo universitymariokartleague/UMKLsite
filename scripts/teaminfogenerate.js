@@ -77,7 +77,7 @@ async function generateTeamBox(teamData, showError) {
         .replace("{{logoSrc}}", teamData.logo_src)
         .replace("{{extraFields}}", extraFields)
         .replace("{{currentFields}}", currentFields)
-        .replace("{{errorMessage}}", showError ? `<blockquote style="margin-top:5px;margin-bottom:0px;padding:5px;" class="fail">Failed to fetch team data from API, the above information may not be up to date!</blockquote>` : "");
+        .replace("{{errorMessage}}", showError ? `<blockquote style="margin-top:5px;margin-bottom:0px;padding:5px;" class="fail">Failed to fetch team data from the API, the above information may not be up to date!</blockquote>` : "");
 
     const highlightColor = `${teamData.team_color}80`;
     document.documentElement.style.setProperty('--highlight-color', highlightColor);

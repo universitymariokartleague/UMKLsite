@@ -49,18 +49,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     try {
         teamColors = await getTeamcolors();
-
-        teamColors[0].forEach(({ team_name: name, team_color: color }) => {
-            createColorBox(name, color);
-        });
     } catch (error) {
         console.debug(`%cgetteamcolors.js %c> %cAPI failed - using fallback information...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
         await getTeamcolorsFallback();
-
-        Object.entries(teamColors).forEach(([name, color]) => {
-            createColorBox(name, color);
-        });
     }
+
+    teamColors.forEach(({ team_name: name, team_color: color }) => {
+        createColorBox(name, color);
+    });
 
     console.debug(`%cgetteamcolors.js %c> %cGenerated team colors in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
 });

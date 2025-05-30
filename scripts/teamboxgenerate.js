@@ -211,7 +211,7 @@ async function getCurrentSeason() {
 }
 
 async function getSeasonStatus(season = 0) {
-    console.debug(`%cteamboxgenerate.js %c> %cFetching seasoninfo from API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    console.debug(`%cteamboxgenerate.js %c> %cFetching seasoninfo from the API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     return fetch('https://api.umkl.co.uk/seasoninfo', {
         method: 'POST',
         headers: {
@@ -234,13 +234,13 @@ async function getTeamdataSafe(season) {
         teamData = await getTeamdata("", currentSeason); 
     } catch (error) {
         console.debug(`%cteamboxgenerate.js %c> %cAPI failed - using fallback information...`, "color:#9452ff", "color:#fff", "color:#c29cff");
-        JSTeamBoxLoading.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch team data from API, the below information may not be up to date!</blockquote>`;
+        JSTeamBoxLoading.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch team data from the API, the below information may not be up to date!</blockquote>`;
         await getTeamdataFallback(season)
     }
 }
 
 async function getTeamdata(team = "", season) {
-    console.debug(`%cteamboxgenerate.js %c> %cFetching teamdata from API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    console.debug(`%cteamboxgenerate.js %c> %cFetching teamdata from the API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     return fetch('https://api.umkl.co.uk/teamdata', {
         method: 'POST',
         headers: {
@@ -280,7 +280,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         teamData = await getTeamdata("", currentSeason);
     } catch {
         console.debug(`%cteamboxgenerate.js %c> %cAPI failed - using fallback information...`, "color:#9452ff", "color:#fff", "color:#c29cff");
-        JSTeamBoxLoading.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch team data from API, the below information may not be up to date!</blockquote>`;
+        JSTeamBoxLoading.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch team data from the API, the below information may not be up to date!</blockquote>`;
         await getTeamdataFallback(currentSeason);
     }
     

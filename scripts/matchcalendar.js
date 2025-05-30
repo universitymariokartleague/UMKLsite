@@ -11,10 +11,11 @@ const weekdayNamesFull = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"
 const DEFAULTSTARTDAY = 1;
 
 const expandedLog = document.getElementById('expandedLog');
+const calendarError = document.getElementById("calendarError")
 
 let currentlyShownDate = [2000, 0];
-let dailyLogData = {};
-let teamColorsData = {};
+let matchData = {};
+let teamColors = {};
 
 let discardLogOnChange = false;
 
@@ -78,11 +79,13 @@ function generateCalendar(month, year) {
         }
         
         const dateToCheck = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        if (dailyLogData[dateToCheck]) {
-            dailyLogData[dateToCheck].forEach(entry => {
+        if (matchData[dateToCheck]) {
+            matchData[dateToCheck].forEach(entry => {
                 const [team1, team2] = entry.teamsInvolved;
-                const color1 = teamColorsData[team1];
-                const color2 = teamColorsData[team2];
+
+                // Find team color by team name from teamColors[0] array
+                const color1 = (teamColors.find(t => t.team_name === team1) || {}).team_color || "#ccc";
+                const color2 = (teamColors.find(t => t.team_name === team2) || {}).team_color || "#ccc";
             
                 const colorBarContainer = document.createElement('div');
                 colorBarContainer.classList.add('color-bar-container');
@@ -143,11 +146,11 @@ function showDailyLog(date, dayCell) {
         window.history.pushState({}, '', newUrl);
     }
 
-    const tempLocale = localStorage.getItem("locale") || "en-GB";
+    const locale = localStorage.getItem("locale") || "en-GB";
 
-    const log = dailyLogData[date] || [];
+    const log = matchData[date] || [];
     if (log.length) {
-        const formattedDate = new Date(`${date}`).toLocaleString(tempLocale, { dateStyle: 'full' });
+        const formattedDate = new Date(`${date}`).toLocaleString(locale, { dateStyle: 'full' });
         expandedLog.innerHTML = `
             <div class="settingSubheading">
                 <div class="current-season-area"> 
@@ -165,15 +168,18 @@ function showDailyLog(date, dayCell) {
                     }
     
                     const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
+                    let timeString = entry.time || '00:00';
+                    if (/^\d{2}:\d{2}$/.test(timeString)) timeString += ':00';
+                    const formattedMatchTime = new Date(`1970-01-01T${timeString}`).toLocaleTimeString(locale, { hour: 'numeric', minute: '2-digit'});
                     return `
                         <div class="event">
-                            <p style="margin: 3px 0; font-size:20px; opacity:70%;">${new Date(`1970-01-01T${entry.time || '00:00'}:00`).toLocaleTimeString(tempLocale, { hour: 'numeric', minute: '2-digit'})}</p>
+                            <p style="margin: 3px 0; font-size:20px; opacity:70%;">${formattedMatchTime}</p>
                             <h2 style="margin-bottom: 10px;">
                                 <span class=${team1.class_name}><a class="no-color-link no-underline-link" href="${team1.link}">${team1.team_name}</a></span> 
                                 VS 
                                 <span class="${team2.class_name}"><a class="no-color-link no-underline-link" href="${team2.link}">${team2.team_name}</a></span>
                             </h2>
-                            ${entry.description.replace(/(?:\r\n|\r|\n)/g, '<br/>')}
+                            ${autoLink(entry.description.replace(/(?:\r\n|\r|\n)/g, '<br/>'))}
                         </div>
                     `;
                 }).join('')}
@@ -184,6 +190,17 @@ function showDailyLog(date, dayCell) {
     } else {
         expandedLog.innerHTML = `<div class="settingSubheading"><h3>No events scheduled</h3></div>`;
     }
+}
+
+function autoLink(text) {
+    const urlRegex = /((https?:\/\/|www\.)[^\s<]+)/gi;
+    return text.replace(urlRegex, function(url) {
+        let href = url;
+        if (!href.match(/^https?:\/\//)) {
+            href = 'http://' + href;
+        }
+        return `<a href="${href}" target="_blank">${url}</a>`;
+    });
 }
 
 function createShareButtonListener(formattedDate) {
@@ -223,17 +240,17 @@ document.addEventListener('startDayChange', () => {
 function makeTeamsColorStyles() {
     const styleSheet = document.createElement("style");
 
-    Object.entries(teamColorsData).forEach(([team, color]) => {
+    teamColors.forEach((team) => {
         styleSheet.innerText += `
-            .${team} {
+            .${team.team_name.replace(/\s+/g, '')} {
                 cursor: pointer;
                 padding: 0 3px;
-                border: 2px solid ${color};
-                background-color: ${color}aa;
+                border: 2px solid ${team.team_color};
+                background-color: ${team.team_color}aa;
                 border-radius: 5px;
             }
         `
-    });
+    })
 
     document.head.appendChild(styleSheet);
 }
@@ -241,7 +258,7 @@ function makeTeamsColorStyles() {
 window.addEventListener('popstate', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const dateParam = urlParams.get('date');
-    if (dateParam && dailyLogData[dateParam]) {
+    if (dateParam && matchData[dateParam]) {
         console.debug(`%cmatchcalendar.js %c> %cURL parameter changed`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
         showDailyLog(dateParam);
     } else {
@@ -249,55 +266,86 @@ window.addEventListener('popstate', () => {
     }
 });
 
-function displayCalendar() {
-    let dailyLogPath = "database/matchdata.json";
-    let teamColorsPath = "database/teamcolorsfallback.json";
-
-    fetch(teamColorsPath)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(colorsData => {
-            teamColorsData = colorsData
-            console.debug(`%cmatchcalendar.js %c> %cTeam colors loaded: ${JSON.stringify(teamColorsData)}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-            makeTeamsColorStyles();
-            console.debug(`%cmatchcalendar.js %c> %cTeam css created`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-            fetch(dailyLogPath)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    dailyLogData = data;
-                    const currentDate = new Date();
-                    generateCalendar(currentDate.getMonth(), currentDate.getFullYear());        
-                    console.debug(`%cmatchcalendar.js %c> %cMatch data loaded in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-        
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const dateParam = urlParams.get('date');
-                    if (dateParam && dailyLogData[dateParam]) {
-                        console.debug(`%cmatchcalendar.js %c> %cURL parameter detected`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-                        const dateObj = new Date(dateParam);
-                        generateCalendar(dateObj.getMonth(), dateObj.getFullYear());
-                        showDailyLog(dateParam);
-                    }
-                })
-                .catch(error => {
-                    console.debug(`%cmatchcalendar.js %c> %cError loading match data: ${error}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-                });    
-        })
-        .catch(error => {
-            console.debug(`%cmatchcalendar.js %c> %cError loading team colors: ${error}`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-        });
+async function getTeamcolors() {
+    return fetch('https://api.umkl.co.uk/teamcolors', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: "{}"
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    });
 }
 
-window.addEventListener('load', function() {
+async function getTeamcolorsFallback() {
+    const response = await fetch(`database/teamcolorsfallback.json`);
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    teamColors = await response.json();
+}
+
+async function getMatchData() {
+    return fetch('https://api.umkl.co.uk/matchdata', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: "{}"
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    });
+}
+
+async function getMatchDataFallback() {
+    const response = await fetch(`database/matchdatafallback.json`);
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    matchData = await response.json();
+}
+
+function displayCalendar() {
+    const currentDate = new Date();
+    generateCalendar(currentDate.getMonth(), currentDate.getFullYear());        
+    console.debug(`%cmatchcalendar.js %c> %cMatch data loaded in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const dateParam = urlParams.get('date');
+    if (dateParam && matchData[dateParam]) {
+        console.debug(`%cmatchcalendar.js %c> %cURL parameter detected`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+        const dateObj = new Date(dateParam);
+        generateCalendar(dateObj.getMonth(), dateObj.getFullYear());
+        showDailyLog(dateParam);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     console.debug(`%cmatchcalendar.js %c> %cLoading calendar...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+    
+    try {
+        matchData = await getMatchData();
+        teamColors = await getTeamcolors();
+    } catch (error) {
+        console.debug(`%cmatchcalendar.js %c> %cAPI failed - using fallback information...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+        await getMatchDataFallback();
+        await getTeamcolorsFallback();
+
+        calendarError.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
+    }
+
+    console.log(matchData)
+    
+    makeTeamsColorStyles();
     displayCalendar();
 });
