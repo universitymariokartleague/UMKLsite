@@ -165,7 +165,7 @@ function showMonthPicker(currentDate) {
         <div class="preview-message">
             <select id="monthDropdown">
                 ${months.map((m, i) =>
-                    `<option value="${i}" ${i === month ? 'selected' : ''}>${m}</option>`
+                    `<option value="${i}" ${i === currentlyShownDate[1] ? 'selected' : ''}>${m}</option>`
                 ).join('')}
             </select>
             <select id="yearDropdown">
