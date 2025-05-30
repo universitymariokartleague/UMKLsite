@@ -343,8 +343,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         calendarError.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
     }
-
-    console.log(matchData)
     
     makeTeamsColorStyles();
     displayCalendar();
