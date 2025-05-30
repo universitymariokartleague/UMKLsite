@@ -13,11 +13,21 @@ const DEFAULTSTARTDAY = 1;
 const expandedLog = document.getElementById('expandedLog');
 const calendarError = document.getElementById("calendarError")
 
+const startYear = 2023;
+const currentYear = new Date().getFullYear();
+const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+];
 let currentlyShownDate = [2000, 0];
 let matchData = {};
 let teamColors = {};
 
 let discardLogOnChange = false;
+
+let previewTimeout = null;
+let isPopupShowing = false;
+let currentPreview = null;
 
 let startTime;
 
@@ -44,7 +54,7 @@ function generateCalendar(month, year) {
     `;
 
     const currentDate = new Date();
-    document.getElementById('goToCurrentMonthButton').addEventListener('click', () => generateCalendar(currentDate.getMonth(), currentDate.getFullYear()));
+    document.getElementById('goToCurrentMonthButton').addEventListener('click', () => showMonthPicker(currentDate));
     document.getElementById('previousMonthButton').addEventListener('click', () => changeMonth(-1));
     document.getElementById('nextMonthButton').addEventListener('click', () => changeMonth(1));
 
@@ -127,6 +137,100 @@ function changeMonth(change) {
     const newDate = new Date(currentlyShownDate[0], currentlyShownDate[1] + change);
     generateCalendar(newDate.getMonth(), newDate.getFullYear());
 };
+
+function showMonthPicker(currentDate) {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+
+    if (currentPreview?.parentNode) {
+        generateCalendar(month, year);
+        return;
+    }
+
+    cleanupPopupPreview();
+
+    const button = document.getElementById('goToCurrentMonthButton');
+    const buttonRect = button.getBoundingClientRect();
+    const scrollX = window.scrollX || window.pageXOffset;
+    const scrollY = window.scrollY || window.pageYOffset;
+
+    const preview = document.createElement('div');
+    preview.className = 'preview text-preview';
+    preview.style.left = `${buttonRect.left + scrollX + buttonRect.width / 2 - 87.5}px`;
+    preview.style.top = `${buttonRect.bottom + scrollY + 10}px`;
+
+    preview.innerHTML = `
+        <div class="arrow"></div>
+        <div class="arrow-border"></div>
+        <div class="preview-message">
+            <select id="monthDropdown">
+                ${months.map((m, i) =>
+                    `<option value="${i}" ${i === month ? 'selected' : ''}>${m}</option>`
+                ).join('')}
+            </select>
+            <select id="yearDropdown">
+                ${Array.from({ length: currentYear + 2 - (startYear + 1) + 1 }, (_, i) => {
+                    const y = startYear + 1 + i;
+                    return `<option value="${y}" ${y === year ? 'selected' : ''}>${y}</option>`;
+                }).join('')}
+            </select>
+        </div>
+    `;
+
+    document.body.appendChild(preview);
+    currentPreview = preview;
+    isPopupShowing = true;
+
+    const monthDropdown = preview.querySelector('#monthDropdown');
+    const yearDropdown = preview.querySelector('#yearDropdown');
+
+    function handleDropdownChange() {
+        generateCalendar(Number(monthDropdown.value), Number(yearDropdown.value));
+        resetAutoCloseTimer();
+    }
+
+    monthDropdown.addEventListener('change', handleDropdownChange);
+    yearDropdown.addEventListener('change', handleDropdownChange);
+
+    function resetAutoCloseTimer() {
+        clearTimeout(previewTimeout);
+        previewTimeout = setTimeout(closePreview, 5000);
+    }
+
+    function closePreview() {
+        if (!preview?.parentNode) return;
+        preview.style.transform = 'scale(0.95) translateY(-10px)';
+        preview.style.opacity = '0';
+        document.removeEventListener('mousedown', handleClickOutside);
+        setTimeout(cleanupPopupPreview, 150);
+    }
+
+    function handleClickOutside(e) {
+        if (!preview.contains(e.target)) {
+            closePreview();
+        }
+    }
+
+    setTimeout(() => {
+        preview.style.transform = 'scale(1) translateY(0)';
+        preview.style.opacity = '1';
+    }, 10);
+
+    previewTimeout = setTimeout(closePreview, 5000);
+    setTimeout(() => document.addEventListener('mousedown', handleClickOutside), 0);
+}
+
+function cleanupPopupPreview() {
+    clearTimeout(previewTimeout);
+    previewTimeout = null;
+
+    if (currentPreview?.parentNode) {
+        currentPreview.remove();
+    }
+
+    currentPreview = null;
+    isPopupShowing = false;
+}
 
 function showDailyLog(date, dayCell) {
     // Remove highlight from all previously selected days

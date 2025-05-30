@@ -98,60 +98,61 @@ function showImagePreview(blob, imagePath, input) {
 
 function showPreview(message, isImage, imagePath, blob) {
     cleanupPreview();
+
     const buttonRect = shareButton.getBoundingClientRect();
     const scrollX = window.scrollX || window.pageXOffset;
     const scrollY = window.scrollY || window.pageYOffset;
 
     const preview = document.createElement('div');
-    preview.classList.add('preview');
-    preview.classList.add(isImage ? 'image-preview' : 'text-preview');
+    preview.className = `preview ${isImage ? 'image-preview' : 'text-preview'}`;
     preview.style.left = `${Math.max(10, buttonRect.left + scrollX + buttonRect.width / 2 - 110)}px`;
     preview.style.top = `${buttonRect.bottom + scrollY + 10}px`;
 
-    const arrow = document.createElement('div');
-    arrow.classList.add('arrow');
-    const arrowBorder = document.createElement('div');
-    arrowBorder.classList.add('arrow-border');
-    preview.appendChild(arrow);
-    preview.appendChild(arrowBorder);
+    preview.innerHTML = `
+        <div class="arrow"></div>
+        <div class="arrow-border"></div>
+    `;
 
     if (isImage && blob) {
         const img = document.createElement('img');
         const blobUrl = URL.createObjectURL(blob);
         img.src = blobUrl;
-        img.classList.add('preview-image');
-        img.addEventListener('click', () => window.open(imagePath ? imagePath : blobUrl, '_blank'));
+        img.className = 'preview-image';
+        img.addEventListener('click', () => window.open(imagePath || blobUrl, '_blank'));
         preview.appendChild(img);
+        preview._blobUrl = blobUrl; // Store to revoke later
     }
 
     const msgDiv = document.createElement('div');
-    msgDiv.innerHTML = `${message}`;
-    msgDiv.classList.add('preview-message');
-    if (isImage) msgDiv.classList.add('preview-message-image');
+    msgDiv.className = `preview-message${isImage ? ' preview-message-image' : ''}`;
+    msgDiv.innerHTML = message;
     preview.appendChild(msgDiv);
 
-    document.addEventListener('click', handleDocumentClick);
     document.body.appendChild(preview);
-
     currentPreview = preview;
     isPopupShowing = true;
 
-    setTimeout(() => {
-        if (preview.parentNode) {
-            preview.style.transform = 'scale(1) translateY(0)';
-            preview.style.opacity = '1';
+    const closePreview = () => {
+        if (!preview.parentNode) return;
+        preview.style.transform = 'scale(0.95) translateY(-10px)';
+        preview.style.opacity = '0';
+        document.removeEventListener('mousedown', handleClickOutside);
+        setTimeout(cleanupPreview, 150);
+    };
+
+    const handleClickOutside = (e) => {
+        if (!preview.contains(e.target)) {
+            closePreview();
         }
+    };
+
+    setTimeout(() => {
+        preview.style.transform = 'scale(1) translateY(0)';
+        preview.style.opacity = '1';
     }, 10);
 
-    previewTimeout = setTimeout(() => {
-        if (preview.parentNode) {
-            preview.style.transform = 'scale(0.95) translateY(-10px)';
-            preview.style.opacity = '0';
-            setTimeout(cleanupPreview, 150);
-        } else {
-            cleanupPreview();
-        }
-    }, 3000);
+    setTimeout(() => document.addEventListener('mousedown', handleClickOutside), 0);
+    previewTimeout = setTimeout(closePreview, 3000);
 }
 
 function cleanupPreview() {
@@ -161,29 +162,13 @@ function cleanupPreview() {
     }
 
     if (currentPreview) {
-        if (currentPreview.parentNode) {
-            currentPreview.remove();
+        if (currentPreview._blobUrl) {
+            URL.revokeObjectURL(currentPreview._blobUrl);
         }
-        const img = currentPreview.querySelector('img');
-        if (img?.src.startsWith('blob:')) {
-            URL.revokeObjectURL(img.src);
-        }
+        currentPreview.remove();
         currentPreview = null;
-        isPopupShowing = false;
-        shareButton.innerHTML = originalMessage;
     }
-}
 
-function handleDocumentClick(event) {
-    if (isPopupShowing && currentPreview && !currentPreview.contains(event.target) && event.target !== shareButton) {
-        if (currentPreview.parentNode) {
-            currentPreview.style.transform = 'scale(0.95) translateY(-10px)';
-            currentPreview.style.opacity = '0';
-            setTimeout(() => {
-                cleanupPreview();
-            }, 150);
-        } else {
-            cleanupPreview();
-        }
-    }
+    isPopupShowing = false;
+    shareButton.innerHTML = originalMessage;
 }
