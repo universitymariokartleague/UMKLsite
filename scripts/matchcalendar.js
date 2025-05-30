@@ -163,12 +163,12 @@ function showMonthPicker(currentDate) {
         <div class="arrow"></div>
         <div class="arrow-border"></div>
         <div class="preview-message">
-            <select id="monthDropdown">
+            <select class="popupDropdown" id="monthDropdown">
                 ${months.map((m, i) =>
                     `<option value="${i}" ${i === currentlyShownDate[1] ? 'selected' : ''}>${m}</option>`
                 ).join('')}
             </select>
-            <select id="yearDropdown">
+            <select class="popupDropdown" id="yearDropdown">
                 ${Array.from({ length: currentYear + 2 - (startYear + 1) + 1 }, (_, i) => {
                     const y = startYear + 1 + i;
                     return `<option value="${y}" ${y === year ? 'selected' : ''}>${y}</option>`;

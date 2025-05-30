@@ -67,3 +67,28 @@
     border-top: none;
     z-index: 1;
 }
+
+.popupDropdown {
+    width: 110px;
+    padding: 6px 10px;
+    border: 1px solid #ccccccaa;
+    border-radius: 6px;
+    background-color: var(--bg-color, #fff);
+    color: var(--text-color, #222);
+    font-size: 14px;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    transition: border-color 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    cursor: pointer;
+}
+
+.popupDropdown:hover {
+    border-color: var(--text-color);
+}
+
+.popupDropdown#yearDropdown {
+    width: 50px;
+    padding: 6px;
+}
