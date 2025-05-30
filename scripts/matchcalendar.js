@@ -421,7 +421,6 @@ async function getMatchDataFallback() {
 function displayCalendar() {
     const currentDate = new Date();
     generateCalendar(currentDate.getMonth(), currentDate.getFullYear());        
-    console.debug(`%cmatchcalendar.js %c> %cMatch data loaded in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
 
     const urlParams = new URLSearchParams(window.location.search);
     const dateParam = urlParams.get('date');
@@ -450,4 +449,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     makeTeamsColorStyles();
     displayCalendar();
+    console.debug(`%cmatchcalendar.js %c> %cMatch data loaded in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
 });
