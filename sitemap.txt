@@ -17,8 +17,8 @@ https://umkl.co.uk/rules/match/
 https://umkl.co.uk/rules/team/
 https://umkl.co.uk/sitemap/
 https://umkl.co.uk/teams/
+https://umkl.co.uk/teams/bimm/
 https://umkl.co.uk/teams/birmingham/
-https://umkl.co.uk/teams/bristol-bob-ombs/
 https://umkl.co.uk/teams/edinburgh/
 https://umkl.co.uk/teams/glasgow/
 https://umkl.co.uk/teams/keele/
@@ -26,7 +26,7 @@ https://umkl.co.uk/teams/oxford/
 https://umkl.co.uk/teams/staffs/
 https://umkl.co.uk/teams/warwick/
 https://umkl.co.uk/teams/york/
-https://umkl.co.uk/test/jsimagegen/
+https://umkl.co.uk/test/apitest/
 https://umkl.co.uk/tools/
 https://umkl.co.uk/tools/6v6scorecalculator/
 https://umkl.co.uk/tools/colourpicker/

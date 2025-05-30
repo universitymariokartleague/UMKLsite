@@ -20,6 +20,7 @@ def run_pre_commit_tasks():
     genteamcolorsjson.generate_team_colors_json()
 
     # Generate sitemap
+    print("Generating sitemap...")
     makesitemap.generate_sitemap()
 
     print("All tasks completed successfully!")
