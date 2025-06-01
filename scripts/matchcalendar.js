@@ -277,13 +277,14 @@ function showDailyLog(date, dayCell) {
                     const formattedMatchTime = new Date(`1970-01-01T${timeString}`).toLocaleTimeString(locale, { hour: 'numeric', minute: '2-digit'});
                     return `
                         <div class="event">
-                            <p style="margin: 3px 0; font-size:20px; opacity:70%;">${formattedMatchTime}</p>
+                            <p class="event-header">${formattedMatchTime}</p>
                             <h2 style="margin-bottom: 10px;">
                                 <span class=${team1.class_name}><a class="no-color-link no-underline-link" href="${team1.link}">${team1.team_name}</a></span> 
                                 VS 
                                 <span class="${team2.class_name}"><a class="no-color-link no-underline-link" href="${team2.link}">${team2.team_name}</a></span>
                             </h2>
-                            ${autoLink(entry.description.replace(/(?:\r\n|\r|\n)/g, '<br/>'))}
+                            <p>${autoLink(entry.description.replace(/(?:\r\n|\r|\n)/g, '<br/>'))}</p>
+                            <span class="settings-extra-info">This match from Season ${entry.season}.</span>
                         </div>
                     `;
                 }).join('')}
@@ -446,7 +447,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         calendarError.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
     }
-    
+
     makeTeamsColorStyles();
     displayCalendar();
     console.debug(`%cmatchcalendar.js %c> %cMatch data loaded in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
