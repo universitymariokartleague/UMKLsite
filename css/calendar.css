@@ -29,7 +29,7 @@
     font-size: 25px;
 }
 
-.month-arrow:hover, .month-name:hover {
+.month-arrow:hover:not(.empty), .month-name:hover:not(.empty) {
     cursor: pointer;
     color: var(--accent-color);
     transition: 0.1s;

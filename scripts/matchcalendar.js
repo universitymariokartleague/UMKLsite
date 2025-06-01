@@ -13,7 +13,8 @@ const DEFAULTSTARTDAY = 1;
 const expandedLog = document.getElementById('expandedLog');
 const calendarError = document.getElementById("calendarError")
 
-const startYear = 2023;
+const startYear = 2023; // currentYear of season = startYear + season (eg: season 1 - 2023 + 1 = 2024)
+const minYear = 2024; // Minimum year for the calendar, prevents going back to 2023
 const currentYear = new Date().getFullYear();
 const months = [
     "January", "February", "March", "April", "May", "June",
@@ -26,7 +27,6 @@ let teamColors = {};
 let discardLogOnChange = false;
 
 let previewTimeout = null;
-let isPopupShowing = false;
 let currentPreview = null;
 
 let startTime;
@@ -48,7 +48,7 @@ function generateCalendar(month, year) {
     const adjustedWeekdayNames = weekdayNames.slice(startDay).concat(weekdayNames.slice(0, startDay));
 
     monthYear.innerHTML = `
-        <a class="month-arrow fa-solid fa-arrow-left" id="previousMonthButton"></a>
+        <a class="month-arrow fa-solid fa-arrow-left ${(year == minYear && month == 0) ? "empty" : ""}" id="previousMonthButton"></a>
         <span class="month-name" id="goToCurrentMonthButton">${Intl.DateTimeFormat('en', { month: tempMonthType }).format(new Date(year, month))} ${year}</span>
         <a class="month-arrow fa-solid fa-arrow-right" id="nextMonthButton"></a>
     `;
@@ -135,6 +135,9 @@ function generateCalendar(month, year) {
 
 function changeMonth(change) {
     const newDate = new Date(currentlyShownDate[0], currentlyShownDate[1] + change);
+    if (newDate.getFullYear() < minYear || (newDate.getFullYear() === minYear && newDate.getMonth() < 0)) {
+        return;
+    }
     generateCalendar(newDate.getMonth(), newDate.getFullYear());
 };
 
@@ -186,7 +189,6 @@ function showMonthPicker(currentDate) {
     });
 
     currentPreview = preview;
-    isPopupShowing = true;
 
     const monthDropdown = preview.querySelector('#monthDropdown');
     const yearDropdown = preview.querySelector('#yearDropdown');
@@ -236,7 +238,6 @@ function cleanupPopupPreview() {
     }
 
     currentPreview = null;
-    isPopupShowing = false;
 }
 
 function showDailyLog(date, dayCell) {
