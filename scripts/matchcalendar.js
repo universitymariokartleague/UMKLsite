@@ -378,7 +378,7 @@ window.addEventListener('popstate', () => {
 });
 
 async function getTeamcolors() {
-    return fetch('https://api.umkl.co.uk/teamcolors', {
+    return fetch('https://api.umkl.co.uk/teamcolorss', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -1,9 +1,62 @@
 {
+    "2024-10-12": [
+        {
+            "title": "York VS Staffs",
+            "time": "14:00",
+            "season": 1,
+            "description": "A 6v6 match between York and Staffs. This was the first match in the UMKL!",
+            "teamsInvolved": ["York", "Staffs"]
+        }
+    ],
+    "2024-11-17": [
+        {
+            "title": "Edinburgh VS Keele",
+            "time": "14:00",
+            "season": 1,
+            "description": "A 6v6 match between Edinburgh and Keele.",
+            "teamsInvolved": ["Edinburgh", "Keele"]
+        }
+    ],
+    "2024-12-07": [
+        {
+            "title": "Staffs VS Keele",
+            "time": "14:00",
+            "season": 1,
+            "description": "A 6v6 match between Staffs and Keele.",
+            "teamsInvolved": ["Staffs", "Keele"]
+        },
+        {
+            "title": "York VS Edinburgh",
+            "time": "14:00",
+            "season": 1,
+            "description": "A 6v6 match between York and Edinburgh.",
+            "teamsInvolved": ["York", "Edinburgh"]
+        }
+    ],
+    "2025-02-01": [
+        {
+            "title": "Staffs VS Edinburgh",
+            "time": "14:00",
+            "season": 1,
+            "description": "A 6v6 match between Staffs and Edinburgh.",
+            "teamsInvolved": ["Staffs", "Edinburgh"]
+        }
+    ],
+    "2025-02-23": [
+        {
+            "title": "Keele VS York",
+            "time": "18:00",
+            "season": 1,
+            "description": "A 6v6 match between Keele and York. This was the final match of Season 1. The archived stream can be found here: https://www.youtube.com/watch?v=O70A4PCdSas.",
+            "teamsInvolved": ["Keele", "York"]
+        }
+    ],
     "2025-04-16": [
         {
             "title": "York VS Staffs",
             "time": "18:00",
-            "description": "A 6v6 test match between York and Staffs. This served as a test of the Cheep Cheep bot and YouTube streaming.\n\nThis match was streamed from both team's perspectives on the UMKL YouTube channel. You can watch those archived streams here: https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH",
+            "season": 2,
+            "description": "A 6v6 test match between York and Staffs. This served as a test of the Cheep Cheep bot and YouTube streaming.\n\nThis match was streamed from both team's perspectives on the UMKL YouTube channel. You can watch those archived streams here: https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH.",
             "teamsInvolved": ["York", "Staffs"]
         }
     ],
@@ -11,7 +64,8 @@
         {
             "title": "Staffs VS Birmingham",
             "time": "18:00",
-            "description": "A 6v6 test match between Staffs and Birmingham. This served as a test of the Cheep Cheep bot and YouTube streaming.\n\nThis match was streamed from both team's perspectives on the UMKL YouTube channel. You can watch those archived streams here: https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH",
+            "season": 2,
+            "description": "A 6v6 test match between Staffs and Birmingham. This served as a test of the Cheep Cheep bot and YouTube streaming.\n\nThis match was streamed from both team's perspectives on the UMKL YouTube channel. You can watch those archived streams here: https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH.",
             "teamsInvolved": ["Staffs", "Birmingham"]
         }
     ],
@@ -19,7 +73,8 @@
         {
             "title": "Staffs VS Keele",
             "time": "18:00",
-            "description": "A 6v6 test match between Staffs and Keele. This served as a test of the Cheep Cheep bot and YouTube streaming.\n\nYou can watch those archived streams here: https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH",
+            "season": 2,
+            "description": "A 6v6 test match between Staffs and Keele. This served as a test of the Cheep Cheep bot and YouTube streaming.\n\nYou can watch those archived streams here: https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH.",
             "teamsInvolved": ["Staffs", "Keele"]
         }
     ],
@@ -27,7 +82,8 @@
         {
             "title": "York VS Glasgow",
             "time": "18:00",
-            "description": "A 6v6 test match between York and Glasgow. This served as a test of the Cheep Cheep bot and YouTube streaming.\n\nYou can watch those archived streams here: https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH",
+            "season": 2,
+            "description": "A 6v6 test match between York and Glasgow. This served as a test of the Cheep Cheep bot and YouTube streaming.\n\nYou can watch those archived streams here: https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH.",
             "teamsInvolved": ["York", "Glasgow"]
         }
     ],
@@ -35,13 +91,15 @@
         {
             "title": "Staffs VS Glasgow",
             "time": "18:00",
-            "description": "A 6v6 test match between Staffs and Glasgow. This served as a test of the Cheep Cheep bot and YouTube streaming.\n\nYou can watch those archived streams here: https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH",
+            "season": 2,
+            "description": "A 6v6 test match between Staffs and Glasgow. This served as a test of the Cheep Cheep bot and YouTube streaming.\n\nYou can watch those archived streams here: https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH.",
             "teamsInvolved": ["Staffs", "Glasgow"]
         },
         {
             "title": "York VS Birmingham",
             "time": "19:30",
-            "description": "A 6v6 test match between York and Birmingham.\n\nYou can watch those archived streams here: https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH",
+            "season": 2,
+            "description": "A 6v6 test match between York and Birmingham.\n\nYou can watch those archived streams here: https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH.",
             "teamsInvolved": ["York", "Birmingham"]
         }
     ]
