@@ -10,10 +10,10 @@ def run_pre_commit_tasks():
     and then generates a JSON file containing team colors.
     """
     # Generate the graphics
-    print("Generating graphics...")
-    max_season = logic.get_current_season()
-    for i in range(1, max_season + 1):
-        graphics.create_team_standings_image(season_id=i, add_timestamp=True)
+    # print("Generating graphics...")
+    # max_season = logic.get_current_season()
+    # for i in range(1, max_season + 1):
+    #     graphics.create_team_standings_image(season_id=i, add_timestamp=True)
 
     # Generate the team colors JSON file
     print("Generating team colors JSON file...")
