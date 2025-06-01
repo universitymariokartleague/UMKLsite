@@ -256,39 +256,37 @@ function showDailyLog(date, dayCell) {
     if (log.length) {
         const formattedDate = new Date(`${date}`).toLocaleString(locale, { dateStyle: 'full' });
         expandedLog.innerHTML = `
-            <div class="settingSubheading">
-                <div class="current-season-area"> 
-                    <h3 style="margin: 3px">${formattedDate}</h3>                            
-                    <button id="shareButton"><span class="fa-solid fa-share"></span> Share Date</button>
-                </div>
-                <hr class="after-title" style="margin-bottom:0;">
-                ${log.map((entry, index) => {
-                    function createTeamObject(teamName) {
-                        return {
-                            team_name: teamName,
-                            class_name: teamName.replace(/\s+/g, ''),
-                            link: `pages/teams/${teamName.replace(/\s+/g, '-').toLowerCase()}/`
-                        };
-                    }
-    
-                    const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
-                    let timeString = entry.time || '00:00';
-                    if (/^\d{2}:\d{2}$/.test(timeString)) timeString += ':00';
-                    const formattedMatchTime = new Date(`1970-01-01T${timeString}`).toLocaleTimeString(locale, { hour: 'numeric', minute: '2-digit'});
-                    return `
-                        <div class="event">
-                            <p class="event-header">${formattedMatchTime}</p>
-                            <h2 style="margin-bottom: 10px;">
-                                <span class=${team1.class_name}><a class="no-color-link no-underline-link" href="${team1.link}">${team1.team_name}</a></span> 
-                                VS 
-                                <span class="${team2.class_name}"><a class="no-color-link no-underline-link" href="${team2.link}">${team2.team_name}</a></span>
-                            </h2>
-                            <p>${autoLink(entry.description.replace(/(?:\r\n|\r|\n)/g, '<br/>'))}</p>
-                            <span class="settings-extra-info">This match from Season ${entry.season}.</span>
-                        </div>
-                    `;
-                }).join('')}
+            <div class="current-season-area"> 
+                <h3 style="margin: 3px">${formattedDate}</h3>                            
+                <button id="shareButton"><span class="fa-solid fa-share"></span> Share Date</button>
             </div>
+            <hr class="after-title" style="margin-bottom:0;">
+            ${log.map((entry, index) => {
+                function createTeamObject(teamName) {
+                    return {
+                        team_name: teamName,
+                        class_name: teamName.replace(/\s+/g, ''),
+                        link: `pages/teams/${teamName.replace(/\s+/g, '-').toLowerCase()}/`
+                    };
+                }
+
+                const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
+                let timeString = entry.time || '00:00';
+                if (/^\d{2}:\d{2}$/.test(timeString)) timeString += ':00';
+                const formattedMatchTime = new Date(`1970-01-01T${timeString}`).toLocaleTimeString(locale, { hour: 'numeric', minute: '2-digit'});
+                return `
+                    <div class="event">
+                        <p class="event-header">${formattedMatchTime}</p>
+                        <h2 style="margin-bottom: 10px;">
+                            <span class=${team1.class_name}><a class="no-color-link no-underline-link" href="${team1.link}">${team1.team_name}</a></span> 
+                            VS 
+                            <span class="${team2.class_name}"><a class="no-color-link no-underline-link" href="${team2.link}">${team2.team_name}</a></span>
+                        </h2>
+                        <p>${autoLink(entry.description.replace(/(?:\r\n|\r|\n)/g, '<br/>'))}</p>
+                        <span class="settings-extra-info">This match from Season ${entry.season}.</span>
+                    </div>
+                `;
+            }).join('')}
         `;
 
         createShareButtonListener(formattedDate);
