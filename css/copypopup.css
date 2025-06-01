@@ -69,12 +69,12 @@
 }
 
 .popupDropdown {
-    width: 110px;
+    width: 105px;
     padding: 6px 10px;
     border: 1px solid #ccccccaa;
     border-radius: 6px;
     background-color: var(--bg-color, #fff);
-    color: var(--text-color, #222);
+    color: var(--text-color);
     font-size: 14px;
     appearance: none;
     -webkit-appearance: none;
@@ -89,6 +89,15 @@
 }
 
 .popupDropdown#yearDropdown {
-    width: 50px;
-    padding: 6px;
+    width: 55px;
+    padding: 6px 8px;
+}
+
+.currentDateButton {
+    width: 32px;
+    padding: 6px 2px;
+    border: 1px solid #ccccccaa;
+    border-radius: 6px;
+    color: var(--text-color);
+    font-size: 14px;
 }

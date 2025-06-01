@@ -143,7 +143,7 @@ function showMonthPicker(currentDate) {
     const month = currentDate.getMonth();
 
     if (currentPreview?.parentNode) {
-        generateCalendar(month, year);
+        // generateCalendar(month, year);
         return;
     }
 
@@ -156,13 +156,13 @@ function showMonthPicker(currentDate) {
 
     const preview = document.createElement('div');
     preview.className = 'preview text-preview';
-    preview.style.left = `${buttonRect.left + scrollX + buttonRect.width / 2 - 87.5}px`;
+    preview.style.left = `${buttonRect.left + scrollX + buttonRect.width / 2 - 105}px`;
     preview.style.top = `${buttonRect.bottom + scrollY + 10}px`;
 
     preview.innerHTML = `
         <div class="arrow"></div>
         <div class="arrow-border"></div>
-        <div class="preview-message">
+        <div class="preview-message" style="-webkit-user-select:none;user-select:none;">
             <select class="popupDropdown" id="monthDropdown">
                 ${months.map((m, i) =>
                     `<option value="${i}" ${i === currentlyShownDate[1] ? 'selected' : ''}>${m}</option>`
@@ -174,10 +174,17 @@ function showMonthPicker(currentDate) {
                     return `<option value="${y}" ${y === currentlyShownDate[0] ? 'selected' : ''}>${y}</option>`;
                 }).join('')}
             </select>
+            <button class="currentDateButton" id="currentDateButton"><i class="fa-solid fa-calendar"></i></button>
         </div>
     `;
 
     document.body.appendChild(preview);
+
+    document.getElementById('currentDateButton').addEventListener('click', () => {
+        generateCalendar(month, year);
+        closePreview();
+    });
+
     currentPreview = preview;
     isPopupShowing = true;
 
