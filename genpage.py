@@ -1,8 +1,7 @@
 import os, re
 from bs4 import BeautifulSoup
 
-TEAM_PAGE = """
-<!DOCTYPE html>
+TEAM_PAGE = """<!DOCTYPE html>
 <html lang="en" data-overlayscrollbars-initialize>
     <head>
         <base href="../../../">
@@ -101,8 +100,7 @@ TEAM_PAGE = """
 </html>
 """
 
-BLANK_NEWS_PAGE = """
-<!DOCTYPE html>
+BLANK_NEWS_PAGE = """<!DOCTYPE html>
 <html lang="en" data-overlayscrollbars-initialize>
     <head>
         <base href="../../../../">
