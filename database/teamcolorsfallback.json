@@ -1,11 +1,38 @@
-{
-    "York": "#1BAA8B",
-    "Staffs": "#A11212",
-    "Edinburgh": "#287AC8",
-    "Keele": "#61B6CB",
-    "Birmingham": "#FDD017",
-    "BIMM": "#616161",
-    "Glasgow": "#BD4AFF",
-    "Oxford": "#002147",
-    "Warwick": "#3C1053"
-}
+[
+    {
+        "team_color": "#1BAA8B",
+        "team_name": "York"
+    },
+    {
+        "team_color": "#A11212",
+        "team_name": "Staffs"
+    },
+    {
+        "team_color": "#287AC8",
+        "team_name": "Edinburgh"
+    },
+    {
+        "team_color": "#61B6CB",
+        "team_name": "Keele"
+    },
+    {
+        "team_color": "#FDD017",
+        "team_name": "Birmingham"
+    },
+    {
+        "team_color": "#616161",
+        "team_name": "BIMM"
+    },
+    {
+        "team_color": "#BD4AFF",
+        "team_name": "Glasgow"
+    },
+    {
+        "team_color": "#002147",
+        "team_name": "Oxford"
+    },
+    {
+        "team_color": "#3C1053",
+        "team_name": "Warwick"
+    }
+]
