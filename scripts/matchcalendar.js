@@ -13,9 +13,10 @@ const DEFAULTSTARTDAY = 1;
 const expandedLog = document.getElementById('expandedLog');
 const calendarError = document.getElementById("calendarError")
 
-const startYear = 2023; // currentYear of season = startYear + season (eg: season 1 - 2023 + 1 = 2024)
-const minYear = 2024; // Minimum year for the calendar, prevents going back to 2023
 const currentYear = new Date().getFullYear();
+const startYear = 2023; // currentYear of season = startYear + season (eg: season 1 - 2023 + 1 = 2024)
+const minYear = startYear + 1; // Minimum year for the calendar, prevents going back to 2023
+const maxYear = currentYear + 2; // Maximum year for the calendar, allows going up to 2 years in the future
 const months = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
@@ -52,7 +53,7 @@ function generateCalendar(month, year) {
     monthYear.innerHTML = `
         <a class="month-arrow fa-solid fa-arrow-left ${(year == minYear && month == 0) ? "empty" : ""}" id="previousMonthButton"></a>
         <span class="month-name" id="goToCurrentMonthButton">${Intl.DateTimeFormat('en', { month: tempMonthType }).format(new Date(year, month))} ${year}</span>
-        <a class="month-arrow fa-solid fa-arrow-right" id="nextMonthButton"></a>
+        <a class="month-arrow fa-solid fa-arrow-right ${(year == maxYear && month == 11) ? "empty" : ""}" id="nextMonthButton"></a>
     `;
 
     const currentDate = new Date();
@@ -137,7 +138,13 @@ function generateCalendar(month, year) {
 
 function changeMonth(change) {
     const newDate = new Date(currentlyShownDate[0], currentlyShownDate[1] + change);
-    if (newDate.getFullYear() < minYear || (newDate.getFullYear() === minYear && newDate.getMonth() < 0)) {
+    // Prevent going below minYear or above maxYear/month 11
+    if (
+        newDate.getFullYear() < minYear ||
+        (newDate.getFullYear() === minYear && newDate.getMonth() < 0) ||
+        newDate.getFullYear() > maxYear ||
+        (newDate.getFullYear() === maxYear && newDate.getMonth() > 11)
+    ) {
         return;
     }
     generateCalendar(newDate.getMonth(), newDate.getFullYear());
@@ -167,16 +174,16 @@ function showMonthPicker(currentDate) {
     preview.innerHTML = `
         <div class="arrow"></div>
         <div class="arrow-border"></div>
-        <div class="preview-message" style="-webkit-user-select:none;user-select:none;">
+        <div class="preview-message" style="user-select:none;">
             <select class="popupDropdown" id="monthDropdown">
                 ${months.map((m, i) =>
-                    `<option value="${i}" ${i === currentlyShownDate[1] ? 'selected' : ''}>${m}</option>`
+                    `<option value="${i}"${i === currentlyShownDate[1] ? ' selected' : ''}>${m}</option>`
                 ).join('')}
             </select>
             <select class="popupDropdown" id="yearDropdown">
-                ${Array.from({ length: currentYear + 2 - (startYear + 1) + 1 }, (_, i) => {
-                    const y = startYear + 1 + i;
-                    return `<option value="${y}" ${y === currentlyShownDate[0] ? 'selected' : ''}>${y}</option>`;
+                ${Array.from({ length: maxYear - minYear + 1 }, (_, i) => {
+                    const y = minYear + i;
+                    return `<option value="${y}"${y === currentlyShownDate[0] ? ' selected' : ''}>${y}</option>`;
                 }).join('')}
             </select>
             <button class="currentDateButton" id="currentDateButton"><i class="fa-solid fa-calendar"></i></button>
@@ -463,13 +470,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                 } else {
                     window.retryCount++;
                 }
-                calendarError.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch match data from the API, the below information may not be up to date!<br>Retrying: attempt ${window.retryCount}...</blockquote>`;
                 matchData = await getMatchData();
                 teamColors = await getTeamcolors();
+                calendarError.innerHTML = ""
                 makeTeamsColorStyles();
                 displayCalendar();
             } catch (err) {
-                calendarError.innerHTML = ""
+                calendarError.innerHTML = `<blockquote class="fail"><b>API error - Retrying: attempt ${window.retryCount}...</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
                 refreshTimer = setTimeout(retryFetch, 2000);
             }
         };
