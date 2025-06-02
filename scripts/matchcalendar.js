@@ -24,6 +24,8 @@ let currentlyShownDate = [2000, 0];
 let matchData = {};
 let teamColors = {};
 
+let refreshTimer = null;
+
 let discardLogOnChange = false;
 
 let previewTimeout = null;
@@ -452,6 +454,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         await getTeamcolorsFallback();
 
         calendarError.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
+    
+        if (refreshTimer) clearTimeout(refreshTimer);
+        const retryFetch = async () => {
+            try {
+                calendarError.innerHTML = '<blockquote class="fail"><b>API error</b><br>Retrying to fetch match data...</blockquote>';
+                matchData = await getMatchData();
+                teamColors = await getTeamcolors();
+                makeTeamsColorStyles();
+                displayCalendar();
+            } catch (err) {
+                // Keep showing fallback and error message
+                refreshTimer = setTimeout(retryFetch, 2000);
+            }
+        };
+        refreshTimer = setTimeout(retryFetch, 2000);
     }
 
     makeTeamsColorStyles();
