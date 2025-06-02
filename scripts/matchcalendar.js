@@ -443,7 +443,7 @@ function displayCalendar() {
 
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
-    console.debug(`%cmatchcalendar.js %c> %cLoading calendar...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+    console.debug(`%cmatchcalendar.js %c> %cFetching calendar...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
     
     try {
         matchData = await getMatchData();
@@ -458,13 +458,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (refreshTimer) clearTimeout(refreshTimer);
         const retryFetch = async () => {
             try {
-                calendarError.innerHTML = '<blockquote class="fail"><b>API error</b><br>Retrying to fetch match data...</blockquote>';
+                if (typeof retryCount === 'undefined') {
+                    window.retryCount = 1;
+                } else {
+                    window.retryCount++;
+                }
+                calendarError.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch match data from the API, the below information may not be up to date!<br>Retrying: attempt ${window.retryCount}...</blockquote>`;
                 matchData = await getMatchData();
                 teamColors = await getTeamcolors();
                 makeTeamsColorStyles();
                 displayCalendar();
             } catch (err) {
-                // Keep showing fallback and error message
+                calendarError.innerHTML = ""
                 refreshTimer = setTimeout(retryFetch, 2000);
             }
         };
