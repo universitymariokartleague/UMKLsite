@@ -4,6 +4,10 @@
             3,
             0
         ],
+        "coords": [
+            53.96,
+            -1.08
+        ],
         "first_entry": 1,
         "place_id": 1826149980,
         "season_matches_played": 0,
@@ -15,7 +19,7 @@
         ],
         "team_career_points": 1781,
         "team_championships": 1,
-        "team_color": "#1baa8b",
+        "team_color": "#1BAA8B",
         "team_full_name": "University of York",
         "team_id": 1,
         "team_name": "York",
@@ -26,6 +30,10 @@
         "career_wins_losses": [
             2,
             1
+        ],
+        "coords": [
+            53.0,
+            -2.1833
         ],
         "first_entry": 1,
         "place_id": 1826799578,
@@ -50,6 +58,10 @@
             1,
             2
         ],
+        "coords": [
+            55.9533,
+            -3.1892
+        ],
         "first_entry": 1,
         "place_id": 1826492520,
         "season_matches_played": 0,
@@ -72,6 +84,10 @@
         "career_wins_losses": [
             0,
             3
+        ],
+        "coords": [
+            53.0109,
+            -2.2278
         ],
         "first_entry": 1,
         "place_id": 1826124765,
@@ -96,6 +112,10 @@
             0,
             0
         ],
+        "coords": [
+            52.48,
+            -1.9025
+        ],
         "first_entry": 2,
         "place_id": 1826423213,
         "season_matches_played": 0,
@@ -119,6 +139,10 @@
             0,
             0
         ],
+        "coords": [
+            51.4536,
+            -2.5975
+        ],
         "first_entry": 2,
         "place_id": 1826921049,
         "season_matches_played": 0,
@@ -133,7 +157,7 @@
         "team_color": "#616161",
         "team_full_name": "BIMM University",
         "team_id": 6,
-        "team_name": "Bristol Bob-Ombs",
+        "team_name": "BIMM",
         "team_place": "Bristol, England",
         "team_season_points": 0
     },
@@ -141,6 +165,10 @@
         "career_wins_losses": [
             0,
             0
+        ],
+        "coords": [
+            55.8611,
+            -4.25
         ],
         "first_entry": 2,
         "place_id": 1826836462,
@@ -165,6 +193,10 @@
             0,
             0
         ],
+        "coords": [
+            51.75,
+            -1.25
+        ],
         "first_entry": 2,
         "place_id": 1826689568,
         "season_matches_played": 0,
@@ -176,7 +208,7 @@
         ],
         "team_career_points": 0,
         "team_championships": 0,
-        "team_color": "#002147",
+        "team_color": "#1D42A6",
         "team_full_name": "University of Oxford",
         "team_id": 8,
         "team_name": "Oxford",
@@ -187,6 +219,10 @@
         "career_wins_losses": [
             0,
             0
+        ],
+        "coords": [
+            52.28,
+            -1.59
         ],
         "first_entry": 2,
         "place_id": 1826383937,
@@ -199,7 +235,7 @@
         ],
         "team_career_points": 0,
         "team_championships": 0,
-        "team_color": "#3C1053",
+        "team_color": "#775887",
         "team_full_name": "University of Warwick",
         "team_id": 9,
         "team_name": "Warwick",

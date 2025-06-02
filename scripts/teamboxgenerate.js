@@ -38,6 +38,8 @@ const startYear = 2023;
 let currentSeason = 2;
 let maxSeason = currentSeason;
 
+let refreshTimer = null;
+
 let startTime;
 
 async function loadFont(name, url) {
@@ -282,6 +284,25 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.debug(`%cteamboxgenerate.js %c> %cAPI failed - using fallback information...`, "color:#9452ff", "color:#fff", "color:#c29cff");
         JSTeamBoxLoading.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch team data from the API, the below information may not be up to date!</blockquote>`;
         await getTeamdataFallback(currentSeason);
+
+        if (refreshTimer) clearTimeout(refreshTimer);
+        const retryFetch = async () => {
+            try {
+                if (typeof retryCount === 'undefined') {
+                    window.retryCount = 1;
+                } else {
+                    window.retryCount++;
+                }
+                teamData = await getTeamdata("", currentSeason);
+                generateTeamBoxes(teamData)
+                generateSeasonPicker();
+                updateSeasonText();
+            } catch (err) {
+                JSTeamBoxLoading.innerHTML = `<blockquote class="fail"><b>API error - Retrying: attempt ${window.retryCount}</b><br>Failed to fetch team data from the API, the below information may not be up to date!</blockquote>`;
+                refreshTimer = setTimeout(retryFetch, 2000);
+            }
+        };
+        refreshTimer = setTimeout(retryFetch, 2000);
     }
     
     console.debug(`%cteamboxgenerate.js %c> %cGenerated team data in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9452ff", "color:#fff", "color:#c29cff");
