@@ -167,7 +167,7 @@ function generateTeamBoxes(teamData) {
                     <img class="teamLogo" src="${team.logo_src}" alt="${team.team_name} team logo">
                     <div class="teamName">${team.team_name.toUpperCase()}</div>
                     <div class="teamPointsArea">
-                        <div class="teamPoints">${team.points_override ?? team.points ?? "0"}</div>
+                        <div class="teamPoints">${team.team_season_points}</div>
                         <div class="teamStandings">${team.season_wins_losses[0]} - ${team.season_wins_losses[1]} (${matchesPlayed} MATCH${matchesPlayed === 1 ? "" : "ES"})</div>
                     </div>
                 `;
@@ -279,7 +279,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadFont('SF-Pro-Display-Bold', 'assets/pythongraphics/fonts/SF-Pro/SF-Pro-Display-Bold.otf');
     
     try {
-        teamData = await getTeamdata("", currentSeason);
+        teamData = await getTeamdata("");
     } catch {
         console.debug(`%cteamboxgenerate.js %c> %cAPI failed - using fallback information...`, "color:#9452ff", "color:#fff", "color:#c29cff");
         JSTeamBoxLoading.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch team data from the API, the below information may not be up to date!</blockquote>`;
@@ -293,7 +293,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 } else {
                     window.retryCount++;
                 }
-                teamData = await getTeamdata("", currentSeason);
+                teamData = await getTeamdata("");
                 generateTeamBoxes(teamData)
                 generateSeasonPicker();
                 updateSeasonText();
