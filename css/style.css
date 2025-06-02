@@ -915,8 +915,6 @@ blockquote {
 .team-info-logo {
     margin: 0 auto;
     width: 200px;
-    opacity: 0;
-    animation: fadeIn 0.1s ease-in-out forwards;
 }
 
 @media screen and (max-width: 767px) {

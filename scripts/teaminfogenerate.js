@@ -21,7 +21,6 @@ const teamBoxFormatHTML = `
                 {{currentFields}}
             </div>
         </div>
-        {{errorMessage}}
     </div>
 
     <div class="map {{className}}">
@@ -34,6 +33,8 @@ const startYear = 2023;
 
 let teamData = [];
 const currentSeason = 2;
+
+let refreshTimer = null;
 
 let startTime;
 
@@ -77,7 +78,6 @@ async function generateTeamBox(teamData, showError) {
         .replace("{{logoSrc}}", teamData.logo_src)
         .replace("{{extraFields}}", extraFields)
         .replace("{{currentFields}}", currentFields)
-        .replace("{{errorMessage}}", showError ? `<blockquote style="margin-top:5px;margin-bottom:0px;padding:5px;" class="fail">Failed to fetch team data from the API, the above information may not be up to date!</blockquote>` : "");
 
     const highlightColor = `${teamData.team_color}80`;
     document.documentElement.style.setProperty('--highlight-color', highlightColor);
@@ -85,6 +85,29 @@ async function generateTeamBox(teamData, showError) {
     document.head.appendChild(teamStyleSheet);
     JSTeamBox.innerHTML = tempTeamBox;
     JSTeamBox.classList.add('fade-in');
+
+    if (showError) {
+        let errorBlock = document.getElementById("team-api-error");
+        if (!errorBlock) {
+            errorBlock = document.createElement("blockquote");
+            errorBlock.className = "fail";
+            errorBlock.id = "team-api-error";
+            const mainElem = document.querySelector("main");
+            if (mainElem) {
+                mainElem.appendChild(errorBlock);
+            }
+        }
+        if (window.retryCount) {
+            errorBlock.innerHTML = `<b>API error - Retrying: attempt ${window.retryCount}</b><br>Failed to fetch team data from the API, the below information may not be up to date!`;
+        } else {
+            errorBlock.innerHTML = "<b>API error</b><br>Failed to fetch team data from the API, the below information may not be up to date!";
+        }
+    } else {
+        let errorBlock = document.getElementById("team-api-error");
+        if (errorBlock) {
+            errorBlock.remove();
+        }
+    }
 }
 
 function toOrdinal(n) {
@@ -135,6 +158,24 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.debug(`%cteaminfogeenrate.js %c> %cAPI failed - using fallback information...`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
         teamData = await getTeamdataFallback(currentTeam);
         showError = true;
+
+        if (refreshTimer) clearTimeout(refreshTimer);
+        const retryFetch = async () => {
+            try {
+                if (typeof retryCount === 'undefined') {
+                    window.retryCount = 1;
+                } else {
+                    window.retryCount++;
+                }
+                teamData = await getTeamdata(currentTeam);
+                showError = false;
+                await generateTeamBox(teamData[0], showError);
+            } catch (err) {
+                await generateTeamBox(teamData[0], showError);
+                refreshTimer = setTimeout(retryFetch, 2000);
+            }
+        };
+        refreshTimer = setTimeout(retryFetch, 2000);
     }
     await generateTeamBox(teamData[0], showError);
 
