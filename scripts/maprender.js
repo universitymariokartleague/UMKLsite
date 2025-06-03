@@ -41,31 +41,35 @@ function updateTransform() {
     container.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
 }
 
-// Zoom handler for mouse wheel
 function onWheel(e) {
     e.preventDefault();
 
-    // Zoom step factor
     const zoomFactor = 0.1;
-    const delta = e.deltaY < 0 ? 1 + zoomFactor : 1 - zoomFactor;
-    const newScale = Math.min(maxScale, Math.max(minScale, scale * delta));
+    const scaleDelta = e.deltaY < 0 ? 1 + zoomFactor : 1 - zoomFactor;
+    const newScale = Math.min(maxScale, Math.max(minScale, scale * scaleDelta));
 
-    if (newScale === scale) return; // no change
+    if (newScale === scale) return;
 
-    // Calculate the mouse position relative to the container
+    // Get mouse position relative to the wrapper (screen space)
     const rect = wrapper.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
 
-    // Calculate how pan should change to zoom towards mouse pointer
-    panX = mouseX - ((mouseX - panX) * (newScale / scale));
-    panY = mouseY - ((mouseY - panY) * (newScale / scale));
+    // Calculate position in map coordinates (content space)
+    const contentX = (mouseX - panX) / scale;
+    const contentY = (mouseY - panY) / scale;
 
+    // Update scale
     scale = newScale;
-    updateTransform();
 
+    // Update pan so that the content under the cursor stays under the cursor
+    panX = mouseX - contentX * scale;
+    panY = mouseY - contentY * scale;
+
+    updateTransform();
     placeDots();
 }
+
 
 // Mouse down to start pan
 function onPointerDown(e) {
@@ -75,6 +79,7 @@ function onPointerDown(e) {
         y: e.clientY - panY,
     };
     wrapper.style.cursor = 'grabbing';
+    container.style.transition = 'none';
 }
 
 // Mouse move to pan
@@ -89,6 +94,7 @@ function onPointerMove(e) {
 function onPointerUp() {
     isPanning = false;
     wrapper.style.cursor = 'default';
+    container.style.transition = 'transform 0.2s ease'; 
 }
 
 // Touch support for panning and zooming (basic)
@@ -178,8 +184,6 @@ function placeDots() {
 
     const { clientWidth: w, clientHeight: h } = mapImg;
     if (!w || !h) return;
-
-    console.log(scale)
 
     const fragment = document.createDocumentFragment();
     coords.forEach(([lat, lon]) => {
