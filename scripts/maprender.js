@@ -3,7 +3,7 @@ const container = mapImg.parentElement;
 
 const mapBounds = {
     minLat: 49.97, // Southern edge
-    maxLat: 60.83,   // Northern edge
+    maxLat: 58.67193,   // Northern edge
     minLon: -8.64,  // Western edge (e.g., Ireland)
     maxLon: 1.73,    // Eastern edge
 };
@@ -28,7 +28,7 @@ let maxSeason = currentSeason;
 
 // Variables to track zoom and pan state
 let scale = 1;
-let minScale = 1;
+let minScale = 0.5;
 let maxScale = 20;
 let panX = 0;
 let panY = 0;
@@ -192,8 +192,8 @@ function placeDots() {
         dot.className = 'dot';
         Object.assign(dot.style, {
             position: 'absolute',
-            width: `${5}px`,
-            height: `${5}px`,
+            width: `${10}px`,
+            height: `${10}px`,
             borderRadius: '50%',
             backgroundColor: 'red',
             left: `${x - 1}px`,
