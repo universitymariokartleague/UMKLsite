@@ -300,7 +300,7 @@ function showDailyLog(date, dayCell) {
                             <span class="${team2.class_name}"><a class="no-color-link no-underline-link" href="${team2.link}">${team2.team_name}</a></span>
                         </h2>
                         <p>${autoLink(entry.description.replace(/(?:\r\n|\r|\n)/g, '<br/>'))}</p>
-                        <span class="settings-extra-info">This is a Season ${entry.season} match.</span>
+                        <span class="settings-extra-info">This is a ${entry.testMatch ? "test" : `Season ${entry.season}`} match.</span>
                     </div>
                 `;
             }).join('')}
