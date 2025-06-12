@@ -784,7 +784,6 @@ blockquote {
     flex-wrap: wrap;
     
     border-radius: 10px;
-    background-color: var(--box-area-bg-color);
     border: 1px solid #ccccccaa;
     padding: 10px;
 }
