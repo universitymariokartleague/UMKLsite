@@ -42,7 +42,7 @@ function createEmptyCells(count) {
     }
 }
 
-function generateCalendar(month, year) {
+function generateCalendar(month, year, dateParam = null) {
     const startDay = localStorage.getItem("startDay") || DEFAULTSTARTDAY;
     const tempMonthType = localStorage.getItem("monthType") || "long";
 
@@ -121,9 +121,12 @@ function generateCalendar(month, year) {
                 dayCell.appendChild(colorBarContainer);
             });
             dayCell.classList.add('logged');
+            if (dateParam === dateToCheck) {
+                dayCell.classList.add('selected');
+            }
             dayCell.addEventListener('click', () => showDailyLog(dateToCheck, dayCell));
         }
-        
+
         calendarDays.appendChild(dayCell);
     };
 
@@ -435,16 +438,16 @@ async function getMatchDataFallback() {
 }
 
 function displayCalendar() {
-    const currentDate = new Date();
-    generateCalendar(currentDate.getMonth(), currentDate.getFullYear());        
-
     const urlParams = new URLSearchParams(window.location.search);
     const dateParam = urlParams.get('date');
     if (dateParam && matchData[dateParam]) {
         console.debug(`%cmatchcalendar.js %c> %cURL parameter detected`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
         const dateObj = new Date(dateParam);
-        generateCalendar(dateObj.getMonth(), dateObj.getFullYear());
         showDailyLog(dateParam);
+        generateCalendar(dateObj.getMonth(), dateObj.getFullYear(), dateParam);
+    } else {
+        const currentDate = new Date();
+        generateCalendar(currentDate.getMonth(), currentDate.getFullYear());        
     }
 }
 
