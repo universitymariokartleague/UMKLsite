@@ -783,10 +783,15 @@ blockquote {
     align-items: center; /* Vertically center items */
     flex-wrap: wrap;
     
-    border-radius: 15px;
+    border-radius: 10px;
     background-color: var(--box-area-bg-color);
-    border: var(--button-outline);
+    border: 1px solid #ccccccaa;
     padding: 10px;
+}
+
+.match-details-box {
+    display: flex;
+    gap: 20px;
 }
 
 .match-container.special {
@@ -948,6 +953,12 @@ blockquote {
     }
 }
 
+.match-detail-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
 .info-container {
 	display: flex;
 	justify-content: center;
@@ -958,6 +969,7 @@ blockquote {
     border-radius: 10px;
     padding: 10px;
     background-color: var(--box-area-bg-color);
+    border: 1px solid #ccccccaa;
     width: 100vw;
 }
 
