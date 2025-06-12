@@ -319,10 +319,17 @@ function autoLink(text) {
     const urlRegex = /((https?:\/\/|www\.)[^\s<]+)/gi;
     return text.replace(urlRegex, function(url) {
         let href = url;
+        let displayUrl = url;
+        let trailingDot = '';
+        if (displayUrl.endsWith('.')) {
+            displayUrl = displayUrl.slice(0, -1);
+            href = href.slice(0, -1);
+            trailingDot = '.';
+        }
         if (!href.match(/^https?:\/\//)) {
             href = 'http://' + href;
         }
-        return `<a href="${href}" target="_blank">${url}</a>`;
+        return `<a href="${href}" target="_blank">${displayUrl}</a>${trailingDot}`;
     });
 }
 
