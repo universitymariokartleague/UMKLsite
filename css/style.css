@@ -675,7 +675,6 @@ blockquote {
     border-radius: 10px;
     border: 1px solid #cccccccc;
     overflow: hidden; /* This contains the scrollbar within the rounded corners */
-    background-color: var(--box-area-bg-color);
 }
 
 .news-container {
@@ -710,6 +709,7 @@ blockquote {
     margin: 0 auto;
 	flex-wrap: wrap;
     background-color: unset;
+    
 }
 
 .news-box {
@@ -719,11 +719,12 @@ blockquote {
     min-width: 200px;
     width: 200px;
     height: 250px;
-    border-radius: 10px;
+    border-radius: 5px;
     overflow: hidden;
     position: relative;
     isolation: isolate;
     contain: paint;
+    background-color: var(--box-area-bg-color);
 }
 
 .news-box .news-image img,
@@ -965,7 +966,7 @@ blockquote {
 	flex-wrap: wrap;
     text-align: center;
     margin-top: 10px;
-    border-radius: 10px;
+    border-radius: 5px;
     padding: 10px;
     background-color: var(--box-area-bg-color);
     border: 1px solid #ccccccaa;
