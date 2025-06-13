@@ -9,6 +9,7 @@ const mapBounds = {
 };
 
 let coords = [];
+let teamParam = "";
 
 // Create a wrapper to hold the map and dots for zoom/pan
 const wrapper = document.createElement('div');
@@ -248,6 +249,9 @@ function placeDots() {
             backdropFilter: 'blur(4px)'
         });
         label.dataset.dotLabel = '1';
+        if (name === teamParam) {
+            label.style.fontWeight = 'bold';
+        }
 
         // Try different positions until we find one that doesn't collide
         const labelWidth = name.length * 8 + 12; // Approximate width based on character count
@@ -318,6 +322,11 @@ function latLonToPixel(lat, lon, width, height) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('team')) {
+        teamParam = urlParams.get('team');
+    }
+
     const teamData = await getTeamdata("");
 
     // Extract valid coordinates and team color

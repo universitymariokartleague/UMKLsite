@@ -24,10 +24,8 @@ const teamBoxFormatHTML = `
     </div>
 
     <div class="map {{className}}">
-        <iframe id="teamMapIFrame" src="pages/map/" frameborder="0"></iframe>
+        <iframe id="teamMapIFrame" src="pages/map/?team={{teamName}}" frameborder="0"></iframe>
     </div>
-
-
 `;
 
 const JSTeamBox = document.getElementById("JSTeamBox")
@@ -74,7 +72,7 @@ async function generateTeamBox(teamData, showError) {
     `;
 
     let tempTeamBox = teamBoxFormatHTML
-        .replace("{{teamName}}", teamData.team_name)
+        .replaceAll("{{teamName}}", teamData.team_name)
         .replace("{{className}}", teamData.class_name)
         .replace("{{teamNameLower}}", teamData.team_name.toLowerCase())
         .replace("{{logoSrc}}", teamData.logo_src)
