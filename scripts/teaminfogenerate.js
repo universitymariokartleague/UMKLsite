@@ -15,7 +15,7 @@ const teamBoxFormatHTML = `
         <div class="current-season-info">
             <div class="heading-wrapper" style="margin-left: 3px;">
                 <h2>Season 2</h2>
-                <div class="green-dot"></div>
+                <div class="live-dot"></div>
             </div>
             <div class="team-info-text">
                 {{currentFields}}
@@ -24,8 +24,10 @@ const teamBoxFormatHTML = `
     </div>
 
     <div class="map {{className}}">
-        <img src="assets/image/map/{{teamNameLower}}_map.png">
+        <iframe id="teamMapIFrame" src="pages/map/" frameborder="0"></iframe>
     </div>
+
+
 `;
 
 const JSTeamBox = document.getElementById("JSTeamBox")

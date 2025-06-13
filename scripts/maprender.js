@@ -4,7 +4,7 @@ const container = mapImg.parentElement;
 const mapBounds = {
     minLat: 49.97, // Southern edge
     maxLat: 58.67193,   // Northern edge
-    minLon: -8.64,  // Western edge (e.g., Ireland)
+    minLon: -8.64,  // Western edge
     maxLon: 1.73,    // Eastern edge
 };
 
@@ -13,7 +13,6 @@ let coords = [];
 // Create a wrapper to hold the map and dots for zoom/pan
 const wrapper = document.createElement('div');
 wrapper.style.position = 'relative';
-wrapper.style.overflow = 'hidden';
 wrapper.style.width = container.clientWidth + 'px';
 wrapper.style.height = container.clientHeight + 'px';
 wrapper.style.touchAction = 'none'; // prevent default gestures on touch devices
@@ -28,8 +27,8 @@ let maxSeason = currentSeason;
 
 // Variables to track zoom and pan state
 let scale = 1;
-let minScale = 0.5;
-let maxScale = 20;
+let minScale = 1;
+let maxScale = 5;
 let panX = 0;
 let panY = 0;
 
@@ -179,27 +178,121 @@ async function getTeamdata(team = "", season) {
 }
 
 function placeDots() {
-    // Remove existing dots
-    container.querySelectorAll('.dot').forEach(dot => dot.remove());
+    container.querySelectorAll('.dot, .dot-label').forEach(el => el.remove());
 
     const { clientWidth: w, clientHeight: h } = mapImg;
     if (!w || !h) return;
 
     const fragment = document.createDocumentFragment();
-    coords.forEach(([lat, lon]) => {
+    const labels = []; // To store label positions for collision detection
+
+    coords.forEach(({ coords: [lat, lon], color, name }) => {
         const { x, y } = latLonToPixel(lat, lon, w, h);
         const dot = document.createElement('div');
-        dot.className = 'dot';
+        // Generate a unique class for each color
+        const colorClass = `pulse-${color.replace('#', '')}`;
+        dot.className = `dot pulse ${colorClass}`;
         Object.assign(dot.style, {
             position: 'absolute',
-            width: `${10}px`,
-            height: `${10}px`,
+            aspectRatio: '1 / 1',
+            width: '10px',
             borderRadius: '50%',
-            backgroundColor: 'red',
-            left: `${x - 1}px`,
-            top: `${y}px`,
-            pointerEvents: 'none'
+            backgroundColor: color,
+            left: `${x - 5}px`,
+            top: `${y - 5}px`,
+            pointerEvents: 'auto',
+            zIndex: 2
         });
+
+        // Add pulsing animation CSS for this color if not already present
+        if (!document.getElementById(`dot-pulse-style-${colorClass}`)) {
+            const style = document.createElement('style');
+            style.id = `dot-pulse-style-${colorClass}`;
+            style.textContent = `
+                .dot.pulse.${colorClass} {
+                    box-shadow: 0 0 0 0 ${color}50;
+                    animation: dot-pulse-${colorClass} 2.0s infinite;
+                }
+                @keyframes dot-pulse-${colorClass} {
+                    0% {
+                        box-shadow: 0 0 0 0 ${color}B3;
+                    }
+                    70% {
+                        box-shadow: 0 0 0 8px ${color}00;
+                    }
+                    100% {
+                        box-shadow: 0 0 0 0 ${color}00;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Create label with collision detection
+        const label = document.createElement('div');
+        label.className = 'dot-label';
+        label.textContent = name;
+        Object.assign(label.style, {
+            fontFamily: "Montserrat, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
+            position: 'absolute',
+            color: '#222',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            padding: '2px 6px',
+            fontSize: '12px',
+            whiteSpace: 'nowrap',
+            pointerEvents: 'none',
+            zIndex: 10,
+            boxShadow: '0 2px 6px #0002',
+            background: 'rgba(255,255,255,0.2)',
+            backdropFilter: 'blur(4px)'
+        });
+        label.dataset.dotLabel = '1';
+
+        // Try different positions until we find one that doesn't collide
+        const labelWidth = name.length * 8 + 12; // Approximate width based on character count
+        const labelHeight = 24; // Approximate height
+        
+        // Possible positions to try (right, left, above, below)
+        const positions = [
+            { left: x + 12, top: y - 12 }, // right (default)
+            { left: x - labelWidth - 12, top: y - 12 }, // left
+            { left: x - labelWidth / 2, top: y - labelHeight - 8 }, // above
+            { left: x - labelWidth / 2, top: y + 12 } // below
+        ];
+
+        // Find first position that doesn't collide with existing labels
+        const foundPosition = positions.find(pos => {
+            const newLabelRect = {
+                x: pos.left,
+                y: pos.top,
+                width: labelWidth,
+                height: labelHeight
+            };
+            
+            // Check against all existing labels
+            return !labels.some(existingLabel => 
+                !(newLabelRect.x > existingLabel.x + existingLabel.width ||
+                  newLabelRect.x + newLabelRect.width < existingLabel.x ||
+                  newLabelRect.y > existingLabel.y + existingLabel.height ||
+                  newLabelRect.y + newLabelRect.height < existingLabel.y)
+            );
+        });
+
+        // Use found position or default to first position
+        const finalPosition = foundPosition || positions[0];
+        label.style.left = `${finalPosition.left}px`;
+        label.style.top = `${finalPosition.top}px`;
+
+        // Store label position for future collision detection
+        labels.push({
+            x: finalPosition.left,
+            y: finalPosition.top,
+            width: labelWidth,
+            height: labelHeight
+        });
+
+        fragment.appendChild(label);
         fragment.appendChild(dot);
     });
 
@@ -227,10 +320,14 @@ function latLonToPixel(lat, lon, width, height) {
 document.addEventListener('DOMContentLoaded', async () => {
     const teamData = await getTeamdata("");
 
-    // Extract valid coordinates
+    // Extract valid coordinates and team color
     coords = teamData
-        .filter(team => Array.isArray(team.coords) && team.coords.length === 2)
-        .map(team => team.coords);
+        .filter(team => Array.isArray(team.coords) && team.coords.length === 2 && team.team_color)
+        .map(team => ({
+            coords: team.coords,
+            color: team.team_color,
+            name: team.team_name
+        }));
 
     // Place dots when image is loaded
     if (mapImg.complete && mapImg.naturalWidth !== 0) {
@@ -241,7 +338,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     window.addEventListener('resize', () => {
         placeDots();
-        // Optionally reset pan and zoom on resize
-        // scale = 1; panX = 0; panY = 0; updateTransform();
     });
 });

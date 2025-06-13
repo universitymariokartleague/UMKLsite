@@ -1,0 +1,23 @@
+html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    margin: 0;
+    background: #ccccccbb
+}
+
+.map-container, #worldMap {
+    user-select: none;
+    -webkit-user-drag: none;
+    touch-action: none;
+    cursor: grab;
+}
+
+.map-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
