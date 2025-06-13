@@ -495,5 +495,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     makeTeamsColorStyles();
     displayCalendar();
+    const currentDate = new Date();
+    showDailyLog(currentDate.toISOString().split('T')[0]);
     console.debug(`%cmatchcalendar.js %c> %cMatch data loaded in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
 });

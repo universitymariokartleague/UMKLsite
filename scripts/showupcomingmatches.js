@@ -78,15 +78,17 @@ function showUpcomingMatch() {
             </div>
             <div class="info-container">
                 <div class="match-details-box">
-                <div class="match-detail-container">
-                    <i class="fa-solid fa-calendar-days"></i>
-                    <h3>${formattedDate}</h3>
+                    <div class="match-detail-container">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <h3>${formattedDate}</h3>
+                    </div>
+                    <div class="match-detail-container">
+                        <i class="fa-solid fa-clock"></i>
+                        <h3>${formattedTime}</h3>
+                    </div>
                 </div>
-                <div class="match-detail-container">
-                    <i class="fa-solid fa-clock"></i>
-                    <h3>${formattedTime}</h3>
-                </div>
-                </div>
+                <span><a href="https://www.youtube.com/@universitymariokartleague" target="_blank" rel="noopener noreferrer">Watch here</a></span>
+                <span class="settings-extra-info">${match.testMatch ? "This is a Test Match" : ""}</span>
             </div>
             </div>`;
         });
