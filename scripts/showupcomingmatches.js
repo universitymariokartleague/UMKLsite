@@ -87,8 +87,11 @@ function showUpcomingMatch() {
                         <h3>${formattedTime}</h3>
                     </div>
                 </div>
-                <span><a href="https://www.youtube.com/@universitymariokartleague" target="_blank" rel="noopener noreferrer">Watch here</a></span>
-                <span class="settings-extra-info">${match.testMatch ? "This is a Test Match" : ""}</span>
+                <span>
+                    <a href="https://www.youtube.com/@universitymariokartleague/streams" target="_blank">Watch here</a> | 
+                    <a href="pages/matches/?date=${matchDateStr}">View details</a>
+                </span>
+                <span class="settings-extra-info">${match.testMatch ? "This is a test match." : ""}</span>
             </div>
             </div>`;
         });
