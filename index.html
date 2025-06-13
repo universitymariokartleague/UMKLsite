@@ -31,6 +31,7 @@
     <script defer src="scripts/overlayscrollbar.js"></script>
 
     <script defer src="scripts/settings.js" type="module"></script>
+    <script defer src="scripts/showupcomingmatches.js" type="module"></script>
     <script defer src="scripts/tagnewsposts.js" type="module"></script>
 </head>
 
@@ -76,47 +77,13 @@
             The University Mario Kart League (UMKL) brings together students from over 8 
             universities around the UK to compete as teams of six in Mario Kart 8 Deluxe!
         </p>
-        <p>Strategy and teamwork is essential in these matches. The team with the most
+        <p>
+            Strategy and teamwork is essential in these matches. The team with the most
             points across the season will emerge victorious!
         </p>
         <hr>
 
-        <h2>Next Match</h2>
-        <a href="pages/matches/">View All Matches</a>
-        <div class="after-title match-container">
-            <div class="team-box">
-                <a href="pages/teams/york/" class="no-color-link no-underline-link">
-                    <img class="team-box-image" src="assets/image/teamemblems/YORK.png" />
-                    <h3>York</h3>
-                </a>
-            </div>
-
-            <div class="vs-box">
-                <h1>VS</h1>
-            </div>
-
-            <div class="team-box">
-                <a href="pages/teams/bimm/" class="no-color-link no-underline-link">
-                    <img class="team-box-image" src="assets/image/teamemblems/BIMM.png" />
-                    <h3>BIMM</h3>
-                </a>
-            </div>
-
-            <div class="info-container">
-                <div class="match-details-box">
-                    <div class="match-detail-container">
-                        <i class="fa-solid fa-calendar-days"></i>
-                        <h3>13 June 2025</h3>
-                    </div>
-                    <div class="match-detail-container">
-                        <i class="fa-solid fa-clock"></i>
-                        <h3>20:00</h3>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <hr />
+        <div id="upcomingMatchesBox"></div>
 
         <h2>News</h2>
         <a href="pages/news/">View More</a>
