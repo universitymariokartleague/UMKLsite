@@ -44,9 +44,8 @@ function showUpcomingMatch() {
         ...(matchData[tomorrowStr] || [])
     ];
 
-    if (matches.length == 0) {
-        upcomingMatchesBox.innerHTML += ``;
-    } else {
+    upcomingMatchesBox.innerHTML = ``;
+    if (matches.length > 0) {
         const locale = localStorage.getItem("locale") || "en-GB";
 
         let html = `<h2>Upcoming Matches</h2>
@@ -95,6 +94,10 @@ function showUpcomingMatch() {
         upcomingMatchesBox.innerHTML += html;
     }
 }
+
+document.addEventListener('startDayChange', () => {
+    showUpcomingMatch();
+});
 
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
