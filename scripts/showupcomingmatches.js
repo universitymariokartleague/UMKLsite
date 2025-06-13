@@ -56,6 +56,13 @@ function showUpcomingMatch() {
             const matchDateStr = (matchData[todayStr]?.includes(match) ? todayStr : tomorrowStr);
             const formattedDate = new Date(matchDateStr).toLocaleDateString(locale, { dateStyle: 'long' });
             const teams = match.teamsInvolved || [];
+            let formattedTime = match.time;
+            if (match.time) {
+                const [hours, minutes] = match.time.split(':');
+                const dateObj = new Date();
+                dateObj.setHours(Number(hours), Number(minutes));
+                formattedTime = dateObj.toLocaleTimeString(locale, { timeStyle: 'short' });
+            }
             html += `<div class="match-container">
             <div class="team-box">
                 <a href="pages/teams/${teams[0].toLowerCase()}/" class="no-color-link no-underline-link">
@@ -78,7 +85,7 @@ function showUpcomingMatch() {
                 </div>
                 <div class="match-detail-container">
                     <i class="fa-solid fa-clock"></i>
-                    <h3>${match.time}</h3>
+                    <h3>${formattedTime}</h3>
                 </div>
                 </div>
             </div>
