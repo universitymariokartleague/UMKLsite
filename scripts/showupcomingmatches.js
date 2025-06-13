@@ -38,11 +38,18 @@ function showUpcomingMatch() {
     tomorrow.setDate(today.getDate() + 1);
     const tomorrowStr = formatDate(tomorrow);
 
-    // get all matches from today and tomorrow
+    // get all matches from today and tomorrow, filter out matches more than 2 hours ago
+    const now = new Date();
     const matches = [
         ...(matchData[todayStr] || []),
         ...(matchData[tomorrowStr] || [])
-    ];
+    ].filter(match => {
+        const [hours, minutes] = match.time.split(':').map(Number);
+        const matchDateStr = (matchData[todayStr]?.includes(match) ? todayStr : tomorrowStr);
+        const matchDate = new Date(matchDateStr);
+        matchDate.setHours(hours, minutes, 0, 0);
+        return (now - matchDate) <= 2 * 60 * 60 * 1000;
+    });
 
     upcomingMatchesBox.innerHTML = ``;
     if (matches.length > 0) {
@@ -128,7 +135,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 upcomingMatchesBox.innerHTML = ""
                 showUpcomingMatch();
             } catch (err) {
-                upcomingMatchesBox.innerHTML = `<blockquote class="fail"><b>API error - Retrying: attempt ${window.retryCount}...</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
                 refreshTimer = setTimeout(retryFetch, 2000);
             }
         };
