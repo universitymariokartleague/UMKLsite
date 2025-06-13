@@ -485,6 +485,21 @@ mention::selection, tag::selection {
     background-color: rgba(88, 101, 242, 0.5);
 }
 
+new {
+    color: #FFF;
+    font-size: 14px;
+    padding: 1px 6px;
+    background-color: rgba(88, 101, 242, 0.6);
+    border: 1px solid #FFF;
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 5px;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
 .tag-link {
     text-decoration: none;
 }
