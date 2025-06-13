@@ -202,7 +202,7 @@ function placeDots() {
             left: `${x - 5}px`,
             top: `${y - 5}px`,
             pointerEvents: 'auto',
-            zIndex: 2
+            zIndex: name === teamParam ? 3 : 2 // Place selected team dot on top
         });
 
         // Add pulsing animation CSS for this color if not already present
