@@ -706,6 +706,7 @@ blockquote {
 
 .news-container-override {
     max-width: 702px;
+    padding: 5px;
     margin: 0 auto;
 	flex-wrap: wrap;
     background-color: unset;
