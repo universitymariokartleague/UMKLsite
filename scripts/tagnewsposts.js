@@ -20,7 +20,7 @@ window.addEventListener('load', function() {
         const rect = element.getBoundingClientRect();
         const width = rect.width;
 
-        if (width > 200) {
+        if (width > 205) {
             const style = document.createElement('style');
             style.textContent = `
                 @keyframes news-date${index}scrollBackForth {
