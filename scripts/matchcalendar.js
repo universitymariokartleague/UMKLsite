@@ -311,7 +311,13 @@ function showDailyLog(date, dayCell) {
 
         createShareButtonListener(formattedDate);
     } else {
-        expandedLog.innerHTML = `<div class="settingSubheading"><h3>No events scheduled</h3></div>`;
+        expandedLog.innerHTML = `<div class="settingSubheading">Select a date to see the matches happening on that day.</div>`;
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.delete('date');
+        const newUrl = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''}`;
+        if (window.location.href !== newUrl) {
+            window.history.pushState({}, '', newUrl);
+        }
     }
 }
 
