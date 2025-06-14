@@ -79,36 +79,36 @@ function showUpcomingMatch() {
                 }
             }
             html += `<div class="match-container">
-            <div class="team-box">
-                <a href="pages/teams/${teams[0].toLowerCase()}/" class="no-color-link no-underline-link">
-                <img class="team-box-image" src="assets/image/teamemblems/${teams[0].toUpperCase()}.png" />
-                <h3>${teams[0]}</h3>
-                </a>
-            </div>
-            <div class="vs-box"><h1>VS</h1></div>
-            <div class="team-box">
-                <a href="pages/teams/${teams[1].toLowerCase()}/" class="no-color-link no-underline-link">
-                <img class="team-box-image" src="assets/image/teamemblems/${teams[1].toUpperCase()}.png" />
-                <h3>${teams[1]}</h3>
-                </a>
-            </div>
-            <div class="info-container">
-                <div class="match-details-box">
-                    <div class="match-detail-container">
-                        <i class="fa-solid fa-calendar-days"></i>
-                        <h3>${formattedDate}</h3>
-                    </div>
-                    <div class="match-detail-container">
-                        <i class="fa-solid fa-clock"></i>
-                        <h3><div class="heading-wrapper">${formattedTime}${isLive ? '<div class="live-dot"></div>' : ''}</div></h3>
-                    </div>
+                <div class="team-box">
+                    <a href="pages/teams/${teams[0].toLowerCase()}/" class="no-color-link no-underline-link">
+                    <img class="team-box-image" src="assets/image/teamemblems/${teams[0].toUpperCase()}.png" />
+                    <h3>${teams[0]}</h3>
+                    </a>
                 </div>
-                <span>
-                    <a href="https://www.youtube.com/@universitymariokartleague/streams" target="_blank">Watch here</a> | 
-                    <a href="pages/matches/?date=${matchDateStr}">View details</a>
-                </span>
-                <span class="settings-extra-info">${match.testMatch ? "This is a test match." : ""}</span>
-            </div>
+                <div class="vs-box"><h1>VS</h1></div>
+                <div class="team-box">
+                    <a href="pages/teams/${teams[1].toLowerCase()}/" class="no-color-link no-underline-link">
+                    <img class="team-box-image" src="assets/image/teamemblems/${teams[1].toUpperCase()}.png" />
+                    <h3>${teams[1]}</h3>
+                    </a>
+                </div>
+                <div class="info-container">
+                    <div class="match-details-box">
+                        <div class="match-detail-container">
+                            <i class="fa-solid fa-calendar-days"></i>
+                            <h3>${formattedDate}</h3>
+                        </div>
+                        <div class="match-detail-container">
+                            <i class="fa-solid fa-clock"></i>
+                            <h3><div class="heading-wrapper">${formattedTime}${isLive ? '<div class="live-dot"></div>' : ''}</div></h3>
+                        </div>
+                    </div>
+                    <span>
+                        <a href="https://www.youtube.com/@universitymariokartleague/streams" target="_blank">Watch here</a> | 
+                        <a href="pages/matches/?date=${matchDateStr}">View details</a>
+                    </span>
+                    <span class="settings-extra-info">${match.testMatch ? "This is a test match." : ""}</span>
+                </div>
             </div>`;
         });
         html += `</div><hr />`;
