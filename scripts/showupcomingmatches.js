@@ -1,4 +1,5 @@
 const upcomingMatchesBox = document.getElementById("upcomingMatchesBox");
+const MATCH_LENGTH = 1.5;
 let matchData = {};
 
 let refreshTimer = null;
@@ -48,7 +49,7 @@ function showUpcomingMatch() {
         const matchDateStr = (matchData[todayStr]?.includes(match) ? todayStr : tomorrowStr);
         const matchDate = new Date(matchDateStr);
         matchDate.setHours(hours, minutes, 0, 0);
-        return (now - matchDate) <= 2 * 60 * 60 * 1000;
+        return (now - matchDate) <= MATCH_LENGTH * 60 * 60 * 1000;
     });
 
     upcomingMatchesBox.innerHTML = ``;
@@ -63,11 +64,19 @@ function showUpcomingMatch() {
             const formattedDate = new Date(matchDateStr).toLocaleDateString(locale, { dateStyle: 'long' });
             const teams = match.teamsInvolved || [];
             let formattedTime = match.time;
+            let isLive = false;
             if (match.time) {
                 const [hours, minutes] = match.time.split(':');
-                const dateObj = new Date();
-                dateObj.setHours(Number(hours), Number(minutes));
+                const dateObj = new Date(matchDateStr);
+                dateObj.setHours(Number(hours), Number(minutes), 0, 0);
                 formattedTime = dateObj.toLocaleTimeString(locale, { timeStyle: 'short' });
+
+                const now = new Date();
+                const matchStart = dateObj;
+                const matchEnd = new Date(matchStart.getTime() + MATCH_LENGTH * 60 * 60 * 1000);
+                if (now >= matchStart && now <= matchEnd) {
+                    isLive = true;
+                }
             }
             html += `<div class="match-container">
             <div class="team-box">
@@ -91,7 +100,7 @@ function showUpcomingMatch() {
                     </div>
                     <div class="match-detail-container">
                         <i class="fa-solid fa-clock"></i>
-                        <h3>${formattedTime}</h3>
+                        <h3><div class="heading-wrapper">${formattedTime}${isLive ? '<div class="live-dot"></div>' : ''}</div></h3>
                     </div>
                 </div>
                 <span>
