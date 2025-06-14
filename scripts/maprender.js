@@ -233,21 +233,20 @@ function placeDots() {
         const label = document.createElement('div');
         label.className = 'dot-label';
         label.textContent = name;
-        Object.assign(label.style, {
-            fontFamily: "Montserrat, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
-            position: 'absolute',
-            color: '#222',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            padding: '2px 6px',
-            fontSize: '12px',
-            whiteSpace: 'nowrap',
-            pointerEvents: 'none',
-            zIndex: 10,
-            boxShadow: '0 2px 6px #0002',
-            background: 'rgba(255,255,255,0.2)',
-            backdropFilter: 'blur(4px)'
-        });
+        // Object.assign(label.style, {
+        //     fontFamily: "Montserrat, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
+        //     position: 'absolute',
+        //     border: '1px solid #ccc',
+        //     borderRadius: '4px',
+        //     padding: '2px 6px',
+        //     fontSize: '12px',
+        //     whiteSpace: 'nowrap',
+        //     pointerEvents: 'none',
+        //     zIndex: 10,
+        //     boxShadow: '0 2px 6px #0002',
+        //     background: 'rgba(255,255,255,0.2)',
+        //     backdropFilter: 'blur(4px)'
+        // });
         label.dataset.dotLabel = '1';
         if (name === teamParam) {
             label.style.fontWeight = 'bold';

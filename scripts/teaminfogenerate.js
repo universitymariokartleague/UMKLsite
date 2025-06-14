@@ -24,7 +24,7 @@ const teamBoxFormatHTML = `
     </div>
 
     <div class="map {{className}}">
-        <iframe id="teamMapIFrame" src="pages/map/?team={{teamName}}" frameborder="0"></iframe>
+        <iframe id="teamMapIFrame" src="pages/map/index.html?team={{teamName}}" frameborder="0"></iframe>
     </div>
 `;
 
