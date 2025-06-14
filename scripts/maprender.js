@@ -194,37 +194,44 @@ function placeDots() {
         const colorClass = `pulse-${color.replace('#', '')}`;
         dot.className = `dot pulse ${colorClass}`;
         Object.assign(dot.style, {
-            position: 'absolute',
-            aspectRatio: '1 / 1',
-            width: '10px',
-            borderRadius: '50%',
             backgroundColor: color,
             left: `${x - 5}px`,
             top: `${y - 5}px`,
             pointerEvents: 'auto',
-            zIndex: name === teamParam ? 3 : 2 // Place selected team dot on top
+            zIndex: name === teamParam ? 3 : 2, // Place selected team dot on top
+            opacity: 0,
+            animation: `dot-fade-in 0.5s ease-in-out forwards, dot-pulse-${colorClass} 2.0s infinite`
         });
+
+        // Add fade-in animation CSS if not already present
+        if (!document.getElementById('dot-fade-in-style')) {
+            const style = document.createElement('style');
+            style.id = 'dot-fade-in-style';
+            style.textContent = `
+            @keyframes dot-fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+            }
+            `;
+            document.head.appendChild(style);
+        }
 
         // Add pulsing animation CSS for this color if not already present
         if (!document.getElementById(`dot-pulse-style-${colorClass}`)) {
             const style = document.createElement('style');
             style.id = `dot-pulse-style-${colorClass}`;
             style.textContent = `
-                .dot.pulse.${colorClass} {
-                    box-shadow: 0 0 0 0 ${color}50;
-                    animation: dot-pulse-${colorClass} 2.0s infinite;
+            @keyframes dot-pulse-${colorClass} {
+                0% {
+                box-shadow: 0 0 0 0 ${color}B3;
                 }
-                @keyframes dot-pulse-${colorClass} {
-                    0% {
-                        box-shadow: 0 0 0 0 ${color}B3;
-                    }
-                    70% {
-                        box-shadow: 0 0 0 8px ${color}00;
-                    }
-                    100% {
-                        box-shadow: 0 0 0 0 ${color}00;
-                    }
+                70% {
+                box-shadow: 0 0 0 8px ${color}00;
                 }
+                100% {
+                box-shadow: 0 0 0 0 ${color}00;
+                }
+            }
             `;
             document.head.appendChild(style);
         }
@@ -233,20 +240,6 @@ function placeDots() {
         const label = document.createElement('div');
         label.className = 'dot-label';
         label.textContent = name;
-        // Object.assign(label.style, {
-        //     fontFamily: "Montserrat, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
-        //     position: 'absolute',
-        //     border: '1px solid #ccc',
-        //     borderRadius: '4px',
-        //     padding: '2px 6px',
-        //     fontSize: '12px',
-        //     whiteSpace: 'nowrap',
-        //     pointerEvents: 'none',
-        //     zIndex: 10,
-        //     boxShadow: '0 2px 6px #0002',
-        //     background: 'rgba(255,255,255,0.2)',
-        //     backdropFilter: 'blur(4px)'
-        // });
         label.dataset.dotLabel = '1';
         if (name === teamParam) {
             label.style.fontWeight = 'bold';
