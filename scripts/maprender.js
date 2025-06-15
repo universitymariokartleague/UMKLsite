@@ -331,6 +331,77 @@ function latLonToPixel(lat, lon, width, height) {
     return { x, y };
 }
 
+function createZoomControls() {
+    const controls = document.createElement('div');
+    controls.className = 'zoom-controls';
+
+    // Zoom In
+    const zoomInBtn = document.createElement('button');
+    zoomInBtn.innerHTML = '+';
+    zoomInBtn.title = 'Zoom In';
+    zoomInBtn.className = 'controls-button';
+    zoomInBtn.addEventListener('click', () => {
+        const zoomFactor = 1.2;
+        const newScale = Math.min(maxScale, scale * zoomFactor);
+        if (newScale !== scale) {
+            // Center zoom on map center
+            const rect = wrapper.getBoundingClientRect();
+            const mouseX = rect.width / 2;
+            const mouseY = rect.height / 2;
+            const contentX = (mouseX - panX) / scale;
+            const contentY = (mouseY - panY) / scale;
+            scale = newScale;
+            panX = mouseX - contentX * scale;
+            panY = mouseY - contentY * scale;
+            updateTransform();
+            placeDots();
+        }
+    });
+
+    // Zoom Out
+    const zoomOutBtn = document.createElement('button');
+    zoomOutBtn.innerHTML = '-';
+    zoomOutBtn.title = 'Zoom Out';
+    zoomOutBtn.className = 'controls-button';
+    zoomOutBtn.addEventListener('click', () => {
+        const zoomFactor = 1 / 1.2;
+        const newScale = Math.max(minScale, scale * zoomFactor);
+        if (newScale !== scale) {
+            // Center zoom on map center
+            const rect = wrapper.getBoundingClientRect();
+            const mouseX = rect.width / 2;
+            const mouseY = rect.height / 2;
+            const contentX = (mouseX - panX) / scale;
+            const contentY = (mouseY - panY) / scale;
+            scale = newScale;
+            panX = mouseX - contentX * scale;
+            panY = mouseY - contentY * scale;
+            updateTransform();
+            placeDots();
+        }
+    });
+
+    // Reset
+    const resetBtn = document.createElement('button');
+    resetBtn.innerHTML = '⟳';
+    resetBtn.title = 'Reset Zoom/Pan';
+    resetBtn.className = 'controls-button';
+    resetBtn.addEventListener('click', () => {
+        scale = 1;
+        panX = 0;
+        panY = 0;
+        updateTransform();
+        placeDots();
+    });
+
+    controls.appendChild(zoomInBtn);
+    controls.appendChild(zoomOutBtn);
+    controls.appendChild(resetBtn);
+
+    // Add controls to wrapper
+    wrapper.appendChild(controls);
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('team')) {
@@ -358,4 +429,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.addEventListener('resize', () => {
         placeDots();
     });
+
+    createZoomControls();
 });
