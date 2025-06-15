@@ -193,6 +193,7 @@ function placeDots() {
         // Generate a unique class for each color
         const colorClass = `pulse-${color.replace('#', '')}`;
         dot.className = `dot pulse ${colorClass}`;
+        const fadeDelay = (name === teamParam) ? 0 : (0.25 + Math.random() * 0.25).toFixed(3);
         Object.assign(dot.style, {
             backgroundColor: color,
             left: `${x - 5}px`,
@@ -200,7 +201,7 @@ function placeDots() {
             pointerEvents: 'auto',
             zIndex: name === teamParam ? 3 : 2, // Place selected team dot on top
             opacity: 0,
-            animation: `dot-fade-in 0.5s ease-in-out forwards, dot-pulse-${colorClass} 2.0s infinite`
+            animation: `dot-fade-in 0.5s ease-in-out ${fadeDelay}s forwards, dot-pulse-${colorClass} 2.0s infinite`
         });
 
         // Add fade-in animation CSS if not already present
@@ -209,8 +210,8 @@ function placeDots() {
             style.id = 'dot-fade-in-style';
             style.textContent = `
             @keyframes dot-fade-in {
-            from { opacity: 0; }
-            to { opacity: 1; }
+                from { opacity: 0; }
+                to { opacity: 1; }
             }
             `;
             document.head.appendChild(style);
@@ -243,6 +244,23 @@ function placeDots() {
         label.dataset.dotLabel = '1';
         if (name === teamParam) {
             label.style.fontWeight = 'bold';
+        }
+        Object.assign(label.style, {
+            opacity: 0,
+            animation: `dotLabelFadeIn-${colorClass} 0.5s ease-in-out ${parseFloat(fadeDelay) + ((name === teamParam) ? 0 : 0.25)}s forwards`
+        });
+
+        // Add dotLabelFadeIn animation CSS for this color if not already present
+        if (!document.getElementById(`dotLabelFadeIn-${colorClass}`)) {
+            const style = document.createElement('style');
+            style.id = `dotLabelFadeIn-${colorClass}`;
+            style.textContent = `
+            @keyframes dotLabelFadeIn-${colorClass} {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            `;
+            document.head.appendChild(style);
         }
 
         // Try different positions until we find one that doesn't collide
