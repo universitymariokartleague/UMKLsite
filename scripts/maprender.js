@@ -253,6 +253,7 @@ function placeDots() {
         }
         Object.assign(label.style, {
             opacity: 0,
+            backgroundColor: `${color}${isCurrentTeam ? '50': '20'}`,
             animation: `dotLabelFadeIn-${colorClass} ${loadedOnce ? 0 : 0.5}s ease-in-out ${loadedOnce ? 0 : (parseFloat(fadeDelay) + ((name === teamParam) ? 0 : 0.25))}s forwards`
         });
 
@@ -277,8 +278,8 @@ function placeDots() {
         const positions = [
             { left: x + 12, top: y - 12 }, // right (default)
             { left: x - labelWidth - 12, top: y - 12 }, // left
+            { left: x - labelWidth / 2, top: y + 12 }, // below
             { left: x - labelWidth / 2, top: y - labelHeight - 8 }, // above
-            { left: x - labelWidth / 2, top: y + 12 } // below
         ];
 
         // Find first position that doesn't collide with existing labels
