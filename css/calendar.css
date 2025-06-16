@@ -23,16 +23,17 @@
     margin: 0 auto;
     font-weight: 600;
     user-select: none;
+    transition: 0.1s ease-in-out;
 }
 
 .month-arrow {
     font-size: 25px;
+    transition: 0.1s ease-in-out;
 }
 
 .month-arrow:hover:not(.empty), .month-name:hover:not(.empty) {
     cursor: pointer;
     color: var(--accent-color);
-    transition: 0.1s;
 }
 
 .calendar-header {

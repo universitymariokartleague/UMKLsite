@@ -178,18 +178,18 @@ function showMonthPicker(currentDate) {
         <div class="arrow"></div>
         <div class="arrow-border"></div>
         <div class="preview-message" style="user-select:none;">
-            <select class="popupDropdown" id="monthDropdown">
+            <select title="Select a month" class="popupDropdown" id="monthDropdown">
                 ${months.map((m, i) =>
                     `<option value="${i}"${i === currentlyShownDate[1] ? ' selected' : ''}>${m}</option>`
                 ).join('')}
             </select>
-            <select class="popupDropdown" id="yearDropdown">
+            <select title="Select a year" class="popupDropdown" id="yearDropdown">
                 ${Array.from({ length: maxYear - minYear + 1 }, (_, i) => {
                     const y = minYear + i;
                     return `<option value="${y}"${y === currentlyShownDate[0] ? ' selected' : ''}>${y}</option>`;
                 }).join('')}
             </select>
-            <button class="currentDateButton" id="currentDateButton"><i class="fa-solid fa-calendar"></i></button>
+            <button title="Return to the current date" class="currentDateButton" id="currentDateButton"><i class="fa-solid fa-calendar"></i></button>
         </div>
     `;
 
@@ -197,6 +197,7 @@ function showMonthPicker(currentDate) {
 
     document.getElementById('currentDateButton').addEventListener('click', () => {
         generateCalendar(month, year);
+        clearURLParams();
         closePreview();
     });
 
@@ -206,10 +207,13 @@ function showMonthPicker(currentDate) {
     const yearDropdown = preview.querySelector('#yearDropdown');
 
     function handleDropdownChange() {
+        console.log("yeah")
         generateCalendar(Number(monthDropdown.value), Number(yearDropdown.value));
         resetAutoCloseTimer();
     }
 
+    monthDropdown.addEventListener('click', resetAutoCloseTimer);
+    yearDropdown.addEventListener('click', resetAutoCloseTimer);
     monthDropdown.addEventListener('change', handleDropdownChange);
     yearDropdown.addEventListener('change', handleDropdownChange);
 
@@ -312,12 +316,7 @@ function showDailyLog(date, dayCell) {
         createShareButtonListener(formattedDate);
     } else {
         expandedLog.innerHTML = `<div class="settingSubheading">Select a date to see the matches happening on that day.</div>`;
-        const urlParams = new URLSearchParams(window.location.search);
-        urlParams.delete('date');
-        const newUrl = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''}`;
-        if (window.location.href !== newUrl) {
-            window.history.pushState({}, '', newUrl);
-        }
+        clearURLParams();
     }
 }
 
@@ -337,6 +336,15 @@ function autoLink(text) {
         }
         return `<a href="${href}" target="_blank">${displayUrl}</a>${trailingDot}`;
     });
+}
+
+function clearURLParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.delete('date');
+    const newUrl = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''}`;
+    if (window.location.href !== newUrl) {
+        window.history.pushState({}, '', newUrl);
+    }
 }
 
 function createShareButtonListener(formattedDate) {
