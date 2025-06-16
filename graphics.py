@@ -205,11 +205,12 @@ def create_team_standings_image(
     add_text("TEAM STANDINGS", TITLE_POSITION, DEFAULT_FONT, TITLE_FONT_SIZE, TITLE_COLOR, anchor="lm")
 
     if add_timestamp:
+        draw_box_custom((760, 15), 350, 45, 12, "#fff", "#fff")
         timestamp = datetime.now().strftime("%d/%m/%Y")
         if (season_id == logic.get_current_season()):
-            add_text(f"Standings as of\n{timestamp}", (TITLE_POSITION[0] + 900, TITLE_POSITION[1] - 85), DEFAULT_FONT, TITLE_FONT_SIZE - 35, TITLE_COLOR, anchor="rt")
+            add_text(f"Standings as of {timestamp}", (TITLE_POSITION[0] + 735, TITLE_POSITION[1] - 68), DEFAULT_FONT, TITLE_FONT_SIZE - 35, ACCENT_COLOR, anchor="mm")
         else:
-            add_text(f"This season\nhas concluded", (TITLE_POSITION[0] + 900, TITLE_POSITION[1] - 85), DEFAULT_FONT, TITLE_FONT_SIZE - 35, TITLE_COLOR, anchor="rt")
+            add_text(f"This season has concluded", (TITLE_POSITION[0] + 735, TITLE_POSITION[1] - 68), DEFAULT_FONT, TITLE_FONT_SIZE - 35, ACCENT_COLOR, anchor="mm")
 
     # Draw team standings
     for i, (team_id, current_points) in enumerate(team_standings[:MAX_TEAMS]):
