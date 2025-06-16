@@ -312,11 +312,14 @@ function showDailyLog(date, dayCell) {
         createShareButtonListener(formattedDate);
     } else {
         expandedLog.innerHTML = `<div class="settingSubheading">Select a date to see the matches happening on that day.</div>`;
-        const urlParams = new URLSearchParams(window.location.search);
-        urlParams.delete('date');
-        const newUrl = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''}`;
-        if (window.location.href !== newUrl) {
+        const today = new Date().toISOString().split('T')[0];
+        if (date === today) {
+            const urlParams = new URLSearchParams(window.location.search);
+            urlParams.delete('date');
+            const newUrl = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''}`;
+            if (window.location.href !== newUrl) {
             window.history.pushState({}, '', newUrl);
+            }
         }
     }
 }
