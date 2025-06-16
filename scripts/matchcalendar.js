@@ -312,14 +312,11 @@ function showDailyLog(date, dayCell) {
         createShareButtonListener(formattedDate);
     } else {
         expandedLog.innerHTML = `<div class="settingSubheading">Select a date to see the matches happening on that day.</div>`;
-        const today = new Date().toISOString().split('T')[0];
-        if (date === today) {
-            const urlParams = new URLSearchParams(window.location.search);
-            urlParams.delete('date');
-            const newUrl = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''}`;
-            if (window.location.href !== newUrl) {
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.delete('date');
+        const newUrl = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''}`;
+        if (window.location.href !== newUrl) {
             window.history.pushState({}, '', newUrl);
-            }
         }
     }
 }
@@ -461,8 +458,11 @@ function displayCalendar() {
         const dateObj = new Date(dateParam);
         showDailyLog(dateParam);
         generateCalendar(dateObj.getMonth(), dateObj.getFullYear(), dateParam);
-    } else {
+    } else {       
         const currentDate = new Date();
+        if (!discardLogOnChange) {
+            showDailyLog(currentDate.toISOString().split('T')[0]);
+        } 
         generateCalendar(currentDate.getMonth(), currentDate.getFullYear());        
     }
 }
@@ -504,7 +504,5 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     makeTeamsColorStyles();
     displayCalendar();
-    const currentDate = new Date();
-    showDailyLog(currentDate.toISOString().split('T')[0]);
     console.debug(`%cmatchcalendar.js %c> %cMatch data loaded in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
 });
