@@ -28,12 +28,12 @@ TEAM_PAGE = """<!DOCTYPE html>
         <meta name="twitter:card" content="summary_large_image">
     
         <!-- Scripts -->
-                <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-    <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
+        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+        <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
         <script src="scripts/overlayscrollbar.js" defer></script>    
         
         <script type="module" src="scripts/settings.js" defer></script>
-            <script type="module" src="scripts/teaminfogenerate.js" defer></script>
+        <script type="module" src="scripts/teaminfogenerate.js" defer></script>
     </head>
     <body id="top" data-overlayscrollbars-initialize>
         <div class="navbar-container">
@@ -72,19 +72,11 @@ TEAM_PAGE = """<!DOCTYPE html>
         <main>
             <a href="pages/teams/">Back</a>
             <h1>{TEAMNAME}</h1>
-            <p class="p-below-title">
-                Team information about {TEAMNAME}.   
-            </p>
             <hr class="hr-below-title">
 
             <div id="JSTeamBox" class="teamBoxContainer" data-team="{TEAMNAME}">
                 Loading team data...
             </div>
-
-            <h3 class="p-no-spacing">Clips and media</h3>
-            <p class="p-no-spacing">
-
-            </p>
         </main>
 
         <footer>
