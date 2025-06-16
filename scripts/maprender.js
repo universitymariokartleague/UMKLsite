@@ -11,6 +11,8 @@ const mapBounds = {
 let coords = [];
 let teamParam = "";
 
+let loadedOnce = false;
+
 // Create a wrapper to hold the map and dots for zoom/pan
 const wrapper = document.createElement('div');
 wrapper.style.position = 'relative';
@@ -205,7 +207,7 @@ function placeDots() {
             pointerEvents: 'auto',
             zIndex: isCurrentTeam ? 3 : 2, // Place selected team dot on top
             opacity: 0,
-            animation: `dot-fade-in 0.5s ease-in-out ${fadeDelay}s forwards, dot-pulse-${colorClass} ${isCurrentTeam ? '1.25' : '2.0'}s infinite`
+            animation: `dot-fade-in ${loadedOnce ? 0 : 0.5}s ease-in-out ${loadedOnce ? 0 : fadeDelay}s forwards, dot-pulse-${colorClass} ${isCurrentTeam ? '1.25' : '2.0'}s infinite`
         });
 
         // Add fade-in animation CSS if not already present
@@ -251,7 +253,7 @@ function placeDots() {
         }
         Object.assign(label.style, {
             opacity: 0,
-            animation: `dotLabelFadeIn-${colorClass} 0.5s ease-in-out ${parseFloat(fadeDelay) + ((name === teamParam) ? 0 : 0.25)}s forwards`
+            animation: `dotLabelFadeIn-${colorClass} ${loadedOnce ? 0 : 0.5}s ease-in-out ${loadedOnce ? 0 : (parseFloat(fadeDelay) + ((name === teamParam) ? 0 : 0.25))}s forwards`
         });
 
         // Add dotLabelFadeIn animation CSS for this color if not already present
@@ -315,6 +317,8 @@ function placeDots() {
     });
 
     container.appendChild(fragment);
+
+    loadedOnce = true;
 }
 
 // Mercator projection conversion
