@@ -33,7 +33,7 @@ body {
 }
 
 .map-container, #worldMap {
-    user-select: none;
+    /* user-select: none; */
     -webkit-user-drag: none;
     touch-action: none;
     cursor: grab;
