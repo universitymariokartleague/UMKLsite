@@ -226,13 +226,13 @@ function placeDots() {
             style.textContent = `
             @keyframes dot-pulse-${colorClass} {
                 0% {
-                box-shadow: 0 0 0 0 ${color}B3;
+                    box-shadow: 0 0 0 0 ${color}B3;
                 }
                 70% {
-                box-shadow: 0 0 0 8px ${color}00;
+                    box-shadow: 0 0 0 8px ${color}00;
                 }
                 100% {
-                box-shadow: 0 0 0 0 ${color}00;
+                    box-shadow: 0 0 0 0 ${color}00;
                 }
             }
             `;
@@ -267,13 +267,15 @@ function placeDots() {
         }
 
         // Try different positions until we find one that doesn't collide
-        const labelWidth = name.length * 8 + 12; // Approximate width based on character count
+        const labelWidth = name.length * 8; // Approximate width based on character count
         const labelHeight = 24; // Approximate height
         
-        // Possible positions to try (right, left, above, below)
+        // Possible positions to try (right, left, above, below, diagonals)
         const positions = [
-            { left: x + 12, top: y - 12 }, // right (default)
-            { left: x - labelWidth - 12, top: y - 12 }, // left
+            { left: x + 15, top: y - 11 }, // right (default)
+            { left: x + 15, top: y - labelHeight + 4 }, // top-right
+            { left: x - labelWidth - 24, top: y - 11 }, // left
+            { left: x - labelWidth - 10, top: y - labelHeight + 4 }, // top-left
             { left: x - labelWidth / 2, top: y + 12 }, // below
             { left: x - labelWidth / 2, top: y - labelHeight - 8 }, // above
         ];
@@ -409,34 +411,26 @@ function createZoomControls() {
 
 document.addEventListener('DOMContentLoaded', async () => {
     startTime = performance.now();
-
+    
+    createZoomControls();
+    
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('team')) {
         teamParam = urlParams.get('team');
     }
-
+    
     const teamLocations = await getTeamlocations("");
-
-    // Extract valid coordinates and team color
     coords = teamLocations
         .map(team => ({
             coords: team.coords,
             color: team.team_color,
             name: team.team_name
         }));
-
-    // Place dots when image is loaded
-    if (mapImg.complete && mapImg.naturalWidth !== 0) {
-        placeDots();
-    } else {
-        mapImg.addEventListener('load', placeDots, { once: true });
-    }
+    placeDots();
 
     window.addEventListener('resize', () => {
         placeDots();
     });
-
-    createZoomControls();
 
     console.debug(`%cmaprender.js %c> %cGenerated team info box in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9452ff", "color:#fff", "color:#c29cff");
 });
