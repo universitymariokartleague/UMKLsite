@@ -50,29 +50,15 @@ function onWheel(e) {
     const newScale = Math.min(maxScale, Math.max(minScale, scale * scaleDelta));
 
     if (newScale === scale) return;
-
-    // Get mouse position relative to the wrapper (screen space)
-    const rect = wrapper.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    // Calculate position in map coordinates (content space)
-    const contentX = (mouseX - panX) / scale;
-    const contentY = (mouseY - panY) / scale;
-
-    // Update scale
+    
     scale = newScale;
 
-    // Update pan so that the content under the cursor stays under the cursor
-    // panX = mouseX - contentX * scale;
-    // panY = mouseY - contentY * scale;
-
     updateTransform();
-    // placeDots();
+    // placeDots(); // Optional if dots need repositioning on zoom
 }
 
-// Mouse down to start pan
 function onPointerDown(e) {
+    if (e.pointerType !== 'mouse') return;
     isPanning = true;
     startPan = {
         x: e.clientX - panX,
@@ -82,16 +68,15 @@ function onPointerDown(e) {
     container.style.transition = 'none';
 }
 
-// Mouse move to pan
 function onPointerMove(e) {
-    if (!isPanning) return;
+    if (!isPanning || e.pointerType !== 'mouse') return;
     panX = e.clientX - startPan.x;
     panY = e.clientY - startPan.y;
     updateTransform();
 }
 
-// Mouse up to stop pan
-function onPointerUp() {
+function onPointerUp(e) {
+    if (e && e.pointerType && e.pointerType !== 'mouse') return;
     isPanning = false;
     wrapper.style.cursor = 'default';
     container.style.transition = 'transform 0.2s ease'; 
@@ -409,7 +394,6 @@ function createZoomControls() {
         const newScale = Math.min(maxScale, scale * zoomFactor);
         if (newScale !== scale) {
             scale = newScale;
-
             panX = panX * zoomStep;
             panY = panY * zoomStep;
 
@@ -429,7 +413,6 @@ function createZoomControls() {
         const newScale = Math.max(minScale, scale * zoomFactor);
         if (newScale !== scale) {
             scale = newScale;
-
             panX = panX * zoomStep;
             panY = panY * zoomStep;
 
