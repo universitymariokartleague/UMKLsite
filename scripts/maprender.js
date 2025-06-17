@@ -64,13 +64,12 @@ function onWheel(e) {
     scale = newScale;
 
     // Update pan so that the content under the cursor stays under the cursor
-    panX = mouseX - contentX * scale;
-    panY = mouseY - contentY * scale;
+    // panX = mouseX - contentX * scale;
+    // panY = mouseY - contentY * scale;
 
     updateTransform();
-    placeDots();
+    // placeDots();
 }
-
 
 // Mouse down to start pan
 function onPointerDown(e) {
@@ -179,6 +178,21 @@ async function getTeamlocations() {
 function placeDots() {
     container.querySelectorAll('.dot, .dot-label').forEach(el => el.remove());
 
+    let svg = container.querySelector('svg.dot-lines');
+    if (svg) svg.remove(); // Remove existing lines
+
+    svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.classList.add('dot-lines');
+    Object.assign(svg.style, {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
+        zIndex: 1
+    });
+
     const { clientWidth: w, clientHeight: h } = mapImg;
     if (!w || !h) return;
 
@@ -276,6 +290,8 @@ function placeDots() {
             { left: x + 15, top: y - labelHeight + 4 }, // top-right
             { left: x - labelWidth - 24, top: y - 11 }, // left
             { left: x - labelWidth - 10, top: y - labelHeight + 4 }, // top-left
+            { left: x - labelWidth - 10, top: y + 12 }, // bottom-left
+            { left: x + 15, top: y + 12 }, // bottom-right
             { left: x - labelWidth / 2, top: y + 12 }, // below
             { left: x - labelWidth / 2, top: y - labelHeight - 8 }, // above
         ];
@@ -303,18 +319,58 @@ function placeDots() {
         label.style.left = `${finalPosition.left}px`;
         label.style.top = `${finalPosition.top}px`;
 
-        // Store label position for future collision detection
+        // Draw a line from dot to label center, with animation
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        const labelCenterX = finalPosition.left + labelWidth / 2;
+        const labelCenterY = finalPosition.top + labelHeight / 2;
+        line.setAttribute('x1', x);
+        line.setAttribute('y1', y);
+        line.setAttribute('x2', labelCenterX);
+        line.setAttribute('y2', labelCenterY);
+        line.setAttribute('stroke', color);
+        line.setAttribute('stroke-width', '1');
+        const lineLength = Math.hypot(labelCenterX - x, labelCenterY - y);
+
+        // Add line-draw animation CSS for this color if not already present
+        if (!document.getElementById(`lineDrawFadeIn-${colorClass}`)) {
+            const style = document.createElement('style');
+            style.id = `lineDrawFadeIn-${colorClass}`;
+            style.textContent = `
+            @keyframes lineDrawFadeIn-${colorClass} {
+                0% {
+                    stroke-dashoffset: ${lineLength};
+                    opacity: 0;
+                }
+                50% {
+                    opacity: 1;
+                }
+                100% {
+                    stroke-dashoffset: 0;
+                    opacity: ${isCurrentTeam ? '1' : '0.5'};
+                }
+            }`;
+            document.head.appendChild(style);
+        }
+
+        line.setAttribute('stroke-dasharray', lineLength);
+        line.setAttribute('stroke-dashoffset', lineLength);
+        line.style.animation = `lineDrawFadeIn-${colorClass} ${loadedOnce ? 0 : 0.5}s ease-in-out ${loadedOnce ? 0 : fadeDelay - 0.1}s forwards`;
+        svg.appendChild(line);
+
+        // Store label position for future collision detection, with padding
+        const padding = 6;
         labels.push({
-            x: finalPosition.left,
-            y: finalPosition.top,
-            width: labelWidth,
-            height: labelHeight
+            x: finalPosition.left - padding,
+            y: finalPosition.top - padding,
+            width: labelWidth + 2 * padding,
+            height: labelHeight + 2 * padding
         });
 
         fragment.appendChild(label);
         fragment.appendChild(dot);
     });
 
+    container.appendChild(svg);
     container.appendChild(fragment);
 
     loadedOnce = true;
@@ -349,19 +405,16 @@ function createZoomControls() {
     zoomInBtn.className = 'controls-button';
     zoomInBtn.addEventListener('click', () => {
         const zoomFactor = 1.2;
+        const zoomStep = Math.sqrt(zoomFactor);
         const newScale = Math.min(maxScale, scale * zoomFactor);
         if (newScale !== scale) {
-            // Center zoom on map center
-            const rect = wrapper.getBoundingClientRect();
-            const mouseX = rect.width / 2;
-            const mouseY = rect.height / 2;
-            const contentX = (mouseX - panX) / scale;
-            const contentY = (mouseY - panY) / scale;
             scale = newScale;
-            panX = mouseX - contentX * scale;
-            panY = mouseY - contentY * scale;
+
+            panX = panX * zoomStep;
+            panY = panY * zoomStep;
+
             updateTransform();
-            placeDots();
+            // placeDots();
         }
     });
 
@@ -372,19 +425,16 @@ function createZoomControls() {
     zoomOutBtn.className = 'controls-button';
     zoomOutBtn.addEventListener('click', () => {
         const zoomFactor = 1 / 1.2;
+        const zoomStep = Math.sqrt(zoomFactor);
         const newScale = Math.max(minScale, scale * zoomFactor);
         if (newScale !== scale) {
-            // Center zoom on map center
-            const rect = wrapper.getBoundingClientRect();
-            const mouseX = rect.width / 2;
-            const mouseY = rect.height / 2;
-            const contentX = (mouseX - panX) / scale;
-            const contentY = (mouseY - panY) / scale;
             scale = newScale;
-            panX = mouseX - contentX * scale;
-            panY = mouseY - contentY * scale;
+
+            panX = panX * zoomStep;
+            panY = panY * zoomStep;
+
             updateTransform();
-            placeDots();
+            // placeDots();
         }
     });
 
@@ -398,7 +448,7 @@ function createZoomControls() {
         panX = 0;
         panY = 0;
         updateTransform();
-        placeDots();
+        // placeDots();
     });
 
     controls.appendChild(zoomInBtn);
@@ -429,6 +479,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     placeDots();
 
     window.addEventListener('resize', () => {
+        wrapper.style.width = window.frameElement.offsetWidth + 'px';
+
+        updateTransform();
         placeDots();
     });
 

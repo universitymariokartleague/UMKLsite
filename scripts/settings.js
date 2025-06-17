@@ -48,7 +48,7 @@ let darkThemeEnabled = meta.content == "dark" ? 1 : 0;
 // Panel
 function generateSettingsPanel() {
     try {
-        const tempTheme = (localStorage.getItem("darktheme") == 1 || darkThemeEnabled == 1) ? "Dark" : "Light";
+        const tempTheme = localStorage.getItem("darktheme") == 1 ? "Dark" : (localStorage.getItem("darktheme") == 0 ? "Light" : "Automatic");
         const listView = localStorage.getItem("teamsListView") == 1 || false;
         const experimentalListView = localStorage.getItem("experimentalListView") == 1 || false;
         
@@ -60,7 +60,7 @@ function generateSettingsPanel() {
 
         settingsBoxJS.innerHTML = `
             <div class="setting-sub-heading">Appearance</div><hr>
-            <span class="settings-hover-info" data-info="Light or dark theme">Page theme</span><button id="toggleTheme" class="settings-option">${tempTheme} theme</button><br>
+            <span class="settings-hover-info" data-info="Light, dark or automatic">Page theme</span><button id="toggleTheme" class="settings-option">${tempTheme}</button><br>
             <span class="settings-hover-info" data-info="Grid or list view">Teams page layout</span><button id="toggleListView" class="settings-option">${listView ? "List view" : "Grid view"}</button><br>
             <span class="settings-hover-info" data-info="Experiment!">experimentalListView</span><button id="toggleExperimentalListView" class="settings-option">${experimentalListView ? "On" : "Off"}</button><br>
 
@@ -82,12 +82,36 @@ function generateSettingsPanel() {
 generateSettingsPanel();
 
 function toggleTheme() {
-    darkThemeEnabled = !darkThemeEnabled;
+    let current = localStorage.getItem("darktheme");
+    let next = current === null ? 0 : current == 0 ? 1 : current == 1 ? null : 0;
+
+    if (next === null) {
+        localStorage.removeItem("darktheme");
+        darkThemeEnabled = window.matchMedia('(prefers-color-scheme: dark)').matches ? 1 : 0;
+    } else {
+        localStorage.setItem("darktheme", next);
+        darkThemeEnabled = next;
+    }
+
     meta.content = darkThemeEnabled ? "dark" : "light";
-    root.classList.toggle("dark-theme", darkThemeEnabled);
+    root.classList.toggle("dark-theme", !!darkThemeEnabled);
     root.classList.toggle("light-theme", !darkThemeEnabled);
-    console.debug(`%csettings.js %c> %cSetting and saving ${meta.content} theme`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
-    localStorage.setItem("darktheme", darkThemeEnabled ? 1 : 0);
+    console.debug(`%csettings.js %c> %c${next === null ? "Clearing theme" : `Set theme to ${meta.content}`}`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
+    sendThemeChangeEvent();
+    generateSettingsPanel();
+}
+function toggleThemeLightDarkOnly() {
+    const meta = document.querySelector('meta[name="color-scheme"]');
+    const root = document.querySelector(":root");
+
+    let next = meta.content === "dark" ? 0 : 1;
+    localStorage.setItem("darktheme", next);
+    darkThemeEnabled = next;
+
+    meta.content = darkThemeEnabled ? "dark" : "light";
+    root.classList.toggle("dark-theme", !!darkThemeEnabled);
+    root.classList.toggle("light-theme", !darkThemeEnabled);
+    console.debug(`%csettings.js %c> %cSet theme to ${meta.content}`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
     sendThemeChangeEvent();
     generateSettingsPanel();
 }
@@ -214,19 +238,21 @@ function checkEasterEggs() {
 }
 checkEasterEggs();
 
-// Keyboard shortcuts for toggling theme
+// Keyboard shortcuts for toggling theme and opening settings panel
 let isKeyPressed = false;
 if (!easterEgg) {
     document.addEventListener('keydown', (event) => {
         if (event.key === 'i' && !isKeyPressed) {
             isKeyPressed = true;
-            toggleTheme();
+            toggleThemeLightDarkOnly();
+        }
+        if (event.key === 'o' && !isKeyPressed) {
+            isKeyPressed = true;
+            toggleSettingsPanel();
         }
     });
-    
+
     document.addEventListener('keyup', (event) => {
-        if (event.key === 'i') {
-            isKeyPressed = false;
-        }
+        isKeyPressed = false;
     });
 }
