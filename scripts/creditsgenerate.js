@@ -1,3 +1,8 @@
+/*
+    This script generates credits and social links 
+    for use on the credits page.
+*/
+
 const contributors = [
     {
         name: "h.omeless",

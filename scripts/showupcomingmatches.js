@@ -1,3 +1,8 @@
+/*
+    This script dynamically generates the upcoming matches section
+    on the home page of the site.
+*/
+
 const upcomingMatchesBox = document.getElementById("upcomingMatchesBox");
 const MATCH_LENGTH = 1.5;
 let matchData = {};

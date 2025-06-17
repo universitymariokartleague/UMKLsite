@@ -1,3 +1,7 @@
+/*
+    This script is unused. It generates UMKL standing images client side.
+*/
+
 const JSImagegen = document.getElementById("JSImagegen");
 let startTime;
 let currentSeason;

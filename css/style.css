@@ -481,6 +481,9 @@ tag {
     user-select: all;
 }
 
+.tag-selected {
+    border: 1px solid var(--text-color);
+}
 
 mention::selection, tag::selection {
     background-color: rgba(88, 101, 242, 0.5);

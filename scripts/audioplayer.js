@@ -4,8 +4,7 @@
     and keyboard controls. The player can be embedded in a webpage and is responsive 
     to screen size changes.
 
-    This code was written a long time ago and probably needs updating -_-
-    but this shouldn't be in prod anyways...?! 
+    This code was written a long time ago and probably needs updating... -_-
     - zy
 */
 

@@ -7,7 +7,7 @@
 
 const teamBoxFormatHTML = `
     <div class="team-info-wrapper">
-        <img width=200 height=200 src="{{logoSrc}}" alt="{{teamName}} team logo" class="team-info-logo">
+        <img width=200 height=200 src="{{logoSrc}}" alt="{{teamName}}'s team logo" title="{{teamName}}'s team logo"  class="team-info-logo">
         <hr>
         <div class="team-info-text">
             {{extraFields}}
@@ -43,7 +43,7 @@ async function generateTeamBox(teamData, showError) {
     JSTeamBox.classList.remove('fade-in');
 
     try {
-        teamData.logo_src = `assets/image/teamemblems/${teamData.team_name.toUpperCase()}.png`
+        teamData.logo_src = `assets/image/teamemblems/hres/${teamData.team_name.toUpperCase()}.png`
         teamData.class_name = teamData.team_name.replace(/\s+/g, '')
     } catch (error) {
         JSTeamBox.innerHTML = `<blockquote class="fail">No team data available!<br/>${error.stack}</blockquote>`;

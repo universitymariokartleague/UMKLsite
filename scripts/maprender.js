@@ -1,3 +1,8 @@
+/*
+    This script generates the map seen on team pages. It places the
+    positions of all team locations on the map.
+*/
+
 const mapImg = document.getElementById('worldMap');
 const container = mapImg.parentElement;
 

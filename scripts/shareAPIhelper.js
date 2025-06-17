@@ -1,3 +1,8 @@
+/*
+    This script providers helper functions for shareAPI calls from
+    other scripts.
+*/
+
 export { isWindowsOrLinux, copyTextToClipboard, copyImageToClipboard, shareText, shareImage, showTextPopup, showImagePreview, setOriginalMessage, getOriginalMessage, getIsPopupShowing };
 
 let previewTimeout = null;

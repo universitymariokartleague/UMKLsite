@@ -1,3 +1,7 @@
+/*
+    This script changes the theme of the site depending on the holiday.
+*/
+
 export { halloweenEasterEgg, xmasEasterEgg };
 
 function injectMusic(path) {

@@ -3,6 +3,7 @@
     menu that allows users to change the theme, locale, and various other settings.
     It saves the settings in local storage and applies them to the page. 
 */
+
 import { halloweenEasterEgg, xmasEasterEgg } from './eastereggs.js';
 
 const settingsBoxHTML = `
