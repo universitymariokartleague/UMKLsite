@@ -13,6 +13,8 @@ let teamParam = "";
 
 let loadedOnce = false;
 
+let startTime;
+
 // Create a wrapper to hold the map and dots for zoom/pan
 const wrapper = document.createElement('div');
 wrapper.style.position = 'relative';
@@ -24,9 +26,6 @@ wrapper.style.touchAction = 'none'; // prevent default gestures on touch devices
 container.style.position = 'relative';
 container.parentElement.insertBefore(wrapper, container);
 wrapper.appendChild(container);
-
-let currentSeason = 2;
-let maxSeason = currentSeason;
 
 // Variables to track zoom and pan state
 let scale = 1;
@@ -160,17 +159,14 @@ wrapper.addEventListener('touchcancel', onTouchEnd);
 
 // Your existing fetching and dot placing code below...
 
-async function getTeamdata(team = "", season) {
-    console.debug(`%cmaprender.js %c> %cFetching teamdata from the API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
-    return fetch('https://api.umkl.co.uk/teamdata', {
+async function getTeamlocations() {
+    console.debug(`%cmaprender.js %c> %cFetching teamlocations from the API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    return fetch('https://api.umkl.co.uk/teamlocations', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            team: `${team}`,
-            season: `${season}`
-        })
+        body: JSON.stringify({})
     })
         .then(response => {
             if (!response.ok) {
@@ -412,16 +408,17 @@ function createZoomControls() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    startTime = performance.now();
+
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('team')) {
         teamParam = urlParams.get('team');
     }
 
-    const teamData = await getTeamdata("");
+    const teamLocations = await getTeamlocations("");
 
     // Extract valid coordinates and team color
-    coords = teamData
-        .filter(team => Array.isArray(team.coords) && team.coords.length === 2 && team.team_color)
+    coords = teamLocations
         .map(team => ({
             coords: team.coords,
             color: team.team_color,
@@ -440,4 +437,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     createZoomControls();
+
+    console.debug(`%cmaprender.js %c> %cGenerated team info box in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9452ff", "color:#fff", "color:#c29cff");
 });
