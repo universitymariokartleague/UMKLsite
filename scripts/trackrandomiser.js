@@ -349,6 +349,37 @@ const tracks = {
         "Squeaky Clean Sprint",
         "Tour Madrid Drive"
     ],
+    WORLD: [
+        "Mario Bros. Circuit",
+        "Crown City",
+        "Whistletop Summit",
+        "DK Spaceport",
+        "Desert Hills",
+        "Shy Guy Bazaar",
+        "Wario Stadium",
+        "Airship Fortress",
+        "DK Pass",
+        "Starview Peak",
+        "Sky-High Sundae",
+        {normal: "Wario Shipyard", pal: "Wario's Galleon"},
+        "Koopa Troopa Beach",
+        "Faraway Oasis",
+        "Peach Stadium",
+        "Salty Salty Speedway",
+        "Dino Dino Jungle",
+        "Great ? Block Ruins",
+        "Cheep Cheep Falls",
+        "Dandelion Depths",
+        "Boo Cinema",
+        "Dry Bones Burnout",
+        "Moo Moo Meadows",
+        "Choco Mountain",
+        "Toad's Factory",
+        "Bowser's Castle",
+        "Acorn Heights",
+        "Mario Circuit",
+        "Rainbow Road"
+    ],
 }
 
 const tracksContainer = document.getElementById("results");
