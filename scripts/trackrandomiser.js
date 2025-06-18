@@ -365,6 +365,7 @@ const tracks = {
         "Koopa Troopa Beach",
         "Faraway Oasis",
         "Peach Stadium",
+        "Peach Beach",
         "Salty Salty Speedway",
         "Dino Dino Jungle",
         "Great ? Block Ruins",
