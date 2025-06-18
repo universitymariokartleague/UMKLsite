@@ -294,7 +294,7 @@ const tracks = {
 
         "3DS Toad Circuit",
         { normal: "3DS Music Park", pal: "3DS Melody Motorway" },
-        { normal: "3DS Alpine Pass", pal: "3DS Rock Rock Mountain" },
+        { normal: "3DS Rock Rock Mountain", pal: "3DS Alpine Pass" },
         { normal: "3DS Piranha Plant Slide", pal: "3DS Piranha Plant Pipeway" },
         { normal: "3DS Neo Bowser City", pal: "3DS Koopa City" },
         "3DS DK Jungle",
