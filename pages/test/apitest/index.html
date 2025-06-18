@@ -58,21 +58,33 @@
             <h1>apitest</h1>
             <hr class="hr-below-title">
 
-            Current season (/currentseason) (live)
-            <br>Took: <span id="timeTaken3"></span>ms to generate
-            <div id="currentseason"></div>
-
-            <hr>
-
             Tables from API (/teamdata) (live)
             <br>Took: <span id="timeTaken"></span>ms to generate
             <div id="teamdataTable"></div>
 
             <hr>
 
-            Tables from API (/query) (live)
+            Current season (/currentseason) (live)
+            <br>Took: <span id="timeTaken3"></span>ms to generate
+            <div id="currentseason"></div>
+
+            <hr>
+
+            Tables from API (/teamcolors) (live)
             <br>Took: <span id="timeTaken2"></span>ms to generate
-            <div id="DBTables"></div>
+            <div id="teamcolors"></div>
+
+            <hr>
+
+            Tables from API (/teamlocations) (live)
+            <br>Took: <span id="timeTaken4"></span>ms to generate
+            <div id="teamlocations"></div>
+
+            <hr>
+
+            Tables from API (/matchdata) (live)
+            <br>Took: <span id="timeTaken5"></span>ms to generate
+            <div id="matchdata"></div>
         </main>
 
         <footer>
@@ -90,6 +102,9 @@
 <script>
     const currentSeason = document.getElementById("currentseason");
     const teamdataTable = document.getElementById("teamdataTable");
+    const teamcolorsTable = document.getElementById("teamcolors");
+    const teamlocationsTable = document.getElementById("teamlocations");
+    const teammatchdataTable = document.getElementById("matchdata");
     const DBTables = document.getElementById("DBTables");
 
     async function printCurrentSeason() {
@@ -103,7 +118,7 @@
             let startTime = performance.now();
             const data = await runTeamdata(team);
             document.getElementById("timeTaken").innerHTML = performance.now() - startTime;
-            createHTMLTable("team", data, teamdataTable)
+            createHTMLTable("teamdata", data, teamdataTable)
 
         } catch (error) {
             console.error("Error constructing tables:", error);
@@ -111,51 +126,47 @@
         }
     }
 
-    async function constructSQLJSON() {
+    async function constructTeamcolorsJSON() {
         try {
-            const tableQueries = [
-                // { name: "Game", query: "SELECT * FROM game" },
-                { name: "Penalty", query: "SELECT * FROM penalty" },
-                { name: "Season", query: "SELECT * FROM season" },
-                { name: "Season Entry", query: "SELECT * FROM season_entry" },
-                { name: "Team", query: "SELECT * FROM team" },
-                { name: "Tournament", query: "SELECT * FROM tournament" },
-                { name: "Tournament Entry", query: "SELECT * FROM tournament_entry" },
-                { name: "Tournament Result", query: "SELECT * FROM tournament_result" },
-                // { name: "UK Places", query: "SELECT * FROM uk_places" },
-                // { name: "User", query: "SELECT * FROM user" }
-            ];
-
             let startTime = performance.now();
-            for (const table of tableQueries) {
-                const data = await runSQL(table.query);
-                if (data && data.length > 0) {
-                    createHTMLTable(table.name, data, DBTables);
-                }
-            }
+            const data = await getTeamcolors();
             document.getElementById("timeTaken2").innerHTML = performance.now() - startTime;
+            createHTMLTable("teamcolors", data, teamcolorsTable)
+
         } catch (error) {
             console.error("Error constructing tables:", error);
-            DBTables.innerHTML = `<div class="error">Error loading data: ${error.message}</div>`;
+            teamcolorsTable.innerHTML = `<div class="error">Error loading data: ${error.message}</div>`;
         }
     }
 
-    function runSQL(sql) {
-        return fetch('https://api.umkl.co.uk/query', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                query: `${sql}`
-            })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        });
+    async function constructTeamlocationsJSON() {
+        try {
+            let startTime = performance.now();
+            const data = await getTeamlocations();
+            document.getElementById("timeTaken4").innerHTML = performance.now() - startTime;
+            createHTMLTable("teamlocations", data, teamlocationsTable)
+
+        } catch (error) {
+            console.error("Error constructing tables:", error);
+            teamlocationsTable.innerHTML = `<div class="error">Error loading data: ${error.message}</div>`;
+        }
+    }
+
+    async function constructMatchdataJSON() {
+        try {
+            let startTime = performance.now();
+            const data = await getMatchData();
+            console.log(data)
+            document.getElementById("timeTaken5").innerHTML = performance.now() - startTime;
+            const matchArray = Object.entries(data).flatMap(([date, matches]) =>
+                matches.map(match => ({ date, ...match }))
+            );
+            createHTMLTable("matchdata", matchArray, teammatchdataTable)
+
+        } catch (error) {
+            console.error("Error constructing tables:", error);
+            teammatchdataTable.innerHTML = `<div class="error">Error loading data: ${error.message}</div>`;
+        }
     }
 
     function runTeamdata(team = "", season = 2) {
@@ -195,59 +206,97 @@
         });
     }
 
+    async function getTeamcolors() {
+        return fetch('https://api.umkl.co.uk/teamcolors', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: "{}"
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        });
+    }
+
+    async function getTeamlocations() {
+        return fetch('https://api.umkl.co.uk/teamlocations', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        });
+    }
+
+    async function getMatchData() {
+        return fetch('https://api.umkl.co.uk/matchdata', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: "{}"
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        });
+    }
+
     function createHTMLTable(tableName, data, group) {
-        // Create table container
         const tableContainer = document.createElement('div');
         tableContainer.className = 'table-container';
         
-        // Create table title
         const title = document.createElement('h2');
         title.textContent = tableName;
         tableContainer.appendChild(title);
 
-        // Create the table element
         const table = document.createElement('table');
         table.className = 'data-table';
 
-        // Create table header
+        const allKeys = new Set();
+        data.forEach(row => {
+            Object.keys(row).forEach(key => allKeys.add(key));
+        });
+        const headerKeys = Array.from(allKeys);
+
         const thead = document.createElement('thead');
         const headerRow = document.createElement('tr');
-        
-        // Add column headers
-        if (data.length > 0) {
-            Object.keys(data[0]).forEach(key => {
-                const th = document.createElement('th');
-                th.textContent = key;
-                headerRow.appendChild(th);
-            });
-        }
-        
+        headerKeys.forEach(key => {
+            const th = document.createElement('th');
+            th.textContent = key;
+            headerRow.appendChild(th);
+        });
         thead.appendChild(headerRow);
         table.appendChild(thead);
 
-        // Create table body
         const tbody = document.createElement('tbody');
-        
-        // Add data rows
         data.forEach(row => {
             const tr = document.createElement('tr');
-            
-            Object.values(row).forEach(value => {
+            headerKeys.forEach(key => {
                 const td = document.createElement('td');
-                // Handle null/undefined values
-                td.textContent = value !== null && value !== undefined ? value.toString() : 'NULL';
+                const value = row[key];
+                td.textContent = value !== null && value !== undefined ? value.toString() : '';
                 tr.appendChild(td);
             });
-            
             tbody.appendChild(tr);
         });
-        
         table.appendChild(tbody);
         tableContainer.appendChild(table);
         group.appendChild(tableContainer);
     }
 
-    // Add some basic CSS
     const style = document.createElement('style');
     style.textContent = `
         .table-container {
@@ -286,7 +335,11 @@
     `;
     document.head.appendChild(style);
 
-    printCurrentSeason();
-    constructTeamdataJSON();
-    constructSQLJSON();
+    (async function() {
+        await printCurrentSeason();
+        await constructTeamdataJSON();
+        await constructTeamcolorsJSON();
+        await constructTeamlocationsJSON();
+        await constructMatchdataJSON();
+    })();
 </script>
