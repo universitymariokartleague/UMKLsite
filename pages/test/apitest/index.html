@@ -335,11 +335,9 @@
     `;
     document.head.appendChild(style);
 
-    (async function() {
-        await printCurrentSeason();
-        await constructTeamdataJSON();
-        await constructTeamcolorsJSON();
-        await constructTeamlocationsJSON();
-        await constructMatchdataJSON();
-    })();
+    printCurrentSeason();
+    constructTeamdataJSON();
+    constructTeamcolorsJSON();
+    constructTeamlocationsJSON();
+    constructMatchdataJSON();
 </script>

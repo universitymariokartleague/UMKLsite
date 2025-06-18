@@ -27,7 +27,7 @@ const contributors = [
     },
     {
         name: "tsun1509",
-        img: "https://cdn.discordapp.com/avatars/342974732938903563/a_ecd8f2918246d6d90ab60629764e9151?size=1024",
+        img: "https://cdn.discordapp.com/avatars/342974732938903563/ecd8f2918246d6d90ab60629764e9151?size=1024",
         discord: "https://discordapp.com/users/342974732938903563",
         github: "https://github.com/TusharSundarka/"
     },
