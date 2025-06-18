@@ -127,7 +127,7 @@ const tracks = {
         "Toad's Factory",
         "Mario Circuit",
         "Coconut Mall",
-        { normal: "DK Summit", pal: "DK's Snowboard Cross" },
+        { us: "DK Summit", pal: "DK's Snowboard Cross" },
         "Wario's Gold Mine",
         "Daisy Circuit",
         "Koopa Cape",
@@ -158,16 +158,16 @@ const tracks = {
     MK7: [
         "Toad Circuit",
         "Daisy Hills",
-        { normal: "Cheep Cheep Lagoon", pal: "Cheep-Cheep Cape" },
+        { us: "Cheep Cheep Lagoon", pal: "Cheep-Cheep Cape" },
         "Shy Guy Bazaar",
-        { normal: "Wuhu Loop", pal: "Wuhu Island Loop" },
+        { us: "Wuhu Loop", pal: "Wuhu Island Loop" },
         "Mario Circuit",
-        { normal: "Music Park", pal: "Melody Motorway" },
-        { normal: "Rock Rock Mountain", pal: "Alpine Pass" },
-        { normal: "Piranha Plant Slide", pal: "Piranha Plant Pipeway" },
-        { normal: "Wario Shipyard", pal: "Wario's Galleon" },
-        { normal: "Neo Bowser City", pal: "Koopa City" },
-        { normal: "Maka Wuhu", pal: "Wuhu Mountain Loop" },
+        { us: "Music Park", pal: "Melody Motorway" },
+        { us: "Rock Rock Mountain", pal: "Alpine Pass" },
+        { us: "Piranha Plant Slide", pal: "Piranha Plant Pipeway" },
+        { us: "Wario Shipyard", pal: "Wario's Galleon" },
+        { us: "Neo Bowser City", pal: "Koopa City" },
+        { us: "Maka Wuhu", pal: "Wuhu Mountain Loop" },
         "DK Jungle",
         "Rosalina's Ice World",
         "Bowser's Castle",
@@ -196,7 +196,7 @@ const tracks = {
         "Sweet Sweet Canyon",
         "Thwomp Ruins",
         "Mario Circuit",
-        { normal: "Toad Harbor", pal: "Toad Harbour" },
+        { us: "Toad Harbor", pal: "Toad Harbour" },
         "Twisted Mansion",
         "Shy Guy Falls",
         "Sunshine Airport",
@@ -204,7 +204,7 @@ const tracks = {
         "Electrodrome",
         "Mount Wario",
         "Cloudtop Cruise",
-        { normal: "Bone-Dry Dunes", pal: "Bone Dry Dunes" },
+        { us: "Bone-Dry Dunes", pal: "Bone Dry Dunes" },
         "Bowser's Castle",
         "Rainbow Road",
 
@@ -218,10 +218,10 @@ const tracks = {
         "3DS DK Jungle",
         "DS Wario Stadium",
         "GCN Sherbet Land",
-        { normal: "3DS Music Park", pal: "3DS Melody Motorway" },
+        { us: "3DS Music Park", pal: "3DS Melody Motorway" },
         "N64 Yoshi Valley",
         "DS Tick-Tock Clock",
-        { normal: "3DS Piranha Plant Slide", pal: "3DS Piranha Plant Pipeway" },
+        { us: "3DS Piranha Plant Slide", pal: "3DS Piranha Plant Pipeway" },
         "Wii Grumble Volcano",
         "N64 Rainbow Road",
 
@@ -237,7 +237,7 @@ const tracks = {
         "GBA Cheese Land",
         "Wild Woods",
         "Animal Crossing",
-        { normal: "3DS Neo Bowser City", pal: "3DS Koopa City" },
+        { us: "3DS Neo Bowser City", pal: "3DS Koopa City" },
         "GBA Ribbon Road",
         "Super Bell Subway",
         "Big Blue"
@@ -283,7 +283,7 @@ const tracks = {
         "Wii Moo Moo Meadows",
         "Wii Mushroom Gorge",
         "Wii Coconut Mall",
-        { normal: "Wii DK Summit", pal: "Wii DK's Snowboard Cross" },
+        { us: "Wii DK Summit", pal: "Wii DK's Snowboard Cross" },
         "Wii Wario's Gold Mine",
         "Wii Daisy Circuit",
         "Wii Koopa Cape",
@@ -293,10 +293,10 @@ const tracks = {
         "Wii Rainbow Road",
 
         "3DS Toad Circuit",
-        { normal: "3DS Music Park", pal: "3DS Melody Motorway" },
-        { normal: "3DS Rock Rock Mountain", pal: "3DS Alpine Pass" },
-        { normal: "3DS Piranha Plant Slide", pal: "3DS Piranha Plant Pipeway" },
-        { normal: "3DS Neo Bowser City", pal: "3DS Koopa City" },
+        { us: "3DS Music Park", pal: "3DS Melody Motorway" },
+        { us: "3DS Rock Rock Mountain", pal: "3DS Alpine Pass" },
+        { us: "3DS Piranha Plant Slide", pal: "3DS Piranha Plant Pipeway" },
+        { us: "3DS Neo Bowser City", pal: "3DS Koopa City" },
         "3DS DK Jungle",
         "3DS Rosalina's Ice World",
         "3DS Rainbow Road",
@@ -306,7 +306,7 @@ const tracks = {
         "Sweet Sweet Canyon",
         "Thwomp Ruins",
         "Mario Circuit",
-        { normal: "Toad Harbor", pal: "Toad Harbour" },
+        { us: "Toad Harbor", pal: "Toad Harbour" },
         "Twisted Mansion",
         "Shy Guy Falls",
         "Sunshine Airport",
@@ -314,7 +314,7 @@ const tracks = {
         "Electrodrome",
         "Mount Wario",
         "Cloudtop Cruise",
-        { normal: "Bone-Dry Dunes", pal: "Bone Dry Dunes" },
+        { us: "Bone-Dry Dunes", pal: "Bone Dry Dunes" },
         "Bowser's Castle",
         "Rainbow Road",
 
@@ -361,7 +361,7 @@ const tracks = {
         "DK Pass",
         "Starview Peak",
         "Sky-High Sundae",
-        {normal: "Wario Shipyard", pal: "Wario's Galleon"},
+        {us: "Wario Shipyard", pal: "Wario's Galleon"},
         "Koopa Troopa Beach",
         "Faraway Oasis",
         "Peach Stadium",
@@ -404,7 +404,7 @@ function pickRandomTrack() {
     if (document.getElementById("disableRepicks").checked) {
         let tempTracksList = tracksPicked.slice().reverse();
         if (tracksPicked.length == tracks[selectedGame].length) {
-            pickedTracksList.innerHTML = `<div class="codeBoxTight"><b>Max tracks! Please clear!<br>Picked tracks (${tracksPicked.length} / ${tracks[selectedGame].length})</b><br><br>${tempTracksList.map(track => track.normal ? (PALNamesCheckbox.checked ? track.pal : track.normal) : track).join(`<br>`)}</div>`;
+            pickedTracksList.innerHTML = `<div class="codeBoxTight"><b>Max tracks! Please clear!<br>Picked tracks (${tracksPicked.length} / ${tracks[selectedGame].length})</b><br><br>${tempTracksList.map(track => track.us ? (PALNamesCheckbox.checked ? track.pal : track.us) : track).join(`<br>`)}</div>`;
             return;
         }
         while (tracksPicked.includes(tempRandomTrack)) {
@@ -413,14 +413,14 @@ function pickRandomTrack() {
         lastTrack = tempRandomTrack;
         tracksPicked.push(tempRandomTrack);
         tempTracksList = tracksPicked.slice().reverse();
-        pickedTracksList.innerHTML = `<div class="codeBoxTight"><b>Picked tracks (${tracksPicked.length} / ${tracks[selectedGame].length})</b><br><br>${tempTracksList.map(track => track.normal ? (PALNamesCheckbox.checked ? track.pal : track.normal) : track).join(`<br>`)}</div>`;
+        pickedTracksList.innerHTML = `<div class="codeBoxTight"><b>Picked tracks (${tracksPicked.length} / ${tracks[selectedGame].length})</b><br><br>${tempTracksList.map(track => track.us ? (PALNamesCheckbox.checked ? track.pal : track.us) : track).join(`<br>`)}</div>`;
     }
 
-    if (tempRandomTrack.normal) {
+    if (tempRandomTrack.us) {
         if (PALNamesCheckbox.checked) {
             tempRandomTrack = tempRandomTrack.pal;
         } else {
-            tempRandomTrack = tempRandomTrack.normal;
+            tempRandomTrack = tempRandomTrack.us;
         }
     }
     tracksContainer.innerHTML = `${tempRandomTrack}`;
@@ -430,13 +430,13 @@ function rerender(selectedGame) {
     if (document.getElementById("disableRepicks").checked) {
         if (tracksPicked.length == tracks[selectedGame].length) {
             let tempTracksList = tracksPicked.slice().reverse();
-            pickedTracksList.innerHTML = `<div class="codeBoxTight"><b>Max tracks! Please clear!<br>Picked tracks (${tracksPicked.length} / ${tracks[selectedGame].length})</b><br><br>${tempTracksList.map(track => track.normal ? (PALNamesCheckbox.checked ? track.pal : track.normal) : track).join(`<br>`)}</div>`;
+            pickedTracksList.innerHTML = `<div class="codeBoxTight"><b>Max tracks! Please clear!<br>Picked tracks (${tracksPicked.length} / ${tracks[selectedGame].length})</b><br><br>${tempTracksList.map(track => track.us ? (PALNamesCheckbox.checked ? track.pal : track.us) : track).join(`<br>`)}</div>`;
         } else {
             let tempTracksList = tracksPicked.slice().reverse();
-            pickedTracksList.innerHTML = `<div class="codeBoxTight"><b>Picked tracks (${tracksPicked.length} / ${tracks[selectedGame].length})</b><br><br>${tempTracksList.map(track => track.normal ? (PALNamesCheckbox.checked ? track.pal : track.normal) : track).join(`<br>`)}</div>`;    
+            pickedTracksList.innerHTML = `<div class="codeBoxTight"><b>Picked tracks (${tracksPicked.length} / ${tracks[selectedGame].length})</b><br><br>${tempTracksList.map(track => track.us ? (PALNamesCheckbox.checked ? track.pal : track.us) : track).join(`<br>`)}</div>`;    
         }
     }
-    tracksContainer.innerHTML = `${lastTrack.normal ? (PALNamesCheckbox.checked ? lastTrack.pal : lastTrack.normal) : lastTrack}`;
+    tracksContainer.innerHTML = `${lastTrack.us ? (PALNamesCheckbox.checked ? lastTrack.pal : lastTrack.us) : lastTrack}`;
 }
 
 function clearRepicks() {

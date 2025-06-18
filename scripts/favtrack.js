@@ -59,7 +59,7 @@ const tracks = [
     "NS Merry Mountain", "NS Ninja Hideaway", "NS Sky-High Sundae",
     "NS Piranha Plant Cove", "NS Yoshi's Island", "NS Squeaky Clean Sprint",
     
-    // Mario Kart Tour (Tour)
+    // Mario Kart Tour (iOS/Android)
     "Tour New York Minute", "Tour Tokyo Blur", "Tour Paris Promenade", "Tour London Loop",
     "Tour Vancouver Velocity", "Tour Los Angeles Laps", "Tour Berlin Byways", "Tour Sydney Sprint",
     "Tour Singapore Speedway", "Tour Amsterdam Drift", "Tour Bangkok Rush", "Tour Athens Dash",
