@@ -1,22 +1,22 @@
 [
     {
-        "team_color": "#1BAA8B",
+        "team_color": "#1baa8b",
         "team_name": "York"
     },
     {
-        "team_color": "#A11212",
+        "team_color": "#a11212",
         "team_name": "Staffs"
     },
     {
-        "team_color": "#287AC8",
+        "team_color": "#287ac8",
         "team_name": "Edinburgh"
     },
     {
-        "team_color": "#61B6CB",
+        "team_color": "#61b6cb",
         "team_name": "Keele"
     },
     {
-        "team_color": "#FDD017",
+        "team_color": "#fdd017",
         "team_name": "Birmingham"
     },
     {
@@ -24,15 +24,19 @@
         "team_name": "BIMM"
     },
     {
-        "team_color": "#BD4AFF",
+        "team_color": "#bd4aff",
         "team_name": "Glasgow"
     },
     {
-        "team_color": "#002147",
+        "team_color": "#1d42a6",
         "team_name": "Oxford"
     },
     {
-        "team_color": "#3C1053",
+        "team_color": "#a499f4",
         "team_name": "Warwick"
+    },
+    {
+        "team_color": "#5ac8c1",
+        "team_name": "Liverpool"
     }
 ]
