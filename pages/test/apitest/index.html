@@ -156,7 +156,6 @@
         try {
             let startTime = performance.now();
             const data = await getMatchData();
-            console.log(data)
             document.getElementById("timeTaken5").innerHTML = performance.now() - startTime;
             const matchArray = Object.entries(data).flatMap(([date, matches]) =>
                 matches.map(match => ({ date, ...match }))
@@ -335,9 +334,11 @@
     `;
     document.head.appendChild(style);
 
-    printCurrentSeason();
-    constructTeamdataJSON();
-    constructTeamcolorsJSON();
-    constructTeamlocationsJSON();
-    constructMatchdataJSON();
+    (async function() {
+        await printCurrentSeason();
+        await constructTeamdataJSON();
+        await constructTeamcolorsJSON();
+        await constructTeamlocationsJSON();
+        await constructMatchdataJSON();
+    })();
 </script>

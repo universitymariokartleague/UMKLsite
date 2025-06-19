@@ -132,27 +132,33 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
         matchData = await getMatchData();
     } catch (error) {
-        console.debug(`%cshowupcomingmatches.js %c> %cAPI failed - using fallback information...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-        await getMatchDataFallback();
+        if (error && error.message && error.message.includes('429')) {
+            upcomingMatchesBox.innerHTML = `<blockquote class="fail"><b>API error</b><br>Your device or network is sending too many requests, so you have been rate-limited. Please try again later.</blockquote><hr>`;
+            return;
+        } else {
+            console.debug(`%cshowupcomingmatches.js %c> %cAPI failed - using fallback information...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+            await getMatchDataFallback();
 
-        upcomingMatchesBox.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
-    
-        if (refreshTimer) clearTimeout(refreshTimer);
-        const retryFetch = async () => {
+            upcomingMatchesBox.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote><hr>`;
+
+            if (refreshTimer) clearTimeout(refreshTimer);
+            const retryFetch = async () => {
             try {
                 if (typeof retryCount === 'undefined') {
-                    window.retryCount = 1;
+                window.retryCount = 1;
                 } else {
-                    window.retryCount++;
+                window.retryCount++;
                 }
                 matchData = await getMatchData();
-                upcomingMatchesBox.innerHTML = ""
+                upcomingMatchesBox.innerHTML = "";
                 showUpcomingMatch();
             } catch (err) {
+                upcomingMatchesBox.innerHTML = `<blockquote class="fail"><b>API error - Retrying: attempt ${window.retryCount}...</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote><hr>`;
                 refreshTimer = setTimeout(retryFetch, 2000);
             }
-        };
-        refreshTimer = setTimeout(retryFetch, 2000);
+            };
+            refreshTimer = setTimeout(retryFetch, 2000);
+        }
     }
 
     showUpcomingMatch();

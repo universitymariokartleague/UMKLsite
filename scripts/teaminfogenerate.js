@@ -86,27 +86,41 @@ async function generateTeamBox(teamData, showError) {
     JSTeamBox.innerHTML = tempTeamBox;
     JSTeamBox.classList.add('fade-in');
 
-    if (showError) {
-        let errorBlock = document.getElementById("team-api-error");
-        if (!errorBlock) {
-            errorBlock = document.createElement("blockquote");
-            errorBlock.className = "fail";
-            errorBlock.id = "team-api-error";
-            const mainElem = document.querySelector("main");
-            if (mainElem) {
-                mainElem.appendChild(errorBlock);
+    let errorBlock = document.getElementById("team-api-error");
+    switch (showError) {
+        case 1:
+            if (!errorBlock) {
+                errorBlock = document.createElement("blockquote");
+                errorBlock.className = "fail";
+                errorBlock.id = "team-api-error";
+                const mainElem = document.querySelector("main");
+                if (mainElem) {
+                    mainElem.appendChild(errorBlock);
+                }
             }
-        }
-        if (window.retryCount) {
-            errorBlock.innerHTML = `<b>API error - Retrying: attempt ${window.retryCount}</b><br>Failed to fetch team data from the API, the below information may not be up to date!`;
-        } else {
-            errorBlock.innerHTML = "<b>API error</b><br>Failed to fetch team data from the API, the below information may not be up to date!";
-        }
-    } else {
-        let errorBlock = document.getElementById("team-api-error");
-        if (errorBlock) {
-            errorBlock.remove();
-        }
+            if (window.retryCount) {
+                errorBlock.innerHTML = `<b>API error - Retrying: attempt ${window.retryCount}</b><br>Failed to fetch team data from the API, the below information may not be up to date!`;
+            } else {
+                errorBlock.innerHTML = "<b>API error</b><br>Failed to fetch team data from the API, the below information may not be up to date!";
+            }
+            break;
+        case 2:
+            if (!errorBlock) {
+                errorBlock = document.createElement("blockquote");
+                errorBlock.className = "fail";
+                errorBlock.id = "team-api-error";
+                const mainElem = document.querySelector("main");
+                if (mainElem) {
+                    mainElem.appendChild(errorBlock);
+                }
+            }
+            errorBlock.innerHTML = "<b>API error</b><br>Your device or network is sending too many requests, so you have been rate-limited. Please try again later.";
+            break;
+        default:
+            if (errorBlock) {
+                errorBlock.remove();
+            }
+            break;
     }
 }
 
@@ -150,32 +164,36 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.debug(`%cteaminfogeenrate.js %c> %cGenerating team info box`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
     JSTeamBox.innerHTML = "Loading team information...";
 
-    let showError = false;
+    let showError = 0;
     let currentTeam = JSTeamBox.dataset.team
     try {
         teamData = await getTeamdata(currentTeam);
     } catch (error) {
         console.debug(`%cteaminfogeenrate.js %c> %cAPI failed - using fallback information...`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
         teamData = await getTeamdataFallback(currentTeam);
-        showError = true;
+        showError = 1;
 
-        if (refreshTimer) clearTimeout(refreshTimer);
-        const retryFetch = async () => {
-            try {
-                if (typeof retryCount === 'undefined') {
-                    window.retryCount = 1;
-                } else {
-                    window.retryCount++;
+        if (error && error.message && error.message.includes('429')) {
+            showError = 2;
+        } else {
+            if (refreshTimer) clearTimeout(refreshTimer);
+            const retryFetch = async () => {
+                try {
+                    if (typeof retryCount === 'undefined') {
+                        window.retryCount = 1;
+                    } else {
+                        window.retryCount++;
+                    }
+                    teamData = await getTeamdata(currentTeam);
+                    showError = 0;
+                    await generateTeamBox(teamData[0], showError);
+                } catch (err) {
+                    await generateTeamBox(teamData[0], showError);
+                    refreshTimer = setTimeout(retryFetch, 2000);
                 }
-                teamData = await getTeamdata(currentTeam);
-                showError = false;
-                await generateTeamBox(teamData[0], showError);
-            } catch (err) {
-                await generateTeamBox(teamData[0], showError);
-                refreshTimer = setTimeout(retryFetch, 2000);
-            }
-        };
-        refreshTimer = setTimeout(retryFetch, 2000);
+            };
+            refreshTimer = setTimeout(retryFetch, 2000);
+        }
     }
     await generateTeamBox(teamData[0], showError);
 

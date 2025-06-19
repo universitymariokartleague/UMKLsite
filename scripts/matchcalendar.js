@@ -487,15 +487,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         await getMatchDataFallback();
         await getTeamcolorsFallback();
 
-        calendarError.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
-    
-        if (refreshTimer) clearTimeout(refreshTimer);
-        const retryFetch = async () => {
+        if (error && error.message && error.message.includes('429')) {
+            calendarError.innerHTML = `<blockquote class="fail"><b>API error</b><br>Your device or network is sending too many requests, so you have been rate-limited. Please try again later.</blockquote>`;
+        } else {
+            calendarError.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
+
+            if (refreshTimer) clearTimeout(refreshTimer);
+            const retryFetch = async () => {
             try {
                 if (typeof retryCount === 'undefined') {
-                    window.retryCount = 1;
+                window.retryCount = 1;
                 } else {
-                    window.retryCount++;
+                window.retryCount++;
                 }
                 matchData = await getMatchData();
                 teamColors = await getTeamcolors();
@@ -506,8 +509,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 calendarError.innerHTML = `<blockquote class="fail"><b>API error - Retrying: attempt ${window.retryCount}...</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
                 refreshTimer = setTimeout(retryFetch, 2000);
             }
-        };
-        refreshTimer = setTimeout(retryFetch, 2000);
+            };
+            refreshTimer = setTimeout(retryFetch, 2000);
+        }
     }
 
     makeTeamsColorStyles();

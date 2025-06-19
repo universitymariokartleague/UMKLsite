@@ -280,29 +280,33 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     try {
         teamData = await getTeamdata("");
-    } catch {
+    } catch (error) {
         console.debug(`%cteamboxgenerate.js %c> %cAPI failed - using fallback information...`, "color:#9452ff", "color:#fff", "color:#c29cff");
         JSTeamBoxLoading.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch team data from the API, the below information may not be up to date!</blockquote>`;
         await getTeamdataFallback(currentSeason);
 
-        if (refreshTimer) clearTimeout(refreshTimer);
-        const retryFetch = async () => {
-            try {
-                if (typeof retryCount === 'undefined') {
-                    window.retryCount = 1;
-                } else {
-                    window.retryCount++;
+        if (error && error.message && error.message.includes('429')) {
+            JSTeamBoxLoading.innerHTML = `<blockquote class="fail"><b>API error</b><br>Your device or network is sending too many requests, so you have been rate-limited. Please try again later.</blockquote>`;
+        } else {
+            if (refreshTimer) clearTimeout(refreshTimer);
+            const retryFetch = async () => {
+                try {
+                    if (typeof retryCount === 'undefined') {
+                        window.retryCount = 1;
+                    } else {
+                        window.retryCount++;
+                    }
+                    teamData = await getTeamdata("");
+                    generateTeamBoxes(teamData)
+                    generateSeasonPicker();
+                    updateSeasonText();
+                } catch (err) {
+                    JSTeamBoxLoading.innerHTML = `<blockquote class="fail"><b>API error - Retrying: attempt ${window.retryCount}</b><br>Failed to fetch team data from the API, the below information may not be up to date!</blockquote>`;
+                    refreshTimer = setTimeout(retryFetch, 2000);
                 }
-                teamData = await getTeamdata("");
-                generateTeamBoxes(teamData)
-                generateSeasonPicker();
-                updateSeasonText();
-            } catch (err) {
-                JSTeamBoxLoading.innerHTML = `<blockquote class="fail"><b>API error - Retrying: attempt ${window.retryCount}</b><br>Failed to fetch team data from the API, the below information may not be up to date!</blockquote>`;
-                refreshTimer = setTimeout(retryFetch, 2000);
-            }
-        };
-        refreshTimer = setTimeout(retryFetch, 2000);
+            };
+            refreshTimer = setTimeout(retryFetch, 2000);
+        }
     }
     
     console.debug(`%cteamboxgenerate.js %c> %cGenerated team data in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9452ff", "color:#fff", "color:#c29cff");
@@ -353,7 +357,7 @@ async function updateSeasonText() {
     try {
         seasonStatus = (await getSeasonStatus(currentSeason))[1];
     } catch (error) {
-        seasonStatus = "API error";
+        seasonStatus = "Unknown...";
     }
     currentSeasonText.innerText = `${seasonStatus} (${(startYear + Number(currentSeason))}-${(startYear + 1 + Number(currentSeason))})`;
     currentSeasonText.classList.add('fade-in');
