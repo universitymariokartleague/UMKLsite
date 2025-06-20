@@ -14,7 +14,7 @@ const teamBoxFormatHTML = `
         </div>
         <div class="current-season-info">
             <div class="heading-wrapper" style="margin-left: 3px;">
-                <h2>Season 2</h2>
+                <h2>Season {{currentSeason}}</h2>
                 <div class="live-dot"></div>
             </div>
             <div class="team-info-text">
@@ -62,6 +62,8 @@ async function generateTeamBox(teamData, showError) {
         </table>
     `;
 
+    console.log(teamData)
+
     let currentFields = `
         <table class="team-info-table">
             <tr><td class="table-key">Matches Played</td><td>${teamData.season_matches_played}</td></tr>
@@ -72,6 +74,7 @@ async function generateTeamBox(teamData, showError) {
     `;
 
     let tempTeamBox = teamBoxFormatHTML
+        .replace("{{currentSeason}}", teamData.season)
         .replaceAll("{{teamName}}", teamData.team_name)
         .replace("{{className}}", teamData.class_name)
         .replace("{{teamNameLower}}", teamData.team_name.toLowerCase())
@@ -130,7 +133,7 @@ function toOrdinal(n) {
     return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
 
-async function getTeamdata(team = "", season = 0) {
+async function getTeamdata(team = "", season = "") {
     return fetch('https://api.umkl.co.uk/teamdata', {
         method: 'POST',
         headers: {
