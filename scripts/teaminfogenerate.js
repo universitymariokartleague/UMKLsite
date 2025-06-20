@@ -62,8 +62,6 @@ async function generateTeamBox(teamData, showError) {
         </table>
     `;
 
-    console.log(teamData)
-
     let currentFields = `
         <table class="team-info-table">
             <tr><td class="table-key">Matches Played</td><td>${teamData.season_matches_played}</td></tr>
