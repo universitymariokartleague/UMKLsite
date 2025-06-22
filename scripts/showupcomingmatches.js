@@ -62,7 +62,7 @@ function showUpcomingMatch() {
         const locale = localStorage.getItem("locale") || "en-GB";
 
         let html = `<h2>Upcoming Matches</h2>
-        <a href="pages/matches/">View All Matches</a>
+        <a href="pages/matches/">View all matches</a>
         <div class="after-title match-container-list">`;
         matches.forEach(match => {
             const matchDateStr = (matchData[todayStr]?.includes(match) ? todayStr : tomorrowStr);
