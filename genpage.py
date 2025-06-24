@@ -86,7 +86,7 @@ TEAM_PAGE = """<!DOCTYPE html>
             <a href="https://www.youtube.com/@universitymariokartleague" title="UMKL YouTube Channel" class="no-color-link no-underline-link-footer fa-brands fa-youtube"></a>
             <a href="https://www.instagram.com/universitymariokartleague" title="UMKL Instagram Account" class="no-color-link no-underline-link-footer fa-brands fa-instagram"></a>
             <a href="https://www.facebook.com/profile.php?id=61575273336011" title="UMKL Facebook Page" class="no-color-link no-underline-link-footer fa-brands fa-facebook"></a>            
-            <a href="https://discord.gg/jz3hKEmDss" title="UMKL Discord Server" class="no-color-link no-underline-link-footer fa-brands fa-discord"></a>            
+            <a href="https://discord.gg/jz3hKEmDss" title="UMKL Discord server" class="no-color-link no-underline-link-footer fa-brands fa-discord"></a>            
         </footer>
     </body>
 </html>
@@ -179,7 +179,7 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
             <a href="https://www.youtube.com/@universitymariokartleague" title="UMKL YouTube Channel" class="no-color-link no-underline-link-footer fa-brands fa-youtube"></a>
             <a href="https://www.instagram.com/universitymariokartleague" title="UMKL Instagram Account" class="no-color-link no-underline-link-footer fa-brands fa-instagram"></a>
             <a href="https://www.facebook.com/profile.php?id=61575273336011" title="UMKL Facebook Page" class="no-color-link no-underline-link-footer fa-brands fa-facebook"></a>            
-            <a href="https://discord.gg/jz3hKEmDss" title="UMKL Discord Server" class="no-color-link no-underline-link-footer fa-brands fa-discord"></a>            
+            <a href="https://discord.gg/jz3hKEmDss" title="UMKL Discord server" class="no-color-link no-underline-link-footer fa-brands fa-discord"></a>            
         </footer>
     </body>
 </html>
