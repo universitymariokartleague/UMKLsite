@@ -74,7 +74,7 @@ TEAM_PAGE = """<!DOCTYPE html>
             <h1>{TEAMNAME}</h1>
             <hr class="hr-below-title">
 
-            <div id="JSTeamBox" class="teamBoxContainer" data-team="{TEAMNAME}">
+            <div id="JSTeamBox" class="team-info" data-team="{TEAMNAME}">
                 Loading team data...
             </div>
         </main>
