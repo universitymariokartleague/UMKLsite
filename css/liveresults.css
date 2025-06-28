@@ -1,11 +1,11 @@
 @font-face {
     font-family: "SF-Pro-Display-Heavy";
-    src: url("assets/pythongraphics/fonts/SF-Pro/SF-Pro-Display-Heavy.otf");
+    src: url("../assets/pythongraphics/fonts/SF-Pro/SF-Pro-Display-Heavy.otf");
 }
 
 @font-face {
     font-family: "SF-Pro-Display-Bold";
-    src: url("assets/pythongraphics/fonts/SF-Pro/SF-Pro-Display-Bold.otf");
+    src: url("../assets/pythongraphics/fonts/SF-Pro/SF-Pro-Display-Bold.otf");
 }
 
 body {
