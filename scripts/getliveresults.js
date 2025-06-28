@@ -28,13 +28,58 @@ async function getLive() {
     });
 }
 
+function animateNumberChange(element, oldValue, newValue, duration = 500, grow = false) {
+    const startTime = performance.now();
+    const difference = newValue - oldValue;
+
+    if (grow) {
+        element.classList.remove("grow");
+        void element.offsetWidth; // force reflow
+        element.classList.add("grow");
+    }
+
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const currentValue = Math.round(oldValue + difference * progress);
+        element.innerText = currentValue;
+
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        }
+    }
+
+    requestAnimationFrame(update);
+}
+
 function setScores() {
-    if (reversed) {
-        firstTeamScore.innerText = scores[1]
-        secondTeamScore.innerText = scores[0]
-    } else {
-        firstTeamScore.innerText = scores[0]
-        secondTeamScore.innerText = scores[1]
+    const [newFirst, newSecond] = reversed ? [scores[1], scores[0]] : [scores[0], scores[1]];
+
+    const currentFirst = parseInt(firstTeamScore.innerText) || 0;
+    const currentSecond = parseInt(secondTeamScore.innerText) || 0;
+
+    const deltaFirst = Math.abs(newFirst - currentFirst);
+    const deltaSecond = Math.abs(newSecond - currentSecond);
+
+    const minDuration = 200;
+    const maxDuration = 1000;
+
+    let durationFirst = minDuration;
+    let durationSecond = minDuration;
+
+    if (deltaFirst !== 0 || deltaSecond !== 0) {
+        const totalDelta = deltaFirst + deltaSecond;
+
+        durationFirst = deltaFirst === 0 ? minDuration : minDuration + ((deltaFirst / totalDelta) * (maxDuration - minDuration));
+        durationSecond = deltaSecond === 0 ? minDuration : minDuration + ((deltaSecond / totalDelta) * (maxDuration - minDuration));
+    }
+
+    if (deltaFirst > 0) {
+        animateNumberChange(firstTeamScore, currentFirst, newFirst, durationFirst, newFirst > newSecond);
+    }
+
+    if (deltaSecond > 0) {
+        animateNumberChange(secondTeamScore, currentSecond, newSecond, durationSecond, newSecond > newFirst);
     }
 }
 

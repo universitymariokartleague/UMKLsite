@@ -25,3 +25,14 @@ h1 {
     margin: 19px 0 0 0;
     text-shadow: 0 0 15px rgba(0, 0, 0, 1);
 }
+
+@keyframes growText {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.grow {
+    display: inline-block;
+    animation: growText 0.5s ease;
+}
