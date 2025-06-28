@@ -6,6 +6,7 @@ let scores = []
 const firstTeamScore = document.getElementById("firstteamscore")
 const secondTeamScore = document.getElementById("secondteamscore")
 const errorMessage = document.getElementById("errormessage")
+let reversed = Boolean(document.body.dataset.reversed) || false;
 
 let refreshTimer = null;
 
@@ -28,8 +29,13 @@ async function getLive() {
 }
 
 function setScores() {
-    firstTeamScore.innerText = scores[0]
-    secondTeamScore.innerText = scores[1]
+    if (reversed) {
+        firstTeamScore.innerText = scores[1]
+        secondTeamScore.innerText = scores[0]
+    } else {
+        firstTeamScore.innerText = scores[0]
+        secondTeamScore.innerText = scores[1]
+    }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
