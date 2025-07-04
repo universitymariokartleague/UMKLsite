@@ -912,6 +912,7 @@ blockquote {
 .team-info-table td {
     padding: 0;
     width: 50%;
+    vertical-align: top;
 }
 
 .team-info-table .table-key {

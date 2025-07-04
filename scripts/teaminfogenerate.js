@@ -56,7 +56,7 @@ function buildTeamInfoTable(teamData, isCurrent = false) {
             <tr><td class="table-key">Institution</td><td>${teamData.team_full_name}</td></tr>
             <tr><td class="table-key">First Entry</td><td>Season ${teamData.first_entry} (${startYear + teamData.first_entry}-${startYear + 1 + teamData.first_entry})</td></tr>
             <tr><td class="table-key">Championships</td><td>${teamData.team_championships}</td></tr>
-            <tr><td class="table-key">Wins-Losses</td><td>${teamData.career_wins_losses[0]} - ${teamData.career_wins_losses[1]}</td></tr>
+            <tr><td class="table-key">Lifetime<br>Wins/Losses</td><td>${teamData.career_wins_losses[0]} - ${teamData.career_wins_losses[1]}</td></tr>
             <tr><td class="table-key">Lifetime Points</td><td>${teamData.team_career_points}</td></tr>
         </table>
     `;
