@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             scores = await getLive();
             setScores();
             errorMessage.innerHTML = "";
-        } catch (err) {
+        } catch (error) {
             errorMessage.innerHTML = `Retrying: attempt ${window.retryCount}`;
         } finally {
             refreshTimer = setTimeout(updateFetch, 1000);
