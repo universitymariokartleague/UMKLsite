@@ -276,8 +276,8 @@ function placeDots() {
         
         // Possible positions to try (right, left, above, below, diagonals)
         const positions = [
-            { left: x + 25, top: y - labelHeight + 4 }, // top-right
             { left: x + 15, top: y - 11 }, // right (default)
+            { left: x + 25, top: y - labelHeight + 4 }, // top-right
             { left: x - labelWidth - 34, top: y - 11 }, // left
             { left: x - labelWidth - 10, top: y - labelHeight + 4 }, // top-left
             { left: x - labelWidth - 10, top: y + 12 }, // bottom-left
@@ -288,19 +288,26 @@ function placeDots() {
 
         // Find first position that doesn't collide with existing labels
         const foundPosition = positions.find(pos => {
+            // Expand bounding box by 1.5x for collision detection
+            const centerX = pos.left + labelWidth / 2;
+            const centerY = pos.top + labelHeight / 2;
+            const expandedWidth = labelWidth * 1.5;
+            const expandedHeight = labelHeight * 1.2;
             const newLabelRect = {
-                x: pos.left,
-                y: pos.top,
-                width: labelWidth,
-                height: labelHeight
+                x: centerX - expandedWidth / 2,
+                y: centerY - expandedHeight / 2,
+                width: expandedWidth,
+                height: expandedHeight
             };
-            
+
             // Check against all existing labels
-            return !labels.some(existingLabel => 
-                !(newLabelRect.x > existingLabel.x + existingLabel.width ||
-                  newLabelRect.x + newLabelRect.width < existingLabel.x ||
-                  newLabelRect.y > existingLabel.y + existingLabel.height ||
-                  newLabelRect.y + newLabelRect.height < existingLabel.y)
+            return !labels.some(existingLabel =>
+            !(
+                newLabelRect.x > existingLabel.x + existingLabel.width ||
+                newLabelRect.x + newLabelRect.width < existingLabel.x ||
+                newLabelRect.y > existingLabel.y + existingLabel.height ||
+                newLabelRect.y + newLabelRect.height < existingLabel.y
+            )
             );
         });
 
