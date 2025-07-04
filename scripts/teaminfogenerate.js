@@ -90,6 +90,29 @@ async function generateTeamBox(teamData, showError) {
     JSTeamBox.innerHTML = tempTeamBox;
     JSTeamBox.classList.add('fade-in');
 
+    // Dynamically inject .live-dot CSS using --highlight-color as background
+    (function injectLiveDotStyle() {
+        const style = document.createElement('style');
+        style.textContent = `
+            .live-dot {
+                background-color: ${teamData.team_color};
+                box-shadow: 0 0 0 0 ${teamData.team_color}80;
+            }
+            @keyframes live-dot-pulse {
+                0% {
+                    box-shadow: 0 0 0 0 ${teamData.team_color}80;
+                }
+                70% {
+                    box-shadow: 0 0 0 8px ${teamData.team_color}00;
+                }
+                100% {
+                    box-shadow: 0 0 0 0 ${teamData.team_color}00;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    })();
+
     showErrorBox(showError);
 }
 
