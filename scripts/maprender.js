@@ -276,9 +276,9 @@ function placeDots() {
         
         // Possible positions to try (right, left, above, below, diagonals)
         const positions = [
+            { left: x + 25, top: y - labelHeight + 4 }, // top-right
             { left: x + 15, top: y - 11 }, // right (default)
-            { left: x + 15, top: y - labelHeight + 4 }, // top-right
-            { left: x - labelWidth - 24, top: y - 11 }, // left
+            { left: x - labelWidth - 34, top: y - 11 }, // left
             { left: x - labelWidth - 10, top: y - labelHeight + 4 }, // top-left
             { left: x - labelWidth - 10, top: y + 12 }, // bottom-left
             { left: x + 15, top: y + 12 }, // bottom-right
