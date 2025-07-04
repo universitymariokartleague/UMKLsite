@@ -1,3 +1,5 @@
+# Please use .runbeforecommit.py
+
 import json, requests
 
 API_URL = "https://api.umkl.co.uk/"

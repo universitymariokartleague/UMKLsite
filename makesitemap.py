@@ -1,6 +1,7 @@
 # Please use .runbeforecommit.py
 
 import os
+
 def generate_sitemap():
     root_dir = '.'  # Scan all folders from the current directory
     sitemap_file = 'sitemap.txt'
