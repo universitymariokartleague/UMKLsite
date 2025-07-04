@@ -87,6 +87,10 @@ async function generateTeamBox(teamData, showError) {
     JSTeamBox.innerHTML = tempTeamBox;
     JSTeamBox.classList.add('fade-in');
 
+    showErrorBox(showError);
+}
+
+function showErrorBox(showError) {
     let errorBlock = document.getElementById("team-api-error");
     switch (showError) {
         case 1:
@@ -189,7 +193,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     showError = 0;
                     await generateTeamBox(teamData[0], showError);
                 } catch (err) {
-                    await generateTeamBox(teamData[0], showError);
+                    showErrorBox(showError);
                     refreshTimer = setTimeout(retryFetch, 2000);
                 }
             };

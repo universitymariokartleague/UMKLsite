@@ -20,6 +20,11 @@ def get_teamcolors():
     if response.content:
         return response.json()
 
+def get_teamlocations():
+    response = requests.post(f"{API_URL}teamlocations", json={}, headers=HEADERS)
+    if response.content:
+        return response.json()
+
 def get_matchdata():
     response = requests.post(f"{API_URL}matchdata", json={}, headers=HEADERS)
     if response.content:
@@ -34,8 +39,11 @@ def generate_match_data_json():
     with open("database/teamcolorsfallback.json", "w") as file:
         json.dump(get_teamcolors(), file, indent=4)
 
+    with open("database/teamlocationsfallback.json", "w") as file:
+        json.dump(get_teamlocations(), file, indent=4)
+
     with open("database/matchdatafallback.json", "w") as file:
         json.dump(get_matchdata(), file, indent=4)
 
-if __name__ == "__main__":
-    generate_match_data_json()
+# if __name__ == "__main__":
+#     generate_match_data_json()

@@ -13,6 +13,7 @@ const mapBounds = {
     maxLon: 1.73,    // Eastern edge
 };
 
+let teamLocations = [];
 let coords = [];
 let teamParam = "";
 
@@ -163,6 +164,14 @@ async function getTeamlocations() {
         }
         return response.json();
     });
+}
+
+async function getTeamlocationsFallback() {
+    const response = await fetch(`database/teamlocationsfallback.json`);
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
 }
 
 function placeDots() {
@@ -464,7 +473,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         teamParam = urlParams.get('team');
     }
     
-    const teamLocations = await getTeamlocations("");
+    try {
+        teamLocations = await getTeamlocations("");
+    } catch (error) {
+        teamLocations = await getTeamlocationsFallback("");
+    }
     coords = teamLocations
         .map(team => ({
             coords: team.coords,
@@ -479,6 +492,4 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateTransform();
         placeDots();
     });
-
-    console.debug(`%cmaprender.js %c> %cGenerated team info box in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9452ff", "color:#fff", "color:#c29cff");
 });

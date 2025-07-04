@@ -1,0 +1,82 @@
+[
+    {
+        "coords": [
+            53.96,
+            -1.08
+        ],
+        "team_color": "#1baa8b",
+        "team_name": "York"
+    },
+    {
+        "coords": [
+            53.0,
+            -2.1833
+        ],
+        "team_color": "#a11212",
+        "team_name": "Staffs"
+    },
+    {
+        "coords": [
+            55.9533,
+            -3.1892
+        ],
+        "team_color": "#287ac8",
+        "team_name": "Edinburgh"
+    },
+    {
+        "coords": [
+            53.0109,
+            -2.2278
+        ],
+        "team_color": "#61b6cb",
+        "team_name": "Keele"
+    },
+    {
+        "coords": [
+            52.48,
+            -1.9025
+        ],
+        "team_color": "#fdd017",
+        "team_name": "Birmingham"
+    },
+    {
+        "coords": [
+            51.4536,
+            -2.5975
+        ],
+        "team_color": "#616161",
+        "team_name": "BIMM"
+    },
+    {
+        "coords": [
+            55.8611,
+            -4.25
+        ],
+        "team_color": "#bd4aff",
+        "team_name": "Glasgow"
+    },
+    {
+        "coords": [
+            51.75,
+            -1.25
+        ],
+        "team_color": "#1d42a6",
+        "team_name": "Oxford"
+    },
+    {
+        "coords": [
+            52.4081,
+            -1.5106
+        ],
+        "team_color": "#a499f4",
+        "team_name": "Warwick"
+    },
+    {
+        "coords": [
+            53.4094,
+            -2.9785
+        ],
+        "team_color": "#5ac8c1",
+        "team_name": "Liverpool"
+    }
+]
