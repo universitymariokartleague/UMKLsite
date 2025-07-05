@@ -33,11 +33,6 @@ container.style.position = 'relative';
 container.parentElement.insertBefore(wrapper, container);
 wrapper.appendChild(container);
 
-// Variables to track zoom and pan state
-const DEFAULT_SCALE = 1;
-const DEFAULT_PAN_X = 0;
-
-
 function getIframeSize() {
     if (window.frameElement) {
         return {
@@ -52,6 +47,10 @@ function getIframeSize() {
 }
 
 const t = (getIframeSize().height - 538) / (576 - 538);
+
+// Variables to track zoom and pan state
+const DEFAULT_SCALE = 1;
+const DEFAULT_PAN_X = 0;
 const DEFAULT_PAN_Y = Math.round(-150 + t * (-112 + 150));
 
 let scale = 1;
@@ -59,7 +58,6 @@ let minScale = 0.75;
 let maxScale = 5;
 let panX = DEFAULT_PAN_X;
 let panY = DEFAULT_PAN_Y;
-
 let isPanning = false;
 let startPan = { x: 0, y: 0 };
 
