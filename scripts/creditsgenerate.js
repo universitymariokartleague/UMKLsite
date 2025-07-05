@@ -11,11 +11,6 @@ const contributors = [
         github: "https://github.com/h-omeless/"
     },
     {
-        name: "redthe1",
-        img: "https://cdn.discordapp.com/avatars/326369832129921024/3feb1250000b858f69afb25a2166d143.png?size=1024",
-        discord: "https://discordapp.com/users/326369832129921024"
-    },
-    {
         name: "skjamm",
         img: "https://cdn.discordapp.com/avatars/309400933870206978/fa52349be7108e85402f5477e548bc77.png?size=1024",
         discord: "https://discordapp.com/users/309400933870206978"
@@ -44,17 +39,17 @@ const sections = [
     {
         title: "Founding",
         description: `People responsible for the creation of the University Mario Kart League`,
-        contributorIndexes: [0, 1, 2, 3, 4, 5]
+        contributorIndexes: [0, 1, 2, 3, 4]
     },
     {
         title: "Cheep Cheep App",
         description: `Development of the Cheep Cheep app, which is used on the UMKL Discord server`,
-        contributorIndexes: [0, 4, 5]
+        contributorIndexes: [0, 3, 4]
     },
     {
         title: "Website",
         description: `All the source code for the website can be found at our <a href="https://github.com/universitymariokartleague/UMKLsite">GitHub repository</a>`,
-        contributorIndexes: [0, 4, 5]
+        contributorIndexes: [0, 3, 4]
     }
 ];
 

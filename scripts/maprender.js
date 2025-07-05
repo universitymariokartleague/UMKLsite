@@ -8,7 +8,7 @@ const container = mapImg.parentElement;
 
 const mapBounds = {
     minLat: 49.97, // Southern edge
-    maxLat: 58.67193,   // Northern edge
+    maxLat: 60.86088,   // Northern edge
     minLon: -8.64,  // Western edge
     maxLon: 1.73,    // Eastern edge
 };
@@ -34,11 +34,31 @@ container.parentElement.insertBefore(wrapper, container);
 wrapper.appendChild(container);
 
 // Variables to track zoom and pan state
+const DEFAULT_SCALE = 1;
+const DEFAULT_PAN_X = 0;
+
+
+function getIframeSize() {
+    if (window.frameElement) {
+        return {
+            width: window.frameElement.offsetWidth,
+            height: window.frameElement.offsetHeight
+        };
+    }
+    return {
+        width: window.innerWidth,
+        height: window.innerHeight
+    };
+}
+
+const t = (getIframeSize().height - 538) / (576 - 538);
+const DEFAULT_PAN_Y = Math.round(-150 + t * (-112 + 150));
+
 let scale = 1;
-let minScale = 1;
+let minScale = 0.75;
 let maxScale = 5;
-let panX = 0;
-let panY = 0;
+let panX = DEFAULT_PAN_X;
+let panY = DEFAULT_PAN_Y;
 
 let isPanning = false;
 let startPan = { x: 0, y: 0 };
@@ -448,9 +468,9 @@ function createZoomControls() {
     resetBtn.title = 'Reset Zoom/Pan';
     resetBtn.className = 'controls-button';
     resetBtn.addEventListener('click', () => {
-        scale = 1;
-        panX = 0;
-        panY = 0;
+        scale = DEFAULT_SCALE;
+        panX = DEFAULT_PAN_X;
+        panY = DEFAULT_PAN_Y;
         updateTransform();
         // placeDots();
     });
@@ -466,6 +486,7 @@ function createZoomControls() {
 document.addEventListener('DOMContentLoaded', async () => {
     startTime = performance.now();
     
+    updateTransform();
     createZoomControls();
     
     const urlParams = new URLSearchParams(window.location.search);
