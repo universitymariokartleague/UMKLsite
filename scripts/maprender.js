@@ -214,8 +214,10 @@ function placeDots() {
     if (!w || !h) return;
 
     const fragment = document.createDocumentFragment();
-    const labels = []; // To store label positions for collision detection
+    let labels = []; // To store label positions for collision detection
 
+    // First, create all dots and store their positions
+    const dotPositions = [];
     coords.forEach(({ coords: [lat, lon], color, name }) => {
         const { x, y } = latLonToPixel(lat, lon, w, h);
         const dot = document.createElement('div');
@@ -232,7 +234,7 @@ function placeDots() {
             left: `${x - 5}px`,
             top: `${y - 5}px`,
             pointerEvents: 'auto',
-            zIndex: isCurrentTeam ? 3 : 2, // Place selected team dot on top
+            zIndex: isCurrentTeam ? 3 : 2,
             opacity: 0,
             animation: `dot-fade-in ${loadedOnce ? 0 : 0.5}s ease-in-out ${loadedOnce ? 0 : fadeDelay}s forwards, dot-pulse-${colorClass} ${isCurrentTeam ? '1.25' : '2.0'}s infinite`
         });
@@ -270,6 +272,21 @@ function placeDots() {
             document.head.appendChild(style);
         }
 
+        fragment.appendChild(dot);
+        dotPositions.push({ x, y, color, name, isCurrentTeam, colorClass, fadeDelay });
+    });
+
+    // Prepare dot bounding boxes for collision detection with labels
+    const dotBoxes = dotPositions.map(({ x, y }) => ({
+        x: x - 8, // slightly larger than dot radius for safety
+        y: y - 8,
+        width: 12,
+        height: 12
+    }));
+
+    // Now, create all labels and lines, with collision detection
+    labels = [];
+    dotPositions.forEach(({ x, y, color, name, isCurrentTeam, colorClass, fadeDelay }, dotIdx) => {
         // Create label with collision detection
         const label = document.createElement('div');
         label.className = 'dot-label';
@@ -298,24 +315,20 @@ function placeDots() {
         }
 
         // Try different positions until we find one that doesn't collide
-        const labelWidth = name.length * 8; // Approximate width based on character count
-        const labelHeight = 24; // Approximate height
-        
-        // Possible positions to try (right, left, above, below, diagonals)
+        const labelWidth = name.length * 8;
+        const labelHeight = 24;
         const positions = [
-            { left: x + 15, top: y - 11 }, // right (default)
-            { left: x + 25, top: y - labelHeight + 4 }, // top-right
-            { left: x - labelWidth - 34, top: y - 11 }, // left
-            { left: x - labelWidth - 10, top: y - labelHeight + 4 }, // top-left
-            { left: x - labelWidth - 10, top: y + 12 }, // bottom-left
-            { left: x + 15, top: y + 12 }, // bottom-right
-            { left: x - labelWidth / 2, top: y + 12 }, // below
-            { left: x - labelWidth / 2, top: y - labelHeight - 8 }, // above
+            { left: x + 15, top: y - 11 },
+            { left: x + 25, top: y - labelHeight + 4 },
+            { left: x - labelWidth - 34, top: y - 11 },
+            { left: x - labelWidth - 10, top: y - labelHeight + 4 },
+            { left: x - labelWidth - 10, top: y + 12 },
+            { left: x + 15, top: y + 12 },
+            { left: x - labelWidth / 2, top: y + 12 },
+            { left: x - labelWidth / 2, top: y - labelHeight - 8 },
         ];
 
-        // Find first position that doesn't collide with existing labels
         const foundPosition = positions.find(pos => {
-            // Expand bounding box by 1.5x for collision detection
             const centerX = pos.left + labelWidth / 2;
             const centerY = pos.top + labelHeight / 2;
             const expandedWidth = labelWidth * 1.5;
@@ -326,19 +339,28 @@ function placeDots() {
                 width: expandedWidth,
                 height: expandedHeight
             };
-
-            // Check against all existing labels
-            return !labels.some(existingLabel =>
-            !(
-                newLabelRect.x > existingLabel.x + existingLabel.width ||
-                newLabelRect.x + newLabelRect.width < existingLabel.x ||
-                newLabelRect.y > existingLabel.y + existingLabel.height ||
-                newLabelRect.y + newLabelRect.height < existingLabel.y
-            )
+            // Check collision with other labels
+            const collidesWithLabels = labels.some(existingLabel =>
+                !(
+                    newLabelRect.x > existingLabel.x + existingLabel.width ||
+                    newLabelRect.x + newLabelRect.width < existingLabel.x ||
+                    newLabelRect.y > existingLabel.y + existingLabel.height ||
+                    newLabelRect.y + newLabelRect.height < existingLabel.y
+                )
             );
+            // Check collision with dots (except itself)
+            const collidesWithDots = dotBoxes.some((dotBox, idx) =>
+                idx !== dotIdx && // don't check against its own dot
+                !(
+                    newLabelRect.x > dotBox.x + dotBox.width ||
+                    newLabelRect.x + newLabelRect.width < dotBox.x ||
+                    newLabelRect.y > dotBox.y + dotBox.height ||
+                    newLabelRect.y + newLabelRect.height < dotBox.y
+                )
+            );
+            return !collidesWithLabels && !collidesWithDots;
         });
 
-        // Use found position or default to first position
         const finalPosition = foundPosition || positions[0];
         label.style.left = `${finalPosition.left}px`;
         label.style.top = `${finalPosition.top}px`;
@@ -391,7 +413,6 @@ function placeDots() {
         });
 
         fragment.appendChild(label);
-        fragment.appendChild(dot);
     });
 
     container.appendChild(svg);
