@@ -46,12 +46,10 @@ function getIframeSize() {
     };
 }
 
-const t = (getIframeSize().height - 538) / (576 - 538);
-
 // Variables to track zoom and pan state
 const DEFAULT_SCALE = 1;
 const DEFAULT_PAN_X = 0;
-const DEFAULT_PAN_Y = Math.round(-150 + t * (-112 + 150));
+const DEFAULT_PAN_Y = Math.round(-150 + (getIframeSize().height - 538) / (576 - 538) * (-112 + 150));
 
 let scale = 1;
 let minScale = 0.75;
