@@ -258,7 +258,11 @@ footer {
         color: white;
         cursor: pointer;
         font-size: 22px;
-        padding-left: 25vw;
+        width: 100px; /* or any width you want */
+        height: 48px; /* same as nav-bar height */
+        line-height: 52px; /* vertically center text */
+        text-align: right;
+        display: inline-block;
     }
     
     .nav-dropdown {
