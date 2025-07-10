@@ -75,8 +75,8 @@ function generateTeamBoxes(teamData) {
     }
 
     if (listView) {
-        let experimentalListView = localStorage.getItem("experimentalListView") == 1 || true;
-        if (!experimentalListView) {
+        let legacyListView = localStorage.getItem("legacyListView") == 1 || false;
+        if (legacyListView) {
             JSTeamBox.classList.remove('teamBoxContainer');
 
             const table = document.createElement('table');

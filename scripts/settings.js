@@ -51,7 +51,7 @@ function generateSettingsPanel() {
     try {
         const tempTheme = localStorage.getItem("darktheme") == 1 ? "Dark" : (localStorage.getItem("darktheme") == 0 ? "Light" : "Automatic");
         const listView = localStorage.getItem("teamsListView") == 1 || false;
-        const experimentalListView = localStorage.getItem("experimentalListView") == 1 || false;
+        const legacyListView = localStorage.getItem("legacyListView") == 1 || false;
         
         const tempLocale = localStorage.getItem("locale") || "en-GB";
         const tempLocaleDisplay = tempLocale === "en-GB" ? "English (UK)" : "English (US)";
@@ -63,7 +63,7 @@ function generateSettingsPanel() {
             <div class="setting-sub-heading">Appearance</div><hr>
             <span class="settings-hover-info" data-info="Light, dark or automatic">Page theme</span><button id="toggleTheme" class="settings-option">${tempTheme}</button><br>
             <span class="settings-hover-info" data-info="Grid or list view">Teams page layout</span><button id="toggleListView" class="settings-option">${listView ? "List view" : "Grid view"}</button><br>
-            <span class="settings-hover-info" data-info="Experiment!">experimentalListView</span><button id="toggleExperimentalListView" class="settings-option">${experimentalListView ? "On" : "Off"}</button><br>
+            <span class="settings-hover-info" data-info="Will be removed!">legacyListView</span><button id="togglelegacyListView" class="settings-option">${legacyListView ? "On" : "Off"}</button><br>
 
             <div class="setting-sub-heading">${tempLocale == "en-GB" ? "Localisation" : "Localization"}</div><hr class="settings-hr">
             <span class="settings-hover-info" data-info="UK or US date/time format">Locale</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button><br/>
@@ -125,10 +125,10 @@ function toggleListView() {
     generateSettingsPanel();
 }
 
-function toggleExperimentalListView() {
-    const newExperimentalListView = localStorage.getItem("experimentalListView") == 1 ? 0 : 1;
-    localStorage.setItem("experimentalListView", newExperimentalListView);
-    console.debug(`%csettings.js %c> %cset experimentalListView to ${newExperimentalListView}`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
+function togglelegacyListView() {
+    const newlegacyListView = localStorage.getItem("legacyListView") == 1 ? 0 : 1;
+    localStorage.setItem("legacyListView", newlegacyListView);
+    console.debug(`%csettings.js %c> %cset legacyListView to ${newlegacyListView}`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
     document.dispatchEvent(new CustomEvent('listViewChange'));
     generateSettingsPanel();
 }
@@ -183,7 +183,7 @@ function clearLocalStorage() {
 function generateEventListeners() {
     document.getElementById('toggleTheme').addEventListener('click', toggleTheme);
     document.getElementById('toggleListView').addEventListener('click', toggleListView);
-    document.getElementById('toggleExperimentalListView').addEventListener('click', toggleExperimentalListView);
+    document.getElementById('togglelegacyListView').addEventListener('click', togglelegacyListView);
     document.getElementById('toggleStartDayButton').addEventListener('click', toggleStartDay);
     document.getElementById('toggleMonthTypeButton').addEventListener('click', toggleMonthType);
     document.getElementById('toggleLocaleTypeButton').addEventListener('click', toggleLocale);
