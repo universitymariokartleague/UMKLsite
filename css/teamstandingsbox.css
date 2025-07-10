@@ -116,6 +116,7 @@
     }
 
     .teamStandingsBox .teamPosition {
+        border-radius: 2.5px;
         font-size: clamp(0.5rem, 3.5vw, 5em);
         height: clamp(1rem, 5.0vw, 5em);
         width: clamp(1rem, 5.0vw, 5em);
