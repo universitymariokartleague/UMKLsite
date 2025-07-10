@@ -1,11 +1,33 @@
+:root,
+:root.light-theme {
+    --standings-bg-color: #bc0839;
+    --standings-box-bg-color: #fff;
+    --standings-text-color: #bc0839;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --standings-bg-color: #111111;
+        --standings-box-bg-color: #111111;
+        --standings-text-color: #fff;
+    }
+}
+
+:root.dark-theme {
+    --standings-bg-color: #111111;
+    --standings-box-bg-color: #111111;
+    --standings-text-color: #fff;
+}
+
 .teamStandingsBox {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    padding: 25px;
+    padding: 15px;
     
-    color: #bc0839;
-    background-color: #bc0839;
+    color: var(--standings-text-color);
+    background-color: var(--standings-bg-color);
+    border: 1px solid #ccccccaa;
     min-height: 100px;
     border-radius: 10px;
 
@@ -18,7 +40,7 @@
     padding: 10px;
     cursor: pointer;
     outline: 1px #bc0839 solid;
-    background-color: #fff;
+    background-color: var(--standings-box-bg-color);
     height: 50px;
     border-radius: 10px;
     transition: background-color 0.2s ease, outline 0.2s ease, color 0.2s ease;
@@ -50,6 +72,7 @@
 
 .teamStandingsBox .teamColour {
     border-radius: 5px;
+    margin-left: 2px;
     width: 12px;
 }
  
@@ -100,6 +123,7 @@
 
     .teamStandingsBox .teamColour {
         border-radius: 5px;
+        margin-left: 0;
         width: clamp(0.25rem, 1.25vw, 5em);
     }
     
