@@ -168,7 +168,7 @@ function generateTeamBoxes(teamData) {
                     <div class="teamName">${team.team_name.toUpperCase()}</div>
                     <div class="teamPointsArea">
                         <div class="teamPoints">${team.team_season_points}</div>
-                        <div class="teamStandings">${team.season_wins_losses[0]} - ${team.season_wins_losses[1]} (${matchesPlayed} <i style="font-size:0.8em;" class="fa-solid fa-flag-checkered"></i>)</div>
+                        <div class="teamStandings">${team.season_wins_losses[0]} - ${team.season_wins_losses[1]} (${matchesPlayed} <i style="font-size:0.8em;margin-right:0.1em" class="fa-solid fa-flag-checkered"></i>)</div>
                     </div>
                 `;
 
