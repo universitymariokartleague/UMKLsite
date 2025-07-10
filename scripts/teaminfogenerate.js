@@ -43,8 +43,8 @@ function buildTeamInfoTable(teamData, isCurrent = false) {
     if (isCurrent) {
         return `
             <table class="team-info-table">
-                <tr><td class="table-key">Matches Played</td><td>${teamData.season_matches_played}</td></tr>
                 <tr><td class="table-key">Wins-Losses</td><td>${teamData.season_wins_losses[0]} - ${teamData.season_wins_losses[1]}</td></tr>
+                <tr><td class="table-key">Matches Played</td><td>${teamData.season_matches_played}</td></tr>
                 <tr><td class="table-key">Points</td><td>${teamData.team_season_points} (${toOrdinal(teamData.season_position)})</td></tr>
                 <tr><td class="table-key">Penalties</td><td>${teamData.season_penalties}</td></tr>
             </table>
@@ -55,7 +55,7 @@ function buildTeamInfoTable(teamData, isCurrent = false) {
             <tr><td class="table-key">Location</td><td>${teamData.team_place}</td></tr>
             <tr><td class="table-key">Institution</td><td>${teamData.team_full_name}</td></tr>
             <tr><td class="table-key">First Entry</td><td>Season ${teamData.first_entry} (${startYear + teamData.first_entry}-${startYear + 1 + teamData.first_entry})</td></tr>
-            <tr><td class="table-key">Championships</td><td>${teamData.team_championships}</td></tr>
+            <tr><td class="table-key">Season Wins</td><td>${teamData.team_championships}</td></tr>
             <tr><td class="table-key">Lifetime<br>Wins/Losses</td><td>${teamData.career_wins_losses[0]} - ${teamData.career_wins_losses[1]}</td></tr>
             <tr><td class="table-key">Lifetime Points</td><td>${teamData.team_career_points}</td></tr>
         </table>
