@@ -80,5 +80,52 @@
 }
 
 @media screen and (max-width: 767px) {
+    .teamStandingsBox {
+        padding: 10px;
+        gap: clamp(0.25rem, 1.5vw, 5em);
+    }
 
+    .teamStandingsBox .teamStanding {
+        gap: clamp(0.25rem, 1.0vw, 5em);
+        padding: 5px;
+        border-radius: 5px;
+        height: clamp(0.75rem, 5.0vw, 5em);
+    }
+
+    .teamStandingsBox .teamPosition {
+        font-size: clamp(0.5rem, 3.5vw, 5em);
+        height: clamp(1rem, 5.0vw, 5em);
+        width: clamp(1rem, 5.0vw, 5em);
+    }
+
+    .teamStandingsBox .teamColour {
+        border-radius: 5px;
+        width: clamp(0.25rem, 1.25vw, 5em);
+    }
+    
+    .teamStandingsBox .teamLogo {
+        margin-left: 0;
+        height: clamp(0.25rem, 5.0vw, 5em);
+        width: clamp(0.25rem, 5.0vw, 5em);
+    }
+
+    .teamStandingsBox .teamName {
+        margin-left: 0;
+        font-size: clamp(0.25rem, 4.25vw, 5em);
+    }
+
+    .teamStandingsBox .teamPointsArea {
+        margin-left: auto;
+        margin-right: 5px;
+        text-align: right;
+        line-height: 0.8;
+    }
+
+    .teamStandingsBox .teamPointsArea .teamPoints {
+        font-size: clamp(0.5rem, 4.25vw, 5em);
+    }
+
+    .teamStandingsBox .teamPointsArea .teamStandings {
+        font-size: clamp(0.25rem, 2.0vw, 5em);
+    }
 }
