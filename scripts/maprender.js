@@ -326,6 +326,27 @@ function placeDots() {
             { left: x - labelWidth / 2, top: y - labelHeight - 8 },
         ];
 
+        // Concentric circular rings
+        const ringCount = 10;             // how many circles
+        const radiusStep = 20;            // how much to increase radius per ring
+        const degreesPerCircle = 360;     // full circle
+        const angleStep = 1;              // one position per degree
+
+        for (let r = 2; r <= ringCount; r++) {
+            const radius = r * radiusStep;
+
+            for (let deg = 0; deg < degreesPerCircle; deg += angleStep) {
+                const angleRad = (deg * Math.PI) / 180;
+                const offsetX = radius * Math.cos(angleRad);
+                const offsetY = radius * Math.sin(angleRad);
+
+                positions.push({
+                    left: x + offsetX - labelWidth / 2,
+                    top: y + offsetY - labelHeight / 2,
+                });
+            }
+        }
+
         const foundPosition = positions.find(pos => {
             const centerX = pos.left + labelWidth / 2;
             const centerY = pos.top + labelHeight / 2;
