@@ -156,8 +156,7 @@
             ],
             "testMatch": true,
             "time": "20:00",
-            "title": "York VS BIMM (Test Match)",
-            "tournament_id": 9
+            "title": "York VS BIMM (Test Match)"
         }
     ],
     "2025-06-22": [
@@ -172,6 +171,20 @@
             "testMatch": true,
             "time": "18:00",
             "title": "Staffs VS Warwick (Test Match)"
+        }
+    ],
+    "2025-07-16": [
+        {
+            "description": "A 6v6 Test Match between York and Warwick. This will serve as a test of the Cheep Cheep app and YouTube streaming. Members of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed on the UMKL YouTube channel. You can visit the channel here: https://www.youtube.com/@universitymariokartleague.",
+            "eventID": "1394365791922688000",
+            "season": 2,
+            "teamsInvolved": [
+                "York",
+                "Warwick"
+            ],
+            "testMatch": true,
+            "time": "20:00",
+            "title": "York VS Warwick (Test Match)"
         }
     ]
 }
