@@ -290,7 +290,7 @@ function showDailyLog(date, dayCell) {
                     return {
                         team_name: teamName,
                         class_name: teamName.replace(/\s+/g, ''),
-                        link: `pages/teams/${teamName.replace(/\s+/g, '-').toLowerCase()}/`
+                        link: `pages/teams/details/?team=${teamName.replace(/\s+/g, '-').toLowerCase()}`
                     };
                 }
 

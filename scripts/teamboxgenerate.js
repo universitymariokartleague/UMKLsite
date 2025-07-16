@@ -7,7 +7,7 @@
 
 function generateTeamHTML(team) {
     return `
-        <button onClick="location.href='pages/teams/${team.link_name}/'" class="${team.class_name} teamBox">
+        <button onClick="location.href='pages/teams/details?team=${team.link_name}'" class="${team.class_name} teamBox">
             <div class="positionBox">
                 <div class="team-position">${team.season_position}</div>
                 <div class="team-points">
@@ -62,16 +62,28 @@ function generateTeamBox(team) {
     return tempDiv;
 }
 
-function generateTeamBoxes(teamData) {
+async function generateTeamBoxes(teamData) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.add('fade-in');
     listView = localStorage.getItem("teamsListView") == 1 || false;
 
+    function checkImage(url) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve(true);
+            img.onerror = () => resolve(false);
+            img.src = url;
+        });
+    }
+
     for (let i = 0; i < teamData.length; i++) {
         const team = teamData[i];
-        team.logo_src = `assets/image/teamemblems/${team.team_name.toUpperCase()}.png`
-        team.class_name = team.team_name.replace(/\s+/g, '')
-        team.link_name = team.team_name.replace(/\s+/g, '-').toLowerCase()
+        const logoUrl = `assets/image/teamemblems/${team.team_name.toUpperCase()}.png`;
+        const exists = await checkImage(logoUrl);
+
+        team.logo_src = exists ? logoUrl : "assets/image/teamemblems/DEFAULT.png";
+        team.class_name = team.team_name.replace(/\s+/g, '');
+        team.link_name = team.team_name;
     }
 
     if (listView) {
@@ -100,13 +112,13 @@ function generateTeamBoxes(teamData) {
                 row.style.color = "#FFF";
 
                 row.addEventListener('click', () => {
-                    window.location.href = `pages/teams/${team.link_name}/`
+                    window.location.href = `pages/teams/details?team=${team.link_name}`
                 });
 
                 row.setAttribute('tabindex', '0');
                 row.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
-                        window.location.href = `pages/teams/${team.link_name}/`
+                        window.location.href = `pages/teams/details?team=${team.link_name}`
                     }
                 });
 
@@ -152,12 +164,12 @@ function generateTeamBoxes(teamData) {
                 row.classList.add("teamStanding");
 
                 row.addEventListener('click', () => {
-                    window.location.href = `pages/teams/${team.link_name}/`;
+                    window.location.href = `pages/teams/details?team=${team.link_name}`;
                 });
                 row.setAttribute('tabindex', '0');
                 row.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
-                        window.location.href = `pages/teams/${team.link_name}/`;
+                        window.location.href = `pages/teams/details?team=${team.link_name}`;
                     }
                 });
 

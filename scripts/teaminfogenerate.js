@@ -29,6 +29,7 @@ const teamBoxFormatHTML = `
 `;
 
 const JSTeamBox = document.getElementById("JSTeamBox")
+const teamNameBox = document.getElementById("teamNameBox")
 const startYear = 2023;
 
 let teamData = [];
@@ -67,11 +68,21 @@ async function generateTeamBox(teamData, showError) {
     JSTeamBox.classList.remove('fade-in');
 
     try {
-        teamData.logo_src = `assets/image/teamemblems/hres/${teamData.team_name.toUpperCase()}.png`;
-        teamData.class_name = teamData.team_name.replace(/\s+/g, '');
+        const teamNameUpper = teamData.team_name.toUpperCase();
+        const logoUrl = `assets/image/teamemblems/hres/${teamNameUpper}.png`;
+
+        await new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = resolve;
+            img.onerror = reject;
+            img.src = logoUrl;
+        });
+
+        teamData.logo_src = logoUrl;
+
     } catch (error) {
-        JSTeamBox.innerHTML = `<blockquote class="fail">No team data available!<br/>${error.stack}</blockquote>`;
-        return;
+        teamData.logo_src = 'assets/image/teamemblems/hres/DEFAULT.png';
+        console.debug(`%cteaminfogeenrate.js %c> %cTeam emblem for ${teamData.team_name} not found, using DEFAULT`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
     }
 
     const extraFields = buildTeamInfoTable(teamData);
@@ -192,7 +203,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     JSTeamBox.innerHTML = "Loading team information...";
 
     let showError = 0;
-    let currentTeam = JSTeamBox.dataset.team
+    const urlParams = new URLSearchParams(window.location.search);
+    let currentTeam = urlParams.get('team');
+    teamNameBox.innerText = currentTeam;
+
     try {
         teamData = await getTeamdata(currentTeam);
     } catch (error) {

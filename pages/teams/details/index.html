@@ -5,8 +5,8 @@
     
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-        <title>Team Birmingham | University Mario Kart League</title>
-        <meta name="description" content="Information about Team Birmingham, which are participating in the University Mario Kart League (UMKL)">
+        <title>Team {TEAMNAME} | University Mario Kart League</title>
+        <meta name="description" content="Information about Team {TEAMNAME}, which are participating in the University Mario Kart League (UMKL)">
         <link rel="shortcut icon" href="assets/image/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
@@ -18,7 +18,7 @@
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://umkl.co.uk/pages/teams/" />
         <meta property="og:image" content="https://umkl.co.uk/assets/image/brand/Cheep_Cheep_banner.png" />
-        <meta property="og:description" content="Information about Team Birmingham, which are participating in the University Mario Kart League (UMKL)" />
+        <meta property="og:description" content="Information about Team {TEAMNAME}, which are participating in the University Mario Kart League (UMKL)" />
         <meta name="theme-color" content="#bc0839">
     
         <!-- Include this to make the og:image larger -->
@@ -30,7 +30,7 @@
         <script src="scripts/overlayscrollbar.js" defer></script>    
         
         <script type="module" src="scripts/settings.js" defer></script>
-            <script type="module" src="scripts/teaminfogenerate.js" defer></script>
+        <script type="module" src="scripts/teaminfogenerate.js" defer></script>
     </head>
     <body id="top" data-overlayscrollbars-initialize>
         <div class="navbar-container">
@@ -62,19 +62,18 @@
                         <a href="pages/faq/">FAQs</a>
                         <a target="_blank" class="nav-bar-link" href="https://discord.gg/jz3hKEmDss">Discord</a>
                     </div>
-                </div>            
+                </div>           
             </div>
         </div>
 
         <main>
             <a href="pages/teams/">Back</a>
-            <h1>Birmingham</h1>
+            <h1 id="teamNameBox"></h1>
             <hr class="hr-below-title">
 
-            <div id="JSTeamBox" class="team-info" data-team="Birmingham">
+            <div id="JSTeamBox" class="team-info">
                 Loading team data...
             </div>
-
         </main>
 
         <footer>
