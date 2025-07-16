@@ -309,7 +309,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         window.retryCount++;
                     }
                     teamData = await getTeamdata("");
-                    generateTeamBoxes(teamData)
+                    await generateTeamBoxes(teamData)
                     generateSeasonPicker();
                     updateSeasonText();
                 } catch (err) {
@@ -322,7 +322,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     
     console.debug(`%cteamboxgenerate.js %c> %cGenerated team data in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9452ff", "color:#fff", "color:#c29cff");
-    generateTeamBoxes(teamData)
+    await generateTeamBoxes(teamData)
 
     try {
         currentSeason = parseInt(await getCurrentSeason());
@@ -338,7 +338,7 @@ document.addEventListener('listViewChange', async () => {
     await getTeamdataSafe(currentSeason)
     updateButton();
     console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes...`, "color:#9452ff", "color:#fff", "color:#c29cff");
-    generateTeamBoxes(teamData, false);
+    await generateTeamBoxes(teamData, false);
 });
 
 function generateSeasonPicker() {
@@ -359,7 +359,7 @@ seasonPicker.addEventListener("change", async function () {
     currentSeasonText.classList.remove('fade-in');
     currentSeason = parseInt(this.value);
     await getTeamdataSafe(currentSeason)
-    generateTeamBoxes(teamData)
+    await generateTeamBoxes(teamData)
     await updateSeasonText();
     // console.log(JSON.stringify(teamData))
 });
