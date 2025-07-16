@@ -65,7 +65,8 @@ function generateTeamBox(team) {
 async function generateTeamBoxes(teamData) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.add('fade-in');
-    listView = localStorage.getItem("teamsListView") == 1 || false;
+    const listView = localStorage.getItem("teamsListView") == 1 || false;
+    const placeholder = "assets/image/teamemblems/DEFAULT.png";
 
     function checkImage(url) {
         return new Promise((resolve) => {
@@ -76,18 +77,21 @@ async function generateTeamBoxes(teamData) {
         });
     }
 
-    for (let i = 0; i < teamData.length; i++) {
-        const team = teamData[i];
+    // Create an array of promises for all image checks
+    const checkPromises = teamData.map(team => {
         const logoUrl = `assets/image/teamemblems/${team.team_name.toUpperCase()}.png`;
-        const exists = await checkImage(logoUrl);
-        if (!exists) {
-            console.debug(`%cteamboxgenerate.js %c> %cTeam emblem for ${teamData.team_name} not found, using DEFAULT`, "color:#9452ff", "color:#fff", "color:#c29cff");
-        }
+        return checkImage(logoUrl).then(exists => {
+            if (!exists) {
+                console.debug(`%cteamboxgenerate.js %c> %cTeam emblem for ${team.team_name} not found, using DEFAULT`, "color:#9452ff", "color:#fff", "color:#c29cff");
+            }
+            team.logo_src = exists ? logoUrl : placeholder;
+            team.class_name = team.team_name.replace(/\s+/g, '');
+            team.link_name = team.team_name;
+        });
+    });
 
-        team.logo_src = exists ? logoUrl : "assets/image/teamemblems/DEFAULT.png";
-        team.class_name = team.team_name.replace(/\s+/g, '');
-        team.link_name = team.team_name;
-    }
+    // Await all checks in parallel
+    await Promise.all(checkPromises);
 
     if (listView) {
         let legacyListView = localStorage.getItem("legacyListView") == 1 || false;
