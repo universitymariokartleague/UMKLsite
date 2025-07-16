@@ -209,6 +209,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     let showError = 0;
     const urlParams = new URLSearchParams(window.location.search);
     let currentTeam = urlParams.get('team');
+    document.title = currentTeam;
     teamNameBox.innerText = currentTeam;
 
     if (!currentTeam) {
