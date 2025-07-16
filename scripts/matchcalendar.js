@@ -270,10 +270,6 @@ function showDailyLog(date, dayCell) {
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.set('date', date);
     const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
-    if (window.location.href !== newUrl) {
-        window.history.pushState({}, '', newUrl);
-    }
-
     const locale = localStorage.getItem("locale") || "en-GB";
 
     const log = matchData[date] || [];
@@ -342,9 +338,6 @@ function clearURLParams() {
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.delete('date');
     const newUrl = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''}`;
-    if (window.location.href !== newUrl) {
-        window.history.pushState({}, '', newUrl);
-    }
 }
 
 function createShareButtonListener(formattedDate) {
