@@ -80,6 +80,9 @@ async function generateTeamBoxes(teamData) {
         const team = teamData[i];
         const logoUrl = `assets/image/teamemblems/${team.team_name.toUpperCase()}.png`;
         const exists = await checkImage(logoUrl);
+        if (!exists) {
+            console.debug(`%cteamboxgenerate.js %c> %cTeam emblem for ${teamData.team_name} not found, using DEFAULT`, "color:#9452ff", "color:#fff", "color:#c29cff");
+        }
 
         team.logo_src = exists ? logoUrl : "assets/image/teamemblems/DEFAULT.png";
         team.class_name = team.team_name.replace(/\s+/g, '');
