@@ -270,6 +270,9 @@ function showDailyLog(date, dayCell) {
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.set('date', date);
     const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+    if (window.location.href !== newUrl) {
+        window.history.replaceState({}, '', newUrl);
+    }
     const locale = localStorage.getItem("locale") || "en-GB";
 
     const log = matchData[date] || [];
@@ -337,7 +340,10 @@ function autoLink(text) {
 function clearURLParams() {
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.delete('date');
-    const newUrl = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''}`;
+    const newUrl = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''}`; 
+    if (window.location.href !== newUrl) {
+        window.history.replaceState({}, '', newUrl);
+    }
 }
 
 function createShareButtonListener(formattedDate) {
@@ -351,20 +357,15 @@ function createShareButtonListener(formattedDate) {
         
         const message = `Check out these UMKL matches on ${formattedDate}! ${window.location.href}`
         
-        const imagePath = 'assets/image/calendar/mikuheadshake.gif'
-        const blob = await fetch(imagePath).then(r => r.blob());
-
         if (useClipboard) {
             const success = await copyTextToClipboard(message);
             shareButton.innerText = success ? "Text copied to clipboard!" : "Failed to copy!";
             const messageWithURL = `Check out these UMKL matches on ${formattedDate}! <a href="${window.location.href}">${window.location.href}</a>`
-            showImagePreview(blob, imagePath, messageWithURL)
+            showTextPopup( messageWithURL)
         } else {
-            await shareImage(
+            await shareText(
                 `UMKL Matches on ${formattedDate}`,
-                message,
-                blob,
-                "mikuheadshake.gif"
+                message
             );
         }
     });
