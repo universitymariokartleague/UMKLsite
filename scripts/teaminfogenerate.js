@@ -170,23 +170,27 @@ function toOrdinal(n) {
 }
 
 async function getTeamdata(team = "", season = "") {
-    return fetch('https://api.umkl.co.uk/teamdata', {
+    const response = await fetch('https://api.umkl.co.uk/teamdata', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            team: `${team}`,
-            season: `${season}`
-        })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
+        body: JSON.stringify({ team, season })
     });
+
+    if (!response.ok) {
+        let errorData;
+        try {
+            errorData = await response.json();
+        } catch {
+            errorData = { error: `HTTP error! status: ${response.status}` };
+        }
+        throw errorData;
+    }
+
+    return response.json();
 }
+
 
 async function getTeamdataFallback(currentTeam) {
     const response = await fetch(`database/teamdatafallbacks${currentSeason}.json`);
@@ -207,9 +211,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     let currentTeam = urlParams.get('team');
     teamNameBox.innerText = currentTeam;
 
+    if (!currentTeam) {
+        window.location.href = "/pages/teams";
+    } else {
+        teamNameBox.innerText = currentTeam;
+    }
+
     try {
         teamData = await getTeamdata(currentTeam);
     } catch (error) {
+        console.log(error)
+        if (error?.error === "Team not found") {
+            window.location.href = "/pages/teams";
+        }
+
         console.debug(`%cteaminfogeenrate.js %c> %cAPI failed - using fallback information...`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
         teamData = await getTeamdataFallback(currentTeam);
         showError = 1;
