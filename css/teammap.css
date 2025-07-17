@@ -80,8 +80,8 @@ body {
     white-space: nowrap;
     pointer-events: none;
     z-index: 10;
-    box-shadow: 0 2px 6px #0002;
-    backdrop-filter: blur(5px);
+    box-shadow: 0 2px 6px #0003;
+    backdrop-filter: blur(2px);
     -webkit-user-select: none;
 	user-select: none;
 }

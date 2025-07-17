@@ -295,7 +295,7 @@ function placeDots() {
         }
         Object.assign(label.style, {
             opacity: 0,
-            backgroundColor: `${color}${isCurrentTeam ? '50': '20'}`,
+            backgroundColor: `${color}${isCurrentTeam ? '60': '40'}`,
             animation: `dotLabelFadeIn-${colorClass} ${loadedOnce ? 0 : 0.5}s ease-in-out ${loadedOnce ? 0 : (parseFloat(fadeDelay) + ((name === teamParam) ? 0 : 0.25))}s forwards`
         });
 
