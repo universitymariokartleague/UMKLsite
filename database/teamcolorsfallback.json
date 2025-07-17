@@ -34,5 +34,13 @@
     {
         "team_color": "#a499f4",
         "team_name": "Warwick"
+    },
+    {
+        "team_color": "#1f2b7d",
+        "team_name": "Liverpool"
+    },
+    {
+        "team_color": "#7f00ff",
+        "team_name": "Uosheff"
     }
 ]

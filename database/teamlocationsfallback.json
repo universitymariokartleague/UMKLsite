@@ -76,7 +76,15 @@
             53.4094,
             -2.9785
         ],
-        "team_color": "#5ac8c1",
+        "team_color": "#1f2b7d",
         "team_name": "Liverpool"
+    },
+    {
+        "coords": [
+            53.3808,
+            -1.4703
+        ],
+        "team_color": "#7f00ff",
+        "team_name": "Uosheff"
     }
 ]

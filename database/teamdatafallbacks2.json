@@ -250,5 +250,61 @@
         "team_name": "Warwick",
         "team_place": "Warwick, England",
         "team_season_points": 0
+    },
+    {
+        "career_wins_losses": [
+            0,
+            0
+        ],
+        "coords": [
+            53.4094,
+            -2.9785
+        ],
+        "first_entry": 2,
+        "place_id": 1826558678,
+        "season": 2,
+        "season_matches_played": 0,
+        "season_penalties": 0,
+        "season_position": 10,
+        "season_wins_losses": [
+            0,
+            0
+        ],
+        "team_career_points": 0,
+        "team_championships": 0,
+        "team_color": "#1f2b7d",
+        "team_full_name": "University of Liverpool",
+        "team_id": 10,
+        "team_name": "Liverpool",
+        "team_place": "Liverpool, England",
+        "team_season_points": 0
+    },
+    {
+        "career_wins_losses": [
+            0,
+            0
+        ],
+        "coords": [
+            53.3808,
+            -1.4703
+        ],
+        "first_entry": 2,
+        "place_id": 1826289852,
+        "season": 2,
+        "season_matches_played": 0,
+        "season_penalties": 0,
+        "season_position": 11,
+        "season_wins_losses": [
+            0,
+            0
+        ],
+        "team_career_points": 0,
+        "team_championships": 0,
+        "team_color": "#7f00ff",
+        "team_full_name": "University of Sheffield",
+        "team_id": 11,
+        "team_name": "Uosheff",
+        "team_place": "Sheffield, England",
+        "team_season_points": 0
     }
 ]
