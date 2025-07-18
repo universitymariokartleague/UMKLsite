@@ -326,7 +326,6 @@ function placeDots() {
             { left: x - labelWidth / 2, top: y - labelHeight - 8 },
         ];
 
-        // Concentric circular rings
         const ringCount = 10;             // how many circles
         const radiusStep = 20;            // how much to increase radius per ring
         const degreesPerCircle = 360;     // full circle
