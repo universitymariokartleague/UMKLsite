@@ -200,5 +200,19 @@
             "time": "20:00",
             "title": "York VS Liverpool (Test Match)"
         }
+    ],
+    "2025-07-30": [
+        {
+            "description": "A 6v6 Test Match between Staffs and Cambridge. This will serve as a test of the Cheep Cheep app and YouTube streaming. Members of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed on the UMKL YouTube channel. You can visit the channel here: https://www.youtube.com/@universitymariokartleague.",
+            "eventID": "1397631211622633503",
+            "season": 2,
+            "teamsInvolved": [
+                "Staffs",
+                "Cambridge"
+            ],
+            "testMatch": true,
+            "time": "19:15",
+            "title": "Staffs VS Cambridge (Test Match)"
+        }
     ]
 }
