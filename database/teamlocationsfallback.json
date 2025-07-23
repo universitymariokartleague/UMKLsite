@@ -86,5 +86,13 @@
         ],
         "team_color": "#7f00ff",
         "team_name": "Uosheff"
+    },
+    {
+        "coords": [
+            52.2053,
+            0.1192
+        ],
+        "team_color": "#85b09a",
+        "team_name": "Cambridge"
     }
 ]

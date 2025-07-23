@@ -306,5 +306,33 @@
         "team_name": "Uosheff",
         "team_place": "Sheffield, England",
         "team_season_points": 0
+    },
+    {
+        "career_wins_losses": [
+            0,
+            0
+        ],
+        "coords": [
+            52.2053,
+            0.1192
+        ],
+        "first_entry": 2,
+        "place_id": 1826229713,
+        "season": 2,
+        "season_matches_played": 0,
+        "season_penalties": 0,
+        "season_position": 12,
+        "season_wins_losses": [
+            0,
+            0
+        ],
+        "team_career_points": 0,
+        "team_championships": 0,
+        "team_color": "#85b09a",
+        "team_full_name": "University of Cambridge",
+        "team_id": 12,
+        "team_name": "Cambridge",
+        "team_place": "Cambridge, England",
+        "team_season_points": 0
     }
 ]
