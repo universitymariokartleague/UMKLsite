@@ -338,11 +338,13 @@ function placeDots() {
                 const angleRad = (deg * Math.PI) / 180;
                 const offsetX = radius * Math.cos(angleRad);
                 const offsetY = radius * Math.sin(angleRad);
-
-                positions.push({
-                    left: x + offsetX - labelWidth / 2,
-                    top: y + offsetY - labelHeight / 2,
-                });
+                
+                if (x + offsetX - labelWidth / 2 < 280) {
+                    positions.push({
+                        left: x + offsetX - labelWidth / 2,
+                        top: y + offsetY - labelHeight / 2,
+                    });
+                }
             }
         }
 
@@ -380,8 +382,16 @@ function placeDots() {
         });
 
         const finalPosition = foundPosition || positions[0];
+
+        if (finalPosition.left > 280) {
+            finalPosition.left = 280;
+            finalPosition.top -= 15;
+        }
+
         label.style.left = `${finalPosition.left}px`;
         label.style.top = `${finalPosition.top}px`;
+
+        console.log(finalPosition)
 
         // Draw a line from dot to label center, with animation
         const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
