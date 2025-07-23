@@ -4,7 +4,7 @@
 */
 
 const upcomingMatchesBox = document.getElementById("upcomingMatchesBox");
-const MATCH_LENGTH = 1.5;
+const MATCH_LENGTH_MINS = 90;
 let matchData = {};
 
 let refreshTimer = null;
@@ -54,7 +54,7 @@ function showUpcomingMatch() {
         const matchDateStr = (matchData[todayStr]?.includes(match) ? todayStr : tomorrowStr);
         const matchDate = new Date(matchDateStr);
         matchDate.setHours(hours, minutes, 0, 0);
-        return (now - matchDate) <= MATCH_LENGTH * 60 * 60 * 1000;
+        return (now - matchDate) <= MATCH_LENGTH_MINS * 60 * 1000;
     });
 
     upcomingMatchesBox.innerHTML = ``;
@@ -78,7 +78,7 @@ function showUpcomingMatch() {
 
                 const now = new Date();
                 const matchStart = dateObj;
-                const matchEnd = new Date(matchStart.getTime() + MATCH_LENGTH * 60 * 60 * 1000);
+                const matchEnd = new Date(matchStart.getTime() + MATCH_LENGTH_MINS * 60 * 1000);
                 if (now >= matchStart && now <= matchEnd) {
                     isLive = true;
                 }
@@ -112,11 +112,13 @@ function showUpcomingMatch() {
                         <a href="https://www.youtube.com/@universitymariokartleague/streams" target="_blank">Watch here</a> | 
                         <a href="pages/matches/?date=${matchDateStr}">View details</a>
                     </span>
-                    <span class="settings-extra-info">${match.testMatch ? "This is a test match." : ""}</span>
+                    <span class="settings-extra-info">${match.testMatch ? "This is a test match" : ""}</span>
                 </div>
             </div>`;
         });
         html += `</div><hr />`;
+
+        upcomingMatchesBox.classList.add('fade-in');
         upcomingMatchesBox.innerHTML += html;
     }
 }

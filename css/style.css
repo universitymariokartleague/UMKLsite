@@ -866,6 +866,15 @@ blockquote {
     opacity: 1;
 }
 
+#upcomingMatchesBox {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#upcomingMatchesBox.fade-in {
+    opacity: 1;
+}
+
 .team-info {
     border: 1px solid #ccccccaa;
     border-radius: 10px;
