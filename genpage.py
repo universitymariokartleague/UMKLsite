@@ -10,7 +10,7 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <title>{TITLE} | University Mario Kart League</title>
         <meta name="description" content="{TITLE} news article on University Mario Kart League (UMKL)">
-        <link rel="shortcut icon" href="assets/image/brand/favicon.png" type="image/png">
+        <link rel="shortcut icon" href="assets/media/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
         <link rel="stylesheet" href="css/overlayscrollbars.min.css">
@@ -38,7 +38,7 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
         <div class="navbar-container">
             <div class="nav-bar">
                 <a href="index.html" class="nav-bar-title no-color-link no-underline-link-footer">
-                    <img src="assets/image/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
+                    <img src="assets/media/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
                     <h2>UMKL</h2>
                 </a>
                 <nav class="nav-flex">

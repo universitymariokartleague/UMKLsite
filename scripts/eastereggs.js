@@ -62,7 +62,7 @@ function halloweenEasterEgg() {
         left: '10px',
         width: '85px',
         height: '85px',
-        backgroundImage: 'url("assets/image/eastereggs/halloween/splunkin.webp")',
+        backgroundImage: 'url("assets/media/eastereggs/halloween/splunkin.webp")',
         backgroundSize: 'contain',
         backgroundRepeat: 'no-repeat',
         zIndex: '1000'
@@ -74,7 +74,7 @@ function halloweenEasterEgg() {
         right: '10px',
         width: '100px',
         height: '100px',
-        backgroundImage: 'url("assets/image/eastereggs/halloween/jackogoomba.webp")',
+        backgroundImage: 'url("assets/media/eastereggs/halloween/jackogoomba.webp")',
         backgroundSize: 'contain',
         backgroundRepeat: 'no-repeat',
         zIndex: '1000'
@@ -87,7 +87,7 @@ function halloweenEasterEgg() {
             position: 'fixed',
             width: '50px',
             height: '50px',
-            backgroundImage: 'url("assets/image/eastereggs/halloween/ghost.webp")',
+            backgroundImage: 'url("assets/media/eastereggs/halloween/ghost.webp")',
             backgroundSize: 'contain',
             backgroundRepeat: 'no-repeat',
             zIndex: '1000',
@@ -100,7 +100,7 @@ function halloweenEasterEgg() {
         ghost.style.top = `${startY}px`;
 
         if (endX < startX) {
-            ghost.style.backgroundImage = 'url("assets/image/eastereggs/halloween/ghost2.webp")';
+            ghost.style.backgroundImage = 'url("assets/media/eastereggs/halloween/ghost2.webp")';
         }
 
         document.body.appendChild(ghost);

@@ -5,8 +5,8 @@
     
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-        <title>Welcome to the UMKL! | University Mario Kart League</title>
-        <meta name="description" content="Welcome to the UMKL! news article on University Mario Kart League (UMKL)">
+        <title>Cheep Cheep Updates | University Mario Kart League</title>
+        <meta name="description" content="Cheep Cheep Updates news article on University Mario Kart League (UMKL)">
         <link rel="shortcut icon" href="assets/media/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
@@ -14,15 +14,15 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
         <meta name="color-scheme" content="dark light">
     
-        <meta property="og:title" content="University Mario Kart League | Welcome to the UMKL! - News" />
+        <meta property="og:title" content="University Mario Kart League | Cheep Cheep Updates - News" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://umkl.co.uk/pages/news/2025-04-22/umkl-test-matches-are-being-conducted" />
-        <meta property="og:image" content="assets/media/news/testmatches.webp" />
-        <meta property="og:description" content="Welcome to the UMKL! news article on University Mario Kart League (UMKL)" />
-        <meta name="theme-color" content="#bc0839">
+        <meta property="og:url" content="https://umkl.co.uk/pages/news/2025-07-17/cheep-cheep-updates" />
+        <meta property="og:image" content="assets/media/news/newcommands.webp" />
+        <meta property="og:description" content="Cheep Cheep Updates news article on University Mario Kart League (UMKL)" />
+        <meta name="theme-color" content="#bc0839" />
     
         <!-- Include this to make the og:image larger -->
-        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:card" content="summary_large_image" />
     
         <!-- Scripts -->
         <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
@@ -67,69 +67,77 @@
 
         <main>
             <a href="pages/news/">Back</a>
-            <h1>Welcome to the UMKL!</h1>
+            <h1>Cheep Cheep Updates</h1>
             <div class="p-below-title">
-                19/04/2025 |
-                <tag>Intro</tag>
-                <div class="news-credits">Written by skjamm, untitledgoosegame<br>Edited by zy</div>
+                17/07/2025 | 
+                <tag>Discord</tag>
+                <tag>Test Matches</tag>
+                <div class="news-credits">Written by zy</div>
             </div>
             <hr class="hr-below-title">
 
-            <p>Welcome to the University Mario Kart League!</p>
+            <p>Hi all! Here are a few updates.</p>
 
-            <p>If you've reached this page, you probably have an idea of what we do, but we'll explain more below!</p>
+            <p>
+                It's been a few months since the announcement of 
+                <mention>@Cheep Cheep</mention> app, 
+                since then a lot of new commands and features have been added.
+            </p>
+
+            <p>
+                Work is being done constantly to improve the stability of our 
+                systems we use for UMKL, so we hope everyone is happy with the 
+                continued development!</p>
                 
-            <p>
-                We're an independent gaming league made up of university teams across the country,
-                which compete in 6v6 Mario Kart 8 Deluxe matches.
+            <p>The most important change from the 
+                previous message is that the <code>/register</code> has been removed, as 
+                it is no longer required to use <code>/join</code> when you're joining a 
+                team. A full changelog will be listed at the end of this page.
             </p>
 
             <p>
-                This project started last year, where we had four university teams in play, 
-                but this has quickly expanded to universities across the country! Currently 
-                we're still growing, with 6v6 test matches and friendlies being played until our 
-                next season starts next academic year.
+                A few test matches have occurred recently and they've gone smoothly, 
+                so more test matches will follow! 
+                So be sure to check the <a href="pages/matches/">matches</a> page
+                for upcoming matches!
             </p>
+            
+            <p>Below are some newly added commands that can be used in the server!</p>
+            <p></p><img class="image" height="auto" width="100%" src="pages/news/2025-07-17/cheep-cheep-updates/newcommands.png" /></p>
 
-            <img class="image" height="auto" width="100%" src="assets/media/brand/UMKL_Season_2_Teaser.png" />
-            <br><span class="settings-extra-info">Season 2 is scheduled to start in October 2025.</span>
-
-            <p>We're one season down, with our reigning champions York topping the charts for Season 1.</p>
-
-            <img class="image" height="auto" width="100%" src="pages/news/2025-04-19/umkl-intro/team_standings.png" />
-            <br><span class="settings-extra-info">Some team logos were incomplete during Season 1.</span>
+            <div class="codeBox">
+                <b>Changelog for the 17/07/2025 update</b>
+                <ul style="line-height: 1.6;">
+                    <li><code>/register</code> removed, it is no longer required to use <code>/join</code></li>
+                    <li>New command - <code>/leaderboards</code></li>
+                    <li>Formatted <code>YYYY-MM-DD</code> to <code>DD/MM/YYYY</code> in embeds (only for outputted text, not for command inputs)</li>
+                    <li>Added the match versus image on the sign-up embed</li>
+                    <li>Changed the date in the sign-up embed to a timestamp</li>
+                    <li>New command - <code>/change-team-colour</code> (board only)</li>
+                    <li>Internal changes to SQL/DB threading</li>
+                    <li>Internal changes to the API used on <code>umkl.co.uk</code></li>
+                    <li>Tweaked graphics to add shadowing beneath text to improve contrast and readability</li>
+                    <li>New command - <code>/generate-stream-overlay</code></li>
+                    <li>Fixed <code>/team-profile</code></li>
+                    <li>New commands (used for streaming overlay):
+                        <ul>
+                        <li><code>/add-results-to-liveresults</code></li>
+                        <li><code>/edit-results-in-liveresults</code></li>
+                        <li><code>/reset-liveresults</code></li>
+                        </ul>
+                    </li>
+                    <li>New command - <code>/submit-room-code</code></li>
+                    <li>New command - <code>/report-disconnection</code></li>
+                    <li>Added some easter eggs</li>
+                </ul>
+            </div>
 
             <p>
-                Currently, whilst we're working on our website and the next season's roster, we are currently 
-                having on-going test matches between our teams and practice rooms.
-            </p> 
-                
-            <p>
-                The UMKL discord is growing daily, with more and more interest being shown in our matches and livestreams,
-                as we carve out our own little niche in gaming culture.
+                <span class="settings-extra-info">
+                    This article is a summary of an announcement made on the UMKL Discord server, 
+                    you can join the server <a target="_blank" href="https://discord.gg/jz3hKEmDss">here</a>.
+                </span>
             </p>
-        
-            <p> 
-                We are run by students, for students, and remain dedicated 
-                to forging connections between universities. Our 6v6 comp format gives uni groups 
-                ample opportunity to communicate with each other, 
-                improve their Mario Kart 8 Deluxe skills, and grow as a team together. 
-            </p>
-                
-            <p> 
-                With 12 players and 12 races per match, get ready to 
-                practice your green shell snipes, bomb throws,
-                and to communicate effectively as a team to speed towards victory!
-            </p>
-
-            <p>
-                You can join our Discord server <a target="_blank" href="https://discord.gg/jz3hKEmDss">here</a>.<br>
-                Our YouTube channel, where we livestream matches, can be visited <a target="_blank" href="https://www.youtube.com/@universitymariokartleague">here</a>.
-            </p>
-
-            <span class="settings-extra-info">
-                Please visit the <a href="pages/credits/">credits</a> to see everyone who worked on the University Mario Kart League.
-            </span>
         </main>
 
         <footer>

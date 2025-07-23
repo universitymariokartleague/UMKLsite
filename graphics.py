@@ -7,8 +7,8 @@ from PIL import Image, ImageDraw, ImageFont
 import discord, discord.ext.commands
 
 # File paths
-DEFAULT_ICON_PATH = "assets/image/teamemblems/DEFAULT.png"
-TEAM_ICON_DIR = "assets/image/teamemblems/"
+DEFAULT_ICON_PATH = "assets/media/teamemblems/DEFAULT.png"
+TEAM_ICON_DIR = "assets/media/teamemblems/"
 DEFAULT_FONT = "assets/pythongraphics/fonts/SF-Pro/SF-Pro-Display-Bold.otf"
 DEFAULT_FONT_HEAVY = "assets/pythongraphics/fonts/SF-Pro/SF-Pro-Display-Black.otf"
 FALLBACK_FONT = "assets/pythongraphics/fonts/FOT-RodinNTLG Pro DB.otf"

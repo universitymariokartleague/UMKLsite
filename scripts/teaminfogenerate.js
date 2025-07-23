@@ -69,7 +69,7 @@ async function generateTeamBox(teamData, showError) {
 
     try {
         const teamNameUpper = teamData.team_name.toUpperCase();
-        const logoUrl = `assets/image/teamemblems/hres/${teamNameUpper}.png`;
+        const logoUrl = `assets/media/teamemblems/hres/${teamNameUpper}.png`;
 
         await new Promise((resolve, reject) => {
             const img = new Image();
@@ -81,7 +81,7 @@ async function generateTeamBox(teamData, showError) {
         teamData.logo_src = logoUrl;
 
     } catch (error) {
-        teamData.logo_src = 'assets/image/teamemblems/hres/DEFAULT.png';
+        teamData.logo_src = 'assets/media/teamemblems/hres/DEFAULT.png';
         console.debug(`%cteaminfogeenrate.js %c> %cTeam emblem for ${teamData.team_name} not found, using DEFAULT`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
     }
 

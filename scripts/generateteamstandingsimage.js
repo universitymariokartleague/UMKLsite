@@ -7,7 +7,7 @@ let startTime;
 let currentSeason;
 
 // Constants
-const TEAM_ICON_DIR = "assets/image/teamemblems/";
+const TEAM_ICON_DIR = "assets/media/teamemblems/";
 const DEFAULT_FONT = "SF-Pro-Display-Bold";
 const DEFAULT_FONT_HEAVY = "SF-Pro-Display-Black";
 const TITLE_COLOR = "#ffffff";

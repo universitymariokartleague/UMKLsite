@@ -66,7 +66,7 @@ async function generateTeamBoxes(teamData) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.add('fade-in');
     const listView = localStorage.getItem("teamsListView") == 1 || false;
-    const placeholder = "assets/image/teamemblems/DEFAULT.png";
+    const placeholder = "assets/media/teamemblems/DEFAULT.png";
 
     function checkImage(url) {
         return new Promise((resolve) => {
@@ -79,7 +79,7 @@ async function generateTeamBoxes(teamData) {
 
     // Create an array of promises for all image checks
     const checkPromises = teamData.map(team => {
-        const logoUrl = `assets/image/teamemblems/${team.team_name.toUpperCase()}.png`;
+        const logoUrl = `assets/media/teamemblems/${team.team_name.toUpperCase()}.png`;
         return checkImage(logoUrl).then(exists => {
             if (!exists) {
                 console.debug(`%cteamboxgenerate.js %c> %cTeam emblem for ${team.team_name} not found, using DEFAULT`, "color:#9452ff", "color:#fff", "color:#c29cff");
