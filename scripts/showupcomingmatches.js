@@ -85,14 +85,14 @@ function showUpcomingMatch() {
             }
             html += `<div class="match-container">
                 <div class="team-box">
-                    <a href="pages/teams/${teams[0].toLowerCase()}/" class="no-color-link no-underline-link">
+                    <a href="pages/teams/details/?team=${teams[0]}" class="no-color-link no-underline-link">
                     <img class="team-box-image" src="assets/image/teamemblems/${teams[0].toUpperCase()}.png" />
                     <h3>${teams[0]}</h3>
                     </a>
                 </div>
                 <div class="vs-box"><h1>VS</h1></div>
                 <div class="team-box">
-                    <a href="pages/teams/${teams[1].toLowerCase()}/" class="no-color-link no-underline-link">
+                    <a href="pages/teams/details/?team=${teams[1]}" class="no-color-link no-underline-link">
                     <img class="team-box-image" src="assets/image/teamemblems/${teams[1].toUpperCase()}.png" />
                     <h3>${teams[1]}</h3>
                     </a>
