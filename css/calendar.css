@@ -119,81 +119,6 @@
     border: 1px solid #cccccc4f;
 }
 
-
-
-.event-container {
-    margin: 10px 0;
-    border-radius: 10px;
-    overflow: hidden;
-    border: 1px solid #ccccccaa;
-}
-
-.event-header {
-    margin: 3px 0; 
-    font-size:20px; 
-    opacity: 0.7;
-}
-
-.team-box-container {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    overflow: visible;
-}
-
-.match-details-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 10px;
-}
-
-.match-date-time-box {
-    display: flex;
-    gap: 15px;
-}
-
-.match-detail-container {
-    display: flex;
-    gap: 5px;
-    align-items: center;
-}
-
-.match-season {
-    margin: 5px;
-}
-
-.team-box {
-    flex: 1;
-    text-align: center;
-    padding: 20px;
-    font-size: 10px;
-}
-
-.team-box-image {
-    max-height: 100px;
-    max-width: 100px;
-}
-
-.team-box-name {
-    color: white;
-}
-
-.score-box {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    color: var(--accent-color);
-    padding: 20px 20px;
-    border-radius: 10px;
-    font-size: 30px;
-    font-weight: bold;
-}
-
-
 @media screen and (max-width: 767px) {
     .calendar {
         flex: 0 0 100%;
@@ -237,16 +162,5 @@
         width: clamp(3px, 2vw, 15px);
         height: clamp(1px, 0.5vw, 5px);
         margin: 0;
-    }
-
-
-    .team-box-image {
-        max-height: 60px;
-        max-width: 60px;
-    }
-
-    .score-box {
-        font-size: 20px;
-        padding: 10px 10px;
     }
 }
