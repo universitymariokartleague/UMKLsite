@@ -296,7 +296,7 @@ function showDailyLog(date, dayCell) {
                 const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
                 let timeString = entry.time || '00:00';
                 if (/^\d{2}:\d{2}$/.test(timeString)) timeString += ':00';
-                const formattedMatchTime = new Date(`1970-01-01T${timeString}`).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit'});
+                const formattedMatchTime = new Date(`1970-01-01T${timeString}`).toLocaleTimeString(locale, { hour: 'numeric', minute: '2-digit' });
                 return `
                     <div class="event-container">
                         <div class="team-box-container">

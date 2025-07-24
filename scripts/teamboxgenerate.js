@@ -17,7 +17,8 @@ function generateTeamHTML(team) {
             <hr>
             <div class="${team.class_name} team">
                 <span>${team.team_name}</span>
-                <img src="${team.logo_src}" alt="${team.team_name} team logo" class="team-logo">
+                <img src="${team.logo_src}" alt="${team.team_name} team logo" class="team-logo"
+                onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
             </div>
             <hr>
             <div class="institution">${team.team_full_name}</div>
