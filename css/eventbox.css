@@ -3,16 +3,7 @@
     border-radius: 10px;
     overflow: hidden;
     border: 1px solid #ccccccaa;
-    animation: fadeInEventBox 0.5s ease;
 }
-
-.event-header {
-    margin: 3px 0; 
-    font-size:20px; 
-    opacity: 0.7;
-}
-
-
 
 .team-box-container {
     position: relative;
@@ -41,14 +32,18 @@
 }
 
 .match-season {
-    margin: 5px;
+    margin: 0px;
+}
+
+.match-description {
+    padding: 0px 15px 5px 15px;
 }
 
 .team-box {
     flex: 1;
     text-align: center;
     padding: 20px;
-    font-size: 10px;
+    font-size: clamp(10px, 2vw, 14px);
 }
 
 .team-box-image {
@@ -71,6 +66,8 @@
     border-radius: 10px;
     font-size: 30px;
     font-weight: bold;
+    -webkit-user-select: none;
+	user-select: none;
 }
 
 @media screen and (max-width: 767px) {
@@ -82,14 +79,5 @@
     .score-box {
         font-size: 20px;
         padding: 10px 10px;
-    }
-}
-
-@keyframes fadeInEventBox {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
     }
 }

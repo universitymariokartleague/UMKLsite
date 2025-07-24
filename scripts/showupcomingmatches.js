@@ -4,8 +4,10 @@
 */
 
 const upcomingMatchesBox = document.getElementById("upcomingMatchesBox");
+const upcomingMatchesError = document.getElementById("upcomingMatchesError");
 const MATCH_LENGTH_MINS = 90;
 let matchData = {};
+let teamColors = {};
 
 let refreshTimer = null;
 
@@ -33,6 +35,30 @@ async function getMatchDataFallback() {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
     matchData = await response.json();
+}
+
+async function getTeamcolors() {
+    return fetch('https://api.umkl.co.uk/teamcolors', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: "{}"
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    });
+}
+
+async function getTeamcolorsFallback() {
+    const response = await fetch(`database/teamcolorsfallback.json`);
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    teamColors = await response.json();
 }
 
 function showUpcomingMatch() {
@@ -64,17 +90,27 @@ function showUpcomingMatch() {
         let html = `<h2>Upcoming Matches</h2>
         <a href="pages/matches/">View all matches</a>
         <div class="after-title match-container-list">`;
-        matches.forEach(match => {
-            const matchDateStr = (matchData[todayStr]?.includes(match) ? todayStr : tomorrowStr);
+        matches.forEach(entry => {
+            function createTeamObject(teamName) {
+                return {
+                    team_name: teamName,
+                    class_name: teamName.replace(/\s+/g, ''),
+                    link: `pages/teams/details/?team=${teamName}`
+                };
+            }
+
+            const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
+            const matchDateStr = (matchData[todayStr]?.includes(entry) ? todayStr : tomorrowStr);
             const formattedDate = new Date(matchDateStr).toLocaleDateString(locale, { dateStyle: 'long' });
-            const teams = match.teamsInvolved || [];
-            let formattedTime = match.time;
+            let timeString = entry.time || '00:00';
+            if (/^\d{2}:\d{2}$/.test(timeString)) timeString += ':00';
+            const formattedMatchTime = new Date(`1970-01-01T${timeString}`).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit'});
+            
             let isLive = false;
-            if (match.time) {
-                const [hours, minutes] = match.time.split(':');
+            if (entry.time) {
+                const [hours, minutes] = entry.time.split(':');
                 const dateObj = new Date(matchDateStr);
                 dateObj.setHours(Number(hours), Number(minutes), 0, 0);
-                formattedTime = dateObj.toLocaleTimeString(locale, { timeStyle: 'short' });
 
                 const now = new Date();
                 const matchStart = dateObj;
@@ -83,44 +119,65 @@ function showUpcomingMatch() {
                     isLive = true;
                 }
             }
-            html += `<div class="match-container">
-                <div class="team-box">
-                    <a href="pages/teams/details/?team=${teams[0]}" class="no-color-link no-underline-link">
-                    <img class="team-box-image" src="assets/media/teamemblems/${teams[0].toUpperCase()}.png" />
-                    <h3>${teams[0]}</h3>
-                    </a>
+            html += `            
+            <div class="event-container">
+                <div class="team-box-container">
+                    <div class="team-box ${team1.class_name}">
+                        <a class="no-underline-link no-color-link" href="${team1.link}">
+                            <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
+                            onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                            <h2><a class="no-underline-link no-color-link" href="${team1.link}">${team1.team_name}</a></h2>
+                        </a>
+                    </div>
+                    <div class="score-box">VS</div>       
+                    <div class="team-box ${team2.class_name}">
+                        <a class="no-underline-link no-color-link" href="${team2.link}">
+                            <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
+                            onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                            <h2>${team2.team_name}</h2>
+                        </a>
+                    </div>
                 </div>
-                <div class="vs-box"><h1>VS</h1></div>
-                <div class="team-box">
-                    <a href="pages/teams/details/?team=${teams[1]}" class="no-color-link no-underline-link">
-                    <img class="team-box-image" src="assets/media/teamemblems/${teams[1].toUpperCase()}.png" />
-                    <h3>${teams[1]}</h3>
-                    </a>
-                </div>
-                <div class="info-container">
-                    <div class="match-details-box">
+                <div class="match-details-box">
+                    <div class="match-date-time-box">
                         <div class="match-detail-container">
                             <i class="fa-solid fa-calendar-days"></i>
                             <h3>${formattedDate}</h3>
                         </div>
                         <div class="match-detail-container">
                             <i class="fa-solid fa-clock"></i>
-                            <h3><div class="heading-wrapper">${formattedTime}${isLive ? '<div class="live-dot"></div>' : ''}</div></h3>
+                            <h3><div class="heading-wrapper">${formattedMatchTime}${isLive ? '<div class="live-dot"></div>' : ''}</div></h3>
                         </div>
                     </div>
-                    <span>
+                    <div>
                         <a href="https://www.youtube.com/@universitymariokartleague/streams" target="_blank">Watch here</a> | 
                         <a href="pages/matches/?date=${matchDateStr}">View details</a>
-                    </span>
-                    <span class="settings-extra-info">${match.testMatch ? "This is a test match" : ""}</span>
+                    </div>
+                    <p class="match-season">${entry.testMatch ? "<span class='settings-extra-info'>Test match</span>" : `Season ${entry.season}`}</p>
                 </div>
-            </div>`;
+            </div>
+            `;
         });
         html += `</div><hr />`;
 
         upcomingMatchesBox.classList.add('fade-in');
         upcomingMatchesBox.innerHTML += html;
     }
+}
+
+function makeTeamsColorStyles() {
+    const styleSheet = document.createElement("style");
+
+    teamColors.forEach((team) => {
+        styleSheet.innerText += `
+            .${team.team_name.replace(/\s+/g, '')} {
+                cursor: pointer;
+                background-color: ${team.team_color};
+            }
+        `
+    })
+
+    document.head.appendChild(styleSheet);
 }
 
 document.addEventListener('startDayChange', () => {
@@ -133,29 +190,33 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     try {
         matchData = await getMatchData();
+        teamColors = await getTeamcolors();
     } catch (error) {
         if (error && error.message && error.message.includes('429')) {
-            upcomingMatchesBox.innerHTML = `<blockquote class="fail"><b>API error</b><br>Your device or network is sending too many requests, so you have been rate-limited. Please try again later.</blockquote><hr>`;
+            upcomingMatchesError.innerHTML = `<blockquote class="fail"><b>API error</b><br>Your device or network is sending too many requests, so you have been rate-limited. Please try again later.</blockquote>`;
             return;
         } else {
             console.debug(`%cshowupcomingmatches.js %c> %cAPI failed - using fallback information...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
             await getMatchDataFallback();
+            await getTeamcolorsFallback();
 
-            upcomingMatchesBox.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote><hr>`;
+            upcomingMatchesError.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
 
             if (refreshTimer) clearTimeout(refreshTimer);
             const retryFetch = async () => {
             try {
                 if (typeof retryCount === 'undefined') {
-                window.retryCount = 1;
+                    window.retryCount = 1;
                 } else {
-                window.retryCount++;
+                    window.retryCount++;
                 }
                 matchData = await getMatchData();
-                upcomingMatchesBox.innerHTML = "";
+                teamColors = await getTeamcolors();
+                upcomingMatchesError.innerHTML = "";
+                makeTeamsColorStyles();
                 showUpcomingMatch();
             } catch (err) {
-                upcomingMatchesBox.innerHTML = `<blockquote class="fail"><b>API error - Retrying: attempt ${window.retryCount}...</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote><hr>`;
+                upcomingMatchesError.innerHTML = `<blockquote class="fail"><b>API error - Retrying: attempt ${window.retryCount}...</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
                 refreshTimer = setTimeout(retryFetch, 2000);
             }
             };
@@ -163,6 +224,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    makeTeamsColorStyles();
     showUpcomingMatch();
     console.debug(`%cshowupcomingmatches.js %c> %cMatch data loaded in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
 });

@@ -323,8 +323,9 @@ function showDailyLog(date, dayCell) {
                                     <h2>${formattedMatchTime}</h2>
                                 </div>
                             </div>
-                            <p class="match-season">${entry.testMatch ? "Test Match" : `Season ${entry.season}`}</p>
+                            <p class="match-season">${entry.testMatch ? "<span class='settings-extra-info'>Test match</span>" : `Season ${entry.season}`}</p>
                         </div>
+                        <p class="match-description">${autoLink(entry.description)}</p>
                     </div>
                 `;
             }).join('')}
