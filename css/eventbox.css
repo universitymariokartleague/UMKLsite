@@ -49,6 +49,8 @@
 .team-box-image {
     max-height: 100px;
     max-width: 100px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
 }
 
 .team-box-name {

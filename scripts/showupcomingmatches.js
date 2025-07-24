@@ -125,6 +125,7 @@ function showUpcomingMatch() {
                     <div class="team-box ${team1.class_name}">
                         <a class="no-underline-link no-color-link" href="${team1.link}">
                             <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
+                            onload="this.style.opacity=1" 
                             onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
                             <h2><a class="no-underline-link no-color-link" href="${team1.link}">${team1.team_name}</a></h2>
                         </a>
@@ -133,6 +134,7 @@ function showUpcomingMatch() {
                     <div class="team-box ${team2.class_name}">
                         <a class="no-underline-link no-color-link" href="${team2.link}">
                             <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
+                            onload="this.style.opacity=1" 
                             onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
                             <h2>${team2.team_name}</h2>
                         </a>
