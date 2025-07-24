@@ -801,52 +801,7 @@ blockquote {
     font-style: italic;
 }
 
-/* next match box */
-.match-container {
-    display: flex;
-    justify-content: center;
-    align-items: center; /* Vertically center items */
-    flex-wrap: wrap;
-    
-    border-radius: 10px;
-    border: 1px solid #ccccccaa;
-    padding: 10px;
-}
 
-.match-details-box {
-    display: flex;
-	justify-content: center;
-    margin-bottom: 5px;
-    gap: 20px;
-}
-
-.match-container.special {
-    animation: rainbow 4s linear infinite;
-}
-
-.team-box {
-    flex: 1;
-    min-width: 50px;
-    max-width: 300px;
-    margin: auto;
-    text-align: center;
-    padding: 10px;
-    border-radius: 15px;
-}
-
-.team-box-image {
-    height: 25vw;
-    width: 25vw;
-    max-height: 100px;
-    max-width: 100px;
-}
-
-.vs-box {
-    flex: 0 0 105px;
-    font-size: 30px;
-    padding: 10px;
-    text-align: center;
-}
 
 #JSTeamBox {
     opacity: 0;
@@ -1003,10 +958,7 @@ blockquote {
     }
 }
 
-.match-detail-container {
-    gap: 10px;
-    align-items: center;
-}
+
 
 .info-container {
 	display: flex;

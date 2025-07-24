@@ -298,15 +298,44 @@ function showDailyLog(date, dayCell) {
                 if (/^\d{2}:\d{2}$/.test(timeString)) timeString += ':00';
                 const formattedMatchTime = new Date(`1970-01-01T${timeString}`).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit'});
                 return `
-                    <div class="event">
-                        <p class="event-header">${formattedMatchTime}</p>
-                        <h2 style="margin-bottom: 10px;">
-                            <span class=${team1.class_name}><a class="no-color-link no-underline-link" href="${team1.link}">${team1.team_name}</a></span> 
-                            VS 
-                            <span class="${team2.class_name}"><a class="no-color-link no-underline-link" href="${team2.link}">${team2.team_name}</a></span>
-                        </h2>
-                        <p>${autoLink(entry.description.replace(/(?:\r\n|\r|\n)/g, '<br/>'))}</p>
-                        <span class="settings-extra-info">This is a ${entry.testMatch ? "test" : `Season ${entry.season}`} match.</span>
+                    <div class="event-container">
+
+                                <div class="team-box-container">
+
+
+                                    <div class="team-box ${team1.class_name}">
+                                    <a class="no-underline-link no-color-link" href="${team1.link}">
+                                        <img class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
+                                        onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                                        <h2><a class="no-underline-link no-color-link" href="${team1.link}">${team1.team_name}</a></h2>
+                                    </a>
+                                        </div>
+                                    
+
+                                    <div class="score-box">VS</div>
+
+                                    
+                                    <div class="team-box ${team2.class_name}">
+                                    <a class="no-underline-link no-color-link" href="${team2.link}">
+                                        <img class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
+                                        onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                                        <h2>${team2.team_name}</h2>
+                                    </a>
+                                    </div>
+                                    
+
+                                </div>
+
+                                <div class="match-details-box">
+                                    <div class="match-date-time-box">
+
+                                        <div class="match-detail-container">
+                                            <i class="fa-solid fa-clock"></i>
+                                            <h2>${formattedMatchTime}</h2>
+                                        </div>
+                                    </div>
+                                    <p class="match-season">${entry.testMatch ? "Test Match" : `Season ${entry.season}`}</p>
+                                </div>
                     </div>
                 `;
             }).join('')}
@@ -382,10 +411,7 @@ function makeTeamsColorStyles() {
         styleSheet.innerText += `
             .${team.team_name.replace(/\s+/g, '')} {
                 cursor: pointer;
-                padding: 0 3px;
-                border: 2px solid ${team.team_color};
-                background-color: ${team.team_color}aa;
-                border-radius: 5px;
+                background-color: ${team.team_color};
             }
         `
     })
