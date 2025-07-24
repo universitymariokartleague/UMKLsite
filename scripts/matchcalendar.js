@@ -299,43 +299,32 @@ function showDailyLog(date, dayCell) {
                 const formattedMatchTime = new Date(`1970-01-01T${timeString}`).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit'});
                 return `
                     <div class="event-container">
-
-                                <div class="team-box-container">
-
-
-                                    <div class="team-box ${team1.class_name}">
-                                    <a class="no-underline-link no-color-link" href="${team1.link}">
-                                        <img class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
-                                        onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
-                                        <h2><a class="no-underline-link no-color-link" href="${team1.link}">${team1.team_name}</a></h2>
-                                    </a>
-                                        </div>
-                                    
-
-                                    <div class="score-box">VS</div>
-
-                                    
-                                    <div class="team-box ${team2.class_name}">
-                                    <a class="no-underline-link no-color-link" href="${team2.link}">
-                                        <img class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
-                                        onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
-                                        <h2>${team2.team_name}</h2>
-                                    </a>
-                                    </div>
-                                    
-
+                        <div class="team-box-container">
+                            <div class="team-box ${team1.class_name}">
+                                <a class="no-underline-link no-color-link" href="${team1.link}">
+                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
+                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                                    <h2><a class="no-underline-link no-color-link" href="${team1.link}">${team1.team_name}</a></h2>
+                                </a>
+                            </div>
+                            <div class="score-box">VS</div>       
+                            <div class="team-box ${team2.class_name}">
+                                <a class="no-underline-link no-color-link" href="${team2.link}">
+                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
+                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                                    <h2>${team2.team_name}</h2>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="match-details-box">
+                            <div class="match-date-time-box">
+                                <div class="match-detail-container">
+                                    <i class="fa-solid fa-clock"></i>
+                                    <h2>${formattedMatchTime}</h2>
                                 </div>
-
-                                <div class="match-details-box">
-                                    <div class="match-date-time-box">
-
-                                        <div class="match-detail-container">
-                                            <i class="fa-solid fa-clock"></i>
-                                            <h2>${formattedMatchTime}</h2>
-                                        </div>
-                                    </div>
-                                    <p class="match-season">${entry.testMatch ? "Test Match" : `Season ${entry.season}`}</p>
-                                </div>
+                            </div>
+                            <p class="match-season">${entry.testMatch ? "Test Match" : `Season ${entry.season}`}</p>
+                        </div>
                     </div>
                 `;
             }).join('')}
