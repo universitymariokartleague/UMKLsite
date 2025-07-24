@@ -66,32 +66,14 @@ async function generateTeamBoxes(teamData) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.add('fade-in');
     const listView = localStorage.getItem("teamsListView") == 1 || false;
-    const placeholder = "assets/media/teamemblems/DEFAULT.png";
+    const placeholderLogo = "assets/media/teamemblems/DEFAULT.png";
 
-    function checkImage(url) {
-        return new Promise((resolve) => {
-            const img = new Image();
-            img.onload = () => resolve(true);
-            img.onerror = () => resolve(false);
-            img.src = url;
-        });
+    for (let i = 0; i < teamData.length; i++) {
+        const team = teamData[i];
+        team.logo_src = `assets/media/teamemblems/${team.team_name.toUpperCase()}.png`
+        team.class_name = team.team_name.replace(/\s+/g, '')
+        team.link_name = team.team_name
     }
-
-    // Create an array of promises for all image checks
-    const checkPromises = teamData.map(team => {
-        const logoUrl = `assets/media/teamemblems/${team.team_name.toUpperCase()}.png`;
-        return checkImage(logoUrl).then(exists => {
-            if (!exists) {
-                console.debug(`%cteamboxgenerate.js %c> %cTeam emblem for ${team.team_name} not found, using DEFAULT`, "color:#9452ff", "color:#fff", "color:#c29cff");
-            }
-            team.logo_src = exists ? logoUrl : placeholder;
-            team.class_name = team.team_name.replace(/\s+/g, '');
-            team.link_name = team.team_name;
-        });
-    });
-
-    // Await all checks in parallel
-    await Promise.all(checkPromises);
 
     if (listView) {
         let legacyListView = localStorage.getItem("legacyListView") == 1 || false;
@@ -135,7 +117,8 @@ async function generateTeamBoxes(teamData) {
                 [
                     team.season_position, 
                     `<div class="team-name-grid-flex">
-                        <img src="${team.logo_src}" alt="${team.team_name} team logo" class="team-logo-grid">
+                        <img src="${team.logo_src}" alt="${team.team_name} team logo" class="team-logo-grid"
+                        onerror="this.onerror=null; this.src='${placeholderLogo}';"/>
                             <div class="team-text-flex">
                             <h3>${team.team_name}</h3>
                         <span class="team-list-full-institution">${team.team_full_name}</span>
@@ -183,7 +166,8 @@ async function generateTeamBoxes(teamData) {
                 row.innerHTML = `
                     <div class="teamPosition">${team.season_position}</div>
                     <div class="teamColour" style="background-color:${team.team_color}"></div>
-                    <img class="teamLogo" src="${team.logo_src}" alt="${team.team_name} team logo">
+                    <img class="teamLogo" src="${team.logo_src}" alt="${team.team_name} team logo"
+                    onerror="this.onerror=null; this.src='${placeholderLogo}';"/>
                     <div class="teamName">${team.team_name.toUpperCase()}</div>
                     <div class="teamPointsArea">
                         <div class="teamPoints">${team.team_season_points}</div>

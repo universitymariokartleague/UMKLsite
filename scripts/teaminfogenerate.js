@@ -7,7 +7,8 @@
 
 const teamBoxFormatHTML = `
     <div class="team-info-wrapper">
-        <img width=200 height=200 src="{{logoSrc}}" alt="{{teamName}}'s team logo" title="{{teamName}}'s team logo"  class="team-info-logo">
+        <img width=200 height=200 src="{{logoSrc}}" alt="{{teamName}}'s team logo" title="{{teamName}}'s team logo"  class="team-info-logo"
+        onerror="this.onerror=null; this.src='{{placeholderLogo}}';"/>
         <hr>
         <div class="team-info-text">
             {{extraFields}}
@@ -67,23 +68,10 @@ async function generateTeamBox(teamData, showError) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.remove('fade-in');
 
-    try {
-        const teamNameUpper = teamData.team_name.toUpperCase();
-        const logoUrl = `assets/media/teamemblems/hres/${teamNameUpper}.png`;
-
-        await new Promise((resolve, reject) => {
-            const img = new Image();
-            img.onload = resolve;
-            img.onerror = reject;
-            img.src = logoUrl;
-        });
-
-        teamData.logo_src = logoUrl;
-
-    } catch (error) {
-        teamData.logo_src = 'assets/media/teamemblems/hres/DEFAULT.png';
-        console.debug(`%cteaminfogeenrate.js %c> %cTeam emblem for ${teamData.team_name} not found, using DEFAULT`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
-    }
+    const placeholderLogo = "assets/media/teamemblems/DEFAULT.png";
+    const teamNameUpper = teamData.team_name.toUpperCase();
+    const logoUrl = `assets/media/teamemblems/hres/${teamNameUpper}.png`;
+    teamData.logo_src = logoUrl;
 
     const extraFields = buildTeamInfoTable(teamData);
     const currentFields = buildTeamInfoTable(teamData, true);
@@ -94,6 +82,7 @@ async function generateTeamBox(teamData, showError) {
         .replace("{{className}}", teamData.class_name)
         .replace("{{teamNameLower}}", teamData.team_name.toLowerCase())
         .replace("{{logoSrc}}", teamData.logo_src)
+        .replace("{{placeholderLogo}}", placeholderLogo)
         .replace("{{extraFields}}", extraFields)
         .replace("{{currentFields}}", currentFields);
 
