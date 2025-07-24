@@ -342,7 +342,7 @@ a:hover {
 }
 
 .no-underline-link {
-    color: var(--text-color)!important; 
+    /* color: var(--text-color)!important;  */
     text-decoration: none;
     transition: none!important;
 }
