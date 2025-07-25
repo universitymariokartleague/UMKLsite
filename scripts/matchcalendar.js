@@ -294,9 +294,22 @@ function showDailyLog(date, dayCell) {
                 }
 
                 const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
+
+                function uses12HourClock(locale) {
+                    const test = new Date('2020-01-01T13:00');
+                    return test.toLocaleTimeString(locale).toLowerCase().includes('pm');
+                }
                 let timeString = entry.time || '00:00';
                 if (/^\d{2}:\d{2}$/.test(timeString)) timeString += ':00';
-                const formattedMatchTime = new Date(`1970-01-01T${timeString}`).toLocaleTimeString(locale, { hour: 'numeric', minute: '2-digit' });
+                const is12Hour = uses12HourClock(locale);
+                const formattedMatchTime = new Date(`1970-01-01T${timeString}`).toLocaleTimeString(locale, {
+                    hour: is12Hour ? 'numeric' : '2-digit',
+                    minute: '2-digit',
+                    hour12: is12Hour,
+                });
+
+                console.log(entry.results)
+
                 return `
                     <div class="event-container">
                         <div class="team-box-container">
@@ -309,6 +322,7 @@ function showDailyLog(date, dayCell) {
                                 </a>
                             </div>
                             <div class="score-box">VS</div>       
+                            ${formatResults(entry.results)}     
                             <div class="team-box ${team2.class_name}">
                                 <a class="no-underline-link no-color-link" href="${team2.link}">
                                     <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
@@ -340,7 +354,30 @@ function showDailyLog(date, dayCell) {
     }
 }
 
+function formatResults(results) {
+    if (!results || results.length !== 2) {
+        return '';
+    }
+
+    const [_, teamAScore, teamAPenalty] = results[0];
+    const [__, teamBScore, teamBPenalty] = results[1];
+    const hasPenalty = teamAPenalty !== 0 || teamBPenalty !== 0;
+
+    return `
+        <div class="score-box points-box">
+            ${teamAScore} - ${teamBScore}
+            ${hasPenalty ? 
+            `
+                <p class="penalty-text">
+                    -${teamAPenalty}	 	 	 	 	 -${teamBPenalty}
+                </p>
+            ` : ''}
+        </div>
+    `.trim();
+}
+
 function autoLink(text) {
+    text = text.replaceAll("\n", "<br>")
     const urlRegex = /((https?:\/\/|www\.)[^\s<]+)/gi;
     return text.replace(urlRegex, function(url) {
         let href = url;

@@ -31,6 +31,10 @@
     align-items: center;
 }
 
+.match-result {
+    margin: 0px;
+}
+
 .match-season {
     margin: 0px;
 }
@@ -64,12 +68,25 @@
     transform: translate(-50%, -50%);
     background-color: white;
     color: var(--accent-color);
-    padding: 20px 20px;
+    padding: 20px;
     border-radius: 10px;
     font-size: 30px;
     font-weight: bold;
     -webkit-user-select: none;
 	user-select: none;
+}
+
+.points-box {
+    top: 87.5%;
+    font-size: 16px;
+    padding: 5px;
+}
+
+.penalty-text {
+    font-size: 10px;
+    margin: 0;
+    line-height: 0.5;
+    text-align: center;
 }
 
 @media screen and (max-width: 767px) {
