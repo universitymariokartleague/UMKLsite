@@ -308,8 +308,6 @@ function showDailyLog(date, dayCell) {
                     hour12: is12Hour,
                 });
 
-                console.log(entry.results)
-
                 return `
                     <div class="event-container">
                         <div class="team-box-container">
