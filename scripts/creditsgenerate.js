@@ -6,25 +6,25 @@
 const contributors = [
     {
         name: "h.omeless",
-        discord: "https://discordapp.com/users/330762336669532161",
+        discord: "https://discord.com/users/330762336669532161",
         github: "https://github.com/h-omeless/"
     },
     {
         name: "skjamm",
-        discord: "https://discordapp.com/users/309400933870206978"
+        discord: "https://discord.com/users/309400933870206978"
     },
     {
         name: "theenderdiamond",
-        discord: "https://discordapp.com/users/427910181830131712"
+        discord: "https://discord.com/users/427910181830131712"
     },
     {
         name: "tsun1509",
-        discord: "https://discordapp.com/users/342974732938903563",
+        discord: "https://discord.com/users/342974732938903563",
         github: "https://github.com/TusharSundarka/"
     },
     {
         name: "zyposts",
-        discord: "https://discordapp.com/users/1202021758685949994",
+        discord: "https://discord.com/users/1202021758685949994",
         github: "https://github.com/zydezu/",
         email: "mailto:webmaster@umkl.co.uk"
     }
@@ -61,14 +61,14 @@ function renderContributor(person) {
         .filter(platform => person[platform.key])
         .map(platform =>
             `<a class="no-underline-link" href="${person[platform.key]}" title="${platform.title}">
-                <span class="${platform.icon}"></span>
+                <span class="no-color-link ${platform.icon}"></span>
             </a>`
         )
         .join("");
 
     return `
         <div class="credit-container">
-            <img src="assets/media/credits/${person.name}.png" width="50px" height="50px">
+            <img onload="this.style.opacity=1" class="credit-image" src="assets/media/credits/${person.name}.png" width="50px" height="50px">
             <div class="credit-info">
                 <b>${person.name}</b>
                 <div class="credit-socials">${socials}</div>

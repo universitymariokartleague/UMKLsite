@@ -1238,7 +1238,6 @@ blockquote {
     height: 35px;
 }
 
-
 @media screen and (max-width: 767px) {
     .team-list-view-table th {
         padding: 10px 5px;
@@ -1267,45 +1266,6 @@ blockquote {
     .team-logo-grid {
         width: 25px; 
         height: 25px;
-    }
-}
-
-#creditGenerate {
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
-}
-
-#creditGenerate.fade-in {
-    opacity: 1;
-}
-
-.credits-wrapper {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-}
-
-.credits-title {
-    margin-top: 0.5em;
-    margin-bottom: 0.2em;
-}
-
-.credit-container {
-    border: 1px solid #ccccccaa;
-    border-radius: 10px;
-    padding: 10px;
-    display: flex;
-    gap: 10px;
-}
-
-.credit-container img {
-    border-radius: 5px;
-}
-
-@media screen and (max-width: 767px) {
-    .credits-wrapper {
-        display: flex;
-        flex-direction: column;
     }
 }
 
