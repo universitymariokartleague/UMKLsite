@@ -9,6 +9,7 @@ import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareText, sh
 const weekdayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const weekdayNamesFull = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const DEFAULTSTARTDAY = 1;
+const MATCH_LENGTH_MINS = 90;
 
 const expandedLog = document.getElementById('expandedLog');
 const calendarError = document.getElementById("calendarError")
@@ -308,6 +309,20 @@ function showDailyLog(date, dayCell) {
                 hour12: is12Hour,
             });
 
+            let isLive = false;
+            if (entry.time) {
+                const [hours, minutes] = entry.time.split(':');
+                const dateObj = new Date(formattedDate);
+                dateObj.setHours(Number(hours), Number(minutes), 0, 0);
+
+                const now = new Date();
+                const matchStart = dateObj;
+                const matchEnd = new Date(matchStart.getTime() + MATCH_LENGTH_MINS * 60 * 1000);
+                if (now >= matchStart && now <= matchEnd) {
+                    isLive = true;
+                }
+            }
+
             const resultsHTML = formatResults(entry.results);
             if (entry.ytLinks) {
                 team1.ytLink = entry.ytLinks[0]
@@ -315,62 +330,63 @@ function showDailyLog(date, dayCell) {
             }
 
             return `
-                    <div class="event-container">
-                        <div class="team-box-container">
-                            <div class="team-background left ${team1.class_name}"></div>
-                            <div class="team-background right ${team2.class_name}"></div>
-                            <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.png"/>
+            <div class="event-container">
+                <div class="team-box-container">
+                    <div class="team-background left ${team1.class_name}"></div>
+                    <div class="team-background right ${team2.class_name}"></div>
+                    <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.png"/>
 
-                            <div class="event-overlay">
-                                <div class="event-box-team">
-                                    <a class="no-underline-link no-color-link" href="${team1.link}">
-                                        <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
-                                        alt="${team1.team_name} team logo"
-                                        onload="this.style.opacity=1"
-                                        onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
-                                        <h2>${team1.team_name}</h2>
-                                    </a>
-                                    <div class="youtube-box left-team">
-                                        ${team1.ytLink ? `
-                                        <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
-                                        href="${team1.ytLink}" target="_blank" title="View the archived livestream"></a>` : ''}
-                                    </div>
-                                </div>
-                            
-                                <div class="score-box">${resultsHTML ? formatResults(entry.results) : "VS"}</div>       
-
-                                <div class="event-box-team">
-                                    <a class="no-underline-link no-color-link" href="${team2.link}">
-                                        <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
-                                        alt="${team2.team_name} team logo"
-                                        onload="this.style.opacity=1" 
-                                        onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
-                                        <h2>${team2.team_name}</h2>
-                                    </a>
-                                    <div class="youtube-box right-team">
-                                        ${team2.ytLink ? `
-                                        <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
-                                        href="${team2.ytLink}" target="_blank" title="View the archived livestream"></a>` : ''}
-                                    </div>
-                                </div>
+                    <div class="event-overlay">
+                        <div class="event-box-team">
+                            <a class="no-underline-link no-color-link" href="${team1.link}">
+                                <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
+                                alt="${team1.team_name} team logo"
+                                onload="this.style.opacity=1"
+                                onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                                <h2>${team1.team_name}</h2>
+                            </a>
+                            <div class="youtube-box left-team">
+                                ${team1.ytLink ? `
+                                <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
+                                href="${team1.ytLink}" target="_blank" title="View the archived livestream"></a>` : ''}
                             </div>
                         </div>
 
-                        <div class="match-details-box">
-                            <div class="match-date-time-box">
-                                <div class="match-detail-container">
-                                    <i class="fa-solid fa-clock"></i>
-                                    <h2>${formattedMatchTime}</h2>
-                                </div>
+                        <div class="score-box">${resultsHTML ? formatResults(entry.results) : "VS"}</div>       
+
+                        <div class="event-box-team">
+                            <a class="no-underline-link no-color-link" href="${team2.link}">
+                                <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
+                                alt="${team2.team_name} team logo"
+                                onload="this.style.opacity=1" 
+                                onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                                <h2>${team2.team_name}</h2>
+                            </a>
+                            <div class="youtube-box right-team">
+                                ${team2.ytLink ? `
+                                <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
+                                href="${team2.ytLink}" target="_blank" title="View the archived livestream"></a>` : ''}
                             </div>
-                            <p class="match-season">${entry.testMatch ? "<span class='settings-extra-info'>Test match</span>" : `Season ${entry.season}`}</p>
                         </div>
-                        <details class="match-box">
-                            <summary>Match details</summary>
-                            <p class="match-description">${autoLink(entry.description)}</p>
-                        </details>
                     </div>
-                `;
+                </div>
+
+                <div class="match-details-box">
+                    <div class="match-date-time-box">
+                        <div class="match-detail-container">
+                            <i class="fa-solid fa-clock"></i>
+                            <h2>${formattedMatchTime}</h2>
+                            ${isLive ? '<div class="live-dot"></div>' : ''}
+                        </div>
+                    </div>
+                    <p class="match-season">${entry.testMatch ? "<span class='settings-extra-info'>Test match</span>" : `Season ${entry.season}`}</p>
+                </div>
+                <details class="match-box">
+                    <summary>Match details</summary>
+                    <p class="match-description">${autoLink(entry.description)}</p>
+                </details>
+            </div>
+            `;
         }).join('')}
         `;
 

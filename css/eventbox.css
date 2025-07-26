@@ -31,6 +31,10 @@
     align-items: center;
 }
 
+.match-detail-container .live-dot {
+    margin-left: 5px;
+}
+
 .match-result {
     margin: 0px;
 }

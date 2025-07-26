@@ -2,6 +2,19 @@
     "2024-10-12": [
         {
             "description": "A 6v6 match between York and Staffs. This was the first match in the UMKL!",
+            "eventID": "1",
+            "results": [
+                [
+                    1,
+                    586,
+                    0
+                ],
+                [
+                    2,
+                    398,
+                    0
+                ]
+            ],
             "season": 1,
             "teamsInvolved": [
                 "York",
@@ -14,6 +27,19 @@
     "2024-11-17": [
         {
             "description": "A 6v6 match between Edinburgh and Keele.",
+            "eventID": "2",
+            "results": [
+                [
+                    3,
+                    560,
+                    0
+                ],
+                [
+                    4,
+                    424,
+                    0
+                ]
+            ],
             "season": 1,
             "teamsInvolved": [
                 "Edinburgh",
@@ -26,6 +52,19 @@
     "2024-12-07": [
         {
             "description": "A 6v6 match between Staffs and Keele.",
+            "eventID": "3",
+            "results": [
+                [
+                    2,
+                    572,
+                    0
+                ],
+                [
+                    4,
+                    412,
+                    0
+                ]
+            ],
             "season": 1,
             "teamsInvolved": [
                 "Staffs",
@@ -36,6 +75,19 @@
         },
         {
             "description": "A 6v6 match between York and Edinburgh.",
+            "eventID": "4",
+            "results": [
+                [
+                    1,
+                    588,
+                    0
+                ],
+                [
+                    3,
+                    396,
+                    0
+                ]
+            ],
             "season": 1,
             "teamsInvolved": [
                 "York",
@@ -48,6 +100,19 @@
     "2025-02-01": [
         {
             "description": "A 6v6 match between Staffs and Edinburgh.",
+            "eventID": "5",
+            "results": [
+                [
+                    2,
+                    515,
+                    0
+                ],
+                [
+                    3,
+                    469,
+                    0
+                ]
+            ],
             "season": 1,
             "teamsInvolved": [
                 "Staffs",
@@ -60,6 +125,19 @@
     "2025-02-23": [
         {
             "description": "A 6v6 match between Keele and York. This was the final match of Season 1. The archived stream can be found here: https://www.youtube.com/watch?v=O70A4PCdSas.",
+            "eventID": "6",
+            "results": [
+                [
+                    4,
+                    377,
+                    0
+                ],
+                [
+                    1,
+                    607,
+                    0
+                ]
+            ],
             "season": 1,
             "teamsInvolved": [
                 "Keele",
@@ -72,6 +150,18 @@
     "2025-04-16": [
         {
             "description": "A 6v6 test match between York and Staffs. This served as a test of the Cheep Cheep app and YouTube streaming.\n\nThis match was streamed from both team's perspectives on the UMKL YouTube channel. You can watch those archived streams here: https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH.",
+            "results": [
+                [
+                    1,
+                    456,
+                    0
+                ],
+                [
+                    2,
+                    528,
+                    0
+                ]
+            ],
             "season": 2,
             "teamsInvolved": [
                 "York",
@@ -79,12 +169,28 @@
             ],
             "testMatch": true,
             "time": "18:00",
-            "title": "York VS Staffs"
+            "title": "York VS Staffs (Test Match)",
+            "ytLinks": [
+                "https://www.youtube.com/watch?v=YG_ke9cIKQw",
+                "https://www.youtube.com/watch?v=_BuHHRfPV70"
+            ]
         }
     ],
     "2025-04-21": [
         {
             "description": "A 6v6 test match between Staffs and Birmingham. This served as a test of the Cheep Cheep app and YouTube streaming.\n\nThis match was streamed from both team's perspectives on the UMKL YouTube channel. You can watch those archived streams here: https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH.",
+            "results": [
+                [
+                    2,
+                    439,
+                    0
+                ],
+                [
+                    5,
+                    545,
+                    0
+                ]
+            ],
             "season": 2,
             "teamsInvolved": [
                 "Staffs",
@@ -92,12 +198,28 @@
             ],
             "testMatch": true,
             "time": "18:00",
-            "title": "Staffs VS Birmingham"
+            "title": "Staffs VS Birmingham (Test Match)",
+            "ytLinks": [
+                "https://www.youtube.com/watch?v=AnStfSocdps",
+                "https://www.youtube.com/watch?v=wmlOi7stFBo"
+            ]
         }
     ],
     "2025-04-25": [
         {
             "description": "A 6v6 test match between Staffs and Keele. This served as a test of the Cheep Cheep app and YouTube streaming.\n\nYou can watch those archived streams here: https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH.",
+            "results": [
+                [
+                    2,
+                    562,
+                    30
+                ],
+                [
+                    4,
+                    362,
+                    30
+                ]
+            ],
             "season": 2,
             "teamsInvolved": [
                 "Staffs",
@@ -105,12 +227,28 @@
             ],
             "testMatch": true,
             "time": "18:00",
-            "title": "Staffs VS Keele"
+            "title": "Staffs VS Keele (Test Match)",
+            "ytLinks": [
+                "https://www.youtube.com/watch?v=i4HJjSm27mQ",
+                ""
+            ]
         }
     ],
     "2025-04-26": [
         {
             "description": "A 6v6 test match between York and Glasgow. This served as a test of the Cheep Cheep app and YouTube streaming.\n\nYou can watch those archived streams here: https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH.",
+            "results": [
+                [
+                    1,
+                    599,
+                    0
+                ],
+                [
+                    7,
+                    385,
+                    0
+                ]
+            ],
             "season": 2,
             "teamsInvolved": [
                 "York",
@@ -118,12 +256,28 @@
             ],
             "testMatch": true,
             "time": "18:00",
-            "title": "York VS Glasgow"
+            "title": "York VS Glasgow (Test Match)",
+            "ytLinks": [
+                "https://www.youtube.com/watch?v=g7blGdViwPc",
+                ""
+            ]
         }
     ],
     "2025-04-27": [
         {
             "description": "A 6v6 test match between Staffs and Glasgow. This served as a test of the Cheep Cheep app and YouTube streaming.\n\nYou can watch those archived streams here: https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH.",
+            "results": [
+                [
+                    2,
+                    517,
+                    0
+                ],
+                [
+                    7,
+                    437,
+                    0
+                ]
+            ],
             "season": 2,
             "teamsInvolved": [
                 "Staffs",
@@ -131,24 +285,56 @@
             ],
             "testMatch": true,
             "time": "18:00",
-            "title": "Staffs VS Glasgow"
+            "title": "Staffs VS Glasgow (Test Match)",
+            "ytLinks": [
+                "https://www.youtube.com/watch?v=2Vx9DDlzXKc",
+                ""
+            ]
         },
         {
-            "description": "A 6v6 Test Match between York and Birmingham.\n\nYou can watch those archived streams here: https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH.",
+            "description": "A 6v6 test match between York and Birmingham.\n\nYou can watch those archived streams here: https://www.youtube.com/playlist?list=PLA9y6mUhnL26e2DXoc9qfiyOymYX5UWHH.",
+            "results": [
+                [
+                    1,
+                    567,
+                    0
+                ],
+                [
+                    5,
+                    417,
+                    0
+                ]
+            ],
             "season": 2,
             "teamsInvolved": [
                 "York",
                 "Birmingham"
             ],
             "testMatch": true,
-            "time": "18:00",
-            "title": "York VS Birmingham"
+            "time": "19:30",
+            "title": "York VS Birmingham (Test Match)",
+            "ytLinks": [
+                "https://www.youtube.com/watch?v=MSaF1vmcQgQ",
+                "https://www.youtube.com/watch?v=KH-Nm7Z56Kg"
+            ]
         }
     ],
     "2025-06-13": [
         {
-            "description": "A 6v6 Test Match between York and BIMM. This will serve as a test of the Cheep Cheep app and YouTube streaming. Members of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed on the UMKL YouTube channel. You can visit it here: https://www.youtube.com/@universitymariokartleague.",
+            "description": "A 6v6 test match between York and BIMM. This match serves to test the Cheep Cheep application and live streaming. Members of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed on the UMKL YouTube channel. You can visit it here: https://www.youtube.com/@universitymariokartleague.",
             "eventID": "1379793227741265930",
+            "results": [
+                [
+                    1,
+                    516,
+                    0
+                ],
+                [
+                    6,
+                    468,
+                    0
+                ]
+            ],
             "season": 2,
             "teamsInvolved": [
                 "York",
@@ -156,13 +342,29 @@
             ],
             "testMatch": true,
             "time": "20:00",
-            "title": "York VS BIMM (Test Match)"
+            "title": "York VS BIMM (Test Match)",
+            "ytLinks": [
+                "https://www.youtube.com/watch?v=CknYT-it-jc",
+                "https://www.youtube.com/watch?v=FQ1C8aKLiSA"
+            ]
         }
     ],
     "2025-06-22": [
         {
-            "description": "A 6v6 Test Match between Staffs and Warwick. This will serve as a test of the Cheep Cheep app and YouTube streaming. Members of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed on the UMKL YouTube channel. You can visit the channel here: https://www.youtube.com/@universitymariokartleague.",
+            "description": "A 6v6 test match between Staffs and Warwick. This match serves to test the Cheep Cheep application and live streaming. Members of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed on the UMKL YouTube channel. You can visit the channel here: https://www.youtube.com/@universitymariokartleague.",
             "eventID": "1384191273489137674",
+            "results": [
+                [
+                    2,
+                    549,
+                    0
+                ],
+                [
+                    9,
+                    435,
+                    0
+                ]
+            ],
             "season": 2,
             "teamsInvolved": [
                 "Staffs",
@@ -170,13 +372,29 @@
             ],
             "testMatch": true,
             "time": "18:00",
-            "title": "Staffs VS Warwick (Test Match)"
+            "title": "Staffs VS Warwick (Test Match)",
+            "ytLinks": [
+                "https://www.youtube.com/watch?v=lvwXrmRslO8",
+                ""
+            ]
         }
     ],
     "2025-07-16": [
         {
-            "description": "A 6v6 Test Match between York and Warwick. This will serve as a test of the Cheep Cheep app and YouTube streaming. Members of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed on the UMKL YouTube channel. You can visit the channel here: https://www.youtube.com/@universitymariokartleague.",
+            "description": "A 6v6 test match between York and Warwick. This match serves to test the Cheep Cheep application and live streaming. Members of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed on the UMKL YouTube channel. You can visit the channel here: https://www.youtube.com/@universitymariokartleague.",
             "eventID": "1394365791922688000",
+            "results": [
+                [
+                    1,
+                    587,
+                    0
+                ],
+                [
+                    9,
+                    397,
+                    0
+                ]
+            ],
             "season": 2,
             "teamsInvolved": [
                 "York",
@@ -184,13 +402,29 @@
             ],
             "testMatch": true,
             "time": "20:00",
-            "title": "York VS Warwick (Test Match)"
+            "title": "York VS Warwick (Test Match)",
+            "ytLinks": [
+                "https://www.youtube.com/watch?v=hQJjH37LY88",
+                ""
+            ]
         }
     ],
     "2025-07-23": [
         {
-            "description": "A 6v6 Test Match between York and Liverpool. This will serve as a test of the Cheep Cheep app and YouTube streaming. Members of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed on the UMKL YouTube channel. You can visit the channel here: https://www.youtube.com/@universitymariokartleague.",
+            "description": "A 6v6 test match between York and Liverpool. This match serves to test the Cheep Cheep application and live streaming. Members of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed on the UMKL YouTube channel. You can visit the channel here: https://www.youtube.com/@universitymariokartleague.",
             "eventID": "1397379530766684201",
+            "results": [
+                [
+                    1,
+                    582,
+                    0
+                ],
+                [
+                    10,
+                    402,
+                    0
+                ]
+            ],
             "season": 2,
             "teamsInvolved": [
                 "York",
@@ -198,13 +432,18 @@
             ],
             "testMatch": true,
             "time": "20:00",
-            "title": "York VS Liverpool (Test Match)"
+            "title": "York VS Liverpool (Test Natch)",
+            "ytLinks": [
+                "https://www.youtube.com/watch?v=o46vrQVSgug",
+                "https://www.youtube.com/watch?v=wRWdLxkUD5w"
+            ]
         }
     ],
     "2025-07-30": [
         {
-            "description": "A 6v6 Test Match between Staffs and Cambridge. This will serve as a test of the Cheep Cheep app and YouTube streaming. Members of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed on the UMKL YouTube channel. You can visit the channel here: https://www.youtube.com/@universitymariokartleague.",
+            "description": "A 6v6 test match between Staffs and Cambridge. This match serves to test the Cheep Cheep application and live streaming. Members of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed on the UMKL YouTube channel. You can visit the channel here: https://www.youtube.com/@universitymariokartleague.",
             "eventID": "1397631211622633503",
+            "results": [],
             "season": 2,
             "teamsInvolved": [
                 "Staffs",
