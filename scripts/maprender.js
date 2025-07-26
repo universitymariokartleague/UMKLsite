@@ -391,8 +391,6 @@ function placeDots() {
         label.style.left = `${finalPosition.left}px`;
         label.style.top = `${finalPosition.top}px`;
 
-        console.log(finalPosition)
-
         // Draw a line from dot to label center, with animation
         const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
         const labelCenterX = finalPosition.left + labelWidth / 2;
