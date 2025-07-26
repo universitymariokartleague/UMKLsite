@@ -60,6 +60,7 @@ function buildTeamInfoTable(teamData, isCurrent = false) {
             <tr><td class="table-key">Season Wins</td><td>${teamData.team_championships}</td></tr>
             <tr><td class="table-key">Lifetime<br>Wins/Losses</td><td>${teamData.career_wins_losses[0]} - ${teamData.career_wins_losses[1]}</td></tr>
             <tr><td class="table-key">Lifetime Points</td><td>${teamData.team_career_points}</td></tr>
+            <tr><td class="table-key">Lifetime Matches Played</td><td>${teamData.lifetime_matches_played}</td></tr>
         </table>
     `;
 }
