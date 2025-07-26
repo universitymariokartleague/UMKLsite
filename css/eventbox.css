@@ -135,4 +135,8 @@
         padding: 2vmin;
         border-radius: 5px;
     }
+
+    .match-date-time-box {
+        font-size: 10px;
+    }
 }

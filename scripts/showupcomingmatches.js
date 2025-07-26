@@ -122,40 +122,49 @@ function showUpcomingMatch() {
             html += `            
             <div class="event-container">
                 <div class="team-box-container">
-                    <div class="team-box ${team1.class_name}">
-                        <a class="no-underline-link no-color-link" href="${team1.link}">
-                            <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
-                            onload="this.style.opacity=1" 
-                            onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
-                            <h2><a class="no-underline-link no-color-link" href="${team1.link}">${team1.team_name}</a></h2>
-                        </a>
+                        <div class="team-background left ${team1.class_name}"></div>
+                        <div class="team-background right ${team2.class_name}"></div>
+                        <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.png" alt="Team Overlay"/>
+
+                    <div class="event-overlay">
+
+                        <div class="event-box-team">
+                            <a class="no-underline-link no-color-link" href="${team1.link}">
+                                <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
+                                onload="this.style.opacity=1"
+                                onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                                <h2>${team1.team_name}</h2>
+                            </a>
+                        </div>
+                    
+                        <div class="score-box">${resultsHTML ? formatResults(entry.results) : "VS"}</div>       
+
+                        <div class="event-box-team">
+                            <a class="no-underline-link no-color-link" href="${team2.link}">
+                                <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
+                                onload="this.style.opacity=1" 
+                                onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                                <h2>${team2.team_name}</h2>
+                            </a>
+                        </div>
                     </div>
-                    <div class="score-box">VS</div>       
-                    <div class="team-box ${team2.class_name}">
-                        <a class="no-underline-link no-color-link" href="${team2.link}">
-                            <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
-                            onload="this.style.opacity=1" 
-                            onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
-                            <h2>${team2.team_name}</h2>
-                        </a>
-                    </div>
+
                 </div>
+
+
+
                 <div class="match-details-box">
                     <div class="match-date-time-box">
                         <div class="match-detail-container">
                             <i class="fa-solid fa-calendar-days"></i>
-                            <h3>${formattedDate}</h3>
+                            <h2>${formattedDate}</h2>
                         </div>
                         <div class="match-detail-container">
                             <i class="fa-solid fa-clock"></i>
-                            <h3><div class="heading-wrapper">${formattedMatchTime}${isLive ? '<div class="live-dot"></div>' : ''}</div></h3>
+                            <h2>${formattedMatchTime}${isLive ? '<div class="live-dot"></div>' : ''}</h2>
                         </div>
                     </div>
-                    <div>
-                        <a href="https://www.youtube.com/@universitymariokartleague/streams" target="_blank">Watch here</a> | 
-                        <a href="pages/matches/?date=${matchDateStr}">View details</a>
-                    </div>
-                    <p class="match-season">${entry.testMatch ? "<span class='settings-extra-info'>Test match</span>" : `Season ${entry.season}`}</p>
+                        <p class="match-season">${entry.testMatch ? "<span class='settings-extra-info'>Test Match</span>" : `Season ${entry.season}`}</p>
                 </div>
             </div>
             `;
