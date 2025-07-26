@@ -276,8 +276,8 @@ function mikuEasterEgg() {
         .day.selected {
             position: relative;
             overflow: hidden;
-            z-index: 0; /* allow stacking context */
-            color: #fff; /* optional: better contrast over the image */
+            z-index: 0;
+            color: #fff;
         }
 
         .day.selected::before {
