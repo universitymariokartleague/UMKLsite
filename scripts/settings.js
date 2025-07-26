@@ -236,24 +236,66 @@ function checkEasterEggs() {
         default:
             break;
     }
+
+    xmasEasterEgg();
 }
 checkEasterEggs();
 
 // Keyboard shortcuts for toggling theme and opening settings panel
 let isKeyPressed = false;
-if (!easterEgg) {
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'i' && !isKeyPressed) {
-            isKeyPressed = true;
-            toggleThemeLightDarkOnly();
-        }
-        if (event.key === 'o' && !isKeyPressed) {
-            isKeyPressed = true;
-            toggleSettingsPanel();
-        }
-    });
+let keySequence = []; // stores recent keys
+const easterCode = ['m', 'i', 'k', 'u'];
 
-    document.addEventListener('keyup', (event) => {
-        isKeyPressed = false;
-    });
+document.addEventListener('keydown', (event) => {
+    const key = event.key.toLowerCase();
+
+    keySequence.push(key);
+    if (keySequence.length > easterCode.length) {
+        keySequence.shift();
+    }
+
+    if (keySequence.join('') === easterCode.join('')) {
+        mikuEasterEgg();
+        console.log("aa")
+    }
+
+    if ((key === 'i' || key === 'o') && !isKeyPressed) {
+        isKeyPressed = true;
+        if (key === 'i') toggleThemeLightDarkOnly();
+        if (key === 'o') toggleSettingsPanel();
+    }
+});
+
+document.addEventListener('keyup', () => {
+    isKeyPressed = false;
+});
+
+function mikuEasterEgg() {
+    const style = document.createElement('style');
+    style.textContent = `
+        .day.selected {
+            position: relative;
+            overflow: hidden;
+            z-index: 0; /* allow stacking context */
+            color: #fff; /* optional: better contrast over the image */
+        }
+
+        .day.selected::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("../assets/media/calendar/mikuheadshake.gif");
+            background-size: cover;
+            background-position: center;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .day.selected:hover::before {
+            opacity: 0.25;
+        }
+    `;
+    document.head.appendChild(style);
 }

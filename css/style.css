@@ -147,7 +147,6 @@ footer {
     text-align: center;
     padding: 5px;
     z-index: 1;
-    transition: background-color 0.2s ease-in-out;
 }
 
 [id] {
@@ -171,7 +170,6 @@ footer {
     width: 100%;
     top: 0;
     z-index: 5;
-    transition: background-color 0.2s ease-in-out;
 }
 
 .navbar-container .nav-bar {
