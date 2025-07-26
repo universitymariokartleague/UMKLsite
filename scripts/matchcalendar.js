@@ -311,26 +311,34 @@ function showDailyLog(date, dayCell) {
                 return `
                     <div class="event-container">
                         <div class="team-box-container">
-                            <div class="team-box ${team1.class_name}">
-                                <a class="no-underline-link no-color-link" href="${team1.link}">
-                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
-                                    onload="this.style.opacity=1"
-                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
-                                    <h2><a class="no-underline-link no-color-link" href="${team1.link}">${team1.team_name}</a></h2>
-                                </a>
-                            </div>
+                            <div class="team-background left ${team1.class_name}"></div>
+                            <div class="team-background right ${team2.class_name}"></div>
+
+                            <div class="event-overlay">
+
+                                <div class="event-box-team">
+                                    <a class="no-underline-link no-color-link" href="${team1.link}">
+                                        <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
+                                        onload="this.style.opacity=1"
+                                        onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                                        <h2 class="team-name">${team1.team_name}</h2>
+                                    </a>
+                                </div>
                             
-                            <div class="score-box">${formatResults(entry.results) ? formatResults(entry.results) : "VS"}</div>       
-                              
-                            <div class="team-box ${team2.class_name}">
-                                <a class="no-underline-link no-color-link" href="${team2.link}">
-                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
-                                    onload="this.style.opacity=1" 
-                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
-                                    <h2>${team2.team_name}</h2>
-                                </a>
+                                <div class="score-box">${formatResults(entry.results) ? formatResults(entry.results) : "VS"}</div>       
+
+                                <div class="event-box-team">
+                                    <a class="no-underline-link no-color-link" href="${team2.link}">
+                                        <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
+                                        onload="this.style.opacity=1" 
+                                        onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                                        <h2 class="team-name">${team2.team_name}</h2>
+                                    </a>
+                                </div>
                             </div>
+
                         </div>
+
                         <div class="match-details-box">
                             <div class="match-date-time-box">
                                 <div class="match-detail-container">
@@ -340,7 +348,6 @@ function showDailyLog(date, dayCell) {
                             </div>
                             <p class="match-season">${entry.testMatch ? "<span class='settings-extra-info'>Test Match</span>" : `Season ${entry.season}`}</p>
                         </div>
-                        <p class="match-description">${autoLink(entry.description)}</p>
                     </div>
                 `;
             }).join('')}
