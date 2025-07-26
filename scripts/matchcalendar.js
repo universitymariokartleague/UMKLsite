@@ -308,6 +308,8 @@ function showDailyLog(date, dayCell) {
                     hour12: is12Hour,
                 });
 
+                const resultsHTML = formatResults(entry.results);
+
                 return `
                     <div class="event-container">
                         <div class="team-box-container">
@@ -326,7 +328,7 @@ function showDailyLog(date, dayCell) {
                                     </a>
                                 </div>
                             
-                                <div class="score-box">${formatResults(entry.results) ? formatResults(entry.results) : "VS"}</div>       
+                                <div class="score-box">${resultsHTML ? formatResults(entry.results) : "VS"}</div>       
 
                                 <div class="event-box-team">
                                     <a class="no-underline-link no-color-link" href="${team2.link}">
@@ -375,7 +377,7 @@ function formatResults(results) {
             ${hasPenalty ? 
             `
                 <p class="penalty-text">
-                    -${teamAPenalty}	 	 	 	 	 -${teamBPenalty}
+                    -${teamAPenalty}	 	 	 	 	 	  	  	  -${teamBPenalty}
                 </p>
             ` : ''}
     `.trim();
