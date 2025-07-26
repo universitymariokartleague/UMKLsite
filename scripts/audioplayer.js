@@ -650,3 +650,36 @@ async function zipTracksToDownload() {
         document.getElementById('downloadAllButton').innerHTML = `Download All`;
     }
 }
+
+function handleAudioStatusPosition() {
+	const audioStatus = document.getElementById('audioStatus');
+	const footer = document.querySelector('footer');
+
+	if (!audioStatus || !footer) return;
+
+	// Only run on screen widths 1000px or less
+	if (window.innerWidth > 1000) {
+		// Reset to default positioning if needed
+		audioStatus.style.position = '';
+		audioStatus.style.bottom = '';
+		return;
+	}
+
+	const footerRect = footer.getBoundingClientRect();
+	const windowHeight = window.innerHeight;
+
+	if (footerRect.top < windowHeight) {
+		// Footer is visible: avoid overlapping
+		audioStatus.style.position = 'absolute';
+		audioStatus.style.bottom = `${windowHeight - footerRect.top + 25}px`;
+	} else {
+		// Footer not in view: fixed at bottom
+		audioStatus.style.position = 'fixed';
+		audioStatus.style.bottom = '25px';
+	}
+}
+
+// Attach listeners
+window.addEventListener('scroll', handleAudioStatusPosition);
+window.addEventListener('resize', handleAudioStatusPosition);
+document.addEventListener('DOMContentLoaded', handleAudioStatusPosition);
