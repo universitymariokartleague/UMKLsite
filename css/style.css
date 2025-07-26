@@ -878,12 +878,12 @@ blockquote {
 .team-info-table td {
     padding: 0;
     width: 50%;
-    vertical-align: top;
+    vertical-align: middle;
 }
 
 .team-info-table .table-key {
     font-weight: bold;
-    vertical-align: top;
+    vertical-align: middle;
 }
 
 .team-info-wrapper {
