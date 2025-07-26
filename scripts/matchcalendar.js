@@ -311,8 +311,9 @@ function showDailyLog(date, dayCell) {
                 return `
                     <div class="event-container">
                         <div class="team-box-container">
-                            <div class="team-background left ${team1.class_name}"></div>
-                            <div class="team-background right ${team2.class_name}"></div>
+                                <div class="team-background left ${team1.class_name}"></div>
+                                <div class="team-background right ${team2.class_name}"></div>
+                                <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.png" alt="Team Overlay"/>
 
                             <div class="event-overlay">
 
@@ -321,7 +322,7 @@ function showDailyLog(date, dayCell) {
                                         <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
                                         onload="this.style.opacity=1"
                                         onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
-                                        <h2 class="team-name">${team1.team_name}</h2>
+                                        <h2>${team1.team_name}</h2>
                                     </a>
                                 </div>
                             
@@ -332,7 +333,7 @@ function showDailyLog(date, dayCell) {
                                         <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
                                         onload="this.style.opacity=1" 
                                         onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
-                                        <h2 class="team-name">${team2.team_name}</h2>
+                                        <h2>${team2.team_name}</h2>
                                     </a>
                                 </div>
                             </div>
