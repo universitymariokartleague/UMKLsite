@@ -81,7 +81,7 @@ function generateCalendar(month, year, dateParam = null) {
         const dayCell = document.createElement('div');
         dayCell.textContent = day;
         dayCell.classList.add('day');
-        
+
         const today = new Date();
         const isToday = (year === today.getFullYear() && month === today.getMonth() && day === today.getDate());
         if (isToday) {
@@ -90,7 +90,7 @@ function generateCalendar(month, year, dateParam = null) {
                 dayCell.classList.add('today');
             }, 50);
         }
-        
+
         const dateToCheck = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         if (matchData[dateToCheck]) {
             matchData[dateToCheck].forEach(entry => {
@@ -99,25 +99,25 @@ function generateCalendar(month, year, dateParam = null) {
                 // Find team color by team name from teamColors[0] array
                 const color1 = (teamColors.find(t => t.team_name === team1) || {}).team_color || "#ccc";
                 const color2 = (teamColors.find(t => t.team_name === team2) || {}).team_color || "#ccc";
-            
+
                 const colorBarContainer = document.createElement('div');
                 colorBarContainer.classList.add('color-bar-container');
-            
+
                 const team1Div = document.createElement('div');
                 team1Div.classList.add('team-color-bar');
                 team1Div.style.backgroundColor = color1;
                 team1Div.style.borderTopLeftRadius = '5px';
                 team1Div.style.borderBottomLeftRadius = '5px';
-            
+
                 const team2Div = document.createElement('div');
                 team2Div.classList.add('team-color-bar');
                 team2Div.style.backgroundColor = color2;
                 team2Div.style.borderTopRightRadius = '5px';
                 team2Div.style.borderBottomRightRadius = '5px';
-            
+
                 colorBarContainer.appendChild(team1Div);
                 colorBarContainer.appendChild(team2Div);
-            
+
                 dayCell.appendChild(colorBarContainer);
             });
             dayCell.classList.add('logged');
@@ -180,14 +180,14 @@ function showMonthPicker(currentDate) {
         <div class="preview-message" style="user-select:none;">
             <select title="Select a month" class="popupDropdown" id="monthDropdown">
                 ${months.map((m, i) =>
-                    `<option value="${i}"${i === currentlyShownDate[1] ? ' selected' : ''}>${m}</option>`
-                ).join('')}
+        `<option value="${i}"${i === currentlyShownDate[1] ? ' selected' : ''}>${m}</option>`
+    ).join('')}
             </select>
             <select title="Select a year" class="popupDropdown" id="yearDropdown">
                 ${Array.from({ length: maxYear - minYear + 1 }, (_, i) => {
-                    const y = minYear + i;
-                    return `<option value="${y}"${y === currentlyShownDate[0] ? ' selected' : ''}>${y}</option>`;
-                }).join('')}
+        const y = minYear + i;
+        return `<option value="${y}"${y === currentlyShownDate[0] ? ' selected' : ''}>${y}</option>`;
+    }).join('')}
             </select>
             <button title="Return to the current date" class="currentDateButton" id="currentDateButton"><i class="fa-solid fa-calendar"></i></button>
         </div>
@@ -261,7 +261,7 @@ function showDailyLog(date, dayCell) {
     document.querySelectorAll('.day.selected').forEach(day => {
         day.classList.remove('selected');
     });
-    
+
     // Add highlight to the newly selected day
     if (dayCell) {
         dayCell.classList.add('selected');
@@ -285,47 +285,56 @@ function showDailyLog(date, dayCell) {
             </div>
             <hr class="after-title" style="margin-bottom:0;">
             ${log.map((entry, index) => {
-                function createTeamObject(teamName) {
-                    return {
-                        team_name: teamName,
-                        class_name: teamName.replace(/\s+/g, ''),
-                        link: `pages/teams/details/?team=${teamName}`
-                    };
-                }
+            function createTeamObject(teamName) {
+                return {
+                    team_name: teamName,
+                    class_name: teamName.replace(/\s+/g, ''),
+                    link: `pages/teams/details/?team=${teamName}`
+                };
+            }
 
-                const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
+            const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
 
-                function uses12HourClock(locale) {
-                    const test = new Date('2020-01-01T13:00');
-                    return test.toLocaleTimeString(locale).toLowerCase().includes('pm');
-                }
-                let timeString = entry.time || '00:00';
-                if (/^\d{2}:\d{2}$/.test(timeString)) timeString += ':00';
-                const is12Hour = uses12HourClock(locale);
-                const formattedMatchTime = new Date(`1970-01-01T${timeString}`).toLocaleTimeString(locale, {
-                    hour: is12Hour ? 'numeric' : '2-digit',
-                    minute: '2-digit',
-                    hour12: is12Hour,
-                });
+            function uses12HourClock(locale) {
+                const test = new Date('2020-01-01T13:00');
+                return test.toLocaleTimeString(locale).toLowerCase().includes('pm');
+            }
+            let timeString = entry.time || '00:00';
+            if (/^\d{2}:\d{2}$/.test(timeString)) timeString += ':00';
+            const is12Hour = uses12HourClock(locale);
+            const formattedMatchTime = new Date(`1970-01-01T${timeString}`).toLocaleTimeString(locale, {
+                hour: is12Hour ? 'numeric' : '2-digit',
+                minute: '2-digit',
+                hour12: is12Hour,
+            });
 
-                const resultsHTML = formatResults(entry.results);
+            const resultsHTML = formatResults(entry.results);
+            if (entry.ytLinks) {
+                team1.ytLink = entry.ytLinks[0]
+                team2.ytLink = entry.ytLinks[1]
+            }
 
-                return `
+            return `
                     <div class="event-container">
                         <div class="team-box-container">
-                                <div class="team-background left ${team1.class_name}"></div>
-                                <div class="team-background right ${team2.class_name}"></div>
-                                <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.png" alt="Team Overlay"/>
+                            <div class="team-background left ${team1.class_name}"></div>
+                            <div class="team-background right ${team2.class_name}"></div>
+                            <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.png"/>
 
                             <div class="event-overlay">
-
                                 <div class="event-box-team">
                                     <a class="no-underline-link no-color-link" href="${team1.link}">
                                         <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
+                                        alt="${team1.team_name} team logo"
                                         onload="this.style.opacity=1"
                                         onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
                                         <h2>${team1.team_name}</h2>
                                     </a>
+                                    <div class="youtube-box left-team">
+                                        ${team1.ytLink ? `
+                                        <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
+                                        href="${team1.ytLink}" target="_blank" title="View the archived livestream"></a>` : ''}
+                                    </div>
                                 </div>
                             
                                 <div class="score-box">${resultsHTML ? formatResults(entry.results) : "VS"}</div>       
@@ -333,13 +342,18 @@ function showDailyLog(date, dayCell) {
                                 <div class="event-box-team">
                                     <a class="no-underline-link no-color-link" href="${team2.link}">
                                         <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
+                                        alt="${team2.team_name} team logo"
                                         onload="this.style.opacity=1" 
                                         onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
                                         <h2>${team2.team_name}</h2>
                                     </a>
+                                    <div class="youtube-box right-team">
+                                        ${team2.ytLink ? `
+                                        <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
+                                        href="${team2.ytLink}" target="_blank" title="View the archived livestream"></a>` : ''}
+                                    </div>
                                 </div>
                             </div>
-
                         </div>
 
                         <div class="match-details-box">
@@ -349,11 +363,15 @@ function showDailyLog(date, dayCell) {
                                     <h2>${formattedMatchTime}</h2>
                                 </div>
                             </div>
-                            <p class="match-season">${entry.testMatch ? "<span class='settings-extra-info'>Test Match</span>" : `Season ${entry.season}`}</p>
+                            <p class="match-season">${entry.testMatch ? "<span class='settings-extra-info'>Test match</span>" : `Season ${entry.season}`}</p>
                         </div>
+                        <details class="match-box">
+                            <summary>Match details</summary>
+                            <p class="match-description">${autoLink(entry.description)}</p>
+                        </details>
                     </div>
                 `;
-            }).join('')}
+        }).join('')}
         `;
 
         createShareButtonListener(formattedDate);
@@ -374,7 +392,7 @@ function formatResults(results) {
 
     return `
             ${teamAScore} - ${teamBScore}
-            ${hasPenalty ? 
+            ${hasPenalty ?
             `
                 <p class="penalty-text">
                     -${teamAPenalty}	 	 	 	 	 	  	  	  -${teamBPenalty}
@@ -386,7 +404,7 @@ function formatResults(results) {
 function autoLink(text) {
     text = text.replaceAll("\n", "<br>")
     const urlRegex = /((https?:\/\/|www\.)[^\s<]+)/gi;
-    return text.replace(urlRegex, function(url) {
+    return text.replace(urlRegex, function (url) {
         let href = url;
         let displayUrl = url;
         let trailingDot = '';
@@ -405,7 +423,7 @@ function autoLink(text) {
 function clearURLParams() {
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.delete('date');
-    const newUrl = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''}`; 
+    const newUrl = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''}`;
     if (window.location.href !== newUrl) {
         window.history.replaceState({}, '', newUrl);
     }
@@ -419,14 +437,14 @@ function createShareButtonListener(formattedDate) {
     shareButton.addEventListener("click", async () => {
         if (getIsPopupShowing()) return;
         const useClipboard = isWindowsOrLinux() || !navigator.canShare;
-        
+
         const message = `Check out these UMKL matches on ${formattedDate}! ${window.location.href}`
-        
+
         if (useClipboard) {
             const success = await copyTextToClipboard(message);
             shareButton.innerText = success ? "Text copied to clipboard!" : "Failed to copy!";
             const messageWithURL = `Check out these UMKL matches on ${formattedDate}! <a href="${window.location.href}">${window.location.href}</a>`
-            showTextPopup( messageWithURL)
+            showTextPopup(messageWithURL)
         } else {
             await shareText(
                 `UMKL Matches on ${formattedDate}`,
@@ -474,12 +492,12 @@ async function getTeamcolors() {
         },
         body: "{}"
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        });
 }
 
 async function getTeamcolorsFallback() {
@@ -498,12 +516,12 @@ async function getMatchData() {
         },
         body: "{}"
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        });
 }
 
 async function getMatchDataFallback() {
@@ -522,19 +540,19 @@ function displayCalendar() {
         const dateObj = new Date(dateParam);
         showDailyLog(dateParam);
         generateCalendar(dateObj.getMonth(), dateObj.getFullYear(), dateParam);
-    } else {       
+    } else {
         const currentDate = new Date();
         if (!discardLogOnChange) {
             showDailyLog(currentDate.toISOString().split('T')[0]);
-        } 
-        generateCalendar(currentDate.getMonth(), currentDate.getFullYear());        
+        }
+        generateCalendar(currentDate.getMonth(), currentDate.getFullYear());
     }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     console.debug(`%cmatchcalendar.js %c> %cFetching calendar...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-    
+
     try {
         matchData = await getMatchData();
         teamColors = await getTeamcolors();
@@ -550,21 +568,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (refreshTimer) clearTimeout(refreshTimer);
             const retryFetch = async () => {
-            try {
-                if (typeof retryCount === 'undefined') {
-                    window.retryCount = 1;
-                } else {
-                    window.retryCount++;
+                try {
+                    if (typeof retryCount === 'undefined') {
+                        window.retryCount = 1;
+                    } else {
+                        window.retryCount++;
+                    }
+                    matchData = await getMatchData();
+                    teamColors = await getTeamcolors();
+                    calendarError.innerHTML = ""
+                    makeTeamsColorStyles();
+                    displayCalendar();
+                } catch (err) {
+                    calendarError.innerHTML = `<blockquote class="fail"><b>API error - Retrying: attempt ${window.retryCount}...</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
+                    refreshTimer = setTimeout(retryFetch, 2000);
                 }
-                matchData = await getMatchData();
-                teamColors = await getTeamcolors();
-                calendarError.innerHTML = ""
-                makeTeamsColorStyles();
-                displayCalendar();
-            } catch (err) {
-                calendarError.innerHTML = `<blockquote class="fail"><b>API error - Retrying: attempt ${window.retryCount}...</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
-                refreshTimer = setTimeout(retryFetch, 2000);
-            }
             };
             refreshTimer = setTimeout(retryFetch, 2000);
         }
