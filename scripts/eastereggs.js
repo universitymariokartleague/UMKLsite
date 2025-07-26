@@ -182,6 +182,9 @@ function xmasEasterEgg() {
         .today:hover {
             background-color: ${accentColor};
         }
+        .score-box {
+            color: ${accentColor}
+        }
     `;
     document.head.appendChild(style);
 

@@ -236,8 +236,6 @@ function checkEasterEggs() {
         default:
             break;
     }
-
-    xmasEasterEgg();
 }
 checkEasterEggs();
 
