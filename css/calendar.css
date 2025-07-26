@@ -118,6 +118,22 @@
     border: 1px solid #cccccc4f;
 }
 
+.today-marker {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.today-marker::before,
+.today-marker::after {
+    content: "";
+    flex: 1;
+    border-bottom: 2px solid var(--accent-color);
+    margin: 0 10px;
+}
+
 @media screen and (max-width: 767px) {
     .calendar {
         flex: 0 0 100%;

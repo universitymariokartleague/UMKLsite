@@ -11,6 +11,8 @@ const weekdayNamesFull = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"
 const DEFAULTSTARTDAY = 1;
 const MATCH_LENGTH_MINS = 90;
 
+const calendarContainer = document.getElementById('calendar-container');
+const calendarListView = document.getElementById('calendarListView');
 const expandedLog = document.getElementById('expandedLog');
 const calendarError = document.getElementById("calendarError")
 
@@ -32,6 +34,9 @@ let discardLogOnChange = false;
 
 let previewTimeout = null;
 let currentPreview = null;
+
+let listViewEnabled = false;
+let listViewToggledOnce = false;
 
 let startTime;
 
@@ -258,6 +263,8 @@ function cleanupPopupPreview() {
 }
 
 function showDailyLog(date, dayCell) {
+    listViewToggledOnce = false;
+
     // Remove highlight from all previously selected days
     document.querySelectorAll('.day.selected').forEach(day => {
         day.classList.remove('selected');
@@ -330,62 +337,62 @@ function showDailyLog(date, dayCell) {
             }
 
             return `
-            <div class="event-container">
-                <div class="team-box-container">
-                    <div class="team-background left ${team1.class_name}"></div>
-                    <div class="team-background right ${team2.class_name}"></div>
-                    <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.png"/>
+                <div class="event-container">
+                    <div class="team-box-container">
+                        <div class="team-background left ${team1.class_name}"></div>
+                        <div class="team-background right ${team2.class_name}"></div>
+                        <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.png"/>
 
-                    <div class="event-overlay">
-                        <div class="event-box-team">
-                            <a class="no-underline-link no-color-link" href="${team1.link}">
-                                <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
-                                alt="${team1.team_name} team logo"
-                                onload="this.style.opacity=1"
-                                onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
-                                <h2>${team1.team_name}</h2>
-                            </a>
-                            <div class="youtube-box left-team">
-                                ${team1.ytLink ? `
-                                <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
-                                href="${team1.ytLink}" target="_blank" title="View the archived livestream"></a>` : ''}
+                        <div class="event-overlay">
+                            <div class="event-box-team">
+                                <a class="no-underline-link no-color-link" href="${team1.link}">
+                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
+                                    alt="${team1.team_name} team logo"
+                                    onload="this.style.opacity=1"
+                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                                    <h2>${team1.team_name}</h2>
+                                </a>
+                                <div class="youtube-box left-team">
+                                    ${team1.ytLink ? `
+                                    <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
+                                    href="${team1.ytLink}" target="_blank" title="View the archived livestream"></a>` : ''}
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="score-box">${resultsHTML ? formatResults(entry.results) : "VS"}</div>       
+                            <div class="score-box">${resultsHTML ? formatResults(entry.results) : "VS"}</div>       
 
-                        <div class="event-box-team">
-                            <a class="no-underline-link no-color-link" href="${team2.link}">
-                                <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
-                                alt="${team2.team_name} team logo"
-                                onload="this.style.opacity=1" 
-                                onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
-                                <h2>${team2.team_name}</h2>
-                            </a>
-                            <div class="youtube-box right-team">
-                                ${team2.ytLink ? `
-                                <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
-                                href="${team2.ytLink}" target="_blank" title="View the archived livestream"></a>` : ''}
+                            <div class="event-box-team">
+                                <a class="no-underline-link no-color-link" href="${team2.link}">
+                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
+                                    alt="${team2.team_name} team logo"
+                                    onload="this.style.opacity=1" 
+                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                                    <h2>${team2.team_name}</h2>
+                                </a>
+                                <div class="youtube-box right-team">
+                                    ${team2.ytLink ? `
+                                    <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
+                                    href="${team2.ytLink}" target="_blank" title="View the archived livestream"></a>` : ''}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="match-details-box">
-                    <div class="match-date-time-box">
-                        <div class="match-detail-container">
-                            <i class="fa-solid fa-clock"></i>
-                            <h2>${formattedMatchTime}</h2>
-                            ${isLive ? '<div class="live-dot"></div>' : ''}
+                    <div class="match-details-box">
+                        <div class="match-date-time-box">
+                            <div class="match-detail-container">
+                                <i class="fa-solid fa-clock"></i>
+                                <h2>${formattedMatchTime}</h2>
+                                ${isLive ? '<div class="live-dot"></div>' : ''}
+                            </div>
                         </div>
+                        <p class="match-season">${entry.testMatch ? "<span class='settings-extra-info'>Test match</span>" : `Season ${entry.season}`}</p>
                     </div>
-                    <p class="match-season">${entry.testMatch ? "<span class='settings-extra-info'>Test match</span>" : `Season ${entry.season}`}</p>
+                    <details class="match-box">
+                        <summary>Match details</summary>
+                        <p class="match-description">${autoLink(entry.description)}</p>
+                    </details>
                 </div>
-                <details class="match-box">
-                    <summary>Match details</summary>
-                    <p class="match-description">${autoLink(entry.description)}</p>
-                </details>
-            </div>
             `;
         }).join('')}
         `;
@@ -394,6 +401,161 @@ function showDailyLog(date, dayCell) {
     } else {
         expandedLog.innerHTML = `<div class="settingSubheading">Select a date to see the matches happening on that day.</div>`;
         clearURLParams();
+    }
+}
+
+function generateCalendarListView() {
+    const today = new Date();
+    const formattedToday = today.toISOString().split("T")[0];
+
+    const sortedDates = Object.keys(matchData);
+    let todayMarkerInserted = false;
+
+    const locale = localStorage.getItem("locale") || "en-GB";
+
+    for (let i = 0; i < sortedDates.length; i++) {
+        const date = sortedDates[i];
+
+        if (!todayMarkerInserted && formattedToday < date) {
+            calendarListView.innerHTML += `
+                <div class="today-marker">
+                    Today - ${new Date(formattedToday).toLocaleDateString(locale, { dateStyle: 'long' })}
+                </div><hr>
+            `;
+            todayMarkerInserted = true;
+        }
+
+        const formattedDate = new Date(`${date}`).toLocaleString(locale, { dateStyle: 'long' });
+        calendarListView.innerHTML += `
+            <h3 id=${date}>${formattedDate}</h3>
+        `
+
+        matchData[date].forEach(entry => {
+            function createTeamObject(teamName) {
+                return {
+                    team_name: teamName,
+                    class_name: teamName.replace(/\s+/g, ''),
+                    link: `pages/teams/details/?team=${teamName}`
+                };
+            }
+
+            const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
+
+            function uses12HourClock(locale) {
+                const test = new Date('2020-01-01T13:00');
+                return test.toLocaleTimeString(locale).toLowerCase().includes('pm');
+            }
+            let timeString = entry.time || '00:00';
+            if (/^\d{2}:\d{2}$/.test(timeString)) timeString += ':00';
+            const is12Hour = uses12HourClock(locale);
+            const formattedMatchTime = new Date(`1970-01-01T${timeString}`).toLocaleTimeString(locale, {
+                hour: is12Hour ? 'numeric' : '2-digit',
+                minute: '2-digit',
+                hour12: is12Hour,
+            });
+
+            let isLive = false;
+            if (entry.time) {
+                const [hours, minutes] = entry.time.split(':');
+                const dateObj = new Date(formattedDate);
+                dateObj.setHours(Number(hours), Number(minutes), 0, 0);
+
+                const now = new Date();
+                const matchStart = dateObj;
+                const matchEnd = new Date(matchStart.getTime() + MATCH_LENGTH_MINS * 60 * 1000);
+                if (now >= matchStart && now <= matchEnd) {
+                    isLive = true;
+                }
+            }
+
+            const resultsHTML = formatResults(entry.results);
+            if (entry.ytLinks) {
+                team1.ytLink = entry.ytLinks[0]
+                team2.ytLink = entry.ytLinks[1]
+            }
+
+            calendarListView.innerHTML += `
+                <div class="event-container">
+                    <div class="team-box-container">
+                        <div class="team-background left ${team1.class_name}"></div>
+                        <div class="team-background right ${team2.class_name}"></div>
+                        <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.png"/>
+
+                        <div class="event-overlay">
+                            <div class="event-box-team">
+                                <a class="no-underline-link no-color-link" href="${team1.link}">
+                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
+                                    alt="${team1.team_name} team logo"
+                                    onload="this.style.opacity=1"
+                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                                    <h2>${team1.team_name}</h2>
+                                </a>
+                                <div class="youtube-box left-team">
+                                    ${team1.ytLink ? `
+                                    <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
+                                    href="${team1.ytLink}" target="_blank" title="View the archived livestream"></a>` : ''}
+                                </div>
+                            </div>
+
+                            <div class="score-box">${resultsHTML ? formatResults(entry.results) : "VS"}</div>       
+
+                            <div class="event-box-team">
+                                <a class="no-underline-link no-color-link" href="${team2.link}">
+                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
+                                    alt="${team2.team_name} team logo"
+                                    onload="this.style.opacity=1" 
+                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                                    <h2>${team2.team_name}</h2>
+                                </a>
+                                <div class="youtube-box right-team">
+                                    ${team2.ytLink ? `
+                                    <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
+                                    href="${team2.ytLink}" target="_blank" title="View the archived livestream"></a>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="match-details-box">
+                        <div class="match-date-time-box">
+                            <div class="match-detail-container">
+                                <i class="fa-solid fa-clock"></i>
+                                <h2>${formattedMatchTime}</h2>
+                                ${isLive ? '<div class="live-dot"></div>' : ''}
+                            </div>
+                        </div>
+                        <p class="match-season">${entry.testMatch ? "<span class='settings-extra-info'>Test match</span>" : `Season ${entry.season}`}</p>
+                    </div>
+                    <details class="match-box">
+                        <summary>Match details</summary>
+                        <p class="match-description">${autoLink(entry.description)}</p>
+                    </details>
+                </div>
+            `
+        })
+
+        calendarListView.innerHTML += `<hr>`
+    }
+}
+
+function scrollMatchList() {
+    const today = new Date();
+    const formattedToday = today.toISOString().split("T")[0];
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const dateParam = urlParams.get('date');
+
+    const target = document.getElementById(dateParam ? dateParam : formattedToday);
+
+    // Try to scroll to the date given, else scroll to bottom
+    if (target) {
+        calendarListView.scrollTo({
+            top: target.offsetTop - calendarListView.offsetTop
+        });
+    } else {
+        calendarListView.scrollTo({
+            top: calendarListView.scrollHeight
+        });
     }
 }
 
@@ -565,9 +727,46 @@ function displayCalendar() {
     }
 }
 
+function generateListViewButton() {
+    const listViewButton = document.getElementById("listViewButton");
+    
+    listViewButton.onclick = () => {
+        listViewEnabled = !listViewEnabled;
+        listViewButton.innerHTML = `${listViewEnabled ? `<span class="fa-regular fa-calendar"></span> Disable` : `<span class="fa-solid fa-bars"></span> Enable`} List View`
+        
+        changeCalendarView(listViewEnabled);
+        
+        localStorage.setItem("calendarListView", listViewEnabled ? 1 : 0);
+    };
+}
+
+function changeCalendarView(listView) {
+    if (listView) {
+        calendarListView.classList.remove("hidden")
+        calendarContainer.classList.add("hidden")
+        if (!listViewToggledOnce) scrollMatchList();
+        listViewToggledOnce = true;
+    } else {
+        calendarListView.classList.add("hidden")
+        calendarContainer.classList.remove("hidden")
+    }
+}
+
+function loadCalendarView() {
+    const calendarListView = localStorage.getItem("calendarListView") == 1 || false;
+    changeCalendarView(calendarListView);
+    listViewEnabled = calendarListView;
+    listViewButton.innerHTML = `${listViewEnabled ? `<span class="fa-regular fa-calendar"></span> Disable` : `<span class="fa-solid fa-bars"></span> Enable`} List View`
+}
+
+document.addEventListener('calendarListViewChange', async () => {
+    loadCalendarView();
+})
+
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     console.debug(`%cmatchcalendar.js %c> %cFetching calendar...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+    generateListViewButton();
 
     try {
         matchData = await getMatchData();
@@ -606,5 +805,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     makeTeamsColorStyles();
     displayCalendar();
+    generateCalendarListView();
+    loadCalendarView();
     console.debug(`%cmatchcalendar.js %c> %cMatch data loaded in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
 });

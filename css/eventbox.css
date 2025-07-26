@@ -181,3 +181,47 @@
         font-size: 10px;
     }
 }
+
+#calendarListView {
+    max-height: 75vh;
+    overflow-y: auto;
+}
+
+#calendarListView .event-box-team {
+    font-size: 1vmin;
+}
+
+#calendarListView .event-box-team .youtube-box {
+    font-size: 1.5vmin;
+}
+
+#calendarListView .team-box-image {
+    max-height: 5vmin;
+    max-width: 5vmin;
+}
+
+#calendarListView .score-box {
+    font-size: 2.5vmin;
+    padding: 1vmin;
+    border-radius: 5px;
+}
+
+#calendarListView .match-date-time-box {
+    font-size: 15px;
+}
+
+@media screen and (max-width: 767px) {
+    #calendarListView .event-box-team {
+        font-size: 1.5vmin;
+    }
+
+    #calendarListView .team-box-image {
+        max-height: 7.5vmin;
+        max-width: 7.5vmin;
+    }
+
+    #calendarListView .score-box {
+        font-size: 3.5vmin;
+        padding: 1.25vmin;
+    }
+}

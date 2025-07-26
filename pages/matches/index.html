@@ -75,20 +75,23 @@
             <h1>Matches</h1>
             <p class="p-below-title">View upcoming and scheduled matches.
             Please take a look at the <a href="pages/rules/match">match rules</a> before playing!</p>
+            <button id="listViewButton"><span class="fa-solid fa-bars"></span> Enable List View</button>
             <hr class="hr-below-title">
 
             <div id="calendarError"></div>
-
-            <div class="calendar-container">
+            
+            <div id="calendarListView" class="hidden"></div>
+            
+            <div class="calendar-container" id="calendar-container">
                 <div class="calendar">
                     <div class="calendar-header">
-                    <div class="month" id="monthYear">
-                        <a class="month-arrow fa-solid fa-arrow-left" id="previousMonthButton"></a>
+                        <div class="month" id="monthYear">
+                        <a class="month-arrow" id="previousMonthButton"></a>
                         <span class="month-name" id="goToCurrentMonthButton">Loading...</span>
-                        <a class="month-arrow fa-solid fa-arrow-right" id="nextMonthButton"></a>
+                        <a class="month-arrow" id="nextMonthButton"></a>
                     </div>
                 </div>
-                <div class="calendar-body" id="calendarDays"><div class="day-header">MON</div><div class="day-header">TUE</div><div class="day-header">WED</div><div class="day-header">THU</div><div class="day-header">FRI</div><div class="day-header">SAT</div><div class="day-header">SUN</div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div></div>
+                <div class="calendar-body" id="calendarDays"></div>
             </div>
 
             <div id="expandedLog"></div>
