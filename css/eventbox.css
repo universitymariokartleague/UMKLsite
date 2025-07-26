@@ -96,7 +96,8 @@
     }
 
     .score-box {
-        font-size: 20px;
-        padding: 10px 10px;
+        font-size: 3vmin;
+        padding: 2vmin 2vmin;
+        border-radius: 1vmin;
     }
 }

@@ -319,8 +319,9 @@ function showDailyLog(date, dayCell) {
                                     <h2><a class="no-underline-link no-color-link" href="${team1.link}">${team1.team_name}</a></h2>
                                 </a>
                             </div>
-                            <div class="score-box">VS</div>       
-                            ${formatResults(entry.results)}     
+                            
+                            <div class="score-box">${formatResults(entry.results) ? formatResults(entry.results) : "VS"}</div>       
+                              
                             <div class="team-box ${team2.class_name}">
                                 <a class="no-underline-link no-color-link" href="${team2.link}">
                                     <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
@@ -337,7 +338,7 @@ function showDailyLog(date, dayCell) {
                                     <h2>${formattedMatchTime}</h2>
                                 </div>
                             </div>
-                            <p class="match-season">${entry.testMatch ? "<span class='settings-extra-info'>Test match</span>" : `Season ${entry.season}`}</p>
+                            <p class="match-season">${entry.testMatch ? "<span class='settings-extra-info'>Test Match</span>" : `Season ${entry.season}`}</p>
                         </div>
                         <p class="match-description">${autoLink(entry.description)}</p>
                     </div>
@@ -362,7 +363,6 @@ function formatResults(results) {
     const hasPenalty = teamAPenalty !== 0 || teamBPenalty !== 0;
 
     return `
-        <div class="score-box points-box">
             ${teamAScore} - ${teamBScore}
             ${hasPenalty ? 
             `
@@ -370,7 +370,6 @@ function formatResults(results) {
                     -${teamAPenalty}	 	 	 	 	 -${teamBPenalty}
                 </p>
             ` : ''}
-        </div>
     `.trim();
 }
 
