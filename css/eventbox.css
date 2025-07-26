@@ -67,12 +67,7 @@
     text-align: center;
     padding: 20px;
     flex: 1;
-
- 
-
 }
-
-
 
 .score-box {
     background-color: white;
@@ -81,10 +76,9 @@
     border-radius: 10px;
     font-size: 30px;
     font-weight: bold;
-    white-space: nowrap;      /* Prevent text wrapping */
-    display: inline-block;    /* Ensure width fits content */
+    white-space: nowrap;
+    display: inline-block;
 }
-
 
 .event-box-team {
     width: 100%;
@@ -104,7 +98,7 @@
 }
 
 .penalty-text {
-    font-size: 10px;
+    font-size: 12px;
     margin: 0;
     line-height: 0.5;
     text-align: center;
@@ -126,5 +120,3 @@
         border-radius: 5px;
     }
 }
-
-
