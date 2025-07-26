@@ -657,30 +657,31 @@ function handleAudioStatusPosition() {
 	const main = document.querySelector('main');
 	const footer = document.querySelector('footer');
 
-	if (!audioStatus || !footer) return;
+	if (!audioStatus || !main || !footer) return;
 
-	if (window.innerWidth > 1000) {
+	const isMobile = window.innerWidth <= 1000;
+
+	if (!isMobile) {
 		audioStatus.style.position = '';
 		audioStatus.style.bottom = '';
-
 		main.style.paddingBottom = '';
 		return;
-	} else {
-        if (playedOnce) {
-            main.style.paddingBottom = '125px';
-        }
 	}
 
-	const footerRect = footer.getBoundingClientRect();
-	const windowHeight = window.innerHeight;
-
-	if (footerRect.top < windowHeight) {
-		audioStatus.style.position = 'absolute';
-		audioStatus.style.bottom = `${windowHeight - footerRect.top + 25}px`;
+	if (typeof playedOnce !== 'undefined' && playedOnce) {
+		main.style.paddingBottom = '125px';
 	} else {
-		audioStatus.style.position = 'fixed';
-		audioStatus.style.bottom = '25px';
+		main.style.paddingBottom = '';
 	}
+
+    const footerRect = footer.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+
+    if (footerRect.top < windowHeight) {
+        audioStatus.style.bottom = `${windowHeight - footerRect.top + 25}px`;
+    } else {
+        audioStatus.style.bottom = '25px';
+    }
 }
 
 // Attach listeners

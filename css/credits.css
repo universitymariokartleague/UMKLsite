@@ -11,11 +11,11 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
+    margin-top: 0.5em;
 }
 
 .credits-title {
     margin-top: 0.5em;
-    margin-bottom: 0.2em;
 }
 
 .credit-container {
