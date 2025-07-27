@@ -414,12 +414,13 @@ function generateCalendarListView() {
     const locale = localStorage.getItem("locale") || "en-GB";
 
     calendarListView.innerHTML = "";
+    let HTMLOutput = "";
 
     for (let i = 0; i < sortedDates.length; i++) {
         const date = sortedDates[i];
 
         if (!todayMarkerInserted && formattedToday < date) {
-            calendarListView.innerHTML += `
+            HTMLOutput += `
                 <div class="today-marker">
                     Today - ${new Date(formattedToday).toLocaleDateString(locale, { dateStyle: 'long' })}
                 </div><hr>
@@ -428,7 +429,7 @@ function generateCalendarListView() {
         }
 
         const formattedDate = new Date(`${date}`).toLocaleString(locale, { dateStyle: 'long' });
-        calendarListView.innerHTML += `
+        HTMLOutput += `
             <h3 id=${date}>${formattedDate}</h3>
         `
 
@@ -476,7 +477,7 @@ function generateCalendarListView() {
                 team2.ytLink = entry.ytLinks[1]
             }
 
-            calendarListView.innerHTML += `
+            HTMLOutput += `
                 <div class="event-container">
                     <div class="team-box-container">
                         <div class="team-background left ${team1.class_name}"></div>
@@ -499,7 +500,7 @@ function generateCalendarListView() {
                                 </div>
                             </div>
 
-                            <div class="score-box">${resultsHTML ? formatResults(entry.results) : "VS"}</div>       
+                            <div class="score-box">${resultsHTML ? resultsHTML : "VS"}</div>       
 
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link" href="${team2.link}">
@@ -534,10 +535,12 @@ function generateCalendarListView() {
                     </details>
                 </div>
             `
-        })
+        });
 
-        calendarListView.innerHTML += `<hr>`
-    }
+        HTMLOutput += `<hr>`
+    };
+
+    calendarListView.innerHTML = HTMLOutput;
 }
 
 function scrollMatchList() {

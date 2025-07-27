@@ -265,7 +265,6 @@ document.addEventListener('keydown', (event) => {
 
     if (keySequence.join('') === easterCode.join('')) {
         mikuEasterEgg();
-        console.log("aa")
     }
 
     if ((key === 'i' || key === 'o') && !isKeyPressed) {
