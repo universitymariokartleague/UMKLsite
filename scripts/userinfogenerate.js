@@ -1,8 +1,5 @@
 /*
-    This script generates the team info page for each team's individual page.
-    It is similar to teamboxgenerate.js, but it focuses on displaying detailed information
-    about a specific team, including their logo, location, institution,
-    championships, wins-losses, and lifetime points. HTML elements are created dynamically.
+    This script generates a user's info page.
 */
 
 const teamBoxFormatHTML = `
@@ -41,26 +38,26 @@ let refreshTimer = null;
 
 let startTime;
 
-function buildTeamInfoTable(teamData, isCurrent = false) {
+function buildTeamInfoTable(playerData, isCurrent = false) {
     if (isCurrent) {
         return `
             <table class="team-info-table">
-                <tr><td class="table-key">Wins/Losses</td><td>${teamData.season_wins_losses[0]} - ${teamData.season_wins_losses[1]} ${teamData.team_season_points > 0 ? `(${toOrdinal(teamData.season_position)})` : ''}</td></tr>
-                <tr><td class="table-key">Matches Played</td><td>${teamData.season_matches_played}</td></tr>
-                <tr><td class="table-key">Points</td><td>${teamData.team_season_points}</td></tr>
-                <tr><td class="table-key">Penalties</td><td>${teamData.season_penalties}</td></tr>
+                <tr><td class="table-key">Wins/Losses</td><td>${playerData.season_wins_losses[0]} - ${playerData.season_wins_losses[1]} ${playerData.team_season_points > 0 ? `(${toOrdinal(playerData.season_position)})` : ''}</td></tr>
+                <tr><td class="table-key">Matches Played</td><td>${playerData.season_matches_played}</td></tr>
+                <tr><td class="table-key">Points</td><td>${playerData.team_season_points}</td></tr>
+                <tr><td class="table-key">Penalties</td><td>${playerData.season_penalties}</td></tr>
             </table>
         `;
     }
     return `
         <table class="team-info-table">
-            <tr><td class="table-key">Location</td><td>${teamData.team_place}</td></tr>
-            <tr><td class="table-key">Institution</td><td>${teamData.team_full_name}</td></tr>
-            <tr><td class="table-key">First Entry</td><td>Season ${teamData.first_entry} (${startYear + teamData.first_entry}-${startYear + 1 + teamData.first_entry})</td></tr>
-            <tr><td class="table-key">Season Wins</td><td>${teamData.team_championships}</td></tr>
-            <tr><td class="table-key">Lifetime<br>Wins/Losses</td><td>${teamData.career_wins_losses[0]} - ${teamData.career_wins_losses[1]}</td></tr>
-            <tr><td class="table-key">Lifetime Points</td><td>${teamData.team_career_points}</td></tr>
-            <tr><td class="table-key">Lifetime Matches Played</td><td>${teamData.lifetime_matches_played}</td></tr>
+            <tr><td class="table-key">Location</td><td>${playerData.team_place}</td></tr>
+            <tr><td class="table-key">Institution</td><td>${playerData.team_full_name}</td></tr>
+            <tr><td class="table-key">First Entry</td><td>Season ${playerData.first_entry} (${startYear + playerData.first_entry}-${startYear + 1 + playerData.first_entry})</td></tr>
+            <tr><td class="table-key">Season Wins</td><td>${playerData.team_championships}</td></tr>
+            <tr><td class="table-key">Lifetime<br>Wins/Losses</td><td>${playerData.career_wins_losses[0]} - ${playerData.career_wins_losses[1]}</td></tr>
+            <tr><td class="table-key">Lifetime Points</td><td>${playerData.team_career_points}</td></tr>
+            <tr><td class="table-key">Lifetime Matches Played</td><td>${playerData.lifetime_matches_played}</td></tr>
         </table>
     `;
 }
@@ -160,7 +157,7 @@ function toOrdinal(n) {
 }
 
 async function getPlayerdata(team = "", season = "") {
-    const response = await fetch('https://api.umkl.co.uk/teamdata', {
+    const response = await fetch('https://api.umkl.co.uk/playerdata', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -181,42 +178,36 @@ async function getPlayerdata(team = "", season = "") {
     return response.json();
 }
 
-async function getPlayerdataFallback(currentTeam) {
-    const response = await fetch(`database/teamdatafallbacks${currentSeason}.json`);
+async function getPlayerdataFallback(playerID) {
+    const response = await fetch(`database/playerdatafallback.json`);
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
     const allTeams = await response.json();
-    return allTeams.filter(team => team.team_name === currentTeam);
+    return allTeams.filter(team => team.team_name === playerID);
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
-    console.debug(`%cteaminfogenerate.js %c> %cGenerating team info box`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
+    console.debug(`%cuserinfogenerate.js %c> %cGenerating player info box`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
     JSTeamBox.innerHTML = "Loading team information...";
 
     let showError = 0;
     const urlParams = new URLSearchParams(window.location.search);
-    let currentTeam = urlParams.get('team');
-    document.title = `Team ${currentTeam} | University Mario Kart League`;
-    teamNameBox.innerText = currentTeam;
-
-    if (!currentTeam) {
-        window.location.href = "/pages/teams";
-    } else {
-        teamNameBox.innerText = currentTeam;
-    }
+    let playerID = urlParams.get('ID');
+    document.title = `Player ${playerID} | University Mario Kart League`;
+    teamNameBox.innerText = playerID;
 
     try {
-        playerData = await getPlayerdata(currentTeam);
+        playerData = await getPlayerdata(playerID);
     } catch (error) {
         console.log(error)
-        if (error?.error === "Team not found") {
-            window.location.href = "/pages/teams";
-        }
+        // if (error?.error === "Player not found") {
+        //     window.location.href = "/pages/players";
+        // }
 
-        console.debug(`%cteaminfogenerate.js %c> %cAPI failed - using fallback information...`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
-        playerData = await getPlayerdataFallback(currentTeam);
+        console.debug(`%cuserinfogenerate.js %c> %cAPI failed - using fallback information...`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
+        playerData = await getPlayerdataFallback(playerID);
         showError = 1;
 
         if (error && error.message && error.message.includes('429')) {
@@ -230,7 +221,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     } else {
                         window.retryCount++;
                     }
-                    playerData = await getPlayerdata(currentTeam);
+                    playerData = await getPlayerdata(playerID);
                     showError = 0;
                     await generateTeamBox(playerData[0], showError);
                 } catch (err) {
@@ -251,8 +242,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             } else {
                 window.retryCount++;
             }
-            console.debug(`%cteaminfogenerate.js %c> %cRefreshing live data...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
-            playerData = await getPlayerdata(currentTeam);
+            console.debug(`%cuserinfogenerate.js %c> %cRefreshing live data...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
+            playerData = await getPlayerdata(playerID);
             showError = 0;
             await editTeamBox(playerData[0]);
             showErrorBox(showError);
@@ -268,5 +259,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
     refreshTimer = setTimeout(updateFetch, UPDATEINVERVAL);
 
-    console.debug(`%cteaminfogenerate.js %c> %cGenerated team info box in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
+    console.debug(`%cuserinfogenerate.js %c> %cGenerated user info box in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
 });

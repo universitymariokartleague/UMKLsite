@@ -413,6 +413,8 @@ function generateCalendarListView() {
 
     const locale = localStorage.getItem("locale") || "en-GB";
 
+    calendarListView.innerHTML = "";
+
     for (let i = 0; i < sortedDates.length; i++) {
         const date = sortedDates[i];
 
