@@ -7,8 +7,8 @@
 
 const teamBoxFormatHTML = `
     <div class="team-info-wrapper">
-        <img width=200 height=200 src="{{logoSrc}}" alt="{{teamName}}'s team logo" title="{{teamName}}'s team logo"  class="team-info-logo"
-        onerror="this.onerror=null; this.src='{{placeholderLogo}}';"/>
+        <img width=200 height=200 src="{{logoSrc}}" alt="{{teamNamePossessive}} team logo" title="{{teamNamePossessive}} team logo"  class="team-info-logo"
+        onload="this.style.opacity=1" onerror="this.onerror=null; this.src='{{placeholderLogo}}';"/>
         <hr>
         <div class="team-info-text">
             {{extraFields}}
@@ -80,6 +80,7 @@ async function generateTeamBox(teamData, showError) {
     let tempTeamBox = teamBoxFormatHTML
         .replace("{{currentSeason}}", teamData.season)
         .replaceAll("{{teamName}}", teamData.team_name)
+        .replaceAll("{{teamNamePossessive}}", makePossessive(teamData.team_name))
         .replace("{{className}}", teamData.class_name)
         .replace("{{teamNameLower}}", teamData.team_name.toLowerCase())
         .replace("{{logoSrc}}", teamData.logo_src)
@@ -91,7 +92,6 @@ async function generateTeamBox(teamData, showError) {
     JSTeamBox.innerHTML = tempTeamBox;
     JSTeamBox.classList.add('fade-in');
 
-    // Dynamically inject .live-dot CSS using --highlight-color as background
     (function injectLiveDotStyle() {
         const style = document.createElement('style');
         style.textContent = `
@@ -115,6 +115,14 @@ async function generateTeamBox(teamData, showError) {
     })();
 
     showErrorBox(showError);
+}
+
+function makePossessive(name) {
+    if (!name) return '';
+    if (name.endsWith('s') || name.endsWith('S')) {
+        return `${name}'`;
+    }
+    return `${name}'s`;
 }
 
 async function editTeamBox(teamData) {

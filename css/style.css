@@ -908,6 +908,8 @@ blockquote {
 .team-info-logo {
     margin: 0 auto;
     width: 200px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
 }
 
 #teamMapIFrame {
@@ -1300,4 +1302,10 @@ blockquote {
         padding: 3px;
         font-size: clamp(0.7rem, 3.5vw, 1em);
     }
+}
+
+.user-image {
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
 }
