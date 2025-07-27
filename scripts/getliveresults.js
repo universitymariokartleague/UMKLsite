@@ -34,7 +34,7 @@ function animateNumberChange(element, oldValue, newValue, duration = 500, grow =
 
     if (grow) {
         element.classList.remove("grow");
-        void element.offsetWidth; // force reflow
+        void element.offsetWidth;
         element.classList.add("grow");
     }
 
@@ -53,6 +53,8 @@ function animateNumberChange(element, oldValue, newValue, duration = 500, grow =
 }
 
 function setScores() {
+    window.retryCount = 0;
+    
     const [newFirst, newSecond] = reversed ? [scores[1], scores[0]] : [scores[0], scores[1]];
 
     const currentFirst = parseInt(firstTeamScore.innerText) || 0;
