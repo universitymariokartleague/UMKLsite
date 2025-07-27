@@ -742,11 +742,13 @@ function generateListViewButton() {
 
 function changeCalendarView(listView) {
     if (listView) {
+        generateCalendarListView();
         calendarListView.classList.remove("hidden")
         calendarContainer.classList.add("hidden")
         if (!listViewToggledOnce) scrollMatchList();
         listViewToggledOnce = true;
     } else {
+        displayCalendar();
         calendarListView.classList.add("hidden")
         calendarContainer.classList.remove("hidden")
     }
@@ -804,8 +806,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     makeTeamsColorStyles();
-    displayCalendar();
-    generateCalendarListView();
     loadCalendarView();
     console.debug(`%cmatchcalendar.js %c> %cMatch data loaded in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
 });

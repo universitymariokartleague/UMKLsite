@@ -183,7 +183,7 @@
 }
 
 #calendarListView {
-    max-height: 75vh;
+    max-height: calc(75vh - 100px);
     overflow-y: auto;
 }
 

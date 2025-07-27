@@ -79,9 +79,6 @@
 }
 
 .day.selected {
-    /* background-image: url("../assets/media/calendar/mikuheadshake.gif");
-    background-size: cover;
-    background-position: center; */
     background-color: #F0185130!important;
     outline: 1px solid #F01851D0;
     border: 1px solid #F01851D0;
