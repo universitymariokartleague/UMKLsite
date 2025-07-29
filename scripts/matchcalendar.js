@@ -743,7 +743,7 @@ function generateListViewButton() {
     
     listViewButton.onclick = () => {
         listViewEnabled = !listViewEnabled;
-        listViewButton.innerHTML = `${listViewEnabled ? `<span class="fa-regular fa-calendar"></span> Disable` : `<span class="fa-solid fa-bars"></span> Enable`} List View`
+        listViewButton.innerHTML = `${listViewEnabled ? `<span class="fa-regular fa-calendar"></span> Calendar View` : `<span class="fa-solid fa-bars"></span> List View`}`
         
         changeCalendarView(listViewEnabled);
         
@@ -769,7 +769,7 @@ function loadCalendarView() {
     const calendarListView = localStorage.getItem("calendarListView") == 1 || false;
     changeCalendarView(calendarListView);
     listViewEnabled = calendarListView;
-    listViewButton.innerHTML = `${listViewEnabled ? `<span class="fa-regular fa-calendar"></span> Disable` : `<span class="fa-solid fa-bars"></span> Enable`} List View`
+    listViewButton.innerHTML = `${listViewEnabled ? `<span class="fa-regular fa-calendar"></span> Calendar View` : `<span class="fa-solid fa-bars"></span> List View`}`
 }
 
 document.addEventListener('calendarListViewChange', async () => {

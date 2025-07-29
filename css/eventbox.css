@@ -119,6 +119,7 @@
 .event-box-team .youtube-box {
     font-size: 14px;
     position: absolute;
+    bottom: 1px;
 }
 
 .event-box-team .fa-youtube {
@@ -189,6 +190,10 @@
     overflow-y: auto;
 }
 
+#calendarListView .event-overlay {
+    padding: 10px;
+}
+
 #calendarListView .event-box-team {
     font-size: 1vmin;
 }
@@ -198,8 +203,8 @@
 }
 
 #calendarListView .team-box-image {
-    max-height: 5vmin;
-    max-width: 5vmin;
+    max-height: 7.5vmin;
+    max-width: 7.5vmin;
 }
 
 #calendarListView .score-box {
@@ -218,8 +223,8 @@
     }
 
     #calendarListView .team-box-image {
-        max-height: 7.5vmin;
-        max-width: 7.5vmin;
+        max-height: 10vmin;
+        max-width: 10vmin;
     }
 
     #calendarListView .score-box {
