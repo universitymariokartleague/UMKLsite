@@ -10,7 +10,6 @@
         <link rel="shortcut icon" href="assets/media/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
-        <link rel="stylesheet" href="css/audioplayer.css">
         <link rel="stylesheet" href="css/overlayscrollbars.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
         <meta name="color-scheme" content="dark light">
@@ -26,7 +25,7 @@
         <meta name="twitter:card" content="summary_large_image">
 
         <!-- Scripts -->
-            <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
         <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
         <script src="scripts/overlayscrollbar.js" defer></script>
         
@@ -91,6 +90,11 @@
                     <a href="pages\rules\brand\" class="button">View</a>
                 </div>
 
+                <div class="rules-box">
+                    <h2>Streaming Guidelines</h2>
+                    <p class="p-below-title">Guidelines for streamers and instructions for OBS set up</p>
+                    <a href="pages\rules\stream\" class="button">View</a>
+                </div>
             </div>
         </main>
 
