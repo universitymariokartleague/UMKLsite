@@ -119,11 +119,11 @@
 .event-box-team .youtube-box {
     font-size: 14px;
     position: absolute;
-    bottom: 1px;
+    bottom: 2px;
 }
 
 .event-box-team .fa-youtube {
-    font-size: 18px;
+    font-size: 22px;
 }
 
 .event-box-team .left-team {
@@ -182,6 +182,10 @@
 
     .match-date-time-box {
         font-size: 10px;
+    }
+
+    .event-box-team .fa-youtube {
+        font-size: 18px;
     }
 }
 
