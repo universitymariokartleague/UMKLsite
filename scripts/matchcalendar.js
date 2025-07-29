@@ -341,13 +341,14 @@ function showDailyLog(date, dayCell) {
                     <div class="team-box-container">
                         <div class="team-background left ${team1.class_name}"></div>
                         <div class="team-background right ${team2.class_name}"></div>
-                        <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.png"/>
+                        <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.png"
+                        onload="this.style.opacity=1" loading="lazy"/>
 
                         <div class="event-overlay">
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link" href="${team1.link}">
                                     <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
-                                    alt="${team1.team_name} team logo"
+                                    alt="${team1.team_name} team logo" loading="lazy"
                                     onload="this.style.opacity=1"
                                     onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
                                     <h2>${team1.team_name}</h2>
@@ -364,7 +365,7 @@ function showDailyLog(date, dayCell) {
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link" href="${team2.link}">
                                     <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
-                                    alt="${team2.team_name} team logo"
+                                    alt="${team2.team_name} team logo" loading="lazy"
                                     onload="this.style.opacity=1" 
                                     onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
                                     <h2>${team2.team_name}</h2>
@@ -406,7 +407,11 @@ function showDailyLog(date, dayCell) {
 
 function generateCalendarListView() {
     const today = new Date();
-    const formattedToday = today.toISOString().split("T")[0];
+    const formattedToday = [
+        today.getFullYear(),
+        String(today.getMonth() + 1).padStart(2, '0'),
+        String(today.getDate()).padStart(2, '0')
+    ].join('-');
 
     const sortedDates = Object.keys(matchData);
     let todayMarkerInserted = false;
@@ -430,7 +435,7 @@ function generateCalendarListView() {
 
         const formattedDate = new Date(`${date}`).toLocaleString(locale, { dateStyle: 'long' });
         HTMLOutput += `
-            <h3 id=${date}>${formattedDate}</h3>
+            <h3 id=${date}>${formattedToday == date ? ' ☆ ' : ''}${formattedDate}</h3>
         `
 
         matchData[date].forEach(entry => {
@@ -482,13 +487,14 @@ function generateCalendarListView() {
                     <div class="team-box-container">
                         <div class="team-background left ${team1.class_name}"></div>
                         <div class="team-background right ${team2.class_name}"></div>
-                        <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.png"/>
+                        <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.png"
+                        onload="this.style.opacity=1" loading="lazy"/>
 
                         <div class="event-overlay">
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link" href="${team1.link}">
                                     <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
-                                    alt="${team1.team_name} team logo"
+                                    alt="${team1.team_name} team logo" loading="lazy"
                                     onload="this.style.opacity=1"
                                     onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
                                     <h2>${team1.team_name}</h2>
@@ -505,7 +511,7 @@ function generateCalendarListView() {
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link" href="${team2.link}">
                                     <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
-                                    alt="${team2.team_name} team logo"
+                                    alt="${team2.team_name} team logo" loading="lazy"
                                     onload="this.style.opacity=1" 
                                     onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
                                     <h2>${team2.team_name}</h2>

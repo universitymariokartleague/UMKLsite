@@ -7,7 +7,7 @@
 
 const teamBoxFormatHTML = `
     <div class="team-info-wrapper">
-        <img width=200 height=200 src="{{logoSrc}}" alt="{{teamNamePossessive}} team logo" title="{{teamNamePossessive}} team logo"  class="team-info-logo"
+        <img width=200 height=200 src="{{logoSrc}}" alt="{{teamNamePossessive}} team logo" title="{{teamNamePossessive}} team logo" class="team-info-logo" loading="lazy"
         onload="this.style.opacity=1" onerror="this.onerror=null; this.src='{{placeholderLogo}}';"/>
         <hr>
         <div class="team-info-text">
@@ -208,6 +208,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     let currentTeam = urlParams.get('team');
     document.title = `Team ${currentTeam} | University Mario Kart League`;
     teamNameBox.innerText = currentTeam;
+
+    let backButton = document.getElementById("backButton");
+    if (backButton) {
+        const referrer = document.referrer;
+        if (referrer.includes("/teams/") || referrer.includes("/matches/")) {
+            backButton.href = "javascript:history.back()";
+        }
+    }
 
     if (!currentTeam) {
         window.location.href = "/pages/teams";
