@@ -62,6 +62,10 @@
     margin-left: 10px;
 }
 
+.match-box summary:hover {
+    text-decoration: underline;
+}
+
 .team-background {
     position: absolute;
     top: 0;
