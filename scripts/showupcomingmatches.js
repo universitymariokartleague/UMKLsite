@@ -131,6 +131,11 @@ function showUpcomingMatch() {
                 }
             }
 
+            if (entry.ytLinks) {
+                team1.ytLink = entry.ytLinks[0]
+                team2.ytLink = entry.ytLinks[1]
+            }
+
             html += `            
             <div class="event-container">
                 <div class="team-box-container">
@@ -147,6 +152,11 @@ function showUpcomingMatch() {
                                 onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
                                 <h2>${team1.team_name}</h2>
                             </a>
+                            <div class="youtube-box left-team">
+                                ${team1.ytLink ? `
+                                <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
+                                href="${team1.ytLink}" target="_blank" title="View the archived livestream"></a>` : ''}
+                            </div>
                         </div>
 
                         <div class="score-box">VS</div>       
@@ -158,6 +168,11 @@ function showUpcomingMatch() {
                                 onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
                                 <h2>${team2.team_name}</h2>
                             </a>
+                            <div class="youtube-box right-team">
+                                ${team2.ytLink ? `
+                                <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
+                                href="${team2.ytLink}" target="_blank" title="View the archived livestream"></a>` : ''}
+                            </div>
                         </div>
                     </div>
                 </div>
