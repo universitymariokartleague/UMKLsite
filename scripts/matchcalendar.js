@@ -356,7 +356,7 @@ function showDailyLog(date, dayCell) {
                                 <div class="youtube-box left-team">
                                     ${team1.ytLink ? `
                                     <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
-                                    href="${team1.ytLink}" target="_blank" title="View the archived livestream"></a>` : ''}
+                                    href="${team1.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'View the archived livestream'}"></a>` : ''}
                                 </div>
                             </div>
 
@@ -373,7 +373,7 @@ function showDailyLog(date, dayCell) {
                                 <div class="youtube-box right-team">
                                     ${team2.ytLink ? `
                                     <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
-                                    href="${team2.ytLink}" target="_blank" title="View the archived livestream"></a>` : ''}
+                                    href="${team2.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'View the archived livestream'}"></a>` : ''}
                                 </div>
                             </div>
                         </div>
@@ -502,7 +502,7 @@ function generateCalendarListView() {
                                 <div class="youtube-box left-team">
                                     ${team1.ytLink ? `
                                     <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
-                                    href="${team1.ytLink}" target="_blank" title="View the archived livestream"></a>` : ''}
+                                    href="${team1.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'View the archived livestream'}"></a>` : ''}
                                 </div>
                             </div>
 
@@ -519,7 +519,7 @@ function generateCalendarListView() {
                                 <div class="youtube-box right-team">
                                     ${team2.ytLink ? `
                                     <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
-                                    href="${team2.ytLink}" target="_blank" title="View the archived livestream"></a>` : ''}
+                                    href="${team2.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'View the archived livestream'}"></a>` : ''}
                                 </div>
                             </div>
                         </div>
