@@ -46,8 +46,8 @@ function buildTeamInfoTable(teamData, isCurrent = false) {
         return `
             <table class="team-info-table">
                 <tr><td class="table-key">Wins/Losses</td><td>${teamData.season_wins_losses[0]} - ${teamData.season_wins_losses[1]} ${teamData.team_season_points > 0 ? `(${toOrdinal(teamData.season_position)})` : ''}</td></tr>
-                <tr><td class="table-key">Matches Played</td><td>${teamData.season_matches_played}</td></tr>
                 <tr><td class="table-key">Points</td><td>${teamData.team_season_points}</td></tr>
+                <tr><td class="table-key">Matches Played</td><td>${teamData.season_matches_played}</td></tr>
                 <tr><td class="table-key">Penalties</td><td>${teamData.season_penalties}</td></tr>
             </table>
         `;
