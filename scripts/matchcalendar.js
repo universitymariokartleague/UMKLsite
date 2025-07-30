@@ -754,6 +754,7 @@ function generateListViewButton() {
 function changeCalendarView(listView) {
     if (listView) {
         generateCalendarListView();
+        document.dispatchEvent(new CustomEvent('scrollbarToCalendarListView'));
         calendarListView.classList.remove("hidden")
         calendarContainer.classList.add("hidden")
         if (!listViewToggledOnce) scrollMatchList();

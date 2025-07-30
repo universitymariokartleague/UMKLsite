@@ -159,6 +159,10 @@ function sendThemeChangeEvent() {
     document.dispatchEvent(new CustomEvent('themeChange', { detail: { darkThemeEnabled } }));
 }
 
+document.addEventListener('scrollbarToCalendarListView', (event) => {
+    document.dispatchEvent(new CustomEvent('addScrollbarToCalendarListView', { detail: { darkThemeEnabled } }));
+})
+
 function toggleStartDay() {
     const newStartDay = localStorage.getItem("startDay") == 0 ? 1 : 0;
     localStorage.setItem("startDay", newStartDay);

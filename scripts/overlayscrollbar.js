@@ -5,6 +5,7 @@
 
 const { OverlayScrollbars } = OverlayScrollbarsGlobal;
 
+let scrollBars = [];
 const osInstance = OverlayScrollbars({
     target: document.body,
     cancel: {
@@ -18,12 +19,15 @@ const osInstance = OverlayScrollbars({
         autoHideDelay: 3000,
     }
 });
+scrollBars.push(osInstance);
 
 function changeScrollbarTheme(dark) {
-    osInstance.options({
-        scrollbars: {
-            theme: dark == 0 ? 'os-theme-dark' : 'os-theme-light'
-        }
+    scrollBars.forEach(sb => {
+        sb.options({
+            scrollbars: {
+                theme: dark == 0 ? 'os-theme-dark' : 'os-theme-light'
+            }
+        });
     });
 }
 
@@ -31,3 +35,21 @@ document.addEventListener('themeChange', (event) => {
     console.debug(`%coverlayscrollbar.js %c> %cChanging scrollbar theme`, "color:#4599ff", "color:#fff", "color:#b3d5ff");
     changeScrollbarTheme(event.detail.darkThemeEnabled);
 });
+
+document.addEventListener('addScrollbarToCalendarListView', (event) => {
+    calendarListView = document.getElementById('calendarListView');
+    console.debug(`%coverlayscrollbar.js %c> %cAdding scrollbar to calendar list view`, "color:#4599ff", "color:#fff", "color:#b3d5ff");
+        
+    const calendarListViewInstance = OverlayScrollbars(calendarListView, {
+        cancel: {
+            nativeScrollbarsOverlaid: true,
+            body: null,
+        },
+        scrollbars: {
+            theme: event.detail.darkThemeEnabled == 0 ? 'os-theme-dark' : 'os-theme-light',
+            autoHide: 'scroll',
+            autoHideDelay: 3000,
+        }
+    });
+    scrollBars.push(calendarListViewInstance);
+})
