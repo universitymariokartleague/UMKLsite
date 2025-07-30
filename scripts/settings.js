@@ -160,7 +160,7 @@ function sendThemeChangeEvent() {
 }
 
 document.addEventListener('scrollbarToCalendarListView', (event) => {
-    document.dispatchEvent(new CustomEvent('addScrollbarToCalendarListView', { detail: { darkThemeEnabled } }));
+    document.dispatchEvent(new CustomEvent('addScrollbarToCalendarListView', { detail: { darkThemeEnabled, scrollToY: event.detail.scrollToY } }));
 })
 
 function toggleStartDay() {

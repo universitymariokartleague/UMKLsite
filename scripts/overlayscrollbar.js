@@ -37,9 +37,9 @@ document.addEventListener('themeChange', (event) => {
 });
 
 document.addEventListener('addScrollbarToCalendarListView', (event) => {
-    calendarListView = document.getElementById('calendarListView');
+    const calendarListView = document.getElementById('calendarListView');
     console.debug(`%coverlayscrollbar.js %c> %cAdding scrollbar to calendar list view`, "color:#4599ff", "color:#fff", "color:#b3d5ff");
-        
+
     const calendarListViewInstance = OverlayScrollbars(calendarListView, {
         cancel: {
             nativeScrollbarsOverlaid: true,
@@ -52,4 +52,22 @@ document.addEventListener('addScrollbarToCalendarListView', (event) => {
         }
     });
     scrollBars.push(calendarListViewInstance);
-})
+
+    const { scrollOffsetElement } = calendarListViewInstance.elements();
+
+    if (event.detail && typeof event.detail.scrollToY === 'number') {
+        scrollOffsetElement.scrollTo({ top: event.detail.scrollToY });
+    }
+});
+
+document.addEventListener('removeScrollbarFromCalendarListView', () => {
+    const calendarListView = document.getElementById('calendarListView');
+    for (let i = 0; i < scrollBars.length; i++) {
+        if (scrollBars[i].elements().target === calendarListView) {
+            scrollBars[i].destroy();
+            scrollBars.splice(i, 1);
+            console.debug(`%coverlayscrollbar.js %c> %cRemoved scrollbar from calendar list view`, "color:#4599ff", "color:#fff", "color:#b3d5ff");
+            break;
+        }
+    }
+});

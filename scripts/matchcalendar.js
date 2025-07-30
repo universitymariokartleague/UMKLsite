@@ -563,10 +563,12 @@ function scrollMatchList() {
         calendarListView.scrollTo({
             top: target.offsetTop - calendarListView.offsetTop
         });
+        return target.offsetTop - calendarListView.offsetTop;
     } else {
         calendarListView.scrollTo({
             top: calendarListView.scrollHeight
         });
+        return calendarListView.scrollHeight;
     }
 }
 
@@ -754,12 +756,15 @@ function generateListViewButton() {
 function changeCalendarView(listView) {
     if (listView) {
         generateCalendarListView();
-        document.dispatchEvent(new CustomEvent('scrollbarToCalendarListView'));
         calendarListView.classList.remove("hidden")
         calendarContainer.classList.add("hidden")
-        if (!listViewToggledOnce) scrollMatchList();
+        if (!listViewToggledOnce) {
+            let y = scrollMatchList();
+            document.dispatchEvent(new CustomEvent('scrollbarToCalendarListView', { detail: { scrollToY: y } }));
+        } 
         listViewToggledOnce = true;
     } else {
+        document.dispatchEvent(new CustomEvent('removeScrollbarFromCalendarListView'));
         displayCalendar();
         calendarListView.classList.add("hidden")
         calendarContainer.classList.remove("hidden")
