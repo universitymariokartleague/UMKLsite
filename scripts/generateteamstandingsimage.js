@@ -266,12 +266,12 @@ async function createTeamStandingsImage(season, isCurrentSeason, teamStandingsDa
     });
 }
 
-async function generateTeamStandingsImage() {
+async function generateTeamStandingsImage(season) {
     startTime = performance.now();
 
     currentSeason = (await getCurrentSeason())[0];
-    let teamStandings = await getTeamdata("", currentSeason);
+    let teamStandings = await getTeamdata("", season);
 
     console.debug(`%cgenerateteamstandingsimage.js %c> %cGenerated team standings ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
-    return createTeamStandingsImage(currentSeason, true, teamStandings)
+    return createTeamStandingsImage(season, season == currentSeason, teamStandings)
 }

@@ -28,7 +28,7 @@ shareButton.addEventListener("click", async () => {
         const useClipboard = isWindowsOrLinux() || !navigator.canShare;
         if (useClipboard) shareButton.innerHTML = "Generating image...";
 
-        const blob = await generateTeamStandingsImage();
+        const blob = await generateTeamStandingsImage(currentSeason.value);
 
         if (useClipboard) {
             const success = await copyImageToClipboard(blob);
