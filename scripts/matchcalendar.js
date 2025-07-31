@@ -307,14 +307,25 @@ function showDailyLog(date, dayCell) {
                 const test = new Date('2020-01-01T13:00');
                 return test.toLocaleTimeString(locale).toLowerCase().includes('pm');
             }
-            let timeString = entry.time || '00:00';
-            if (/^\d{2}:\d{2}$/.test(timeString)) timeString += ':00';
+            let timeString = entry.time || '00:00:00';
             const is12Hour = uses12HourClock(locale);
-            const formattedMatchTime = new Date(`1970-01-01T${timeString}`).toLocaleTimeString(locale, {
+            const dateObj = new Date(`1970-01-01T${timeString}`)
+            const formattedMatchTime = dateObj.toLocaleTimeString(locale, {
                 hour: is12Hour ? 'numeric' : '2-digit',
                 minute: '2-digit',
                 hour12: is12Hour,
             });
+
+            const outsideUKTimezone = checkTimezoneMatches(timeString);
+            let formattedLocalMatchTime;
+            if (outsideUKTimezone) {
+                const timeOnly = timeString.replace(/([+-]\d{2}:\d{2})$/, '');
+                formattedLocalMatchTime = new Date(`1970-01-01T${timeOnly}`).toLocaleTimeString(locale, {
+                    hour: is12Hour ? 'numeric' : '2-digit',
+                    minute: '2-digit',
+                    hour12: is12Hour,
+                });
+            }
 
             let isLive = false;
             if (entry.time) {
@@ -346,7 +357,7 @@ function showDailyLog(date, dayCell) {
 
                         <div class="event-overlay">
                             <div class="event-box-team">
-                                <a class="no-underline-link no-color-link" href="${team1.link}">
+                                <a class="no-underline-link no-color-link team-box-underline-hover" href="${team1.link}">
                                     <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
                                     alt="${team1.team_name} team logo" loading="lazy"
                                     onload="this.style.opacity=1"
@@ -363,7 +374,7 @@ function showDailyLog(date, dayCell) {
                             <div class="score-box">${resultsHTML ? formatResults(entry.results) : "VS"}</div>       
 
                             <div class="event-box-team">
-                                <a class="no-underline-link no-color-link" href="${team2.link}">
+                                <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">
                                     <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
                                     alt="${team2.team_name} team logo" loading="lazy"
                                     onload="this.style.opacity=1" 
@@ -383,7 +394,7 @@ function showDailyLog(date, dayCell) {
                         <div class="match-date-time-box">
                             <div class="match-detail-container">
                                 <i class="fa-solid fa-clock"></i>
-                                <h2>${formattedMatchTime}</h2>
+                                <h2>${formattedMatchTime} ${outsideUKTimezone ? `<span title="Local time">(${formattedLocalMatchTime})</span>` : ''}</h2>
                                 ${isLive ? '<div class="live-dot"></div>' : ''}
                             </div>
                         </div>
@@ -450,17 +461,28 @@ function generateCalendarListView() {
             const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
 
             function uses12HourClock(locale) {
-                const test = new Date('2020-01-01T13:00');
+                const test = new Date('1970-01-01T13:00');
                 return test.toLocaleTimeString(locale).toLowerCase().includes('pm');
             }
-            let timeString = entry.time || '00:00';
-            if (/^\d{2}:\d{2}$/.test(timeString)) timeString += ':00';
+            let timeString = entry.time || '00:00:00';
             const is12Hour = uses12HourClock(locale);
-            const formattedMatchTime = new Date(`1970-01-01T${timeString}`).toLocaleTimeString(locale, {
+            const dateObj = new Date(`1970-01-01T${timeString}`)
+            const formattedMatchTime = dateObj.toLocaleTimeString(locale, {
                 hour: is12Hour ? 'numeric' : '2-digit',
                 minute: '2-digit',
                 hour12: is12Hour,
             });
+
+            const outsideUKTimezone = checkTimezoneMatches(timeString);
+            let formattedLocalMatchTime;
+            if (outsideUKTimezone) {
+                const timeOnly = timeString.replace(/([+-]\d{2}:\d{2})$/, '');
+                formattedLocalMatchTime = new Date(`1970-01-01T${timeOnly}`).toLocaleTimeString(locale, {
+                    hour: is12Hour ? 'numeric' : '2-digit',
+                    minute: '2-digit',
+                    hour12: is12Hour,
+                });
+            }
 
             let isLive = false;
             if (entry.time) {
@@ -492,7 +514,7 @@ function generateCalendarListView() {
 
                         <div class="event-overlay">
                             <div class="event-box-team">
-                                <a class="no-underline-link no-color-link" href="${team1.link}">
+                                <a class="no-underline-link no-color-link team-box-underline-hover" href="${team1.link}">
                                     <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
                                     alt="${team1.team_name} team logo" loading="lazy"
                                     onload="this.style.opacity=1"
@@ -509,7 +531,7 @@ function generateCalendarListView() {
                             <div class="score-box">${resultsHTML ? resultsHTML : "VS"}</div>       
 
                             <div class="event-box-team">
-                                <a class="no-underline-link no-color-link" href="${team2.link}">
+                                <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">
                                     <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
                                     alt="${team2.team_name} team logo" loading="lazy"
                                     onload="this.style.opacity=1" 
@@ -529,7 +551,7 @@ function generateCalendarListView() {
                         <div class="match-date-time-box">
                             <div class="match-detail-container">
                                 <i class="fa-solid fa-clock"></i>
-                                <h2>${formattedMatchTime}</h2>
+                                <h2>${formattedMatchTime} ${outsideUKTimezone ? `<span title="Local time">(${formattedLocalMatchTime})</span>` : ''}</h2>
                                 ${isLive ? '<div class="live-dot"></div>' : ''}
                             </div>
                         </div>
@@ -590,6 +612,18 @@ function formatResults(results) {
                 </p>
             ` : ''}
     `.trim();
+}
+
+function checkTimezoneMatches(timeString) {
+    const offset = new Date().getTimezoneOffset();
+    const sign = offset <= 0 ? '+' : '-';
+    const abs = Math.abs(offset);
+    const formattedOffset = `${sign}${String(Math.floor(abs / 60)).padStart(2, '0')}:${String(abs % 60).padStart(2, '0')}`;
+    
+    const match = timeString.match(/([+-]\d{2}:\d{2})$/);
+    const extractedOffset = match ? match[1] : null;
+
+    return formattedOffset != extractedOffset;
 }
 
 function autoLink(text) {

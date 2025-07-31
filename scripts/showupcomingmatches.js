@@ -62,15 +62,41 @@ async function getTeamcolorsFallback() {
 }
 
 function showUpcomingMatch() {
+    const getUKDate = (offsetDays = 0) => {
+        const now = new Date();
+
+        const formatter = new Intl.DateTimeFormat('en-GB', {
+            timeZone: 'Europe/London',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        });
+
+        const parts = formatter.formatToParts(now);
+        let year = parseInt(parts.find(p => p.type === 'year').value);
+        let month = parseInt(parts.find(p => p.type === 'month').value);
+        let day = parseInt(parts.find(p => p.type === 'day').value);
+
+        day += offsetDays;
+
+        const ukDate = new Date(Date.UTC(year, month - 1, day));
+
+        return ukDate;
+    };
+
+    const todayUK = getUKDate(0);
+    const tomorrowUK = getUKDate(1);
+    
     const pad = n => String(n).padStart(2, '0');
     const formatDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-    const today = new Date();
-    const todayStr = formatDate(today);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-    const tomorrowStr = formatDate(tomorrow);
 
-    // get all matches from today and tomorrow, filter out matches more than 2 hours ago
+    const todayStr = formatDate(todayUK);
+    const tomorrowStr = formatDate(tomorrowUK);
+
+    console.log(todayStr)
+    console.log(tomorrowStr)
+
+    // Get all matches from today and tomorrow
     const now = new Date();
     const matches = [
         ...(matchData[todayStr] || []),
@@ -84,6 +110,7 @@ function showUpcomingMatch() {
     });
 
     upcomingMatchesBox.innerHTML = ``;
+
     if (matches.length > 0) {
         const locale = localStorage.getItem("locale") || "en-GB";
 
@@ -105,17 +132,28 @@ function showUpcomingMatch() {
             const formattedDate = new Date(matchDateStr).toLocaleDateString(locale, { dateStyle: 'long' });
 
             function uses12HourClock(locale) {
-                const test = new Date('2020-01-01T13:00');
+                const test = new Date('1970-01-01T13:00');
                 return test.toLocaleTimeString(locale).toLowerCase().includes('pm');
             }
-            let timeString = entry.time || '00:00';
-            if (/^\d{2}:\d{2}$/.test(timeString)) timeString += ':00';
+            let timeString = entry.time || '00:00:00';
             const is12Hour = uses12HourClock(locale);
-            const formattedMatchTime = new Date(`1970-01-01T${timeString}`).toLocaleTimeString(locale, {
+            const dateObj = new Date(`1970-01-01T${timeString}`)
+            const formattedMatchTime = dateObj.toLocaleTimeString(locale, {
                 hour: is12Hour ? 'numeric' : '2-digit',
                 minute: '2-digit',
                 hour12: is12Hour,
             });
+
+            const outsideUKTimezone = checkTimezoneMatches(timeString);
+            let formattedLocalMatchTime;
+            if (outsideUKTimezone) {
+                const timeOnly = timeString.replace(/([+-]\d{2}:\d{2})$/, '');
+                formattedLocalMatchTime = new Date(`1970-01-01T${timeOnly}`).toLocaleTimeString(locale, {
+                    hour: is12Hour ? 'numeric' : '2-digit',
+                    minute: '2-digit',
+                    hour12: is12Hour,
+                });
+            }
             
             let isLive = false;
             if (entry.time) {
@@ -185,7 +223,7 @@ function showUpcomingMatch() {
                         </div>
                         <div class="match-detail-container">
                             <i class="fa-solid fa-clock"></i>
-                            <h2>${formattedMatchTime}</h2>
+                            <h2>${formattedMatchTime} ${outsideUKTimezone ? `<span title="Local time">(${formattedLocalMatchTime})</span>` : ''}</h2>
                             ${isLive ? '<div class="live-dot"></div>' : ''}
                         </div>
                     </div>
@@ -203,6 +241,18 @@ function showUpcomingMatch() {
         upcomingMatchesBox.classList.add('fade-in');
         upcomingMatchesBox.innerHTML += html;
     }
+}
+
+function checkTimezoneMatches(timeString) {
+    const offset = new Date().getTimezoneOffset();
+    const sign = offset <= 0 ? '+' : '-';
+    const abs = Math.abs(offset);
+    const formattedOffset = `${sign}${String(Math.floor(abs / 60)).padStart(2, '0')}:${String(abs % 60).padStart(2, '0')}`;
+    
+    const match = timeString.match(/([+-]\d{2}:\d{2})$/);
+    const extractedOffset = match ? match[1] : null;
+
+    return formattedOffset != extractedOffset;
 }
 
 function autoLink(text) {
