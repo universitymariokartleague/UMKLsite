@@ -222,7 +222,7 @@ function showUpcomingMatch() {
                             <h2>${formattedDate}</h2>
                         </div>
                         <div class="match-detail-container">
-                            <i class="local-time-clock fa-solid fa-clock"></i>
+                            <i class="${outsideUKTimezone ? 'local-time-clock' : ''} fa-solid fa-clock"></i>
                             <h2>
                                 <span>${formattedMatchTime}</span>
                                 ${outsideUKTimezone ? `

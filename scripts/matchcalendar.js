@@ -393,7 +393,7 @@ function showDailyLog(date, dayCell) {
                     <div class="match-details-box">
                         <div class="match-date-time-box">
                             <div class="match-detail-container">
-                                <i class="local-time-clock fa-solid fa-clock"></i>
+                                <i class="${outsideUKTimezone ? 'local-time-clock' : ''} fa-solid fa-clock"></i>
                                 <h2>
                                     <span>${formattedMatchTime}</span>
                                     ${outsideUKTimezone ? `
@@ -555,7 +555,7 @@ function generateCalendarListView() {
                     <div class="match-details-box">
                         <div class="match-date-time-box">
                             <div class="match-detail-container">
-                                <i class="local-time-clock fa-solid fa-clock"></i>
+                                <i class="${outsideUKTimezone ? 'local-time-clock' : ''} fa-solid fa-clock"></i>
                                 <h2>
                                     <span>${formattedMatchTime}</span>
                                     ${outsideUKTimezone ? `
