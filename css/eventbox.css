@@ -88,7 +88,7 @@
     width: 100%;
     z-index: 1;
     opacity: 0;
-    transition: opacity 1.0s ease-in;
+    transition: opacity 0.75s ease-in;
 }
 
 .event-overlay {
