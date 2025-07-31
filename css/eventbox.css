@@ -168,6 +168,32 @@
     text-align: center;
 }
 
+.local-time-clock {
+    position: relative;
+}
+
+.local-time-clock::after {
+    content: 'UK';
+    position: absolute;
+    font-size: 6px;
+    left: 8px;
+    bottom: -4px;
+    font-family: "Montserrat", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 600;
+    background-color: var(--bg-color);
+    border: var(--button-border);
+    padding: 0 1px 0 1px;
+    border-radius: 5px;
+    display: inline-block;
+    line-height: 1;
+    margin: 0;
+}
+
+.overseas-time-clock {
+    font-size: 16px;
+    margin: 0 5px 0 2px;
+}
+
 @media screen and (max-width: 767px) {
     .event-box-team {
         font-size: 2vmin;
@@ -189,7 +215,11 @@
     }
 
     .match-date-time-box {
-        font-size: 10px;
+        font-size: 14px;
+    }
+
+    .overseas-time-clock {
+        font-size: 14px;
     }
 
     .event-box-team .fa-youtube {

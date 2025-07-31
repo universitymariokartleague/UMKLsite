@@ -222,8 +222,13 @@ function showUpcomingMatch() {
                             <h2>${formattedDate}</h2>
                         </div>
                         <div class="match-detail-container">
-                            <i class="fa-solid fa-clock"></i>
-                            <h2>${formattedMatchTime} ${outsideUKTimezone ? `<span title="Local time">(${formattedLocalMatchTime})</span>` : ''}</h2>
+                            <i class="local-time-clock fa-solid fa-clock"></i>
+                            <h2>
+                                <span>${formattedMatchTime}</span>
+                                ${outsideUKTimezone ? `
+                                    <span title="Local time" style="display: inline-flex; align-items: center;">
+                                    (<i class="overseas-time-clock fa-solid fa-clock"></i>${formattedLocalMatchTime})</span>` : ''}
+                            </h2>                            
                             ${isLive ? '<div class="live-dot"></div>' : ''}
                         </div>
                     </div>
