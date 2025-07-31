@@ -4,7 +4,6 @@
     and institution. The script fetches data from the API and creates the
     HTML elements dynamically. It also handles caching of the data to improve performance.
 */
-
 function generateTeamHTML(team) {
     return `
         <button onClick="location.href='pages/teams/details?team=${team.link_name}'" class="${team.class_name} teamBox">
@@ -31,8 +30,6 @@ const JSTeamBoxLoading = document.getElementById("JSTeamBoxLoading")
 const styleSheet = document.createElement("style");
 const seasonPicker = document.getElementById("season-select")
 const currentSeasonText = document.getElementById("current-season")
-
-let listView = localStorage.getItem("teamsListView") == 1 || false;
 
 let teamData = [];
 const startYear = 2023;
@@ -288,7 +285,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     generateListViewButton();
-    await loadFont('SF-Pro-Display-Bold', 'assets/pythongraphics/fonts/SF-Pro/SF-Pro-Display-Bold.otf');
+    await loadFont('SF-Pro-Display-Bold', 'assets/canvas/fonts/SF-Pro/SF-Pro-Display-Bold.otf');
     
     try {
         teamData = await getTeamdata("");
@@ -361,7 +358,6 @@ seasonPicker.addEventListener("change", async function () {
     await getTeamdataSafe(currentSeason)
     await generateTeamBoxes(teamData)
     await updateSeasonText();
-    // console.log(JSON.stringify(teamData))
 });
 
 async function updateSeasonText() {

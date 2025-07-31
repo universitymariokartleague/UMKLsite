@@ -7,8 +7,8 @@
     The preview is a small popup that shows the image and a message indicating 
     that it has been copied.
 */
-
 import { isWindowsOrLinux, copyImageToClipboard, shareImage, showImagePreview, setOriginalMessage, getOriginalMessage, getIsPopupShowing } from "./shareAPIhelper.js";
+import { generateTeamStandingsImage } from './generateteamstandingsimage.js';
 
 const shareButton = document.getElementById("shareButton");
 const currentSeason = document.getElementById("season-select");
@@ -17,7 +17,7 @@ setOriginalMessage(shareButton.innerHTML);
 function generateMessage() {
     const randomChance = Math.random();
     return randomChance < 0.01
-        ? `今、イースターエッグはないけど... シーズン${currentSeason.value}の結果を見てよ！`
+        ? `初音ミクが語るUMKLシーズン${currentSeason.value}！`
         : `Take a look at Season ${currentSeason.value}'s team standings in the University Mario Kart League!`;
 }
 
@@ -26,16 +26,15 @@ shareButton.addEventListener("click", async () => {
 
     try {
         const useClipboard = isWindowsOrLinux() || !navigator.canShare;
-        if (useClipboard) shareButton.innerHTML = "Loading shareable image...";
+        if (useClipboard) shareButton.innerHTML = "Generating image...";
 
-        const imagePath = `assets/pythongraphics/output/team_standings_season_${currentSeason.value}.png`
-        const blob = await fetch(imagePath).then(r => r.blob());
+        const blob = await generateTeamStandingsImage();
 
         if (useClipboard) {
             const success = await copyImageToClipboard(blob);
             shareButton.innerText = success ? "Image copied to clipboard!" : "Failed to copy!";
             if (success) {
-                showImagePreview(blob, imagePath, generateMessage());
+                showImagePreview(blob, blob.url, generateMessage());
             }
         } else {
             await shareImage(

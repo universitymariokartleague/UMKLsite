@@ -677,7 +677,7 @@ function createShareButtonListener(formattedDate) {
 
         if (useClipboard) {
             const success = await copyTextToClipboard(message);
-            shareButton.innerText = success ? "Text copied to clipboard!" : "Failed to copy!";
+            shareButton.innerText = success ? "Copied to clipboard!" : "Failed to copy!";
             const messageWithURL = `Check out these UMKL matches on ${formattedDate}! <a href="${window.location.href}">${window.location.href}</a>`
             showTextPopup(messageWithURL)
         } else {

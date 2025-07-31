@@ -1,13 +1,10 @@
-# This script is intended to be run before committing changes to ensure that the latest graphics and JSON files are generated.
+# This script is intended to be run before committing changes to ensure that the latest JSON files are generated.
 
-import genteamdata, graphics, logic, makesitemap
+import genteamdata, makesitemap
 
 def run_pre_commit_tasks():
     """
-    Run pre-commit tasks to ensure the latest graphics and JSON files are generated.
-
-    This function generates graphics for team standings for all seasons,
-    and then generates a JSON file containing team colors.
+    Run pre-commit tasks to ensure the latest JSON files are generated.
     """
     print("Generating teamdata/matchdata fallback JSON files...")
     genteamdata.generate_match_data_json()
