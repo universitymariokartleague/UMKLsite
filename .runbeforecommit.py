@@ -1,6 +1,6 @@
 # This script is intended to be run before committing changes to ensure that the latest JSON files are generated.
 
-import genteamdata, makesitemap, generaterss
+import genteamdata, makesitemap, genrss
 
 def run_pre_commit_tasks():
     """
@@ -11,7 +11,7 @@ def run_pre_commit_tasks():
 
     # Generate RSS feed
     print("Generating RSS feed...")
-    generaterss.generate_rss_feed()
+    genrss.generate_rss_feed()
 
     # Generate sitemap
     print("Generating sitemap...")

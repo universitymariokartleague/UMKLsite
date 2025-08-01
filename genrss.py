@@ -1,13 +1,55 @@
-import datetime, re
+import datetime, re, os
 import xml.etree.ElementTree as ET
 import xml.dom.minidom
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 
 NEWS_INDEX = "pages/news/index.html"
 SITE_URL = "https://umkl.co.uk/"
 FEED_TITLE = "UMKL News"
 FEED_LINK = "https://umkl.co.uk/pages/news/"
 FEED_DESCRIPTION = "The latest news from the UMKL"
+
+def extract_main_html(main_tag: BeautifulSoup, base_url: str) -> str:
+    """Extract cleaned HTML after <hr class='hr-below-title'> for RSS description (unescaped)."""
+
+    hr = main_tag.find("hr", class_="hr-below-title")
+    if not hr:
+        return ""
+
+    # Grab everything after the <hr>
+    content_after_hr = []
+    sibling = hr.find_next_sibling()
+    while sibling:
+        next_sibling = sibling.find_next_sibling()
+        content_after_hr.append(sibling.extract())
+        sibling = next_sibling
+
+    # Wrap in div
+    wrapper = BeautifulSoup("<div></div>", "html.parser").div
+    for elem in content_after_hr:
+        wrapper.append(elem)
+
+    # Fix relative links
+    for a in wrapper.find_all("a", href=True):
+        href = a["href"]
+        if not href.startswith(("http://", "https://")):
+            a["href"] = base_url + href.lstrip("/")
+
+    for img in wrapper.find_all("img", src=True):
+        src = img["src"]
+        if not src.startswith(("http://", "https://")):
+            img["src"] = base_url + src.lstrip("/")
+
+    # Keep only href/src attributes, remove others
+    for tag in wrapper.find_all(True):
+        tag.attrs = {k: v for k, v in tag.attrs.items() if k in ("href", "src")}
+
+    # Remove any closing </img> tags if present (not valid HTML)
+    html_str = str(wrapper)
+    html_str = html_str.replace("</img>", "")
+
+    # Return unescaped HTML (not escaped entities)
+    return html_str
 
 def get_news_items():
     items = []
@@ -44,7 +86,23 @@ def get_news_items():
 
         title = clean_text(title_tag.get_text()) if title_tag else "No Title"
         link = SITE_URL + a_tag["href"].lstrip("/") if a_tag else SITE_URL
-        description = clean_text(desc_tag.get_text()) if desc_tag else ""
+        description = ""
+
+        if a_tag and a_tag["href"]:
+            try:
+                # Resolve local file path
+                relative_path = a_tag["href"].lstrip("/")  # e.g. "pages/news/2025-07-17/some-article/"
+                local_path = os.path.join(relative_path, "index.html")  # e.g. "pages/news/2025-07-17/some-article/index.html"
+
+                with open(local_path, encoding="utf-8") as f:
+                    news_html = f.read()
+
+                news_soup = BeautifulSoup(news_html, "html.parser")
+                main_tag = news_soup.find("main")
+                if main_tag:
+                    description = extract_main_html(main_tag, SITE_URL)
+            except Exception as e:
+                print(f"Failed to open or parse {local_path}: {e}")
 
         # Date
         date_tag = box.find("span", class_="news-date")
