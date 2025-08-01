@@ -87,14 +87,11 @@ def build_rss(items):
         item_elem = ET.SubElement(channel, "item")
         ET.SubElement(item_elem, "title").text = item["title"]
         ET.SubElement(item_elem, "link").text = item["link"]
-        # Add image as <enclosure> if present
         if item["image"]:
             ET.SubElement(
                 item_elem,
-                "enclosure",
-                url=item["image"],
-                type="image/webp"
-            )
+                "image"
+            ).text = item["image"]
         ET.SubElement(item_elem, "description").text = item["description"]
         ET.SubElement(item_elem, "pubDate").text = item["pubDate"]
 
