@@ -85,21 +85,23 @@ def build_rss(items):
     image = ET.SubElement(channel, "image")
     ET.SubElement(image, "title").text = FEED_TITLE
     ET.SubElement(image, "url").text = "https://umkl.co.uk/assets/media/brand/favicon.png"
-    ET.SubElement(image, "link").text = "https://umkl.co.uk/"
+    ET.SubElement(image, "link").text = "https://umkl.co.uk/assets/media/brand/favicon.png"
 
     for item in items:
         item_elem = ET.SubElement(channel, "item")
         ET.SubElement(item_elem, "title").text = item["title"]
         ET.SubElement(item_elem, "link").text = item["link"]
         if item["image"]:
-            ET.SubElement(
+            media = ET.SubElement(
                 item_elem,
                 "media:content",
                 {
                     "url": item["image"],
-                    "type": "image/webp"
+                    "type": "image/webp",
+                    "medium": "image"
                 }
             )
+            media.text = " "
         ET.SubElement(item_elem, "description").text = item["description"]
         ET.SubElement(item_elem, "pubDate").text = item["pubDate"]
 
