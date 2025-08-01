@@ -72,7 +72,7 @@ async function loadImage(url) {
     return new Promise((resolve, reject) => {
         const img = new Image();
         img.onload = () => resolve(img);
-        img.onerror = () => img.src = 'assets/media/teamemblems/default.png'
+        img.onerror = () => img.src = 'assets/media/teamemblems/DEFAULT.png'
         img.src = url;
     });
 }
