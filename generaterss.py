@@ -82,7 +82,7 @@ def build_rss(items):
     ET.SubElement(channel, "lastBuildDate").text = datetime.datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S +0000")
     image = ET.SubElement(channel, "image")
     ET.SubElement(image, "title").text = FEED_TITLE
-    ET.SubElement(image, "url").text = "https://umkl.co.uk/assets/media/brand/favicon.ico"
+    ET.SubElement(image, "url").text = "https://umkl.co.uk/assets/media/brand/favicon.png"
     ET.SubElement(image, "link").text = "https://umkl.co.uk/"
 
     for item in items:
