@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+	<channel>
+		<title>UMKL News</title>
+		<link>https://umkl.co.uk/news.rss</link>
+		<description>The latest news from the UMKL</description>
+		<item>
+			<title>Test matches are being conducted!</title>
+			<link>https://umkl.co.uk/pages/news/pages/news/2025-04-22/umkl-test-matches-are-being-conducted/</link>
+			<description>Test matches are planned in the upcoming week, more will follow in the upcoming month...</description>
+			<pubDate>Tue, 22 Apr 2025 00:00:00 +0000</pubDate>
+		</item>
+		<item>
+			<title>Cheep Cheep Updates</title>
+			<link>https://umkl.co.uk/pages/news/pages/news/2025-07-17/cheep-cheep-updates/</link>
+			<description>Some updates about the Cheep Cheep Discord app and upcoming test matches.</description>
+			<pubDate>Thu, 17 Jul 2025 00:00:00 +0000</pubDate>
+		</item>
+		<item>
+			<title>📌 Information for universities wanting to join</title>
+			<link>https://umkl.co.uk/pages/news/pages/news/2025-04-19/uni-joining-info/</link>
+			<description>Read this if you are interested in your uni joining the UMKL or if...</description>
+			<pubDate>Sun, 20 Apr 2025 00:00:00 +0000</pubDate>
+		</item>
+		<item>
+			<title>Join our Discord server!</title>
+			<link>https://umkl.co.uk/pages/news/pages/news/2025-04-19/umkl-discord/</link>
+			<description>All matches are organised through our Discord server. Please join it to take part in a match!</description>
+			<pubDate>Sat, 19 Apr 2025 00:00:00 +0000</pubDate>
+		</item>
+		<item>
+			<title>Welcome to the UMKL!</title>
+			<link>https://umkl.co.uk/pages/news/pages/news/2025-04-19/umkl-intro</link>
+			<description>We are a Mario Kart 8 Deluxe championship featuring teams from universities across the UK!</description>
+			<pubDate>Sat, 19 Apr 2025 00:00:00 +0000</pubDate>
+		</item>
+		<item>
+			<title>Upcoming summer test matches!</title>
+			<link>https://umkl.co.uk/pages/news/pages/news/2025-06-13/upcoming-summer-test-matches/</link>
+			<description>More test matches between teams are being planned as exams finish and summer approaches.</description>
+			<pubDate>Fri, 13 Jun 2025 00:00:00 +0000</pubDate>
+		</item>
+	</channel>
+</rss>
