@@ -4,9 +4,9 @@ import xml.dom.minidom
 from bs4 import BeautifulSoup
 
 NEWS_INDEX = "pages/news/index.html"
-SITE_URL = "https://umkl.co.uk/pages/news/"
+SITE_URL = "https://umkl.co.uk/"
 FEED_TITLE = "UMKL News"
-FEED_LINK = "https://umkl.co.uk/news.rss"
+FEED_LINK = "https://umkl.co.uk/pages/news/"
 FEED_DESCRIPTION = "The latest news from the UMKL"
 
 def get_news_items():
@@ -82,6 +82,10 @@ def build_rss(items):
     ET.SubElement(channel, "title").text = FEED_TITLE
     ET.SubElement(channel, "link").text = FEED_LINK
     ET.SubElement(channel, "description").text = FEED_DESCRIPTION
+    image = ET.SubElement(channel, "image")
+    ET.SubElement(image, "title").text = FEED_TITLE
+    ET.SubElement(image, "url").text = "https://umkl.co.uk/assets/media/brand/favicon.png"
+    ET.SubElement(image, "link").text = "https://umkl.co.uk/"
 
     for item in items:
         item_elem = ET.SubElement(channel, "item")
