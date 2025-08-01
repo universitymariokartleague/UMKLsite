@@ -164,7 +164,7 @@ async function generateTeamBoxes(teamData) {
                 row.innerHTML = `
                     <div class="teamPosition">${team.season_position}</div>
                     <div class="teamColour" style="background-color:${team.team_color}"></div>
-                    <img class="teamLogo" src="${team.logo_src}" alt="${makePossessive(team.team_name)} team logo" loading="lazy"
+                    <img class="teamLogo" src="${team.logo_src}" alt="${makePossessive(team.team_name)} team emblem" loading="lazy"
                     onerror="this.onerror=null; this.src='${placeholderLogo}';"/>
                     <div class="teamName">${team.team_name.toUpperCase()}</div>
                     <div class="teamPointsArea">
