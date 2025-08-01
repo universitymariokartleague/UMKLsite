@@ -78,6 +78,8 @@ def build_rss(items):
     ET.SubElement(channel, "title").text = FEED_TITLE
     ET.SubElement(channel, "link").text = FEED_LINK
     ET.SubElement(channel, "description").text = FEED_DESCRIPTION
+    ET.SubElement(channel, "language").text = "en-gb"
+    ET.SubElement(channel, "lastBuildDate").text = datetime.datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S +0000")
     image = ET.SubElement(channel, "image")
     ET.SubElement(image, "title").text = FEED_TITLE
     ET.SubElement(image, "url").text = "https://umkl.co.uk/assets/media/brand/favicon.ico"
