@@ -43,12 +43,10 @@ def extract_main_html(main_tag: BeautifulSoup, base_url: str) -> str:
     for tag in wrapper.find_all(True):
         tag.attrs = {k: v for k, v in tag.attrs.items() if k in ("href", "src")}
 
-    # Remove any closing </img> tags if present (not valid HTML)
-    html_str = str(wrapper)
+    html_str = wrapper.encode_contents(formatter="html").decode("utf-8")
     html_str = html_str.replace("</img>", "")
 
-    # Return unescaped HTML (not escaped entities)
-    return html_str
+    return f"<div>{html_str}</div>"
 
 def get_news_items():
     items = []
