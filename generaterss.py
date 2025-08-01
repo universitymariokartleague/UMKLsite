@@ -94,7 +94,7 @@ def build_rss(items):
         if item["image"]:
             ET.SubElement(
                 item_elem,
-                "{http://search.yahoo.com/mrss/}content",
+                "media:content",
                 {
                     "url": item["image"],
                     "type": "image/webp"
