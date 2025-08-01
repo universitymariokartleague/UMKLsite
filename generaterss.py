@@ -20,10 +20,6 @@ def get_news_items():
         return items
 
     for box in container.find_all("div", class_="news-box"):
-        # Skip if <new>📌Pinned</new> is present (ignore pinned news)
-        if box.find("new", string="📌Pinned"):
-            continue
-
         # Title and link
         article = box.find("article", class_="news-text")
         a_tag = article.find("a", href=True) if article else None
@@ -84,8 +80,8 @@ def build_rss(items):
     ET.SubElement(channel, "description").text = FEED_DESCRIPTION
     image = ET.SubElement(channel, "image")
     ET.SubElement(image, "title").text = FEED_TITLE
-    ET.SubElement(image, "url").text = "https://umkl.co.uk/assets/media/brand/favicon.png"
-    ET.SubElement(image, "link").text = "https://umkl.co.uk/assets/media/brand/favicon.png"
+    ET.SubElement(image, "url").text = "https://umkl.co.uk/assets/media/brand/favicon.ico"
+    ET.SubElement(image, "link").text = "https://umkl.co.uk/"
 
     for item in items:
         item_elem = ET.SubElement(channel, "item")
