@@ -72,6 +72,12 @@ body {
     border-radius: 5px;
 }
 
+.discord-timestamp {
+    padding: 0px 2px;
+    background-color: #28292c;
+    border-radius: 4px;
+}
+
 .modal-button {
     width: fit-content;
     color: #ffffff;
@@ -131,6 +137,13 @@ body {
     margin-bottom: 8px;
 }
 
+.embed-image img {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 2px;
+}
+
 .embed-fields {
     display: flex;
     flex-direction: column;
@@ -168,4 +181,13 @@ body {
 
 .embed-timestamp {
     margin-left: auto;
+}
+
+a:link {
+    color: #337edb;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
