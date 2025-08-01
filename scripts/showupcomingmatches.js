@@ -93,9 +93,6 @@ function showUpcomingMatch() {
     const todayStr = formatDate(todayUK);
     const tomorrowStr = formatDate(tomorrowUK);
 
-    console.log(todayStr)
-    console.log(tomorrowStr)
-
     // Get all matches from today and tomorrow
     const now = new Date();
     const matches = [

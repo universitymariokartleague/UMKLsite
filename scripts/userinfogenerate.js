@@ -246,7 +246,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         playerData = await getPlayerdata(playerID);
         fetchedCurrentSeason = parseInt(await getCurrentSeason());
     } catch (error) {
-        console.log(error)
+        console.error(error)
         if (error?.error === "Player not found") {
             window.location.href = "/pages/players/";
         }

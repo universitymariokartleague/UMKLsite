@@ -226,7 +226,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
         playerData = await getPlayerdata(currentTeam);
     } catch (error) {
-        console.log(error)
+        console.error(error)
         if (error?.error === "Team not found") {
             window.location.href = "/pages/teams";
         }

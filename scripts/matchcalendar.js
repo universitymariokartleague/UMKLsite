@@ -213,7 +213,6 @@ function showMonthPicker(currentDate) {
     const yearDropdown = preview.querySelector('#yearDropdown');
 
     function handleDropdownChange() {
-        console.log("yeah")
         generateCalendar(Number(monthDropdown.value), Number(yearDropdown.value));
         resetAutoCloseTimer();
     }
