@@ -10,8 +10,7 @@ FEED_LINK = "https://umkl.co.uk/pages/news/"
 FEED_DESCRIPTION = "The latest news from the UMKL"
 
 def extract_main_html(main_tag: BeautifulSoup, base_url: str) -> str:
-    """Extract cleaned HTML after <hr class='hr-below-title'> for RSS description (unescaped)."""
-
+    """Generate an RSS description"""
     hr = main_tag.find("hr", class_="hr-below-title")
     if not hr:
         return ""
@@ -98,7 +97,14 @@ def get_news_items():
                     news_html = f.read()
 
                 news_soup = BeautifulSoup(news_html, "html.parser")
+
+                for span in news_soup.find_all("span", class_="settings-extra-info"):
+                    new_i = news_soup.new_tag("i")
+                    new_i.string = span.get_text()
+                    span.replace_with(new_i)
+
                 main_tag = news_soup.find("main")
+
                 if main_tag:
                     description = extract_main_html(main_tag, SITE_URL)
             except Exception as e:
