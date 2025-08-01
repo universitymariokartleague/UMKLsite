@@ -20,11 +20,27 @@ def get_news_items():
         return items
 
     for box in container.find_all("div", class_="news-box"):
+        # Skip if <new>📌Pinned</new> is present (ignore pinned news)
+        if box.find("new", string="📌Pinned"):
+            continue
+
         # Title and link
         article = box.find("article", class_="news-text")
         a_tag = article.find("a", href=True) if article else None
         title_tag = a_tag.find("span", class_="news-title") if a_tag else None
         desc_tag = article.find("span", class_="news-desc") if article else None
+
+        # Find image in sibling .news-image div (not inside article)
+        image = ""
+        img_div = box.find("div", class_="news-image")
+        if img_div:
+            img = img_div.find("img", src=True)
+            if img:
+                src = img["src"]
+                if src.startswith("http://") or src.startswith("https://"):
+                    image = src
+                else:
+                    image = "https://umkl.co.uk/" + src.lstrip("/")
 
         def clean_text(text):
             # Remove newlines and collapse multiple spaces to one
@@ -45,14 +61,15 @@ def get_news_items():
             if m:
                 pubdate_str = m.group(1)
         try:
-            pubdate = datetime.datetime.strptime(pubdate_str, "%d/%m/%Y")
+            pubdate = datetime.datetime.strptime(pubdate_str, "%d/%m/%Y").replace(tzinfo=datetime.timezone.utc)
         except Exception:
-            pubdate = datetime.datetime.utcnow()
+            pubdate = datetime.datetime.now(datetime.timezone.utc)
 
         items.append({
             "title": title,
             "link": link,
             "description": description,
+            "image": image,
             "pubDate": pubdate.strftime("%a, %d %b %Y %H:%M:%S +0000")
         })
 
@@ -70,6 +87,14 @@ def build_rss(items):
         item_elem = ET.SubElement(channel, "item")
         ET.SubElement(item_elem, "title").text = item["title"]
         ET.SubElement(item_elem, "link").text = item["link"]
+        # Add image as <enclosure> if present
+        if item["image"]:
+            ET.SubElement(
+                item_elem,
+                "enclosure",
+                url=item["image"],
+                type="image/webp"
+            )
         ET.SubElement(item_elem, "description").text = item["description"]
         ET.SubElement(item_elem, "pubDate").text = item["pubDate"]
 
