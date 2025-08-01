@@ -77,7 +77,7 @@ def get_news_items():
     return items
 
 def build_rss(items):
-    rss = ET.Element("rss", version="2.0")
+    rss = ET.Element("rss", version="2.0", attrib={"xmlns:media": "http://search.yahoo.com/mrss/"})
     channel = ET.SubElement(rss, "channel")
     ET.SubElement(channel, "title").text = FEED_TITLE
     ET.SubElement(channel, "link").text = FEED_LINK
@@ -94,8 +94,12 @@ def build_rss(items):
         if item["image"]:
             ET.SubElement(
                 item_elem,
-                "image"
-            ).text = item["image"]
+                "{http://search.yahoo.com/mrss/}content",
+                {
+                    "url": item["image"],
+                    "type": "image/webp"
+                }
+            )
         ET.SubElement(item_elem, "description").text = item["description"]
         ET.SubElement(item_elem, "pubDate").text = item["pubDate"]
 
