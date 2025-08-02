@@ -309,7 +309,7 @@ function showDailyLog(date, dayCell) {
             let timeString = entry.time || '00:00:00';
             const is12Hour = uses12HourClock(locale);
             const dateObj = new Date(`1970-01-01T${timeString}`)
-            const formattedMatchTime = dateObj.toLocaleTimeString(locale, {
+            let formattedMatchTime = dateObj.toLocaleTimeString(locale, {
                 hour: is12Hour ? 'numeric' : '2-digit',
                 minute: '2-digit',
                 hour12: is12Hour,
@@ -324,6 +324,9 @@ function showDailyLog(date, dayCell) {
                     minute: '2-digit',
                     hour12: is12Hour,
                 });
+                let temp = formattedMatchTime
+                formattedMatchTime = formattedLocalMatchTime
+                formattedLocalMatchTime = temp
             }
 
             let isLive = false;
@@ -471,7 +474,7 @@ function generateCalendarListView() {
             let timeString = entry.time || '00:00:00';
             const is12Hour = uses12HourClock(locale);
             const dateObj = new Date(`1970-01-01T${timeString}`)
-            const formattedMatchTime = dateObj.toLocaleTimeString(locale, {
+            let formattedMatchTime = dateObj.toLocaleTimeString(locale, {
                 hour: is12Hour ? 'numeric' : '2-digit',
                 minute: '2-digit',
                 hour12: is12Hour,
@@ -486,6 +489,9 @@ function generateCalendarListView() {
                     minute: '2-digit',
                     hour12: is12Hour,
                 });
+                let temp = formattedMatchTime
+                formattedMatchTime = formattedLocalMatchTime
+                formattedLocalMatchTime = temp
             }
 
             let isLive = false;
