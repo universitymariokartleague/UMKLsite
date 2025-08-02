@@ -1047,6 +1047,10 @@ blockquote {
     margin-left: 30px;
 }
 
+.rule-heading {
+    margin-top: 20px;
+}
+
 .rule-number {
     margin-right: 10px;
     font-weight: bold;
