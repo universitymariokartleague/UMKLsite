@@ -1,0 +1,111 @@
+/* news */
+.news-wrapper {
+    border-radius: 10px;
+    border: 1px solid #cccccccc;
+    overflow: hidden; /* This contains the scrollbar within the rounded corners */
+}
+
+.news-container {
+    display: flex;
+    flex-direction: row;
+    padding: 0 5px 5px 5px;
+    overflow: auto;
+}
+
+.news-container::-webkit-scrollbar {
+    height: 5px;
+}
+
+.news-container::-webkit-scrollbar-thumb {
+    background-color: #cccccc7c;
+}
+
+.news-container::-webkit-scrollbar-thumb:hover {
+    background-color: #ccccccb4;
+}
+
+.news-container::-webkit-scrollbar-thumb:active {
+    background-color: #cccccc;
+}
+
+.news-container::-webkit-scrollbar-track {
+    background-color: #cccccc48;
+}
+
+.news-container-override {
+    max-width: 702px;
+    padding: 5px;
+    margin: 0 auto;
+	flex-wrap: wrap;
+    background-color: unset;
+    
+}
+
+.news-box {
+    border: 1px solid #ccccccaa;
+    padding: 10px;
+    margin: 0 5px 2px 5px;
+    min-width: 200px;
+    width: 200px;
+    height: 250px;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    isolation: isolate;
+    contain: paint;
+    background-color: var(--box-area-bg-color);
+}
+
+.news-box .news-image img,
+.news-box .news-image video,
+.news-box .news-image video {
+	width: 220px;
+    height: 110px;
+    position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+    object-fit: cover;
+    overflow-clip-margin: unset;
+}
+
+.news-box .news-text {
+	color: var(--text-color);
+	position: absolute;
+	bottom: 35px;
+	margin-right: 5px;
+}
+
+.news-box .news-title {
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 1;
+}
+
+.news-box .news-desc {
+    font-size: 15px;
+    line-height: 1.25;
+    display: inline-block;
+}
+
+.news-box .news-date {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	margin-left: 10px;
+	margin-bottom: 10px;
+    opacity: 0.8;
+    width: max-content;
+}
+
+.news-credits {
+    margin-top: 5px;
+    font-size: 0.9em;
+    font-style: italic;
+}
+
+.news-reel {
+
+}
