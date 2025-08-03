@@ -72,7 +72,7 @@ async function loadImage(url) {
     return new Promise((resolve, reject) => {
         const img = new Image();
         img.onload = () => resolve(img);
-        img.onerror = () => img.src = 'assets/media/teamemblems/DEFAULT.png'
+        img.onerror = () => img.src = `${TEAM_ICON_DIR}/DEFAULT.avif`;
         img.src = url;
     });
 }
@@ -225,7 +225,7 @@ async function createTeamStandingsImage(season, isCurrentSeason, teamStandingsDa
 
         // Add team emblem
         try {
-            const emblemPath = `${TEAM_ICON_DIR}${teamdata.team_name.toUpperCase()}.png`;
+            const emblemPath = `${TEAM_ICON_DIR}${teamdata.team_name.toUpperCase()}.avif`;
             const icon = await loadImage(emblemPath);
             ctx.drawImage(icon, INIT_POS[0] - 35, INIT_POS[1] - 57, TEAM_ICON_SIZE[0], TEAM_ICON_SIZE[1]);
         } catch (error) {

@@ -5,17 +5,17 @@
 		<link>https://umkl.co.uk/pages/news/</link>
 		<description>The latest news from the UMKL</description>
 		<language>en-gb</language>
-		<lastBuildDate>Fri, 01 Aug 2025 19:02:38 +0000</lastBuildDate>
+		<lastBuildDate>Sun, 03 Aug 2025 20:46:09 +0000</lastBuildDate>
 		<image>
 			<title>UMKL News</title>
-			<url>https://umkl.co.uk/assets/media/brand/favicon.png</url>
+			<url>assets/media/brand/favicon.png</url>
 			<link>https://umkl.co.uk/</link>
 		</image>
 		<item>
 			<title>Test matches are being conducted!</title>
 			<link>https://umkl.co.uk/pages/news/2025-04-22/umkl-test-matches-are-being-conducted/</link>
-			<media:content url="https://umkl.co.uk/assets/media/news/testmatches.webp" type="image/webp" medium="image"> </media:content>
-			<description>&lt;div&gt;&lt;p&gt;Test matches are planned in the upcoming week, more will follow in the upcoming months.&lt;/p&gt;&lt;p&gt;Please check the &lt;a href="https://umkl.co.uk/pages/matches/"&gt;matches&lt;/a&gt; page to see confirmed and upcoming matches.&lt;/p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-04-22/umkl-test-matches-are-being-conducted/versus.webp"&gt;
+			<media:content url="https://umkl.co.uk/assets/media/news/testmatches.avif" type="image/avif" medium="image"> </media:content>
+			<description>&lt;div&gt;&lt;p&gt;Test matches are planned in the upcoming week, more will follow in the upcoming months.&lt;/p&gt;&lt;p&gt;Please check the &lt;a href="https://umkl.co.uk/pages/matches/"&gt;matches&lt;/a&gt; page to see confirmed and upcoming matches.&lt;/p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-04-22/umkl-test-matches-are-being-conducted/versus.avif"&gt;
 &lt;br/&gt;&lt;i&gt;A match graphic, as seen in the events tab on the Discord server.&lt;/i&gt;
 &lt;p&gt;
                 The upcoming test matches will serve as a test of the Cheep Cheep app and YouTube streaming. Members of the relevant 
@@ -31,7 +31,7 @@
 		<item>
 			<title>Cheep Cheep Updates</title>
 			<link>https://umkl.co.uk/pages/news/2025-07-17/cheep-cheep-updates/</link>
-			<media:content url="https://umkl.co.uk/assets/media/news/newcommands.webp" type="image/webp" medium="image"> </media:content>
+			<media:content url="https://umkl.co.uk/assets/media/news/newcommands.avif" type="image/avif" medium="image"> </media:content>
 			<description>&lt;div&gt;&lt;p&gt;Hi all! Here are a few updates.&lt;/p&gt;&lt;p&gt;
                 It's been a few months since the announcement of 
                 &lt;mention&gt;@Cheep Cheep&lt;/mention&gt; app, 
@@ -85,9 +85,9 @@
 			<pubDate>Thu, 17 Jul 2025 00:00:00 +0000</pubDate>
 		</item>
 		<item>
-			<title>📌 Information for universities wanting to join</title>
+			<title>Information for universities wanting to join</title>
 			<link>https://umkl.co.uk/pages/news/2025-04-19/uni-joining-info/</link>
-			<media:content url="https://umkl.co.uk/assets/media/news/mariokartbanner.webp" type="image/webp" medium="image"> </media:content>
+			<media:content url="https://umkl.co.uk/assets/media/news/mariokartbanner.avif" type="image/avif" medium="image"> </media:content>
 			<description>&lt;div&gt;&lt;h3&gt;Intro&lt;/h3&gt;&lt;p&gt;
                 Joining the University Mario Kart League is a commitment to the future of Mario Kart e-sports in the United Kingdom, 
                 and we would love to have your university represented in the league. 
@@ -102,7 +102,7 @@
                 Teams are also expected to act respectfully 
                 and dignified to both their opponents and their peers, and we reserve the right to pull a team from the 
                 league if they are acting in problematic manner.
-            &lt;/p&gt;&lt;p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-04-19/uni-joining-info/mariokartbanner.webp"&gt;
+            &lt;/p&gt;&lt;p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-04-19/uni-joining-info/mariokartbanner.avif"&gt;
 &lt;i&gt;Season 2 is scheduled to start in October 2025.&lt;/i&gt;&lt;/p&gt;&lt;h3&gt;Creating a New Team&lt;/h3&gt;&lt;p&gt;
                 If you are interested in creating a new team in the UMKL to represent your university, please check whether there
                 are enough players at your university who are interested in participating. 
@@ -147,7 +147,7 @@
 		<item>
 			<title>Join our Discord server!</title>
 			<link>https://umkl.co.uk/pages/news/2025-04-19/umkl-discord/</link>
-			<media:content url="https://umkl.co.uk/assets/media/news/discordinspire.webp" type="image/webp" medium="image"> </media:content>
+			<media:content url="https://umkl.co.uk/assets/media/news/discordinspire.avif" type="image/avif" medium="image"> </media:content>
 			<description>&lt;div&gt;&lt;p&gt;
                 The University Mario Kart League 
                 &lt;a href="https://discord.gg/jz3hKEmDss"&gt;Discord server&lt;/a&gt; is the beating heart of our operations.
@@ -155,7 +155,7 @@
                 From match organisation, to game results and general UMKL activity, the Discord server is the fastest way to keep up to date with the UMKL.
             &lt;/p&gt;&lt;p&gt;
                 The server is also a thriving hub for all UMKL news, and is a great way to connect with other players and make friends across the UK. 
-            &lt;/p&gt;&lt;img src="https://umkl.co.uk/assets/media/brand/Cheep_Cheep_banner_cropped.png"&gt;
+            &lt;/p&gt;&lt;img src="https://umkl.co.uk/assets/media/brand/Cheep_Cheep_banner_cropped.avif"&gt;
 &lt;br/&gt;&lt;i&gt;With the Cheep Cheep app, users can fetch player and match data in the server.&lt;/i&gt;
 &lt;p&gt;
                 Featured in our Discord server is our bespoke app - Cheep Cheep, ready to provide 
@@ -191,7 +191,7 @@
 		<item>
 			<title>Welcome to the UMKL!</title>
 			<link>https://umkl.co.uk/pages/news/2025-04-19/umkl-intro</link>
-			<media:content url="https://umkl.co.uk/assets/media/news/umklbanner.webp" type="image/webp" medium="image"> </media:content>
+			<media:content url="https://umkl.co.uk/assets/media/news/umklbanner.avif" type="image/avif" medium="image"> </media:content>
 			<description>&lt;div&gt;&lt;p&gt;Welcome to the University Mario Kart League!&lt;/p&gt;&lt;p&gt;If you've reached this page, you probably have an idea of what we do, but we'll explain more below!&lt;/p&gt;&lt;p&gt;
                 We're an independent gaming league made up of university teams across the country,
                 which compete in 6v6 Mario Kart 8 Deluxe matches.
@@ -200,10 +200,10 @@
                 but this has quickly expanded to universities across the country! Currently 
                 we're still growing, with 6v6 test matches and friendlies being played until our 
                 next season starts next academic year.
-            &lt;/p&gt;&lt;img src="https://umkl.co.uk/assets/media/brand/UMKL_Season_2_Teaser.png"&gt;
+            &lt;/p&gt;&lt;img src="https://umkl.co.uk/assets/media/brand/UMKL_Season_2_Teaser.avif"&gt;
 &lt;br/&gt;&lt;i&gt;Season 2 is scheduled to start in October 2025.&lt;/i&gt;
 &lt;p&gt;We're one season down, with our reigning champions York topping the charts for Season 1.&lt;/p&gt;
-&lt;img src="https://umkl.co.uk/pages/news/2025-04-19/umkl-intro/team_standings.png"/&gt;
+&lt;img src="https://umkl.co.uk/pages/news/2025-04-19/umkl-intro/team_standings.avif"/&gt;
 &lt;br/&gt;&lt;i&gt;Some team logos were incomplete during Season 1.&lt;/i&gt;
 &lt;p&gt;
                 Currently, whilst we're working on our website and the next season's roster, we are currently 
@@ -237,8 +237,8 @@
 		<item>
 			<title>Upcoming summer test matches!</title>
 			<link>https://umkl.co.uk/pages/news/2025-06-13/upcoming-summer-test-matches/</link>
-			<media:content url="https://umkl.co.uk/assets/media/news/summertestmatches.webp" type="image/webp" medium="image"> </media:content>
-			<description>&lt;div&gt;&lt;p&gt;More test matches between teams are being planned throughout the weeks as exams finish and summer approaches.&lt;/p&gt;&lt;p&gt;Please check the &lt;a href="https://umkl.co.uk/pages/matches/"&gt;matches&lt;/a&gt; page to see confirmed and upcoming matches.&lt;/p&gt;&lt;p&gt;Now is also a good time for board members to liaise with other universities and plan test matches with each other, especially if your team hasn't had a Test Match yet.&lt;/p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-06-13/upcoming-summer-test-matches/versus.webp"&gt;
+			<media:content url="https://umkl.co.uk/assets/media/news/summertestmatches.avif" type="image/avif" medium="image"> </media:content>
+			<description>&lt;div&gt;&lt;p&gt;More test matches between teams are being planned throughout the weeks as exams finish and summer approaches.&lt;/p&gt;&lt;p&gt;Please check the &lt;a href="https://umkl.co.uk/pages/matches/"&gt;matches&lt;/a&gt; page to see confirmed and upcoming matches.&lt;/p&gt;&lt;p&gt;Now is also a good time for board members to liaise with other universities and plan test matches with each other, especially if your team hasn't had a Test Match yet.&lt;/p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-06-13/upcoming-summer-test-matches/versus.avif"&gt;
 &lt;br/&gt;&lt;i&gt;A match graphic, as seen in the events tab on the Discord server.&lt;/i&gt;
 &lt;p&gt;
                 These continued test matches further test the Cheep Cheep application and YouTube streaming. Members of the relevant 

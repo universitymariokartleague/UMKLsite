@@ -1,7 +1,7 @@
-import datetime, re, os
+import datetime, re, os, mimetypes
 import xml.etree.ElementTree as ET
 import xml.dom.minidom
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup
 
 NEWS_INDEX = "pages/news/index.html"
 SITE_URL = "https://umkl.co.uk/"
@@ -144,20 +144,21 @@ def build_rss(items):
     ET.SubElement(channel, "lastBuildDate").text = datetime.datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S +0000")
     image = ET.SubElement(channel, "image")
     ET.SubElement(image, "title").text = FEED_TITLE
-    ET.SubElement(image, "url").text = "https://umkl.co.uk/assets/media/brand/favicon.png"
+    ET.SubElement(image, "url").text = "assets/media/brand/favicon.png"
     ET.SubElement(image, "link").text = "https://umkl.co.uk/"
 
     for item in items:
         item_elem = ET.SubElement(channel, "item")
         ET.SubElement(item_elem, "title").text = item["title"]
         ET.SubElement(item_elem, "link").text = item["link"]
+        mime_type, _ = mimetypes.guess_type(item["image"])
         if item["image"]:
             media = ET.SubElement(
                 item_elem,
                 "media:content",
                 {
                     "url": item["image"],
-                    "type": "image/webp",
+                    "type": mime_type or "image/webp",
                     "medium": "image"
                 }
             )

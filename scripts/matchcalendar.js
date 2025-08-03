@@ -354,17 +354,17 @@ function showDailyLog(date, dayCell) {
                     <div class="team-box-container">
                         <div class="team-background left ${team1.class_name}"></div>
                         <div class="team-background right ${team2.class_name}"></div>
-                        <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.png"
+                        <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.avif"
                         alt="Team background overlay"
                         onload="this.style.opacity=1" loading="lazy"/>
 
                         <div class="event-overlay">
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link team-box-underline-hover" href="${team1.link}">
-                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
+                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.avif"
                                     alt="${makePossessive(team1.team_name)} team logo" loading="lazy"
                                     onload="this.style.opacity=1"
-                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';"/>
                                     <h2>${team1.team_name}</h2>
                                 </a>
                                 <div class="youtube-box left-team">
@@ -378,10 +378,10 @@ function showDailyLog(date, dayCell) {
 
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">
-                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
+                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.avif"
                                     alt="${makePossessive(team2.team_name)} team logo" loading="lazy"
                                     onload="this.style.opacity=1" 
-                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';"/>
                                     <h2>${team2.team_name}</h2>
                                 </a>
                                 <div class="youtube-box right-team">
@@ -520,17 +520,17 @@ function generateCalendarListView() {
                     <div class="team-box-container">
                         <div class="team-background left ${team1.class_name}"></div>
                         <div class="team-background right ${team2.class_name}"></div>
-                        <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.png"
+                        <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.avif"
                         alt="Team background overlay"
                         onload="this.style.opacity=1" loading="lazy"/>
 
                         <div class="event-overlay">
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link team-box-underline-hover" href="${team1.link}">
-                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
+                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.avif"
                                     alt="${makePossessive(team1.team_name)} team logo" loading="lazy"
                                     onload="this.style.opacity=1"
-                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';"/>
                                     <h2>${team1.team_name}</h2>
                                 </a>
                                 <div class="youtube-box left-team">
@@ -544,10 +544,10 @@ function generateCalendarListView() {
 
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">
-                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
+                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.avif"
                                     alt="${makePossessive(team1.team_name)} team logo" loading="lazy"
                                     onload="this.style.opacity=1" 
-                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';"/>
                                     <h2>${team2.team_name}</h2>
                                 </a>
                                 <div class="youtube-box right-team">

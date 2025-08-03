@@ -3,7 +3,7 @@
     positions of all team locations on the map.
 */
 
-const mapImg = document.getElementById('worldMap');
+const mapImg = document.getElementById('UKMap');
 const container = mapImg.parentElement;
 
 const mapBounds = {

@@ -267,13 +267,13 @@ document.addEventListener('keydown', (event) => {
         keySequence.shift();
     }
 
-    if (keySequence.join('') === easterCode.join('')) {
+    if (keySequence.join('') == easterCode.join('')) {
         mikuEasterEgg();
     }
 
-    if ((key === 'i' || key === 'o') && !isKeyPressed) {
+    if ((key === 't' || key === 'o') && !isKeyPressed) {
         isKeyPressed = true;
-        if (key === 'i') toggleThemeLightDarkOnly();
+        if (key === 't') toggleThemeLightDarkOnly();
         if (key === 'o') toggleSettingsPanel();
     }
 });
@@ -284,6 +284,9 @@ document.addEventListener('keyup', () => {
 
 function mikuEasterEgg() {
     const style = document.createElement('style');
+
+    console.log("miku")
+
     style.textContent = `
         .day.selected {
             position: relative;
@@ -296,7 +299,7 @@ function mikuEasterEgg() {
             content: "";
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-image: url("../assets/media/calendar/mikuheadshake.gif");
+            background-image: url("../assets/media/calendar/mikuheadshake.avif");
             background-size: cover;
             background-position: center;
             opacity: 1;

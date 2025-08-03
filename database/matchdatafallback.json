@@ -472,5 +472,20 @@
                 "https://www.youtube.com/watch?v=EJKVDDMM6Mc"
             ]
         }
+    ],
+    "2025-08-04": [
+        {
+            "description": "A 6v6 test match between York and Birmingham. This match serves to test the Cheep Cheep application and live streaming.\n\nMembers of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed on the UMKL YouTube channel. You can visit the channel here: https://www.youtube.com/@universitymariokartleague.",
+            "eventID": "1401256577259929600",
+            "results": [],
+            "season": 2,
+            "teamsInvolved": [
+                "York",
+                "Birmingham"
+            ],
+            "testMatch": true,
+            "time": "18:00:00+01:00",
+            "title": "York VS Birmingham (Test Match)"
+        }
     ]
 }

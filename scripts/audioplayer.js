@@ -67,13 +67,13 @@ function loadedMetadata(message) { // reset sin value
 
 // mediasession API
 function newMediaData() {
-    let imagesrc = audioName.replaceAll('#', '%23') + ".jpg" // fallback
+    let imagesrc = audioName.replaceAll('#', '%23') + ".png" // fallback
     if (playlistOriginal.length > 1) if (playlistOriginal[playlistNumPlaying].includes("|")) imagesrc = playlistOriginal[playlistNumPlaying].split("|")[1]; // if a custom album image is listed use it
     navigator.mediaSession.metadata = new MediaMetadata({
         title: audioName,
         artist: playListTitle,
         album: playListTitle,
-        artwork: containsAlbumArt ? [{ src: path + imagesrc, type: "image/jpg" }] : [{ src: "https://media.architecturaldigest.com/photos/5890e88033bd1de9129eab0a/1:1/w_870,h_870,c_limit/Artist-Designed%20Album%20Covers%202.jpg", type: "image/jpg" }]
+        artwork: containsAlbumArt ? [{ src: path + imagesrc, type: "image/png" }] : [{ src: "assets/media/teamemblems/hres/DEFAULT.png", type: "image/png" }]
     });
 }
 navigator.mediaSession.setActionHandler('previoustrack', function () {
@@ -135,7 +135,7 @@ function setBGMText() {
 
     try {
         if (playlistMode == 1) { // setup html for playlists (the previous/next buttons, the music count / playlist count)
-            let imagesrc = audioName.replaceAll('#', '%23') + ".jpg" // fallback
+            let imagesrc = audioName.replaceAll('#', '%23') + ".png" // fallback
             if (playlistOriginal[playlistNumPlaying].includes("|")) imagesrc = playlistOriginal[playlistNumPlaying].split("|")[1]; // if a custom album image is listed use it
             playlistText.innerHTML = ""
             if (containsAlbumArt) playlistText.innerHTML = `<img class="albumArt" src="${path}${imagesrc}">`;
@@ -186,7 +186,7 @@ function togglePause() {
 };
 
 function setPlayIcon() {
-    playIcon.src = `https://umkl.co.uk/assets/media/audioplayer/play${playState}.png`; // set the svg play icon
+    playIcon.src = `assets/media/audioplayer/play${playState}.avif`; // set the svg play icon
     if (audioStatus.className == "hidden") audioStatus.className = ""; // show the whole audio player if a pause happened (space pressed)
 }
 
@@ -439,7 +439,7 @@ async function setPlaylistData() {
     playListTitle = playlist[0].split("|")[0]; // the first item in the playlist .txt file will be information
     if (playlist[0].split("|")[1]) {
         if (playlist[0].split("|")[1].toLowerCase() == "true") {
-            containsAlbumArt = true; // album art is named the same as the BGM name but with a different file extension (.jpg)
+            containsAlbumArt = true; // album art is named the same as the BGM name but with a different file extension (.png)
         }
     }
     if (playlist[0].split("|")[2]) {

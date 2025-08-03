@@ -17,7 +17,7 @@ function generateTeamHTML(team) {
             <div class="${team.class_name} team">
                 <span>${team.team_name}</span>
                 <img src="${team.logo_src}" alt="${makePossessive(team.team_name)} team logo" class="team-logo" loading="lazy"
-                onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
+                onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';"/>
             </div>
             <hr>
             <div class="institution">${team.team_full_name}</div>
@@ -64,11 +64,11 @@ async function generateTeamBoxes(teamData) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.add('fade-in');
     const listView = localStorage.getItem("teamsListView") == 1 || false;
-    const placeholderLogo = "assets/media/teamemblems/DEFAULT.png";
+    const placeholderLogo = "assets/media/teamemblems/DEFAULT.avif";
 
     for (let i = 0; i < teamData.length; i++) {
         const team = teamData[i];
-        team.logo_src = `assets/media/teamemblems/${team.team_name.toUpperCase()}.png`
+        team.logo_src = `assets/media/teamemblems/${team.team_name.toUpperCase()}.avif`
         team.class_name = team.team_name.replace(/\s+/g, '')
         team.link_name = team.team_name
     }
