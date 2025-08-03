@@ -179,13 +179,15 @@ function showUpcomingMatch() {
                 <div class="team-box-container">
                     <div class="team-background left ${team1.class_name}"></div>
                     <div class="team-background right ${team2.class_name}"></div>
-                    <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.png" 
+                    <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.png"
+                    alt="Team background overlay"
                     onload="this.style.opacity=1" loading="lazy"/>
                     
                     <div class="event-overlay">
                         <div class="event-box-team">
                             <a class="no-underline-link no-color-link" href="${team1.link}">
                                 <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.png"
+                                alt="${makePossessive(team1.team_name)} team logo"
                                 onload="this.style.opacity=1" loading="lazy"
                                 onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
                                 <h2>${team1.team_name}</h2>
@@ -202,6 +204,7 @@ function showUpcomingMatch() {
                         <div class="event-box-team">
                             <a class="no-underline-link no-color-link" href="${team2.link}">
                                 <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.png"
+                                alt="${makePossessive(team1.team_name)} team logo"
                                 onload="this.style.opacity=1" loading="lazy"
                                 onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png';"/>
                                 <h2>${team2.team_name}</h2>
@@ -277,6 +280,14 @@ function autoLink(text) {
         }
         return `<a href="${href}" target="_blank">${displayUrl}</a>${trailingDot}`;
     });
+}
+
+function makePossessive(name) {
+    if (!name) return '';
+    if (name.endsWith('s') || name.endsWith('S')) {
+        return `${name}'`;
+    }
+    return `${name}'s`;
 }
 
 function makeTeamsColorStyles() {

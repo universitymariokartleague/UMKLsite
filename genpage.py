@@ -144,8 +144,9 @@ def create_new_blog():
         - Creates a new HTML file for the blog entry in the appropriate directory.
     """
     title = input("Enter blog title > ")
-    desc = input("Enter blog description > ")
+    description = input("Enter blog description > ")
     image = input("Enter blog image link > ")
+    alt = input("Enter an alt description for the image > ")
     date = input("Enter blog date (DD/MM/YYYY) > ")
 
     link = create_slug(title)
@@ -155,9 +156,9 @@ def create_new_blog():
                 <div class="news-box">
                     <article class="news-text">
                         <a href="pages/news/{url_date}/{link}/"><span class="news-title">{title}</span></a><br>
-                        <span class="news-desc">{desc}</span>
+                        <span class="news-desc">{description}</span>
                     </article>
-                    <div class="news-image"><img onload="this.style.opacity=1" loading="lazy" src="{image}"></div>
+                    <div class="news-image"><img onload="this.style.opacity=1" loading="lazy" src="{image}" alt="{alt}"></div>
                     <span class="news-date">{date}</span>
                 </div>
     """
@@ -210,7 +211,7 @@ def create_new_blog():
 
     os.makedirs(f"pages/news/{url_date}/{link}", exist_ok=True)
     with open(f"pages/news/{url_date}/{link}/index.html", "a+", encoding='utf-8') as f:
-        content = BLANK_NEWS_PAGE.replace("{TITLE}", title).replace("{DESC}", desc).replace("{IMAGE}", image).replace("{DATE}", date).replace("{LINK}", f"pages/news/{url_date}/{link}")
+        content = BLANK_NEWS_PAGE.replace("{TITLE}", title).replace("{DESC}", description).replace("{IMAGE}", image).replace("{DATE}", date).replace("{LINK}", f"pages/news/{url_date}/{link}")
         f.write(content)
 
     print(f"pages/news/{url_date}/{link}/index.html page has been created")
