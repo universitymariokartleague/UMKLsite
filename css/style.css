@@ -646,12 +646,17 @@ blockquote {
     }
 }
 
-.user-image {
-    border-radius: 10px;
+#JSTeamBox {
+    margin-bottom: 20px;
+}
+
+#JSTeamBox {
     opacity: 0;
-    transition: opacity 0.2s ease-in;
-    width: 150px;
-    height: 150px;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#JSTeamBox.fade-in {
+    opacity: 1;
 }
 
 dialog.cookie-popup {
