@@ -185,7 +185,7 @@ function showUpcomingMatch() {
                     
                     <div class="event-overlay">
                         <div class="event-box-team">
-                            <a class="no-underline-link no-color-link" href="${team1.link}">
+                            <a class="no-underline-link no-color-link team-box-underline-hover" href="${team1.link}">
                                 <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.avif"
                                 alt="${makePossessive(team1.team_name)} team logo"
                                 onload="this.style.opacity=1" loading="lazy"
@@ -202,7 +202,7 @@ function showUpcomingMatch() {
                         <div class="score-box">VS</div>       
 
                         <div class="event-box-team">
-                            <a class="no-underline-link no-color-link" href="${team2.link}">
+                            <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">
                                 <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.avif"
                                 alt="${makePossessive(team1.team_name)} team logo"
                                 onload="this.style.opacity=1" loading="lazy"
