@@ -14,6 +14,8 @@ const shareButton = document.getElementById("shareButton");
 const currentSeason = document.getElementById("season-select");
 setOriginalMessage(shareButton.innerHTML);
 
+let blob;
+
 function generateMessage() {
     const randomChance = Math.random();
     return randomChance < 0.01
@@ -28,13 +30,18 @@ shareButton.addEventListener("click", async () => {
         const useClipboard = isWindowsOrLinux() || !navigator.canShare;
         if (useClipboard) shareButton.innerHTML = "Generating image...";
 
-        const blob = await generateTeamStandingsImage(currentSeason.value);
-
         if (useClipboard) {
+            if (!blob) {
+                blob = await generateTeamStandingsImage(currentSeason.value);
+            }
             const success = await copyImageToClipboard(blob);
             shareButton.innerText = success ? "Image copied to clipboard!" : "Failed to copy!";
             if (success) {
                 showImagePreview(blob, blob.url, generateMessage());
+            } else {
+                setTimeout(() => {
+                    shareButton.innerHTML = getOriginalMessage();
+                }, 2000);
             }
         } else {
             await shareImage(
@@ -52,4 +59,8 @@ shareButton.addEventListener("click", async () => {
             shareButton.innerHTML = getOriginalMessage();
         }, 2000);
     }
+});
+
+document.addEventListener("DOMContentLoaded", async () => {
+    blob = await generateTeamStandingsImage(currentSeason.value);
 });

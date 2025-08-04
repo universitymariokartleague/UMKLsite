@@ -272,6 +272,6 @@ async function generateTeamStandingsImage(season) {
     currentSeason = (await getCurrentSeason())[0];
     let teamStandings = await getTeamdata("", season);
 
-    console.debug(`%cgenerateteamstandingsimage.js %c> %cGenerated team standings ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
+    console.debug(`%cgenerateteamstandingsimage.js %c> %cGenerated team standings image in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
     return createTeamStandingsImage(season, season == currentSeason, teamStandings)
 }
