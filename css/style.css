@@ -646,6 +646,12 @@ blockquote {
     }
 }
 
+.question-mark-icon {
+    height: 20px;
+    width: 20px;
+    vertical-align: middle;
+}
+
 #JSTeamBox {
     margin-bottom: 20px;
 }
