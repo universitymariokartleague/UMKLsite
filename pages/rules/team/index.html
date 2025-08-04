@@ -32,8 +32,9 @@
         <script src="scripts/overlayscrollbars.browser.es6.min.js" defer></script>
         <script src="scripts/overlayscrollbar.js" defer></script> 
         <script type="module" src="scripts/coloris.js" defer></script>
+        <script type="module" src="scripts/createcolorwheel.js" defer></script>
         <script type="module" src="scripts/settings.js" defer></script>
-            <script type="module" src="scripts/getteamcolors.js" defer></script>
+        <script type="module" src="scripts/getteamcolors.js" defer></script>
     </head>
     <body id="top" data-overlayscrollbars-initialize>
         <div class="navbar-container">
@@ -119,9 +120,11 @@
                 <span id="colorMessage">Current colour: <code>#1baa8b</code></span>
             </p>
 
-            <p class="p-below-title">Below are existing team colours:</p>
+            
+            <p class="p-below-title">Below are the team colours of existing teams:</p>
             <div id="currentTeamColors"></div>
-
+            
+            <canvas id="colorWheel" width="350" height="275"></canvas>
             <ul>
                 <li>Must be used in the command as a hex colour code</li>
                 <li>

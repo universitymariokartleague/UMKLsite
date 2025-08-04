@@ -24,3 +24,15 @@
 .square .clr-field input {
     padding-left: 48px;
 }
+
+#colorWheel {
+    float: right;
+}
+
+@media (max-width: 767px) {
+    #colorWheel {
+        float: unset;
+        max-width: 100%!important;
+        height: auto!important;
+    }
+}

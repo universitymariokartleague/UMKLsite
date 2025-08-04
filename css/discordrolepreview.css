@@ -21,7 +21,6 @@
     outline: 1px solid #ccccccaa;
 }
 
-/* For mobile devices */
 @media (max-width: 767px) {
     #discordRoleiFrame, #cheepCheepRoleiFrame {
         width: 100%;
