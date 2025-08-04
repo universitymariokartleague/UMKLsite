@@ -17,6 +17,20 @@ const settingsBoxHTML = `
     </div>
 `;
 
+const cookiesBox = `
+    <dialog open class="cookie-popup" id="cookie-popup">
+        <p style="margin: 0 0 5px 0;">
+            This site uses cookies to store your preferences. Cloudflare is also used for site analytics.
+            By using this site, you agree to these uses.<br>
+            You can read our privacy policy <a href="pages/privacy/">here</a>.
+        </p>
+        <form method="dialog">
+            <button id="cookieAccept">OK</button> 
+            <button id="cookieSettings">Settings</button>
+        </form>
+    </dialog>
+`;
+
 document.body.insertAdjacentHTML('beforeend', settingsBoxHTML);
 
 const BGBlur = document.getElementById('BGBlur');
@@ -207,6 +221,23 @@ function generateEventListeners() {
 
 sendThemeChangeEvent();
 
+function generateCookiesPopup() {
+    document.body.insertAdjacentHTML('beforeend', cookiesBox);
+    const cookiePopup = document.getElementById('cookie-popup');
+    const cookieAcceptButton = document.getElementById('cookieAccept');
+    const cookieSettingsButton = document.getElementById('cookieSettings');
+
+    cookieAcceptButton.addEventListener('click', () => {
+        localStorage.setItem("cookiesAccepted", "true");
+        cookiePopup.close();
+        cookiePopup.remove();
+    });
+
+    cookieSettingsButton.addEventListener('click', () => {
+        toggleSettingsPanel();
+    });
+}
+
 function checkEasterEggs() {
     function checkDate(month, day) {
         return currentDate.getMonth() === month && currentDate.getDate() === day;
@@ -252,7 +283,6 @@ function checkEasterEggs() {
             break;
     }
 }
-checkEasterEggs();
 
 // Keyboard shortcuts for toggling theme and opening settings panel
 let isKeyPressed = false;
@@ -285,8 +315,6 @@ document.addEventListener('keyup', () => {
 function mikuEasterEgg() {
     const style = document.createElement('style');
 
-    console.log("miku")
-
     style.textContent = `
         .day.selected {
             position: relative;
@@ -312,5 +340,13 @@ function mikuEasterEgg() {
             opacity: 0.25;
         }
     `;
+
     document.head.appendChild(style);
 }
+
+document.addEventListener("DOMContentLoaded", async () => {
+    if (localStorage.getItem("cookiesAccepted") !== "true") {
+        generateCookiesPopup();
+    }
+    checkEasterEggs();
+});

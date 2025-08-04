@@ -22,8 +22,8 @@
 	will-change: transform, bottom;
 	user-select: none;
 	-webkit-user-select: none;
-	backdrop-filter: blur(25px);
-	-webkit-backdrop-filter: blur(25px);
+	-webkit-backdrop-filter: blur(15px);
+	backdrop-filter: blur(15px);
 }
 
 #audioStatus button {
