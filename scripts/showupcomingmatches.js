@@ -5,7 +5,7 @@
 
 const upcomingMatchesBox = document.getElementById("upcomingMatchesBox");
 const upcomingMatchesError = document.getElementById("upcomingMatchesError");
-const MATCH_LENGTH_MINS = 90;
+const MATCH_LENGTH_MINS = 60;
 let matchData = {};
 let teamColors = {};
 
@@ -194,7 +194,7 @@ function showUpcomingMatch() {
                             </a>
                             <div class="youtube-box left-team">
                                 ${team1.ytLink ? `
-                                <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
+                                <a class="no-underline-link-footer fa-brands fa-youtube ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
                                 href="${team1.ytLink}" target="_blank" title="View the livestream"></a>` : ''}
                             </div>
                         </div>
@@ -211,7 +211,7 @@ function showUpcomingMatch() {
                             </a>
                             <div class="youtube-box right-team">
                                 ${team2.ytLink ? `
-                                <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
+                                <a class="no-underline-link-footer fa-brands fa-youtube ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
                                 href="${team2.ytLink}" target="_blank" title="View the livestream"></a>` : ''}
                             </div>
                         </div>

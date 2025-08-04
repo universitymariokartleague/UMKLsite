@@ -7,9 +7,9 @@
 import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareText, shareImage, showTextPopup, showImagePreview, setOriginalMessage } from './shareAPIhelper.js';
 
 const weekdayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-const weekdayNamesFull = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+// const weekdayNames = ["日", "月", "火", "水", "木", "金", "土"];
 const DEFAULTSTARTDAY = 1;
-const MATCH_LENGTH_MINS = 90;
+const MATCH_LENGTH_MINS = 60;
 
 const calendarContainer = document.getElementById('calendar-container');
 const calendarListView = document.getElementById('calendarListView');
@@ -369,7 +369,7 @@ function showDailyLog(date, dayCell) {
                                 </a>
                                 <div class="youtube-box left-team">
                                     ${team1.ytLink ? `
-                                    <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
+                                    <a class="no-underline-link-footer fa-brands fa-youtube ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
                                     href="${team1.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'View the livestream'}"></a>` : ''}
                                 </div>
                             </div>
@@ -386,7 +386,7 @@ function showDailyLog(date, dayCell) {
                                 </a>
                                 <div class="youtube-box right-team">
                                     ${team2.ytLink ? `
-                                    <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
+                                    <a class="no-underline-link-footer fa-brands fa-youtube ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
                                     href="${team2.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'View the livestream'}"></a>` : ''}
                                 </div>
                             </div>
@@ -535,7 +535,7 @@ function generateCalendarListView() {
                                 </a>
                                 <div class="youtube-box left-team">
                                     ${team1.ytLink ? `
-                                    <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
+                                    <a class="no-underline-link-footer fa-brands fa-youtube ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
                                     href="${team1.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'View the archived livestream'}"></a>` : ''}
                                 </div>
                             </div>
@@ -552,7 +552,7 @@ function generateCalendarListView() {
                                 </a>
                                 <div class="youtube-box right-team">
                                     ${team2.ytLink ? `
-                                    <a class="no-color-link no-underline-link-footer fa-brands fa-youtube"
+                                    <a class="no-underline-link-footer fa-brands fa-youtube ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
                                     href="${team2.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'View the archived livestream'}"></a>` : ''}
                                 </div>
                             </div>

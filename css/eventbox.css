@@ -132,6 +132,22 @@
 
 .event-box-team .fa-youtube {
     font-size: 22px;
+    
+}
+
+.youtube-live-animation {
+    animation: youtubeLiveAnimation 2s ease-in-out infinite;
+}
+
+@keyframes youtubeLiveAnimation {
+    0%, 100% {
+        color: #FFF;
+        text-shadow: 0 0 8px rgba(255, 255, 255, 1);
+    }
+    50% {
+        color: #FFF;
+        text-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+    }
 }
 
 .event-box-team .left-team {
