@@ -99,6 +99,10 @@
     background-color: #e9436f;
 }
 
+.today.selected {
+    color: var(--text-color);
+}
+
 .logged:hover {
     cursor: pointer;
 }
