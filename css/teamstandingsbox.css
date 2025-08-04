@@ -102,7 +102,100 @@
     font-size: 14.5px;
 }
 
+.season-selection {
+    display: flex;
+    flex-direction: column;
+    background-color: #cccccc1f;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 20px 0;
+}
+
+#season-select {
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 5px;
+    border: 1px solid #cccccc;
+    font-weight: bold;
+    margin-bottom: 5px;
+    outline: none;
+}
+
+.current-season-area {
+    display: flex;
+}
+
+#current-season {
+    margin: 5px;
+}
+
+#shareButton {
+    margin-left: 5px;
+}
+
+#listViewButton{
+    margin-left: auto;
+}
+
+.teamBoxContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 15px;
+    row-gap: 15px;
+}
+
+.teamBox {
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    padding: 20px;
+    min-width: 300px;
+    width: 100%;
+    color: inherit;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.teamBox:active {
+    transform: scale(0.95);
+    transition: transform 0.1s;
+}
+
+.positionBox {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    font-size: 25px;
+}
+
+.team {
+    padding-left: 10px;
+    font-size: 25px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 8px solid #FFF
+}
+
+.team-logo {
+    width: 40px; 
+    height: 40px;
+}
+
 @media screen and (max-width: 767px) {
+    .current-season-area {
+        display: unset;
+    }
+
+    #shareButton {
+        margin-left: unset;
+    }
+
+    #listViewButton{
+        margin-left: unset;
+    }
+
     .teamStandingsBox {
         padding: 10px;
         gap: clamp(0.25rem, 1.5vw, 5em);
@@ -152,5 +245,9 @@
 
     .teamStandingsBox .teamPointsArea .teamStandings {
         font-size: clamp(0.25rem, 2.0vw, 5em);
+    }
+
+    .teamBoxContainer {
+        grid-template-columns: 1fr;
     }
 }

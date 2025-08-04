@@ -1,0 +1,130 @@
+.team-list-view-table {
+    width: 100%;
+    border-spacing: 0;
+    margin: 20px 0;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.team-list-view-table th {
+    border-radius: 10px;
+}
+
+.team-list-view-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+.team-list-view-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+.team-list-view-table th:nth-child(1),
+.team-list-view-table td:nth-child(1) {
+    width: 30px;
+    text-align: center;
+}
+
+.team-list-view-table th:nth-child(3),
+.team-list-view-table td:nth-child(3) {
+    width: 50px;
+    text-align: center;
+}
+
+.team-list-view-table th:nth-child(4),
+.team-list-view-table td:nth-child(4) {
+    width: 75px;
+    text-align: center;
+}
+
+.team-list-view-table th:nth-child(5),
+.team-list-view-table td:nth-child(5) {
+    width: 50px;
+    text-align: center;
+}
+
+.team-list-view-table thead {
+    color: var(--text-color);
+    text-align: left;
+}
+
+.team-list-view-table th {
+    padding: 15px 20px;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.team-list-view-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.team-list-view-table td {
+    padding: 8px 20px;
+    font-size: 0.95rem;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+
+.team-list-view-table tr:active {
+    transform: scale(0.98);
+}
+
+.team-list-view-table tr:hover {
+    filter: brightness(1.15);
+    transition: filter 0.1s ease-in-out, transform 0.1s;
+}
+
+.team-list-view-table td:first-child {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.team-list-full-institution {
+    font-weight: normal;
+}
+
+.team-name-grid-flex {
+    display: flex;
+    align-items: center;
+}
+
+.team-text-flex {
+    margin-left: 15px;
+}
+
+.team-logo-grid {
+    width: 35px; 
+    height: 35px;
+}
+
+@media screen and (max-width: 767px) {
+    .team-list-view-table th {
+        padding: 10px 5px;
+    }
+
+    .team-list-view-table td {
+        padding: 5px;
+    }
+
+    .team-list-full-institution {
+        display: none;
+    }
+
+    .team-list-view-table th {
+        font-size: clamp(0.6rem, 3vw, 0.85em);
+    }
+
+    .team-list-view-table td {
+        font-size: clamp(0.6rem, 2.5vw, 0.95em);
+    }
+
+    .team-text-flex {
+        margin-left: 5px;
+    }
+
+    .team-logo-grid {
+        width: 25px; 
+        height: 25px;
+    }
+}

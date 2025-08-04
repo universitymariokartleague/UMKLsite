@@ -1,0 +1,48 @@
+.rule-section, .sub-rule-section {
+    margin-top: 10px;
+    margin-left: 30px;
+}
+
+.rule-heading {
+    margin-top: 20px;
+}
+
+.rule-number {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.tag-clan-table {
+    border: 1px solid #ccccccaa;
+    border-radius: 10px;
+    width: fit-content;
+}
+
+.tag-clan-table table {
+    border-collapse: collapse;
+}
+
+.tag-clan-table th,
+.tag-clan-table td {
+    border-bottom: 1px solid #ccccccaa;
+    border-right: 1px solid #ccccccaa;
+    padding: 8px;
+    text-align: left;
+}
+
+.tag-clan-table tr:last-child td {
+    border-bottom: none;
+}
+
+.tag-clan-table td:last-child,
+.tag-clan-table th:last-child {
+    border-right: none;
+}
+
+@media screen and (max-width: 767px) {
+    .tag-clan-table th,
+    .tag-clan-table td {
+        padding: 3px;
+        font-size: clamp(0.7rem, 3.5vw, 1em);
+    }
+}

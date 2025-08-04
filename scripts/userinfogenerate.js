@@ -4,7 +4,7 @@
 
 const teamBoxFormatHTML = `
     <div class="team-info-wrapper">
-        <img width=200 height=200 src="{{PFP}}" alt="{{username}} profile picture" title="{{username}} profile picture" class="user-image"
+        <img src="{{PFP}}" alt="{{username}} profile picture" title="{{username}} profile picture" class="user-image"
         onload="this.style.opacity=1"/>
         <hr>
         <div class="team-info-text">
@@ -75,7 +75,7 @@ async function generateUserBox(userData, showError) {
     if (teamData) currentFields = buildUserInfoTable(teamData, true);
 
     let tempTeamBox = teamBoxFormatHTML
-        .replace("{{PFP}}", userData.profile_picture)
+        .replace("{{PFP}}", userData.profile_picture.replace("png", "webp"))
         .replaceAll("{{username}}", makePossessive(userData.username))
         .replace("{{currentSeason}}", fetchedCurrentSeason)
         .replace("{{currentFields}}", currentFields)

@@ -259,6 +259,15 @@
     font-size: 15px;
 }
 
+#upcomingMatchesBox {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#upcomingMatchesBox.fade-in {
+    opacity: 1;
+}
+
 @media screen and (max-width: 767px) {
     #calendarListView .event-box-team {
         font-size: 1.5vmin;

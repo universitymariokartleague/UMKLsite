@@ -34,6 +34,12 @@
     height: 50px;
 }
 
+.credit-socials {
+    margin: 2px 0;
+    display: flex;
+    gap: 5px;
+}
+
 @media screen and (max-width: 767px) {
     .credits-wrapper {
         display: flex;

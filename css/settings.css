@@ -168,6 +168,21 @@
     user-select: all;
 }
 
+.settingsBoxOpener {
+    transform: rotate(-60deg);
+    transition: transform 0.2s ease-in-out;
+}
+
+.settingsBoxOpener:hover {
+    transform: rotate(0deg);
+    transition: transform 0.2s ease-in-out;
+}
+
+.settingsBoxOpener:active {
+    transform: rotate(-180deg);
+    transition: transform 0.2s ease-in-out;
+}
+
 @keyframes boxOpen { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); } 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
 @keyframes BGBlurOn { 0% { opacity: 0; } 100% { opacity: 1; } }
 @keyframes boxClose { 0% { opacity: 1; transform: translate(-50%, -50%) scale(1); visibility: visible; } 99% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); visibility: visible; } 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); visibility: hidden; } }
