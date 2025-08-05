@@ -412,8 +412,8 @@ mention {
 
 code {
     color: var(--code-color);
-    font-size: 15px;
-    padding: 2px 5px;
+    font-size: 14px;
+    padding: 1px 4px;
     background-color: var(--code-bg-color);
     border: var(--code-border);
     border-radius: 5px;
