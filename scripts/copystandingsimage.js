@@ -11,6 +11,7 @@ import { isWindowsOrLinux, copyImageToClipboard, shareImage, showImagePreview, s
 import { generateTeamStandingsImage } from './generateteamstandingsimage.js';
 
 const shareButton = document.getElementById("shareButton");
+const seasonPicker = document.getElementById("season-select")
 const currentSeason = document.getElementById("season-select");
 setOriginalMessage(shareButton.innerHTML);
 
@@ -59,6 +60,11 @@ shareButton.addEventListener("click", async () => {
             shareButton.innerHTML = getOriginalMessage();
         }, 2000);
     }
+});
+
+seasonPicker.addEventListener("change", async function () {
+    blob = '';
+    blob = await generateTeamStandingsImage(currentSeason.value);
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
