@@ -195,7 +195,7 @@ function showUpcomingMatch() {
                             <div class="youtube-box left-team">
                                 ${team1.ytLink ? `
                                 <a class="no-underline-link-footer fa-brands fa-youtube ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
-                                href="${team1.ytLink}" target="_blank" title="View the livestream"></a>` : ''}
+                                href="${team1.ytLink}" target="_blank" title="Open the livestream"></a>` : ''}
                             </div>
                         </div>
 
@@ -212,7 +212,7 @@ function showUpcomingMatch() {
                             <div class="youtube-box right-team">
                                 ${team2.ytLink ? `
                                 <a class="no-underline-link-footer fa-brands fa-youtube ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
-                                href="${team2.ytLink}" target="_blank" title="View the livestream"></a>` : ''}
+                                href="${team2.ytLink}" target="_blank" title="Open the livestream"></a>` : ''}
                             </div>
                         </div>
                     </div>
