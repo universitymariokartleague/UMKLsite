@@ -290,6 +290,11 @@ let keySequence = []; // stores recent keys
 const easterCode = ['m', 'i', 'k', 'u'];
 
 document.addEventListener('keydown', (event) => {
+    const tag = event.target.tagName.toLowerCase();
+    const isTyping = tag === 'input' || tag === 'textarea' || event.target.isContentEditable;
+
+    if (isTyping) return;
+
     const key = event.key.toLowerCase();
 
     keySequence.push(key);

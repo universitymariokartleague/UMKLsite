@@ -32,6 +32,9 @@
         
         <script type="module" src="scripts/settings.js" defer></script>
         <script type="module" src="scripts/6v6scorecalculator.js" defer></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
     </head>
 
     <body id="top" data-overlayscrollbars-initialize>
@@ -73,14 +76,30 @@
             <p class="p-below-title">Quickly calculate point scores in a 6v6</p>
             <hr class="hr-below-title">
 
-            <label for="positions-input">Input your teams positions (one line = one race)</label><br>
-            <textarea placeholder="1,2,3,4,5,6" style="width: 400px; height: 200px;" id="positions-input"></textarea>
+            <div class="score-calculator-input-areas">
+                <div class="positions-input-area">
+                    <label for="positions-input">Input your teams' positions</label><br>
+                    <textarea placeholder="1,2,3,4,5,6
+7,8,9,10,11,12" id="positions-input"></textarea><br>
+                </div>
+                <div class="positions-input-area">
+                    <label for="track-names-input">Input track names (optional)</label><br>
+                    <textarea placeholder="Mario Circuit 3
+Yoshi's Island" id="track-names-input"></textarea>
+
+                    <label for="track-names-input">Input team names (optional)</label><br>
+                    <textarea placeholder="York
+Staffs" id="team-names-input"></textarea>
+                </div>
+            </div>
+            
             <div class="result-container">
                 <div class="result-box" id="team-result"><h3>Your Team</h3></div>
                 <div class="points-diff" id="points-diff"><h2>±0</h2></div>
                 <div class="result-box" id="opponent-result"><h3>Opponent Team</h3></div>
             </div>
-            
+
+            <canvas id="scoreChart" width="800" height="400"></canvas>
         </main>
 
         <footer>

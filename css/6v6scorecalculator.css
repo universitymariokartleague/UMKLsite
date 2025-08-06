@@ -1,3 +1,25 @@
+.score-calculator-input-areas {
+    display: flex; 
+    gap: 15px;
+}
+
+.positions-input-area {
+    width: 50%;
+}
+
+#positions-input, #track-names-input, #team-names-input {
+    width: 100%;
+    height: 230px;
+}
+
+#track-names-input {
+    height: 165px;
+}
+
+#team-names-input {
+    height: 35px;
+}
+
 .result-container {
     display: flex;
     justify-content: center;
@@ -24,6 +46,18 @@
 }
 
 @media screen and (max-width: 767px) {
+    .score-calculator-input-areas {
+        display: unset;
+    }
+
+    .positions-input-area {
+        width: 100%;
+    }
+
+    #positions-input, #track-names-input {
+        height: 100px;
+    }
+    
     .result-container {
         flex-wrap: wrap;
     }
