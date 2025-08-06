@@ -1,6 +1,7 @@
 @font-face {
-    font-family: "Red Hat Display";
-    src: url("../assets/font/RedHatDisplay.woff2");
+    font-family: "gg-sans";
+    font-weight: normal;
+    src: url("../assets/font/gg-sans.woff2");
 }
 
 :root,
@@ -21,7 +22,7 @@
 body {
     background-color: var(--bg-color);
     color: #dcddde;
-    font-family: "Red Hat Display", 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: "gg-sans", 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     margin: 0;
     -webkit-user-select: none;
     user-select: none;
