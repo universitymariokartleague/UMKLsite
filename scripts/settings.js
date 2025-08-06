@@ -350,8 +350,8 @@ function mikuEasterEgg() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-    if (localStorage.getItem("cookiesAccepted") !== "true") {
-        generateCookiesPopup();
-    }
+    // if (localStorage.getItem("cookiesAccepted") !== "true") {
+    //     generateCookiesPopup();
+    // }
     checkEasterEggs();
 });
