@@ -48,6 +48,13 @@ function renderResults() {
     if (!positionsInput.value.trim()) {
         teamResult.innerHTML = "<h3>Your Team</h3>";
         opponentResult.innerHTML = "<h3>Opponent Team</h3>";
+        pointsDifference.innerHTML = `<h2>±0</h2>`;
+        if (chart) chart.destroy();
+
+        const url = new URL(window.location);
+        url.search = "";
+        window.history.replaceState({}, document.title, url.toString());
+
         return;
     }
 
@@ -244,11 +251,7 @@ function renderResults() {
         plugins: [ChartDataLabels]
     };
 
-    // Destroy previous chart before creating new one (to avoid duplicates)
-    if (chart) {
-        chart.destroy();
-    }
-
+    if (chart) chart.destroy();
     const ctx = document.getElementById('scoreChart').getContext('2d');
     chart = new Chart(ctx, chartConfig);
 
