@@ -45,6 +45,10 @@
     margin: auto 30px;
 }
 
+.score-graph {
+    height: 400px;
+}
+
 @media screen and (max-width: 767px) {
     .score-calculator-input-areas {
         display: unset;

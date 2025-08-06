@@ -171,6 +171,7 @@ function renderResults() {
         options: {
             responsive: true,
             animation: false,
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
                     position: 'top',
