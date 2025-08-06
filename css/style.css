@@ -35,7 +35,7 @@
 
     --metion-color: #3246b4;
 
-    --box-area-bg-color: rgba(0, 0, 0, 0.02);
+    --box-area-bg-color: rgba(0, 0, 0, 0.015);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -365,6 +365,10 @@ a[target="_blank"].nav-bar-link::after {
 
 .no-color-link {
     color: #FFF!important;
+}
+
+.no-color-link-themed {
+    color: var(--text-color)!important;
 }
 
 .no-underline-link {

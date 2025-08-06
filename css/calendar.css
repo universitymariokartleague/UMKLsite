@@ -66,7 +66,7 @@
     display: flex;
     flex-direction: column;
     border: 1px solid #ccccccaa;
-    background-color: #cccccc1f;
+    background-color: #cccccc10;
     border-radius: 5px;
     font-weight: bold;
     user-select: none;
@@ -75,7 +75,7 @@
 }
 
 .day:not(.empty):not(.today):hover {
-    background-color: #cccccc6f;
+    background-color: #cccccc50;
 }
 
 .day.selected {

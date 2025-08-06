@@ -90,11 +90,11 @@ function renderResults() {
     });
 
     teamResult.innerHTML = `<h3>Your Team</h3><br/>${teamRaceResults.join("")}
-        <br><b>Total</b><br/>
+        <br><b>Total:</b><br/>
         ${yourTeamTotal}<br/>`;
 
     opponentResult.innerHTML = `<h3>Opponent Team</h3><br/>${opponentRaceResults.join("")}
-        <br><b>Total: </b><br/>
+        <br><b>Total:</b><br/>
         ${opponentTeamTotal}<br/>`;
 
     const diff = yourTeamTotal - opponentTeamTotal;
@@ -170,6 +170,7 @@ function renderResults() {
         data: chartData,
         options: {
             responsive: true,
+            animation: false,
             plugins: {
                 legend: {
                     position: 'top',
@@ -235,6 +236,9 @@ function renderResults() {
                             family: 'Montserrat'
                         },
                         color: textColor
+                    },
+                    grid: {
+                        color: '#cccccc30'
                     }
                 },
                 y: {
@@ -244,7 +248,22 @@ function renderResults() {
                             family: 'Montserrat'
                         },
                         color: textColor
+                    },
+                    grid: {
+                        color: (context) => {
+                            return context.tick.value % 100 === 0
+                            ? '#cccccc80'
+                            : '#cccccc30';
+                        }
                     }
+                }
+            },
+            layout: {
+                padding: {
+                    right: 15,
+                    left: 15,
+                    top: 5,
+                    bottom: 5
                 }
             }
         },

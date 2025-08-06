@@ -105,7 +105,7 @@
 .season-selection {
     display: flex;
     flex-direction: column;
-    background-color: #cccccc1f;
+    background-color: #cccccc10;
     border: 1px solid #cccccc;
     border-radius: 10px;
     padding: 10px;

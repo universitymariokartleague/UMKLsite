@@ -61,7 +61,7 @@ function renderContributor(person) {
         .filter(platform => person[platform.key])
         .map(platform =>
             `<a class="no-underline-link" href="${person[platform.key]}" title="${platform.title}">
-                <span class="no-color-link ${platform.icon}"></span>
+                <span class="no-color-link-themed ${platform.icon}"></span>
             </a>`
         )
         .join("");
