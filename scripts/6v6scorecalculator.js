@@ -173,6 +173,17 @@ function renderResults() {
             animation: false,
             maintainAspectRatio: false,
             plugins: {
+                    tooltip: {
+                    bodyFont: {
+                        family: 'Montserrat',
+                    },
+                    titleFont: {
+                        family: 'Montserrat',
+                    },
+                    footerFont: {
+                        family: 'Montserrat',
+                    },
+                },
                 legend: {
                     position: 'top',
                     labels: {
