@@ -10,8 +10,7 @@ body {
     color: #fff;
 
     display: flex;
-    justify-content: center;
-    align-items: center;
+    align-items: end;
     flex-direction: column;
 }
 
@@ -19,17 +18,25 @@ h1 {
     font-family: "SF-Pro-Display", sans-serif;
     font-weight: bolder;
     font-size: 35px;
-    margin: 19px 0 0 0;
+    margin: 19px 10px 0 0;
     text-shadow: 0 0 15px rgba(0, 0, 0, 1);
 }
 
 @keyframes growText {
     0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
+    50% { transform: scale(1.25); }
     100% { transform: scale(1); }
 }
 
 .grow {
     display: inline-block;
-    animation: growText 0.5s ease;
+    animation: growText 1.55s ease;
+}
+
+.liveteamlogo {
+    height: 30px;
+    width: auto;
+    margin: 0 5px;
+    vertical-align: middle;
+    filter: drop-shadow(0 0 15px rgba(0, 0, 0, 1));
 }
