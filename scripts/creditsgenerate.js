@@ -20,7 +20,6 @@ const contributors = [
     {
         name: "tsun1509",
         discord: "https://discord.com/users/342974732938903563",
-        github: "https://github.com/TusharSundarka/"
     },
     {
         name: "zyposts",
