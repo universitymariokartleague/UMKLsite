@@ -50,8 +50,6 @@ const sections = [
 const socialPlatforms = [
     { key: "discord", icon: "fa-brands fa-discord", title: "Discord" },
     { key: "github", icon: "fa-brands fa-github", title: "GitHub" },
-    { key: "twitter", icon: "fa-brands fa-twitter", title: "Twitter" },
-    { key: "linkedin", icon: "fa-brands fa-linkedin", title: "LinkedIn" },
     { key: "email", icon: "fa-solid fa-envelope", title: "Email" }
 ];
 
