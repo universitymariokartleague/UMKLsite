@@ -2,11 +2,14 @@
     A script that fetches from live match data from api.umkl.co.uk/live
 */
 
-let scores = []
+let raceresults = []
 const firstTeamScore = document.getElementById("firstteamscore")
 const secondTeamScore = document.getElementById("secondteamscore")
 const errorMessage = document.getElementById("errormessage")
 let reversed = Boolean(document.body.dataset.reversed) || false;
+
+const scoreMap = [15, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+const maxPos = scoreMap.length
 
 let refreshTimer = null;
 
@@ -20,12 +23,12 @@ async function getLive() {
         },
         body: "{}"
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        });
 }
 
 function animateNumberChange(element, oldValue, newValue, duration = 500, grow = false) {
@@ -54,7 +57,26 @@ function animateNumberChange(element, oldValue, newValue, duration = 500, grow =
 
 function setScores() {
     window.retryCount = 0;
-    
+
+    function calculatePoints(positions) {
+        return positions.reduce((sum, pos) => {
+            if (pos >= 1 && pos <= maxPos) {
+                return sum + scoreMap[pos - 1];
+            }
+            return sum;
+        }, 0);
+    }
+
+    let teamAPoints = raceresults.reduce((total, race) => {
+        return total + calculatePoints(race["1"] || []);
+    }, 0);
+
+    let teamBPoints = raceresults.reduce((total, race) => {
+        return total + calculatePoints(race["2"] || []);
+    }, 0);
+
+    let scores = [teamAPoints, teamBPoints]
+
     const [newFirst, newSecond] = reversed ? [scores[1], scores[0]] : [scores[0], scores[1]];
 
     const currentFirst = parseInt(firstTeamScore.innerText) || 0;
@@ -88,12 +110,13 @@ function setScores() {
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     console.debug(`%cgetlivedata.js %c> %cGetting live match data...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
-    
+
     try {
-        scores = await getLive();
+        raceresults = await getLive();
         setScores();
         errorMessage.innerHTML = "";
     } catch (error) {
+        console.log(error)
         errorMessage.innerHTML = `Connection lost...`;
         console.debug(`%cgetlivedata.js %c> %cAPI failed...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
         if (error && error.message && error.message.includes('429')) {
@@ -102,7 +125,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     console.debug(`%cgetlivedata.js %c> %cFetched live data in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
-    
+
     if (refreshTimer) clearTimeout(refreshTimer);
     const updateFetch = async () => {
         try {
@@ -112,7 +135,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 window.retryCount++;
             }
             console.debug(`%cgetlivedata.js %c> %cRefreshing live data...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
-            scores = await getLive();
+            raceresults = await getLive();
             setScores();
             errorMessage.innerHTML = "";
         } catch (error) {
