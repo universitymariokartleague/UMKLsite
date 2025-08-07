@@ -1,15 +1,11 @@
 @font-face {
-    font-family: "SF-Pro-Display-Heavy";
-    src: url("../assets/canvas/fonts/SF-Pro/SF-Pro-Display-Heavy.otf");
-}
-
-@font-face {
-    font-family: "SF-Pro-Display-Bold";
-    src: url("../assets/canvas/fonts/SF-Pro/SF-Pro-Display-Bold.otf");
+    font-family: "SF-Pro-Display";
+    font-weight: normal;
+    src: url("../assets/font/SF-Pro-Display-Bold.woff2");
 }
 
 body {
-    font-family: "SF-Pro-Display-Bold", sans-serif;
+    font-family: "SF-Pro-Display", sans-serif;
     background: #fff;
     color: #fff;
 
@@ -20,7 +16,8 @@ body {
 }
 
 h1 {
-    font-family: "SF-Pro-Display-Heavy", sans-serif;
+    font-family: "SF-Pro-Display", sans-serif;
+    font-weight: bolder;
     font-size: 35px;
     margin: 19px 0 0 0;
     text-shadow: 0 0 15px rgba(0, 0, 0, 1);
