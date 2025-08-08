@@ -53,8 +53,8 @@ async function getTeamdata(team = "", season) {
 async function loadFonts() {
     try {
         await Promise.all([
-            loadFont('SF-Pro-Display-Bold', 'assets/canvas/fonts/SF-Pro/SF-Pro-Display-Bold.otf'),
-            loadFont('SF-Pro-Display-Black', 'assets/canvas/fonts/SF-Pro/SF-Pro-Display-Black.otf')
+            loadFont('SF-Pro-Display-Bold', 'assets/font/SF-Pro-Display-Bold.woff2'),
+            loadFont('SF-Pro-Display-Black', 'assets/font/SF-Pro-Display-Black.woff2')
         ]);
     } catch (error) {
         console.error('Failed to load fonts:', error);
@@ -161,7 +161,7 @@ function drawRoundedRect(ctx, x, y, width, height, radius, fill, stroke, strokeW
 }
 
 async function createTeamStandingsImage(season, isCurrentSeason, teamStandingsData) {
-    await loadFonts();
+    // await loadFonts();
 
     // Constants
     const TITLE_POSITION = [200, 126];
