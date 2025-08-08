@@ -96,6 +96,8 @@
 .team-logo-grid {
     width: 35px; 
     height: 35px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
 }
 
 @media screen and (max-width: 767px) {
