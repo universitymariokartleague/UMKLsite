@@ -16,7 +16,8 @@ function generateTeamHTML(team) {
             <hr>
             <div class="${team.class_name} team">
                 <span>${team.team_name}</span>
-                <img src="${team.logo_src}" alt="${makePossessive(team.team_name)} team logo" class="team-logo" loading="lazy"
+                <img src="${team.logo_src}" alt="${makePossessive(team.team_name)} team logo" class="team-logo"
+                onload="this.style.opacity=1" loading="lazy"
                 onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';"/>
             </div>
             <hr>
@@ -115,7 +116,8 @@ async function generateTeamBoxes(teamData) {
                 [
                     team.season_position, 
                     `<div class="team-name-grid-flex">
-                        <img src="${team.logo_src}" alt="${makePossessive(team.team_name)} team logo" class="team-logo-grid" loading="lazy"
+                        <img src="${team.logo_src}" alt="${makePossessive(team.team_name)} team logo" class="team-logo-grid"
+                        onload="this.style.opacity=1" loading="lazy"
                         onerror="this.onerror=null; this.src='${placeholderLogo}';"/>
                             <div class="team-text-flex">
                             <h3>${team.team_name}</h3>
@@ -164,7 +166,8 @@ async function generateTeamBoxes(teamData) {
                 row.innerHTML = `
                     <div class="teamPosition">${team.season_position}</div>
                     <div class="teamColour" style="background-color:${team.team_color}"></div>
-                    <img class="teamLogo" src="${team.logo_src}" alt="${makePossessive(team.team_name)} team emblem" loading="lazy"
+                    <img class="teamLogo" src="${team.logo_src}" alt="${makePossessive(team.team_name)} team emblem"
+                    onload="this.style.opacity=1" loading="lazy"
                     onerror="this.onerror=null; this.src='${placeholderLogo}';"/>
                     <div class="teamName">${team.team_name.toUpperCase()}</div>
                     <div class="teamPointsArea">
