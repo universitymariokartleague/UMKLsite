@@ -365,7 +365,7 @@ exportDataButton.onclick = () => {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "formatted_teams.json";
+    a.download = "detailedResults.json";
     a.click();
 
     URL.revokeObjectURL(url);
