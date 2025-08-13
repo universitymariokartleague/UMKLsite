@@ -455,9 +455,15 @@ tag {
     padding: 1px 6px;
     background-color: rgba(88, 101, 242, 0.25);
     border: 1px solid rgba(152, 172, 255, 0.6);
+    transition: background-color 0.1s, border 0.1s;
     border-radius: 5px;
     -webkit-user-select: all;
     user-select: all;
+}
+
+tag:hover {
+    background-color: rgba(88, 101, 242, 0.75);
+    border: 1px solid rgba(152, 172, 255, 1);
 }
 
 mention::selection, tag::selection {

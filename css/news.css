@@ -32,12 +32,11 @@
     background-color: #cccccc48;
 }
 
-.news-container-override {
-    max-width: 702px;
+.news-container-full-page {
     padding: 5px;
     margin: 0 auto;
-	flex-wrap: wrap;
-    background-color: unset;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
 }
 
 .news-box {
@@ -105,6 +104,146 @@
     font-style: italic;
 }
 
-.news-reel {
+#news-reel-box {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 15px auto;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #ccccccaa;
+    background: #000;
+}
 
+.news-reel-viewport {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 280px;
+}
+
+.news-reel-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s ease;
+    will-change: transform;
+}
+
+.news-reel-slide {
+    position: relative;
+    flex: 0 0 100%;
+    height: 100%;
+}
+
+.news-reel-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(2.5px);
+    pointer-events: none;
+    user-select: none;
+}
+
+.news-reel-gradient {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+}
+
+.news-reel-card {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+    padding: 24px;
+    color: #fff!important;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+.news-reel-title {
+    font-size: 1.5rem;
+    text-decoration: underline;
+}
+
+.news-reel-desc {
+    margin: 0;
+}
+
+.news-reel-tags {
+    margin-left: 2px;
+}
+
+.news-reel-tags tag {
+    background-color: rgba(88, 101, 242, 0.5);
+    border: 1px solid rgba(152, 172, 255, 0.7);
+    margin-right: 4px;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.news-reel-tags tag:hover {
+    background-color: rgba(88, 101, 242, 0.8);
+    border: 1px solid rgba(152, 172, 255, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .news-reel-track { transition: none; }
+}
+
+.news-reel-viewport {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 280px;
+}
+
+.news-reel-indicators {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 6;
+}
+
+.news-reel-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.news-reel-dot:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.news-reel-dot.active {
+    background-color: #fff;
+}
+
+.news-reel-progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.1);
+    z-index: 7;
+    overflow: hidden;
+}
+
+.news-reel-progress {
+    width: 0%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    transition: width linear;
 }
