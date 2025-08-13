@@ -112,7 +112,6 @@
     overflow: hidden;
     position: relative;
     border: 1px solid #ccccccaa;
-    background: #000;
 }
 
 .news-reel-viewport {
@@ -143,6 +142,8 @@
     height: 100%;
     object-fit: cover;
     filter: blur(2.5px);
+    opacity: 0;
+    transition: opacity 0.1s ease-in;
     pointer-events: none;
     user-select: none;
 }

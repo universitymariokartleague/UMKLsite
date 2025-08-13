@@ -117,7 +117,7 @@ function addNewsReelArea() {
         const slide = document.createElement('div');
         slide.className = 'news-reel-slide';
         slide.innerHTML = `
-            <img class="news-reel-bg" src="${item.img}" alt="" loading="lazy">
+            <img class="news-reel-bg" src="${item.img}" alt="" onload="this.style.opacity=1" loading="lazy">
             <div class="news-reel-gradient"></div>
             <a class="news-reel-card" href="${item.href}">
                 <div class="news-reel-meta">
