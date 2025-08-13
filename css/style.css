@@ -125,6 +125,10 @@ h1 {
     font-size: 1.8em;
 }
 
+li {
+    padding: 0px 0 5px 0;
+}
+
 .p-below-title {
     margin: 0;
 }
