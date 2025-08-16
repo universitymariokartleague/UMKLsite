@@ -230,16 +230,21 @@
         border-radius: 5px;
     }
 
-    .match-date-time-box {
-        font-size: 14px;
-    }
-
-    .overseas-time-clock {
-        font-size: 14px;
-    }
-
     .event-box-team .fa-youtube {
         font-size: 18px;
+    }
+
+    .match-detail-container {
+        font-size: 3vmin;
+    }
+
+    .match-season {
+        font-size: 12px;
+    }
+
+    .local-time-clock, .overseas-time-clock {
+        font-size: 2.5vmin;
+        margin: 0 3px 0 1px;
     }
 }
 
