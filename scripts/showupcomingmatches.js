@@ -99,10 +99,13 @@ function showUpcomingMatch() {
         ...(matchData[todayStr] || []),
         ...(matchData[tomorrowStr] || [])
     ].filter(match => {
+        if (match.endTime) return false;
+
         const [hours, minutes] = match.time.split(':').map(Number);
         const matchDateStr = (matchData[todayStr]?.includes(match) ? todayStr : tomorrowStr);
         const matchDate = new Date(matchDateStr);
         matchDate.setHours(hours, minutes, 0, 0);
+
         return (now - matchDate) <= MATCH_LENGTH_MINS * 60 * 1000;
     });
 
@@ -132,28 +135,10 @@ function showUpcomingMatch() {
                 const test = new Date('1970-01-01T13:00');
                 return test.toLocaleTimeString(locale).toLowerCase().includes('pm');
             }
-            let timeString = entry.time || '00:00:00';
-            const is12Hour = uses12HourClock(locale);
-            const dateObj = new Date(`1970-01-01T${timeString}`)
-            let formattedMatchTime = dateObj.toLocaleTimeString(locale, {
-                hour: is12Hour ? 'numeric' : '2-digit',
-                minute: '2-digit',
-                hour12: is12Hour,
-            });
 
-            const outsideUKTimezone = checkTimezoneMatches(timeString);
-            let formattedLocalMatchTime;
-            if (outsideUKTimezone) {
-                const timeOnly = timeString.replace(/([+-]\d{2}:\d{2})$/, '');
-                formattedLocalMatchTime = new Date(`1970-01-01T${timeOnly}`).toLocaleTimeString(locale, {
-                    hour: is12Hour ? 'numeric' : '2-digit',
-                    minute: '2-digit',
-                    hour12: is12Hour,
-                });
-                let temp = formattedMatchTime
-                formattedMatchTime = formattedLocalMatchTime
-                formattedLocalMatchTime = temp
-            }
+            const is12Hour = uses12HourClock(locale);
+            let timeString = entry.time || '00:00:00';
+            const { formattedMatchTime, formattedLocalMatchTime, outsideUKTimezone } = formatMatchTime(matchDateStr, timeString, locale);
             
             let isLive = false;
             if (entry.time) {
@@ -173,6 +158,15 @@ function showUpcomingMatch() {
                 team1.ytLink = entry.ytLinks[0]
                 team2.ytLink = entry.ytLinks[1]
             }
+
+            const isoStr = `${matchDateStr}T${entry.time}`;
+            const dateObj = new Date(isoStr);
+            const londonFormatter = new Intl.DateTimeFormat("en-GB", {
+                timeZone: "Europe/London",
+                timeZoneName: "short"
+            });
+            const parts = londonFormatter.formatToParts(dateObj);
+            const zoneName = parts.find(p => p.type === "timeZoneName")?.value || "";
 
             html += `            
             <div class="event-container">
@@ -227,7 +221,7 @@ function showUpcomingMatch() {
                         <div class="match-detail-container">
                             <i class="${outsideUKTimezone ? 'local-time-clock' : ''} fa-solid fa-clock"></i>
                             <h2>
-                                <span>${formattedMatchTime}</span>
+                                <span title="${zoneName}">${formattedMatchTime}</span>
                                 ${outsideUKTimezone ? `
                                     <span title="Local time" style="display: inline-flex; align-items: center;">
                                     (<i class="overseas-time-clock fa-solid fa-clock"></i>${formattedLocalMatchTime})</span>` : ''}
@@ -251,16 +245,67 @@ function showUpcomingMatch() {
     }
 }
 
-function checkTimezoneMatches(timeString) {
-    const offset = new Date().getTimezoneOffset();
-    const sign = offset <= 0 ? '+' : '-';
-    const abs = Math.abs(offset);
-    const formattedOffset = `${sign}${String(Math.floor(abs / 60)).padStart(2, '0')}:${String(abs % 60).padStart(2, '0')}`;
-    
-    const match = timeString.match(/([+-]\d{2}:\d{2})$/);
-    const extractedOffset = match ? match[1] : null;
+function uses12HourClock(locale) {
+    const test = new Date('1970-01-01T13:00');
+    return test.toLocaleTimeString(locale).toLowerCase().includes('pm');
+}
 
-    return formattedOffset != extractedOffset;
+function formatMatchTime(date, timeString, locale) {
+    const is12Hour = uses12HourClock(locale);
+
+    const isoStr = `${date}T${timeString}`;
+    const dateObj = new Date(isoStr);
+
+    const UKTime = new Intl.DateTimeFormat(locale, {
+        timeZone: "Europe/London",
+        hour: is12Hour ? "numeric" : "2-digit",
+        minute: "2-digit",
+        hour12: is12Hour,
+    }).format(dateObj);
+
+    const localTime = new Intl.DateTimeFormat(locale, {
+        hour: is12Hour ? "numeric" : "2-digit",
+        minute: "2-digit",
+        hour12: is12Hour,
+    }).format(dateObj);
+
+    let outsideUKTimezone = checkTimezoneMatches(date, timeString);
+
+    let formattedMatchTime, formattedLocalMatchTime;
+    if (outsideUKTimezone) {
+        formattedMatchTime = UKTime;
+        formattedLocalMatchTime = localTime;
+    } else {
+        formattedMatchTime = UKTime;
+        formattedLocalMatchTime = null;
+    }
+
+    if (formattedMatchTime == formattedLocalMatchTime) {
+        outsideUKTimezone = false;
+    }
+
+    return { formattedMatchTime, formattedLocalMatchTime, outsideUKTimezone };
+}
+
+function checkTimezoneMatches(dateStr, timeStr) {
+    const match = timeStr.match(/([+-]\d{2}):([0-5]\d)$/);
+    if (!match) return false;
+
+    const [ , offsetH, offsetM ] = match;
+    const offsetMinutes = parseInt(offsetH, 10) * 60 + parseInt(offsetM, 10) * (offsetH.startsWith("-") ? -1 : 1);
+
+    const [hourStr, minuteStr] = timeStr.split(":");
+    const hours = parseInt(hourStr, 10);
+    const minutes = parseInt(minuteStr, 10);
+
+    const [year, month, day] = dateStr.split("-").map(Number);
+
+    const utcDate = new Date(Date.UTC(year, month - 1, day, hours, minutes));
+
+    const londonTime = new Date(utcDate.toLocaleString("en-GB", { timeZone: "Europe/London" }));
+    const londonOffsetMinutes = (londonTime - utcDate) / 60000;
+
+    return offsetMinutes !== londonOffsetMinutes;
 }
 
 function autoLink(text) {
