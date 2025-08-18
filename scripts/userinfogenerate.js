@@ -56,7 +56,7 @@ function buildUserInfoTable(data, isCurrent = false) {
         </table>`;
 }
 
-async function generateUserBox(userData, showError) {
+async function generateMatchStatsBox(userData, showError) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.remove('fade-in');
 
@@ -269,7 +269,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     playerData = await getPlayerdata(playerID);
                     fetchedCurrentSeason = parseInt(await getCurrentSeason());
                     showError = 0;
-                    await generateUserBox(playerData, showError);
+                    await generateMatchStatsBox(playerData, showError);
                 } catch (err) {
                     showErrorBox(showError);
                     refreshTimer = setTimeout(retryFetch, 2000);
@@ -278,7 +278,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             refreshTimer = setTimeout(retryFetch, 2000);
         }
     }
-    await generateUserBox(playerData, showError);
+    await generateMatchStatsBox(playerData, showError);
 
     if (refreshTimer) clearTimeout(refreshTimer);
     const updateFetch = async () => {

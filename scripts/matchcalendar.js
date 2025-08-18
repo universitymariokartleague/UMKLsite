@@ -793,30 +793,6 @@ window.addEventListener('popstate', () => {
     }
 });
 
-async function getTeamcolors() {
-    return fetch('https://api.umkl.co.uk/teamcolors', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: "{}"
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        });
-}
-
-async function getTeamcolorsFallback() {
-    const response = await fetch(`database/teamcolorsfallback.json`);
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    teamColors = await response.json();
-}
-
 async function getMatchData() {
     return fetch('https://api.umkl.co.uk/matchdata', {
         method: 'POST',
@@ -839,6 +815,30 @@ async function getMatchDataFallback() {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
     matchData = await response.json();
+}
+
+async function getTeamcolors() {
+    return fetch('https://api.umkl.co.uk/teamcolors', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: "{}"
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        });
+}
+
+async function getTeamcolorsFallback() {
+    const response = await fetch(`database/teamcolorsfallback.json`);
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    teamColors = await response.json();
 }
 
 function displayCalendar() {

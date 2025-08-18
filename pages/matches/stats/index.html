@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" data-overlayscrollbars-initialize>
+    <head>
+        <base href="../../../">
+    
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>Match Stats | University Mario Kart League</title>
+        <meta name="description" content="This page shows match stats in the University Mario Kart League (UMKL)">
+        <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/teampage.css">
+        <link rel="stylesheet" href="css/settings.css">
+        <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
+        <link rel="stylesheet" href="css/ext/fontawesome.min.css">
+        <meta name="color-scheme" content="dark light">
+    
+        <meta property="og:title" content="University Mario Kart League | Teams" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://umkl.co.uk/pages/teams/" />
+        <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/Cheep_Cheep_banner.avif" />
+        <meta property="og:description" content="This page shows match stats in the University Mario Kart League (UMKL)" />
+        <meta name="theme-color" content="#bc0839">
+    
+        <!-- Include this to make the og:image larger -->
+        <meta name="twitter:card" content="summary_large_image">
+    
+        <!-- Scripts -->
+        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+        <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
+        <script src="scripts/overlayscrollbar.js" defer></script>    
+        
+        <script type="module" src="scripts/settings.js" defer></script>
+        <script type="module" src="scripts/matchstatsgenerate.js" defer></script>
+    </head>
+    <body id="top" data-overlayscrollbars-initialize>
+        <div class="navbar-container">
+            <div class="nav-bar">
+                <a href="index.html" class="nav-bar-title no-color-link no-underline-link-footer">
+                    <img src="assets/media/brand/UMKLlogonav.avif" class="nav-bar-logo" alt="UMKL logo">
+                    <h2>UMKL</h2>
+                </a>
+                <nav class="nav-flex">
+                    <ul id="nav-bar">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="pages/news/">News</a></li>
+                        <li><a class="nav-selected" href="pages/teams/">Teams</a></li>
+                        <li><a href="pages/matches/">Matches</a></li>
+                        <li><a href="pages/rules/">Rules</a></li>
+                        <li><a href="pages/faq/">FAQs</a></li>
+                        <li><a target="_blank" class="nav-bar-link" href="https://discord.gg/jz3hKEmDss">Discord</a></li>
+                    </ul>
+                </nav>
+                <!-- Dropdown navigation (shown on mobile) -->
+                <div class="nav-dropdown">
+                    <div class="nav-dropdown-button">☰</div>
+                    <div class="nav-dropdown-content" id="nav-dropdown-bar">
+                        <a href="index.html">Home</a>
+                        <a href="pages/news/">News</a>
+                        <a href="pages/teams/">Teams</a>
+                        <a href="pages/matches/">Matches</a>
+                        <a href="pages/rules/">Rules</a>
+                        <a href="pages/faq/">FAQs</a>
+                        <a target="_blank" class="nav-bar-link" href="https://discord.gg/jz3hKEmDss">Discord</a>
+                    </div>
+                </div>           
+            </div>
+        </div>
+
+        <main>
+            <a href="pages/matches/" id="backButton">Back</a>
+            <h1>Match Stats</h1>
+            <hr class="hr-below-title">
+
+            <div id="JSTeamBox" class="team-info">
+                Loading match information...
+            </div>
+        </main>
+
+        <footer>
+            © UMKL 2025 |
+            <a class="no-color-link" href="pages/credits/">Credits</a> |
+            <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |
+            <a href="https://www.youtube.com/@universitymariokartleague" title="UMKL YouTube Channel" class="no-color-link no-underline-link-footer fa-brands fa-youtube"></a>
+            <a href="https://www.instagram.com/universitymariokartleague" title="UMKL Instagram Account" class="no-color-link no-underline-link-footer fa-brands fa-instagram"></a>
+            <a href="https://www.facebook.com/profile.php?id=61575273336011" title="UMKL Facebook Page" class="no-color-link no-underline-link-footer fa-brands fa-facebook"></a>            
+            <a href="https://discord.gg/jz3hKEmDss" title="UMKL Discord server" class="no-color-link no-underline-link-footer fa-brands fa-discord"></a>            
+        </footer>
+    </body>
+</html>
