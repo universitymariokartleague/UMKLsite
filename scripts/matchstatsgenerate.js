@@ -29,9 +29,11 @@ function buildUserInfoTable(data) {
         .map(([track, count]) => `${track}: ${count}`)
         .join("<br>");
 
+    const length = Object.keys(data).length;
+
     return `
         <table class="team-info-table">
-            <tr><td class="table-key">Track Frequency</td><td>${resultString}</td></tr>
+            <tr><td class="table-key">Track Frequency<br>(${length}/96 played)</td><td>${resultString}</td></tr>
         </table>`;
 }
 
@@ -51,8 +53,6 @@ async function generateMatchStatsBox(showError) {
             }
         }
     }
-
-    console.log(trackCounts);
 
     const extraFields = buildUserInfoTable(trackCounts);
 
