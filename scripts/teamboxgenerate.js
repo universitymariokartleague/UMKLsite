@@ -4,7 +4,7 @@
     and institution. The script fetches data from the API and creates the
     HTML elements dynamically. It also handles caching of the data to improve performance.
 */
-function generateTeamHTML(team) {
+function generateTeamHTML(team, cached = false) {
     return `
         <button onClick="location.href='pages/teams/details?team=${team.link_name}'" class="${team.class_name} teamBox">
             <div class="positionBox">
@@ -17,7 +17,7 @@ function generateTeamHTML(team) {
             <div class="${team.class_name} team">
                 <span>${team.team_name}</span>
                 <img src="${team.logo_src}" alt="${makePossessive(team.team_name)} team logo" class="team-logo"
-                onload="this.style.opacity=1" loading="lazy"
+                ${cached ? '' : `onload="this.style.opacity=1"`} loading="lazy"
                 onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';"/>
             </div>
             <hr>
@@ -48,7 +48,7 @@ async function loadFont(name, url) {
     return font;
 }
 
-function generateTeamBox(team) {
+function generateTeamBox(team, cached = false) {
     let teamBoxStyle="button.teamBox.{{className}}:hover,button.teamBox.{{className}}:focus{border: 0px solid {{teamColor}};outline: 4px solid {{teamColor}};}.team.{{className}}{border-left: 8px solid {{teamColor}};}"
         .replaceAll("{{className}}", team.class_name)
         .replaceAll("{{teamColor}}", team.team_color);
@@ -56,12 +56,12 @@ function generateTeamBox(team) {
     styleSheet.innerText += teamBoxStyle;
 
     const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = generateTeamHTML(team);
+    tempDiv.innerHTML = generateTeamHTML(team, cached);
 
     return tempDiv;
 }
 
-async function generateTeamBoxes(teamData) {
+async function generateTeamBoxes(teamData, cached = false) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.add('fade-in');
     const listView = localStorage.getItem("teamsListView") == 1 || false;
@@ -117,7 +117,7 @@ async function generateTeamBoxes(teamData) {
                     team.season_position, 
                     `<div class="team-name-grid-flex">
                         <img src="${team.logo_src}" alt="${makePossessive(team.team_name)} team logo" class="team-logo-grid"
-                        onload="this.style.opacity=1" loading="lazy"
+                        ${cached ? '' : `onload="this.style.opacity=1"`} loading="lazy"
                         onerror="this.onerror=null; this.src='${placeholderLogo}';"/>
                             <div class="team-text-flex">
                             <h3>${team.team_name}</h3>
@@ -167,7 +167,7 @@ async function generateTeamBoxes(teamData) {
                     <div class="teamPosition">${team.season_position}</div>
                     <div class="teamColour" style="background-color:${team.team_color}"></div>
                     <img class="teamLogo" src="${team.logo_src}" alt="${makePossessive(team.team_name)} team emblem"
-                    onload="this.style.opacity=1" loading="lazy"
+                    ${cached ? '' : `onload="this.style.opacity=1"`} loading="lazy"
                     onerror="this.onerror=null; this.src='${placeholderLogo}';"/>
                     <div class="teamName">${team.team_name.toUpperCase()}</div>
                     <div class="teamPointsArea">
@@ -188,7 +188,7 @@ async function generateTeamBoxes(teamData) {
         try {
             for (let i = 0; i < teamData.length; i++) {
                 const team = teamData[i];
-                fragment.appendChild(generateTeamBox(team, i));
+                fragment.appendChild(generateTeamBox(team, cached));
             }
             document.head.appendChild(styleSheet);
         } catch (error) {
@@ -286,10 +286,15 @@ async function getTeamdataFallback(season) {
 
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
-    console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     generateListViewButton();
     await loadFont('SF-Pro-Display-Bold', 'assets/font/SF-Pro-Display-Bold.woff2');
     
+    if (localStorage.teamDataCache) {
+        JSTeamBoxLoading.innerHTML = ""
+        console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes (cache)...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+        await generateTeamBoxes(JSON.parse(localStorage.teamDataCache), true)
+    }
+
     try {
         teamData = await getTeamdata("");
     } catch (error) {
@@ -321,8 +326,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
     
-    console.debug(`%cteamboxgenerate.js %c> %cGenerated team data in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9452ff", "color:#fff", "color:#c29cff");
-    await generateTeamBoxes(teamData)
+    await generateTeamBoxes(teamData);
+    console.debug(`%cteamboxgenerate.js %c> %cGenerated updated team data in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    localStorage.setItem("teamDataCache", JSON.stringify(teamData));
 
     try {
         currentSeason = parseInt(await getCurrentSeason());
@@ -337,7 +343,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 document.addEventListener('listViewChange', async () => {
     await getTeamdataSafe(currentSeason)
     updateButton();
-    console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes...`, "color:#9452ff", "color:#fff", "color:#c29cff");    
     await generateTeamBoxes(teamData, false);
 });
 

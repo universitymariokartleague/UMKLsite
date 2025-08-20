@@ -38,6 +38,8 @@ let currentPreview = null;
 let listViewEnabled = false;
 let listViewToggledOnce = false;
 
+let cached = false;
+
 let startTime;
 
 function createEmptyCells(count) {
@@ -91,10 +93,11 @@ function generateCalendar(month, year, dateParam = null) {
         const today = new Date();
         const isToday = (year === today.getFullYear() && month === today.getMonth() && day === today.getDate());
         if (isToday) {
-            dayCell.classList.add('day');
-            setTimeout(() => {
-                dayCell.classList.add('today');
-            }, 50);
+            if (!cached) {
+                setTimeout(() => {
+                    dayCell.classList.add('today');
+                }, 50);
+            }
         }
 
         const dateToCheck = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
@@ -360,14 +363,14 @@ function showDailyLog(date, dayCell) {
                         <div class="team-background right ${team2.class_name}"></div>
                         <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.avif"
                         alt="Team background overlay"
-                        onload="this.style.opacity=1" loading="lazy"/>
+                        ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>
 
                         <div class="event-overlay">
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link team-box-underline-hover" href="${team1.link}">
                                     <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.avif"
                                     alt="${makePossessive(team1.team_name)} team logo" loading="lazy"
-                                    onload="this.style.opacity=1"
+                                    ${cached ? `` : 'onload="this.style.opacity=1"'}
                                     onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';"/>
                                     <h2>${team1.team_name}</h2>
                                 </a>
@@ -384,7 +387,7 @@ function showDailyLog(date, dayCell) {
                                 <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">
                                     <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.avif"
                                     alt="${makePossessive(team2.team_name)} team logo" loading="lazy"
-                                    onload="this.style.opacity=1" 
+                                    ${cached ? `` : 'onload="this.style.opacity=1"'}
                                     onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';"/>
                                     <h2>${team2.team_name}</h2>
                                 </a>
@@ -530,14 +533,14 @@ function generateCalendarListView() {
                         <div class="team-background right ${team2.class_name}"></div>
                         <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.avif"
                         alt="Team background overlay"
-                        onload="this.style.opacity=1" loading="lazy"/>
+                        ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>
 
                         <div class="event-overlay">
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link team-box-underline-hover" href="${team1.link}">
                                     <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.avif"
                                     alt="${makePossessive(team1.team_name)} team logo" loading="lazy"
-                                    onload="this.style.opacity=1"
+                                    ${cached ? `` : 'onload="this.style.opacity=1"'}
                                     onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';"/>
                                     <h2>${team1.team_name}</h2>
                                 </a>
@@ -554,7 +557,7 @@ function generateCalendarListView() {
                                 <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">
                                     <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.avif"
                                     alt="${makePossessive(team1.team_name)} team logo" loading="lazy"
-                                    onload="this.style.opacity=1" 
+                                    ${cached ? `` : 'onload="this.style.opacity=1"'}
                                     onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';"/>
                                     <h2>${team2.team_name}</h2>
                                 </a>
@@ -905,6 +908,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.debug(`%cmatchcalendar.js %c> %cFetching calendar...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
     generateListViewButton();
 
+    if (localStorage.matchDataCache && localStorage.teamColorsCache) {
+        cached = true;
+        console.debug(`%cmatchcalendar.js %c> %cRendering calendar (cache)...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+        matchData = JSON.parse(localStorage.matchDataCache)
+        teamColors = JSON.parse(localStorage.teamColorsCache)
+        makeTeamsColorStyles();
+        loadCalendarView();
+    }
+
     try {
         matchData = await getMatchData();
         teamColors = await getTeamcolors();
@@ -940,6 +952,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    localStorage.setItem("matchDataCache", JSON.stringify(matchData));
+    localStorage.setItem("teamColorsCache", JSON.stringify(teamColors));
+    listViewToggledOnce = false;
+    discardLogOnChange = false;
+    cached = false;
+    document.dispatchEvent(new CustomEvent('removeScrollbarFromCalendarListView'));
     makeTeamsColorStyles();
     loadCalendarView();
     console.debug(`%cmatchcalendar.js %c> %cMatch data loaded in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
