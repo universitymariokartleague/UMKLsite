@@ -10,6 +10,7 @@
         <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/teampage.css">
+        <link rel="stylesheet" href="css/matchstats.css">
         <link rel="stylesheet" href="css/settings.css">
         <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
         <link rel="stylesheet" href="css/ext/fontawesome.min.css">
@@ -70,7 +71,23 @@
         <main>
             <a href="pages/matches/" id="backButton">Back</a>
             <h1>Match Stats</h1>
+            <p class="p-below-title">View stats about past matches.
             <hr class="hr-below-title">
+
+            <p>
+                <b>Options</b><br>
+                <label for="testMatches">Include test matches:</label>
+                <input type="checkbox" id="testMatches" name="testMatches" checked>
+                <br>
+                <label for="pointsDiff">Show the average points difference for a track:</label>
+                <input type="checkbox" id="pointsDiff" name="pointsDiff">
+                <br>
+                <label for="teamFrequency">Show how often teams have played a track:</label>
+                <input type="checkbox" id="teamFrequency" name="teamFrequency">
+                <br>
+                <label for="daysPlayed">Show the dates a track was played on:</label>
+                <input type="checkbox" id="daysPlayed" name="daysPlayed">
+            </p>
 
             <div id="JSTeamBox" class="team-info">
                 Loading match information...

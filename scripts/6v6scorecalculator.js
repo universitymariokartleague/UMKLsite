@@ -339,8 +339,6 @@ document.addEventListener('themeChange', () => {
 });
 
 exportDataButton.onclick = () => {
-    const maxPos = scoreMap.length;
-
     const positions = positionsInput.value.trim().split('\n').map(line =>
         line.split(',').map(num => parseInt(num))
     );

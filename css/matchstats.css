@@ -1,0 +1,30 @@
+.track-frequency {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+}
+
+.track-item {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    max-width: 135px;
+    border: 1px solid #cccccccc;
+    border-radius: 10px;
+}
+
+.track-icon {
+    border-radius: 10px;
+}
+
+.track-label {
+    padding-top: 5px;
+}
+
+@media screen and (max-width: 767px) {
+    .track-item {
+        max-width: min(125px, 100%);
+    }
+}
