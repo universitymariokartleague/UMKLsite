@@ -450,6 +450,11 @@ document.getElementById("game-select").addEventListener("change", function () {
     pickedTracksList.innerHTML = "";
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    const tempLocale = localStorage.getItem("locale") || "en-GB";
+    PALNamesCheckbox.checked = tempLocale == "en-GB";
+});
+
 pickRandomTrackButton.addEventListener("click", pickRandomTrack);
 clearRepicksButton.addEventListener("click", clearRepicks);
 PALNamesCheckbox.addEventListener("click", function () {

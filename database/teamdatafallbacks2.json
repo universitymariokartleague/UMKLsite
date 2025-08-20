@@ -4,6 +4,9 @@
             3,
             0
         ],
+        "championship_seasons": [
+            1
+        ],
         "coords": [
             53.96,
             -1.08
@@ -33,6 +36,7 @@
             2,
             1
         ],
+        "championship_seasons": [],
         "coords": [
             53.0,
             -2.1833
@@ -62,6 +66,7 @@
             1,
             2
         ],
+        "championship_seasons": [],
         "coords": [
             55.9533,
             -3.1892
@@ -91,6 +96,7 @@
             0,
             3
         ],
+        "championship_seasons": [],
         "coords": [
             53.0109,
             -2.2278
@@ -120,6 +126,7 @@
             0,
             0
         ],
+        "championship_seasons": [],
         "coords": [
             52.48,
             -1.9025
@@ -149,6 +156,7 @@
             0,
             0
         ],
+        "championship_seasons": [],
         "coords": [
             51.4536,
             -2.5975
@@ -178,6 +186,7 @@
             0,
             0
         ],
+        "championship_seasons": [],
         "coords": [
             55.8611,
             -4.25
@@ -207,6 +216,7 @@
             0,
             0
         ],
+        "championship_seasons": [],
         "coords": [
             51.75,
             -1.25
@@ -236,6 +246,7 @@
             0,
             0
         ],
+        "championship_seasons": [],
         "coords": [
             52.4081,
             -1.5106
@@ -265,6 +276,7 @@
             0,
             0
         ],
+        "championship_seasons": [],
         "coords": [
             53.4094,
             -2.9785
@@ -294,6 +306,7 @@
             0,
             0
         ],
+        "championship_seasons": [],
         "coords": [
             53.3808,
             -1.4703
@@ -323,6 +336,7 @@
             0,
             0
         ],
+        "championship_seasons": [],
         "coords": [
             52.2053,
             0.1192

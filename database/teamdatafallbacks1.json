@@ -4,6 +4,9 @@
             3,
             0
         ],
+        "championship_seasons": [
+            1
+        ],
         "coords": [
             53.96,
             -1.08
@@ -33,6 +36,7 @@
             2,
             1
         ],
+        "championship_seasons": [],
         "coords": [
             53.0,
             -2.1833
@@ -62,6 +66,7 @@
             1,
             2
         ],
+        "championship_seasons": [],
         "coords": [
             55.9533,
             -3.1892
@@ -91,6 +96,7 @@
             0,
             3
         ],
+        "championship_seasons": [],
         "coords": [
             53.0109,
             -2.2278
