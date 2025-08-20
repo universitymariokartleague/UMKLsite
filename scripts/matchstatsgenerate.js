@@ -32,14 +32,14 @@ const daysPlayedCheckbox = document.getElementById("daysPlayed");
 
 function buildTrackCountDiv(data) {
     const sorted = Object.entries(data).sort((a, b) => b[1].count - a[1].count);
-    const maxCount = sorted[0]?.[1].count; // highest play count
+    const maxCount = sorted[0]?.[1].count;
 
     let teamFrequencyString;
     let datesPlayedString;
 
     const resultString = sorted
         .map(([track, stats]) => {
-            const avgDiff = (stats.totalDiff / stats.count).toFixed(1); // average difference
+            const avgDiff = (stats.totalDiff / stats.count).toFixed(1);
             
             if (teamFrequencyCheckbox.checked) {
                 const sortedTeams = Object.entries(stats.teamCounts)
@@ -59,7 +59,7 @@ function buildTrackCountDiv(data) {
             
             return `
                 <div class="track-item">
-                    <img class="track-icon" src="assets/media/courses/mk8dxicons/${track.replaceAll(' ', '_').replaceAll("'", '')}.avif" alt="${track}">
+                    <img class="track-icon" src="assets/media/courses/mk8dxicons/${track.replaceAll(' ', '_').replaceAll("'", '').toLowerCase()}.avif" alt="${track}">
                     <span class="track-label">
                         ${stats.count === maxCount ? "☆ " : ""}<b>${track}</b><br>
                         Played ${stats.count} ${stats.count === 1 ? "time" : "times"}<br>
