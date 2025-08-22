@@ -100,8 +100,8 @@ function getLiveMatchTeams() {
     });
 
     const teamNames = liveMatches.map(entry => entry.teamsInvolved)[0];
-    firstTeamLogo.src = `assets/media/teamemblems/${teamNames[0].toUpperCase()}.avif`
-    secondTeamLogo.src = `assets/media/teamemblems/${teamNames[1].toUpperCase()}.avif`
+        firstTeamLogo.src = `assets/media/teamemblems/${teamNames[0].toUpperCase()}.avif`
+        secondTamLogo.src = `assets/media/teamemblems/${teamNames[1].toUpperCase()}.avif`
 }
 
 function animateNumberChange(element, oldValue, newValue, duration = 500, grow = false) {
@@ -186,7 +186,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
         matchData = await getMatchData();
-        console.log(getLiveMatchTeams());
         raceresults = await getLive();
         setScores();
         errorMessage.innerHTML = "";

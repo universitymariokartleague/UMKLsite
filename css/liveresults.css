@@ -20,12 +20,24 @@ h1 {
     font-size: 35px;
     margin: 19px 10px 0 0;
     text-shadow: 0 0 15px rgba(0, 0, 0, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 @keyframes growText {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.25); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.25);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 .grow {
@@ -39,4 +51,10 @@ h1 {
     margin: 0 5px;
     vertical-align: middle;
     filter: drop-shadow(0 0 15px rgba(0, 0, 0, 1));
+}
+
+.liveErrorMessage {
+    font-size: 10px;
+    line-height: 10px;
+    margin-right: 50px;
 }
