@@ -100,7 +100,7 @@ function getLiveMatchTeams() {
     });
 
     const teamNames = liveMatches.map(entry => entry.teamsInvolved)[0];
-    firstTeamLog.src = `assets/media/teamemblems/${teamNames[0].toUpperCase()}.avif`
+    firstTeamLogo.src = `assets/media/teamemblems/${teamNames[0].toUpperCase()}.avif`
     secondTeamLogo.src = `assets/media/teamemblems/${teamNames[1].toUpperCase()}.avif`
 }
 
