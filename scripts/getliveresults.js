@@ -100,8 +100,10 @@ function getLiveMatchTeams() {
     });
 
     const teamNames = liveMatches.map(entry => entry.teamsInvolved)[0];
+    if (teamNames) {
         firstTeamLogo.src = `assets/media/teamemblems/${teamNames[0].toUpperCase()}.avif`
-        secondTamLogo.src = `assets/media/teamemblems/${teamNames[1].toUpperCase()}.avif`
+        secondTeamLogo.src = `assets/media/teamemblems/${teamNames[1].toUpperCase()}.avif`
+    }
 }
 
 function animateNumberChange(element, oldValue, newValue, duration = 500, grow = false) {
