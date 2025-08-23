@@ -129,7 +129,7 @@ function showUpcomingMatch() {
             const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
             
             const matchDateStr = (matchData[todayStr]?.includes(entry) ? todayStr : tomorrowStr);
-            const formattedDate = new Date(matchDateStr).toLocaleDateString(locale, { dateStyle: 'long' });
+            const formattedDate = new Date(matchDateStr).toLocaleDateString(locale, { dateStyle: 'short' });
 
             function uses12HourClock(locale) {
                 const test = new Date('1970-01-01T13:00');
@@ -224,7 +224,7 @@ function showUpcomingMatch() {
                                 <span title="${zoneName}">${formattedMatchTime}</span>
                                 ${outsideUKTimezone ? `
                                     <span title="Local time" style="display: inline-flex; align-items: center;">
-                                    (<i class="overseas-time-clock fa-solid fa-clock"></i>${formattedLocalMatchTime})</span>` : ''}
+                                    /&nbsp;<i class="overseas-time-clock fa-solid fa-clock"></i>${formattedLocalMatchTime}</span>` : ''}
                             </h2>                            
                             ${isLive ? '<div class="live-dot"></div>' : ''}
                         </div>

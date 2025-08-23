@@ -336,6 +336,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch {
         console.debug(`%cteamboxgenerate.js %c> %cAPI failed - using fallback information...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     }
+
     generateSeasonPicker();
     updateSeasonText();
 });

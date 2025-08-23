@@ -7,14 +7,14 @@
 import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareText, shareImage, showTextPopup, showImagePreview, setOriginalMessage } from './shareAPIhelper.js';
 
 const weekdayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-// const weekdayNames = ["日", "月", "火", "水", "木", "金", "土"];
 const DEFAULTSTARTDAY = 1;
 const MATCH_LENGTH_MINS = 60;
 
-const calendarContainer = document.getElementById('calendar-container');
-const calendarListView = document.getElementById('calendarListView');
-const expandedLog = document.getElementById('expandedLog');
+const calendarContainer = document.getElementById("calendar-container");
+const calendarListView = document.getElementById("calendarListView");
+const expandedLog = document.getElementById("expandedLog");
 const calendarError = document.getElementById("calendarError")
+const overseasMessage = document.getElementById("overseasMessage");
 
 const currentYear = new Date().getFullYear();
 const startYear = 2023; // currentYear of season = startYear + season (eg: season 1 - 2023 + 1 = 2024)
@@ -25,8 +25,9 @@ const months = [
     "July", "August", "September", "October", "November", "December"
 ];
 let currentlyShownDate = [2000, 0];
-let matchData = {};
-let teamColors = {};
+let matchData = [];
+let matchDataToUse = [];
+let teamColors = [];
 
 let refreshTimer = null;
 
@@ -38,6 +39,7 @@ let currentPreview = null;
 let listViewEnabled = false;
 let listViewToggledOnce = false;
 
+let overseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1 || false;
 let cached = false;
 
 let startTime;
@@ -48,6 +50,29 @@ function createEmptyCells(count) {
         emptyCell.classList.add('day', 'empty');
         calendarDays.appendChild(emptyCell);
     }
+}
+
+function normalizeMatchData(matchData) {
+    const localMatchData = {};
+
+    Object.keys(matchData).forEach(dateKey => {
+        matchData[dateKey].forEach(entry => {
+            const matchDate = new Date(`${dateKey}T${entry.time}`);
+
+            const localYear = matchDate.getFullYear();
+            const localMonth = matchDate.getMonth() + 1;
+            const localDay = matchDate.getDate();
+
+            const localDateKey = `${localYear}-${String(localMonth).padStart(2, '0')}-${String(localDay).padStart(2, '0')}`;
+
+            if (!localMatchData[localDateKey]) {
+                localMatchData[localDateKey] = [];
+            }
+            localMatchData[localDateKey].push(entry);
+        });
+    });
+
+    return localMatchData;
 }
 
 function generateCalendar(month, year, dateParam = null) {
@@ -85,6 +110,12 @@ function generateCalendar(month, year, dateParam = null) {
 
     createEmptyCells(firstDay);
 
+    if (overseasDateDisplay) {
+        matchDataToUse = normalizeMatchData(matchData);
+    } else {
+        matchDataToUse = matchData;
+    }
+
     for (let day = 1; day <= daysInMonth; day++) {
         const dayCell = document.createElement('div');
         dayCell.textContent = day;
@@ -101,8 +132,8 @@ function generateCalendar(month, year, dateParam = null) {
         }
 
         const dateToCheck = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        if (matchData[dateToCheck]) {
-            matchData[dateToCheck].forEach(entry => {
+        if (matchDataToUse[dateToCheck]) {
+            matchDataToUse[dateToCheck].forEach(entry => {
                 const [team1, team2] = entry.teamsInvolved;
 
                 // Find team color by team name from teamColors[0] array
@@ -285,9 +316,11 @@ function showDailyLog(date, dayCell) {
     }
     const locale = localStorage.getItem("locale") || "en-GB";
 
-    const log = matchData[date] || [];
+    const log = matchDataToUse[date] || [];
     if (log.length) {
-        const formattedDate = new Date(`${date}`).toLocaleString(locale, { dateStyle: 'full' });
+        const formattedDate = parseLocalDate(date).toLocaleString(locale, { dateStyle: "full" });
+        console.log(date, formattedDate)
+        let formattedLocalDate, dayRelation;
         expandedLog.innerHTML = `
             <div class="current-season-area"> 
                 <h3 style="margin: 3px">${formattedDate}</h3>                            
@@ -308,6 +341,11 @@ function showDailyLog(date, dayCell) {
             const is12Hour = uses12HourClock(locale);
             let timeString = entry.time || '00:00:00';
             const { formattedMatchTime, formattedLocalMatchTime, outsideUKTimezone } = formatMatchTime(date, timeString, locale);
+
+            if (outsideUKTimezone) {
+                formattedLocalDate = new Date(`${date}T${timeString}`).toLocaleString(locale, { dateStyle: "short" });
+                dayRelation = compareDayRelation(formattedLocalDate, date);
+            }
 
             let isLive = false;
             if (entry.time) {
@@ -403,12 +441,13 @@ function showDailyLog(date, dayCell) {
                     <div class="match-details-box">
                         <div class="match-date-time-box">
                             <div class="match-detail-container">
+                                ${dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
                                 <i class="${outsideUKTimezone ? 'local-time-clock' : ''} fa-solid fa-clock"></i>
                                 <h2>
                                     <span title="${matchEndedText}">${formattedMatchTime}</span>
                                     ${outsideUKTimezone ? `
                                         <span title="Local time" style="display: inline-flex; align-items: center;">
-                                        (<i class="overseas-time-clock fa-solid fa-clock"></i>${formattedLocalMatchTime})</span>` : ''}
+                                        |&nbsp;<i class="overseas-time-clock fa-solid fa-clock"></i>${formattedLocalMatchTime}</span>` : ''}
                                 </h2>
                                 ${isLive ? '<div class="live-dot"></div>' : ''}
                             </div>
@@ -428,8 +467,8 @@ function showDailyLog(date, dayCell) {
     } else {
         expandedLog.innerHTML = `<div class="settingSubheading">Select a date to see the matches happening on that day.</div>`;
         clearURLParams();
-    }
-}
+    };
+};
 
 function generateCalendarListView() {
     const today = new Date();
@@ -439,7 +478,12 @@ function generateCalendarListView() {
         String(today.getDate()).padStart(2, '0')
     ].join('-');
 
-    const sortedDates = Object.keys(matchData);
+    if (overseasDateDisplay) {
+        matchDataToUse = normalizeMatchData(matchData);
+    } else {
+        matchDataToUse = matchData;
+    }
+    const sortedDates = Object.keys(matchDataToUse);
     let todayMarkerInserted = false;
 
     const locale = localStorage.getItem("locale") || "en-GB";
@@ -459,12 +503,12 @@ function generateCalendarListView() {
             todayMarkerInserted = true;
         }
 
-        const formattedDate = new Date(`${date}`).toLocaleString(locale, { dateStyle: 'long' });
+        const formattedDate = parseLocalDate(date).toLocaleString(locale, { dateStyle: "full" });
         HTMLOutput += `
             <h3 id=${date}>${formattedToday == date ? ' ☆ ' : ''}${formattedDate}</h3>
         `
 
-        matchData[date].forEach(entry => {
+        matchDataToUse[date].forEach(entry => {
             function createTeamObject(teamName) {
                 return {
                     team_name: teamName,
@@ -472,12 +516,17 @@ function generateCalendarListView() {
                     link: `pages/teams/details/?team=${teamName}`
                 };
             }
-
             const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
-
+            
             const is12Hour = uses12HourClock(locale);
             let timeString = entry.time || '00:00:00';
             const { formattedMatchTime, formattedLocalMatchTime, outsideUKTimezone } = formatMatchTime(date, timeString, locale);
+            let formattedLocalDate, dayRelation;
+
+            if (outsideUKTimezone) {
+                formattedLocalDate = new Date(`${date}T${timeString}`).toLocaleString(locale, { dateStyle: "short" });
+                dayRelation = compareDayRelation(formattedLocalDate, date);
+            }
 
             let isLive = false;
             if (entry.time) {
@@ -573,12 +622,13 @@ function generateCalendarListView() {
                     <div class="match-details-box">
                         <div class="match-date-time-box">
                             <div class="match-detail-container">
+                                ${dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
                                 <i class="${outsideUKTimezone ? 'local-time-clock' : ''} fa-solid fa-clock"></i>
                                 <h2>
                                     <span title="${matchEndedText}">${formattedMatchTime}</span>
                                     ${outsideUKTimezone ? `
                                         <span title="Local time" style="display: inline-flex; align-items: center;">
-                                        (<i class="overseas-time-clock fa-solid fa-clock"></i>${formattedLocalMatchTime})</span>` : ''}
+                                        |&nbsp;<i class="overseas-time-clock fa-solid fa-clock"></i>${formattedLocalMatchTime}</span>` : ''}
                                 </h2>
                                 ${isLive ? '<div class="live-dot"></div>' : ''}
                             </div>
@@ -713,6 +763,37 @@ function checkTimezoneMatches(dateStr, timeStr) {
     return offsetMinutes !== londonOffsetMinutes;
 }
 
+function compareDayRelation(dateStr1, dateStr2) {
+    function parseDate(str) {
+        if (str.includes('/')) {
+            const [day, month, year] = str.split('/').map(Number);
+            return new Date(year, month - 1, day);
+        } else if (str.includes('-')) {
+            const [year, month, day] = str.split('-').map(Number);
+            return new Date(year, month - 1, day);
+        }
+        throw new Error("Unsupported date format: " + str);
+    }
+
+    const d1 = parseDate(dateStr1);
+    const d2 = parseDate(dateStr2);
+
+    const day1 = Date.UTC(d1.getFullYear(), d1.getMonth(), d1.getDate());
+    const day2 = Date.UTC(d2.getFullYear(), d2.getMonth(), d2.getDate());
+
+    const diffDays = Math.round((day1 - day2) / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) return "";
+    if (diffDays === -1) return `Day<br>after`;
+    if (diffDays === 1) return `Day<br>before`;
+    return null;
+}
+
+function parseLocalDate(dateStr) {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    return new Date(year, month - 1, day);
+}
+
 function autoLink(text) {
     text = text.replaceAll("\n", "<br>")
     const urlRegex = /((https?:\/\/|www\.)[^\s<]+)/gi;
@@ -780,7 +861,7 @@ function makeTeamsColorStyles() {
                 background-color: ${team.team_color};
             }
         `
-    })
+    });
 
     document.head.appendChild(styleSheet);
 }
@@ -899,14 +980,47 @@ function loadCalendarView() {
     listViewButton.innerHTML = `${listViewEnabled ? `<span class="fa-solid fa-calendar"></span> Calendar View` : `<span class="fa-solid fa-bars"></span> List View`}`
 }
 
+function testOutsideUK() {
+    let outsideUKTimezone = checkTimezoneMatches('2025-01-01', '00:00:00+01:00');
+    
+    if (outsideUKTimezone) {
+        overseasMessage.classList.remove("hidden");
+        overseasMessage.innerHTML = `
+            <b>Note</b><br/>You seem to be outside the UK.
+            Times and dates displayed will show the UK time, then your local time next to it.<br/>
+            <b>Overseas date type:</b> <button id="overseasDisplayButton"><span class="fa-solid fa-bars"></span> Overseas Display Toggle</button>
+        `;
+        generateOverseasDateDisplayButton();
+    }
+}
+
 document.addEventListener('calendarListViewChange', async () => {
     loadCalendarView();
 })
+
+function updateButton() {
+    const tempOverseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1;
+    overseasDisplayButton.innerHTML = `<span class="fa-solid ${tempOverseasDateDisplay ? 'fa-earth' : 'fa-house'}"></span> ${tempOverseasDateDisplay ? 'Overseas' : 'UK'}`;
+};
+
+function generateOverseasDateDisplayButton() {
+    const overseasDisplayButton = document.getElementById("overseasDisplayButton");
+    
+    updateButton();
+    
+    overseasDisplayButton.onclick = () => {
+        const tempOverseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1;
+        localStorage.setItem("overseasDateDisplay", tempOverseasDateDisplay ? 0 : 1);
+        location.reload();
+        document.dispatchEvent(new CustomEvent('startDayChange'));
+    };
+};
 
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     console.debug(`%cmatchcalendar.js %c> %cFetching calendar...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
     generateListViewButton();
+    testOutsideUK();
 
     if (localStorage.matchDataCache && localStorage.teamColorsCache) {
         cached = true;

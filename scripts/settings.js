@@ -73,6 +73,7 @@ function generateSettingsPanel() {
         const tempStartDay = localStorage.getItem("startDay") || 1;
         const tempMonthType = localStorage.getItem("monthType") || "long";
         const tempMonthTypeDisplay = tempMonthType === "long" ? "Long" : "Short";
+        const tempOverseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1 || false;
 
         settingsBoxJS.innerHTML = `
             <div class="setting-sub-heading">Appearance</div><hr>
@@ -85,6 +86,7 @@ function generateSettingsPanel() {
             <span class="settings-hover-info" data-info="UK or US date/time format">Locale</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button><br/>
             <span class="settings-hover-info" data-info="Monday or Sunday">First day of week</span><button id="toggleStartDayButton" class="settings-option">${weekdayNamesFull[tempStartDay]}</button><br/>
             <span class="settings-hover-info" data-info="April or Apr">Month type</span><button id="toggleMonthTypeButton" class="settings-option">${tempMonthTypeDisplay}</button><br/>
+            <span class="settings-hover-info" data-info="Use UK or local dates when overseas">Overseas date type</span><button id="toggleOverseasDateDisplayButton" class="settings-option">${tempOverseasDateDisplay ? 'Overseas' : 'UK'}</button><br/>
             
             <div class="setting-sub-heading">Website Data</div><hr>
             <span class="settings-hover-info" data-info="reloads the page">Reset settings to default</span><button id="clearLocalStorage" class="settings-option">Clear</button>
@@ -203,6 +205,14 @@ function toggleLocale() {
     generateSettingsPanel();
 }
 
+function toggleOverseasDateDisplayButton() {
+    const newOverseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1 ? 0 : 1;
+    localStorage.setItem("overseasDateDisplay", newOverseasDateDisplay);
+    console.debug(`%csettings.js %c> %cset overseasDateDisplay to ${newOverseasDateDisplay}`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
+    document.dispatchEvent(new CustomEvent('startDayChange'));
+    generateSettingsPanel();
+}
+
 function clearLocalStorage() {
     localStorage.clear();
     window.location.reload();
@@ -216,6 +226,7 @@ function generateEventListeners() {
     document.getElementById('toggleStartDayButton').addEventListener('click', toggleStartDay);
     document.getElementById('toggleMonthTypeButton').addEventListener('click', toggleMonthType);
     document.getElementById('toggleLocaleTypeButton').addEventListener('click', toggleLocale);
+    document.getElementById('toggleOverseasDateDisplayButton').addEventListener('click', toggleOverseasDateDisplayButton);
     document.getElementById('clearLocalStorage').addEventListener('click', clearLocalStorage);
 }
 
