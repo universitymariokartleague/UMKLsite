@@ -22,12 +22,6 @@
     border: 1px solid #ccccccaa;
 }
 
-.team-info .map img {
-    width: 95%;
-    height: auto;
-    margin: 10px auto;
-}
-
 .team-info-logo {
     margin: 0 auto;
     width: 200px;
@@ -77,5 +71,9 @@
 @media screen and (max-width: 767px) {
     .team-info {
         flex-direction: column;
+    }
+
+    .team-info .map {
+        height: 75vh;
     }
 }

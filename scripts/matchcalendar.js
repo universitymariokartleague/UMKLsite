@@ -402,7 +402,7 @@ function showDailyLog(date, dayCell) {
                         alt="Team background overlay"
                         ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>
 
-                        <div class="event-overlay">
+                        <div class="event-overlay" translate="no">
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link team-box-underline-hover" href="${team1.link}">
                                     <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.avif"
@@ -443,9 +443,9 @@ function showDailyLog(date, dayCell) {
                                 ${overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
                                 <i class="${outsideUKTimezone ? 'local-time-clock' : ''} fa-solid fa-clock"></i>
                                 <h2>
-                                    <span title="${matchEndedText}">${formattedMatchTime}</span>
+                                    <span translate="no" title="${matchEndedText}">${formattedMatchTime}</span>
                                     ${outsideUKTimezone ? `
-                                        <span title="Local time" style="display: inline-flex; align-items: center;">
+                                        <span translate="no" title="Local time" style="display: inline-flex; align-items: center;">
                                         |&nbsp;<i class="overseas-time-clock fa-solid fa-clock"></i>${formattedLocalMatchTime}</span>` : ''}
                                 </h2>
                                 ${!overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
@@ -814,7 +814,7 @@ function autoLink(text) {
         if (!href.match(/^https?:\/\//)) {
             href = 'http://' + href;
         }
-        return `<a href="${href}" target="_blank">${displayUrl}</a>${trailingDot}`;
+        return `<a translate="no" href="${href}" target="_blank">${displayUrl}</a>${trailingDot}`;
     });
 }
 
@@ -991,7 +991,7 @@ function testOutsideUK() {
     if (outsideUKTimezone) {
         overseasMessage.classList.remove("hidden");
         overseasMessage.innerHTML = `
-            <b>Note</b><br/>You seem to be outside the UK.
+            <b translate="no">Note</b><br/>You seem to be outside the UK.
             Times and dates displayed will show the UK time, then your local time next to it.<br/>
             <b>Overseas date type:</b> <button id="overseasDisplayButton"><span class="fa-solid fa-bars"></span> Overseas Display Toggle</button>
         `;

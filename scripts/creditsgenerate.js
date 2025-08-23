@@ -64,7 +64,7 @@ function renderContributor(person) {
         .join("");
 
     return `
-        <div class="credit-container">
+        <div translate="no" class="credit-container">
             <img onload="this.style.opacity=1" loading="lazy" class="credit-image" src="assets/media/credits/${person.name}.avif">
             <div class="credit-info">
                 <b>${person.name}</b>

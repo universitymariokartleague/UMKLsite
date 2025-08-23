@@ -35,7 +35,7 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
         <script type="module" src="scripts/settings.js" defer></script>
     </head>
     <body id="top" data-overlayscrollbars-initialize>
-        <div class="navbar-container">
+        <div class="navbar-container" translate="no">
             <div class="nav-bar">
                 <a href="index.html" class="nav-bar-title no-color-link no-underline-link-footer">
                     <img src="assets/media/brand/UMKLlogonav.avif" class="nav-bar-logo" alt="UMKL logo">
@@ -73,7 +73,7 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
             <h1>{TITLE}</h1>
             <div class="p-below-title">
                 {DATE} | 
-                <tag>Intro</tag>
+                <tag translate="no">Intro</tag>
                 <div class="news-credits">Written by {AUTHOR1}, {AUTHOR2}.<br>Edited by {EDITOR}</div>
             </div>
             <hr class="hr-below-title">
@@ -81,7 +81,7 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
             <p>{DESC}</p>
         </main>
 
-        <footer>
+        <footer translate="no">
             © UMKL 2025 |
             <a class="no-color-link" href="pages/credits/">Credits</a> |
             <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |

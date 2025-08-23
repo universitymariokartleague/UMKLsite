@@ -287,6 +287,7 @@ function placeDots() {
     dotPositions.forEach(({ x, y, color, name, isCurrentTeam, colorClass, fadeDelay }, dotIdx) => {
         // Create label with collision detection
         const label = document.createElement('div');
+        label.translate = false;
         label.className = 'dot-label';
         label.textContent = name;
         label.dataset.dotLabel = '1';

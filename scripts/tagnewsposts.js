@@ -21,6 +21,7 @@ function addLinksToTags() {
             }
             anchor.className = 'tag-link';
 
+            tag.translate = false;
             tag.className = 'tag-link-text';
             tag.parentNode.replaceChild(anchor, tag);
             anchor.appendChild(tag);

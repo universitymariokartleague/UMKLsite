@@ -9,13 +9,13 @@ function generateTeamHTML(team, cached = false) {
         <button onClick="location.href='pages/teams/details?team=${team.link_name}'" class="${team.class_name} teamBox">
             <div class="positionBox">
                 <div class="team-position">${team.season_position}</div>
-                <div class="team-points">
+                <div class="team-points" translate="no">
                     <div class="points-value">${team.team_season_points} PTS</div>
                 </div>
             </div>
             <hr>
             <div class="${team.class_name} team">
-                <span>${team.team_name}</span>
+                <span translate="no">${team.team_name}</span>
                 <img src="${team.logo_src}" alt="${makePossessive(team.team_name)} team logo" class="team-logo"
                 ${cached ? '' : `onload="this.style.opacity=1"`} loading="lazy"
                 onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';"/>
@@ -86,6 +86,9 @@ async function generateTeamBoxes(teamData, cached = false) {
             const headerRow = document.createElement('tr');
             ['POS', 'TEAM', "MATCHES", 'W - L', 'PTS'].forEach(headerText => {
                 const th = document.createElement('th');
+                if (headerText !== 'TEAM' && headerText !== 'MATCHES') {
+                    th.translate = false;
+                }
                 th.textContent = headerText;
                 headerRow.appendChild(th);
             });
@@ -120,7 +123,7 @@ async function generateTeamBoxes(teamData, cached = false) {
                         ${cached ? '' : `onload="this.style.opacity=1"`} loading="lazy"
                         onerror="this.onerror=null; this.src='${placeholderLogo}';"/>
                             <div class="team-text-flex">
-                            <h3>${team.team_name}</h3>
+                            <h3 translate="no">${team.team_name}</h3>
                         <span class="team-list-full-institution">${team.team_full_name}</span>
                         </div>
                     </div>`, 
@@ -164,13 +167,13 @@ async function generateTeamBoxes(teamData, cached = false) {
                 });
 
                 row.innerHTML = `
-                    <div class="teamPosition">${team.season_position}</div>
+                    <div translate="no" class="teamPosition">${team.season_position}</div>
                     <div class="teamColour" style="background-color:${team.team_color}"></div>
                     <img class="teamLogo" src="${team.logo_src}" alt="${makePossessive(team.team_name)} team emblem"
                     ${cached ? '' : `onload="this.style.opacity=1"`} loading="lazy"
                     onerror="this.onerror=null; this.src='${placeholderLogo}';"/>
-                    <div class="teamName">${team.team_name.toUpperCase()}</div>
-                    <div class="teamPointsArea">
+                    <div translate="no" class="teamName">${team.team_name.toUpperCase()}</div>
+                    <div translate="no" class="teamPointsArea">
                         <div class="teamPoints">${team.team_season_points}</div>
                         <div class="teamStandings">${team.season_wins_losses[0]} - ${team.season_wins_losses[1]} (${matchesPlayed} <i style="font-size:0.8em;margin-right:0.1em" class="fa-solid fa-flag-checkered"></i>)</div>
                     </div>
