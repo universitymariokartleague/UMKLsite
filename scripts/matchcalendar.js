@@ -986,8 +986,8 @@ function loadCalendarView() {
 }
 
 function testOutsideUK() {
-    let outsideUKTimezone = checkTimezoneMatches('2025-01-01', '00:00:00+01:00');
-    
+    let { _, __, outsideUKTimezone } = formatMatchTime('2025-01-01', '00:00:00+01:00', "en-GB");
+
     if (outsideUKTimezone) {
         overseasMessage.classList.remove("hidden");
         overseasMessage.innerHTML = `
