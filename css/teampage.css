@@ -74,6 +74,8 @@
     }
 
     .team-info .map {
-        height: 75vh;
+        aspect-ratio: 1 / 1.9;
+        width: 100%;
+        height: auto;
     }
 }

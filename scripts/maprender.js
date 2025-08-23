@@ -16,19 +16,15 @@ const mapBounds = {
 let teamLocations = [];
 let coords = [];
 let teamParam = "";
-
 let loadedOnce = false;
-
 let startTime;
 
-// Create a wrapper to hold the map and dots for zoom/pan
+// Wrapper to hold the map and dots for zoom/pan
 const wrapper = document.createElement('div');
 wrapper.style.position = 'relative';
 wrapper.style.width = container.clientWidth + 'px';
 wrapper.style.height = container.clientHeight + 'px';
-wrapper.style.touchAction = 'none'; // prevent default gestures on touch devices
-
-// Move mapImg and existing dots container inside wrapper
+wrapper.style.touchAction = 'none';
 container.style.position = 'relative';
 container.parentElement.insertBefore(wrapper, container);
 wrapper.appendChild(container);
@@ -49,43 +45,65 @@ function getIframeSize() {
 // Variables to track zoom and pan state
 const DEFAULT_SCALE = 1;
 const DEFAULT_PAN_X = 0;
-const DEFAULT_PAN_Y = top.innerWidth < 767 ? Math.round(-150 + (getIframeSize().height - 538) / (576 - 538) * (-112 + 150)) / 2 : Math.round(-150 + (getIframeSize().height - 538) / (576 - 538) * (-112 + 150));
+const basePanY = Math.round(
+    -150 + (getIframeSize().height - 538) / (576 - 538) * (-112 + 150)
+);
+const DEFAULT_PAN_Y = top.innerWidth < 767 ? (basePanY + 90) / 2 : basePanY;
 
-let scale = 1;
-let minScale = 0.75;
-let maxScale = 5;
+let scale = DEFAULT_SCALE;
 let panX = DEFAULT_PAN_X;
 let panY = DEFAULT_PAN_Y;
+let minScale = 0.75;
+let maxScale = 5;
 let isPanning = false;
 let startPan = { x: 0, y: 0 };
+let lastTouchDist = null;
 
-// Function to apply CSS transform for pan and zoom
+function clampPan() {
+    const { clientWidth, clientHeight } = container;
+    const maxPanX = (clientWidth * (scale - 1)) / 2 + 250;
+    const maxPanY = (clientHeight * (scale - 1)) / 2 + 300;
+
+    panX = Math.max(-maxPanX, Math.min(maxPanX, panX));
+    panY = Math.max(-maxPanY, Math.min(maxPanY, panY));
+}
+
 function updateTransform() {
+    clampPan();
     container.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+}
+
+function getTouchDistance(touches) {
+    if (touches.length < 2) return null;
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+}
+
+function injectStyle(id, css) {
+    if (!document.getElementById(id)) {
+        const style = document.createElement('style');
+        style.id = id;
+        style.textContent = css;
+        document.head.appendChild(style);
+    }
 }
 
 function onWheel(e) {
     e.preventDefault();
-
     const zoomFactor = 0.1;
     const scaleDelta = e.deltaY < 0 ? 1 + zoomFactor : 1 - zoomFactor;
     const newScale = Math.min(maxScale, Math.max(minScale, scale * scaleDelta));
-
-    if (newScale === scale) return;
-    
-    scale = newScale;
-
-    updateTransform();
-    // placeDots(); // Optional if dots need repositioning on zoom
+    if (newScale !== scale) {
+        scale = newScale;
+        updateTransform();
+    }
 }
 
 function onPointerDown(e) {
     if (e.pointerType !== 'mouse') return;
     isPanning = true;
-    startPan = {
-        x: e.clientX - panX,
-        y: e.clientY - panY,
-    };
+    startPan = { x: e.clientX - panX, y: e.clientY - panY };
     wrapper.style.cursor = 'grabbing';
     container.style.transition = 'none';
 }
@@ -101,17 +119,7 @@ function onPointerUp(e) {
     if (e && e.pointerType && e.pointerType !== 'mouse') return;
     isPanning = false;
     wrapper.style.cursor = 'default';
-    container.style.transition = 'transform 0.2s ease'; 
-}
-
-// Touch support for panning and zooming (basic)
-let lastTouchDist = null;
-
-function getTouchDistance(touches) {
-    if (touches.length < 2) return null;
-    const dx = touches[0].clientX - touches[1].clientX;
-    const dy = touches[0].clientY - touches[1].clientY;
-    return Math.sqrt(dx * dx + dy * dy);
+    container.style.transition = 'transform 0.15s ease'; 
 }
 
 function onTouchStart(e) {
@@ -137,33 +145,19 @@ function onTouchMove(e) {
         if (lastTouchDist) {
             const delta = newDist / lastTouchDist;
             const newScale = Math.min(maxScale, Math.max(minScale, scale * delta));
-            scale = newScale;
-            updateTransform();
+            if (newScale !== scale) {
+                scale = newScale;
+                updateTransform();
+            }
         }
         lastTouchDist = newDist;
     }
 }
 
-function onTouchEnd(e) {
-    if (e.touches.length === 0) {
-        isPanning = false;
-        lastTouchDist = null;
-    }
+function onTouchEnd() {
+    isPanning = false;
+    lastTouchDist = null;
 }
-
-// Attach event listeners for zoom and pan
-wrapper.addEventListener('wheel', onWheel, { passive: false });
-wrapper.addEventListener('pointerdown', onPointerDown);
-window.addEventListener('pointermove', onPointerMove);
-window.addEventListener('pointerup', onPointerUp);
-window.addEventListener('pointercancel', onPointerUp);
-
-wrapper.addEventListener('touchstart', onTouchStart, { passive: false });
-wrapper.addEventListener('touchmove', onTouchMove, { passive: false });
-wrapper.addEventListener('touchend', onTouchEnd);
-wrapper.addEventListener('touchcancel', onTouchEnd);
-
-// Your existing fetching and dot placing code below...
 
 async function getTeamlocations() {
     console.debug(`%cmaprender.js %c> %cFetching teamlocations from the API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
@@ -188,6 +182,53 @@ async function getTeamlocationsFallback() {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
     return response.json();
+}
+
+function latLonToPixel(lat, lon, width, height) {
+    const { minLon, maxLon, minLat, maxLat } = mapBounds;
+
+    const x = ((lon - minLon) / (maxLon - minLon)) * width;
+
+    const latRad = lat * Math.PI / 180;
+    const mercY = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
+    const mercMin = Math.log(Math.tan(Math.PI / 4 + (minLat * Math.PI / 180) / 2));
+    const mercMax = Math.log(Math.tan(Math.PI / 4 + (maxLat * Math.PI / 180) / 2));
+
+    const y = ((mercMax - mercY) / (mercMax - mercMin)) * height;
+    return { x, y };
+}
+
+function createZoomControls() {
+    const controls = document.createElement('div');
+    controls.className = 'zoom-controls';
+
+    const makeBtn = (label, title, onClick) => {
+        const btn = document.createElement('button');
+        btn.textContent = label;
+        btn.title = title;
+        btn.className = 'controls-button';
+        btn.addEventListener('click', onClick);
+        return btn;
+    };
+
+    controls.appendChild(makeBtn('+', 'Zoom In', () => {
+        scale = Math.min(maxScale, scale * 1.2);
+        updateTransform();
+    }));
+
+    controls.appendChild(makeBtn('-', 'Zoom Out', () => {
+        scale = Math.max(minScale, scale / 1.2);
+        updateTransform();
+    }));
+
+    controls.appendChild(makeBtn('⟳', 'Reset', () => {
+        scale = DEFAULT_SCALE;
+        panX = DEFAULT_PAN_X;
+        panY = DEFAULT_PAN_Y;
+        updateTransform();
+    }));
+
+    wrapper.appendChild(controls);
 }
 
 function placeDots() {
@@ -448,87 +489,6 @@ function placeDots() {
     loadedOnce = true;
 }
 
-// Mercator projection conversion
-function latLonToPixel(lat, lon, width, height) {
-    const { minLon, maxLon, minLat, maxLat } = mapBounds;
-
-    const x = ((lon - minLon) / (maxLon - minLon)) * width;
-
-    // Convert latitudes to Mercator Y
-    const latRad = lat * Math.PI / 180;
-    const mercY = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
-
-    const mercMin = Math.log(Math.tan(Math.PI / 4 + (minLat * Math.PI / 180) / 2));
-    const mercMax = Math.log(Math.tan(Math.PI / 4 + (maxLat * Math.PI / 180) / 2));
-
-    const y = ((mercMax - mercY) / (mercMax - mercMin)) * height;
-
-    return { x, y };
-}
-
-function createZoomControls() {
-    const controls = document.createElement('div');
-    controls.className = 'zoom-controls';
-
-    // Zoom In
-    const zoomInBtn = document.createElement('button');
-    zoomInBtn.innerHTML = '+';
-    zoomInBtn.title = 'Zoom In';
-    zoomInBtn.className = 'controls-button';
-    zoomInBtn.addEventListener('click', () => {
-        const zoomFactor = 1.2;
-        const zoomStep = Math.sqrt(zoomFactor);
-        const newScale = Math.min(maxScale, scale * zoomFactor);
-        if (newScale !== scale) {
-            scale = newScale;
-            panX = panX * zoomStep;
-            panY = panY * zoomStep;
-
-            updateTransform();
-            // placeDots();
-        }
-    });
-
-    // Zoom Out
-    const zoomOutBtn = document.createElement('button');
-    zoomOutBtn.innerHTML = '-';
-    zoomOutBtn.title = 'Zoom Out';
-    zoomOutBtn.className = 'controls-button';
-    zoomOutBtn.addEventListener('click', () => {
-        const zoomFactor = 1 / 1.2;
-        const zoomStep = Math.sqrt(zoomFactor);
-        const newScale = Math.max(minScale, scale * zoomFactor);
-        if (newScale !== scale) {
-            scale = newScale;
-            panX = panX * zoomStep;
-            panY = panY * zoomStep;
-
-            updateTransform();
-            // placeDots();
-        }
-    });
-
-    // Reset
-    const resetBtn = document.createElement('button');
-    resetBtn.innerHTML = '⟳';
-    resetBtn.title = 'Reset Zoom/Pan';
-    resetBtn.className = 'controls-button';
-    resetBtn.addEventListener('click', () => {
-        scale = DEFAULT_SCALE;
-        panX = DEFAULT_PAN_X;
-        panY = DEFAULT_PAN_Y;
-        updateTransform();
-        // placeDots();
-    });
-
-    controls.appendChild(zoomInBtn);
-    controls.appendChild(zoomOutBtn);
-    controls.appendChild(resetBtn);
-
-    // Add controls to wrapper
-    wrapper.appendChild(controls);
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
     startTime = performance.now();
     
@@ -560,3 +520,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         placeDots();
     });
 });
+
+// Attach event listeners for zoom and pan
+wrapper.addEventListener('wheel', onWheel, { passive: false });
+wrapper.addEventListener('pointerdown', onPointerDown);
+window.addEventListener('pointermove', onPointerMove);
+window.addEventListener('pointerup', onPointerUp);
+wrapper.addEventListener('touchstart', onTouchStart, { passive: false });
+wrapper.addEventListener('touchmove', onTouchMove, { passive: false });
+wrapper.addEventListener('touchend', onTouchEnd);
+wrapper.addEventListener('touchcancel', onTouchEnd);
