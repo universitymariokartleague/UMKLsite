@@ -119,10 +119,10 @@ body {
     justify-content: center;
     width: 28px;
     height: 28px;
-    font-size: 20px;
+    font-size: 16px;
     background: none;
     color: var(--text-color);
-    border: 1px solid #ccccccaa;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
     outline: none;

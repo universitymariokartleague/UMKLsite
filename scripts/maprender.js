@@ -53,8 +53,8 @@ const DEFAULT_PAN_Y = top.innerWidth < 767 ? (basePanY + 90) / 2 : basePanY;
 let scale = DEFAULT_SCALE;
 let panX = DEFAULT_PAN_X;
 let panY = DEFAULT_PAN_Y;
-let minScale = 0.75;
-let maxScale = 5;
+let minScale = 1;
+let maxScale = 1;
 let isPanning = false;
 let startPan = { x: 0, y: 0 };
 let lastTouchDist = null;
@@ -91,10 +91,22 @@ function injectStyle(id, css) {
 
 function onWheel(e) {
     e.preventDefault();
+
+    const rect = wrapper.getBoundingClientRect(); // use wrapper, not container
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
     const zoomFactor = 0.1;
     const scaleDelta = e.deltaY < 0 ? 1 + zoomFactor : 1 - zoomFactor;
     const newScale = Math.min(maxScale, Math.max(minScale, scale * scaleDelta));
+
     if (newScale !== scale) {
+        const scaleRatio = newScale / scale;
+
+        // Adjust pan relative to cursor, in wrapper coordinates
+        panX = mouseX - (mouseX - panX) * scaleRatio;
+        panY = mouseY - (mouseY - panY) * scaleRatio;
+
         scale = newScale;
         updateTransform();
     }
@@ -146,6 +158,14 @@ function onTouchMove(e) {
             const delta = newDist / lastTouchDist;
             const newScale = Math.min(maxScale, Math.max(minScale, scale * delta));
             if (newScale !== scale) {
+                const rect = container.getBoundingClientRect();
+                const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+                const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+
+                const scaleRatio = newScale / scale;
+                panX = midX - (midX - panX) * scaleRatio;
+                panY = midY - (midY - panY) * scaleRatio;
+
                 scale = newScale;
                 updateTransform();
             }
@@ -202,26 +222,29 @@ function createZoomControls() {
     const controls = document.createElement('div');
     controls.className = 'zoom-controls';
 
-    const makeBtn = (label, title, onClick) => {
+    const makeBtn = (iconClass, title, onClick) => {
         const btn = document.createElement('button');
-        btn.textContent = label;
+        const icon = document.createElement('i');
+        icon.className = iconClass;
+        btn.appendChild(icon);
+
         btn.title = title;
         btn.className = 'controls-button';
         btn.addEventListener('click', onClick);
         return btn;
     };
 
-    controls.appendChild(makeBtn('+', 'Zoom In', () => {
-        scale = Math.min(maxScale, scale * 1.2);
-        updateTransform();
-    }));
+    // controls.appendChild(makeBtn('+', 'Zoom In', () => {
+    //     scale = Math.min(maxScale, scale * 1.2);
+    //     updateTransform();
+    // }));
 
-    controls.appendChild(makeBtn('-', 'Zoom Out', () => {
-        scale = Math.max(minScale, scale / 1.2);
-        updateTransform();
-    }));
+    // controls.appendChild(makeBtn('-', 'Zoom Out', () => {
+    //     scale = Math.max(minScale, scale / 1.2);
+    //     updateTransform();
+    // }));
 
-    controls.appendChild(makeBtn('⟳', 'Reset', () => {
+    controls.appendChild(makeBtn(`fa-solid fa-refresh`, 'Reset map position', () => {
         scale = DEFAULT_SCALE;
         panX = DEFAULT_PAN_X;
         panY = DEFAULT_PAN_Y;
@@ -232,12 +255,11 @@ function createZoomControls() {
 }
 
 function placeDots() {
-    container.querySelectorAll('.dot, .dot-label').forEach(el => el.remove());
+    // Remove existing dots
+    const existingElements = container.querySelectorAll('.dot, .dot-label, svg.dot-lines');
+    existingElements.forEach(el => el.remove());
 
-    let svg = container.querySelector('svg.dot-lines');
-    if (svg) svg.remove(); // Remove existing lines
-
-    svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.classList.add('dot-lines');
     Object.assign(svg.style, {
         position: 'absolute',
@@ -253,21 +275,24 @@ function placeDots() {
     if (!w || !h) return;
 
     const fragment = document.createDocumentFragment();
-    let labels = []; // To store label positions for collision detection
-
-    // First, create all dots and store their positions
     const dotPositions = [];
+    const dotBoxes = [];
+    const labels = [];
+
+    // Inject shared fade-in animation once
+    injectStyle('dot-fade-in-style', `
+        @keyframes dot-fade-in { from { opacity: 0; } to { opacity: 1; } }
+    `);
+
     coords.forEach(({ coords: [lat, lon], color, name }) => {
         const { x, y } = latLonToPixel(lat, lon, w, h);
-        const dot = document.createElement('div');
-
-        let isCurrentTeam = false;
-        if (name === teamParam) isCurrentTeam = true;
-
-        // Generate a unique class for each color
-        const colorClass = `pulse-${color.replace('#', '')}`;
-        dot.className = `dot pulse ${colorClass}`;
+        const isCurrentTeam = name === teamParam;
+        const colorClass = `pulse-${color.replace('#','')}`;
         const fadeDelay = isCurrentTeam ? 0 : (0.25 + Math.random() * 0.25).toFixed(3);
+
+        // Dot
+        const dot = document.createElement('div');
+        dot.className = `dot pulse ${colorClass}`;
         Object.assign(dot.style, {
             backgroundColor: color,
             left: `${x - 5}px`,
@@ -277,84 +302,43 @@ function placeDots() {
             opacity: 0,
             animation: `dot-fade-in ${loadedOnce ? 0 : 0.5}s ease-in-out ${loadedOnce ? 0 : fadeDelay}s forwards, dot-pulse-${colorClass} ${isCurrentTeam ? '1.25' : '2.0'}s infinite`
         });
-
-        // Add fade-in animation CSS if not already present
-        if (!document.getElementById('dot-fade-in-style')) {
-            const style = document.createElement('style');
-            style.id = 'dot-fade-in-style';
-            style.textContent = `
-            @keyframes dot-fade-in {
-                from { opacity: 0; }
-                to { opacity: 1; }
-            }
-            `;
-            document.head.appendChild(style);
-        }
-
-        // Add pulsing animation CSS for this color if not already present
-        if (!document.getElementById(`dot-pulse-style-${colorClass}`)) {
-            const style = document.createElement('style');
-            style.id = `dot-pulse-style-${colorClass}`;
-            style.textContent = `
-            @keyframes dot-pulse-${colorClass} {
-                0% {
-                    box-shadow: 0 0 0 0 ${color}B3;
-                }
-                70% {
-                    box-shadow: 0 0 0 8px ${color}00;
-                }
-                100% {
-                    box-shadow: 0 0 0 0 ${color}00;
-                }
-            }
-            `;
-            document.head.appendChild(style);
-        }
-
         fragment.appendChild(dot);
+
+        // Dot pulse animation CSS
+        injectStyle(`dot-pulse-style-${colorClass}`, `
+            @keyframes dot-pulse-${colorClass} {
+                0% { box-shadow: 0 0 0 0 ${color}B3; }
+                70% { box-shadow: 0 0 0 8px ${color}00; }
+                100% { box-shadow: 0 0 0 0 ${color}00; }
+            }
+        `);
+
         dotPositions.push({ x, y, color, name, isCurrentTeam, colorClass, fadeDelay });
+        dotBoxes.push({ x: x - 8, y: y - 8, width: 12, height: 12 });
     });
 
-    // Prepare dot bounding boxes for collision detection with labels
-    const dotBoxes = dotPositions.map(({ x, y }) => ({
-        x: x - 8, // slightly larger than dot radius for safety
-        y: y - 8,
-        width: 12,
-        height: 12
-    }));
-
-    // Now, create all labels and lines, with collision detection
-    labels = [];
+    // Place labels with collision detection
     dotPositions.forEach(({ x, y, color, name, isCurrentTeam, colorClass, fadeDelay }, dotIdx) => {
-        // Create label with collision detection
         const label = document.createElement('div');
         label.translate = false;
         label.className = 'dot-label';
         label.textContent = name;
-        label.dataset.dotLabel = '1';
-        if (isCurrentTeam) {
-            label.style.fontWeight = 'bold';
-        }
+        if (isCurrentTeam) label.style.fontWeight = 'bold';
+
         Object.assign(label.style, {
             opacity: 0,
-            backgroundColor: `${color}${isCurrentTeam ? '60': '40'}`,
+            backgroundColor: `${color}${isCurrentTeam ? '60':'40'}`,
             animation: `dotLabelFadeIn-${colorClass} ${loadedOnce ? 0 : 0.5}s ease-in-out ${loadedOnce ? 0 : (parseFloat(fadeDelay) + ((name === teamParam) ? 0 : 0.25))}s forwards`
         });
 
-        // Add dotLabelFadeIn animation CSS for this color if not already present
-        if (!document.getElementById(`dotLabelFadeIn-${colorClass}`)) {
-            const style = document.createElement('style');
-            style.id = `dotLabelFadeIn-${colorClass}`;
-            style.textContent = `
+        injectStyle(`dotLabelFadeIn-${colorClass}`, `
             @keyframes dotLabelFadeIn-${colorClass} {
                 from { opacity: 0; }
                 to { opacity: 1; }
             }
-            `;
-            document.head.appendChild(style);
-        }
+        `);
 
-        // Try different positions until we find one that doesn't collide
+        // Candidate positions for label
         const labelWidth = name.length * 8;
         const labelHeight = 24;
         const positions = [
@@ -365,120 +349,69 @@ function placeDots() {
             { left: x - labelWidth - 10, top: y + 12 },
             { left: x + 15, top: y + 12 },
             { left: x - labelWidth / 2, top: y + 12 },
-            { left: x - labelWidth / 2, top: y - labelHeight - 8 },
+            { left: x - labelWidth / 2, top: y - labelHeight - 8 }
         ];
 
-        const ringCount = 10;             // how many circles
-        const radiusStep = 20;            // how much to increase radius per ring
-        const degreesPerCircle = 360;     // full circle
-        const angleStep = 1;              // one position per degree
-
+        // Add spiral positions around dot
+        const ringCount = 10, radiusStep = 20, degreesPerCircle = 360, angleStep = 1;
         for (let r = 2; r <= ringCount; r++) {
             const radius = r * radiusStep;
-
             for (let deg = 0; deg < degreesPerCircle; deg += angleStep) {
-                const angleRad = (deg * Math.PI) / 180;
+                const angleRad = deg * Math.PI / 180;
                 const offsetX = radius * Math.cos(angleRad);
                 const offsetY = radius * Math.sin(angleRad);
-                
-                if (x + offsetX - labelWidth / 2 < 280) {
-                    positions.push({
-                        left: x + offsetX - labelWidth / 2,
-                        top: y + offsetY - labelHeight / 2,
-                    });
-                }
+                if (x + offsetX - labelWidth / 2 < 280) positions.push({
+                    left: x + offsetX - labelWidth / 2,
+                    top: y + offsetY - labelHeight / 2
+                });
             }
         }
 
+        // Choose first non-colliding position
         const foundPosition = positions.find(pos => {
             const centerX = pos.left + labelWidth / 2;
             const centerY = pos.top + labelHeight / 2;
-            const expandedWidth = labelWidth * 1.5;
-            const expandedHeight = labelHeight * 1.2;
-            const newLabelRect = {
-                x: centerX - expandedWidth / 2,
-                y: centerY - expandedHeight / 2,
-                width: expandedWidth,
-                height: expandedHeight
-            };
-            // Check collision with other labels
-            const collidesWithLabels = labels.some(existingLabel =>
-                !(
-                    newLabelRect.x > existingLabel.x + existingLabel.width ||
-                    newLabelRect.x + newLabelRect.width < existingLabel.x ||
-                    newLabelRect.y > existingLabel.y + existingLabel.height ||
-                    newLabelRect.y + newLabelRect.height < existingLabel.y
-                )
-            );
-            // Check collision with dots (except itself)
-            const collidesWithDots = dotBoxes.some((dotBox, idx) =>
-                idx !== dotIdx && // don't check against its own dot
-                !(
-                    newLabelRect.x > dotBox.x + dotBox.width ||
-                    newLabelRect.x + newLabelRect.width < dotBox.x ||
-                    newLabelRect.y > dotBox.y + dotBox.height ||
-                    newLabelRect.y + newLabelRect.height < dotBox.y
-                )
-            );
-            return !collidesWithLabels && !collidesWithDots;
+            const newRect = { x: centerX - labelWidth*0.75, y: centerY - labelHeight*0.6, width: labelWidth*1.5, height: labelHeight*1.2 };
+
+            const collidesLabel = labels.some(l => !(newRect.x > l.x + l.width || newRect.x + newRect.width < l.x || newRect.y > l.y + l.height || newRect.y + newRect.height < l.y));
+            const collidesDot = dotBoxes.some((d, i) => i !== dotIdx && !(newRect.x > d.x + d.width || newRect.x + newRect.width < d.x || newRect.y > d.y + d.height || newRect.y + newRect.height < d.y));
+            return !collidesLabel && !collidesDot;
         });
 
-        const finalPosition = foundPosition || positions[0];
+        const finalPos = foundPosition || positions[0];
+        if (finalPos.left > 280) { finalPos.left = 280; finalPos.top -= 15; }
 
-        if (finalPosition.left > 280) {
-            finalPosition.left = 280;
-            finalPosition.top -= 15;
-        }
+        label.style.left = `${finalPos.left}px`;
+        label.style.top = `${finalPos.top}px`;
 
-        label.style.left = `${finalPosition.left}px`;
-        label.style.top = `${finalPosition.top}px`;
-
-        // Draw a line from dot to label center, with animation
+        // Draw line to label
         const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        const labelCenterX = finalPosition.left + labelWidth / 2;
-        const labelCenterY = finalPosition.top + labelHeight / 2;
+        const labelCenterX = finalPos.left + labelWidth / 2;
+        const labelCenterY = finalPos.top + labelHeight / 2;
         line.setAttribute('x1', x);
         line.setAttribute('y1', y);
         line.setAttribute('x2', labelCenterX);
         line.setAttribute('y2', labelCenterY);
         line.setAttribute('stroke', color);
         line.setAttribute('stroke-width', '1');
+
         const lineLength = Math.hypot(labelCenterX - x, labelCenterY - y);
-
-        // Add line-draw animation CSS for this color if not already present
-        if (!document.getElementById(`lineDrawFadeIn-${colorClass}`)) {
-            const style = document.createElement('style');
-            style.id = `lineDrawFadeIn-${colorClass}`;
-            style.textContent = `
+        injectStyle(`lineDrawFadeIn-${colorClass}`, `
             @keyframes lineDrawFadeIn-${colorClass} {
-                0% {
-                    stroke-dashoffset: ${lineLength};
-                    opacity: 0;
-                }
-                50% {
-                    opacity: 1;
-                }
-                100% {
-                    stroke-dashoffset: 0;
-                    opacity: ${isCurrentTeam ? '1' : '0.5'};
-                }
-            }`;
-            document.head.appendChild(style);
-        }
-
+                0% { stroke-dashoffset: ${lineLength}; opacity: 0; }
+                50% { opacity: 1; }
+                100% { stroke-dashoffset: 0; opacity: ${isCurrentTeam ? '1':'0.5'}; }
+            }
+        `);
         line.setAttribute('stroke-dasharray', lineLength);
         line.setAttribute('stroke-dashoffset', lineLength);
         line.style.animation = `lineDrawFadeIn-${colorClass} ${loadedOnce ? 0 : 0.5}s ease-in-out ${loadedOnce ? 0 : fadeDelay - 0.1}s forwards`;
+
         svg.appendChild(line);
 
-        // Store label position for future collision detection, with padding
+        // Store label position for collision detection
         const padding = 6;
-        labels.push({
-            x: finalPosition.left - padding,
-            y: finalPosition.top - padding,
-            width: labelWidth + 2 * padding,
-            height: labelHeight + 2 * padding
-        });
+        labels.push({ x: finalPos.left - padding, y: finalPos.top - padding, width: labelWidth + 2*padding, height: labelHeight + 2*padding });
 
         fragment.appendChild(label);
     });
@@ -491,37 +424,36 @@ function placeDots() {
 
 document.addEventListener('DOMContentLoaded', async () => {
     startTime = performance.now();
-    
     updateTransform();
     createZoomControls();
-    
+
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('team')) {
-        teamParam = urlParams.get('team');
-    }
-    
+    teamParam = urlParams.get('team') || "";
+
     try {
-        teamLocations = await getTeamlocations("");
-    } catch (error) {
-        teamLocations = await getTeamlocationsFallback("");
+        teamLocations = await getTeamlocations();
+    } catch {
+        teamLocations = await getTeamlocationsFallback();
     }
-    coords = teamLocations
-        .map(team => ({
-            coords: team.coords,
-            color: team.team_color,
-            name: team.team_name
-        }));
+    coords = teamLocations.map(t => ({
+        coords: t.coords,
+        color: t.team_color,
+        name: t.team_name
+    }));
+
     placeDots();
 
+    let resizeTimeout;
     window.addEventListener('resize', () => {
-        wrapper.style.width = window.frameElement.offsetWidth + 'px';
-
-        updateTransform();
-        placeDots();
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            wrapper.style.width = (window.frameElement?.offsetWidth || window.innerWidth) + 'px';
+            updateTransform();
+            placeDots();
+        }, 200);
     });
 });
 
-// Attach event listeners for zoom and pan
 wrapper.addEventListener('wheel', onWheel, { passive: false });
 wrapper.addEventListener('pointerdown', onPointerDown);
 window.addEventListener('pointermove', onPointerMove);
