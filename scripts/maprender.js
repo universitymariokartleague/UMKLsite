@@ -116,7 +116,6 @@ function onPointerDown(e) {
     if (e.pointerType !== 'mouse') return;
     isPanning = true;
     startPan = { x: e.clientX - panX, y: e.clientY - panY };
-    wrapper.style.cursor = 'grabbing';
     container.style.transition = 'none';
 }
 
@@ -130,7 +129,6 @@ function onPointerMove(e) {
 function onPointerUp(e) {
     if (e && e.pointerType && e.pointerType !== 'mouse') return;
     isPanning = false;
-    wrapper.style.cursor = 'default';
     container.style.transition = 'transform 0.15s ease'; 
 }
 
