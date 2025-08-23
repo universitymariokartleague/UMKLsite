@@ -8,7 +8,7 @@ import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareText, sh
 
 const weekdayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const DEFAULTSTARTDAY = 1;
-const MATCH_LENGTH_MINS = 60;
+const MATCH_LENGTH_MINS = 90;
 
 const calendarContainer = document.getElementById("calendar-container");
 const calendarListView = document.getElementById("calendarListView");
@@ -319,7 +319,6 @@ function showDailyLog(date, dayCell) {
     const log = matchDataToUse[date] || [];
     if (log.length) {
         const formattedDate = parseLocalDate(date).toLocaleString(locale, { dateStyle: "full" });
-        console.log(date, formattedDate)
         let formattedLocalDate, dayRelation;
         expandedLog.innerHTML = `
             <div class="current-season-area"> 
@@ -327,7 +326,7 @@ function showDailyLog(date, dayCell) {
                 <button id="shareButton"><span class="fa-solid fa-share"></span> Share Date</button>
             </div>
             <hr class="after-title" style="margin-bottom:0;">
-            ${log.map((entry, index) => {
+        ${log.map((entry, index) => {
             function createTeamObject(teamName) {
                 return {
                     team_name: teamName,
@@ -441,7 +440,7 @@ function showDailyLog(date, dayCell) {
                     <div class="match-details-box">
                         <div class="match-date-time-box">
                             <div class="match-detail-container">
-                                ${dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
+                                ${overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
                                 <i class="${outsideUKTimezone ? 'local-time-clock' : ''} fa-solid fa-clock"></i>
                                 <h2>
                                     <span title="${matchEndedText}">${formattedMatchTime}</span>
@@ -449,6 +448,7 @@ function showDailyLog(date, dayCell) {
                                         <span title="Local time" style="display: inline-flex; align-items: center;">
                                         |&nbsp;<i class="overseas-time-clock fa-solid fa-clock"></i>${formattedLocalMatchTime}</span>` : ''}
                                 </h2>
+                                ${!overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
                                 ${isLive ? '<div class="live-dot"></div>' : ''}
                             </div>
                         </div>
@@ -622,7 +622,7 @@ function generateCalendarListView() {
                     <div class="match-details-box">
                         <div class="match-date-time-box">
                             <div class="match-detail-container">
-                                ${dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
+                                ${overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
                                 <i class="${outsideUKTimezone ? 'local-time-clock' : ''} fa-solid fa-clock"></i>
                                 <h2>
                                     <span title="${matchEndedText}">${formattedMatchTime}</span>
@@ -630,6 +630,7 @@ function generateCalendarListView() {
                                         <span title="Local time" style="display: inline-flex; align-items: center;">
                                         |&nbsp;<i class="overseas-time-clock fa-solid fa-clock"></i>${formattedLocalMatchTime}</span>` : ''}
                                 </h2>
+                                ${!overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
                                 ${isLive ? '<div class="live-dot"></div>' : ''}
                             </div>
                         </div>
@@ -783,10 +784,14 @@ function compareDayRelation(dateStr1, dateStr2) {
 
     const diffDays = Math.round((day1 - day2) / (1000 * 60 * 60 * 24));
 
-    if (diffDays === 0) return "";
-    if (diffDays === -1) return `Day<br>after`;
-    if (diffDays === 1) return `Day<br>before`;
-    return null;
+    if (overseasDateDisplay) {
+        if (diffDays === -1) return `Day<br>after`;
+        if (diffDays === 1) return `Day<br>before`;
+    } else {
+        if (diffDays === 1) return `Day<br>after`;
+        if (diffDays === -1) return `Day<br>before`;
+    }
+    return "";
 }
 
 function parseLocalDate(dateStr) {

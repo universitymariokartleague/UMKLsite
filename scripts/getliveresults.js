@@ -11,7 +11,7 @@ const secondTeamLogo = document.getElementById("secondteamlogo");
 const errorMessage = document.getElementById("errormessage");
 let reversed = Boolean(document.body.dataset.reversed) || false;
 
-const MATCH_LENGTH_MINS = 60;
+const MATCH_LENGTH_MINS = 90;
 
 const scoreMap = [15, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 const maxPos = scoreMap.length;
@@ -88,7 +88,7 @@ function getLiveMatchTeams() {
     const now = new Date();
 
     const liveMatches = matches.filter(entry => {
-        // if (!entry.time || entry.endTime) return false;
+        if (!entry.time || entry.endTime) return false;
 
         const [hours, minutes] = entry.time.split(':').map(Number);
         const matchDateStr = (matchData[todayStr]?.includes(entry) ? todayStr : tomorrowStr);

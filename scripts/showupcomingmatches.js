@@ -5,9 +5,12 @@
 
 const upcomingMatchesBox = document.getElementById("upcomingMatchesBox");
 const upcomingMatchesError = document.getElementById("upcomingMatchesError");
-const MATCH_LENGTH_MINS = 60;
-let matchData = {};
-let teamColors = {};
+const MATCH_LENGTH_MINS = 90;
+let matchData = [];
+let matchDataToUse = [];
+let teamColors = [];
+
+let overseasDateDisplay = true; // forced on this page since I can't get it working otherwise 
 
 let refreshTimer = null;
 
@@ -61,52 +64,58 @@ async function getTeamcolorsFallback() {
     teamColors = await response.json();
 }
 
-function showUpcomingMatch() {
-    const getUKDate = (offsetDays = 0) => {
-        const now = new Date();
+function normalizeMatchData(matchData) {
+    const localMatchData = {};
 
-        const formatter = new Intl.DateTimeFormat('en-GB', {
-            timeZone: 'Europe/London',
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
+    Object.keys(matchData).forEach(dateKey => {
+        matchData[dateKey].forEach(entry => {
+            const matchDate = new Date(`${dateKey}T${entry.time}`);
+
+            const localYear = matchDate.getFullYear();
+            const localMonth = matchDate.getMonth() + 1;
+            const localDay = matchDate.getDate();
+
+            const localDateKey = `${localYear}-${String(localMonth).padStart(2, '0')}-${String(localDay).padStart(2, '0')}`;
+
+            if (!localMatchData[localDateKey]) {
+                localMatchData[localDateKey] = [];
+            }
+            localMatchData[localDateKey].push(entry);
         });
+    });
 
-        const parts = formatter.formatToParts(now);
-        let year = parseInt(parts.find(p => p.type === 'year').value);
-        let month = parseInt(parts.find(p => p.type === 'month').value);
-        let day = parseInt(parts.find(p => p.type === 'day').value);
+    return localMatchData;
+};
 
-        day += offsetDays;
+function parseLocalDate(dateStr) {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    return new Date(year, month - 1, day);
+};
 
-        const ukDate = new Date(Date.UTC(year, month - 1, day));
-
-        return ukDate;
-    };
-
-    const todayUK = getUKDate(0);
-    const tomorrowUK = getUKDate(1);
-    
+function showUpcomingMatch() {
     const pad = n => String(n).padStart(2, '0');
     const formatDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
-    const todayStr = formatDate(todayUK);
-    const tomorrowStr = formatDate(tomorrowUK);
+    const getLocalDate = (offsetDays = 0) => {
+        const now = new Date();
+        now.setDate(now.getDate() + offsetDays);
+        return formatDate(now);
+    };
 
-    // Get all matches from today and tomorrow
-    const now = new Date();
+    const todayStr = getLocalDate(0);
+    const tomorrowStr = getLocalDate(1);
+
+    if (overseasDateDisplay) {
+        matchDataToUse = normalizeMatchData(matchData);
+    } else {
+        matchDataToUse = matchData;
+    }
+
     const matches = [
-        ...(matchData[todayStr] || []),
-        ...(matchData[tomorrowStr] || [])
+        ...(matchDataToUse[todayStr] || []),
+        ...(matchDataToUse[tomorrowStr] || [])
     ].filter(match => {
-        if (match.endTime) return false;
-
-        const [hours, minutes] = match.time.split(':').map(Number);
-        const matchDateStr = (matchData[todayStr]?.includes(match) ? todayStr : tomorrowStr);
-        const matchDate = new Date(matchDateStr);
-        matchDate.setHours(hours, minutes, 0, 0);
-
-        return (now - matchDate) <= MATCH_LENGTH_MINS * 60 * 1000;
+        return !match.endTime;
     });
 
     upcomingMatchesBox.innerHTML = ``;
@@ -128,18 +137,18 @@ function showUpcomingMatch() {
 
             const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
             
-            const matchDateStr = (matchData[todayStr]?.includes(entry) ? todayStr : tomorrowStr);
-            const formattedDate = new Date(matchDateStr).toLocaleDateString(locale, { dateStyle: 'short' });
+            const matchDateStr = (matchDataToUse[todayStr]?.includes(entry) ? todayStr : tomorrowStr);
+            const formattedDate = parseLocalDate(matchDateStr).toLocaleString(locale, { dateStyle: "long" });
+            let formattedLocalDate, dayRelation;
 
-            function uses12HourClock(locale) {
-                const test = new Date('1970-01-01T13:00');
-                return test.toLocaleTimeString(locale).toLowerCase().includes('pm');
-            }
-
-            const is12Hour = uses12HourClock(locale);
             let timeString = entry.time || '00:00:00';
             const { formattedMatchTime, formattedLocalMatchTime, outsideUKTimezone } = formatMatchTime(matchDateStr, timeString, locale);
             
+            if (outsideUKTimezone) {
+                formattedLocalDate = new Date(`${matchDateStr}T${timeString}`).toLocaleString(locale, { dateStyle: "short" });
+                dayRelation = compareDayRelation(formattedLocalDate, matchDateStr);
+            }
+
             let isLive = false;
             if (entry.time) {
                 const [hours, minutes] = entry.time.split(':');
@@ -213,19 +222,21 @@ function showUpcomingMatch() {
                 </div>
 
                 <div class="match-details-box">
+                    <div class="match-detail-container match-date-field">
+                        <i class="fa-solid fa-calendar"></i>
+                        <span>${formattedDate}</span>
+                    </div>
                     <div class="match-date-time-box">
                         <div class="match-detail-container">
-                            <i class="fa-solid fa-calendar-days"></i>
-                            <h2>${formattedDate}</h2>
-                        </div>
-                        <div class="match-detail-container">
+                            ${overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
                             <i class="${outsideUKTimezone ? 'local-time-clock' : ''} fa-solid fa-clock"></i>
                             <h2>
                                 <span title="${zoneName}">${formattedMatchTime}</span>
                                 ${outsideUKTimezone ? `
                                     <span title="Local time" style="display: inline-flex; align-items: center;">
-                                    /&nbsp;<i class="overseas-time-clock fa-solid fa-clock"></i>${formattedLocalMatchTime}</span>` : ''}
-                            </h2>                            
+                                    |&nbsp;<i class="overseas-time-clock fa-solid fa-clock"></i>${formattedLocalMatchTime}</span>` : ''}
+                            </h2>       
+                            ${!overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}                     
                             ${isLive ? '<div class="live-dot"></div>' : ''}
                         </div>
                     </div>
@@ -306,6 +317,36 @@ function checkTimezoneMatches(dateStr, timeStr) {
     const londonOffsetMinutes = (londonTime - utcDate) / 60000;
 
     return offsetMinutes !== londonOffsetMinutes;
+}
+
+function compareDayRelation(dateStr1, dateStr2) {
+    function parseDate(str) {
+        if (str.includes('/')) {
+            const [day, month, year] = str.split('/').map(Number);
+            return new Date(year, month - 1, day);
+        } else if (str.includes('-')) {
+            const [year, month, day] = str.split('-').map(Number);
+            return new Date(year, month - 1, day);
+        }
+        throw new Error("Unsupported date format: " + str);
+    }
+
+    const d1 = parseDate(dateStr1);
+    const d2 = parseDate(dateStr2);
+
+    const day1 = Date.UTC(d1.getFullYear(), d1.getMonth(), d1.getDate());
+    const day2 = Date.UTC(d2.getFullYear(), d2.getMonth(), d2.getDate());
+
+    const diffDays = Math.round((day1 - day2) / (1000 * 60 * 60 * 24));
+
+    if (overseasDateDisplay) {
+        if (diffDays === -1) return `Day<br>after`;
+        if (diffDays === 1) return `Day<br>before`;
+    } else {
+        if (diffDays === 1) return `Day<br>after`;
+        if (diffDays === -1) return `Day<br>before`;
+    }
+    return "";
 }
 
 function autoLink(text) {

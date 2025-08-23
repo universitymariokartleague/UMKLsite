@@ -25,6 +25,10 @@
     gap: 15px;
 }
 
+.match-date-field {
+    font-size: 14px;
+}
+
 .match-detail-container {
     display: flex;
     gap: 5px;
