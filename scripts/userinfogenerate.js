@@ -240,7 +240,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     let showError = 0;
     const urlParams = new URLSearchParams(window.location.search);
-    let playerID = urlParams.get('ID');
+    let playerID = urlParams.get('id');
+    if (!playerID) playerID = urlParams.get('ID');
+    if (!playerID) window.location.href = "/";
 
     try {
         playerData = await getPlayerdata(playerID);
@@ -248,7 +250,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
         console.error(error)
         if (error?.error === "Player not found") {
-            window.location.href = "/pages/players/";
+            window.location.href = "/";
         }
 
         console.debug(`%cuserinfogenerate.js %c> %cAPI failed - using fallback information...`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
