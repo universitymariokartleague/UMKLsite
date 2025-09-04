@@ -819,6 +819,7 @@ function autoLink(text) {
 }
 
 function clearURLParams() {
+    if (cached) return;
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.delete('date');
     const newUrl = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''}`;
