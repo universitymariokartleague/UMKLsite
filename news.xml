@@ -5,11 +5,263 @@
 		<link>https://umkl.co.uk/pages/news/</link>
 		<description>The latest news from the UMKL</description>
 		<language>en-gb</language>
-		<lastBuildDate>Wed, 20 Aug 2025 16:33:07 +0000</lastBuildDate>
+		<lastBuildDate>Fri, 05 Sep 2025 01:21:21 +0000</lastBuildDate>
 		<image>
 			<title>UMKL News</title>
 			<url>assets/media/brand/favicon.png</url>
 			<link>https://umkl.co.uk/</link>
 		</image>
+		<item>
+			<title>Test matches are being conducted!</title>
+			<link>https://umkl.co.uk/pages/news/2025-04-22/umkl-test-matches-are-being-conducted/</link>
+			<media:content url="https://umkl.co.uk/assets/media/news/testmatches.avif" type="image/avif" medium="image"> </media:content>
+			<description>&lt;div&gt;&lt;p&gt;Test matches are planned in the upcoming week, more will follow in the upcoming months.&lt;/p&gt;&lt;p&gt;Please check the &lt;a href="https://umkl.co.uk/pages/matches/"&gt;matches&lt;/a&gt; page to see confirmed and upcoming matches.&lt;/p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-04-22/umkl-test-matches-are-being-conducted/versus.avif"&gt;
+&lt;br/&gt;&lt;i&gt;A match graphic, as seen in the events tab on the Discord server.&lt;/i&gt;
+&lt;p&gt;
+                The upcoming test matches will serve as a test of the Cheep Cheep app and YouTube streaming. Members of the relevant 
+                teams can sign up to compete in this match using the button in the team's announcement channel.
+            &lt;/p&gt;
+&lt;p&gt;
+                These matches will be streamed from both team's perspectives on the UMKL YouTube channel. 
+                You can visit it &lt;a href="https://www.youtube.com/@universitymariokartleague"&gt;here&lt;/a&gt;.
+            &lt;/p&gt;
+&lt;/div&gt;</description>
+			<pubDate>Tue, 22 Apr 2025 00:00:00 +0000</pubDate>
+		</item>
+		<item>
+			<title>Cheep Cheep Updates</title>
+			<link>https://umkl.co.uk/pages/news/2025-07-17/cheep-cheep-updates/</link>
+			<media:content url="https://umkl.co.uk/assets/media/news/newcommands.avif" type="image/avif" medium="image"> </media:content>
+			<description>&lt;div&gt;&lt;p&gt;Hi all! Here are a few updates.&lt;/p&gt;&lt;p&gt;
+                It's been a few months since the announcement of 
+                &lt;mention&gt;@Cheep Cheep&lt;/mention&gt; app, 
+                since then a lot of new commands and features have been added.
+            &lt;/p&gt;&lt;p&gt;
+                Work is being done constantly to improve the stability of our 
+                systems we use for UMKL, so we hope everyone is happy with the 
+                continued development!&lt;/p&gt;&lt;p&gt;The most important change from the 
+                previous message is that the &lt;code&gt;/register&lt;/code&gt; has been removed, as 
+                it is no longer required to use &lt;code&gt;/join&lt;/code&gt; when you're joining a 
+                team. A full changelog will be listed at the end of this page.
+            &lt;/p&gt;&lt;p&gt;
+                A few test matches have occurred recently and they've gone smoothly, 
+                so more test matches will follow! 
+                So be sure to check the &lt;a href="https://umkl.co.uk/pages/matches/"&gt;matches&lt;/a&gt; page
+                for upcoming matches!
+            &lt;/p&gt;&lt;p&gt;Below are some newly added commands that can be used in the server!&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-07-17/cheep-cheep-updates/newcommands.png"&gt;
+&lt;div&gt;
+&lt;b&gt;Changelog for the 17/07/2025 update&lt;/b&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;/register&lt;/code&gt; removed, it is no longer required to use &lt;code&gt;/join&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;New command - &lt;code&gt;/leaderboards&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Formatted &lt;code&gt;YYYY-MM-DD&lt;/code&gt; to &lt;code&gt;DD/MM/YYYY&lt;/code&gt; in embeds (only for outputted text, not for command inputs)&lt;/li&gt;
+&lt;li&gt;Added the match versus image on the sign-up embed&lt;/li&gt;
+&lt;li&gt;Changed the date in the sign-up embed to a timestamp&lt;/li&gt;
+&lt;li&gt;New command - &lt;code&gt;/change-team-colour&lt;/code&gt; (board only)&lt;/li&gt;
+&lt;li&gt;Internal changes to SQL/DB threading&lt;/li&gt;
+&lt;li&gt;Internal changes to the API used on &lt;code&gt;umkl.co.uk&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Tweaked graphics to add shadowing beneath text to improve contrast and readability&lt;/li&gt;
+&lt;li&gt;New command - &lt;code&gt;/generate-stream-overlay&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Fixed &lt;code&gt;/team-profile&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;New commands (used for streaming overlay):
+                        &lt;ul&gt;
+&lt;li&gt;&lt;code&gt;/add-results-to-liveresults&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/edit-results-in-liveresults&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/reset-liveresults&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;New command - &lt;code&gt;/submit-room-code&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;New command - &lt;code&gt;/report-disconnection&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Added some easter eggs&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;p&gt;
+&lt;i&gt;
+                    This article is a summary of an announcement made on the UMKL Discord server, 
+                    you can join the server here.
+                &lt;/i&gt;
+&lt;/p&gt;
+&lt;/div&gt;</description>
+			<pubDate>Thu, 17 Jul 2025 00:00:00 +0000</pubDate>
+		</item>
+		<item>
+			<title>Information for universities wanting to join</title>
+			<link>https://umkl.co.uk/pages/news/2025-04-19/uni-joining-info/</link>
+			<media:content url="https://umkl.co.uk/assets/media/news/mariokartbanner.avif" type="image/avif" medium="image"> </media:content>
+			<description>&lt;div&gt;&lt;h3&gt;Intro&lt;/h3&gt;&lt;p&gt;
+                Joining the University Mario Kart League is a commitment to the future of Mario Kart e-sports in the United Kingdom, 
+                and we would love to have your university represented in the league. 
+            &lt;/p&gt;&lt;p&gt;
+                The UMKL presents an exciting opportunity for students across the country to make connections 
+                and have fun alongside their studies, while also providing a look into the growing competitive scene of Mario Kart.
+            &lt;/p&gt;&lt;p&gt;
+                Being a part of the University Mario Kart League is a responsibility. 
+                University teams are expected to maintain a level of activity throughout the season, 
+                as with many teams comes a greater weight on scheduling. 
+            &lt;/p&gt;&lt;p&gt;
+                Teams are also expected to act respectfully 
+                and dignified to both their opponents and their peers, and we reserve the right to pull a team from the 
+                league if they are acting in problematic manner.
+            &lt;/p&gt;&lt;p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-04-19/uni-joining-info/mariokartbanner.avif"&gt;
+&lt;i&gt;Season 2 is scheduled to start in October 2025.&lt;/i&gt;&lt;/p&gt;&lt;h3&gt;Creating a New Team&lt;/h3&gt;&lt;p&gt;
+                If you are interested in creating a new team in the UMKL to represent your university, please check whether there
+                are enough players at your university who are interested in participating. 
+            &lt;/p&gt;&lt;p&gt;
+                A team must have a minimum of six players
+                available to play in every match, so make sure there are more than enough players to fill this requirement.
+                Members of your university do not need to play in matches to be part of your team.
+            &lt;/p&gt;&lt;p&gt;
+                University teams should not be tied to a specific society in a university. Although specific societies in
+                the university may be Mario Kart or e-sports/gaming focused, anybody in the univeristy should be free 
+                to join the team regardless of their affiliation with these specific societies.
+            &lt;/p&gt;&lt;blockquote&gt;
+&lt;b&gt;Important&lt;/b&gt;&lt;br/&gt;
+                All efforts must be made within your university's team to include everyone, such as discussing 
+                match line-ups in the UMKL server (not in a separate society's server 
+                that some members may not have access to, as an example) and keeping teamwide practise to within 
+                the UMKL server.&lt;br/&gt;
+&lt;b&gt;This is important to keep the UMKL free and open for everyone.&lt;/b&gt;
+&lt;br/&gt;&lt;br/&gt;
+                Promotion of the UMKL via society channels is allowed, but a distinction must be made
+                about how you do not need to be part of that society to be part of the UMKL team.
+                Please read the &lt;a href="https://umkl.co.uk/pages/rules/brand/"&gt;Brand Guidelines&lt;/a&gt; page for more details about how you can
+                use UMKL intellectual property and content. 
+            &lt;/blockquote&gt;&lt;p&gt;
+                Please note that current students, alumni, university faculty and prospective students (holding an offer)
+                are welcome to join your team, but students outside of your university may not be allowed.
+            &lt;/p&gt;&lt;blockquote&gt;
+&lt;b&gt;Note&lt;/b&gt;&lt;br/&gt;
+                Please visit the &lt;a href="https://umkl.co.uk/pages/rules/team/"&gt;Team Guidelines&lt;/a&gt; page
+                for rules associated with a new team's credentials
+            &lt;/blockquote&gt;&lt;p&gt;
+                Teams should thoroughly brief themselves on the &lt;a href="https://umkl.co.uk/pages/rules/match/"&gt;match rules&lt;/a&gt; and relay this information to 
+                their players before forming a team. The majority of our matches are livestreamed and recorded 
+                for entertainment and promotion, and teams should also make their players aware of this. Players should
+                be briefed on this fact and be told about the consequences of misconduct should it occur on our live matches.
+            &lt;/p&gt;&lt;p&gt;
+                Once teams have completed the above requirements, they should contact the board with 
+                their request to join and we will review it. This is best done on the &lt;a href="https://discord.gg/jz3hKEmDss"&gt;UMKL Discord server&lt;/a&gt;.
+                If accepted, your team will be inducted into the following season of the league. A season will 
+                typically begin in October, and end in April, with us taking a break over the Winter period.
+            &lt;/p&gt;&lt;p&gt;
+                If accepted, the board will ask your team to nominate two individuals to join 
+                the board. These members will then be able to use the &lt;code&gt;/create-team&lt;/code&gt; command.
+            &lt;/p&gt;&lt;h3&gt;Conclusion&lt;/h3&gt;&lt;p&gt;
+                We hope that everything here is clear, and we look forward to seeing your team 
+                joining the UMKL and competing in the next season. For any questions, queries or inquiries 
+                contact any of the board members and we would be more than happy to help!
+            &lt;/p&gt;&lt;p&gt;
+                You can join our Discord server &lt;a href="https://discord.gg/jz3hKEmDss"&gt;here&lt;/a&gt;
+                and find our YouTube channel &lt;a href="https://www.youtube.com/@universitymariokartleague"&gt;here&lt;/a&gt;.
+            &lt;/p&gt;&lt;/div&gt;</description>
+			<pubDate>Sun, 20 Apr 2025 00:00:00 +0000</pubDate>
+		</item>
+		<item>
+			<title>Join our Discord server!</title>
+			<link>https://umkl.co.uk/pages/news/2025-04-19/umkl-discord/</link>
+			<media:content url="https://umkl.co.uk/assets/media/news/discordinspire.avif" type="image/avif" medium="image"> </media:content>
+			<description>&lt;div&gt;&lt;p&gt;
+                The University Mario Kart League 
+                &lt;a href="https://discord.gg/jz3hKEmDss"&gt;Discord server&lt;/a&gt; is the beating heart of our operations.
+            &lt;/p&gt;&lt;p&gt;
+                From match organisation, to game results and general UMKL activity, the Discord server is the fastest way to keep up to date with the UMKL.
+            &lt;/p&gt;&lt;p&gt;
+                The server is also a thriving hub for all UMKL news, and is a great way to connect with other players and make friends across the UK. 
+            &lt;/p&gt;&lt;img src="https://umkl.co.uk/assets/media/brand/Cheep_Cheep_banner_cropped.avif"&gt;
+&lt;br/&gt;&lt;i&gt;With the Cheep Cheep app, users can fetch player and match data in the server.&lt;/i&gt;
+&lt;p&gt;
+                Featured in our Discord server is our bespoke app - Cheep Cheep, ready to provide 
+                data about players in the UMKL, stats about teams. It can also manage a team's current roster before each match, 
+                and generate sleek custom images after every match, showing a team and player's score, along with the standings
+                for a current season.
+                &lt;br/&gt;&lt;i&gt;
+                    The Cheep Cheep app was developed by Adeola Adeniji, zy and Tushar Sundarka,
+                    please visit the credits for all UMKL credits.
+                &lt;/i&gt;
+&lt;/p&gt;
+&lt;p&gt;It's also loaded with a bunch of tools helping board members manage matches and teams. This all ensures smooth running of the league.&lt;/p&gt;
+&lt;p&gt;
+                The server is also the quickest way to contact the UMKL board, 
+                who are happy to answer any of your questions and queries. 
+                This is helpful for upcoming teams and universities who 
+                might be interested in taking part in future seasons.
+                &lt;br/&gt;&lt;i&gt;
+                    Please visit Information for universities wanting to join
+                    for more information on this topic.
+                &lt;/i&gt;
+&lt;/p&gt;
+&lt;p&gt;
+                Whether you're a player, a committee member or a fan, 
+                come join our Discord server and be a part of our lovely community! 
+            &lt;/p&gt;
+&lt;p&gt;
+                You can join our Discord server &lt;a href="https://discord.gg/jz3hKEmDss"&gt;here&lt;/a&gt;.&lt;br/&gt;
+&lt;/p&gt;
+&lt;/div&gt;</description>
+			<pubDate>Sat, 19 Apr 2025 00:00:00 +0000</pubDate>
+		</item>
+		<item>
+			<title>Welcome to the UMKL!</title>
+			<link>https://umkl.co.uk/pages/news/2025-04-19/umkl-intro</link>
+			<media:content url="https://umkl.co.uk/assets/media/news/umklbanner.avif" type="image/avif" medium="image"> </media:content>
+			<description>&lt;div&gt;&lt;p&gt;Welcome to the University Mario Kart League!&lt;/p&gt;&lt;p&gt;If you've reached this page, you probably have an idea of what we do, but we'll explain more below!&lt;/p&gt;&lt;p&gt;
+                We're an independent gaming league made up of university teams across the country,
+                which compete in 6v6 Mario Kart 8 Deluxe matches.
+            &lt;/p&gt;&lt;p&gt;
+                This project started last year, where we had four university teams in play, 
+                but this has quickly expanded to universities across the country! Currently 
+                we're still growing, with 6v6 test matches and friendlies being played until our 
+                next season starts next academic year.
+            &lt;/p&gt;&lt;img src="https://umkl.co.uk/assets/media/brand/UMKL_Season_2_Teaser.avif"&gt;
+&lt;br/&gt;&lt;i&gt;Season 2 is scheduled to start in October 2025.&lt;/i&gt;
+&lt;p&gt;We're one season down, with our reigning champions York topping the charts for Season 1.&lt;/p&gt;
+&lt;img src="https://umkl.co.uk/pages/news/2025-04-19/umkl-intro/team_standings.avif"/&gt;
+&lt;br/&gt;&lt;i&gt;Some team logos were incomplete during Season 1.&lt;/i&gt;
+&lt;p&gt;
+                Currently, whilst we're working on our website and the next season's roster, we are currently 
+                having on-going test matches between our teams and practice rooms.
+            &lt;/p&gt;
+&lt;p&gt;
+                The UMKL discord is growing daily, with more and more interest being shown in our matches and livestreams,
+                as we carve out our own little niche in gaming culture.
+            &lt;/p&gt;
+&lt;p&gt; 
+                We are run by students, for students, and remain dedicated 
+                to forging connections between universities. Our 6v6 comp format gives uni groups 
+                ample opportunity to communicate with each other, 
+                improve their Mario Kart 8 Deluxe skills, and grow as a team together. 
+            &lt;/p&gt;
+&lt;p&gt; 
+                With 12 players and 12 races per match, get ready to 
+                practice your green shell snipes, bomb throws,
+                and to communicate effectively as a team to speed towards victory!
+            &lt;/p&gt;
+&lt;p&gt;
+                You can join our Discord server &lt;a href="https://discord.gg/jz3hKEmDss"&gt;here&lt;/a&gt;.&lt;br/&gt;
+                Our YouTube channel, where we livestream matches, can be visited &lt;a href="https://www.youtube.com/@universitymariokartleague"&gt;here&lt;/a&gt;.
+            &lt;/p&gt;
+&lt;i&gt;
+                Please visit the credits to see everyone who worked on the University Mario Kart League.
+            &lt;/i&gt;
+&lt;/div&gt;</description>
+			<pubDate>Sat, 19 Apr 2025 00:00:00 +0000</pubDate>
+		</item>
+		<item>
+			<title>Upcoming summer test matches!</title>
+			<link>https://umkl.co.uk/pages/news/2025-06-13/upcoming-summer-test-matches/</link>
+			<media:content url="https://umkl.co.uk/assets/media/news/summertestmatches.avif" type="image/avif" medium="image"> </media:content>
+			<description>&lt;div&gt;&lt;p&gt;More test matches between teams are being planned throughout the weeks as exams finish and summer approaches.&lt;/p&gt;&lt;p&gt;Please check the &lt;a href="https://umkl.co.uk/pages/matches/"&gt;matches&lt;/a&gt; page to see confirmed and upcoming matches.&lt;/p&gt;&lt;p&gt;Now is also a good time for board members to liaise with other universities and plan test matches with each other, especially if your team hasn't had a Test Match yet.&lt;/p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-06-13/upcoming-summer-test-matches/versus.avif"&gt;
+&lt;br/&gt;&lt;i&gt;A match graphic, as seen in the events tab on the Discord server.&lt;/i&gt;
+&lt;p&gt;
+                These continued test matches further test the Cheep Cheep application and YouTube streaming. Members of the relevant 
+                teams can sign up to compete in this match using the button in the team's announcement channel.
+            &lt;/p&gt;
+&lt;p&gt;
+                These matches will be streamed on the UMKL YouTube channel. 
+                You can watch upcoming livestreams &lt;a href="https://www.youtube.com/@universitymariokartleague/streams"&gt;here&lt;/a&gt;.
+            &lt;/p&gt;
+&lt;/div&gt;</description>
+			<pubDate>Fri, 13 Jun 2025 00:00:00 +0000</pubDate>
+		</item>
 	</channel>
 </rss>

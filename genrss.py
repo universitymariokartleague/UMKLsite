@@ -54,7 +54,7 @@ def get_news_items():
         html = f.read()
 
     soup = BeautifulSoup(html, "html.parser")
-    container = soup.find("div", {"class": "news-container after-title news-container-override", "id": "news-container"})
+    container = soup.find("div", {"class": "news-container after-title news-container-full-page", "id": "news-container"})
     if not container:
         return items
 
@@ -176,3 +176,5 @@ def generate_rss_feed():
     with open("news.xml", "wb") as f:
         f.write(rss_xml)
     print("RSS feed generated as news.xml")
+
+generate_rss_feed()
