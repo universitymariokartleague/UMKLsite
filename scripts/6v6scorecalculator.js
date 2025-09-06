@@ -2,7 +2,9 @@
     This script calculates the points difference in 6v6. It dynamically updates
     the results for both teams and the points difference as the user inputs data. 
 */
+import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareText, shareImage, showTextPopup, showImagePreview, setOriginalMessage } from './shareAPIhelper.js';
 
+const inputArea = document.getElementById("inputArea");
 const positionsInput = document.getElementById("positions-input");
 const teamResult = document.getElementById("team-result");
 const opponentResult = document.getElementById("opponent-result");
@@ -18,6 +20,7 @@ const teamNamesInput = document.getElementById("team-names-input");
 const exportDataButton = document.getElementById("exportDataButton");
 
 let teamColors = [];
+let matchName = "";
 
 async function getTeamcolors() {
     return fetch('https://api.umkl.co.uk/teamcolors', {
@@ -316,6 +319,7 @@ function loadFromURLParams() {
     const positionsCompressed = urlParams.get('p');
     const tracksCompressed = urlParams.get('t');
     const teamsCompressed = urlParams.get('n');
+    const matchNameCompressed = urlParams.get('m');
 
     if (positionsCompressed) {
         const positionsRaw = LZString.decompressFromEncodedURIComponent(positionsCompressed);
@@ -331,6 +335,10 @@ function loadFromURLParams() {
     if (teamsCompressed) {
         const teams = LZString.decompressFromEncodedURIComponent(teamsCompressed);
         teamNamesInput.value = teams;
+    }
+
+    if (matchNameCompressed) {
+        matchName = LZString.decompressFromEncodedURIComponent(matchNameCompressed);
     }
 }
 
@@ -363,7 +371,7 @@ exportDataButton.onclick = () => {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "detailedResults.json";
+    a.download = `detailedResults${matchName.replaceAll(" ", "").replace("(TestMatch)", "")}.json`;
     a.click();
 
     URL.revokeObjectURL(url);
@@ -373,6 +381,42 @@ document.addEventListener("DOMContentLoaded", async () => {
     teamColors = await getTeamcolors();
     loadFromURLParams();
     renderResults();
+    if (matchName) {
+        inputArea.style.display = "unset";
+        inputArea.innerHTML = `<h2>${matchName}</h2><button id="shareButton"><span class="fa-solid fa-share"></span> Share Results Graph</button>`;
+        const shareButton = document.getElementById("shareButton");
+
+        setOriginalMessage(shareButton.innerHTML);
+
+        shareButton.addEventListener("click", async () => {
+            function canvasToBlob(canvas, type = "image/png", quality) {
+                return new Promise(resolve => {
+                    canvas.toBlob(blob => resolve(blob), type, quality);
+                });
+            }
+
+            if (getIsPopupShowing()) return;
+            const useClipboard = isWindowsOrLinux() || !navigator.canShare;
+
+            const blob = await canvasToBlob(document.getElementById("scoreChart"));
+
+            const message = `Check out the results for ${matchName}!`
+
+            if (useClipboard) {
+                const success = await copyTextToClipboard(message);
+                shareButton.innerText = success ? "Copied to clipboard!" : "Failed to copy!";
+                showImagePreview(blob, blob.url, message)
+            } else {
+                await shareImage(
+                    `${matchName} Results`,
+                    message,
+                    blob,
+                    `6v6_results_${matchName.replaceAll(" ", "_")}.png`
+                )
+            }
+        });
+    }
+    inputArea.classList.remove("hidden");
 
     positionsInput.addEventListener("input", renderResults);
     trackNamesInput.addEventListener("input", renderResults);

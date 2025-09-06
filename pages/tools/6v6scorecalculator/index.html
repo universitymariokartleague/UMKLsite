@@ -6,11 +6,12 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <title>6v6 Score Calculator | University Mario Kart League</title>
-        <meta name="description" content="Quickly calculate point scores in a 6v6 on the University Mario Kart League (UMKL) site">
+        <meta name="description" content="Calculate and visualise point scores from a 6v6 match on the University Mario Kart League (UMKL) site">
         <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/6v6scorecalculator.css">
         <link rel="stylesheet" href="css/settings.css">
+        <link rel="stylesheet" href="css/copypopup.css">
         <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
         <link rel="stylesheet" href="css/ext/fontawesome.min.css">
         <meta name="color-scheme" content="dark light">
@@ -19,7 +20,7 @@
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://umkl.co.uk/pages/tools/trackrandomiser/" />
         <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_Banner_embed.avif" />
-        <meta property="og:description" content="Quickly calculate point scores in a 6v6 on the University Mario Kart League (UMKL) site" />
+        <meta property="og:description" content="Calculate and visualise point scores from a 6v6 match on the University Mario Kart League (UMKL) site" />
         <meta name="theme-color" content="#bc0839">
 
         <!-- Include this to make the og:image larger -->
@@ -73,11 +74,11 @@
 
         <main>
             <h1>6v6 Score Calculator</h1>
-            <p class="p-below-title">Quickly calculate point scores in a 6v6</p>
+            <p class="p-below-title">Calculate and visualise point scores from a 6v6 match</p>
             <button id="exportDataButton">Export data as JSON</button>
             <hr class="hr-below-title">
 
-            <div class="score-calculator-input-areas">
+            <div class="score-calculator-input-areas hidden" id="inputArea">
                 <div class="positions-input-area">
                     <label for="positions-input">Input your teams' positions</label><br>
                     <textarea translate="no" placeholder="1,2,3,4,5,6
@@ -102,7 +103,7 @@ Staffs" id="team-names-input"></textarea>
 
             <div class="score-graph">
                 <canvas id="scoreChart"></canvas>
-            </div>
+            </div><br>
         </main>
 
         <footer translate="no">

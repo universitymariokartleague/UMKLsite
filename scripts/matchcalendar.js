@@ -19,7 +19,7 @@ const overseasMessage = document.getElementById("overseasMessage");
 const currentYear = new Date().getFullYear();
 const startYear = 2023; // currentYear of season = startYear + season (eg: season 1 - 2023 + 1 = 2024)
 const minYear = startYear + 1; // Minimum year for the calendar, prevents going back to 2023
-const maxYear = currentYear + 2; // Maximum year for the calendar, allows going up to 2 years in the future
+const maxYear = currentYear + 1; // Maximum year for the calendar, allows going up to 2 years in the future
 const months = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
@@ -28,6 +28,9 @@ let currentlyShownDate = [2000, 0];
 let matchData = [];
 let matchDataToUse = [];
 let teamColors = [];
+
+let currentlyShownLog = null;
+let isKeyPressed = false;
 
 let refreshTimer = null;
 
@@ -295,6 +298,31 @@ function cleanupPopupPreview() {
     currentPreview = null;
 }
 
+function changeShownDay(change) {
+    if (!currentlyShownLog) return;
+
+    const dates = Object.keys(matchDataToUse).sort();
+    let currentIndex = dates.indexOf(currentlyShownLog);
+
+    if (currentIndex === -1) {
+        currentIndex = dates.findIndex(d => d > currentlyShownLog);
+        if (currentIndex === -1) {
+            currentIndex = dates.length; 
+        }
+    }
+
+    let newIndex = currentIndex + change;
+    if (dates[currentIndex] && dates[currentIndex] > currentlyShownLog && change < 0) {
+        newIndex = currentIndex - 1;
+    }
+
+    if (newIndex < 0 || newIndex >= dates.length) {
+        return;
+    }
+
+    return dates[newIndex];
+}
+
 function generate6v6ScoreCalculatorLink(entry) {
     const url = new URL("pages/tools/6v6scorecalculator/", window.location.origin);
 
@@ -308,10 +336,12 @@ function generate6v6ScoreCalculatorLink(entry) {
 
     const teamsString = entry.teamsInvolved.join('\n');
 
+    const compressedMatchName = LZString.compressToEncodedURIComponent(entry.title);
     const compressedPositions = LZString.compressToEncodedURIComponent(positionsString);
     const compressedTracks = LZString.compressToEncodedURIComponent(tracksString);
     const compressedTeams = LZString.compressToEncodedURIComponent(teamsString);
 
+    url.searchParams.set('m', compressedMatchName);
     url.searchParams.set('p', compressedPositions);
     url.searchParams.set('t', compressedTracks);
     url.searchParams.set('n', compressedTeams);
@@ -320,15 +350,14 @@ function generate6v6ScoreCalculatorLink(entry) {
 }
 
 function showDailyLog(date, dayCell) {
+    currentlyShownLog = date;
+
     listViewToggledOnce = false;
 
-    // Remove highlight from all previously selected days
-    document.querySelectorAll('.day.selected').forEach(day => {
-        day.classList.remove('selected');
-    });
-
-    // Add highlight to the newly selected day
     if (dayCell) {
+        document.querySelectorAll('.day.selected').forEach(day => {
+            day.classList.remove('selected');
+        });
         dayCell.classList.add('selected');
     }
 
@@ -418,7 +447,7 @@ function showDailyLog(date, dayCell) {
             }
 
             let calculatorlink = '';
-            if (resultsHTML) calculatorlink = generate6v6ScoreCalculatorLink(entry);
+            if (resultsHTML && entry.detailedResults) calculatorlink = generate6v6ScoreCalculatorLink(entry);
 
             return `
                 <div class="event-container">
@@ -1048,6 +1077,39 @@ function generateOverseasDateDisplayButton() {
         document.dispatchEvent(new CustomEvent('startDayChange'));
     }
 }
+
+document.addEventListener('keydown', (event) => {
+    const key = event.key.toLowerCase();
+
+    if (!isKeyPressed) {
+        let newDate;
+        if (key === 'arrowleft') {
+            isKeyPressed = true;
+            newDate = changeShownDay(-1);
+        } else if (key === 'arrowright') {
+            isKeyPressed = true;
+            newDate = changeShownDay(1);
+        }
+        if (newDate) {
+            const dateObj = new Date(newDate);
+            generateCalendar(dateObj.getMonth(), dateObj.getFullYear(), newDate);
+            showDailyLog(newDate);
+        }
+
+        if (key === '[') {
+            isKeyPressed = true;
+            changeMonth(-1);
+        }
+        if (key === ']') {
+            isKeyPressed = true;
+            changeMonth(1);
+        }
+    }
+});
+
+document.addEventListener('keyup', () => {
+    isKeyPressed = false;
+});
 
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();

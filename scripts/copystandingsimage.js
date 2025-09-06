@@ -45,6 +45,10 @@ shareButton.addEventListener("click", async () => {
                 }, 2000);
             }
         } else {
+            if (!blob) {
+                blob = await generateTeamStandingsImage(currentSeason.value);
+            }
+
             await shareImage(
                 "UMKL Team Standings",
                 generateMessage(),
