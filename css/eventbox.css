@@ -116,6 +116,15 @@
     -webkit-user-select: none;
 }
 
+.score-box a {
+    color: var(--accent-color)!important;
+    text-decoration: none;
+}
+
+.score-box a:hover {
+    color: #ffb4b4!important;
+}
+
 .event-box-team {
     width: 100%;
     text-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);

@@ -177,7 +177,7 @@ function generateCalendar(month, year, dateParam = null) {
     }
 
     discardLogOnChange = true;
-};
+}
 
 function changeMonth(change) {
     const newDate = new Date(currentlyShownDate[0], currentlyShownDate[1] + change);
@@ -191,7 +191,7 @@ function changeMonth(change) {
         return;
     }
     generateCalendar(newDate.getMonth(), newDate.getFullYear());
-};
+}
 
 function showMonthPicker(currentDate) {
     const year = currentDate.getFullYear();
@@ -295,6 +295,30 @@ function cleanupPopupPreview() {
     currentPreview = null;
 }
 
+function generate6v6ScoreCalculatorLink(entry) {
+    const url = new URL("pages/tools/6v6scorecalculator/", window.location.origin);
+
+    const positionsString = entry.detailedResults
+        .map(race => race[1].join(',')) // take only the "1" array
+        .join('\n');
+
+    const tracksString = entry.detailedResults
+        .map(race => race.track)
+        .join('\n');
+
+    const teamsString = entry.teamsInvolved.join('\n');
+
+    const compressedPositions = LZString.compressToEncodedURIComponent(positionsString);
+    const compressedTracks = LZString.compressToEncodedURIComponent(tracksString);
+    const compressedTeams = LZString.compressToEncodedURIComponent(teamsString);
+
+    url.searchParams.set('p', compressedPositions);
+    url.searchParams.set('t', compressedTracks);
+    url.searchParams.set('n', compressedTeams);
+
+    return url;
+}
+
 function showDailyLog(date, dayCell) {
     listViewToggledOnce = false;
 
@@ -393,6 +417,9 @@ function showDailyLog(date, dayCell) {
                 team2.ytLink = entry.ytLinks[1]
             }
 
+            let calculatorlink = '';
+            if (resultsHTML) calculatorlink = generate6v6ScoreCalculatorLink(entry);
+
             return `
                 <div class="event-container">
                     <div class="team-box-container">
@@ -418,7 +445,7 @@ function showDailyLog(date, dayCell) {
                                 </div>
                             </div>
 
-                            <div class="score-box">${resultsHTML ? formatResults(entry.results) : "VS"}</div>       
+                            <div class="score-box">${calculatorlink ? `<a href="${calculatorlink}" title="View detailed results">${resultsHTML ? formatResults(entry.results) : "VS"}</a>` : `${resultsHTML ? formatResults(entry.results) : "VS"}`}</div>       
 
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">
@@ -467,8 +494,8 @@ function showDailyLog(date, dayCell) {
     } else {
         expandedLog.innerHTML = `<div class="settingSubheading">Select a date to see the matches happening on that day.</div>`;
         clearURLParams();
-    };
-};
+    }
+}
 
 function generateCalendarListView() {
     const today = new Date();
@@ -683,13 +710,13 @@ function formatResults(results) {
     const hasPenalty = teamAPenalty !== 0 || teamBPenalty !== 0;
 
     return `
-            ${teamAScore} - ${teamBScore}
-            ${hasPenalty ?
-            `
-                <p class="penalty-text">
-                    -${teamAPenalty}	 	 	 	 	 	  	  	  -${teamBPenalty}
-                </p>
-            ` : ''}
+        ${teamAScore} - ${teamBScore}
+        ${hasPenalty ?
+        `
+            <p class="penalty-text">
+                -${teamAPenalty}	 	 	 	 	 	  	  	  -${teamBPenalty}
+            </p>
+        ` : ''}
     `.trim();
 }
 
@@ -815,7 +842,7 @@ function autoLink(text) {
             href = 'http://' + href;
         }
         return `<a translate="no" href="${href}" target="_blank">${displayUrl}</a>${trailingDot}`;
-    });
+    })
 }
 
 function clearURLParams() {
@@ -848,9 +875,9 @@ function createShareButtonListener(formattedDate) {
             await shareText(
                 `UMKL Matches on ${formattedDate}`,
                 message
-            );
+            )
         }
-    });
+    })
 }
 
 document.addEventListener('startDayChange', () => {
@@ -867,7 +894,7 @@ function makeTeamsColorStyles() {
                 background-color: ${team.team_color};
             }
         `
-    });
+    })
 
     document.head.appendChild(styleSheet);
 }
@@ -881,7 +908,7 @@ window.addEventListener('popstate', () => {
     } else {
         expandedLog.innerHTML = 'No logs for this day';
     }
-});
+})
 
 async function getMatchData() {
     return fetch('https://api.umkl.co.uk/matchdata', {
@@ -891,12 +918,12 @@ async function getMatchData() {
         },
         body: "{}"
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        });
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
 }
 
 async function getMatchDataFallback() {
@@ -915,12 +942,12 @@ async function getTeamcolors() {
         },
         body: "{}"
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        });
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
 }
 
 async function getTeamcolorsFallback() {
@@ -958,7 +985,7 @@ function generateListViewButton() {
         changeCalendarView(listViewEnabled);
 
         localStorage.setItem("calendarListView", listViewEnabled ? 1 : 0);
-    };
+    }
 }
 
 function changeCalendarView(listView) {
@@ -1007,7 +1034,7 @@ document.addEventListener('calendarListViewChange', async () => {
 function updateButton() {
     const tempOverseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1;
     overseasDisplayButton.innerHTML = `<span class="fa-solid ${tempOverseasDateDisplay ? 'fa-earth' : 'fa-house'}"></span> ${tempOverseasDateDisplay ? 'Overseas' : 'UK'}`;
-};
+}
 
 function generateOverseasDateDisplayButton() {
     const overseasDisplayButton = document.getElementById("overseasDisplayButton");
@@ -1019,8 +1046,8 @@ function generateOverseasDateDisplayButton() {
         localStorage.setItem("overseasDateDisplay", tempOverseasDateDisplay ? 0 : 1);
         location.reload();
         document.dispatchEvent(new CustomEvent('startDayChange'));
-    };
-};
+    }
+}
 
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
@@ -1081,4 +1108,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     makeTeamsColorStyles();
     loadCalendarView();
     console.debug(`%cmatchcalendar.js %c> %cMatch data loaded in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-});
+})

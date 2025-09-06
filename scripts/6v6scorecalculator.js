@@ -92,11 +92,17 @@ function renderResults() {
         ${opponentTeamScore}<br/>`;
     });
 
-    teamResult.innerHTML = `<h3>Your Team</h3><br/>${teamRaceResults.join("")}
+    const teamNames = teamNamesInput.value
+        .trim()
+        .split("\n")
+        .map(name => name.trim())
+        .filter(name => name);
+
+    teamResult.innerHTML = `<h3>${teamNames[0] || 'Your Team'}</h3><br/>${teamRaceResults.join("")}
         <br><b>Total:</b><br/>
         ${yourTeamTotal}<br/>`;
 
-    opponentResult.innerHTML = `<h3>Opponent Team</h3><br/>${opponentRaceResults.join("")}
+    opponentResult.innerHTML = `<h3>${teamNames[1] || 'Opponent Team'}</h3><br/>${opponentRaceResults.join("")}
         <br><b>Total:</b><br/>
         ${opponentTeamTotal}<br/>`;
 
@@ -118,12 +124,6 @@ function renderResults() {
             ? trackNames
             : positions.map((_, index) => `Race ${index + 1}`)
     )];
-
-    const teamNames = teamNamesInput.value
-        .trim()
-        .split("\n")
-        .map(name => name.trim())
-        .filter(name => name);
 
     let yourTeamScoresCumulative = [0];
     let opponentScoresCumulative = [0];

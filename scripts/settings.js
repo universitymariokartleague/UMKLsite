@@ -299,6 +299,7 @@ function checkEasterEggs() {
 let isKeyPressed = false;
 let keySequence = [];
 const easterCode = ['m', 'i', 'k', 'u'];
+const mkwEasterCode = ['m', 'k', 'w'];
 
 document.addEventListener('keydown', (event) => {
     const tag = event.target.tagName.toLowerCase();
@@ -315,6 +316,8 @@ document.addEventListener('keydown', (event) => {
 
     if (keySequence.join('') == easterCode.join('')) {
         mikuEasterEgg();
+    } else if (keySequence.join('') == mkwEasterCode.join('')) {
+        mkwEasterEgg();
     }
 
     if ((key === 't' || key === 'o') && !isKeyPressed) {
@@ -356,6 +359,36 @@ function mikuEasterEgg() {
             opacity: 0.25;
         }
     `;
+
+    document.head.appendChild(style);
+}
+
+function mkwEasterEgg() {
+    const style = document.createElement('style');
+
+    let fontPath = "assets/font/RacersDelight.woff2"
+    if (document.baseURI.includes("pages/rules/match/")) {
+        fontPath = "../../../assets/font/RacersDelight.woff2"
+    }
+
+    style.textContent = `
+        @font-face {
+            font-family: "RacersDelight";
+            src: url(${fontPath}) format("woff2");
+        }
+
+        body,
+        button,
+        input,
+        textarea,
+        select {
+            font-family: "RacersDelight", "RacersDelightFallback", sans-serif;
+        }
+
+        .teamStandingsBox {
+            font-family: "RacersDelight", "RacersDelightFallback", sans-serif;
+        }
+    `
 
     document.head.appendChild(style);
 }
