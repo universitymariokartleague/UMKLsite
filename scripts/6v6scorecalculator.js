@@ -17,6 +17,7 @@ let defaultTeamColors = ["#1baa8b", "#a11212"];
 const trackNamesInput = document.getElementById("track-names-input");
 const teamNamesInput = document.getElementById("team-names-input");
 
+const canvas = document.getElementById("scoreChart");
 const exportDataButton = document.getElementById("exportDataButton");
 
 let teamColors = [];
@@ -50,7 +51,7 @@ const getTeamColor = (name) => {
     return match ? match.team_color : null;
 };
 
-function renderResults() {
+function renderResults(width) {
     if (!positionsInput.value.trim()) {
         teamResult.innerHTML = "<h3>Your Team</h3>";
         opponentResult.innerHTML = "<h3>Opponent Team</h3>";
@@ -169,13 +170,28 @@ function renderResults() {
         ]
     };
 
-    const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').trim();
+    const textColor = getComputedStyle(document.body).getPropertyValue('--text-color');
+
+    let chartBackgroundPlugin = null;
+    if (width) {
+        chartBackgroundPlugin = {
+            id: 'customCanvasBackgroundColor',
+            beforeDraw: (chart) => {
+                const ctx = chart.ctx;
+                ctx.save();
+                ctx.globalCompositeOperation = 'destination-over';
+                ctx.fillStyle = textColor == "#fff" ? "#111111" : "#FFFFFF";
+                ctx.fillRect(0, 0, chart.width, chart.height);
+                ctx.restore();
+            }
+        };
+    }
 
     const chartConfig = {
         type: 'line',
         data: chartData,
         options: {
-            responsive: true,
+            responsive: !width,
             animation: false,
             maintainAspectRatio: false,
             plugins: {
@@ -285,11 +301,18 @@ function renderResults() {
                 }
             }
         },
-        plugins: [ChartDataLabels]
+        plugins: chartBackgroundPlugin ? [ChartDataLabels, chartBackgroundPlugin] : [ChartDataLabels]
     };
 
     if (chart) chart.destroy();
-    const ctx = document.getElementById('scoreChart').getContext('2d');
+    const ctx = canvas.getContext('2d');
+
+    if (width) {
+        const aspectRatio = 2;
+        canvas.width = width;
+        canvas.height = Math.round(width / aspectRatio);
+    }
+
     chart = new Chart(ctx, chartConfig);
 
     addToURLParam(positions, trackNames, teamNames);
@@ -398,7 +421,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (getIsPopupShowing()) return;
             const useClipboard = isWindowsOrLinux() || !navigator.canShare;
 
-            const blob = await canvasToBlob(document.getElementById("scoreChart"));
+            renderResults(800);
+            const blob = await canvasToBlob(canvas);
+            renderResults();
 
             const message = `Check out the results for ${matchName}!`
 
