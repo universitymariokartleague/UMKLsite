@@ -129,7 +129,7 @@ function onPointerMove(e) {
 function onPointerUp(e) {
     if (e && e.pointerType && e.pointerType !== 'mouse') return;
     isPanning = false;
-    container.style.transition = 'transform 0.15s ease'; 
+    container.style.transition = 'transform 0.15s ease';
 }
 
 function onTouchStart(e) {
@@ -186,12 +186,12 @@ async function getTeamlocations() {
         },
         body: JSON.stringify({})
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        });
 }
 
 async function getTeamlocationsFallback() {
@@ -285,7 +285,7 @@ function placeDots() {
     coords.forEach(({ coords: [lat, lon], color, name }) => {
         const { x, y } = latLonToPixel(lat, lon, w, h);
         const isCurrentTeam = name === teamParam;
-        const colorClass = `pulse-${color.replace('#','')}`;
+        const colorClass = `pulse-${color.replace('#', '')}`;
         const fadeDelay = isCurrentTeam ? 0 : (0.25 + Math.random() * 0.25).toFixed(3);
 
         // Dot
@@ -325,7 +325,7 @@ function placeDots() {
 
         Object.assign(label.style, {
             opacity: 0,
-            backgroundColor: `${color}${isCurrentTeam ? '60':'40'}`,
+            backgroundColor: `${color}${isCurrentTeam ? '60' : '40'}`,
             animation: `dotLabelFadeIn-${colorClass} ${loadedOnce ? 0 : 0.5}s ease-in-out ${loadedOnce ? 0 : (parseFloat(fadeDelay) + ((name === teamParam) ? 0 : 0.25))}s forwards`
         });
 
@@ -369,7 +369,7 @@ function placeDots() {
         const foundPosition = positions.find(pos => {
             const centerX = pos.left + labelWidth / 2;
             const centerY = pos.top + labelHeight / 2;
-            const newRect = { x: centerX - labelWidth*0.75, y: centerY - labelHeight*0.6, width: labelWidth*1.5, height: labelHeight*1.2 };
+            const newRect = { x: centerX - labelWidth * 0.75, y: centerY - labelHeight * 0.6, width: labelWidth * 1.5, height: labelHeight * 1.2 };
 
             const collidesLabel = labels.some(l => !(newRect.x > l.x + l.width || newRect.x + newRect.width < l.x || newRect.y > l.y + l.height || newRect.y + newRect.height < l.y));
             const collidesDot = dotBoxes.some((d, i) => i !== dotIdx && !(newRect.x > d.x + d.width || newRect.x + newRect.width < d.x || newRect.y > d.y + d.height || newRect.y + newRect.height < d.y));
@@ -398,7 +398,7 @@ function placeDots() {
             @keyframes lineDrawFadeIn-${colorClass} {
                 0% { stroke-dashoffset: ${lineLength}; opacity: 0; }
                 50% { opacity: 1; }
-                100% { stroke-dashoffset: 0; opacity: ${isCurrentTeam ? '1':'0.5'}; }
+                100% { stroke-dashoffset: 0; opacity: ${isCurrentTeam ? '1' : '0.5'}; }
             }
         `);
         line.setAttribute('stroke-dasharray', lineLength);
@@ -409,7 +409,7 @@ function placeDots() {
 
         // Store label position for collision detection
         const padding = 6;
-        labels.push({ x: finalPos.left - padding, y: finalPos.top - padding, width: labelWidth + 2*padding, height: labelHeight + 2*padding });
+        labels.push({ x: finalPos.left - padding, y: finalPos.top - padding, width: labelWidth + 2 * padding, height: labelHeight + 2 * padding });
 
         fragment.appendChild(label);
     });
@@ -433,11 +433,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch {
         teamLocations = await getTeamlocationsFallback();
     }
-    coords = teamLocations.map(t => ({
-        coords: t.coords,
-        color: t.team_color,
-        name: t.team_name
-    }));
+
+    coords = teamLocations
+        .filter(t => t.coords)
+        .map(t => ({
+            coords: t.coords,
+            color: t.team_color,
+            name: t.team_name
+        }));
 
     placeDots();
 

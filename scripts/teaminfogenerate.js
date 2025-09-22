@@ -65,7 +65,7 @@ function buildTeamInfoTable(teamData, isCurrent = false) {
 
     return `
         <table class="team-info-table">
-            <tr><td class="table-key">Location</td><td>${teamData.team_place}</td></tr>
+            ${teamData.team_place ? `<tr><td class="table-key">Location</td><td>${teamData.team_place}</td></tr>` : ''}
             <tr><td class="table-key">Institution</td><td>${teamData.team_full_name}</td></tr>
             <tr><td class="table-key">First Entry</td><td>Season ${teamData.first_entry} <span class="settings-extra-info">(${startYear + teamData.first_entry}-${startYear + 1 + teamData.first_entry})</span></td></tr>
             <tr><td class="table-key">Season Titles</td><td>${teamData.team_championships} <span class="settings-extra-info">${formatChampionshipSeasons(teamData.championship_seasons)}</span></td></tr>
