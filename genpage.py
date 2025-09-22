@@ -20,7 +20,7 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
         <meta property="og:title" content="University Mario Kart League | {TITLE} - News" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://umkl.co.uk/{LINK}" />
-        <meta property="og:image" content="{IMAGE}" />
+        <meta property="og:image" content="https://umkl.co.uk/{IMAGE}" />
         <meta property="og:description" content="{TITLE} news article on University Mario Kart League (UMKL)" />
         <meta name="theme-color" content="#bc0839" />
     
