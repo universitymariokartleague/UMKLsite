@@ -1,0 +1,48 @@
+#creditGenerate {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#creditGenerate.fade-in {
+    opacity: 1;
+}
+
+.credits-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 0.5em;
+}
+
+.credits-title {
+    margin-top: 0.5em;
+}
+
+.credit-container {
+    border: 1px solid #ccccccaa;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.credit-image {
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+    width: 50px;
+    height: 50px;
+}
+
+.credit-socials {
+    margin: 2px 0;
+    display: flex;
+    gap: 5px;
+}
+
+@media screen and (max-width: 767px) {
+    .credits-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+}

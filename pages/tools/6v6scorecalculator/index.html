@@ -6,19 +6,21 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <title>6v6 Score Calculator | University Mario Kart League</title>
-        <meta name="description" content="Quickly calculate point scores in a 6v6 on the University Mario Kart League (UMKL) site">
-        <link rel="shortcut icon" href="assets/image/brand/favicon.png" type="image/png">
+        <meta name="description" content="Calculate and visualise point scores from a 6v6 match on the University Mario Kart League (UMKL) site">
+        <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/6v6scorecalculator.css">
         <link rel="stylesheet" href="css/settings.css">
-        <link rel="stylesheet" href="css/overlayscrollbars.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        <link rel="stylesheet" href="css/copypopup.css">
+        <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
+        <link rel="stylesheet" href="css/ext/fontawesome.min.css">
         <meta name="color-scheme" content="dark light">
 
         <meta property="og:title" content="University Mario Kart League | 6v6 Score Calculator" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://umkl.co.uk/pages/tools/trackrandomiser/" />
-        <meta property="og:image" content="https://umkl.co.uk/assets/image/brand/UMKL_Banner_embed.png" />
-        <meta property="og:description" content="Quickly calculate point scores in a 6v6 on the University Mario Kart League (UMKL) site" />
+        <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_Banner_embed.avif" />
+        <meta property="og:description" content="Calculate and visualise point scores from a 6v6 match on the University Mario Kart League (UMKL) site" />
         <meta name="theme-color" content="#bc0839">
 
         <!-- Include this to make the og:image larger -->
@@ -31,13 +33,16 @@
         
         <script type="module" src="scripts/settings.js" defer></script>
         <script type="module" src="scripts/6v6scorecalculator.js" defer></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
     </head>
 
     <body id="top" data-overlayscrollbars-initialize>
-        <div class="navbar-container">
+        <div class="navbar-container" translate="no">
             <div class="nav-bar">
                 <a class="nav-bar-title no-color-link no-underline-link-footer" href="#top">
-                    <img alt="UMKL logo" class="nav-bar-logo" src="assets/image/brand/UMKLlogonav.webp" />
+                    <img alt="UMKL logo" class="nav-bar-logo" src="assets/media/brand/UMKLlogonav.avif" />
                     <h2>UMKL</h2>
                 </a>    
                 <nav class="nav-flex">
@@ -69,20 +74,39 @@
 
         <main>
             <h1>6v6 Score Calculator</h1>
-            <p class="p-below-title">Quickly calculate point scores in a 6v6</p>
+            <p class="p-below-title">Calculate and visualise point scores from a 6v6 match</p>
+            <button id="exportDataButton">Export data as JSON</button>
             <hr class="hr-below-title">
 
-            <label for="positions-input">Input your teams positions (one line = one race)</label><br>
-            <textarea placeholder="1,2,3,4,5,6" style="width: 400px; height: 200px;" id="positions-input"></textarea>
+            <div class="score-calculator-input-areas hidden" id="inputArea">
+                <div class="positions-input-area">
+                    <label for="positions-input">Input your teams' positions</label><br>
+                    <textarea translate="no" placeholder="1,2,3,4,5,6
+7,8,9,10,11,12" id="positions-input"></textarea><br>
+                </div>
+                <div class="positions-input-area">
+                    <label for="track-names-input">Input track names (optional)</label><br>
+                    <textarea translate="no" placeholder="Mario Circuit 3
+Yoshi's Island" id="track-names-input"></textarea>
+
+                    <label for="track-names-input">Input team names (optional)</label><br>
+                    <textarea translate="no" placeholder="York
+Staffs" id="team-names-input"></textarea>
+                </div>
+            </div>
+            
             <div class="result-container">
                 <div class="result-box" id="team-result"><h3>Your Team</h3></div>
                 <div class="points-diff" id="points-diff"><h2>±0</h2></div>
                 <div class="result-box" id="opponent-result"><h3>Opponent Team</h3></div>
             </div>
-            
+
+            <div class="score-graph">
+                <canvas id="scoreChart"></canvas>
+            </div><br>
         </main>
 
-        <footer>
+        <footer translate="no">
             © UMKL 2025 |
             <a class="no-color-link" href="pages/credits/">Credits</a> |
             <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |

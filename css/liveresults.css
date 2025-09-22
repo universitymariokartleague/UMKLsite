@@ -1,38 +1,60 @@
 @font-face {
-    font-family: "SF-Pro-Display-Heavy";
-    src: url("../assets/pythongraphics/fonts/SF-Pro/SF-Pro-Display-Heavy.otf");
-}
-
-@font-face {
-    font-family: "SF-Pro-Display-Bold";
-    src: url("../assets/pythongraphics/fonts/SF-Pro/SF-Pro-Display-Bold.otf");
+    font-family: "SF-Pro-Display";
+    font-weight: normal;
+    src: url("../assets/font/SF-Pro-Display-Bold.woff2");
 }
 
 body {
-    font-family: "SF-Pro-Display-Bold", sans-serif;
+    font-family: "SF-Pro-Display", sans-serif;
     background: #fff;
     color: #fff;
 
     display: flex;
-    justify-content: center;
-    align-items: center;
+    align-items: end;
     flex-direction: column;
 }
 
 h1 {
-    font-family: "SF-Pro-Display-Heavy", sans-serif;
+    font-family: "SF-Pro-Display", sans-serif;
+    font-weight: bolder;
     font-size: 35px;
-    margin: 19px 0 0 0;
+    margin: 19px 10px 0 0;
     text-shadow: 0 0 15px rgba(0, 0, 0, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 @keyframes growText {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.25);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 .grow {
     display: inline-block;
-    animation: growText 0.5s ease;
+    animation: growText 1.55s ease;
+}
+
+.liveteamlogo {
+    height: 30px;
+    width: auto;
+    margin: 0 5px;
+    vertical-align: middle;
+    filter: drop-shadow(0 0 15px rgba(0, 0, 0, 1));
+}
+
+.liveErrorMessage {
+    font-size: 10px;
+    line-height: 10px;
+    margin-right: 50px;
 }

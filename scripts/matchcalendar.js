@@ -7,23 +7,30 @@
 import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareText, shareImage, showTextPopup, showImagePreview, setOriginalMessage } from './shareAPIhelper.js';
 
 const weekdayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-const weekdayNamesFull = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const DEFAULTSTARTDAY = 1;
+const MATCH_LENGTH_MINS = 90;
 
-const expandedLog = document.getElementById('expandedLog');
+const calendarContainer = document.getElementById("calendar-container");
+const calendarListView = document.getElementById("calendarListView");
+const expandedLog = document.getElementById("expandedLog");
 const calendarError = document.getElementById("calendarError")
+const overseasMessage = document.getElementById("overseasMessage");
 
 const currentYear = new Date().getFullYear();
 const startYear = 2023; // currentYear of season = startYear + season (eg: season 1 - 2023 + 1 = 2024)
 const minYear = startYear + 1; // Minimum year for the calendar, prevents going back to 2023
-const maxYear = currentYear + 2; // Maximum year for the calendar, allows going up to 2 years in the future
+const maxYear = currentYear + 1; // Maximum year for the calendar, allows going up to 2 years in the future
 const months = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
 ];
 let currentlyShownDate = [2000, 0];
-let matchData = {};
-let teamColors = {};
+let matchData = [];
+let matchDataToUse = [];
+let teamColors = [];
+
+let currentlyShownLog = null;
+let isKeyPressed = false;
 
 let refreshTimer = null;
 
@@ -31,6 +38,12 @@ let discardLogOnChange = false;
 
 let previewTimeout = null;
 let currentPreview = null;
+
+let listViewEnabled = false;
+let listViewToggledOnce = false;
+
+let overseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1 || false;
+let cached = false;
 
 let startTime;
 
@@ -40,6 +53,29 @@ function createEmptyCells(count) {
         emptyCell.classList.add('day', 'empty');
         calendarDays.appendChild(emptyCell);
     }
+}
+
+function normalizeMatchData(matchData) {
+    const localMatchData = {};
+
+    Object.keys(matchData).forEach(dateKey => {
+        matchData[dateKey].forEach(entry => {
+            const matchDate = new Date(`${dateKey}T${entry.time}`);
+
+            const localYear = matchDate.getFullYear();
+            const localMonth = matchDate.getMonth() + 1;
+            const localDay = matchDate.getDate();
+
+            const localDateKey = `${localYear}-${String(localMonth).padStart(2, '0')}-${String(localDay).padStart(2, '0')}`;
+
+            if (!localMatchData[localDateKey]) {
+                localMatchData[localDateKey] = [];
+            }
+            localMatchData[localDateKey].push(entry);
+        });
+    });
+
+    return localMatchData;
 }
 
 function generateCalendar(month, year, dateParam = null) {
@@ -77,47 +113,54 @@ function generateCalendar(month, year, dateParam = null) {
 
     createEmptyCells(firstDay);
 
+    if (overseasDateDisplay) {
+        matchDataToUse = normalizeMatchData(matchData);
+    } else {
+        matchDataToUse = matchData;
+    }
+
     for (let day = 1; day <= daysInMonth; day++) {
         const dayCell = document.createElement('div');
         dayCell.textContent = day;
         dayCell.classList.add('day');
-        
+
         const today = new Date();
         const isToday = (year === today.getFullYear() && month === today.getMonth() && day === today.getDate());
         if (isToday) {
-            dayCell.classList.add('day');
-            setTimeout(() => {
-                dayCell.classList.add('today');
-            }, 50);
+            if (!cached) {
+                setTimeout(() => {
+                    dayCell.classList.add('today');
+                }, 50);
+            }
         }
-        
+
         const dateToCheck = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        if (matchData[dateToCheck]) {
-            matchData[dateToCheck].forEach(entry => {
+        if (matchDataToUse[dateToCheck]) {
+            matchDataToUse[dateToCheck].forEach(entry => {
                 const [team1, team2] = entry.teamsInvolved;
 
                 // Find team color by team name from teamColors[0] array
                 const color1 = (teamColors.find(t => t.team_name === team1) || {}).team_color || "#ccc";
                 const color2 = (teamColors.find(t => t.team_name === team2) || {}).team_color || "#ccc";
-            
+
                 const colorBarContainer = document.createElement('div');
                 colorBarContainer.classList.add('color-bar-container');
-            
+
                 const team1Div = document.createElement('div');
                 team1Div.classList.add('team-color-bar');
                 team1Div.style.backgroundColor = color1;
                 team1Div.style.borderTopLeftRadius = '5px';
                 team1Div.style.borderBottomLeftRadius = '5px';
-            
+
                 const team2Div = document.createElement('div');
                 team2Div.classList.add('team-color-bar');
                 team2Div.style.backgroundColor = color2;
                 team2Div.style.borderTopRightRadius = '5px';
                 team2Div.style.borderBottomRightRadius = '5px';
-            
+
                 colorBarContainer.appendChild(team1Div);
                 colorBarContainer.appendChild(team2Div);
-            
+
                 dayCell.appendChild(colorBarContainer);
             });
             dayCell.classList.add('logged');
@@ -137,7 +180,7 @@ function generateCalendar(month, year, dateParam = null) {
     }
 
     discardLogOnChange = true;
-};
+}
 
 function changeMonth(change) {
     const newDate = new Date(currentlyShownDate[0], currentlyShownDate[1] + change);
@@ -151,7 +194,7 @@ function changeMonth(change) {
         return;
     }
     generateCalendar(newDate.getMonth(), newDate.getFullYear());
-};
+}
 
 function showMonthPicker(currentDate) {
     const year = currentDate.getFullYear();
@@ -180,14 +223,14 @@ function showMonthPicker(currentDate) {
         <div class="preview-message" style="user-select:none;">
             <select title="Select a month" class="popupDropdown" id="monthDropdown">
                 ${months.map((m, i) =>
-                    `<option value="${i}"${i === currentlyShownDate[1] ? ' selected' : ''}>${m}</option>`
-                ).join('')}
+        `<option value="${i}"${i === currentlyShownDate[1] ? ' selected' : ''}>${m}</option>`
+    ).join('')}
             </select>
             <select title="Select a year" class="popupDropdown" id="yearDropdown">
                 ${Array.from({ length: maxYear - minYear + 1 }, (_, i) => {
-                    const y = minYear + i;
-                    return `<option value="${y}"${y === currentlyShownDate[0] ? ' selected' : ''}>${y}</option>`;
-                }).join('')}
+        const y = minYear + i;
+        return `<option value="${y}"${y === currentlyShownDate[0] ? ' selected' : ''}>${y}</option>`;
+    }).join('')}
             </select>
             <button title="Return to the current date" class="currentDateButton" id="currentDateButton"><i class="fa-solid fa-calendar"></i></button>
         </div>
@@ -207,7 +250,6 @@ function showMonthPicker(currentDate) {
     const yearDropdown = preview.querySelector('#yearDropdown');
 
     function handleDropdownChange() {
-        console.log("yeah")
         generateCalendar(Number(monthDropdown.value), Number(yearDropdown.value));
         resetAutoCloseTimer();
     }
@@ -256,14 +298,66 @@ function cleanupPopupPreview() {
     currentPreview = null;
 }
 
+function changeShownDay(change) {
+    if (!currentlyShownLog) return;
+
+    const dates = Object.keys(matchDataToUse).sort();
+    let currentIndex = dates.indexOf(currentlyShownLog);
+
+    if (currentIndex === -1) {
+        currentIndex = dates.findIndex(d => d > currentlyShownLog);
+        if (currentIndex === -1) {
+            currentIndex = dates.length; 
+        }
+    }
+
+    let newIndex = currentIndex + change;
+    if (dates[currentIndex] && dates[currentIndex] > currentlyShownLog && change < 0) {
+        newIndex = currentIndex - 1;
+    }
+
+    if (newIndex < 0 || newIndex >= dates.length) {
+        return;
+    }
+
+    return dates[newIndex];
+}
+
+function generate6v6ScoreCalculatorLink(entry) {
+    const url = new URL("pages/tools/6v6scorecalculator/", window.location.origin);
+
+    const positionsString = entry.detailedResults
+        .map(race => race[1].join(',')) // take only the "1" array
+        .join('\n');
+
+    const tracksString = entry.detailedResults
+        .map(race => race.track)
+        .join('\n');
+
+    const teamsString = entry.teamsInvolved.join('\n');
+
+    const compressedMatchName = LZString.compressToEncodedURIComponent(entry.title);
+    const compressedPositions = LZString.compressToEncodedURIComponent(positionsString);
+    const compressedTracks = LZString.compressToEncodedURIComponent(tracksString);
+    const compressedTeams = LZString.compressToEncodedURIComponent(teamsString);
+
+    url.searchParams.set('m', compressedMatchName);
+    url.searchParams.set('p', compressedPositions);
+    url.searchParams.set('t', compressedTracks);
+    url.searchParams.set('n', compressedTeams);
+
+    return url;
+}
+
 function showDailyLog(date, dayCell) {
-    // Remove highlight from all previously selected days
-    document.querySelectorAll('.day.selected').forEach(day => {
-        day.classList.remove('selected');
-    });
-    
-    // Add highlight to the newly selected day
+    currentlyShownLog = date;
+
+    listViewToggledOnce = false;
+
     if (dayCell) {
+        document.querySelectorAll('.day.selected').forEach(day => {
+            day.classList.remove('selected');
+        });
         dayCell.classList.add('selected');
     }
 
@@ -275,41 +369,154 @@ function showDailyLog(date, dayCell) {
     }
     const locale = localStorage.getItem("locale") || "en-GB";
 
-    const log = matchData[date] || [];
+    const log = matchDataToUse[date] || [];
     if (log.length) {
-        const formattedDate = new Date(`${date}`).toLocaleString(locale, { dateStyle: 'full' });
+        const formattedDate = parseLocalDate(date).toLocaleString(locale, { dateStyle: "full" });
+        let formattedLocalDate, dayRelation;
         expandedLog.innerHTML = `
             <div class="current-season-area"> 
                 <h3 style="margin: 3px">${formattedDate}</h3>                            
                 <button id="shareButton"><span class="fa-solid fa-share"></span> Share Date</button>
             </div>
             <hr class="after-title" style="margin-bottom:0;">
-            ${log.map((entry, index) => {
-                function createTeamObject(teamName) {
-                    return {
-                        team_name: teamName,
-                        class_name: teamName.replace(/\s+/g, ''),
-                        link: `pages/teams/details/?team=${teamName}`
-                    };
-                }
+        ${log.map((entry, index) => {
+            function createTeamObject(teamName) {
+                return {
+                    team_name: teamName,
+                    class_name: teamName.replace(/\s+/g, ''),
+                    link: `pages/teams/details/?team=${teamName}`
+                };
+            }
 
-                const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
-                let timeString = entry.time || '00:00';
-                if (/^\d{2}:\d{2}$/.test(timeString)) timeString += ':00';
-                const formattedMatchTime = new Date(`1970-01-01T${timeString}`).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit'});
-                return `
-                    <div class="event">
-                        <p class="event-header">${formattedMatchTime}</p>
-                        <h2 style="margin-bottom: 10px;">
-                            <span class=${team1.class_name}><a class="no-color-link no-underline-link" href="${team1.link}">${team1.team_name}</a></span> 
-                            VS 
-                            <span class="${team2.class_name}"><a class="no-color-link no-underline-link" href="${team2.link}">${team2.team_name}</a></span>
-                        </h2>
-                        <p>${autoLink(entry.description.replace(/(?:\r\n|\r|\n)/g, '<br/>'))}</p>
-                        <span class="settings-extra-info">This is a ${entry.testMatch ? "test" : `Season ${entry.season}`} match.</span>
+            const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
+
+            const is12Hour = uses12HourClock(locale);
+            let timeString = entry.time || '00:00:00';
+            const { formattedMatchTime, formattedLocalMatchTime, outsideUKTimezone } = formatMatchTime(date, timeString, locale);
+
+            if (outsideUKTimezone) {
+                formattedLocalDate = new Date(`${date}T${timeString}`).toLocaleString(locale, { dateStyle: "short" });
+                dayRelation = compareDayRelation(formattedLocalDate, date);
+            }
+
+            let isLive = false;
+            if (entry.time) {
+                const [hours, minutes] = entry.time.split(':');
+                const dateObj = new Date(formattedDate);
+                dateObj.setHours(Number(hours), Number(minutes), 0, 0);
+
+                const now = new Date();
+                const matchStart = dateObj;
+                const matchEnd = new Date(matchStart.getTime() + MATCH_LENGTH_MINS * 60 * 1000);
+                if (now >= matchStart && now <= matchEnd) {
+                    isLive = true;
+                }
+            }
+
+            const resultsHTML = formatResults(entry.results);
+
+            let matchEndedText = ''
+            if (entry.endTime) {
+                function formatTime(timeStr, is12Hour = false) {
+                    const [hourStr, minuteStr] = timeStr.split(":");
+                    let hours = parseInt(hourStr, 10);
+                    let suffix = "";
+                    if (is12Hour) {
+                        suffix = hours >= 12 ? "PM" : "AM";
+                        hours = hours % 12 || 12;
+                    }
+                    return is12Hour
+                        ? `${hours}:${minuteStr.padStart(2, "0")} ${suffix}`
+                        : `${hourStr.padStart(2, "0")}:${minuteStr.padStart(2, "0")}`;
+                }
+                let formattedEndTime = formatTime(entry.endTime, is12Hour);
+                const isoStr = `${date}T${entry.endTime}`;
+                const dateObj = new Date(isoStr);
+                const londonFormatter = new Intl.DateTimeFormat("en-GB", {
+                    timeZone: "Europe/London",
+                    timeZoneName: "short"
+                });
+                const parts = londonFormatter.formatToParts(dateObj);
+                const zoneName = parts.find(p => p.type === "timeZoneName")?.value || "";
+                matchEndedText = `Match started at ${formattedMatchTime} and ended at ${formattedEndTime} (${zoneName})`;
+            }
+
+            if (entry.ytLinks) {
+                team1.ytLink = entry.ytLinks[0]
+                team2.ytLink = entry.ytLinks[1]
+            }
+
+            let calculatorlink = '';
+            if (resultsHTML && entry.detailedResults) calculatorlink = generate6v6ScoreCalculatorLink(entry);
+
+            return `
+                <div class="event-container">
+                    <div class="team-box-container">
+                        <div class="team-background left ${team1.class_name}"></div>
+                        <div class="team-background right ${team2.class_name}"></div>
+                        <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.avif"
+                        alt="Team background overlay"
+                        ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>
+
+                        <div class="event-overlay" translate="no">
+                            <div class="event-box-team">
+                                <a class="no-underline-link no-color-link team-box-underline-hover" href="${team1.link}">
+                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.avif"
+                                    alt="${makePossessive(team1.team_name)} team logo" loading="lazy"
+                                    ${cached ? `` : 'onload="this.style.opacity=1"'}
+                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';"/>
+                                    <h2>${team1.team_name}</h2>
+                                </a>
+                                <div class="youtube-box left-team">
+                                    ${team1.ytLink ? `
+                                    <a class="no-underline-link-footer fa-brands fa-youtube ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
+                                    href="${team1.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'Open the livestream'}"></a>` : ''}
+                                </div>
+                            </div>
+
+                            <div class="score-box">${calculatorlink ? `<a href="${calculatorlink}" title="View detailed results">${resultsHTML ? formatResults(entry.results) : "VS"}</a>` : `${resultsHTML ? formatResults(entry.results) : "VS"}`}</div>       
+
+                            <div class="event-box-team">
+                                <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">
+                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.avif"
+                                    alt="${makePossessive(team2.team_name)} team logo" loading="lazy"
+                                    ${cached ? `` : 'onload="this.style.opacity=1"'}
+                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';"/>
+                                    <h2>${team2.team_name}</h2>
+                                </a>
+                                <div class="youtube-box right-team">
+                                    ${team2.ytLink ? `
+                                    <a class="no-underline-link-footer fa-brands fa-youtube ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
+                                    href="${team2.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'Open the livestream'}"></a>` : ''}
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                `;
-            }).join('')}
+
+                    <div class="match-details-box">
+                        <div class="match-date-time-box">
+                            <div class="match-detail-container">
+                                ${overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
+                                <i class="${outsideUKTimezone ? 'local-time-clock' : ''} fa-solid fa-clock"></i>
+                                <h2>
+                                    <span translate="no" title="${matchEndedText}">${formattedMatchTime}</span>
+                                    ${outsideUKTimezone ? `
+                                        <span translate="no" title="Local time" style="display: inline-flex; align-items: center;">
+                                        |&nbsp;<i class="overseas-time-clock fa-solid fa-clock"></i>${formattedLocalMatchTime}</span>` : ''}
+                                </h2>
+                                ${!overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
+                                ${isLive ? '<div class="live-dot"></div>' : ''}
+                            </div>
+                        </div>
+                        <p class="match-season">${entry.testMatch ? "<span class='settings-extra-info'>Test match</span>" : `Season ${entry.season}`}</p>
+                    </div>
+                    <details class="match-box">
+                        <summary>Match details</summary>
+                        <p class="match-description">${autoLink(entry.description)}</p>
+                    </details>
+                </div>
+            `;
+        }).join('')}
         `;
 
         createShareButtonListener(formattedDate);
@@ -319,9 +526,339 @@ function showDailyLog(date, dayCell) {
     }
 }
 
+function generateCalendarListView() {
+    const today = new Date();
+    const formattedToday = [
+        today.getFullYear(),
+        String(today.getMonth() + 1).padStart(2, '0'),
+        String(today.getDate()).padStart(2, '0')
+    ].join('-');
+
+    if (overseasDateDisplay) {
+        matchDataToUse = normalizeMatchData(matchData);
+    } else {
+        matchDataToUse = matchData;
+    }
+    const sortedDates = Object.keys(matchDataToUse);
+    let todayMarkerInserted = false;
+
+    const locale = localStorage.getItem("locale") || "en-GB";
+
+    calendarListView.innerHTML = "";
+    let HTMLOutput = "";
+
+    for (let i = 0; i < sortedDates.length; i++) {
+        const date = sortedDates[i];
+
+        if (!todayMarkerInserted && formattedToday < date) {
+            HTMLOutput += `
+                <div class="today-marker">
+                    Today - ${new Date(formattedToday).toLocaleDateString(locale, { dateStyle: 'long' })}
+                </div><hr>
+            `;
+            todayMarkerInserted = true;
+        }
+
+        const formattedDate = parseLocalDate(date).toLocaleString(locale, { dateStyle: "full" });
+        HTMLOutput += `
+            <h3 id=${date}>${formattedToday == date ? ' ☆ ' : ''}${formattedDate}</h3>
+        `
+
+        matchDataToUse[date].forEach(entry => {
+            function createTeamObject(teamName) {
+                return {
+                    team_name: teamName,
+                    class_name: teamName.replace(/\s+/g, ''),
+                    link: `pages/teams/details/?team=${teamName}`
+                };
+            }
+            const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
+            
+            const is12Hour = uses12HourClock(locale);
+            let timeString = entry.time || '00:00:00';
+            const { formattedMatchTime, formattedLocalMatchTime, outsideUKTimezone } = formatMatchTime(date, timeString, locale);
+            let formattedLocalDate, dayRelation;
+
+            if (outsideUKTimezone) {
+                formattedLocalDate = new Date(`${date}T${timeString}`).toLocaleString(locale, { dateStyle: "short" });
+                dayRelation = compareDayRelation(formattedLocalDate, date);
+            }
+
+            let isLive = false;
+            if (entry.time) {
+                const [hours, minutes] = entry.time.split(':');
+                const dateObj = new Date(formattedDate);
+                dateObj.setHours(Number(hours), Number(minutes), 0, 0);
+
+                const now = new Date();
+                const matchStart = dateObj;
+                const matchEnd = new Date(matchStart.getTime() + MATCH_LENGTH_MINS * 60 * 1000);
+                if (now >= matchStart && now <= matchEnd) {
+                    isLive = true;
+                }
+            }
+
+            const resultsHTML = formatResults(entry.results);
+
+            let matchEndedText = ''
+            if (entry.endTime) {
+                function formatTime(timeStr, is12Hour = false) {
+                    const [hourStr, minuteStr] = timeStr.split(":");
+                    let hours = parseInt(hourStr, 10);
+                    let suffix = "";
+                    if (is12Hour) {
+                        suffix = hours >= 12 ? "PM" : "AM";
+                        hours = hours % 12 || 12;
+                    }
+                    return is12Hour
+                        ? `${hours}:${minuteStr.padStart(2, "0")} ${suffix}`
+                        : `${hourStr.padStart(2, "0")}:${minuteStr.padStart(2, "0")}`;
+                }
+                let formattedEndTime = formatTime(entry.endTime, is12Hour);
+                const isoStr = `${date}T${entry.endTime}`;
+                const dateObj = new Date(isoStr);
+                const londonFormatter = new Intl.DateTimeFormat("en-GB", {
+                    timeZone: "Europe/London",
+                    timeZoneName: "short"
+                });
+                const parts = londonFormatter.formatToParts(dateObj);
+                const zoneName = parts.find(p => p.type === "timeZoneName")?.value || "";
+                matchEndedText = `Match started at ${formattedMatchTime} and ended at ${formattedEndTime} (${zoneName})`;
+            }
+
+            if (entry.ytLinks) {
+                team1.ytLink = entry.ytLinks[0]
+                team2.ytLink = entry.ytLinks[1]
+            }
+
+            HTMLOutput += `
+                <div class="event-container">
+                    <div class="team-box-container">
+                        <div class="team-background left ${team1.class_name}"></div>
+                        <div class="team-background right ${team2.class_name}"></div>
+                        <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.avif"
+                        alt="Team background overlay"
+                        ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>
+
+                        <div class="event-overlay">
+                            <div class="event-box-team">
+                                <a class="no-underline-link no-color-link team-box-underline-hover" href="${team1.link}">
+                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.avif"
+                                    alt="${makePossessive(team1.team_name)} team logo" loading="lazy"
+                                    ${cached ? `` : 'onload="this.style.opacity=1"'}
+                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';"/>
+                                    <h2>${team1.team_name}</h2>
+                                </a>
+                                <div class="youtube-box left-team">
+                                    ${team1.ytLink ? `
+                                    <a class="no-underline-link-footer fa-brands fa-youtube ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
+                                    href="${team1.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'View the archived livestream'}"></a>` : ''}
+                                </div>
+                            </div>
+
+                            <div class="score-box">${resultsHTML ? resultsHTML : "VS"}</div>       
+
+                            <div class="event-box-team">
+                                <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">
+                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.avif"
+                                    alt="${makePossessive(team1.team_name)} team logo" loading="lazy"
+                                    ${cached ? `` : 'onload="this.style.opacity=1"'}
+                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';"/>
+                                    <h2>${team2.team_name}</h2>
+                                </a>
+                                <div class="youtube-box right-team">
+                                    ${team2.ytLink ? `
+                                    <a class="no-underline-link-footer fa-brands fa-youtube ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
+                                    href="${team2.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'View the archived livestream'}"></a>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="match-details-box">
+                        <div class="match-date-time-box">
+                            <div class="match-detail-container">
+                                ${overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
+                                <i class="${outsideUKTimezone ? 'local-time-clock' : ''} fa-solid fa-clock"></i>
+                                <h2>
+                                    <span title="${matchEndedText}">${formattedMatchTime}</span>
+                                    ${outsideUKTimezone ? `
+                                        <span title="Local time" style="display: inline-flex; align-items: center;">
+                                        |&nbsp;<i class="overseas-time-clock fa-solid fa-clock"></i>${formattedLocalMatchTime}</span>` : ''}
+                                </h2>
+                                ${!overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
+                                ${isLive ? '<div class="live-dot"></div>' : ''}
+                            </div>
+                        </div>
+                        <p class="match-season">${entry.testMatch ? "<span class='settings-extra-info'>Test match</span>" : `Season ${entry.season}`}</p>
+                    </div>
+                    <details class="match-box">
+                        <summary>Match details</summary>
+                        <p class="match-description">${autoLink(entry.description)}</p>
+                    </details>
+                </div>
+            `
+        });
+
+        HTMLOutput += `<hr>`
+    };
+
+    calendarListView.innerHTML = HTMLOutput;
+}
+
+function scrollMatchList() {
+    const today = new Date();
+    const formattedToday = today.toISOString().split("T")[0];
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const dateParam = urlParams.get('date');
+
+    const target = document.getElementById(dateParam ? dateParam : formattedToday);
+
+    // Try to scroll to the date given, else scroll to bottom
+    if (target) {
+        calendarListView.scrollTo({
+            top: target.offsetTop - calendarListView.offsetTop
+        });
+        return target.offsetTop - calendarListView.offsetTop;
+    } else {
+        calendarListView.scrollTo({
+            top: calendarListView.scrollHeight
+        });
+        return calendarListView.scrollHeight;
+    }
+}
+
+function formatResults(results) {
+    if (!results || results.length !== 2) {
+        return '';
+    }
+
+    const [_, teamAScore, teamAPenalty] = results[0];
+    const [__, teamBScore, teamBPenalty] = results[1];
+    const hasPenalty = teamAPenalty !== 0 || teamBPenalty !== 0;
+
+    return `
+        ${teamAScore} - ${teamBScore}
+        ${hasPenalty ?
+        `
+            <p class="penalty-text">
+                -${teamAPenalty}	 	 	 	 	 	  	  	  -${teamBPenalty}
+            </p>
+        ` : ''}
+    `.trim();
+}
+
+function makePossessive(name) {
+    if (!name) return '';
+    if (name.endsWith('s') || name.endsWith('S')) {
+        return `${name}'`;
+    }
+    return `${name}'s`;
+}
+
+function uses12HourClock(locale) {
+    const test = new Date('1970-01-01T13:00');
+    return test.toLocaleTimeString(locale).toLowerCase().includes('pm');
+}
+
+function formatMatchTime(date, timeString, locale) {
+    const is12Hour = uses12HourClock(locale);
+
+    const isoStr = `${date}T${timeString}`;
+    const dateObj = new Date(isoStr);
+
+    const UKTime = new Intl.DateTimeFormat(locale, {
+        timeZone: "Europe/London",
+        hour: is12Hour ? "numeric" : "2-digit",
+        minute: "2-digit",
+        hour12: is12Hour,
+    }).format(dateObj);
+
+    const localTime = new Intl.DateTimeFormat(locale, {
+        hour: is12Hour ? "numeric" : "2-digit",
+        minute: "2-digit",
+        hour12: is12Hour,
+    }).format(dateObj);
+
+    let outsideUKTimezone = checkTimezoneMatches(date, timeString);
+
+    let formattedMatchTime, formattedLocalMatchTime;
+    if (outsideUKTimezone) {
+        formattedMatchTime = UKTime;
+        formattedLocalMatchTime = localTime;
+    } else {
+        formattedMatchTime = UKTime;
+        formattedLocalMatchTime = null;
+    }
+
+    if (formattedMatchTime == formattedLocalMatchTime) {
+        outsideUKTimezone = false;
+    }
+
+    return { formattedMatchTime, formattedLocalMatchTime, outsideUKTimezone };
+}
+
+function checkTimezoneMatches(dateStr, timeStr) {
+    const match = timeStr.match(/([+-]\d{2}):([0-5]\d)$/);
+    if (!match) return false;
+
+    const [ , offsetH, offsetM ] = match;
+    const offsetMinutes = parseInt(offsetH, 10) * 60 + parseInt(offsetM, 10) * (offsetH.startsWith("-") ? -1 : 1);
+
+    const [hourStr, minuteStr] = timeStr.split(":");
+    const hours = parseInt(hourStr, 10);
+    const minutes = parseInt(minuteStr, 10);
+
+    const [year, month, day] = dateStr.split("-").map(Number);
+
+    const utcDate = new Date(Date.UTC(year, month - 1, day, hours, minutes));
+
+    const londonTime = new Date(utcDate.toLocaleString("en-GB", { timeZone: "Europe/London" }));
+    const londonOffsetMinutes = (londonTime - utcDate) / 60000;
+
+    return offsetMinutes !== londonOffsetMinutes;
+}
+
+function compareDayRelation(dateStr1, dateStr2) {
+    function parseDate(str) {
+        if (str.includes('/')) {
+            const [day, month, year] = str.split('/').map(Number);
+            return new Date(year, month - 1, day);
+        } else if (str.includes('-')) {
+            const [year, month, day] = str.split('-').map(Number);
+            return new Date(year, month - 1, day);
+        }
+        throw new Error("Unsupported date format: " + str);
+    }
+
+    const d1 = parseDate(dateStr1);
+    const d2 = parseDate(dateStr2);
+
+    const day1 = Date.UTC(d1.getFullYear(), d1.getMonth(), d1.getDate());
+    const day2 = Date.UTC(d2.getFullYear(), d2.getMonth(), d2.getDate());
+
+    const diffDays = Math.round((day1 - day2) / (1000 * 60 * 60 * 24));
+
+    if (overseasDateDisplay) {
+        if (diffDays === -1) return `Day<br>after`;
+        if (diffDays === 1) return `Day<br>before`;
+    } else {
+        if (diffDays === 1) return `Day<br>after`;
+        if (diffDays === -1) return `Day<br>before`;
+    }
+    return "";
+}
+
+function parseLocalDate(dateStr) {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    return new Date(year, month - 1, day);
+}
+
 function autoLink(text) {
+    text = text.replaceAll("\n", "<br>")
     const urlRegex = /((https?:\/\/|www\.)[^\s<]+)/gi;
-    return text.replace(urlRegex, function(url) {
+    return text.replace(urlRegex, function (url) {
         let href = url;
         let displayUrl = url;
         let trailingDot = '';
@@ -333,14 +870,15 @@ function autoLink(text) {
         if (!href.match(/^https?:\/\//)) {
             href = 'http://' + href;
         }
-        return `<a href="${href}" target="_blank">${displayUrl}</a>${trailingDot}`;
-    });
+        return `<a translate="no" href="${href}" target="_blank">${displayUrl}</a>${trailingDot}`;
+    })
 }
 
 function clearURLParams() {
+    if (cached) return;
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.delete('date');
-    const newUrl = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''}`; 
+    const newUrl = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''}`;
     if (window.location.href !== newUrl) {
         window.history.replaceState({}, '', newUrl);
     }
@@ -354,21 +892,21 @@ function createShareButtonListener(formattedDate) {
     shareButton.addEventListener("click", async () => {
         if (getIsPopupShowing()) return;
         const useClipboard = isWindowsOrLinux() || !navigator.canShare;
-        
+
         const message = `Check out these UMKL matches on ${formattedDate}! ${window.location.href}`
-        
+
         if (useClipboard) {
             const success = await copyTextToClipboard(message);
-            shareButton.innerText = success ? "Text copied to clipboard!" : "Failed to copy!";
+            shareButton.innerText = success ? "Copied to clipboard!" : "Failed to copy!";
             const messageWithURL = `Check out these UMKL matches on ${formattedDate}! <a href="${window.location.href}">${window.location.href}</a>`
-            showTextPopup( messageWithURL)
+            showTextPopup(messageWithURL)
         } else {
             await shareText(
                 `UMKL Matches on ${formattedDate}`,
                 message
-            );
+            )
         }
-    });
+    })
 }
 
 document.addEventListener('startDayChange', () => {
@@ -382,10 +920,7 @@ function makeTeamsColorStyles() {
         styleSheet.innerText += `
             .${team.team_name.replace(/\s+/g, '')} {
                 cursor: pointer;
-                padding: 0 3px;
-                border: 2px solid ${team.team_color};
-                background-color: ${team.team_color}aa;
-                border-radius: 5px;
+                background-color: ${team.team_color};
             }
         `
     })
@@ -402,31 +937,7 @@ window.addEventListener('popstate', () => {
     } else {
         expandedLog.innerHTML = 'No logs for this day';
     }
-});
-
-async function getTeamcolors() {
-    return fetch('https://api.umkl.co.uk/teamcolors', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: "{}"
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    });
-}
-
-async function getTeamcolorsFallback() {
-    const response = await fetch(`database/teamcolorsfallback.json`);
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    teamColors = await response.json();
-}
+})
 
 async function getMatchData() {
     return fetch('https://api.umkl.co.uk/matchdata', {
@@ -441,7 +952,7 @@ async function getMatchData() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         return response.json();
-    });
+    })
 }
 
 async function getMatchDataFallback() {
@@ -452,6 +963,30 @@ async function getMatchDataFallback() {
     matchData = await response.json();
 }
 
+async function getTeamcolors() {
+    return fetch('https://api.umkl.co.uk/teamcolors', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: "{}"
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+}
+
+async function getTeamcolorsFallback() {
+    const response = await fetch(`database/teamcolorsfallback.json`);
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    teamColors = await response.json();
+}
+
 function displayCalendar() {
     const urlParams = new URLSearchParams(window.location.search);
     const dateParam = urlParams.get('date');
@@ -460,19 +995,137 @@ function displayCalendar() {
         const dateObj = new Date(dateParam);
         showDailyLog(dateParam);
         generateCalendar(dateObj.getMonth(), dateObj.getFullYear(), dateParam);
-    } else {       
+    } else {
         const currentDate = new Date();
         if (!discardLogOnChange) {
             showDailyLog(currentDate.toISOString().split('T')[0]);
-        } 
-        generateCalendar(currentDate.getMonth(), currentDate.getFullYear());        
+        }
+        generateCalendar(currentDate.getMonth(), currentDate.getFullYear());
     }
 }
+
+function generateListViewButton() {
+    const listViewButton = document.getElementById("listViewButton");
+
+    listViewButton.onclick = () => {
+        listViewEnabled = !listViewEnabled;
+        listViewButton.innerHTML = `${listViewEnabled ? `<span class="fa-solid fa-calendar"></span> Calendar View` : `<span class="fa-solid fa-bars"></span> List View`}`
+
+        changeCalendarView(listViewEnabled);
+
+        localStorage.setItem("calendarListView", listViewEnabled ? 1 : 0);
+    }
+}
+
+function changeCalendarView(listView) {
+    if (listView) {
+        generateCalendarListView();
+        calendarListView.classList.remove("hidden")
+        calendarContainer.classList.add("hidden")
+        if (!listViewToggledOnce) {
+            let y = scrollMatchList();
+            document.dispatchEvent(new CustomEvent('scrollbarToCalendarListView', { detail: { scrollToY: y } }));
+        }
+        listViewToggledOnce = true;
+    } else {
+        document.dispatchEvent(new CustomEvent('removeScrollbarFromCalendarListView'));
+        displayCalendar();
+        calendarListView.classList.add("hidden")
+        calendarContainer.classList.remove("hidden")
+    }
+}
+
+function loadCalendarView() {
+    const calendarListView = localStorage.getItem("calendarListView") == 1 || false;
+    changeCalendarView(calendarListView);
+    listViewEnabled = calendarListView;
+    listViewButton.innerHTML = `${listViewEnabled ? `<span class="fa-solid fa-calendar"></span> Calendar View` : `<span class="fa-solid fa-bars"></span> List View`}`
+}
+
+function testOutsideUK() {
+    let { _, __, outsideUKTimezone } = formatMatchTime('2025-01-01', '00:00:00+01:00', "en-GB");
+
+    if (outsideUKTimezone) {
+        overseasMessage.classList.remove("hidden");
+        overseasMessage.innerHTML = `
+            <b translate="no">Note</b><br/>You seem to be outside the UK.
+            Times and dates displayed will show the UK time, then your local time next to it.<br/>
+            <b>Overseas date type:</b> <button id="overseasDisplayButton"><span class="fa-solid fa-bars"></span> Overseas Display Toggle</button>
+        `;
+        generateOverseasDateDisplayButton();
+    }
+}
+
+document.addEventListener('calendarListViewChange', async () => {
+    loadCalendarView();
+})
+
+function updateButton() {
+    const tempOverseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1;
+    overseasDisplayButton.innerHTML = `<span class="fa-solid ${tempOverseasDateDisplay ? 'fa-earth' : 'fa-house'}"></span> ${tempOverseasDateDisplay ? 'Overseas' : 'UK'}`;
+}
+
+function generateOverseasDateDisplayButton() {
+    const overseasDisplayButton = document.getElementById("overseasDisplayButton");
+    
+    updateButton();
+    
+    overseasDisplayButton.onclick = () => {
+        const tempOverseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1;
+        localStorage.setItem("overseasDateDisplay", tempOverseasDateDisplay ? 0 : 1);
+        location.reload();
+        document.dispatchEvent(new CustomEvent('startDayChange'));
+    }
+}
+
+document.addEventListener('keydown', (event) => {
+    const key = event.key.toLowerCase();
+
+    if (!isKeyPressed) {
+        let newDate;
+        if (key === 'arrowleft') {
+            isKeyPressed = true;
+            newDate = changeShownDay(-1);
+        } else if (key === 'arrowright') {
+            isKeyPressed = true;
+            newDate = changeShownDay(1);
+        }
+        if (newDate) {
+            const dateObj = new Date(newDate);
+            generateCalendar(dateObj.getMonth(), dateObj.getFullYear(), newDate);
+            showDailyLog(newDate);
+        }
+
+        if (key === '[') {
+            isKeyPressed = true;
+            changeMonth(-1);
+        }
+        if (key === ']') {
+            isKeyPressed = true;
+            changeMonth(1);
+        }
+    }
+});
+
+document.addEventListener('keyup', () => {
+    isKeyPressed = false;
+});
 
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     console.debug(`%cmatchcalendar.js %c> %cFetching calendar...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-    
+    generateListViewButton();
+    testOutsideUK();
+
+    if (localStorage.matchDataCache && localStorage.teamColorsCache) {
+        cached = true;
+        console.debug(`%cmatchcalendar.js %c> %cRendering calendar (cache)...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+        matchData = JSON.parse(localStorage.matchDataCache)
+        teamColors = JSON.parse(localStorage.teamColorsCache)
+        makeTeamsColorStyles();
+        loadCalendarView();
+    }
+
     try {
         matchData = await getMatchData();
         teamColors = await getTeamcolors();
@@ -488,27 +1141,33 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (refreshTimer) clearTimeout(refreshTimer);
             const retryFetch = async () => {
-            try {
-                if (typeof retryCount === 'undefined') {
-                    window.retryCount = 1;
-                } else {
-                    window.retryCount++;
+                try {
+                    if (typeof retryCount === 'undefined') {
+                        window.retryCount = 1;
+                    } else {
+                        window.retryCount++;
+                    }
+                    matchData = await getMatchData();
+                    teamColors = await getTeamcolors();
+                    calendarError.innerHTML = ""
+                    makeTeamsColorStyles();
+                    displayCalendar();
+                } catch (err) {
+                    calendarError.innerHTML = `<blockquote class="fail"><b>API error - Retrying: attempt ${window.retryCount}...</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
+                    refreshTimer = setTimeout(retryFetch, 2000);
                 }
-                matchData = await getMatchData();
-                teamColors = await getTeamcolors();
-                calendarError.innerHTML = ""
-                makeTeamsColorStyles();
-                displayCalendar();
-            } catch (err) {
-                calendarError.innerHTML = `<blockquote class="fail"><b>API error - Retrying: attempt ${window.retryCount}...</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
-                refreshTimer = setTimeout(retryFetch, 2000);
-            }
             };
             refreshTimer = setTimeout(retryFetch, 2000);
         }
     }
 
+    localStorage.setItem("matchDataCache", JSON.stringify(matchData));
+    localStorage.setItem("teamColorsCache", JSON.stringify(teamColors));
+    listViewToggledOnce = false;
+    discardLogOnChange = false;
+    cached = false;
+    document.dispatchEvent(new CustomEvent('removeScrollbarFromCalendarListView'));
     makeTeamsColorStyles();
-    displayCalendar();
+    loadCalendarView();
     console.debug(`%cmatchcalendar.js %c> %cMatch data loaded in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-});
+})

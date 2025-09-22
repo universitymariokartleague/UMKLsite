@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" data-overlayscrollbars-initialize>
+
+<head>
+    <base href="../../../">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Streaming Guidelines | University Mario Kart League</title>
+    <meta name="description" content="Streaming Guidelines for the University Mario Kart League (UMKL)">
+    <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
+    <link rel="stylesheet" href="css/ext/fontawesome.min.css">
+    <meta name="color-scheme" content="dark light">
+
+    <meta property="og:title" content="University Mario Kart League | Brand Guidelines" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://umkl.co.uk/pages/rules/brand/" />
+    <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_Banner_embed.avif" />
+    <meta property="og:description" content="Streaming Guidelines for the University Mario Kart League (UMKL)" />
+    <meta name="theme-color" content="#bc0839">
+
+    <!-- Include this to make the og:image larger -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Scripts -->
+    <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+    <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
+    <script src="scripts/overlayscrollbar.js" defer></script>
+    
+    <script type="module" src="scripts/settings.js" defer></script>
+</head>
+
+<body id="top" data-overlayscrollbars-initialize>
+    <div class="navbar-container" translate="no">
+        <div class="nav-bar">
+            <a href="index.html" class="nav-bar-title no-color-link no-underline-link-footer">
+                <img src="assets/media/brand/UMKLlogonav.avif" class="nav-bar-logo" alt="UMKL logo">
+                <h2>UMKL</h2>
+            </a>
+            <nav class="nav-flex">
+                <ul id="nav-bar">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="pages/news/">News</a></li>
+                    <li><a href="pages/teams/">Teams</a></li>
+                    <li><a href="pages/matches/">Matches</a></li>
+                    <li><a class="nav-selected" href="pages/rules/">Rules</a></li>
+                    <li><a href="pages/faq/">FAQs</a></li>
+                    <li><a target="_blank" class="nav-bar-link" href="https://discord.gg/jz3hKEmDss">Discord</a></li>
+                </ul>
+            </nav>
+            <!-- Dropdown navigation (shown on mobile) -->
+            <div class="nav-dropdown">
+                <div class="nav-dropdown-button">☰</div>
+                <div class="nav-dropdown-content" id="nav-dropdown-bar">
+                    <a href="index.html">Home</a>
+                    <a href="pages/news/">News</a>
+                    <a href="pages/teams/">Teams</a>
+                    <a href="pages/matches/">Matches</a>
+                    <a href="pages/rules/">Rules</a>
+                    <a href="pages/faq/">FAQs</a>
+                    <a target="_blank" class="nav-bar-link" href="https://discord.gg/jz3hKEmDss">Discord</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <a href="pages/rules/">Back</a>
+        <h1>Streaming Guidelines</h1>
+        <p class="p-below-title">Guidelines for streamers and instructions on how to set up OBS</p>
+        <hr class="hr-below-title">
+
+        <h2>OBS Set Up</h2>
+        <p class="p-below-title">
+            How to set up OBS with the UMKL overlay and stream to YouTube
+        </p><br>
+
+        <h3>Overview</h3>
+        <p class="p-below-title">
+            Use <code translate="no">/generate-stream-overlay</code> on the 
+            UMKL Discord server to produce a stream overlay for
+            yourself or somebody else, this overlay will be for
+            UMKL streams.
+        </p>
+        <p>
+            <img class="image" src="assets/media/streaming/OBSlayout.avif" alt="An image of OBS with the various overlay on top of the stream">
+        </p>
+
+        <h3>Adding Sources</h3>
+        <p class="p-below-title">
+            In OBS, adding sources is how you will construct the visuals on your stream.
+            <br>List of sources
+            <ul>
+                <li>Discord VC Overlay (follow the instructions on <a href="https://streamkit.discord.com/overlay">https://streamkit.discord.com/overlay</a>)</li>
+                <li>Score Overlay (<a href="https://live.umkl.co.uk/">https://live.umkl.co.uk/</a> or <a href="https://liverev.umkl.co.uk/">https://liverev.umkl.co.uk/</a> depending on the team order)</li>
+                <li>Stream Overlay (Can be generated with <code translate="no">/generate-stream-overlay</code> in the UMKL Discord server)</li>
+                <li>Video Capture Device (Capture Card)</li>
+            </ul>
+            Sources at the top will display on top of sources below it.
+
+            <blockquote class="warning">
+                <b translate="no">A Note About Audio</b>
+                <br>There are two ways to hear audio from Discord in your stream.
+                <br>You can use <code translate="no">Desktop Audio</code> to
+                capture audio from Discord, but it is recommended to use add an <code translate="no">Application Audio Capture (BETA)</code>
+                source and directly capture audio from the Discord application, as this will avoid any potential double audio issues.
+                <br><b>Be sure to mute any audio sources that aren't in use.</b>
+                <br><br>
+                If you want to hear game audio without the need of splitters, you can right-click<br><code translate="no">Video Capture Device</code>
+                in the <code translate="no">Audio Mixer</code> panel, select <code translate="no">Advanced Audio Properties</code> and set <code translate="no">Audio Monitoring</code>
+                for the capture card to <code translate="no">Monitor and Output</code> to hear game audio through OBS and your computer.
+            </blockquote>
+        </p>
+        <p>
+            <video controls loop class="image" src="assets/media/streaming/OBSsources.mp4"></video>
+        </p>
+
+        <h3>Entering a Stream Key</h3>
+        <p class="p-below-title">
+            To enter a stream key in OBS, navigate to <code translate="no">Settings</code> and click the <code translate="no">Stream</code> tab.
+            Select <br><code translate="no">YouTube - RTMPS</code> in the service dropdown, click <code translate="no">Use Stream Key (advanced)</code>
+            and paste in your team's stream key.
+
+            <blockquote class="info">
+                <b translate="no">Note</b>
+                <br>Please contact a board member to recieve your team's stream key if you don't have it yet.
+            </blockquote>
+        </p>
+        <p>
+            <video controls loop class="image" src="assets/media/streaming/streamkey.mp4"></video>
+        </p>
+
+        <h3>Multiple Profiles</h3>
+        <p class="p-below-title">
+            In OBS you can create multiple profiles. You can change them with the 'Profile' dropdown menu.
+            This is useful if you need to switch streaming destinations (ie: personal account and UMKL channel).
+        </p>
+        <p>
+            <img class="image" src="assets/media/streaming/switchprofile.avif" alt="">
+        </p>
+
+        <h3>Audio Mixing</h3>
+        <p class="p-below-title">
+            Before streaming, ensure your sources are mixed well. The image below can be used as a guide for what
+            volumes should be used on different sources.
+        </p>
+        <p>
+            <img style="max-width: 380px;" class="image" src="assets/media/streaming/OBSaudioguide.avif" alt="">
+        </p>
+
+        <h2>Notes</h2>
+
+        <ul class="p-below-title">
+            <li>
+                Please note that the stream overlay (and the title of the stream) will contain 
+                your Discord username, to signify which team's perspective the stream is from, 
+                this is so it matches the username shown on results graphics and such. 
+                Please ensure your DM settings on Discord are as you'd like bearing this information
+                in mind
+            </li>
+
+            <li>
+                Ideally we would want at least one person playing on each team to be able to stream
+                the match (this isn't a requirement but it's ideal)
+            </li>
+
+            <li>
+                Ensure your bitrate is set high enough for the stream to look good,
+                <a href="https://support.google.com/youtube/answer/2853702?hl=en-GB">Bitrate Guidelines on YouTube Help</a><br>
+                At 1080p60 (H.264), 12 Mbps bitrate is recommended. If your connection allows it, it can be benificial to stream at 1440p or 4K resolutions
+                for access to higher bitrates on YouTube
+            </li>
+
+            <li>
+                Do not show the room code on-screen, block it from the screen if needed
+            </li>
+        </ul>
+    </main>
+
+    <footer translate="no">
+        © UMKL 2025 |
+        <a class="no-color-link" href="pages/credits/">Credits</a> |
+        <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |
+        <a href="https://www.youtube.com/@universitymariokartleague" title="UMKL YouTube Channel" class="no-color-link no-underline-link-footer fa-brands fa-youtube"></a>
+        <a href="https://www.instagram.com/universitymariokartleague" title="UMKL Instagram Account" class="no-color-link no-underline-link-footer fa-brands fa-instagram"></a>
+        <a href="https://www.facebook.com/profile.php?id=61575273336011" title="UMKL Facebook Page" class="no-color-link no-underline-link-footer fa-brands fa-facebook"></a>            
+        <a href="https://discord.gg/jz3hKEmDss" title="UMKL Discord server" class="no-color-link no-underline-link-footer fa-brands fa-discord"></a>            
+    </footer>
+</body>
+</html>

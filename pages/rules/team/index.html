@@ -7,21 +7,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <title>Team Guidelines | University Mario Kart League</title>
         <meta name="description" content="The team creation rules for the University Mario Kart League (UMKL)">
-        <link rel="shortcut icon" href="assets/image/brand/favicon.png" type="image/png">
+        <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
-        <link rel="stylesheet" href="css/calendar.css">
         <link rel="stylesheet" href="css/colorpicker.css">
         <link rel="stylesheet" href="css/discordrolepreview.css">
-        <link rel="stylesheet" href="css/overlayscrollbars.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-        <link rel="stylesheet" href="css/coloris.min.css">
+        <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
+        <link rel="stylesheet" href="css/ext/fontawesome.min.css">
+        <link rel="stylesheet" href="css/ext/coloris.min.css">
         <meta name="color-scheme" content="dark light">
     
         <meta property="og:title" content="University Mario Kart League | Match Rules" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://umkl.co.uk/pages/rules/team/" />
-        <meta property="og:image" content="https://umkl.co.uk/assets/image/brand/UMKL_Banner_cropped.png" />
+        <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_Banner_cropped.avif" />
         <meta property="og:description" content="The team creation rules for the University Mario Kart League (UMKL)" />
         <meta name="theme-color" content="#bc0839">
     
@@ -33,14 +32,15 @@
         <script src="scripts/overlayscrollbars.browser.es6.min.js" defer></script>
         <script src="scripts/overlayscrollbar.js" defer></script> 
         <script type="module" src="scripts/coloris.js" defer></script>
+        <script type="module" src="scripts/createcolorwheel.js" defer></script>
         <script type="module" src="scripts/settings.js" defer></script>
-            <script type="module" src="scripts/getteamcolors.js" defer></script>
+        <script type="module" src="scripts/getteamcolors.js" defer></script>
     </head>
     <body id="top" data-overlayscrollbars-initialize>
-        <div class="navbar-container">
+        <div class="navbar-container" translate="no">
             <div class="nav-bar">
                 <a href="index.html" class="nav-bar-title no-color-link no-underline-link-footer">
-                    <img src="assets/image/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
+                    <img src="assets/media/brand/UMKLlogonav.avif" class="nav-bar-logo" alt="UMKL logo">
                     <h2>UMKL</h2>
                 </a>
                 <nav class="nav-flex">
@@ -76,10 +76,10 @@
             <p class="p-below-title">Rules and guidelines for new teams wanting to join the UMKL</p>
             <hr class="hr-below-title">
 
-            <blockquote class="info">
-                <b>Note</b><br>
-                Please visit <a href="pages/news/2025-04-19/uni-joining-info/">Information for universities wanting to join</a> 
-                for general information about joining the UMKL.    
+            <blockquote class="fail">
+                <b translate="no">Important</b><br>
+                Please make sure you have fully read <a href="pages/news/2025-04-19/uni-joining-info/">Information for universities wanting to join</a> 
+                for information about joining the UMKL before you read this page.
             </blockquote>
 
             <h2>Name</h2>
@@ -117,12 +117,14 @@
             
             <p class="color-picker square">
                 <input value="#1baa8b" id="color-picker" class="coloris" type="text" data-coloris>
-                <span id="colorMessage">Current colour: <code>#1baa8b</code></span>
+                <span id="colorMessage">Current colour: <code translate="no">#1baa8b</code></span>
             </p>
 
-            <p class="p-below-title">Below are existing team colours:</p>
+            
+            <p class="p-below-title">Below are the team colours of existing teams:</p>
             <div id="currentTeamColors"></div>
-
+            
+            <canvas id="colorWheel" width="350" height="275"></canvas>
             <ul>
                 <li>Must be used in the command as a hex colour code</li>
                 <li>
@@ -139,7 +141,7 @@
             <p class="p-below-title">Your team will be represented through your emblem, this does not need to be submitted immediately upon your team's creation</p>
             <ul>
                 <li>The team should submit their own emblem, which will be used for all graphics in the league</li>
-                <li>Should be of a 1:1 (square) ratio and submitted as a .png file (with transparency)</li>
+                <li>Should be of a 1:1 (square) ratio and submitted as a <code translate="no">.png</code> file (with transparency)</li>
                 <li>Should represent your university, team name, or location, rather than just Mario or Nintendo. 
                     This ensures each emblem has a unique feel from one another,
                     it also enables your team to be easily recognised by people outside of the league</li>
@@ -151,7 +153,7 @@
             
         </main>
 
-        <footer>
+        <footer translate="no">
             © UMKL 2025 |
             <a class="no-color-link" href="pages/credits/">Credits</a> |
             <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |

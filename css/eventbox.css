@@ -1,0 +1,339 @@
+.event-container {
+    margin: 10px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #ccccccaa;
+}
+
+.team-box-container {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+}
+
+.match-details-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+}
+
+.match-date-time-box {
+    display: flex;
+    gap: 15px;
+}
+
+.match-date-field {
+    font-size: 14px;
+}
+
+.match-detail-container {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.match-detail-container .live-dot {
+    margin-left: 5px;
+}
+
+.match-result,
+.match-season {
+    margin: 0;
+}
+
+.match-description {
+    padding: 0 15px 5px;
+}
+
+.match-box {
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.match-box[open] .match-description {
+    margin: 10px 0 0;
+}
+
+.match-box summary {
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.match-box summary:hover {
+    text-decoration: underline;
+}
+
+.team-background {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    z-index: 1;
+}
+
+.team-background.left {
+    left: 0;
+}
+
+.team-background.right {
+    right: 0;
+}
+
+.team-background-overlay {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.75s ease-in;
+}
+
+.event-overlay {
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    flex: 1;
+}
+
+.score-box {
+    background-color: white;
+    color: var(--accent-color);
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 30px;
+    font-weight: bold;
+    white-space: nowrap;
+    display: inline-block;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.score-box a {
+    color: var(--accent-color)!important;
+    text-decoration: none;
+}
+
+.score-box a:hover {
+    color: #ffb4b4!important;
+}
+
+.event-box-team {
+    width: 100%;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.team-box-underline-hover:hover {
+    text-decoration: underline;
+}
+
+.event-box-team .youtube-box {
+    font-size: 14px;
+    position: absolute;
+    bottom: 2px;
+}
+
+.event-box-team .fa-youtube {
+    font-size: 22px;
+}
+
+.youtube-live-animation {
+    animation: youtubeLiveAnimation 2s ease-in-out infinite;
+}
+
+@keyframes youtubeLiveAnimation {
+    0%, 100% {
+        color: #FFF;
+        text-shadow: 0 0 8px rgba(255, 255, 255, 1);
+    }
+
+    50% {
+        color: #FFF;
+        text-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+    }
+}
+
+.event-box-team .left-team {
+    left: 0;
+    margin-left: 5px;
+}
+
+.event-box-team .right-team {
+    right: 0;
+    margin-right: 5px;
+}
+
+.youtube-box a[target="_blank"]::after {
+    content: none !important;
+}
+
+.team-box-image {
+    max-height: 100px;
+    max-width: 100px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+}
+
+.points-box {
+    top: 87.5%;
+    font-size: 16px;
+    padding: 5px;
+}
+
+.penalty-text {
+    font-size: 12px;
+    margin: 0;
+    line-height: 0.5;
+    text-align: center;
+}
+
+.local-time-clock {
+    position: relative;
+}
+
+.local-time-clock::after {
+    content: 'UK';
+    position: absolute;
+    font-size: 6px;
+    left: 8px;
+    bottom: -4px;
+    font-family: "Montserrat", system-ui, sans-serif;
+    font-weight: 600;
+    background-color: var(--bg-color);
+    border: var(--button-border);
+    padding: 0 1px;
+    border-radius: 5px;
+    display: inline-block;
+    line-height: 1;
+}
+
+.overseas-time-clock {
+    font-size: 16px;
+    margin: 0 5px 0 2px;
+}
+
+#calendarListView {
+    max-height: calc(75vh - 100px);
+    overflow-y: auto;
+}
+
+#calendarListView .event-overlay {
+    padding: 10px;
+}
+
+#calendarListView .event-box-team {
+    font-size: 1vmin;
+}
+
+#calendarListView .event-box-team .youtube-box {
+    font-size: 1.5vmin;
+}
+
+#calendarListView .team-box-image {
+    max-height: 7.5vmin;
+    max-width: 7.5vmin;
+}
+
+#calendarListView .score-box {
+    font-size: 2.5vmin;
+    padding: 1vmin;
+    border-radius: 5px;
+}
+
+#calendarListView .match-date-time-box {
+    font-size: 15px;
+}
+
+#upcomingMatchesBox {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#upcomingMatchesBox.fade-in {
+    opacity: 1;
+}
+
+.dayRelation {
+    font-size: 10px;
+    font-family: "Montserrat", system-ui, sans-serif;
+    font-weight: 600;
+    background-color: var(--bg-color);
+    border: var(--button-border);
+    padding: 0 1px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+@media screen and (max-width: 767px) {
+    .event-box-team {
+        font-size: 2vmin;
+    }
+
+    .event-box-team .youtube-box {
+        font-size: 2.5vmin;
+    }
+
+    .team-box-image {
+        max-height: 15vmin;
+        max-width: 15vmin;
+    }
+
+    .score-box {
+        font-size: 5vmin;
+        padding: 2vmin;
+        border-radius: 5px;
+    }
+
+    .event-box-team .fa-youtube {
+        font-size: 18px;
+    }
+
+    .match-detail-container {
+        font-size: 3vmin;
+    }
+
+    .match-season {
+        font-size: 12px;
+    }
+
+    .local-time-clock,
+    .overseas-time-clock {
+        font-size: 2.5vmin;
+        margin: 0 2px 0 1px;
+    }
+
+    .overseas-time-clock {
+        margin: 0 4px 0 1px;
+    }
+
+    .local-time-clock::after {
+        font-size: 5.5px;
+        left: 4px;
+        border-radius: 5px;
+    }
+
+    #calendarListView .event-box-team {
+        font-size: 1.5vmin;
+    }
+
+    #calendarListView .team-box-image {
+        max-height: 10vmin;
+        max-width: 10vmin;
+    }
+
+    #calendarListView .score-box {
+        font-size: 3.5vmin;
+        padding: 1.25vmin;
+    }
+
+    .dayRelation {
+        font-size: 8px;
+    }
+}

@@ -1,128 +1,216 @@
 <!DOCTYPE html>
 <html lang="en" data-overlayscrollbars-initialize>
-    <head>
-        <base href="../../">
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-        <title>Sitemap | University Mario Kart League</title>
-        <meta name="description" content="The sitemap page for the University Mario Kart League (UMKL)">
-        <link rel="shortcut icon" href="assets/image/brand/favicon.png" type="image/png">
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/settings.css">
-        <link rel="stylesheet" href="css/overlayscrollbars.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-        <meta name="color-scheme" content="dark light">
+<head>
+    <base href="../../">
 
-        <meta property="og:title" content="University Mario Kart League | Sitemap" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://umkl.co.uk/pages/sitemap/" />
-        <meta property="og:image" content="https://umkl.co.uk/assets/image/brand/UMKL_Banner_embed.png" />
-        <meta property="og:description" content="The sitemap for University Mario Kart League (UMKL)" />
-        <meta name="theme-color" content="#bc0839">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Sitemap | University Mario Kart League</title>
+    <meta name="description" content="The sitemap page for the University Mario Kart League (UMKL)">
+    <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
+    <link rel="stylesheet" href="css/ext/fontawesome.min.css">
+    <meta name="color-scheme" content="dark light">
 
-        <!-- Include this to make the og:image larger -->
-        <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:title" content="University Mario Kart League | Sitemap" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://umkl.co.uk/pages/sitemap/" />
+    <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_Banner_embed.avif" />
+    <meta property="og:description" content="The sitemap for University Mario Kart League (UMKL)" />
+    <meta name="theme-color" content="#bc0839">
 
-        <!-- Scripts -->
-        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-        <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
-        <script src="scripts/overlayscrollbar.js" defer></script>
-        
-        <script type="module" src="scripts/settings.js" defer></script>
-    </head>
+    <!-- Include this to make the og:image larger -->
+    <meta name="twitter:card" content="summary_large_image">
 
-    <body id="top" data-overlayscrollbars-initialize>
-        <div class="navbar-container">
-            <div class="nav-bar">
-                <a href="index.html" class="nav-bar-title no-color-link no-underline-link-footer">
-                    <img src="assets/image/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
-                    <h2>UMKL</h2>
-                </a>
-                <nav class="nav-flex">
-                    <ul id="nav-bar">
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="pages/news/">News</a></li>
-                        <li><a href="pages/teams/">Teams</a></li>
-                        <li><a href="pages/matches/">Matches</a></li>
-                        <li><a href="pages/rules/">Rules</a></li>
-                        <li><a href="pages/faq/">FAQs</a></li>
-                        <li><a target="_blank" class="nav-bar-link" href="https://discord.gg/jz3hKEmDss">Discord</a></li>
-                    </ul>
-                </nav>
-                <!-- Dropdown navigation (shown on mobile) -->
-                <div class="nav-dropdown">
-                    <div class="nav-dropdown-button">☰</div>
-                    <div class="nav-dropdown-content" id="nav-dropdown-bar">
-                        <a href="index.html">Home</a>
-                        <a href="pages/news/">News</a>
-                        <a href="pages/teams/">Teams</a>
-                        <a href="pages/matches/">Matches</a>
-                        <a href="pages/rules/">Rules</a>
-                        <a href="pages/faq/">FAQs</a>
-                        <a target="_blank" class="nav-bar-link" href="https://discord.gg/jz3hKEmDss">Discord</a>
-                    </div>
+    <!-- Scripts -->
+    <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() { let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) } checkTheme();</script>
+    <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
+    <script src="scripts/overlayscrollbar.js" defer></script>
+
+    <script type="module" src="scripts/settings.js" defer></script>
+</head>
+
+<body id="top" data-overlayscrollbars-initialize>
+    <div class="navbar-container" translate="no">
+        <div class="nav-bar">
+            <a href="index.html" class="nav-bar-title no-color-link no-underline-link-footer">
+                <img src="assets/media/brand/UMKLlogonav.avif" class="nav-bar-logo" alt="UMKL logo">
+                <h2>UMKL</h2>
+            </a>
+            <nav class="nav-flex">
+                <ul id="nav-bar">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="pages/news/">News</a></li>
+                    <li><a href="pages/teams/">Teams</a></li>
+                    <li><a href="pages/matches/">Matches</a></li>
+                    <li><a href="pages/rules/">Rules</a></li>
+                    <li><a href="pages/faq/">FAQs</a></li>
+                    <li><a target="_blank" class="nav-bar-link" href="https://discord.gg/jz3hKEmDss">Discord</a></li>
+                </ul>
+            </nav>
+            <!-- Dropdown navigation (shown on mobile) -->
+            <div class="nav-dropdown">
+                <div class="nav-dropdown-button">☰</div>
+                <div class="nav-dropdown-content" id="nav-dropdown-bar">
+                    <a href="index.html">Home</a>
+                    <a href="pages/news/">News</a>
+                    <a href="pages/teams/">Teams</a>
+                    <a href="pages/matches/">Matches</a>
+                    <a href="pages/rules/">Rules</a>
+                    <a href="pages/faq/">FAQs</a>
+                    <a target="_blank" class="nav-bar-link" href="https://discord.gg/jz3hKEmDss">Discord</a>
                 </div>
             </div>
         </div>
+    </div>
 
-        <main>
-            <h1>Sitemap</h1>
-            <p class="p-below-title">See all the pages on the site</p>
-            <hr class="hr-below-title">
+    <main>
+        <h1>Sitemap</h1>
+        <p class="p-below-title">See all the pages on the site</p>
+        <hr class="hr-below-title">
 
-            <p class="p-no-spacing">
-                <u>Base</u><br>
-                <a href="404.html">404.html</a><br>
-                <a href="index.html">index.html</a><br>
-                <a href="README.md">README.md</a><br>
-                <a href="robots.txt">robots.txt</a><br>
-                <a href="sitemap.txt">sitemap.txt</a><br>
-            </p>
+        <p class="p-no-spacing">
+            <b>Base</b><br>
+            <a href="404.html">404.html</a><br>
+            <a href="index.html">index.html</a><br>
+            <a href="README.md">README.md</a><br>
+            <a href="robots.txt">robots.txt</a><br>
+            <a href="sitemap.txt">sitemap.txt</a><br>
+        </p>
 
-            <p>
-                <u>Pages</u><br>
-                ↪ <a href="https://umkl.co.uk/pages/credits/">pages/credits/</a><br>
-                ↪ <a href="https://umkl.co.uk/pages/faq/">pages/faq/</a><br>
-                <span class="indent">↪ <a href="https://umkl.co.uk/pages/faq/cheepcheepsignup.html">pages/faq/cheepcheepsignup.html</a></span><br>
-                <span class="indent">↪ <a href="https://umkl.co.uk/pages/faq/discordrole.html">pages/faq/discordrole.html</a></span><br>
-                ↪ <a href="https://umkl.co.uk/pages/live/">pages/live/</a><br>
-                ↪ <a href="https://umkl.co.uk/pages/livereversed/">pages/livereversed/</a><br>
-                ↪ <a href="https://umkl.co.uk/pages/map/">pages/map/</a><br>
-                ↪ <a href="https://umkl.co.uk/pages/matches/">pages/matches/</a><br>
-                ↪ <a href="https://umkl.co.uk/pages/news/">pages/news/</a><br>
-                <span class="indent">↪ <a href="https://umkl.co.uk/pages/news/2025-04-19/umkl-discord/">pages/news/2025-04-19/umkl-discord/</a></span><br>
-                <span class="indent">↪ <a href="https://umkl.co.uk/pages/news/2025-04-19/umkl-intro/">pages/news/2025-04-19/umkl-intro/</a></span><br>
-                <span class="indent">↪ <a href="https://umkl.co.uk/pages/news/2025-04-19/uni-joining-info/">pages/news/2025-04-19/uni-joining-info/</a></span><br>
-                <span class="indent">↪ <a href="https://umkl.co.uk/pages/news/2025-04-22/umkl-test-matches-are-being-conducted/">pages/news/2025-04-22/umkl-test-matches-are-being-conducted/</a></span><br>
-                <span class="indent">↪ <a href="https://umkl.co.uk/pages/news/2025-06-13/upcoming-summer-test-matches/">pages/news/2025-06-13/upcoming-summer-test-matches/</a></span><br>
-                ↪ <a href="https://umkl.co.uk/pages/rules/">pages/rules/</a><br>
-                <span class="indent">↪ <a href="https://umkl.co.uk/pages/rules/brand/">pages/rules/brand/</a></span><br>
-                <span class="indent">↪ <a href="https://umkl.co.uk/pages/rules/match/">pages/rules/match/</a></span><br>
-                <span class="indent">↪ <a href="https://umkl.co.uk/pages/rules/team/">pages/rules/team/</a></span><br>
-                ↪ <a href="https://umkl.co.uk/pages/sitemap/">pages/sitemap/</a><br>
-                ↪ <a href="https://umkl.co.uk/pages/teams/">pages/teams/</a><br>
-                <span class="indent">↪ <a href="https://umkl.co.uk/pages/teams/details/">pages/teams/details/</a></span><br>
-                ↪ <span>pages/test/</span><br>
-                <span class="indent">↪ <a href="https://umkl.co.uk/pages/test/apitest/">pages/test/apitest/</a></span><br>
-                <span class="indent">↪ <a href="https://umkl.co.uk/pages/test/umklmmo/">pages/test/umklmmo/</a></span><br>
-                <span class="indent">↪ <a href="https://umkl.co.uk/pages/test/umklmmo/UMKLMMO/">pages/test/umklmmo/UMKLMMO/</a></span><br>
-                ↪ <a href="https://umkl.co.uk/pages/tools/">pages/tools/</a><br>
-                <span class="indent">↪ <a href="https://umkl.co.uk/pages/tools/6v6scorecalculator/">pages/tools/6v6scorecalculator/</a></span><br>
-                <span class="indent">↪ <a href="https://umkl.co.uk/pages/tools/colourpicker/">pages/tools/colourpicker/</a></span><br>
-                <span class="indent">↪ <a href="https://umkl.co.uk/pages/tools/favtrack/">pages/tools/favtrack/</a></span><br>
-                <span class="indent">↪ <a href="https://umkl.co.uk/pages/tools/trackrandomiser/">pages/tools/trackrandomiser/</a></span><br>
-            </p>
-        </main>
+        <b>Pages</b>
+        <ul translate="no" class="p-no-spacing">
+            <li><a href="pages/credits/">pages/credits/</a></li>
+            <li><a href="pages/faq/">pages/faq/</a>
+                <ul>
+                    <li>
+                        <a href="pages/faq/cheepcheepsignup.html">pages/faq/cheepcheepsignup.html</a>
+                    </li>
+                    <li>
+                        <a href="pages/faq/discordrole.html">pages/faq/discordrole.html</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="pages/live/">pages/live/</a>
+            </li>
+            <li>
+                <a href="pages/livereversed/">pages/livereversed/</a>
+            </li>
+            <li>
+                <a href="pages/map/">pages/map/</a>
+            </li>
+            <li>
+                <a href="pages/matches/">pages/matches/</a>
+                <ul>
+                    <li>
+                        <a href="pages/matches/stats/">pages/matches/stats/</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="pages/news/">pages/news/</a>
+                <ul>
+                    <li>
+                        <a href="pages/news/2025-04-19/umkl-discord/">pages/news/2025-04-19/umkl-discord/</a>
+                    </li>
+                    <li>
+                        <a href="pages/news/2025-04-19/umkl-intro/">pages/news/2025-04-19/umkl-intro/</a>
+                    </li>
+                    <li>
+                        <a href="pages/news/2025-04-19/uni-joining-info/">pages/news/2025-04-19/uni-joining-info/</a>
+                    </li>
+                    <li>
+                        <a href="pages/news/2025-04-22/umkl-test-matches-are-being-conducted/">pages/news/2025-04-22/umkl-test-matches-are-being-conducted/</a>
+                    </li>
+                    <li>
+                        <a href="pages/news/2025-06-13/upcoming-summer-test-matches/">pages/news/2025-06-13/upcoming-summer-test-matches/</a>
+                    </li>
+                    <li>
+                        <a href="pages/news/2025-07-17/cheep-cheep-updates/">pages/news/2025-07-17/cheep-cheep-updates/</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="pages/players/">pages/players/</a>
+                <ul>
+                    <li>
+                        <a href="pages/players/details/">pages/players/details/</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="pages/privacy/">pages/privacy/</a>
+            </li>
+            <li>
+                <a href="pages/rules/">pages/rules/</a>
+                <ul>
+                    <li>
+                        <a href="pages/rules/brand/">pages/rules/brand/</a>
+                    </li>
+                    <li>
+                        <a href="pages/rules/match/">pages/rules/match/</a>
+                    </li>
+                    <li>
+                        <a href="pages/rules/stream/">pages/rules/stream/</a>
+                    </li>
+                    <li>
+                        <a href="pages/rules/team/">pages/rules/team/</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="pages/sitemap/">pages/sitemap/</a>
+            </li>
+            <li>
+                <a href="pages/teams/">pages/teams/</a>
+                <ul>
+                    <li>
+                        <a href="pages/teams/details/">pages/teams/details/</a>
+                    </li>
+                </ul>
+            </li>
+            <li>pages/test/
+                <ul>
+                    <li>
+                        <a href="pages/test/apitest/">pages/test/apitest/</a>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="pages/tools/">pages/tools/</a>
+                <ul>
+                    <li>
+                        <a href="pages/tools/6v6scorecalculator/">pages/tools/6v6scorecalculator/</a>
+                    </li>
+                    <li>
+                        <a href="pages/tools/colourpicker/">pages/tools/colourpicker/</a>
+                    </li>
+                    <li>
+                        <a href="pages/tools/favtrack/">pages/tools/favtrack/</a></li>
+                    <li>
+                        <a href="pages/tools/trackrandomiser/">pages/tools/trackrandomiser/</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </main>
 
-        <footer>
-            © UMKL 2025 |
-            <a class="no-color-link" href="pages/credits/">Credits</a> |
-            <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |
-            <a href="https://www.youtube.com/@universitymariokartleague" title="UMKL YouTube Channel" class="no-color-link no-underline-link-footer fa-brands fa-youtube"></a>
-            <a href="https://www.instagram.com/universitymariokartleague" title="UMKL Instagram Account" class="no-color-link no-underline-link-footer fa-brands fa-instagram"></a>
-            <a href="https://www.facebook.com/profile.php?id=61575273336011" title="UMKL Facebook Page" class="no-color-link no-underline-link-footer fa-brands fa-facebook"></a>            
-            <a href="https://discord.gg/jz3hKEmDss" title="UMKL Discord server" class="no-color-link no-underline-link-footer fa-brands fa-discord"></a>            
-        </footer>
-    </body>
+    <footer translate="no">
+        © UMKL 2025 |
+        <a class="no-color-link" href="pages/credits/">Credits</a> |
+        <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |
+        <a href="https://www.youtube.com/@universitymariokartleague" title="UMKL YouTube Channel"
+            class="no-color-link no-underline-link-footer fa-brands fa-youtube"></a>
+        <a href="https://www.instagram.com/universitymariokartleague" title="UMKL Instagram Account"
+            class="no-color-link no-underline-link-footer fa-brands fa-instagram"></a>
+        <a href="https://www.facebook.com/profile.php?id=61575273336011" title="UMKL Facebook Page"
+            class="no-color-link no-underline-link-footer fa-brands fa-facebook"></a>
+        <a href="https://discord.gg/jz3hKEmDss" title="UMKL Discord server"
+            class="no-color-link no-underline-link-footer fa-brands fa-discord"></a>
+    </footer>
+</body>
+
 </html>

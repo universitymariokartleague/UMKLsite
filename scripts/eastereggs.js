@@ -8,16 +8,23 @@ function injectMusic(path) {
     const audioContainer = document.createElement('div');
     audioContainer.innerHTML = `
         <audio id="audio" src="${path}" preload="auto"></audio>
+        <script type="text/javascript" src="scripts/audioplayer.js" id="audioPlayerScript" defer></script>
         <div id="audioStatus" data-playlist="bgm.txt" class="hidden">
-            <span id="BGMName">Music</span></br>
-            <span class="playContainer">
-                <img src="" id="playIcon">
-            </span>
-            <span id="audioProgressBar"></span>
-            <span id="currentTime" class="time">0:00</span> / <span id="totalTime" class="time">0:00</span>
+            <span id="BGMName">Music</span><br />
+            <div class="audioControls">
+                <span class="playContainer">
+                    <img src="" id="playIcon" />
+                </span>
+                <div id="audioProgressBar">
+                    <div id="audioBufferBar"></div>
+                </div>
+                <span id="currentTime" class="time">0:00</span>
+                <span>/</span>
+                <span id="totalTime" class="time">0:00</span>
+            </div>
             <p id="playlistText" class="hidden"></p>
         </div>
-        <noscript><blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as it is used on this page<br></blockquote></noscript>
+        <noscript><blockquote class="rainbow"><b>Javascript disabled!</b><br />Please enable javascript, as is it used on this page<br /></blockquote></noscript>
     `;
     document.body.appendChild(audioContainer);
 
@@ -62,7 +69,7 @@ function halloweenEasterEgg() {
         left: '10px',
         width: '85px',
         height: '85px',
-        backgroundImage: 'url("assets/image/eastereggs/halloween/splunkin.webp")',
+        backgroundImage: 'url("assets/media/eastereggs/halloween/splunkin.avif")',
         backgroundSize: 'contain',
         backgroundRepeat: 'no-repeat',
         zIndex: '1000'
@@ -74,7 +81,7 @@ function halloweenEasterEgg() {
         right: '10px',
         width: '100px',
         height: '100px',
-        backgroundImage: 'url("assets/image/eastereggs/halloween/jackogoomba.webp")',
+        backgroundImage: 'url("assets/media/eastereggs/halloween/jackogoomba.avif")',
         backgroundSize: 'contain',
         backgroundRepeat: 'no-repeat',
         zIndex: '1000'
@@ -87,7 +94,7 @@ function halloweenEasterEgg() {
             position: 'fixed',
             width: '50px',
             height: '50px',
-            backgroundImage: 'url("assets/image/eastereggs/halloween/ghost.webp")',
+            backgroundImage: 'url("assets/media/eastereggs/halloween/ghost.avif")',
             backgroundSize: 'contain',
             backgroundRepeat: 'no-repeat',
             zIndex: '1000',
@@ -100,7 +107,7 @@ function halloweenEasterEgg() {
         ghost.style.top = `${startY}px`;
 
         if (endX < startX) {
-            ghost.style.backgroundImage = 'url("assets/image/eastereggs/halloween/ghost2.webp")';
+            ghost.style.backgroundImage = 'url("assets/media/eastereggs/halloween/ghost2.avif")';
         }
 
         document.body.appendChild(ghost);
@@ -132,7 +139,10 @@ function xmasEasterEgg() {
         '--link-hover-color': '#ffffff',
         '--highlight-color': '#ffffff50'
     };
-    Object.entries(themeColors).forEach(([key, value]) => root.style.setProperty(key, value));
+
+    for (const [key, value] of Object.entries(themeColors)) {
+        root.style.setProperty(key, value);
+    }
 
     const accentColor = "#7025b8";
     const style = document.createElement('style');
@@ -143,8 +153,12 @@ function xmasEasterEgg() {
         .nav-selected {
             outline: ${accentColor}83 solid 1px;
         }
+        a:link {
+            transition: unset;
+        }
         .nav-dropdown-content a:hover {
             color: #fff !important;
+            transition: unset;
         }
         @media screen and (max-width: 767px) {
             .nav-dropdown-content a:hover {
@@ -157,32 +171,95 @@ function xmasEasterEgg() {
         a[target="_blank"]::after {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' %3E%3Cpath d='M9 2v1h3.3L6 9.3l.7.7L13 3.7V7h1V2ZM4 4c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V7l-1 1v4c0 .6-.4 1-1 1H4c-.6 0-1-.4-1-1V6c0-.6.4-1 1-1h4l1-1Z' style='fill:%23b07be3'/%3E%3C/svg%3E") !important;
         }
+        .day.selected {
+            background-color: ${accentColor}30!important;
+            outline: 1px solid ${accentColor}D0;
+            border: 1px solid ${accentColor}D0;
+        }
+        .day.selected:hover {
+            background-color: ${accentColor}80!important;
+        }
+        .today:hover {
+            background-color: ${accentColor};
+        }
+        .score-box {
+            color: ${accentColor}
+        }
     `;
     document.head.appendChild(style);
 
+    setupSnowflakes();
+    injectMusic("assets/bgm/xmas/loading playlist.mp3");
+
+    setTimeout(() => {
+        const style = document.createElement('style');
+        style.textContent = `
+            a:link {
+                transition: color 0.10s;
+            }
+        `;
+        document.head.appendChild(style);
+    }, 500);
+}
+
+function setupSnowflakes() {
+    const createElementWithStyles = (tag, styles) => {
+        const el = document.createElement(tag);
+        Object.assign(el.style, styles);
+        return el;
+    };
+
     const createSnowflake = () => {
+        const opacity = (Math.random() * 0.5 + 0.3).toFixed(2);
+        const size = Math.random() * 5 + 1;
+
+        let startX = Math.random() * window.innerWidth;
+        let startY = -10;
+        let endX = startX + (Math.random() * 100 - 50);
+        let endY = window.innerHeight + 10;
+
+        const avoidRadius = 100;
+
+        const dx = startX;
+        const dy = startY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < avoidRadius) {
+            const angle = Math.atan2(dy, dx);
+            const pushDistance = avoidRadius - dist;
+
+            startX += Math.cos(angle) * pushDistance;
+            endX += Math.cos(angle) * pushDistance;
+        }
+
         const snowflake = createElementWithStyles('div', {
             position: 'fixed',
-            width: '10px',
-            height: '10px',
-            backgroundColor: 'white',
+            left: `${startX}px`,
+            top: `${startY}px`,
+            width: `${size}px`,
+            height: `${size}px`,
+            backgroundColor: '#FFF',
             borderRadius: '50%',
-            opacity: Math.random().toString(),
+            opacity: opacity,
             pointerEvents: 'none',
-            zIndex: '1000'
+            zIndex: '4',
         });
-
-        const [startX, endX, startY, endY] = [Math.random() * window.innerWidth, Math.random() * window.innerWidth, -10, window.innerHeight + 10];
-        snowflake.style.left = `${startX}px`;
-        snowflake.style.top = `${startY}px`;
 
         document.body.appendChild(snowflake);
 
+        const duration = 5000 + Math.random() * 3000;
+
         const animation = snowflake.animate([
-            { transform: `translate(${startX}px, ${startY}px)`, opacity: snowflake.style.opacity },
-            { transform: `translate(${endX}px, ${endY}px)`, opacity: '0' }
+            {
+                transform: `translate(0, 0)`,
+                opacity: opacity
+            },
+            {
+                transform: `translate(${endX - startX}px, ${endY - startY}px)`,
+                opacity: '0'
+            }
         ], {
-            duration: 5000 + Math.random() * 3000,
+            duration: duration,
             iterations: 1,
             easing: 'linear'
         });
@@ -190,6 +267,5 @@ function xmasEasterEgg() {
         animation.onfinish = () => snowflake.remove();
     };
 
-    setInterval(createSnowflake, 100);
-    injectMusic("assets/bgm/xmas/loading playlist.mp3");
+    setInterval(createSnowflake, 50);
 }

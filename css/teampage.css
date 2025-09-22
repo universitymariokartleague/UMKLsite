@@ -1,0 +1,81 @@
+.team-info-table td {
+    padding: 2px;
+    width: 50%;
+    vertical-align: middle;
+}
+
+.team-info-table .table-key {
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.team-info-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.team-info .map {
+    width: 100%;
+    display: flex;
+    border-radius: 10px;
+    border: 1px solid #ccccccaa;
+}
+
+.team-info-logo {
+    margin: 0 auto;
+    width: 200px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+}
+
+.current-season-info {
+    margin-top: 10px;
+    border: 1px solid #ccccccaa;
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.team-info {
+    border: 1px solid #ccccccaa;
+    border-radius: 10px;
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+
+.team-info-table {
+    border-collapse: separate;
+    width: 100%;
+}
+
+.heading-wrapper {
+    display: flex;
+}
+
+#teamMapIFrame {
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+    outline: 1px solid #ccccccaa;
+}
+
+.user-image {
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+    width: 150px;
+    height: 150px;
+}
+
+@media screen and (max-width: 767px) {
+    .team-info {
+        flex-direction: column;
+    }
+
+    .team-info .map {
+        aspect-ratio: 1 / 1.9;
+        width: 100%;
+        height: auto;
+    }
+}

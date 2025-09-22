@@ -32,12 +32,14 @@ body {
     color: var(--text-color);
     background-color: var(--bg-color);
     animation: fade-in 0.2s ease-in-out;
+    cursor: move;
 }
 
 @keyframes fade-in {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -48,7 +50,7 @@ body {
     touch-action: none;
     cursor: move;
     -webkit-user-select: none;
-	user-select: none;
+    user-select: none;
 }
 
 .map-container img {
@@ -57,7 +59,7 @@ body {
     display: block;
     opacity: var(--map-opacity);
     -webkit-user-select: none;
-	user-select: none;
+    user-select: none;
 }
 
 .dot {
@@ -81,9 +83,10 @@ body {
     pointer-events: none;
     z-index: 10;
     box-shadow: 0 2px 6px #0003;
+    -webkit-backdrop-filter: blur(2px);
     backdrop-filter: blur(2px);
     -webkit-user-select: none;
-	user-select: none;
+    user-select: none;
 }
 
 .zoom-controls {
@@ -95,6 +98,7 @@ body {
     flex-direction: column;
     gap: 4px;
     background: rgba(255, 255, 255, calc(var(--map-opacity) / 2));
+    -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
     border-radius: 8px;
     border: 1px solid #ccc;
@@ -103,11 +107,13 @@ body {
     opacity: 0;
     animation: fadeIn 0.25s ease-in-out forwards;
     -webkit-user-select: none;
-	user-select: none;
+    user-select: none;
 }
 
 @keyframes fadeIn {
-    to { opacity: 1; }
+    to {
+        opacity: 1;
+    }
 }
 
 .controls-button {
@@ -117,10 +123,10 @@ body {
     justify-content: center;
     width: 28px;
     height: 28px;
-    font-size: 20px;
+    font-size: 16px;
     background: none;
     color: var(--text-color);
-    border: 1px solid #cccccc50;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
     outline: none;

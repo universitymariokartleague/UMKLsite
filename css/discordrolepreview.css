@@ -15,13 +15,12 @@
 }
 
 #cheepCheepRoleiFrame {
-    height: 250px;
+    height: 550px;
     width: 500px;
     border-radius: 10px;
     outline: 1px solid #ccccccaa;
 }
 
-/* For mobile devices */
 @media (max-width: 767px) {
     #discordRoleiFrame, #cheepCheepRoleiFrame {
         width: 100%;

@@ -7,19 +7,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <title>Matches | University Mario Kart League</title>
         <meta name="description" content="See the upcoming matches participating in the University Mario Kart League (UMKL)">
-        <link rel="shortcut icon" href="assets/image/brand/favicon.png" type="image/png">
+        <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
         <link rel="stylesheet" href="css/calendar.css">
+        <link rel="stylesheet" href="css/eventbox.css">
         <link rel="stylesheet" href="css/copypopup.css">
-        <link rel="stylesheet" href="css/overlayscrollbars.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
+        <link rel="stylesheet" href="css/ext/fontawesome.min.css">
         <meta name="color-scheme" content="dark light">
     
         <meta property="og:title" content="University Mario Kart League | Matches" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://umkl.co.uk/pages/teams/" />
-        <meta property="og:image" content="https://umkl.co.uk/assets/image/brand/Cheep_Cheep_banner.png" />
+        <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/Cheep_Cheep_banner.avif" />
         <meta property="og:description" content="See the upcoming matches in the University Mario Kart League (UMKL)" />
         <meta name="theme-color" content="#bc0839">
     
@@ -27,18 +28,19 @@
         <meta name="twitter:card" content="summary_large_image">
     
         <!-- Scripts -->
-                <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-    <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
+        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+        <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
         <script src="scripts/overlayscrollbar.js" defer></script>    
         
         <script type="module" src="scripts/settings.js" defer></script>
         <script type="module" src="scripts/matchcalendar.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
     </head>
     <body id="top" data-overlayscrollbars-initialize>
-        <div class="navbar-container">
+        <div class="navbar-container" translate="no">
             <div class="nav-bar">
                 <a href="index.html" class="nav-bar-title no-color-link no-underline-link-footer">
-                    <img src="assets/image/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
+                    <img src="assets/media/brand/UMKLlogonav.avif" class="nav-bar-logo" alt="UMKL logo">
                     <h2>UMKL</h2>
                 </a>
                 <nav class="nav-flex">
@@ -72,28 +74,36 @@
             <noscript><blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as is it used on this page<br></blockquote></noscript>
 
             <h1>Matches</h1>
-            <p class="p-below-title">View upcoming and scheduled matches.
-            Please take a look at the <a href="pages/rules/match">match rules</a> before playing!</p>
+            <p class="p-below-title">
+                View upcoming and scheduled matches.
+                Please take a look at the <a href="pages/rules/match">match rules</a> before playing!<br>
+                View the <a href="pages/matches/stats">match stats</a> page.
+            </p>
+            <button style="margin-top: 5px;" id="listViewButton"><span class="fa-solid fa-bars"></span> List View</button>
             <hr class="hr-below-title">
 
             <div id="calendarError"></div>
 
-            <div class="calendar-container">
+            <blockquote class="hidden warning" id="overseasMessage"></blockquote>
+            
+            <div id="calendarListView" class="hidden"></div>
+            
+            <div class="calendar-container" id="calendar-container">
                 <div class="calendar">
                     <div class="calendar-header">
-                    <div class="month" id="monthYear">
-                        <a class="month-arrow fa-solid fa-arrow-left" id="previousMonthButton"></a>
+                        <div class="month" id="monthYear">
+                        <a class="month-arrow" id="previousMonthButton"></a>
                         <span class="month-name" id="goToCurrentMonthButton">Loading...</span>
-                        <a class="month-arrow fa-solid fa-arrow-right" id="nextMonthButton"></a>
+                        <a class="month-arrow" id="nextMonthButton"></a>
                     </div>
                 </div>
-                <div class="calendar-body" id="calendarDays"><div class="day-header">MON</div><div class="day-header">TUE</div><div class="day-header">WED</div><div class="day-header">THU</div><div class="day-header">FRI</div><div class="day-header">SAT</div><div class="day-header">SUN</div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div></div>
+                <div class="calendar-body" id="calendarDays"></div>
             </div>
 
             <div id="expandedLog"></div>
         </main>
 
-        <footer>
+        <footer translate="no">
             © UMKL 2025 |
             <a class="no-color-link" href="pages/credits/">Credits</a> |
             <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |

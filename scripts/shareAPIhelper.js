@@ -164,6 +164,7 @@ function cleanupPreview() {
     if (previewTimeout) {
         clearTimeout(previewTimeout);
         previewTimeout = null;
+        shareButton.innerHTML = originalMessage;
     }
 
     if (currentPreview) {
@@ -175,5 +176,4 @@ function cleanupPreview() {
     }
 
     isPopupShowing = false;
-    shareButton.innerHTML = originalMessage;
 }

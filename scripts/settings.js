@@ -8,13 +8,27 @@ import { halloweenEasterEgg, xmasEasterEgg } from './eastereggs.js';
 
 const settingsBoxHTML = `
     <div class="hidden BGBlur" id="BGBlur"></div>
-    <div class="hidden hide-settings-box" id="settingsBox" data-overlayscrollbars-initialize>
+    <div translate="no" class="hidden hide-settings-box" id="settingsBox" data-overlayscrollbars-initialize>
         <div class="settings-box-close-button">
             <button id="settings-box-close-button">Close</button>
         </div>
-        <div class="settings-title">Settings</div>
+        <div translate="yes" class="settings-title">Settings</div>
         <div class="setting-options" id="settingsBoxJS"></div>
     </div>
+`;
+
+const cookiesBox = `
+    <dialog open class="cookie-popup" id="cookie-popup">
+        <p style="margin: 0 0 5px 0;">
+            This site uses cookies to store your preferences. Cloudflare is also used for site analytics.
+            By using this site, you agree to these uses.<br>
+            You can read our privacy policy <a href="pages/privacy/">here</a>.
+        </p>
+        <form method="dialog">
+            <button id="cookieAccept">OK</button> 
+            <button id="cookieSettings">Settings</button>
+        </form>
+    </dialog>
 `;
 
 document.body.insertAdjacentHTML('beforeend', settingsBoxHTML);
@@ -51,6 +65,7 @@ function generateSettingsPanel() {
     try {
         const tempTheme = localStorage.getItem("darktheme") == 1 ? "Dark" : (localStorage.getItem("darktheme") == 0 ? "Light" : "Automatic");
         const listView = localStorage.getItem("teamsListView") == 1 || false;
+        const calendarListView = localStorage.getItem("calendarListView") == 1 || false;
         const legacyListView = localStorage.getItem("legacyListView") == 1 || false;
         
         const tempLocale = localStorage.getItem("locale") || "en-GB";
@@ -58,25 +73,28 @@ function generateSettingsPanel() {
         const tempStartDay = localStorage.getItem("startDay") || 1;
         const tempMonthType = localStorage.getItem("monthType") || "long";
         const tempMonthTypeDisplay = tempMonthType === "long" ? "Long" : "Short";
+        const tempOverseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1 || false;
 
         settingsBoxJS.innerHTML = `
-            <div class="setting-sub-heading">Appearance</div><hr>
-            <span class="settings-hover-info" data-info="Light, dark or automatic">Page theme</span><button id="toggleTheme" class="settings-option">${tempTheme}</button><br>
-            <span class="settings-hover-info" data-info="Grid or list view">Teams page layout</span><button id="toggleListView" class="settings-option">${listView ? "List view" : "Grid view"}</button><br>
-            <span class="settings-hover-info" data-info="Will be removed!">legacyListView</span><button id="togglelegacyListView" class="settings-option">${legacyListView ? "On" : "Off"}</button><br>
+            <div translate="yes" class="setting-sub-heading">Appearance</div><hr>
+            <span translate="yes" class="settings-hover-info" data-info="Light, dark or automatic">Page theme</span><button id="toggleTheme" class="settings-option">${tempTheme}</button><br>
+            <span translate="yes" class="settings-hover-info" data-info="Grid or list view">Teams page layout</span><button id="toggleListView" class="settings-option">${listView ? "List view" : "Grid view"}</button><br>
+            <span translate="yes" class="settings-hover-info" data-info="Calendar or list view">Matches page layout</span><button id="toggleCalendarListView" class="settings-option">${calendarListView ? "List view" : "Calendar view"}</button><br>
+            <span translate="yes" class="settings-hover-info" data-info="Will be removed!">legacyListView</span><button id="togglelegacyListView" class="settings-option">${legacyListView ? "On" : "Off"}</button><br>
 
-            <div class="setting-sub-heading">${tempLocale == "en-GB" ? "Localisation" : "Localization"}</div><hr class="settings-hr">
-            <span class="settings-hover-info" data-info="UK or US date/time format">Locale</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button><br/>
-            <span class="settings-hover-info" data-info="eg: Monday or Sunday">First day of week</span><button id="toggleStartDayButton" class="settings-option">${weekdayNamesFull[tempStartDay]}</button><br/>
-            <span class="settings-hover-info" data-info="eg: April or Apr">Month type</span><button id="toggleMonthTypeButton" class="settings-option">${tempMonthTypeDisplay}</button><br/>
+            <div translate="yes" class="setting-sub-heading">${tempLocale == "en-GB" ? "Localisation" : "Localization"}</div><hr class="settings-hr">
+            <span translate="yes" class="settings-hover-info" data-info="UK or US date/time format">Locale</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button><br/>
+            <span translate="yes" class="settings-hover-info" data-info="Monday or Sunday">First day of week</span><button id="toggleStartDayButton" class="settings-option">${weekdayNamesFull[tempStartDay]}</button><br/>
+            <span translate="yes" class="settings-hover-info" data-info="April or Apr">Month type</span><button id="toggleMonthTypeButton" class="settings-option">${tempMonthTypeDisplay}</button><br/>
+            <span translate="yes" class="settings-hover-info" data-info="Use UK or local dates when overseas">Overseas date type</span><button id="toggleOverseasDateDisplayButton" class="settings-option">${tempOverseasDateDisplay ? 'Overseas' : 'UK'}</button><br/>
             
-            <div class="setting-sub-heading">Website Data</div><hr>
-            <span class="settings-hover-info" data-info="reloads the page">Reset settings to default</span><button id="clearLocalStorage" class="settings-option">Clear</button>
+            <div translate="yes" class="setting-sub-heading">Website Data</div><hr>
+            <span translate="yes" class="settings-hover-info" data-info="reloads the page">Reset settings to default</span><button id="clearLocalStorage" class="settings-option">Clear</button>
 
-            <div class="settings-instructions">Hover/tap the options to see more information</div>
+            <div translate="yes" class="settings-instructions">Hover/tap the options to see more information</div>
         `;
     } catch (error) {
-        settingsBoxJS.innerHTML = `<br>Failed to load settings<br><code>${error.stack}</code>`;
+        settingsBoxJS.innerHTML = `<br>Failed to load settings<br><code translate="no">${error.stack}</code>`;
     }
     generateEventListeners();
 };
@@ -125,6 +143,14 @@ function toggleListView() {
     generateSettingsPanel();
 }
 
+function toggleCalendarListView() {
+    const calendarListView = localStorage.getItem("calendarListView") == 1 ? 0 : 1;
+    localStorage.setItem("calendarListView", calendarListView);
+    console.debug(`%csettings.js %c> %cset calendarListView to ${calendarListView}`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
+    document.dispatchEvent(new CustomEvent('calendarListViewChange'));
+    generateSettingsPanel();
+}
+
 function togglelegacyListView() {
     const newlegacyListView = localStorage.getItem("legacyListView") == 1 ? 0 : 1;
     localStorage.setItem("legacyListView", newlegacyListView);
@@ -148,6 +174,10 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (ev
 function sendThemeChangeEvent() {
     document.dispatchEvent(new CustomEvent('themeChange', { detail: { darkThemeEnabled } }));
 }
+
+document.addEventListener('scrollbarToCalendarListView', (event) => {
+    document.dispatchEvent(new CustomEvent('addScrollbarToCalendarListView', { detail: { darkThemeEnabled, scrollToY: event.detail.scrollToY } }));
+})
 
 function toggleStartDay() {
     const newStartDay = localStorage.getItem("startDay") == 0 ? 1 : 0;
@@ -175,6 +205,14 @@ function toggleLocale() {
     generateSettingsPanel();
 }
 
+function toggleOverseasDateDisplayButton() {
+    const newOverseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1 ? 0 : 1;
+    localStorage.setItem("overseasDateDisplay", newOverseasDateDisplay);
+    console.debug(`%csettings.js %c> %cset overseasDateDisplay to ${newOverseasDateDisplay}`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
+    document.dispatchEvent(new CustomEvent('startDayChange'));
+    generateSettingsPanel();
+}
+
 function clearLocalStorage() {
     localStorage.clear();
     window.location.reload();
@@ -183,14 +221,33 @@ function clearLocalStorage() {
 function generateEventListeners() {
     document.getElementById('toggleTheme').addEventListener('click', toggleTheme);
     document.getElementById('toggleListView').addEventListener('click', toggleListView);
+    document.getElementById('toggleCalendarListView').addEventListener('click', toggleCalendarListView);
     document.getElementById('togglelegacyListView').addEventListener('click', togglelegacyListView);
     document.getElementById('toggleStartDayButton').addEventListener('click', toggleStartDay);
     document.getElementById('toggleMonthTypeButton').addEventListener('click', toggleMonthType);
     document.getElementById('toggleLocaleTypeButton').addEventListener('click', toggleLocale);
+    document.getElementById('toggleOverseasDateDisplayButton').addEventListener('click', toggleOverseasDateDisplayButton);
     document.getElementById('clearLocalStorage').addEventListener('click', clearLocalStorage);
 }
 
 sendThemeChangeEvent();
+
+function generateCookiesPopup() {
+    document.body.insertAdjacentHTML('beforeend', cookiesBox);
+    const cookiePopup = document.getElementById('cookie-popup');
+    const cookieAcceptButton = document.getElementById('cookieAccept');
+    const cookieSettingsButton = document.getElementById('cookieSettings');
+
+    cookieAcceptButton.addEventListener('click', () => {
+        localStorage.setItem("cookiesAccepted", "true");
+        cookiePopup.close();
+        cookiePopup.remove();
+    });
+
+    cookieSettingsButton.addEventListener('click', () => {
+        toggleSettingsPanel();
+    });
+}
 
 function checkEasterEggs() {
     function checkDate(month, day) {
@@ -237,23 +294,108 @@ function checkEasterEggs() {
             break;
     }
 }
-checkEasterEggs();
 
 // Keyboard shortcuts for toggling theme and opening settings panel
 let isKeyPressed = false;
-if (!easterEgg) {
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'i' && !isKeyPressed) {
-            isKeyPressed = true;
-            toggleThemeLightDarkOnly();
-        }
-        if (event.key === 'o' && !isKeyPressed) {
-            isKeyPressed = true;
-            toggleSettingsPanel();
-        }
-    });
+let keySequence = [];
+const easterCode = ['m', 'i', 'k', 'u'];
+const mkwEasterCode = ['m', 'k', 'w'];
 
-    document.addEventListener('keyup', (event) => {
-        isKeyPressed = false;
-    });
+document.addEventListener('keydown', (event) => {
+    const tag = event.target.tagName.toLowerCase();
+    const isTyping = tag === 'input' || tag === 'textarea' || event.target.isContentEditable;
+
+    if (isTyping) return;
+
+    const key = event.key.toLowerCase();
+
+    keySequence.push(key);
+    if (keySequence.length > easterCode.length) {
+        keySequence.shift();
+    }
+
+    if (keySequence.join('') == easterCode.join('')) {
+        mikuEasterEgg();
+    } else if (keySequence.join('') == mkwEasterCode.join('')) {
+        mkwEasterEgg();
+    }
+
+    if ((key === 't' || key === 'o') && !isKeyPressed) {
+        isKeyPressed = true;
+        if (key === 't') toggleThemeLightDarkOnly();
+        if (key === 'o') toggleSettingsPanel();
+    }
+});
+
+document.addEventListener('keyup', () => {
+    isKeyPressed = false;
+});
+
+function mikuEasterEgg() {
+    const style = document.createElement('style');
+
+    style.textContent = `
+        .day.selected {
+            position: relative;
+            overflow: hidden;
+            z-index: 0;
+            color: #fff;
+        }
+
+        .day.selected::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("../assets/media/calendar/mikuheadshake.avif");
+            background-size: cover;
+            background-position: center;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .day.selected:hover::before {
+            opacity: 0.25;
+        }
+    `;
+
+    document.head.appendChild(style);
 }
+
+function mkwEasterEgg() {
+    const style = document.createElement('style');
+
+    let fontPath = "assets/font/RacersDelight.woff2"
+    if (document.baseURI.includes("pages/rules/match/")) {
+        fontPath = "../../../assets/font/RacersDelight.woff2"
+    }
+
+    style.textContent = `
+        @font-face {
+            font-family: "RacersDelight";
+            src: url(${fontPath}) format("woff2");
+        }
+
+        body,
+        button,
+        input,
+        textarea,
+        select {
+            font-family: "RacersDelight", "RacersDelightFallback", sans-serif;
+        }
+
+        .teamStandingsBox {
+            font-family: "RacersDelight", "RacersDelightFallback", sans-serif;
+        }
+    `
+
+    document.head.appendChild(style);
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+    // if (localStorage.getItem("cookiesAccepted") !== "true") {
+    //     generateCookiesPopup();
+    // }
+    checkEasterEggs();
+});

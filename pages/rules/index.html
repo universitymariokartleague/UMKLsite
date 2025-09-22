@@ -7,18 +7,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <title>UMKL Rules | University Mario Kart League</title>
         <meta name="description" content="All types of rules in the University Mario Kart League (UMKL)">
-        <link rel="shortcut icon" href="assets/image/brand/favicon.png" type="image/png">
+        <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
-        <link rel="stylesheet" href="css/audioplayer.css">
-        <link rel="stylesheet" href="css/overlayscrollbars.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
+        <link rel="stylesheet" href="css/ext/fontawesome.min.css">
         <meta name="color-scheme" content="dark light">
 
         <meta property="og:title" content="University Mario Kart League | Rules" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://umkl.co.uk/pages/rules/" />
-        <meta property="og:image" content="https://umkl.co.uk/assets/image/brand/UMKL_Banner_embed.png" />
+        <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_Banner_embed.avif" />
         <meta property="og:description" content="All types of rules in the University Mario Kart League (UMKL)" />
         <meta name="theme-color" content="#bc0839">
 
@@ -26,7 +25,7 @@
         <meta name="twitter:card" content="summary_large_image">
 
         <!-- Scripts -->
-            <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
         <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
         <script src="scripts/overlayscrollbar.js" defer></script>
         
@@ -34,10 +33,10 @@
     </head>
 
     <body id="top" data-overlayscrollbars-initialize>
-        <div class="navbar-container">
+        <div class="navbar-container" translate="no">
             <div class="nav-bar">
                 <a href="index.html" class="nav-bar-title no-color-link no-underline-link-footer">
-                    <img src="assets/image/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
+                    <img src="assets/media/brand/UMKLlogonav.avif" class="nav-bar-logo" alt="UMKL logo">
                     <h2>UMKL</h2>
                 </a>
                 <nav class="nav-flex">
@@ -73,28 +72,33 @@
             <hr class="hr-below-title">
 
             <div class="rules-container">
-                <div class="rules-box">
+                <div class="rule-category-box">
                     <h2>Match Rules</h2>
                     <p class="p-below-title">Rules and regulations for matches</p>
                     <a href="pages\rules\match\" class="button">View</a>
                 </div>
 
-                <div class="rules-box">
+                <div class="rule-category-box">
                     <h2>Team Guidelines</h2>
                     <p class="p-below-title">Rules and guidelines for new teams wanting to join the UMKL</p>
                     <a href="pages\rules\team\" class="button">View</a>
                 </div>
 
-                <div class="rules-box">
+                <div class="rule-category-box">
                     <h2>Brand Guidelines</h2>
                     <p class="p-below-title">Guidelines for the use of intellectual property belonging to the UMKL</p>
                     <a href="pages\rules\brand\" class="button">View</a>
                 </div>
 
+                <div class="rule-category-box">
+                    <h2>Streaming Guidelines</h2>
+                    <p class="p-below-title">Guidelines for streamers and instructions on how to set up OBS</p>
+                    <a href="pages\rules\stream\" class="button">View</a>
+                </div>
             </div>
         </main>
 
-        <footer>
+        <footer translate="no">
             © UMKL 2025 |
             <a class="no-color-link" href="pages/credits/">Credits</a> |
             <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |

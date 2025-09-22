@@ -8,17 +8,19 @@
     <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport" />
     <title>Home | University Mario Kart League</title>
     <meta content="The main hub for all things University Mario Kart League (UMKL)!" name="description" />
-    <link href="assets/image/brand/favicon.png" rel="shortcut icon" type="image/png" />
+    <link rel="icon" href="https://umkl.co.uk/assets/media/brand/favicon.png" type="image/png">
     <link href="css/style.css" rel="stylesheet" />
+    <link href="css/eventbox.css" rel="stylesheet" />
+    <link href="css/news.css" rel="stylesheet" />
     <link href="css/settings.css" rel="stylesheet" />
-    <link href="css/overlayscrollbars.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
+    <link href="css/ext/overlayscrollbars.min.css" rel="stylesheet" />
+    <link href="css/ext/fontawesome.min.css" rel="stylesheet" />
     <meta content="dark light" name="color-scheme" />
 
     <meta content="University Mario Kart League" property="og:title" />
     <meta content="website" property="og:type" />
     <meta content="https://umkl.co.uk/" property="og:url" />
-    <meta content="https://umkl.co.uk/assets/image/brand/UMKL_Banner_embed.png" property="og:image" />
+    <meta content="https://umkl.co.uk/assets/media/brand/UMKL_Banner_embed.avif" property="og:image" />
     <meta content="The main hub for all things University Mario Kart League (UMKL)!" property="og:description" />
     <meta content="#bc0839" name="theme-color" />
 
@@ -36,10 +38,10 @@
 </head>
 
 <body data-overlayscrollbars-initialize="" id="top">
-    <div class="navbar-container">
+    <div class="navbar-container" translate="no">
         <div class="nav-bar">
             <a class="nav-bar-title no-color-link no-underline-link-footer" href="index.html">
-                <img alt="UMKL logo" class="nav-bar-logo" src="assets/image/brand/UMKLlogonav.webp" />
+                <img alt="UMKL logo" class="nav-bar-logo" src="assets/media/brand/UMKLlogonav.avif" />
                 <h2>UMKL</h2>
             </a>
             <nav class="nav-flex">
@@ -70,11 +72,12 @@
     </div>
 
     <main>
-        <img class="image" height="auto" src="assets/image/brand/UMKL_Season_2_Teaser.png" width="100%" />
+        <img class="image" height="auto" src="assets/media/brand/UMKL_Season_2_Teaser.avif" 
+        alt="A graphic showing the University Mario Kart League Season 2 will begin in October 2025" />
         <hr class="hr-below-title" />
         <h2>Welcome</h2>
         <p class="p-below-title">
-            The University Mario Kart League (UMKL) brings together students from over 8
+            The University Mario Kart League (UMKL) brings together students from 12
             universities around the UK to compete as teams of six in Mario Kart 8 Deluxe!
         </p>
         <p>
@@ -83,10 +86,12 @@
         </p>
         <hr />
 
+        <div id="upcomingMatchesError"></div>
         <div id="upcomingMatchesBox"></div>
 
         <h2>News</h2>
-        <a href="pages/news/">View more</a>
+        <a href="pages/news/">View all articles</a>
+
         <div class="news-wrapper after-title">
             <div class="news-container after-title" id="news-container">
                 <div class="news-box">
@@ -98,21 +103,37 @@
                             if...</span>
                     </article>
                     <div class="news-image"><img loading="lazy" onload="this.style.opacity=1"
-                            src="assets/image/news/mariokartbanner.webp" /></div>
+                            src="assets/media/news/mariokartbanner.avif"
+                            alt="An promotional image for Mario Kart 8 Deluxe" /></div>
                     <span class="news-date">20/04/2025 <span class="tags">
                             <tag>Intro</tag>
                         </span></span>
                 </div>
                 <div class="news-box">
-                    <new>New</new>
+                    <article class="news-text">
+                        <a href="pages/news/2025-07-17/cheep-cheep-updates/"><span class="news-title">Cheep Cheep
+                                Updates</span></a><br />
+                        <span class="news-desc">Some updates about the Cheep Cheep Discord app and
+                            upcoming test matches.</span>
+                    </article>
+                    <div class="news-image"><img loading="lazy" onload="this.style.opacity=1"
+                            src="assets/media/news/newcommands.avif"
+                            alt="An image showing new commands that can be used with the Cheep Cheep app" /></div>
+                    <span class="news-date">17/07/2025 <span class="tags">
+                            <tag>Discord</tag> <tag>Test Matches</tag>
+                        </span></span>
+                </div>
+                <div class="news-box">
                     <article class="news-text">
                         <a href="pages/news/2025-06-13/upcoming-summer-test-matches/"><span class="news-title">Upcoming
-                                Summer Test Matches!</span></a><br />
-                        <span class="news-desc">More Test Matches between teams are being planned as exams finish and summer
+                                summer test matches!</span></a><br />
+                        <span class="news-desc">More test matches between teams are being planned as exams finish and
+                            summer
                             approaches.</span>
                     </article>
                     <div class="news-image"><img loading="lazy" onload="this.style.opacity=1"
-                            src="assets/image/news/summertestmatches.webp" /></div>
+                            src="assets/media/news/summertestmatches.avif"
+                            alt="An image showing new commands that can be used with the Cheep Cheep app" /></div>
                     <span class="news-date">13/06/2025 <span class="tags">
                             <tag>Test Matches</tag>
                         </span></span>
@@ -120,12 +141,13 @@
                 <div class="news-box">
                     <article class="news-text">
                         <a href="pages/news/2025-04-22/umkl-test-matches-are-being-conducted/"><span class="news-title">
-                                Test Matches are being conducted!</span></a><br />
-                        <span class="news-desc">Test Matches are planned in the upcoming week, more will follow in the
+                                Test matches are being conducted!</span></a><br />
+                        <span class="news-desc">Test matches are planned in the upcoming week, more will follow in the
                             upcoming month...</span>
                     </article>
                     <div class="news-image"><img loading="lazy" onload="this.style.opacity=1"
-                            src="assets/image/news/testmatches.webp" /></div>
+                            src="assets/media/news/testmatches.avif"
+                            alt="An image depicting Cheep Cheep in the ocean" /></div>
                     <span class="news-date">22/04/2025 <span class="tags">
                             <tag>Test Matches</tag>
                         </span></span>
@@ -133,12 +155,13 @@
                 <div class="news-box">
                     <article class="news-text">
                         <a href="pages/news/2025-04-19/umkl-discord/"><span class="news-title">Join our Discord
-                                Server!</span></a><br />
+                                server!</span></a><br />
                         <span class="news-desc">All matches are organised through our Discord server. Please join it to
                             take part in a match!</span>
                     </article>
                     <div class="news-image"><img loading="lazy" onload="this.style.opacity=1"
-                            src="assets/image/news/discordinspire.webp" /></div>
+                            src="assets/media/news/discordinspire.avif"
+                            alt="A piece of Discord promotional artwork" /></div>
                     <span class="news-date">19/04/2025 <span class="tags">
                             <tag>Intro</tag>
                             <tag>Discord</tag>
@@ -153,7 +176,8 @@
                             across the UK!</span>
                     </article>
                     <div class="news-image"><img loading="lazy" onload="this.style.opacity=1"
-                            src="assets/image/news/umklbanner.webp" /></div>
+                            src="assets/media/news/umklbanner.avif"
+                            alt="An image showing the UMKL logo" /></div>
                     <span class="news-date">19/04/2025 <span class="tags">
                             <tag>Intro</tag>
                         </span></span>
@@ -162,7 +186,7 @@
         </div>
     </main>
 
-    <footer>
+    <footer translate="no">
         © UMKL 2025 |
         <a class="no-color-link" href="pages/credits/">Credits</a> |
         <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |

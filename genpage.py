@@ -10,11 +10,11 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <title>{TITLE} | University Mario Kart League</title>
         <meta name="description" content="{TITLE} news article on University Mario Kart League (UMKL)">
-        <link rel="shortcut icon" href="assets/image/brand/favicon.png" type="image/png">
+        <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
-        <link rel="stylesheet" href="css/overlayscrollbars.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
+        <link rel="stylesheet" href="css/ext/fontawesome.min.css">
         <meta name="color-scheme" content="dark light">
     
         <meta property="og:title" content="University Mario Kart League | {TITLE} - News" />
@@ -35,10 +35,10 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
         <script type="module" src="scripts/settings.js" defer></script>
     </head>
     <body id="top" data-overlayscrollbars-initialize>
-        <div class="navbar-container">
+        <div class="navbar-container" translate="no">
             <div class="nav-bar">
                 <a href="index.html" class="nav-bar-title no-color-link no-underline-link-footer">
-                    <img src="assets/image/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
+                    <img src="assets/media/brand/UMKLlogonav.avif" class="nav-bar-logo" alt="UMKL logo">
                     <h2>UMKL</h2>
                 </a>
                 <nav class="nav-flex">
@@ -73,7 +73,7 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
             <h1>{TITLE}</h1>
             <div class="p-below-title">
                 {DATE} | 
-                <tag>Intro</tag>
+                <tag translate="no">Intro</tag>
                 <div class="news-credits">Written by {AUTHOR1}, {AUTHOR2}.<br>Edited by {EDITOR}</div>
             </div>
             <hr class="hr-below-title">
@@ -81,7 +81,7 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
             <p>{DESC}</p>
         </main>
 
-        <footer>
+        <footer translate="no">
             © UMKL 2025 |
             <a class="no-color-link" href="pages/credits/">Credits</a> |
             <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |
@@ -144,8 +144,9 @@ def create_new_blog():
         - Creates a new HTML file for the blog entry in the appropriate directory.
     """
     title = input("Enter blog title > ")
-    desc = input("Enter blog description > ")
+    description = input("Enter blog description > ")
     image = input("Enter blog image link > ")
+    alt = input("Enter an alt description for the image > ")
     date = input("Enter blog date (DD/MM/YYYY) > ")
 
     link = create_slug(title)
@@ -155,9 +156,9 @@ def create_new_blog():
                 <div class="news-box">
                     <article class="news-text">
                         <a href="pages/news/{url_date}/{link}/"><span class="news-title">{title}</span></a><br>
-                        <span class="news-desc">{desc}</span>
+                        <span class="news-desc">{description}</span>
                     </article>
-                    <div class="news-image"><img onload="this.style.opacity=1" loading="lazy" src="{image}"></div>
+                    <div class="news-image"><img onload="this.style.opacity=1" loading="lazy" src="{image}" alt="{alt}"></div>
                     <span class="news-date">{date}</span>
                 </div>
     """
@@ -210,7 +211,7 @@ def create_new_blog():
 
     os.makedirs(f"pages/news/{url_date}/{link}", exist_ok=True)
     with open(f"pages/news/{url_date}/{link}/index.html", "a+", encoding='utf-8') as f:
-        content = BLANK_NEWS_PAGE.replace("{TITLE}", title).replace("{DESC}", desc).replace("{IMAGE}", image).replace("{DATE}", date).replace("{LINK}", f"pages/news/{url_date}/{link}")
+        content = BLANK_NEWS_PAGE.replace("{TITLE}", title).replace("{DESC}", description).replace("{IMAGE}", image).replace("{DATE}", date).replace("{LINK}", f"pages/news/{url_date}/{link}")
         f.write(content)
 
     print(f"pages/news/{url_date}/{link}/index.html page has been created")

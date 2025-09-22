@@ -5,19 +5,20 @@
     
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-        <title>Team {TEAMNAME} | University Mario Kart League</title>
+        <title>Loading... | University Mario Kart League</title>
         <meta name="description" content="This page contains information about a specific team in the University Mario Kart League (UMKL)">
-        <link rel="shortcut icon" href="assets/image/brand/favicon.png" type="image/png">
+        <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/teampage.css">
         <link rel="stylesheet" href="css/settings.css">
-        <link rel="stylesheet" href="css/overlayscrollbars.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
+        <link rel="stylesheet" href="css/ext/fontawesome.min.css">
         <meta name="color-scheme" content="dark light">
     
         <meta property="og:title" content="University Mario Kart League | Teams" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://umkl.co.uk/pages/teams/" />
-        <meta property="og:image" content="https://umkl.co.uk/assets/image/brand/Cheep_Cheep_banner.png" />
+        <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/Cheep_Cheep_banner.avif" />
         <meta property="og:description" content="This page contains information about a specific team in the University Mario Kart League (UMKL)" />
         <meta name="theme-color" content="#bc0839">
     
@@ -33,10 +34,10 @@
         <script type="module" src="scripts/teaminfogenerate.js" defer></script>
     </head>
     <body id="top" data-overlayscrollbars-initialize>
-        <div class="navbar-container">
+        <div class="navbar-container" translate="no">
             <div class="nav-bar">
                 <a href="index.html" class="nav-bar-title no-color-link no-underline-link-footer">
-                    <img src="assets/image/brand/UMKLlogonav.webp" class="nav-bar-logo" alt="UMKL logo">
+                    <img src="assets/media/brand/UMKLlogonav.avif" class="nav-bar-logo" alt="UMKL logo">
                     <h2>UMKL</h2>
                 </a>
                 <nav class="nav-flex">
@@ -67,8 +68,8 @@
         </div>
 
         <main>
-            <a href="pages/teams/">Back</a>
-            <h1 id="teamNameBox"></h1>
+            <a href="pages/teams/" id="backButton">Back</a>
+            <h1 translate="no" id="teamNameBox"></h1>
             <hr class="hr-below-title">
 
             <div id="JSTeamBox" class="team-info">
@@ -76,7 +77,7 @@
             </div>
         </main>
 
-        <footer>
+        <footer translate="no">
             © UMKL 2025 |
             <a class="no-color-link" href="pages/credits/">Credits</a> |
             <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |

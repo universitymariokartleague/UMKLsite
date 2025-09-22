@@ -4,11 +4,15 @@
             3,
             0
         ],
+        "championship_seasons": [
+            1
+        ],
         "coords": [
             53.96,
             -1.08
         ],
         "first_entry": 1,
+        "lifetime_matches_played": 3,
         "place_id": 1826149980,
         "season": 1,
         "season_matches_played": 3,
@@ -32,11 +36,13 @@
             2,
             1
         ],
+        "championship_seasons": [],
         "coords": [
             53.0,
             -2.1833
         ],
         "first_entry": 1,
+        "lifetime_matches_played": 3,
         "place_id": 1826799578,
         "season": 1,
         "season_matches_played": 3,
@@ -60,11 +66,13 @@
             1,
             2
         ],
+        "championship_seasons": [],
         "coords": [
             55.9533,
             -3.1892
         ],
         "first_entry": 1,
+        "lifetime_matches_played": 3,
         "place_id": 1826492520,
         "season": 1,
         "season_matches_played": 3,
@@ -88,11 +96,13 @@
             0,
             3
         ],
+        "championship_seasons": [],
         "coords": [
             53.0109,
             -2.2278
         ],
         "first_entry": 1,
+        "lifetime_matches_played": 3,
         "place_id": 1826124765,
         "season": 1,
         "season_matches_played": 3,
