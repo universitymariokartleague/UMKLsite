@@ -10,6 +10,10 @@ const contributors = [
         github: "https://github.com/h-omeless/"
     },
     {
+        name: "skipper93653",
+        discord: "https://discord.com/users/344532854102949909"
+    },
+    {
         name: "skjamm",
         discord: "https://discord.com/users/309400933870206978"
     },
@@ -33,17 +37,17 @@ const sections = [
     {
         title: "Founding",
         description: `People responsible for the creation of the University Mario Kart League`,
-        contributorIndexes: [0, 1, 2, 3, 4]
+        contributorIndexes: [0, 1, 2, 3, 4, 5]
     },
     {
         title: "Cheep Cheep App",
         description: `Development of the Cheep Cheep app, which is used on the UMKL Discord server, view the site's privacy policy <a href="pages/privacy">here</a>`,
-        contributorIndexes: [0, 3, 4]
+        contributorIndexes: [0, 4, 5]
     },
     {
         title: "Website",
         description: `All the source code for the website can be found at our <a href="https://github.com/universitymariokartleague/UMKLsite">GitHub repository</a>, view the site's privacy policy <a href="pages/privacy">here</a>`,
-        contributorIndexes: [0, 3, 4]
+        contributorIndexes: [0, 4, 5]
     }
 ];
 
