@@ -46,5 +46,9 @@
     {
         "team_color": "#85b09a",
         "team_name": "Cambridge"
+    },
+    {
+        "team_color": "#e0b3c7",
+        "team_name": "Brighton"
     }
 ]

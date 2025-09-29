@@ -159,7 +159,11 @@ def create_new_blog():
                         <span class="news-desc">{description}</span>
                     </article>
                     <div class="news-image"><img onload="this.style.opacity=1" loading="lazy" src="{image}" alt="{alt}"></div>
-                    <span class="news-date">{date}</span>
+                    <span class="news-date">{date} 
+                        <span class="tags">
+                            <tag>REPLACETAG</tag>
+                        </span>
+                    </span>
                 </div>
     """
 

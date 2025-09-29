@@ -94,5 +94,13 @@
         ],
         "team_color": "#85b09a",
         "team_name": "Cambridge"
+    },
+    {
+        "coords": [
+            50.8208,
+            -0.1375
+        ],
+        "team_color": "#e0b3c7",
+        "team_name": "Brighton"
     }
 ]

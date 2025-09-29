@@ -360,5 +360,35 @@
         "team_name": "Cambridge",
         "team_place": "Cambridge, England",
         "team_season_points": 0
+    },
+    {
+        "career_wins_losses": [
+            0,
+            0
+        ],
+        "championship_seasons": [],
+        "coords": [
+            50.8208,
+            -0.1375
+        ],
+        "first_entry": 2,
+        "lifetime_matches_played": 0,
+        "place_id": 1826609057,
+        "season": 2,
+        "season_matches_played": 0,
+        "season_penalties": 0,
+        "season_position": 13,
+        "season_wins_losses": [
+            0,
+            0
+        ],
+        "team_career_points": 0,
+        "team_championships": 0,
+        "team_color": "#e0b3c7",
+        "team_full_name": "University of Brighton",
+        "team_id": 13,
+        "team_name": "Brighton",
+        "team_place": "Brighton, England",
+        "team_season_points": 0
     }
 ]
