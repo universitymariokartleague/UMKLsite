@@ -131,7 +131,7 @@ def get_news_items():
             "pubDate": pubdate.strftime("%a, %d %b %Y %H:%M:%S +0000")
         })
 
-    items.sort(key=lambda x: x["pubDate"], reverse=True)
+    # items.sort(key=lambda x: x["pubDate"], reverse=True)
     return items
 
 def build_rss(items):
