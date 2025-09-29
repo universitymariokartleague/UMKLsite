@@ -5,7 +5,7 @@
 		<link>https://umkl.co.uk/pages/news/</link>
 		<description>The latest news from the UMKL</description>
 		<language>en-gb</language>
-		<lastBuildDate>Mon, 29 Sep 2025 20:34:35 +0000</lastBuildDate>
+		<lastBuildDate>Mon, 29 Sep 2025 22:12:49 +0000</lastBuildDate>
 		<image>
 			<title>UMKL News</title>
 			<url>assets/media/brand/favicon.png</url>
@@ -245,6 +245,29 @@
             &lt;/i&gt;
 &lt;/div&gt;</description>
 			<pubDate>Sat, 19 Apr 2025 00:00:00 +0000</pubDate>
+		</item>
+		<item>
+			<title>The Structure for Season 2</title>
+			<link>https://umkl.co.uk/pages/news/2025-09-29/the-structure-for-season-2/</link>
+			<media:content url="https://umkl.co.uk/pages/news/2025-09-29/the-structure-for-season-2/season2structure.avif" type="image/avif" medium="image"> </media:content>
+			<description>&lt;div&gt;&lt;p&gt;The upcoming season of UMKL will be using a Swiss Style system to determine the winner, but what exactly is that?&lt;/p&gt;&lt;p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-09-29/the-structure-for-season-2/season2structure.avif"&gt;
+&lt;i&gt;Season 2 is scheduled to start in October 2025.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;
+                A Swiss System Tournament, most commonly used in chess, draws opponents against each other based on their 
+                current standings and match records, resulting in closer matches and near accurate skill based matchmaking. 
+                This simply means that teams who win will play teams who win, and teams who lose will play teams who lose; 
+                there is no 'elimination' and everybody gets to keep on playing!
+            &lt;/p&gt;&lt;p&gt;
+                This system allows us to reduce the number of matchdays required for each team, which helps 
+                when most players are also full time students, and with the huge influx in teams this season 
+                it's just not feasible nor efficient to play almost 70 matches in the space of a few months.
+            &lt;/p&gt;&lt;p&gt;With a Swiss System we reduce that number down to 24 matches, which will be closer fought and 
+                more entertaining for both players and the audience.&lt;/p&gt;&lt;p&gt;With Season 2 starting in October we hope that everyone enjoys the upcoming matches, and we look forward to seeing our teams back in action very soon!&lt;/p&gt;&lt;p&gt;
+&lt;i&gt;
+                    This article is an explation of an announcement made on the UMKL Discord server, 
+                    you can join the server here.
+                &lt;/i&gt;
+&lt;/p&gt;&lt;/div&gt;</description>
+			<pubDate>Mon, 29 Sep 2025 00:00:00 +0000</pubDate>
 		</item>
 		<item>
 			<title>Upcoming summer test matches!</title>
