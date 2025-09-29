@@ -251,7 +251,7 @@ async function createTeamStandingsImage(season, isCurrentSeason, teamStandingsDa
     }
     
     // Calculate final height and crop
-    const finalHeight = POSITION_OFFSET * Math.min(teamStandingsData.length, MAX_TEAMS) + 166;
+    const finalHeight = POSITION_OFFSET * Math.min(teamStandingsData.length, MAX_TEAMS) + 165;
     const croppedCanvas = document.createElement('canvas');
     croppedCanvas.width = 1125;
     croppedCanvas.height = finalHeight;
