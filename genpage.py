@@ -8,8 +8,8 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
     
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-        <title>{TITLE} | University Mario Kart League</title>
-        <meta name="description" content="{TITLE} news article on University Mario Kart League (UMKL)">
+        <title>{TITLE} | UMKL</title>
+        <meta name="description" content="{DESC}">
         <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
@@ -17,11 +17,11 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
         <link rel="stylesheet" href="css/ext/fontawesome.min.css">
         <meta name="color-scheme" content="dark light">
     
-        <meta property="og:title" content="University Mario Kart League | {TITLE} - News" />
+        <meta property="og:title" content="{TITLE} | UMKL" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://umkl.co.uk/{LINK}" />
         <meta property="og:image" content="https://umkl.co.uk/{IMAGE}" />
-        <meta property="og:description" content="{TITLE} news article on University Mario Kart League (UMKL)" />
+        <meta property="og:description" content="{DESC}" />
         <meta name="theme-color" content="#bc0839" />
     
         <!-- Include this to make the og:image larger -->
