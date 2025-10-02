@@ -4552,5 +4552,21 @@
                 "https://www.youtube.com/watch?v=g7AfGSxeY8w"
             ]
         }
+    ],
+    "2025-10-08": [
+        {
+            "description": "A 6v6 match between Birmingham and Liverpool. \n\nMembers of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed on the UMKL YouTube channel. You can visit the channel here: https://www.youtube.com/@universitymariokartleague.",
+            "eventID": "1423297707698815088",
+            "eventURL": "https://discord.com/events/1312070414113050624/1423297707698815088",
+            "results": [],
+            "season": 2,
+            "teamsInvolved": [
+                "Birmingham",
+                "Liverpool"
+            ],
+            "testMatch": false,
+            "time": "19:00:00+01:00",
+            "title": "Birmingham VS Liverpool "
+        }
     ]
 }

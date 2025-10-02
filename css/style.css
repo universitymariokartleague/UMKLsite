@@ -452,7 +452,7 @@ mention {
 tag {
     color: var(--metion-color);
     font-size: 15px;
-    padding: 1px 6px;
+    padding: 0px 5px;
     background-color: rgba(88, 101, 242, 0.25);
     border: 1px solid rgba(152, 172, 255, 0.6);
     transition: background-color 0.1s, border 0.1s;
@@ -694,4 +694,9 @@ dialog.cookie-popup {
         border: none;
         border-top: 1px solid #cccccccc;
     }
+}
+
+.youtube-embed {
+    max-width: 100%;
+    aspect-ratio: 16 / 9;
 }
