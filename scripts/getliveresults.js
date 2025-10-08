@@ -9,7 +9,6 @@ const secondTeamScore = document.getElementById("secondteamscore");
 const firstTeamLogo = document.getElementById("firstteamlogo");
 const secondTeamLogo = document.getElementById("secondteamlogo");
 const errorMessage = document.getElementById("errormessage");
-let reversed = Boolean(document.body.dataset.reversed) || false;
 
 const MATCH_LENGTH_MINS = 90;
 
@@ -152,7 +151,7 @@ function setScores() {
 
     let scores = [teamAPoints, teamBPoints]
 
-    const [newFirst, newSecond] = reversed ? [scores[1], scores[0]] : [scores[0], scores[1]];
+    const [newFirst, newSecond] = [scores[0], scores[1]];
 
     const currentFirst = parseInt(firstTeamScore.innerText) || 0;
     const currentSecond = parseInt(secondTeamScore.innerText) || 0;
