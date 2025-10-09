@@ -189,6 +189,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         matchData = await getMatchData();
         raceresults = await getLive();
         setScores();
+        getLiveMatchTeams()
         errorMessage.innerHTML = "";
         window.lastMatchUpdate = Date.now();
     } catch (error) {
