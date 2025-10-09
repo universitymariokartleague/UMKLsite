@@ -417,6 +417,7 @@ function showDailyLog(date, dayCell) {
 
             let matchEndedText = ''
             if (entry.endTime) {
+                isLive = false;
                 function formatTime(timeStr, is12Hour = false) {
                     const [hourStr, minuteStr] = timeStr.split(":");
                     let hours = parseInt(hourStr, 10);
