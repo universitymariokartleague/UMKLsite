@@ -27,46 +27,18 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
         <!-- Include this to make the og:image larger -->
         <meta name="twitter:card" content="summary_large_image" />
     
+        <!-- Components -->
+        <script type="module" src="components/navbar.js"></script>
+
         <!-- Scripts -->
         <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
         <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
-        <script src="scripts/overlayscrollbar.js" defer></script>    
+        <script src="scripts/overlayscrollbar.js" defer></script>     
         
         <script type="module" src="scripts/settings.js" defer></script>
     </head>
     <body id="top" data-overlayscrollbars-initialize>
-        <div class="navbar-container" translate="no">
-            <div class="nav-bar">
-                <a href="index.html" class="nav-bar-title no-color-link no-underline-link-footer">
-                    <img src="assets/media/brand/UMKLlogonav.avif" class="nav-bar-logo">
-                    <h2>UMKL</h2>
-                </a>
-                <nav class="nav-flex">
-                    <ul id="nav-bar">
-                        <li><a href="index.html">Home</a></li>
-                        <li><a class="nav-selected" href="pages/news/">News</a></li>
-                        <li><a href="pages/teams/">Teams</a></li>
-                        <li><a href="pages/matches/">Matches</a></li>
-                        <li><a href="pages/rules/">Rules</a></li>
-                        <li><a href="pages/faq/">FAQs</a></li>
-                        <li><a target="_blank" class="nav-bar-link" href="https://discord.gg/jz3hKEmDss">Discord</a></li>
-                    </ul>
-                </nav>
-                <!-- Dropdown navigation (shown on mobile) -->
-                <div class="nav-dropdown">
-                    <div class="nav-dropdown-button">☰</div>
-                    <div class="nav-dropdown-content" id="nav-dropdown-bar">
-                        <a href="index.html">Home</a>
-                        <a href="pages/news/">News</a>
-                        <a href="pages/teams/">Teams</a>
-                        <a href="pages/matches/">Matches</a>
-                        <a href="pages/rules/">Rules</a>
-                        <a href="pages/faq/">FAQs</a>
-                        <a target="_blank" class="nav-bar-link" href="https://discord.gg/jz3hKEmDss">Discord</a>
-                    </div>
-                </div>            
-            </div>
-        </div>
+        <umkl-navbar></umkl-navbar>
 
         <main>
             <a href="pages/news/">Back</a>
