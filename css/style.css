@@ -541,3 +541,12 @@ dialog.cookie-popup {
     max-width: 100%;
     aspect-ratio: 16 / 9;
 }
+
+umkl-navbar {
+    background-color: var(--accent-color);
+    position: fixed;
+    width: 100%;
+    height: 48px;
+    top: 0;
+    z-index: 8;
+}
