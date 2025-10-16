@@ -31,7 +31,6 @@ https://umkl.co.uk/pages/sitemap/
 https://umkl.co.uk/pages/teams/
 https://umkl.co.uk/pages/teams/details/
 https://umkl.co.uk/pages/test/apitest/
-https://umkl.co.uk/pages/test/mkw/
 https://umkl.co.uk/pages/tools/
 https://umkl.co.uk/pages/tools/6v6scorecalculator/
 https://umkl.co.uk/pages/tools/colourpicker/
