@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" data-overlayscrollbars-initialize>
+    <head>
+        <base href="../../../">
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>Combo Randomiser | University Mario Kart League</title>
+        <meta name="description" content="Randomise a character and vehicle combo across various games on the University Mario Kart League (UMKL) site">
+        <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/settings.css">
+        <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
+        <link rel="stylesheet" href="css/ext/fontawesome.min.css">
+        <meta name="color-scheme" content="dark light">
+
+        <meta property="og:title" content="University Mario Kart League | Combo Randomiser" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://umkl.co.uk/pages/tools/comborandomiser/" />
+        <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_Banner_embed.avif" />
+        <meta property="og:description" content="Randomise a track pick across various games on the University Mario Kart League (UMKL) site" />
+        <meta name="theme-color" content="#bc0839">
+
+        <!-- Include this to make the og:image larger -->
+        <meta name="twitter:card" content="summary_large_image">
+
+        <!-- Components -->
+        <script type="module" src="components/navbar.js" defer></script>
+
+        <!-- Scripts -->
+        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+        <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
+        <script src="scripts/overlayscrollbar.js" defer></script>
+        
+        <script type="module" src="scripts/settings.js" defer></script>
+        <script type="module" src="scripts/comborandomiser.js" defer></script>
+    </head>
+
+    <body id="top" data-overlayscrollbars-initialize>
+        <umkl-navbar></umkl-navbar>
+
+        <main>
+            <h1>Combo randomiser</h1>
+            <p class="p-below-title">Randomise a character and vehicle combo across various games</p>
+            <hr class="hr-below-title">
+
+            <label for="game-select">Select a game:</label>
+            <select id="game-select">
+                <option value="SNES">Super Mario Kart (SNES)</option>
+                <option value="N64">Mario Kart 64 (N64)</option>
+                <option value="GBA">Mario Kart: Super Circuit (GBA)</option>
+                <option value="GCN">Mario Kart: Double Dash!! (GCN)</option>
+                <option value="DS">Mario Kart DS (DS)</option>
+                <option value="Wii">Mario Kart Wii (Wii)</option>
+                <option value="MK7">Mario Kart 7 (3DS)</option>
+                <option value="MK8">Mario Kart 8 (Wii U)</option>
+                <option value="DX" selected>Mario Kart 8 Deluxe (NS)</option>
+                <option value="WORLD">Mario Kart World (NS2)</option>
+            </select>
+
+            <br><button id="pickRandomCombo">Pick Combo!</button> | <code translate="no"><span id="results">Nothing picked</span></code><br>
+
+            <label for="disableRepicks">Disable repicks:</label>
+            <input type="checkbox" id="disableRepicks" name="disableRepicks">
+            <button id="clearRepicks">Clear repicks list</button>
+
+            <br><label for="palNames">PAL names:</label>
+            <input type="checkbox" id="palNames" name="palNames" checked>
+            
+            <p><div id="pickedCombos"></div></p>
+        </main>
+
+        <footer translate="no">
+            © UMKL 2025 |
+            <a class="no-color-link" href="pages/credits/">Credits</a> |
+            <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |
+            <a href="https://www.youtube.com/@universitymariokartleague" title="UMKL YouTube Channel" class="no-color-link no-underline-link-footer fa-brands fa-youtube"></a>
+            <a href="https://www.instagram.com/universitymariokartleague" title="UMKL Instagram Account" class="no-color-link no-underline-link-footer fa-brands fa-instagram"></a>
+            <a href="https://www.facebook.com/profile.php?id=61575273336011" title="UMKL Facebook Page" class="no-color-link no-underline-link-footer fa-brands fa-facebook"></a>            
+            <a href="https://discord.gg/jz3hKEmDss" title="UMKL Discord server" class="no-color-link no-underline-link-footer fa-brands fa-discord"></a>            
+        </footer>
+    </body>
+</html>
