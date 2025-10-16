@@ -250,38 +250,46 @@ function generateCookiesPopup() {
 }
 
 function checkEasterEggs() {
-    function checkDate(month, day) {
-        return currentDate.getMonth() === month && currentDate.getDate() === day;
+    function checkDate(day, month) {
+        return currentDate.getMonth() + 1 === month && currentDate.getDate() === day;
+    }
+
+    function checkDatePeriod(startDay, startMonth, endDay, endMonth) {
+        const start = new Date(currentDate.getFullYear(), startMonth - 1, startDay);
+        const end = new Date(currentDate.getFullYear(), endMonth - 1, endDay);
+        return currentDate >= start && currentDate <= end;
     }
 
     let currentDate = new Date();
-    // currentDate = new Date(currentDate.getFullYear(), 9, 31);
+    currentDate = new Date(currentDate.getFullYear(), 9, 29);
 
-    if (checkDate(3, 1)) {
+    if (checkDate(1, 4)) {
         easterEgg = "aprilfools";
-    } else if (checkDate(9, 31)) {
+    } else if (checkDatePeriod(29, 10, 31, 10)) {
         easterEgg = "halloween";
-    } else if (checkDate(11, 24)) {
+    } else if (checkDate(24, 12)) {
         easterEgg = "xmaseve";
-    } else if (checkDate(11, 25)) {
+    } else if (checkDate(25, 12)) {
         easterEgg = "xmas";
-    } else if (checkDate(11, 31)) {
+    } else if (checkDate(31, 12)) {
         easterEgg = "newyearseve";
-    } else if (checkDate(0, 1)) {
+    } else if (checkDate(1, 1)) {
         easterEgg = "newyear";
     }
 
     switch (easterEgg) {
         case "aprilfools":
-            console.log("Happy April Fools' Day!");
+            console.log("Happy April Fools!");
             break;
         case "halloween":
+            console.log("Happy Halloween!");
             halloweenEasterEgg();
             break;
         case "xmaseve":
             console.log("Merry Christmas Eve!");
             break;
         case "xmas":
+            console.log("Merry Christmas!");
             xmasEasterEgg();
             break;
         case "newyearseve":
@@ -301,6 +309,8 @@ let keySequence = [];
 const easterCode = ['m', 'i', 'k', 'u'];
 const mkwEasterCode = ['m', 'k', 'w'];
 
+let mkwEasterEggToggled = false;
+
 document.addEventListener('keydown', (event) => {
     const tag = event.target.tagName.toLowerCase();
     const isTyping = tag === 'input' || tag === 'textarea' || event.target.isContentEditable;
@@ -316,8 +326,10 @@ document.addEventListener('keydown', (event) => {
 
     if (keySequence.join('') == easterCode.join('')) {
         mikuEasterEgg();
+        keySequence = [];
     } else if (keySequence.join('') == mkwEasterCode.join('')) {
         mkwEasterEgg();
+        keySequence = [];
     }
 
     if ((key === 't' || key === 'o') && !isKeyPressed) {
@@ -364,6 +376,9 @@ function mikuEasterEgg() {
 }
 
 function mkwEasterEgg() {
+    if (mkwEasterEggToggled) document.location.reload();
+    mkwEasterEggToggled = true;
+
     const style = document.createElement('style');
 
     let fontPath = "assets/font/RacersDelight.woff2"

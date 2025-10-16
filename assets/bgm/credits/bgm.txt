@@ -1,8 +1,8 @@
 credits|true|false|false
-Mario Paint - Mysterious.mp3|_alariko.jpeg
-Wii Food Delivery Channel - Ordering Party Food.mp3|_alariko.jpeg
-Yume 2kki - Green Neon World.mp3|_alariko.jpeg
-Wii U Transfer Tool - Menus.mp3|_alariko.jpeg
-Super Mario Galaxy 2 - World 3.mp3|_alariko.jpeg
-Wii U - Initial Setup.mp3|_alariko.jpeg
-Wii Room - Television.mp3|_alariko.jpeg
+Mario Paint - Mysterious.mp3|cheepcheep.avif
+Wii Food Delivery Channel - Ordering Party Food.mp3|cheepcheep.avif
+Yume 2kki - Green Neon World.mp3|cheepcheep.avif
+Wii U Transfer Tool - Menus.mp3|cheepcheep.avif
+Super Mario Galaxy 2 - World 3.mp3|cheepcheep.avif
+Wii U - Initial Setup.mp3|cheepcheep.avif
+Wii Room - Television.mp3|cheepcheep.avif
