@@ -66,7 +66,7 @@ async function generateMatchStatsBox(userData, showError) {
         console.debug(`%cuserinfogenerate.js %c> %c${userData.username} does not belong to a team`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
     }
 
-    document.title = `${makePossessive(userData.username)} Stats | University Mario Kart League`;
+    document.title = `${makePossessive(userData.username)} Stats | UMKL`;
     teamNameBox.innerText = `${makePossessive(userData.username)} Stats`;
 
     let currentFields = `${userData.username} doesn't belong to a team!`

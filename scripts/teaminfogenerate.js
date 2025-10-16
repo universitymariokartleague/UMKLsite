@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     let showError = 0;
     const urlParams = new URLSearchParams(window.location.search);
     let currentTeam = urlParams.get('team');
-    document.title = `Team ${currentTeam} | University Mario Kart League`;
+    document.title = `Team ${currentTeam} | UMKL`;
     teamNameBox.innerText = currentTeam;
 
     let backButton = document.getElementById("backButton");
