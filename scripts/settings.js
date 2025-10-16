@@ -261,7 +261,7 @@ function checkEasterEggs() {
     }
 
     let currentDate = new Date();
-    currentDate = new Date(currentDate.getFullYear(), 9, 29);
+    // currentDate = new Date(currentDate.getFullYear(), 9, 29);
 
     if (checkDate(1, 4)) {
         easterEgg = "aprilfools";
