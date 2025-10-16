@@ -18,8 +18,7 @@ class UMKLNavbar extends HTMLElement {
                             <li><a href="../../../pages/news/">News</a></li>
                             <li><a href="../../../pages/teams/">Teams</a></li>
                             <li><a href="../../../pages/matches/">Matches</a></li>
-                            <li><a href="../../../pages/rules/">Rules</a></li>
-                            <li><a href="../../../pages/faq/">FAQs</a></li>
+                            <li><a href="../../../pages/rules/">Rules/Guides</a></li>
                             <li><a class="nav-bar-link" href="https://discord.gg/jz3hKEmDss" target="_blank">Discord</a></li>
                         </ul>
                     </nav>
@@ -30,8 +29,7 @@ class UMKLNavbar extends HTMLElement {
                             <a href="../../../pages/news/">News</a>
                             <a href="../../../pages/teams/">Teams</a>
                             <a href="../../../pages/matches/">Matches</a>
-                            <a href="../../../pages/rules/">Rules</a>
-                            <a href="../../../pages/faq/">FAQs</a>
+                            <a href="../../../pages/rules/">Rules/Guides</a>
                             <a class="nav-bar-link" href="https://discord.gg/jz3hKEmDss" target="_blank">Discord</a>
                         </div>
                     </div>
