@@ -24,12 +24,12 @@ async function getMatchData() {
         },
         body: "{}"
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        });
 }
 
 async function getMatchDataFallback() {
@@ -48,12 +48,12 @@ async function getTeamcolors() {
         },
         body: "{}"
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        });
 }
 
 async function getTeamcolorsFallback() {
@@ -102,6 +102,13 @@ function showUpcomingMatch() {
         return formatDate(now);
     };
 
+    function formatDateWithoutYear(dateStr, locale = "en-GB") {
+        const date = new Date(dateStr);
+        const day = date.getDate();
+        const month = date.toLocaleString(locale, { month: "long" });
+        return `${day} ${month}`;
+    }
+
     const todayStr = getLocalDate(0);
     const tomorrowStr = getLocalDate(1);
 
@@ -136,14 +143,14 @@ function showUpcomingMatch() {
             }
 
             const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
-            
-            const matchDateStr = (matchDataToUse[todayStr]?.includes(entry) ? todayStr : tomorrowStr);
-            const formattedDate = parseLocalDate(matchDateStr).toLocaleString(locale, { dateStyle: "long" });
-            let formattedLocalDate, dayRelation;
 
+            const matchDateStr = (matchDataToUse[todayStr]?.includes(entry) ? todayStr : tomorrowStr);
+            const formattedDate = formatDateWithoutYear(parseLocalDate(matchDateStr));
+            
             let timeString = entry.time || '00:00:00';
             const { formattedMatchTime, formattedLocalMatchTime, outsideUKTimezone } = formatMatchTime(matchDateStr, timeString, locale);
             
+            let formattedLocalDate, dayRelation;
             if (outsideUKTimezone) {
                 formattedLocalDate = new Date(`${matchDateStr}T${timeString}`).toLocaleString(locale, { dateStyle: "short" });
                 dayRelation = compareDayRelation(formattedLocalDate, matchDateStr);
@@ -302,7 +309,7 @@ function checkTimezoneMatches(dateStr, timeStr) {
     const match = timeStr.match(/([+-]\d{2}):([0-5]\d)$/);
     if (!match) return false;
 
-    const [ , offsetH, offsetM ] = match;
+    const [, offsetH, offsetM] = match;
     const offsetMinutes = parseInt(offsetH, 10) * 60 + parseInt(offsetM, 10) * (offsetH.startsWith("-") ? -1 : 1);
 
     const [hourStr, minuteStr] = timeStr.split(":");
@@ -398,7 +405,7 @@ document.addEventListener('startDayChange', () => {
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     console.debug(`%cshowupcomingmatches.js %c> %cFetching calendar...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-    
+
     try {
         matchData = await getMatchData();
         teamColors = await getTeamcolors();
@@ -415,21 +422,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (refreshTimer) clearTimeout(refreshTimer);
             const retryFetch = async () => {
-            try {
-                if (typeof retryCount === 'undefined') {
-                    window.retryCount = 1;
-                } else {
-                    window.retryCount++;
+                try {
+                    if (typeof retryCount === 'undefined') {
+                        window.retryCount = 1;
+                    } else {
+                        window.retryCount++;
+                    }
+                    matchData = await getMatchData();
+                    teamColors = await getTeamcolors();
+                    upcomingMatchesError.innerHTML = "";
+                    makeTeamsColorStyles();
+                    showUpcomingMatch();
+                } catch (err) {
+                    upcomingMatchesError.innerHTML = `<blockquote class="fail"><b>API error - Retrying: attempt ${window.retryCount}...</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
+                    refreshTimer = setTimeout(retryFetch, 2000);
                 }
-                matchData = await getMatchData();
-                teamColors = await getTeamcolors();
-                upcomingMatchesError.innerHTML = "";
-                makeTeamsColorStyles();
-                showUpcomingMatch();
-            } catch (err) {
-                upcomingMatchesError.innerHTML = `<blockquote class="fail"><b>API error - Retrying: attempt ${window.retryCount}...</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
-                refreshTimer = setTimeout(retryFetch, 2000);
-            }
             };
             refreshTimer = setTimeout(retryFetch, 2000);
         }
