@@ -1,0 +1,44 @@
+.tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.tool-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    border: var(--button-border);
+    border-radius: 5px;
+    aspect-ratio: 1 / 1;
+    padding: 15px;
+    transition: background-color 0.3s;
+}
+
+.tool-button:hover {
+    outline: var(--button-outline);
+}
+
+.tool-icon {
+    flex-grow: 1;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Placeholder for icon */
+    border-radius: 4px;
+    background-color: #ccccccaa;
+}
+
+.tool-label {
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: var(--text-color);
+    font-size: 10px;
+}

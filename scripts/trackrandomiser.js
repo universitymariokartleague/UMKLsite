@@ -404,7 +404,7 @@ function pickRandomTrack() {
     if (document.getElementById("disableRepicks").checked) {
         let tempTracksList = tracksPicked.slice().reverse();
         if (tracksPicked.length == tracks[selectedGame].length) {
-            pickedTracksList.innerHTML = `<div class="codeBoxTight"><b>Max tracks! Please clear!<br>Picked tracks (${tracksPicked.length} / ${tracks[selectedGame].length})</b><br><br>${tempTracksList.map(track => track.us ? (PALNamesCheckbox.checked ? track.pal : track.us) : track).join(`<br>`)}</div>`;
+            pickedTracksList.innerHTML = `<div class="codeBoxTight"><b>Max courses! Please clear!<br>Picked tracks (${tracksPicked.length} / ${tracks[selectedGame].length})</b><br><br>${tempTracksList.map(track => track.us ? (PALNamesCheckbox.checked ? track.pal : track.us) : track).join(`<br>`)}</div>`;
             return;
         }
         while (tracksPicked.includes(tempRandomTrack)) {
@@ -413,7 +413,7 @@ function pickRandomTrack() {
         lastTrack = tempRandomTrack;
         tracksPicked.push(tempRandomTrack);
         tempTracksList = tracksPicked.slice().reverse();
-        pickedTracksList.innerHTML = `<div class="codeBoxTight"><b>Picked tracks (${tracksPicked.length} / ${tracks[selectedGame].length})</b><br><br>${tempTracksList.map(track => track.us ? (PALNamesCheckbox.checked ? track.pal : track.us) : track).join(`<br>`)}</div>`;
+        pickedTracksList.innerHTML = `<div class="codeBoxTight"><b>Picked courses (${tracksPicked.length} / ${tracks[selectedGame].length})</b><br><br>${tempTracksList.map(track => track.us ? (PALNamesCheckbox.checked ? track.pal : track.us) : track).join(`<br>`)}</div>`;
     }
 
     if (tempRandomTrack.us) {
