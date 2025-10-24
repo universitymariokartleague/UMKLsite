@@ -337,7 +337,7 @@ function placeDots() {
         `);
 
         // Candidate positions for label
-        const labelWidth = name.length * 8;
+        const labelWidth = name.length * 10;
         const labelHeight = 24;
         const positions = [
             { left: x + 15, top: y - 11 },
@@ -369,7 +369,7 @@ function placeDots() {
         const foundPosition = positions.find(pos => {
             const centerX = pos.left + labelWidth / 2;
             const centerY = pos.top + labelHeight / 2;
-            const newRect = { x: centerX - labelWidth * 0.75, y: centerY - labelHeight * 0.6, width: labelWidth * 1.5, height: labelHeight * 1.2 };
+            const newRect = { x: centerX - labelWidth * 0.75, y: centerY - labelHeight * 0.75, width: labelWidth * 1.5, height: labelHeight * 1.2 };
 
             const collidesLabel = labels.some(l => !(newRect.x > l.x + l.width || newRect.x + newRect.width < l.x || newRect.y > l.y + l.height || newRect.y + newRect.height < l.y));
             const collidesDot = dotBoxes.some((d, i) => i !== dotIdx && !(newRect.x > d.x + d.width || newRect.x + newRect.width < d.x || newRect.y > d.y + d.height || newRect.y + newRect.height < d.y));
@@ -408,7 +408,7 @@ function placeDots() {
         svg.appendChild(line);
 
         // Store label position for collision detection
-        const padding = 6;
+        const padding = 2;
         labels.push({ x: finalPos.left - padding, y: finalPos.top - padding, width: labelWidth + 2 * padding, height: labelHeight + 2 * padding });
 
         fragment.appendChild(label);
