@@ -12,9 +12,13 @@ const teamBoxFormatHTML = `
         </div>
         <div class="current-season-info">
             <div class="heading-wrapper" style="margin-left: 3px;">
-                <h2>Season {{currentSeason}} Team Stats</h2>
+                <div style="margin-bottom: 5px;">
+                    <h2>{{currentTeam}} Stats</h2>
+                    <p class="p-below-title">Season {{currentSeason}}</p>
+                </div>
                 <div class="live-dot"></div>
             </div>
+            
             <div class="team-info-text">
                 {{currentFields}}
             </div>
@@ -26,8 +30,7 @@ const JSTeamBox = document.getElementById("JSTeamBox")
 const teamNameBox = document.getElementById("teamNameBox")
 const startYear = 2023;
 
-let playerData = [];
-let teamData;
+let matchData, teamData;
 const currentSeason = 2;
 let fetchedCurrentSeason = currentSeason;
 
@@ -36,80 +39,91 @@ let refreshTimer = null;
 
 let startTime;
 
+function formatDetailedPoints(match_points) {
+    return match_points
+        .map(mp => `${mp.eventID}: ${mp.points} points`)
+        .join(', ');
+}
+
 function buildUserInfoTable(data, isCurrent = false) {
     if (isCurrent) {
         return `
             <table class="team-info-table">
-                <tr><td class="table-key">Wins/Losses</td><td>${data.season_wins_losses[0]} - ${data.season_wins_losses[1]} ${data.team_season_points > 0 ? `(${toOrdinal(data.season_position)})` : ''}</td></tr>
+                <tr><td class="table-key">Wins/Losses (Position)</td><td>${data.season_wins_losses[0]} - ${data.season_wins_losses[1]} ${data.team_season_points > 0 ? `(${toOrdinal(data.season_position)})` : ''}</td></tr>
                 <tr><td class="table-key">Matches Played</td><td>${data.season_matches_played}</td></tr>
-                <tr><td class="table-key">Points</td><td>${data.team_season_points}</td></tr>
-                <tr><td class="table-key">Penalties</td><td>${data.season_penalties}</td></tr>
+                <tr><td class="table-key">Points (Penalties)</td><td>${data.team_season_points} (${data.season_penalties})</td></tr>
             </table>`;
     }
     return `
         <table class="team-info-table">
             <tr><td class="table-key">Current Team</td><td>${data.team}</td></tr>
-            <tr><td class="table-key">Matches Played</td><td>${data.tournament_entries}</td></tr>
-            <tr><td class="table-key">Team Wins</td><td>${data.tournament_wins}</td></tr>
-            <tr><td class="table-key">First Places (Podiums)</td><td>${data.first_places} (${data.podiums})</td></tr>
-            <tr><td class="table-key">Highest Finish (Podiums)</td><td>${data.first_places} (${data.podiums})</td></tr>
+            <tr><td class="table-key">Team Wins</td><td>${data.team_wins}</td></tr>
+            <tr><td class="table-key">Matches Played</td><td>${data.matches_played}</td></tr>
+            <tr><td class="table-key">First Places (Podiums)</td><td>${data.first_places}</td></tr>
+            <tr><td class="table-key">Highest Finish</td><td>${data.highest_finish}</td></tr>
+            <tr><td class="table-key">Career Points</td><td>${data.career_points}</td></tr>
+            <tr><td class="table-key">Detailed</td><td>${formatDetailedPoints(data.match_data)}</td></tr>
+            <tr><td class="table-key">SP</td><td>${data.sp}</td></tr>
         </table>`;
 }
 
-async function generateMatchStatsBox(userData, showError) {
+async function generatePlayerStatsBox(compressedData, showError) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.remove('fade-in');
 
+    const json = LZString.decompressFromEncodedURIComponent(compressedData);
+    const data = JSON.parse(json);
+    console.log(data);
+
     try {
-        teamData = (await getTeamdata(userData.team, fetchedCurrentSeason))[0]
+        teamData = (await getTeamdata(data.team, fetchedCurrentSeason))[0]
     } catch (error) {
-        console.debug(`%cuserinfogenerate.js %c> %c${userData.username} does not belong to a team`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
+        console.debug(`%cuserinfogenerate.js %c> %c${data.username} does not belong to a team`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
     }
 
-    document.title = `${makePossessive(userData.username)} Stats | UMKL`;
-    teamNameBox.innerText = `${makePossessive(userData.username)} Stats`;
+    document.title = `${makePossessive(data.username)} Stats | UMKL`;
+    teamNameBox.innerText = `${makePossessive(data.username)} Stats`;
 
-    let currentFields = `${userData.username} doesn't belong to a team!`
+    let currentFields = `${data.username} doesn't belong to a team!`
 
-    const extraFields = buildUserInfoTable(userData);
+    const extraFields = buildUserInfoTable(data);
     if (teamData) currentFields = buildUserInfoTable(teamData, true);
 
     let tempTeamBox = teamBoxFormatHTML
-        .replace("{{PFP}}", userData.profile_picture.replace("png", "webp"))
-        .replaceAll("{{username}}", makePossessive(userData.username))
+        .replace("{{PFP}}", data.pfp.replace("png", "webp"))
+        .replaceAll("{{username}}", makePossessive(data.username))
+        .replace("{{currentTeam}}", data.team)
         .replace("{{currentSeason}}", fetchedCurrentSeason)
         .replace("{{currentFields}}", currentFields)
         .replace("{{extraFields}}", extraFields);
 
     if (teamData) {
-        document.documentElement.style.setProperty('--highlight-color', `${teamData.team_color}80`);
+        document.documentElement.style.setProperty('--highlight-color', `#${data.color}80`);
     }
     JSTeamBox.innerHTML = tempTeamBox;
     JSTeamBox.classList.add('fade-in');
 
-    if (teamData) {
-        (function injectLiveDotStyle() {
-            const style = document.createElement('style');
-            style.textContent = `
-                .live-dot {
-                    background-color: ${teamData.team_color};
-                    box-shadow: 0 0 0 0 ${teamData.team_color}80;
+    (function injectLiveDotStyle() {
+        const style = document.createElement('style');
+        style.textContent = `
+            .live-dot {
+                background-color: #${data.color};
+                box-shadow: 0 0 0 0 #${data.color}80;
+            }
+            @keyframes live-dot-pulse {
+                0% {
+                    box-shadow: 0 0 0 0 #${data.color}80;
                 }
-                @keyframes live-dot-pulse {
-                    0% {
-                        box-shadow: 0 0 0 0 ${teamData.team_color}80;
-                    }
-                    70% {
-                        box-shadow: 0 0 0 8px ${teamData.team_color}00;
-                    }
-                    100% {
-                        box-shadow: 0 0 0 0 ${teamData.team_color}00;
-                    }
+                70% {
+                    box-shadow: 0 0 0 8px #${data.color}00;
                 }
-            `;
-            document.head.appendChild(style);
-        })();
-    }
+                100% {
+                    box-shadow: 0 0 0 0 #${data.color}00;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    })();
 
     showErrorBox(showError);
 }
@@ -164,37 +178,6 @@ function toOrdinal(n) {
     }
 }
 
-async function getPlayerdata(ID = "") {
-    const response = await fetch('https://api.umkl.co.uk/playerdata', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ID })
-    });
-
-    if (!response.ok) {
-        let errorData;
-        try {
-            errorData = await response.json();
-        } catch {
-            errorData = { error: `HTTP error! status: ${response.status}` };
-        }
-        throw errorData;
-    }
-
-    return response.json();
-}
-
-async function getPlayerdataFallback(playerID) {
-    const response = await fetch(`database/playerdatafallback.json`);
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const allTeams = await response.json();
-    return allTeams.filter(team => team.team_name === playerID);
-}
-
 async function getCurrentSeason() {
     return fetch('https://api.umkl.co.uk/seasoninfo', {
         method: 'POST',
@@ -211,6 +194,30 @@ async function getCurrentSeason() {
             }
             return response.json();
         });
+}
+
+async function getMatchData() {
+    return fetch('https://api.umkl.co.uk/matchdata', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: "{}"
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        });
+}
+
+async function getMatchDataFallback() {
+    const response = await fetch(`database/matchdatafallback.json`);
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    matchData = await response.json();
 }
 
 async function getTeamdata(team, season) {
@@ -240,21 +247,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     let showError = 0;
     const urlParams = new URLSearchParams(window.location.search);
-    let playerID = urlParams.get('id');
-    if (!playerID) playerID = urlParams.get('ID');
-    // if (!playerID) window.location.href = "/";
+    const compressed = urlParams.get('d');
 
     try {
-        playerData = await getPlayerdata(playerID);
+        matchData = await getMatchData();
+        console.log(matchData)
         fetchedCurrentSeason = parseInt(await getCurrentSeason());
     } catch (error) {
-        console.error(error)
-        // if (error?.error === "Player not found") {
-        //     window.location.href = "/";
-        // }
-
-        console.debug(`%cuserinfogenerate.js %c> %cAPI failed - using fallback information...`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
-        playerData = await getPlayerdataFallback(playerID);
+        console.debug(`%cuserinfogenerate.js %c> %cAPI failed - retrying...`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
+        await getMatchDataFallback();
         showError = 1;
 
         if (error && error.message && error.message.includes('429')) {
@@ -268,10 +269,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                     } else {
                         window.retryCount++;
                     }
-                    playerData = await getPlayerdata(playerID);
                     fetchedCurrentSeason = parseInt(await getCurrentSeason());
+                    matchData = await getMatchData();
                     showError = 0;
-                    await generateMatchStatsBox(playerData, showError);
+                    await generatePlayerStatsBox(compressed, showError);
                 } catch (err) {
                     showErrorBox(showError);
                     refreshTimer = setTimeout(retryFetch, 2000);
@@ -280,33 +281,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             refreshTimer = setTimeout(retryFetch, 2000);
         }
     }
-    await generateMatchStatsBox(playerData, showError);
-
-    if (refreshTimer) clearTimeout(refreshTimer);
-    const updateFetch = async () => {
-        try {
-            if (typeof retryCount === 'undefined') {
-                window.retryCount = 1;
-            } else {
-                window.retryCount++;
-            }
-            console.debug(`%cuserinfogenerate.js %c> %cRefreshing live data...`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
-            playerData = await getPlayerdata(playerID);
-            fetchedCurrentSeason = parseInt(await getCurrentSeason());
-            showError = 0;
-            await editUserBox(playerData);
-            showErrorBox(showError);
-        } catch (error) {
-            showError = 1;
-            if (error && error.message && error.message.includes('429')) {
-                showError = 2;
-            }
-            showErrorBox(showError);
-        } finally {
-            refreshTimer = setTimeout(updateFetch, UPDATEINVERVAL);
-        }
-    };
-    refreshTimer = setTimeout(updateFetch, UPDATEINVERVAL);
+    await generatePlayerStatsBox(compressed, showError);
 
     console.debug(`%cuserinfogenerate.js %c> %cGenerated user info box in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
 });

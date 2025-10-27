@@ -47,7 +47,6 @@ function formatChampionshipSeasons(championshipYears) {
     }
 
     const seasons = championshipYears.map(year => `${startYear + year}-${startYear + year + 1}`);
-
     return `(${seasons.join(',<br>')})`;
 }
 
