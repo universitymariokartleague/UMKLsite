@@ -2,7 +2,7 @@
     This script calculates the points difference in 6v6. It dynamically updates
     the results for both teams and the points difference as the user inputs data. 
 */
-import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareText, shareImage, showTextPopup, showImagePreview, setOriginalMessage } from './shareAPIhelper.js';
+import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareImage, showImagePreview, setOriginalMessage } from './shareAPIhelper.js';
 
 const inputArea = document.getElementById("inputArea");
 const positionsInput = document.getElementById("positions-input");
@@ -10,7 +10,6 @@ const teamResult = document.getElementById("team-result");
 const opponentResult = document.getElementById("opponent-result");
 const pointsDifference = document.getElementById("points-diff");
 const scoreMap = [15, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
-const maxPos = scoreMap.length
 
 let chart;
 let defaultTeamColors = ["#1baa8b", "#a11212"];
@@ -18,7 +17,6 @@ const trackNamesInput = document.getElementById("track-names-input");
 const teamNamesInput = document.getElementById("team-names-input");
 
 const canvas = document.getElementById("scoreChart");
-const exportDataButton = document.getElementById("exportDataButton");
 
 let teamColors = [];
 let matchName = "";
@@ -368,37 +366,6 @@ function loadFromURLParams() {
 document.addEventListener('themeChange', () => {
     renderResults();
 });
-
-exportDataButton.onclick = () => {
-    const positions = positionsInput.value.trim().split('\n').map(line =>
-        line.split(',').map(num => parseInt(num))
-    );
-    const trackNames = trackNamesInput.value.trim().split('\n');
-
-    const fullSet = Array.from({ length: maxPos }, (_, i) => i + 1);
-
-    const output = trackNames.map((track, i) => {
-        const team1 = positions[i];
-        const team2 = fullSet.filter(pos => !team1.includes(pos));
-
-        return {
-            track: track,
-            "1": team1,
-            "2": team2
-        };
-    });
-
-    const jsonData = JSON.stringify(output, null, 4);
-    const blob = new Blob([jsonData], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `detailedResults${matchName.replaceAll(" ", "").replace("(TestMatch)", "")}.json`;
-    a.click();
-
-    URL.revokeObjectURL(url);
-};
 
 document.addEventListener("DOMContentLoaded", async () => {
     teamColors = await getTeamcolors();

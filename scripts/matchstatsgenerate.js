@@ -1,5 +1,5 @@
 /*
-    This script generates a user's info page.
+    This script generates stats about matches.
 */
 
 const teamBoxFormatHTML = `
