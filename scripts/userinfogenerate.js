@@ -242,16 +242,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     const urlParams = new URLSearchParams(window.location.search);
     let playerID = urlParams.get('id');
     if (!playerID) playerID = urlParams.get('ID');
-    if (!playerID) window.location.href = "/";
+    // if (!playerID) window.location.href = "/";
 
     try {
         playerData = await getPlayerdata(playerID);
         fetchedCurrentSeason = parseInt(await getCurrentSeason());
     } catch (error) {
         console.error(error)
-        if (error?.error === "Player not found") {
-            window.location.href = "/";
-        }
+        // if (error?.error === "Player not found") {
+        //     window.location.href = "/";
+        // }
 
         console.debug(`%cuserinfogenerate.js %c> %cAPI failed - using fallback information...`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
         playerData = await getPlayerdataFallback(playerID);

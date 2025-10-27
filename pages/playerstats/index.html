@@ -6,7 +6,6 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <title>Loading... | UMKL</title>
-        <meta name="description" content="This page contains information about a specific user in the University Mario Kart League (UMKL)">
         <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/teampage.css">
@@ -15,15 +14,7 @@
         <link rel="stylesheet" href="css/ext/fontawesome.min.css">
         <meta name="color-scheme" content="dark light">
     
-        <meta property="og:title" content="University Mario Kart League | Teams" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://umkl.co.uk/pages/teams/" />
-        <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/Cheep_Cheep_banner.avif" />
-        <meta property="og:description" content="This page contains information about a specific user in the University Mario Kart League (UMKL)" />
         <meta name="theme-color" content="#bc0839">
-    
-        <!-- Include this to make the og:image larger -->
-        <meta name="twitter:card" content="summary_large_image">
     
         <!-- Components -->
         <script type="module" src="components/navbar.js" defer></script>
@@ -37,38 +28,7 @@
         <script type="module" src="scripts/userinfogenerate.js" defer></script>
     </head>
     <body id="top" data-overlayscrollbars-initialize>
-        <div class="navbar-container" translate="no">
-            <div class="nav-bar">
-                <a href="index.html" class="nav-bar-title no-color-link no-underline-link-footer">
-                    <img src="assets/media/brand/UMKLlogonav.avif" class="nav-bar-logo">
-                    <h2>UMKL</h2>
-                </a>
-                <nav class="nav-flex">
-                    <ul id="nav-bar">
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="pages/news/">News</a></li>
-                        <li><a href="pages/teams/">Teams</a></li>
-                        <li><a href="pages/matches/">Matches</a></li>
-                        <li><a href="pages/rules/">Rules</a></li>
-                        <li><a href="pages/faq/">FAQs</a></li>
-                        <li><a target="_blank" class="nav-bar-link" href="https://discord.gg/jz3hKEmDss">Discord</a></li>
-                    </ul>
-                </nav>
-                <!-- Dropdown navigation (shown on mobile) -->
-                <div class="nav-dropdown">
-                    <div class="nav-dropdown-button">☰</div>
-                    <div class="nav-dropdown-content" id="nav-dropdown-bar">
-                        <a href="index.html">Home</a>
-                        <a href="pages/news/">News</a>
-                        <a href="pages/teams/">Teams</a>
-                        <a href="pages/matches/">Matches</a>
-                        <a href="pages/rules/">Rules</a>
-                        <a href="pages/faq/">FAQs</a>
-                        <a target="_blank" class="nav-bar-link" href="https://discord.gg/jz3hKEmDss">Discord</a>
-                    </div>
-                </div>           
-            </div>
-        </div>
+        <umkl-navbar></umkl-navbar>
 
         <main>
             <a href="/">Back</a>
