@@ -1,8 +1,8 @@
 Spooky season...|true|false|false
-Mario Kart 64 - Banshee Boardwalk.mp3|halloween.avif
-Super Mario 64 - Haunted House.mp3|halloween.avif
 Mario Kart 8 Deluxe - GBA Boo Lake.mp3|halloween.avif
 Super Mario 3D World - Shifty Boo Mansion.mp3|halloween.avif
-Super Mario Galaxy 2 - Haunty Halls Galaxy (Yoshi).mp3|halloween.avif
 Super Mario Galaxy - Interlude.mp3|halloween.avif
+Mario Kart 64 - Banshee Boardwalk.mp3|halloween.avif
 Super Mario Galaxy - Waltz of the Boos.mp3|halloween.avif
+Super Mario 64 - Haunted House.mp3|halloween.avif
+Super Mario Galaxy 2 - Haunty Halls Galaxy (Yoshi).mp3|halloween.avif
