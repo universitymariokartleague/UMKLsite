@@ -260,6 +260,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     let showError = 0;
     const urlParams = new URLSearchParams(window.location.search);
+    if (!urlParams.has('d')) window.location.href = "/";
     const compressed = urlParams.get('d');
     const json = LZString.decompressFromEncodedURIComponent(compressed);
     const data = JSON.parse(json);
