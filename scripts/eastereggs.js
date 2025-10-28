@@ -145,7 +145,6 @@ function halloweenEasterEgg() {
         setTimeout(createFlyingGhost, Math.random() * 1000);
     }    
     injectMusic("assets/bgm/halloween/loading playlist.mp3");
-    startPlayingAudio();
 }
 
 function xmasEasterEgg() {
