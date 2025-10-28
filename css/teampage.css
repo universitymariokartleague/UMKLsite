@@ -68,6 +68,19 @@
     height: 150px;
 }
 
+.details-box {
+    overflow: hidden;
+}
+
+.details-box summary {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.details-box summary:hover {
+    text-decoration: underline;
+}
+
 @media screen and (max-width: 767px) {
     .team-info {
         flex-direction: column;
