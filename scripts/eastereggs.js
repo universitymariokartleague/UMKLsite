@@ -5,6 +5,8 @@
 export { halloweenEasterEgg, xmasEasterEgg };
 
 function injectMusic(path) {
+    if (document.getElementById('audio')) return;
+
     const audioContainer = document.createElement('div');
     audioContainer.innerHTML = `
         <audio id="audio" src="${path}" preload="auto"></audio>
@@ -48,88 +50,102 @@ function createElementWithStyles(tag, styles) {
 
 function halloweenEasterEgg() {
     meta.content = "dark";
-    root.classList.add("dark-theme");
-    root.classList.remove("light-theme");
+    root.classList.replace("light-theme", "dark-theme");
 
     const themeColors = {
         '--accent-color': '#ff640a',
         '--link-color': '#ff640a',
         '--link-hover-color': '#ffcaab',
-        '--highlight-color': '#ff640ad0'
+        '--highlight-color': '#ff640ad0',
+        '--button-color': '#ff640a'
     };
-    Object.entries(themeColors).forEach(([key, value]) => root.style.setProperty(key, value));
+    Object.entries(themeColors).forEach(([k, v]) => root.style.setProperty(k, v));
+
+    const style = document.createElement('style');
+    style.textContent = `
+        a[target="_blank"]::after {
+            content: "";
+            width: 1em;
+            height: 1em;
+            margin: 0 0em 0.1em 0.15em;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' %3E%3Cpath d='M9 2v1h3.3L6 9.3l.7.7L13 3.7V7h1V2ZM4 4c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V7l-1 1v4c0 .6-.4 1-1 1H4c-.6 0-1-.4-1-1V6c0-.6.4-1 1-1h4l1-1Z' style='fill:%23ff640a'/%3E%3C/svg%3E");
+            background-size: contain;
+            display: inline-block;
+            vertical-align: sub;
+        }
+    `;
+    document.head.appendChild(style);
 
     document.querySelectorAll('img').forEach(img => {
-        img.style.boxShadow = '0 0 100px 10px rgba(255, 255, 255, 0.25)';
+        img.style.boxShadow = '0 0 50px 5px rgba(255, 255, 255, 0.33)';
     });
 
-    const pumpkinLeft = createElementWithStyles('div', {
-        position: 'fixed',
-        bottom: '25px',
-        left: '10px',
-        width: '85px',
-        height: '85px',
-        backgroundImage: 'url("assets/media/eastereggs/halloween/splunkin.avif")',
-        backgroundSize: 'contain',
-        backgroundRepeat: 'no-repeat',
-        zIndex: '1000'
-    });
+    const decorations = [
+        { side: 'left', size: 55, img: 'splunkin.avif', position: 'bottom' },
+        { side: 'right', size: 75, img: 'jackogoomba.avif', position: 'bottom' },
+        { side: 'left', size: 100, img: 'whiteweb.gif', position: 'top' },
+        { side: 'right', size: 100, img: 'whiteweb.gif', position: 'top' },
+        { side: 'left', size: 100, img: 'skel.gif', position: 'bottom' },
+        { side: 'right', size: 100, img: 'skelbend.gif', position: 'bottom' }
+    ];
 
-    const pumpkinRight = createElementWithStyles('div', {
-        position: 'fixed',
-        bottom: '22px',
-        right: '10px',
-        width: '100px',
-        height: '100px',
-        backgroundImage: 'url("assets/media/eastereggs/halloween/jackogoomba.avif")',
-        backgroundSize: 'contain',
-        backgroundRepeat: 'no-repeat',
-        zIndex: '1000'
+    decorations.forEach(({ side, size, img, position }) => {
+        document.body.appendChild(
+            createElementWithStyles('div', {
+                position: 'fixed',
+                [position]: `2px`,
+                [side]: `${Math.random() * 50}px`,
+                width: `${size}px`,
+                height: `${size}px`,
+                background: `url("assets/media/eastereggs/halloween/${img}") no-repeat center/contain`,
+                zIndex: '100',
+                pointerEvents: 'none'
+            })
+        );
     });
-
-    document.body.append(pumpkinLeft, pumpkinRight);
 
     const createFlyingGhost = () => {
         const ghost = createElementWithStyles('div', {
             position: 'fixed',
             width: '50px',
             height: '50px',
-            backgroundImage: 'url("assets/media/eastereggs/halloween/ghost.avif")',
-            backgroundSize: 'contain',
-            backgroundRepeat: 'no-repeat',
+            background: 'url("assets/media/eastereggs/halloween/ghost.avif") no-repeat center/contain',
             zIndex: '1000',
             pointerEvents: 'none',
             opacity: '0'
         });
 
-        const [startX, startY, endX, endY] = [Math.random() * window.innerWidth, Math.random() * window.innerHeight, Math.random() * window.innerWidth, Math.random() * window.innerHeight];
+        const startX = Math.random() * window.innerWidth;
+        const startY = Math.random() * window.innerHeight;
+        const endX = Math.random() * window.innerWidth;
+        const endY = Math.random() * window.innerHeight;
+
+        if (endX < startX) ghost.style.backgroundImage = 'url("assets/media/eastereggs/halloween/ghost2.avif")';
+
         ghost.style.left = `${startX}px`;
         ghost.style.top = `${startY}px`;
-
-        if (endX < startX) {
-            ghost.style.backgroundImage = 'url("assets/media/eastereggs/halloween/ghost2.avif")';
-        }
-
         document.body.appendChild(ghost);
 
-        const animation = ghost.animate([
-            { transform: `translate(${startX}px, ${startY}px)`, opacity: '0' },
-            { transform: `translate(${(startX + endX) / 2}px, ${(startY + endY) / 2}px)`, opacity: '1' },
-            { transform: `translate(${endX}px, ${endY}px)`, opacity: '0' }
-        ], {
-            duration: 5000 + Math.random() * 3000,
-            iterations: 1,
-            easing: 'ease-in-out'
-        });
+        const duration = 5000 + Math.random() * 3000;
 
-        animation.onfinish = () => {
-            createFlyingGhost();
+        ghost.animate(
+            [
+                { transform: 'translate(0,0)', opacity: 0 },
+                { transform: `translate(${(endX - startX) / 2}px, ${(endY - startY) / 2}px)`, opacity: 1 },
+                { transform: `translate(${endX - startX}px, ${endY - startY}px)`, opacity: 0 }
+            ],
+            { duration, easing: 'ease-in-out' }
+        ).onfinish = () => {
             ghost.remove();
+            requestAnimationFrame(createFlyingGhost);
         };
     };
 
-    Array.from({ length: 10 }).forEach(() => setTimeout(createFlyingGhost, 1000));
+    for (let i = 0; i < 5; i++) {
+        setTimeout(createFlyingGhost, Math.random() * 1000);
+    }    
     injectMusic("assets/bgm/halloween/loading playlist.mp3");
+    startPlayingAudio();
 }
 
 function xmasEasterEgg() {
