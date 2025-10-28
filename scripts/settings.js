@@ -89,7 +89,7 @@ function generateSettingsPanel() {
             <span translate="yes" class="settings-hover-info" data-info="Use UK or local dates when overseas">Overseas date type</span><button id="toggleOverseasDateDisplayButton" class="settings-option">${tempOverseasDateDisplay ? 'Overseas' : 'UK'}</button><br/>
             
             <div translate="yes" class="setting-sub-heading">Website Data</div><hr>
-            <span translate="yes" class="settings-hover-info" data-info="reloads the page">Reset settings to default</span><button id="clearLocalStorage" class="settings-option">Clear</button>
+            <span translate="yes" class="settings-hover-info" data-info="Reloads the page">Reset settings to default</span><button id="clearLocalStorage" class="settings-option">Clear</button>
 
             <div translate="yes" class="settings-instructions">Hover/tap the options to see more information</div>
         `;
@@ -261,7 +261,6 @@ function checkEasterEggs() {
     }
 
     let currentDate = new Date();
-    // currentDate = new Date(currentDate.getFullYear(), 9, 29);
 
     if (checkDate(1, 4)) {
         easterEgg = "aprilfools";
