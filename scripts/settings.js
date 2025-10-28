@@ -66,7 +66,6 @@ function generateSettingsPanel() {
         const tempTheme = localStorage.getItem("darktheme") == 1 ? "Dark" : (localStorage.getItem("darktheme") == 0 ? "Light" : "Automatic");
         const listView = localStorage.getItem("teamsListView") == 1 || false;
         const calendarListView = localStorage.getItem("calendarListView") == 1 || false;
-        const legacyListView = localStorage.getItem("legacyListView") == 1 || false;
         
         const tempLocale = localStorage.getItem("locale") || "en-GB";
         const tempLocaleDisplay = tempLocale === "en-GB" ? "English (UK)" : "English (US)";
@@ -80,7 +79,6 @@ function generateSettingsPanel() {
             <span translate="yes" class="settings-hover-info" data-info="Light, dark or automatic">Page theme</span><button id="toggleTheme" class="settings-option">${tempTheme}</button><br>
             <span translate="yes" class="settings-hover-info" data-info="Grid or list view">Teams page layout</span><button id="toggleListView" class="settings-option">${listView ? "List view" : "Grid view"}</button><br>
             <span translate="yes" class="settings-hover-info" data-info="Calendar or list view">Matches page layout</span><button id="toggleCalendarListView" class="settings-option">${calendarListView ? "List view" : "Calendar view"}</button><br>
-            <span translate="yes" class="settings-hover-info" data-info="Will be removed!">legacyListView</span><button id="togglelegacyListView" class="settings-option">${legacyListView ? "On" : "Off"}</button><br>
 
             <div translate="yes" class="setting-sub-heading">${tempLocale == "en-GB" ? "Localisation" : "Localization"}</div><hr class="settings-hr">
             <span translate="yes" class="settings-hover-info" data-info="UK or US date/time format">Locale</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button><br/>
@@ -151,14 +149,6 @@ function toggleCalendarListView() {
     generateSettingsPanel();
 }
 
-function togglelegacyListView() {
-    const newlegacyListView = localStorage.getItem("legacyListView") == 1 ? 0 : 1;
-    localStorage.setItem("legacyListView", newlegacyListView);
-    console.debug(`%csettings.js %c> %cset legacyListView to ${newlegacyListView}`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
-    document.dispatchEvent(new CustomEvent('listViewChange'));
-    generateSettingsPanel();
-}
-
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
     if (!localStorage.getItem("darktheme")) {
         darkThemeEnabled = event.matches ? 1 : 0;
@@ -222,7 +212,6 @@ function generateEventListeners() {
     document.getElementById('toggleTheme').addEventListener('click', toggleTheme);
     document.getElementById('toggleListView').addEventListener('click', toggleListView);
     document.getElementById('toggleCalendarListView').addEventListener('click', toggleCalendarListView);
-    document.getElementById('togglelegacyListView').addEventListener('click', togglelegacyListView);
     document.getElementById('toggleStartDayButton').addEventListener('click', toggleStartDay);
     document.getElementById('toggleMonthTypeButton').addEventListener('click', toggleMonthType);
     document.getElementById('toggleLocaleTypeButton').addEventListener('click', toggleLocale);

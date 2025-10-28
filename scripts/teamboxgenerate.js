@@ -75,116 +75,47 @@ async function generateTeamBoxes(teamData, cached = false) {
     }
 
     if (listView) {
-        let legacyListView = localStorage.getItem("legacyListView") == 1 || false;
-        if (legacyListView) {
-            JSTeamBox.classList.remove('teamBoxContainer');
+        JSTeamBox.classList.remove('teamBoxContainer');
 
-            const table = document.createElement('table');
-            table.classList.add("team-list-view-table")
-            
-            const thead = document.createElement('thead');
-            const headerRow = document.createElement('tr');
-            ['POS', 'TEAM', "MATCHES", 'W - L', 'PTS'].forEach(headerText => {
-                const th = document.createElement('th');
-                if (headerText !== 'TEAM' && headerText !== 'MATCHES') {
-                    th.translate = false;
-                }
-                th.textContent = headerText;
-                headerRow.appendChild(th);
+        const teamStandingsBox = document.createElement('div');
+        teamStandingsBox.classList.add("teamStandingsBox");
+
+        const fragment = document.createDocumentFragment();
+
+        teamData.forEach(team => {
+            const matchesPlayed = team.season_matches_played;
+
+            const row = document.createElement('div');
+            row.classList.add("teamStanding");
+
+            row.addEventListener('click', () => {
+                window.location.href = `pages/teams/details?team=${team.link_name}`;
             });
-            thead.appendChild(headerRow);
-            table.appendChild(thead);
-            
-            const fragment = document.createDocumentFragment();
-
-            teamData.forEach(team => {
-                const row = document.createElement('tr');
-                row.style.backgroundColor = team.team_color;
-                row.style.color = "#FFF";
-
-                row.addEventListener('click', () => {
-                    window.location.href = `pages/teams/details?team=${team.link_name}`
-                });
-
-                row.setAttribute('tabindex', '0');
-                row.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        window.location.href = `pages/teams/details?team=${team.link_name}`
-                    }
-                });
-
-                row.setAttribute('role', 'button');
-                row.setAttribute('aria-label', `View ${team.team_name} details`);
-                
-                [
-                    team.season_position, 
-                    `<div class="team-name-grid-flex">
-                        <img src="${team.logo_src}" alt="${makePossessive(team.team_name)} team logo" class="team-logo-grid"
-                        ${cached ? '' : `onload="this.style.opacity=1"`} loading="lazy"
-                        onerror="this.onerror=null; this.src='${placeholderLogo}';"/>
-                            <div class="team-text-flex">
-                            <h3 translate="no">${team.team_name}</h3>
-                        <span class="team-list-full-institution">${team.team_full_name}</span>
-                        </div>
-                    </div>`, 
-                    `${team.season_matches_played}`,
-                    `${team.season_wins_losses[0]} - ${team.season_wins_losses[1]}`,
-                    `${team.team_season_points}`,
-                ].forEach(text => {
-                    const td = document.createElement('td');
-                    td.innerHTML = text;
-                    td.classList.add("custom-selection");
-                    row.appendChild(td);
-                });
-                
-                fragment.appendChild(row);
-            });
-
-            table.appendChild(fragment);
-            JSTeamBox.appendChild(table);
-        } else {
-            JSTeamBox.classList.remove('teamBoxContainer');
-
-            const teamStandingsBox = document.createElement('div');
-            teamStandingsBox.classList.add("teamStandingsBox");
-
-            const fragment = document.createDocumentFragment();
-
-            teamData.forEach(team => {
-                const matchesPlayed = team.season_matches_played;
-
-                const row = document.createElement('div');
-                row.classList.add("teamStanding");
-
-                row.addEventListener('click', () => {
+            row.setAttribute('tabindex', '0');
+            row.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
                     window.location.href = `pages/teams/details?team=${team.link_name}`;
-                });
-                row.setAttribute('tabindex', '0');
-                row.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        window.location.href = `pages/teams/details?team=${team.link_name}`;
-                    }
-                });
-
-                row.innerHTML = `
-                    <div translate="no" class="teamPosition">${team.season_position}</div>
-                    <div class="teamColour" style="background-color:${team.team_color}"></div>
-                    <img class="teamLogo" src="${team.logo_src}" alt="${makePossessive(team.team_name)} team emblem"
-                    ${cached ? '' : `onload="this.style.opacity=1"`} loading="lazy"
-                    onerror="this.onerror=null; this.src='${placeholderLogo}';"/>
-                    <div translate="no" class="teamName" title="${team.team_full_name}">${team.team_name.toUpperCase()}</div>
-                    <div translate="no" class="teamPointsArea">
-                        <div class="teamPoints">${team.team_season_points}</div>
-                        <div class="teamStandings">${team.season_wins_losses[0]} - ${team.season_wins_losses[1]} (${matchesPlayed} <i style="font-size:0.8em;margin-right:0.1em" class="fa-solid fa-flag-checkered"></i>)</div>
-                    </div>
-                `;
-
-                fragment.appendChild(row);
+                }
             });
 
-            teamStandingsBox.appendChild(fragment);
-            JSTeamBox.appendChild(teamStandingsBox);
-        }
+            row.innerHTML = `
+                <div translate="no" class="teamPosition">${team.season_position}</div>
+                <div class="teamColour" style="background-color:${team.team_color}"></div>
+                <img class="teamLogo" src="${team.logo_src}" alt="${makePossessive(team.team_name)} team emblem"
+                ${cached ? '' : `onload="this.style.opacity=1"`} loading="lazy"
+                onerror="this.onerror=null; this.src='${placeholderLogo}';"/>
+                <div translate="no" class="teamName" title="${team.team_full_name}">${team.team_name.toUpperCase()}</div>
+                <div translate="no" class="teamPointsArea">
+                    <div class="teamPoints">${team.team_season_points}</div>
+                    <div class="teamStandings">${team.season_wins_losses[0]} - ${team.season_wins_losses[1]} (${matchesPlayed} <i style="font-size:0.8em;margin-right:0.1em" class="fa-solid fa-flag-checkered"></i>)</div>
+                </div>
+            `;
+
+            fragment.appendChild(row);
+        });
+
+        teamStandingsBox.appendChild(fragment);
+        JSTeamBox.appendChild(teamStandingsBox);
     } else {
         JSTeamBox.classList.add('teamBoxContainer');
         const fragment = document.createDocumentFragment();
