@@ -35,7 +35,7 @@ const characters = {
             "Baby Luigi",
             "Toad",
             "Toadette",
-            "Koopa Troopa",
+            "Koopa",
             "Paratroopa",
             "Diddy Kong",
             "Bowser Jr."
