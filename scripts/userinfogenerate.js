@@ -268,7 +268,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
         matchData = await getMatchData();
-        console.log(matchData)
         fetchedCurrentSeason = parseInt(await getCurrentSeason());
     } catch (error) {
         console.debug(`%cuserinfogenerate.js %c> %cAPI failed - retrying...`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
