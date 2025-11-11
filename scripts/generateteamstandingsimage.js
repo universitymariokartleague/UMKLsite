@@ -242,7 +242,7 @@ async function createTeamStandingsImage(season, isCurrentSeason, teamStandingsDa
 
         // Add match counter
         const matches = teamdata.season_matches_played;
-        const matchText = `${teamdata.season_wins_losses[0]} - ${teamdata.season_wins_losses[1]} (${matches} ${matches === 1 ? 'match' : 'matches'})`.toUpperCase();
+        const matchText = `${teamdata.season_wins_losses[0]} - ${teamdata.season_wins_losses[1]} (${matches})`.toUpperCase();
         addText(ctx, matchText, [INIT_POS[0] + POINTS_X_OFFSET, INIT_POS[1] + 10], 
                DEFAULT_FONT, 20, ACCENT_COLOR, "r");
 
