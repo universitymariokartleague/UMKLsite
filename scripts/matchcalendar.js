@@ -135,6 +135,16 @@ function generateCalendar(month, year, dateParam = null) {
         }
 
         const dateToCheck = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        
+        if (matchDataToUse[dateToCheck]) {
+            const sortedMatches = [...matchDataToUse[dateToCheck]].sort((a, b) => {
+            const timeA = a.time || '00:00:00';
+            const timeB = b.time || '00:00:00';
+            return timeA.localeCompare(timeB);
+            });
+            
+            matchDataToUse[dateToCheck] = sortedMatches;
+        }
         if (matchDataToUse[dateToCheck]) {
             matchDataToUse[dateToCheck].forEach(entry => {
                 const [team1, team2] = entry.teamsInvolved;
@@ -375,6 +385,12 @@ function showDailyLog(date, dayCell) {
 
     const log = matchDataToUse[date] || [];
     if (log.length) {
+        const sortedLog = [...log].sort((a, b) => {
+            const timeA = a.time || '00:00:00';
+            const timeB = b.time || '00:00:00';
+            return timeA.localeCompare(timeB);
+        });
+
         const formattedDate = parseLocalDate(date).toLocaleString(locale, { dateStyle: "full" });
         let formattedLocalDate, dayRelation;
         expandedLog.innerHTML = `
@@ -383,7 +399,7 @@ function showDailyLog(date, dayCell) {
                 <button id="shareButton"><span class="fa-solid fa-share"></span> Share Date</button>
             </div>
             <hr class="after-title" style="margin-bottom:0;">
-        ${log.map((entry, index) => {
+        ${sortedLog.map((entry, index) => {
             function createTeamObject(teamName) {
                 return {
                     team_name: teamName,
@@ -568,8 +584,14 @@ function generateCalendarListView() {
         HTMLOutput += `
             <h3 id=${date}>${formattedToday == date ? ' ☆ ' : ''}${formattedDate}</h3>
         `
+        
+        const sortedMatches = [...matchDataToUse[date]].sort((a, b) => {
+            const timeA = a.time || '00:00:00';
+            const timeB = b.time || '00:00:00';
+            return timeA.localeCompare(timeB);
+        });
 
-        matchDataToUse[date].forEach(entry => {
+        sortedMatches.forEach(entry => {
             function createTeamObject(teamName) {
                 return {
                     team_name: teamName,
