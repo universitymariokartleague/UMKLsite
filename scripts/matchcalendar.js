@@ -158,8 +158,12 @@ function generateCalendar(month, year, dateParam = null) {
                 team2Div.style.borderTopRightRadius = '5px';
                 team2Div.style.borderBottomRightRadius = '5px';
 
+
                 colorBarContainer.appendChild(team1Div);
                 colorBarContainer.appendChild(team2Div);
+
+                colorBarContainer.style.opacity = entry.testMatch ? '0.25' : '1';
+
 
                 dayCell.appendChild(colorBarContainer);
             });
