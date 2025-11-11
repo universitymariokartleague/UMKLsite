@@ -327,7 +327,7 @@ function generate6v6ScoreCalculatorLink(entry) {
     const url = new URL("pages/tools/6v6scorecalculator/", window.location.origin);
 
     const positionsString = entry.detailedResults
-        .map(race => race[1].join(',')) // take only the "1" array
+        .map(race => race[1].join(',')) // take only the "1" array - {1: Array(6), 2: Array(6), track: 'GCN Baby Park'}
         .join('\n');
 
     const tracksString = entry.detailedResults
