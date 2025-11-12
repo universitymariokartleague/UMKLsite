@@ -80,7 +80,6 @@ function normalizeMatchData(matchData) {
 
 function generateCalendar(month, year, dateParam = null) {
     const startDay = localStorage.getItem("startDay") || DEFAULTSTARTDAY;
-    const tempMonthType = localStorage.getItem("monthType") || "long";
 
     const monthYear = document.getElementById('monthYear');
     const calendarDays = document.getElementById('calendarDays');
@@ -88,7 +87,7 @@ function generateCalendar(month, year, dateParam = null) {
 
     monthYear.innerHTML = `
         <a class="month-arrow fa-solid fa-arrow-left ${(year == minYear && month == 0) ? "empty" : ""}" id="previousMonthButton"></a>
-        <span class="month-name" id="goToCurrentMonthButton">${Intl.DateTimeFormat('en', { month: tempMonthType }).format(new Date(year, month))} ${year}</span>
+        <span class="month-name" id="goToCurrentMonthButton">${Intl.DateTimeFormat('en', { month: 'long' }).format(new Date(year, month))} ${year}</span>
         <a class="month-arrow fa-solid fa-arrow-right ${(year == maxYear && month == 11) ? "empty" : ""}" id="nextMonthButton"></a>
     `;
 
