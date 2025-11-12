@@ -200,6 +200,8 @@ function showUpcomingMatch() {
                     alt="Team background overlay"
                     onload="this.style.opacity=1" loading="lazy"/>
                     
+                    ${entry.testMatch ? `<div class="test-match-indicator">Test match</div>` : ''}
+
                     <div class="event-overlay">
                         <div class="event-box-team">
                             <a class="no-underline-link no-color-link team-box-underline-hover" href="${team1.link}">

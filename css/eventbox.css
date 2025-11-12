@@ -125,6 +125,19 @@
     color: #ffb4b4!important;
 }
 
+.event-container .test-match-indicator {
+    font-size: 15px;
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    padding: 3px 6px;
+    color: #bc0839;
+    font-weight: 600;
+    background-color: #FFF;
+    border-radius: 5px;
+    z-index: 10;
+}
+
 .event-box-team {
     width: 100%;
     text-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);

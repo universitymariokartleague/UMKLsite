@@ -494,6 +494,8 @@ function showDailyLog(date, dayCell) {
                         <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.avif"
                         alt="Team background overlay"
                         ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>
+                        
+                        ${entry.testMatch ? `<div class="test-match-indicator">Test match</div>` : ''}
 
                         <div class="event-overlay" translate="no">
                             <div class="event-box-team">
@@ -673,7 +675,6 @@ function generateCalendarListView() {
                 team1.ytLink = entry.ytLinks[0]
                 team2.ytLink = entry.ytLinks[1]
             }
-
             HTMLOutput += `
                 <div class="event-container">
                     <div class="team-box-container">
