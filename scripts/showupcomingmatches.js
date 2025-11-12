@@ -133,7 +133,14 @@ function showUpcomingMatch() {
         let html = `<h2>Upcoming Matches</h2>
         <a href="pages/matches/">View all matches</a>
         <div class="after-title match-container-list">`;
-        matches.forEach(entry => {
+
+        const sortedMatches = [...matches].sort((a, b) => {
+            const timeA = a.time || '00:00:00';
+            const timeB = b.time || '00:00:00';
+            return timeA.localeCompare(timeB);
+        });
+
+        sortedMatches.forEach(entry => {
             function createTeamObject(teamName) {
                 return {
                     team_name: teamName,
