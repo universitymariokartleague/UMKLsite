@@ -138,9 +138,9 @@
     padding: 3px 6px;
     color: #bc0839;
     font-weight: 600;
-    background-color: #FFF;
+    background-color: #fff;
     border-radius: 5px;
-    z-index: 10;
+    z-index: 3;
 }
 
 .event-box-team {
@@ -353,5 +353,14 @@
 
     .dayRelation {
         font-size: 8px;
+    }
+
+    .event-container .test-match-indicator {
+        font-size: 12px;
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        padding: 2px 4px;
+        z-index: 3;
     }
 }
