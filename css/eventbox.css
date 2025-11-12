@@ -39,6 +39,11 @@
     margin-left: 5px;
 }
 
+.test-match-indicator .live-dot {
+    margin-left: 0;
+    margin-right: 4px;
+}
+
 .match-result,
 .match-season {
     margin: 0;

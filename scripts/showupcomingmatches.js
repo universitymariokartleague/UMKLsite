@@ -92,7 +92,7 @@ function parseLocalDate(dateStr) {
     return new Date(year, month - 1, day);
 };
 
-function showUpcomingMatch() {
+function showUpcomingMatches() {
     const pad = n => String(n).padStart(2, '0');
     const formatDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
@@ -191,6 +191,24 @@ function showUpcomingMatch() {
             const parts = londonFormatter.formatToParts(dateObj);
             const zoneName = parts.find(p => p.type === "timeZoneName")?.value || "";
 
+            let timeUntilMatch;
+            if (!isLive) {
+                const now = new Date();
+                const diffMs = dateObj.getTime() - now.getTime();
+
+                if (diffMs <= 0) {
+                    timeUntilMatch = "00:00:00";
+                } else {
+                    const totalSeconds = Math.floor(diffMs / 1000);
+                    const days = Math.floor(totalSeconds / 86400);
+                    const hours = Math.floor((totalSeconds % 86400) / 3600);
+                    const minutes = Math.floor((totalSeconds % 3600) / 60);
+                    const seconds = totalSeconds % 60;
+                    timeUntilMatch = `${days.toString()} day ${hours.toString()}:${minutes
+                        .toString()
+                        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+                }
+            }
             html += `            
             <div class="event-container">
                 <div class="team-box-container">
@@ -201,6 +219,7 @@ function showUpcomingMatch() {
                     onload="this.style.opacity=1" loading="lazy"/>
                     
                     ${entry.testMatch ? `<div class="test-match-indicator">Test match</div>` : ''}
+                    ${isLive ? `<div class="test-match-indicator"><span style="display:flex"><div class="live-dot"></div>Live</span></div>` : `<div class="test-match-indicator" id="matchCountdown${entry.eventID}">${timeUntilMatch}</div>`}
 
                     <div class="event-overlay">
                         <div class="event-box-team">
@@ -264,6 +283,30 @@ function showUpcomingMatch() {
                 </details>
             </div>
             `;
+
+            let interval = setInterval(() => {
+                const countdownElement = document.getElementById(`matchCountdown${entry.eventID}`);
+                
+                const now = new Date();
+                const diffMs = dateObj.getTime() - now.getTime();
+
+                if (diffMs <= 0) {
+                    timeUntilMatch = "00:00:00";
+                    clearInterval(interval);
+                    showUpcomingMatches();
+                } else {
+                    const totalSeconds = Math.floor(diffMs / 1000);
+                    const days = Math.floor(totalSeconds / 86400);
+                    const hours = Math.floor((totalSeconds % 86400) / 3600);
+                    const minutes = Math.floor((totalSeconds % 3600) / 60);
+                    const seconds = totalSeconds % 60;
+                    timeUntilMatch = `${days.toString()} day ${hours.toString()}:${minutes
+                        .toString()
+                        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+                }
+
+                countdownElement.innerHTML = timeUntilMatch;
+            }, 1000);
         });
         html += `</div><hr />`;
 
@@ -408,7 +451,7 @@ function makeTeamsColorStyles() {
 }
 
 document.addEventListener('startDayChange', () => {
-    showUpcomingMatch();
+    showUpcomingMatches();
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -441,7 +484,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     teamColors = await getTeamcolors();
                     upcomingMatchesError.innerHTML = "";
                     makeTeamsColorStyles();
-                    showUpcomingMatch();
+                    showUpcomingMatches();
                 } catch (err) {
                     upcomingMatchesError.innerHTML = `<blockquote class="fail"><b>API error - Retrying: attempt ${window.retryCount}...</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
                     refreshTimer = setTimeout(retryFetch, 2000);
@@ -452,6 +495,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     makeTeamsColorStyles();
-    showUpcomingMatch();
+    showUpcomingMatches();
     console.debug(`%cshowupcomingmatches.js %c> %cMatch data loaded in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
 });
