@@ -79,8 +79,6 @@ async function generateTeamBox(teamData, showError) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.remove('fade-in');
 
-    console.log(teamData)
-
     const placeholderLogo = "assets/media/teamemblems/hres/DEFAULT.png";
     const teamNameUpper = teamData.team_name.toUpperCase();
     const logoUrl = `assets/media/teamemblems/hres/${teamNameUpper}.png`;

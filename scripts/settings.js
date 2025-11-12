@@ -255,7 +255,7 @@ function checkEasterEggs() {
         easterEgg = "aprilfools";
     } else if (checkDatePeriod(28, 10, 31, 10)) {
         easterEgg = "halloween";
-    } else if (checkDate(24, 12)) {
+    } else if (checkDate(1, 12, 24, 12)) {
         easterEgg = "xmaseve";
     } else if (checkDate(25, 12)) {
         easterEgg = "xmas";

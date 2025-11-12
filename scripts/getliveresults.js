@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         errorMessage.innerHTML = "";
         window.lastMatchUpdate = Date.now();
     } catch (error) {
-        console.log(error);
+        console.error(error);
         errorMessage.innerHTML = `Connection lost...`;
         console.debug(`%cgetlivedata.js %c> %cAPI failed...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
         if (error && error.message && error.message.includes('429')) {
