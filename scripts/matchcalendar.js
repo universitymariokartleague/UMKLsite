@@ -135,16 +135,16 @@ function generateCalendar(month, year, dateParam = null) {
         }
 
         const dateToCheck = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        
+
         if (matchDataToUse[dateToCheck]) {
             const sortedMatches = [...matchDataToUse[dateToCheck]].sort((a, b) => {
-            const timeA = a.time || '00:00:00';
-            const timeB = b.time || '00:00:00';
-            return timeA.localeCompare(timeB);
+                const timeA = a.time || '00:00:00';
+                const timeB = b.time || '00:00:00';
+                return timeA.localeCompare(timeB);
             });
-            
             matchDataToUse[dateToCheck] = sortedMatches;
         }
+
         if (matchDataToUse[dateToCheck]) {
             matchDataToUse[dateToCheck].forEach(entry => {
                 const [team1, team2] = entry.teamsInvolved;
@@ -158,22 +158,38 @@ function generateCalendar(month, year, dateParam = null) {
 
                 const team1Div = document.createElement('div');
                 team1Div.classList.add('team-color-bar');
-                team1Div.style.backgroundColor = color1;
                 team1Div.style.borderTopLeftRadius = '5px';
                 team1Div.style.borderBottomLeftRadius = '5px';
+                team1Div.style.backgroundColor = color1;
 
                 const team2Div = document.createElement('div');
                 team2Div.classList.add('team-color-bar');
-                team2Div.style.backgroundColor = color2;
                 team2Div.style.borderTopRightRadius = '5px';
                 team2Div.style.borderBottomRightRadius = '5px';
+                team2Div.style.backgroundColor = color2;
 
+                // use a checkered pattern for test matches
+                if (entry.testMatch) {
+                    const checkerPattern = `
+                        repeating-conic-gradient(
+                        rgba(255,255,255,0.6) 0deg 90deg,
+                        rgba(0,0,0,0.15) 90deg 180deg
+                        )
+                    `;
+
+                    [team1Div, team2Div].forEach(teamDiv => {
+                        const color = teamDiv === team1Div ? color1 : color2;
+
+                        teamDiv.style.backgroundColor = color;
+                        teamDiv.style.backgroundImage = checkerPattern;
+                        teamDiv.style.backgroundSize = '9px 9px';
+                        teamDiv.style.backgroundRepeat = 'repeat';
+                        teamDiv.style.backgroundPosition = 'center';
+                    });
+                }
 
                 colorBarContainer.appendChild(team1Div);
                 colorBarContainer.appendChild(team2Div);
-
-                colorBarContainer.style.opacity = entry.testMatch ? '0.25' : '1';
-
 
                 dayCell.appendChild(colorBarContainer);
             });
@@ -321,7 +337,7 @@ function changeShownDay(change) {
     if (currentIndex === -1) {
         currentIndex = dates.findIndex(d => d > currentlyShownLog);
         if (currentIndex === -1) {
-            currentIndex = dates.length; 
+            currentIndex = dates.length;
         }
     }
 
@@ -584,7 +600,7 @@ function generateCalendarListView() {
         HTMLOutput += `
             <h3 id=${date}>${formattedToday == date ? ' ☆ ' : ''}${formattedDate}</h3>
         `
-        
+
         const sortedMatches = [...matchDataToUse[date]].sort((a, b) => {
             const timeA = a.time || '00:00:00';
             const timeB = b.time || '00:00:00';
@@ -600,7 +616,7 @@ function generateCalendarListView() {
                 };
             }
             const [team1, team2] = entry.teamsInvolved.map(createTeamObject);
-            
+
             const is12Hour = uses12HourClock(locale);
             let timeString = entry.time || '00:00:00';
             const { formattedMatchTime, formattedLocalMatchTime, outsideUKTimezone } = formatMatchTime(date, timeString, locale);
@@ -768,7 +784,7 @@ function formatResults(results) {
     return `
         ${teamAScore} - ${teamBScore}
         ${hasPenalty ?
-        `
+            `
             <p class="penalty-text">
                 -${teamAPenalty}	 	 	 	 	 	  	  	  -${teamBPenalty}
             </p>
@@ -830,7 +846,7 @@ function checkTimezoneMatches(dateStr, timeStr) {
     const match = timeStr.match(/([+-]\d{2}):([0-5]\d)$/);
     if (!match) return false;
 
-    const [ , offsetH, offsetM ] = match;
+    const [, offsetH, offsetM] = match;
     const offsetMinutes = parseInt(offsetH, 10) * 60 + parseInt(offsetM, 10) * (offsetH.startsWith("-") ? -1 : 1);
 
     const [hourStr, minuteStr] = timeStr.split(":");
@@ -974,12 +990,12 @@ async function getMatchData() {
         },
         body: "{}"
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
 }
 
 async function getMatchDataFallback() {
@@ -998,12 +1014,12 @@ async function getTeamcolors() {
         },
         body: "{}"
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
 }
 
 async function getTeamcolorsFallback() {
@@ -1094,9 +1110,9 @@ function updateButton() {
 
 function generateOverseasDateDisplayButton() {
     const overseasDisplayButton = document.getElementById("overseasDisplayButton");
-    
+
     updateButton();
-    
+
     overseasDisplayButton.onclick = () => {
         const tempOverseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1;
         localStorage.setItem("overseasDateDisplay", tempOverseasDateDisplay ? 0 : 1);
