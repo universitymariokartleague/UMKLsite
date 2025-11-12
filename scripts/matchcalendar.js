@@ -490,9 +490,9 @@ function showDailyLog(date, dayCell) {
                     <div class="team-box-container">
                         <div class="team-background left ${team1.class_name}"></div>
                         <div class="team-background right ${team2.class_name}"></div>
-                        <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.avif"
+                        ${!entry.testMatch ? `<img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.avif"
                         alt="Team background overlay"
-                        ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>
+                        ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>` : ''}
                         
                         ${entry.testMatch ? `<div class="test-match-indicator">Test match</div>` : ''}
 
@@ -546,7 +546,7 @@ function showDailyLog(date, dayCell) {
                                 ${isLive ? '<div class="live-dot"></div>' : ''}
                             </div>
                         </div>
-                        <p class="match-season">${entry.testMatch ? "<span class='settings-extra-info'>Test match</span>" : `Season ${entry.season}`}</p>
+                        <p class="match-season">${entry.testMatch ? 'Test match' : `Season ${entry.season}`}</p>
                     </div>
                     <details class="match-box">
                         <summary>Match details</summary>
@@ -679,9 +679,11 @@ function generateCalendarListView() {
                     <div class="team-box-container">
                         <div class="team-background left ${team1.class_name}"></div>
                         <div class="team-background right ${team2.class_name}"></div>
-                        <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.avif"
+                        ${!entry.testMatch ? `<img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.avif"
                         alt="Team background overlay"
-                        ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>
+                        ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>` : ''}
+
+                        ${entry.testMatch ? `<div class="test-match-indicator">Test match</div>` : ''}
 
                         <div class="event-overlay">
                             <div class="event-box-team">
@@ -733,7 +735,7 @@ function generateCalendarListView() {
                                 ${isLive ? '<div class="live-dot"></div>' : ''}
                             </div>
                         </div>
-                        <p class="match-season">${entry.testMatch ? "<span class='settings-extra-info'>Test match</span>" : `Season ${entry.season}`}</p>
+                        <p class="match-season">${entry.testMatch ? 'Test match' : `Season ${entry.season}`}</p>
                     </div>
                     <details class="match-box">
                         <summary>Match details</summary>
