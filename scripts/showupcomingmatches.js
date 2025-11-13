@@ -198,6 +198,7 @@ async function showUpcomingMatches() {
 
                 if (diffMs <= 0) {
                     timeUntilMatch = "0:00:00";
+                    isLive = true;
                 } else {
                     const totalSeconds = Math.floor(diffMs / 1000);
                     const days = Math.floor(totalSeconds / 86400);
@@ -222,6 +223,7 @@ async function showUpcomingMatches() {
 
                     if (diffMs <= 0) {
                         countdownElement.innerHTML = "0:00:00";
+                        isLive = true;
                         clearInterval(interval);
                         matchData = await getMatchData();
                         showUpcomingMatches();
