@@ -224,7 +224,7 @@ async function showUpcomingMatches() {
                         countdownElement.innerHTML = "0:00:00";
                         clearInterval(interval);
                         matchData = await getMatchData();
-                        loadCalendarView();
+                        showUpcomingMatches();
                     } else {
                         const totalSeconds = Math.floor(diffMs / 1000);
                         const days = Math.floor(totalSeconds / 86400);
