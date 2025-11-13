@@ -40,7 +40,7 @@ async function getMatchDataFallback() {
     matchData = await response.json();
 }
 
-async function getTeamcolors() {
+async function getTeamColors() {
     return fetch('https://api.umkl.co.uk/teamcolors', {
         method: 'POST',
         headers: {
@@ -92,7 +92,7 @@ function parseLocalDate(dateStr) {
     return new Date(year, month - 1, day);
 };
 
-function showUpcomingMatches() {
+async function showUpcomingMatches() {
     const pad = n => String(n).padStart(2, '0');
     const formatDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
@@ -140,7 +140,7 @@ function showUpcomingMatches() {
             return timeA.localeCompare(timeB);
         });
 
-        sortedMatches.forEach(entry => {
+        for (const entry of sortedMatches) {
             function createTeamObject(teamName) {
                 return {
                     team_name: teamName,
@@ -197,7 +197,7 @@ function showUpcomingMatches() {
                 const diffMs = dateObj.getTime() - now.getTime();
 
                 if (diffMs <= 0) {
-                    timeUntilMatch = "00:00:00";
+                    timeUntilMatch = "0:00:00";
                 } else {
                     const totalSeconds = Math.floor(diffMs / 1000);
                     const days = Math.floor(totalSeconds / 86400);
@@ -284,7 +284,8 @@ function showUpcomingMatches() {
             </div>
             `;
 
-            let interval = setInterval(() => {
+            if (isLive) return;
+            let interval = setInterval(async () => {
                 const countdownElement = document.getElementById(`matchCountdown${entry.eventID}`);
                 
                 const now = new Date();
@@ -293,6 +294,7 @@ function showUpcomingMatches() {
                 if (diffMs <= 0) {
                     timeUntilMatch = "00:00:00";
                     clearInterval(interval);
+                    matchData = await getMatchData();
                     showUpcomingMatches();
                 } else {
                     const totalSeconds = Math.floor(diffMs / 1000);
@@ -307,7 +309,7 @@ function showUpcomingMatches() {
 
                 countdownElement.innerHTML = timeUntilMatch;
             }, 1000);
-        });
+        };
         html += `</div><hr />`;
 
         upcomingMatchesBox.classList.add('fade-in');
@@ -460,7 +462,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
         matchData = await getMatchData();
-        teamColors = await getTeamcolors();
+        teamColors = await getTeamColors();
     } catch (error) {
         if (error && error.message && error.message.includes('429')) {
             upcomingMatchesError.innerHTML = `<blockquote class="fail"><b>API error</b><br>Your device or network is sending too many requests, so you have been rate-limited. Please try again later.</blockquote>`;
@@ -481,7 +483,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         window.retryCount++;
                     }
                     matchData = await getMatchData();
-                    teamColors = await getTeamcolors();
+                    teamColors = await getTeamColors();
                     upcomingMatchesError.innerHTML = "";
                     makeTeamsColorStyles();
                     showUpcomingMatches();
