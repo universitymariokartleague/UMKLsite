@@ -435,6 +435,7 @@ function showDailyLog(date, dayCell) {
             }
 
             let isLive = false;
+            let timeUntilMatch;
             if (entry.time) {
                 const [hours, minutes] = entry.time.split(':');
                 const dateObj = new Date(formattedDate);
@@ -446,8 +447,59 @@ function showDailyLog(date, dayCell) {
                 if (now >= matchStart && now <= matchEnd) {
                     isLive = true;
                 }
-            }
 
+                if (!isLive) {
+                    const now = new Date();
+                    const diffMs = dateObj.getTime() - now.getTime();
+
+                    if (diffMs <= 0) {
+                        timeUntilMatch = "0:00:00";
+                    } else {
+                        const totalSeconds = Math.floor(diffMs / 1000);
+                        const days = Math.floor(totalSeconds / 86400);
+                        const hours = Math.floor((totalSeconds % 86400) / 3600);
+                        const minutes = Math.floor((totalSeconds % 3600) / 60);
+                        const seconds = totalSeconds % 60;
+                        timeUntilMatch = `${days > 0 ? `${days.toString()}d `: ''}${hours.toString()}:${minutes
+                            .toString()
+                            .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+                    }
+                }
+
+                if (!isLive && !entry.endTime) {
+                    let interval = setInterval(async () => {
+                        const countdownElement = document.getElementById(`matchCountdown${entry.eventID}`);
+                        if (!countdownElement) {
+                            clearInterval(interval);
+                            return;
+                        }
+
+                        const now = new Date();
+                        const diffMs = dateObj.getTime() - now.getTime();
+
+                        if (diffMs <= 0) {
+                            countdownElement.innerHTML = "0:00:00";
+                            clearInterval(interval);
+                            matchData = await getMatchData();
+                            loadCalendarView();
+                                const urlParams = new URLSearchParams(window.location.search);
+                                const dateParam = urlParams.get('date');
+                                if (dateParam && matchData[dateParam]) {
+                                    showDailyLog(dateParam);
+                                }
+                        } else {
+                            const totalSeconds = Math.floor(diffMs / 1000);
+                            const days = Math.floor(totalSeconds / 86400);
+                            const hours = Math.floor((totalSeconds % 86400) / 3600);
+                            const minutes = Math.floor((totalSeconds % 3600) / 60);
+                            const seconds = totalSeconds % 60;
+                            countdownElement.innerHTML = `${days > 0 ? `${days.toString()}d `: ''}${hours.toString()}:${minutes
+                                .toString()
+                                .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+                        }
+                    }, 1000);
+                }
+            }
             const resultsHTML = formatResults(entry.results);
 
             let matchEndedText = ''
@@ -495,6 +547,7 @@ function showDailyLog(date, dayCell) {
                         ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>` : ''}
                         
                         ${entry.testMatch ? `<div class="test-match-indicator">Test match</div>` : ''}
+                        ${entry.endTime ? '' : `${isLive ? `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}"><span style="display:flex"><div class="live-dot"></div>Live</span></div>` : `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id="matchCountdown${entry.eventID}">${timeUntilMatch}</div>`}`}
 
                         <div class="event-overlay" translate="no">
                             <div class="event-box-team">

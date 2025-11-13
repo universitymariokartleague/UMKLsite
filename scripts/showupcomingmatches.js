@@ -209,6 +209,35 @@ async function showUpcomingMatches() {
                         .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
                 }
             }
+            if (!isLive) {
+                let interval = setInterval(async () => {
+                    const countdownElement = document.getElementById(`matchCountdown${entry.eventID}`);
+                    if (!countdownElement) {
+                        clearInterval(interval);
+                        return;
+                    }
+
+                    const now = new Date();
+                    const diffMs = dateObj.getTime() - now.getTime();
+
+                    if (diffMs <= 0) {
+                        countdownElement.innerHTML = "0:00:00";
+                        clearInterval(interval);
+                        matchData = await getMatchData();
+                        loadCalendarView();
+                    } else {
+                        const totalSeconds = Math.floor(diffMs / 1000);
+                        const days = Math.floor(totalSeconds / 86400);
+                        const hours = Math.floor((totalSeconds % 86400) / 3600);
+                        const minutes = Math.floor((totalSeconds % 3600) / 60);
+                        const seconds = totalSeconds % 60;
+                        countdownElement.innerHTML = `${days > 0 ? `${days.toString()}d `: ''}${hours.toString()}:${minutes
+                            .toString()
+                            .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+                    }
+                }, 1000);
+            }
+
             html += `            
             <div class="event-container">
                 <div class="team-box-container">
@@ -283,32 +312,6 @@ async function showUpcomingMatches() {
                 </details>
             </div>
             `;
-
-            if (isLive) return;
-            let interval = setInterval(async () => {
-                const countdownElement = document.getElementById(`matchCountdown${entry.eventID}`);
-                
-                const now = new Date();
-                const diffMs = dateObj.getTime() - now.getTime();
-
-                if (diffMs <= 0) {
-                    timeUntilMatch = "00:00:00";
-                    clearInterval(interval);
-                    matchData = await getMatchData();
-                    showUpcomingMatches();
-                } else {
-                    const totalSeconds = Math.floor(diffMs / 1000);
-                    const days = Math.floor(totalSeconds / 86400);
-                    const hours = Math.floor((totalSeconds % 86400) / 3600);
-                    const minutes = Math.floor((totalSeconds % 3600) / 60);
-                    const seconds = totalSeconds % 60;
-                    timeUntilMatch = `${days > 0 ? `${days.toString()}d ` : ''}${hours.toString()}:${minutes
-                        .toString()
-                        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-                }
-
-                countdownElement.innerHTML = timeUntilMatch;
-            }, 1000);
         };
         html += `</div><hr />`;
 
