@@ -245,9 +245,9 @@ async function showUpcomingMatches() {
                 <div class="team-box-container">
                     <div class="team-background left ${team1.class_name}"></div>
                     <div class="team-background right ${team2.class_name}"></div>
-                    <img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.avif"
+                    ${!entry.testMatch ? `<img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.avif"
                     alt="Team background overlay"
-                    onload="this.style.opacity=1" loading="lazy"/>
+                    onload="this.style.opacity=1" loading="lazy"/>` : ''}
                     
                     ${entry.testMatch ? `<div class="test-match-indicator">Test match</div>` : ''}
                     ${isLive ? `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}"><span style="display:flex"><div class="live-dot"></div>Live</span></div>` : `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id="matchCountdown${entry.eventID}">${timeUntilMatch}</div>`}
