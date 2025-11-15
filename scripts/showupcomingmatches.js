@@ -250,7 +250,7 @@ async function showUpcomingMatches() {
                     onload="this.style.opacity=1" loading="lazy"/>
                     
                     ${entry.testMatch ? `<div class="test-match-indicator">Test match</div>` : ''}
-                    ${isLive ? `<div class="test-match-indicator"><span style="display:flex"><div class="live-dot"></div>Live</span></div>` : `<div class="test-match-indicator" id="matchCountdown${entry.eventID}">${timeUntilMatch}</div>`}
+                    ${isLive ? `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}"><span style="display:flex"><div class="live-dot"></div>Live</span></div>` : `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id="matchCountdown${entry.eventID}">${timeUntilMatch}</div>`}
 
                     <div class="event-overlay">
                         <div class="event-box-team">
