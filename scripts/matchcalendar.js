@@ -500,7 +500,7 @@ async function showDailyLog(date, dayCell) {
                             const hours = Math.floor((totalSeconds % 86400) / 3600);
                             const minutes = Math.floor((totalSeconds % 3600) / 60);
                             const seconds = totalSeconds % 60;
-                            countdownElement.innerHTML = `${days > 0 ? `${days.toString()}d `: ''}${hours.toString()}:${minutes
+                            countdownElement.innerHTML = `<i class="fa-solid fa-clock"></i> ${days > 0 ? `${days.toString()}d `: ''}${hours.toString()}:${minutes
                                 .toString()
                                 .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
                         }
@@ -558,7 +558,7 @@ async function showDailyLog(date, dayCell) {
                         ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>` : ''}
                         
                         ${entry.testMatch ? `<div class="test-match-indicator">Test match</div>` : ''}
-                        ${entry.endTime ? '' : `${isLive ? `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id='liveIndicator${entry.eventID}'><span style="display:flex"><div class="live-dot"></div>Live ${devMode && !entry.endTime ? `${liveResults.length + 1 > 12 ? '(Finishing up...)' : `(${liveResults.length + 1}/12)`}` : ''}</span></div>` : `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id="matchCountdown${entry.eventID}">${timeUntilMatch}</div>`}`}
+                        ${entry.endTime ? '' : `${isLive ? `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id='liveIndicator${entry.eventID}'><span style="display:flex"><div class="live-dot"></div>Live ${devMode && !entry.endTime ? `${liveResults.length + 1 > 12 ? '(Finishing up...)' : `(${liveResults.length + 1}/12)`}` : ''}</span></div>` : `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id="matchCountdown${entry.eventID}"><i class="fa-solid fa-clock"></i> ${timeUntilMatch}</div>`}`}
                         ${devMode && !entry.endTime ? `<div class="test-match-indicator signed-up-count">Players signed up: ${team1.team_name}: ${entry.signedUpPlayerCounts[0]} | ${team2.team_name} ${entry.signedUpPlayerCounts[1]}</div>` : ''}
 
                         <div class="event-overlay" translate="no">
@@ -1289,9 +1289,7 @@ document.addEventListener('keydown', (event) => {
 
                             let scores = [teamAPoints, teamBPoints]
 
-                            console.log(scores);
-
-                            liveIndicatorDiv.innerHTML = `<span style="display:flex"><div class="live-dot"></div>Live ${devMode && !matchDataToUse[dateParam || Object.keys(matchDataToUse)[0]][0].endTime ? `${liveResults.length + 1 > 12 ? '(Finishing up...)' : `(${scores[0]} - ${scores[1]} | ${liveResults.length + 1}/12`})` : ''}</span>`;
+                            liveIndicatorDiv.innerHTML = `<span style="display:flex"><div class="live-dot"></div>Live ${devMode && !matchDataToUse[dateParam || Object.keys(matchDataToUse)[0]][0].endTime ? `${liveResults.length + 1 > 12 ? '(Finishing up...)' : `(${scores[0]} - ${scores[1]} | <i class="fa-solid fa-flag-checkered"></i> ${liveResults.length + 1}/12`})` : ''}</span>`;
                         }
                     };
                 } finally {
