@@ -71,6 +71,12 @@ function renderResults(width) {
     let yourTeamTotal = 0;
     let opponentTeamTotal = 0;
 
+    const trackNames = trackNamesInput.value
+        .trim()
+        .split("\n")
+        .map(name => name.trim())
+        .filter(name => name);
+
     const teamRaceResults = positions.map((yourTeamPositions, index) => {
         const allPositions = Array.from({ length: 12 }, (_, i) => i + 1);
         const opponentPositions = allPositions.filter(pos => !yourTeamPositions.includes(pos));
@@ -81,7 +87,7 @@ function renderResults(width) {
         yourTeamTotal += yourTeamScore;
         opponentTeamTotal += opponentTeamScore;
 
-        return `<b>Race ${index + 1}</b>:
+        return `<b>${trackNames[index] ? trackNames[index] : `Race ${index + 1}`}</b>:
         ${yourTeamScore}<br/>`;
     });
 
@@ -90,7 +96,7 @@ function renderResults(width) {
         const opponentPositions = allPositions.filter(pos => !yourTeamPositions.includes(pos));
 
         const opponentTeamScore = opponentPositions.reduce((sum, pos) => sum + calculateScore(pos), 0);
-        return `<b>Race ${index + 1}</b>:
+        return `<b>${trackNames[index] ? trackNames[index] : `Race ${index + 1}`}</b>:
         ${opponentTeamScore}<br/>`;
     });
 
@@ -100,13 +106,9 @@ function renderResults(width) {
         .map(name => name.trim())
         .filter(name => name);
 
-    teamResult.innerHTML = `<h3>${teamNames[0] || 'Your Team'}</h3><br/>${teamRaceResults.join("")}
-        <br><b>Total:</b><br/>
-        ${yourTeamTotal}<br/>`;
+    teamResult.innerHTML = `<h3>${teamNames[0] || 'Your Team'} (Total: ${yourTeamTotal})</h3>${teamRaceResults.join("")}`;
 
-    opponentResult.innerHTML = `<h3>${teamNames[1] || 'Opponent Team'}</h3><br/>${opponentRaceResults.join("")}
-        <br><b>Total:</b><br/>
-        ${opponentTeamTotal}<br/>`;
+    opponentResult.innerHTML = `<h3>${teamNames[1] || 'Opponent Team'} (Total: ${opponentTeamTotal})</h3>${opponentRaceResults.join("")}`;
 
     const diff = yourTeamTotal - opponentTeamTotal;
     const color = diff > 0 ? "green" : diff < 0 ? "red" : "black";
@@ -114,13 +116,7 @@ function renderResults(width) {
     
     pointsDifference.innerHTML = `<h2 style="color: ${color};">${sign}${diff}</h2>`;
 
-    // graph
-    const trackNames = trackNamesInput.value
-        .trim()
-        .split("\n")
-        .map(name => name.trim())
-        .filter(name => name);
-
+    // Render graph
     const raceLabels = ["", ...(
         trackNames.length === positions.length
             ? trackNames
@@ -215,7 +211,7 @@ function renderResults(width) {
                 },
                 title: {
                     display: true,
-                    text: teamNames[0] && teamNames[1] ? `${teamNames[0]} VS ${teamNames[1]}` : 'Team Scores',
+                    text: matchName ? matchName : teamNames[0] && teamNames[1] ? `${teamNames[0]} VS ${teamNames[1]}` : 'Team Scores',
                     font: {
                         family: 'Montserrat',
                         size: 16

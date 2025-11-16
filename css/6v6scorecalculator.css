@@ -25,7 +25,7 @@
     justify-content: center;
     margin-top: 10px;
     border-radius: 10px;
-    padding: 10px;
+    padding: 5px;
     background-color: var(--box-area-bg-color);
 }
 
@@ -37,12 +37,18 @@
     width: 100vw;
     border-radius: 10px;
     position: relative;
+    font-size: 0.8em;
+}
+
+.result-box h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
 }
 
 .points-diff {
     text-align: center;
     width: 250px;
-    margin: auto 30px;
+    margin: auto 15px;
 }
 
 .score-graph {
