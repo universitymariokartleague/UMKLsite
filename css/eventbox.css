@@ -147,6 +147,11 @@
     top: 35px;
 }
 
+.test-match-indicator.signed-up-count {
+    right: unset;
+    left: 6px;
+}
+
 .event-box-team {
     width: 100%;
     text-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);

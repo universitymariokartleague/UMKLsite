@@ -31,6 +31,8 @@ let teamColors = [];
 
 let currentlyShownLog = null;
 let isKeyPressed = false;
+let keySequence = [];
+const devModeSequence = ['d', 'e', 'v'];
 
 let refreshTimer = null;
 
@@ -44,6 +46,8 @@ let listViewToggledOnce = false;
 
 let overseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1 || false;
 let cached = false;
+
+let devMode = false;
 
 let startTime;
 
@@ -482,11 +486,11 @@ function showDailyLog(date, dayCell) {
                             clearInterval(interval);
                             matchData = await getMatchData();
                             loadCalendarView();
-                                const urlParams = new URLSearchParams(window.location.search);
-                                const dateParam = urlParams.get('date');
-                                if (dateParam && matchData[dateParam]) {
-                                    showDailyLog(dateParam);
-                                }
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const dateParam = urlParams.get('date');
+                            if (dateParam && matchData[dateParam]) {
+                                showDailyLog(dateParam);
+                            }
                         } else {
                             const totalSeconds = Math.floor(diffMs / 1000);
                             const days = Math.floor(totalSeconds / 86400);
@@ -537,6 +541,8 @@ function showDailyLog(date, dayCell) {
             let calculatorlink = '';
             if (resultsHTML && entry.detailedResults) calculatorlink = generate6v6ScoreCalculatorLink(entry);
 
+            console.log(entry.signedUpPlayerCounts);
+
             return `
                 <div class="event-container">
                     <div class="team-box-container">
@@ -548,6 +554,7 @@ function showDailyLog(date, dayCell) {
                         
                         ${entry.testMatch ? `<div class="test-match-indicator">Test match</div>` : ''}
                         ${entry.endTime ? '' : `${isLive ? `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}"><span style="display:flex"><div class="live-dot"></div>Live</span></div>` : `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id="matchCountdown${entry.eventID}">${timeUntilMatch}</div>`}`}
+                        ${devMode && !entry.endTime ? `<div class="test-match-indicator signed-up-count">Players signed up: ${team1.team_name}: ${entry.signedUpPlayerCounts[0]} | ${team2.team_name} ${entry.signedUpPlayerCounts[1]}</div>` : ''}
 
                         <div class="event-overlay" translate="no">
                             <div class="event-box-team">
@@ -1201,6 +1208,21 @@ document.addEventListener('keydown', (event) => {
         if (key === ']') {
             isKeyPressed = true;
             changeMonth(1);
+        }
+
+        keySequence.push(key);
+        if (keySequence.length > devModeSequence.length) {
+            keySequence.shift();
+        }
+        if (keySequence.join('') == devModeSequence.join('')) {
+            devMode = !devMode;
+            loadCalendarView();
+            const urlParams = new URLSearchParams(window.location.search);
+            const dateParam = urlParams.get('date');
+            if (dateParam && matchData[dateParam]) {
+                showDailyLog(dateParam);
+            }           
+            keySequence = [];
         }
     }
 });
