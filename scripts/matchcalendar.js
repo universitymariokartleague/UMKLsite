@@ -541,8 +541,6 @@ function showDailyLog(date, dayCell) {
             let calculatorlink = '';
             if (resultsHTML && entry.detailedResults) calculatorlink = generate6v6ScoreCalculatorLink(entry);
 
-            console.log(entry.signedUpPlayerCounts);
-
             return `
                 <div class="event-container">
                     <div class="team-box-container">
