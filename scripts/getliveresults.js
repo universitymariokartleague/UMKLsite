@@ -15,6 +15,8 @@ const MATCH_LENGTH_MINS = 90;
 const scoreMap = [15, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 const maxPos = scoreMap.length;
 
+let receivedValidLogos = false;
+
 let refreshTimer = null;
 
 let startTime;
@@ -52,6 +54,8 @@ async function getMatchData() {
 }
 
 function getLiveMatchTeams() {
+    if (receivedValidLogos) return;
+
     const getUKDate = (offsetDays = 0) => {
         const now = new Date();
         const formatter = new Intl.DateTimeFormat('en-GB', {
@@ -99,6 +103,7 @@ function getLiveMatchTeams() {
     });
 
     const teamNames = liveMatches.map(entry => entry.teamsInvolved)[0];
+    receivedValidLogos = Boolean(teamNames && teamNames[0] && teamNames[1]);
     if (teamNames) {
         firstTeamLogo.src = `assets/media/teamemblems/${teamNames[0].toUpperCase()}.avif`
         secondTeamLogo.src = `assets/media/teamemblems/${teamNames[1].toUpperCase()}.avif`
