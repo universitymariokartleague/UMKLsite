@@ -1289,7 +1289,7 @@ document.addEventListener('keydown', (event) => {
 
                             let scores = [teamAPoints, teamBPoints]
 
-                            liveIndicatorDiv.innerHTML = `<span style="display:flex"><div class="live-dot"></div>Live ${devMode && !matchDataToUse[dateParam || Object.keys(matchDataToUse)[0]][0].endTime ? `${liveResults.length + 1 > 12 ? '(Finishing up...)' : `(${scores[0]} - ${scores[1]} | <i class="fa-solid fa-flag-checkered"></i> ${liveResults.length + 1}/12`})` : ''}</span>`;
+                            liveIndicatorDiv.innerHTML = `<span style="display:flex"><div class="live-dot"></div>Live ${devMode && !matchDataToUse[dateParam || Object.keys(matchDataToUse)[0]][0].endTime ? `${liveResults.length + 1 > 12 ? '(Finishing up...)' : `(${scores[0]} - ${scores[1]} | <i class="fa-solid fa-flag-checkered"></i> ${liveResults.length + 1}/12)`}` : ''}</span>`;
                         }
                     };
                 } finally {
