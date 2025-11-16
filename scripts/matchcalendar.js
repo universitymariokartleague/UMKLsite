@@ -1267,6 +1267,9 @@ document.addEventListener('keydown', (event) => {
                         if (!isLive) {
                             liveIndicatorDiv.innerHTML = '';
                         } else {
+                            const scoreMap = [15, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+                            const maxPos = scoreMap.length;
+
                             function calculatePoints(positions) {
                                 return positions.reduce((sum, pos) => {
                                     if (pos >= 1 && pos <= maxPos) {
