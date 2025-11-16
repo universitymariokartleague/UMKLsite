@@ -1267,6 +1267,15 @@ document.addEventListener('keydown', (event) => {
                         if (!isLive) {
                             liveIndicatorDiv.innerHTML = '';
                         } else {
+                            function calculatePoints(positions) {
+                                return positions.reduce((sum, pos) => {
+                                    if (pos >= 1 && pos <= maxPos) {
+                                        return sum + scoreMap[pos - 1];
+                                    }
+                                    return sum;
+                                }, 0);
+                            }
+
                             let teamAPoints = liveResults.reduce((total, race) => {
                                 return total + calculatePoints(race["1"] || []);
                             }, 0);
