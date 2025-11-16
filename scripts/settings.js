@@ -64,7 +64,7 @@ let darkThemeEnabled = meta.content == "dark" ? 1 : 0;
 function generateSettingsPanel() {
     try {
         const tempTheme = localStorage.getItem("darktheme") == 1 ? "Dark" : (localStorage.getItem("darktheme") == 0 ? "Light" : "Automatic");
-        const listView = localStorage.getItem("teamsListView") == 1 || false;
+        const gridView = localStorage.getItem("teamsGridView") == 1 || false;
         const calendarListView = localStorage.getItem("calendarListView") == 1 || false;
         
         const tempLocale = localStorage.getItem("locale") || "en-GB";
@@ -75,7 +75,7 @@ function generateSettingsPanel() {
         settingsBoxJS.innerHTML = `
             <div translate="yes" class="setting-sub-heading">Appearance</div><hr>
             <span translate="yes" class="settings-hover-info" data-info="Light, dark or automatic">Page theme</span><button id="toggleTheme" class="settings-option">${tempTheme}</button><br>
-            <span translate="yes" class="settings-hover-info" data-info="Grid or list view">Teams page layout</span><button id="toggleListView" class="settings-option">${listView ? "List view" : "Grid view"}</button><br>
+            <span translate="yes" class="settings-hover-info" data-info="List or grid view">Teams page layout</span><button id="toggleListView" class="settings-option">${gridView ? "Grid view" : "List view"}</button><br>
             <span translate="yes" class="settings-hover-info" data-info="Calendar or list view">Matches page layout</span><button id="toggleCalendarListView" class="settings-option">${calendarListView ? "List view" : "Calendar view"}</button><br>
 
             <div translate="yes" class="setting-sub-heading">${tempLocale == "en-GB" ? "Localisation" : "Localization"}</div><hr class="settings-hr">
@@ -131,9 +131,9 @@ function toggleThemeLightDarkOnly() {
 }
 
 function toggleListView() {
-    const newListView = localStorage.getItem("teamsListView") == 1 ? 0 : 1;
-    localStorage.setItem("teamsListView", newListView);
-    console.debug(`%csettings.js %c> %cset teamsListView to ${newListView}`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
+    const newListView = localStorage.getItem("teamsGridView") == 1 ? 0 : 1;
+    localStorage.setItem("teamsGridView", newListView);
+    console.debug(`%csettings.js %c> %cset teamsGridView to ${newListView}`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
     document.dispatchEvent(new CustomEvent('listViewChange'));
     generateSettingsPanel();
 }

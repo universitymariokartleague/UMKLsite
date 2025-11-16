@@ -372,4 +372,8 @@
         padding: 2px 4px;
         z-index: 3;
     }
+
+    .test-match-indicator.push-lower {
+        top: 24px;
+    }
 }

@@ -64,7 +64,7 @@ function generateTeamBox(team, cached = false) {
 async function generateTeamBoxes(teamData, cached = false) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.add('fade-in');
-    const listView = localStorage.getItem("teamsListView") == 1 || false;
+    const gridView = localStorage.getItem("teamsGridView") == 1 || false;
     const placeholderLogo = "assets/media/teamemblems/DEFAULT.avif";
 
     for (let i = 0; i < teamData.length; i++) {
@@ -74,7 +74,20 @@ async function generateTeamBoxes(teamData, cached = false) {
         team.link_name = team.team_name
     }
 
-    if (listView) {
+    if (gridView) {
+        JSTeamBox.classList.add('teamBoxContainer');
+        const fragment = document.createDocumentFragment();
+        try {
+            for (let i = 0; i < teamData.length; i++) {
+                const team = teamData[i];
+                fragment.appendChild(generateTeamBox(team, cached));
+            }
+            document.head.appendChild(styleSheet);
+        } catch (error) {
+            JSTeamBox.innerHTML = error.stack;
+        }
+        JSTeamBox.appendChild(fragment);
+    } else {
         JSTeamBox.classList.remove('teamBoxContainer');
 
         const teamStandingsBox = document.createElement('div');
@@ -116,19 +129,6 @@ async function generateTeamBoxes(teamData, cached = false) {
 
         teamStandingsBox.appendChild(fragment);
         JSTeamBox.appendChild(teamStandingsBox);
-    } else {
-        JSTeamBox.classList.add('teamBoxContainer');
-        const fragment = document.createDocumentFragment();
-        try {
-            for (let i = 0; i < teamData.length; i++) {
-                const team = teamData[i];
-                fragment.appendChild(generateTeamBox(team, cached));
-            }
-            document.head.appendChild(styleSheet);
-        } catch (error) {
-            JSTeamBox.innerHTML = error.stack;
-        }
-        JSTeamBox.appendChild(fragment);
     }
 }
 
@@ -316,8 +316,8 @@ async function updateSeasonText() {
 }
 
 function updateButton() {
-    const isListView = localStorage.getItem("teamsListView") == 1;
-    listViewButton.innerHTML = `<span class="fa-solid ${isListView ? 'fa-table-cells-large' : 'fa-bars'}"></span> ${isListView ? 'Grid View' : 'List View'}`;
+    const isGridView = localStorage.getItem("teamsGridView") == 1;
+    listViewButton.innerHTML = `<span class="fa-solid ${isGridView ? 'fa-bars' : 'fa-table-cells-large'}"></span> ${isGridView ? 'Grid View' : 'List View'}`;
 }
 
 function generateListViewButton() {
@@ -326,8 +326,8 @@ function generateListViewButton() {
     updateButton();
     
     listViewButton.onclick = () => {
-        const isListView = localStorage.getItem("teamsListView") == 1;
-        localStorage.setItem("teamsListView", isListView ? 0 : 1);
+        const isListView = localStorage.getItem("teamsGridView") == 1;
+        localStorage.setItem("teamsGridView", isListView ? 0 : 1);
         updateButton();
         document.dispatchEvent(new CustomEvent('listViewChange'));
     };
