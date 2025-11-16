@@ -47,6 +47,7 @@ let listViewToggledOnce = false;
 let overseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1 || false;
 let cached = false;
 
+let eventliveIndicatorToUpdate;
 let devMode = false;
 
 let startTime;
@@ -382,7 +383,7 @@ function generate6v6ScoreCalculatorLink(entry) {
     return url;
 }
 
-function showDailyLog(date, dayCell) {
+async function showDailyLog(date, dayCell) {
     currentlyShownLog = date;
 
     listViewToggledOnce = false;
@@ -404,6 +405,8 @@ function showDailyLog(date, dayCell) {
 
     const log = matchDataToUse[date] || [];
     if (log.length) {
+        let liveResults = await getLiveResults();
+
         const sortedLog = [...log].sort((a, b) => {
             const timeA = a.time || '00:00:00';
             const timeB = b.time || '00:00:00';
@@ -541,6 +544,10 @@ function showDailyLog(date, dayCell) {
             let calculatorlink = '';
             if (resultsHTML && entry.detailedResults) calculatorlink = generate6v6ScoreCalculatorLink(entry);
 
+            if (isLive && !entry.endTime) {
+                eventliveIndicatorToUpdate = entry.eventID;
+            }
+
             return `
                 <div class="event-container">
                     <div class="team-box-container">
@@ -551,7 +558,7 @@ function showDailyLog(date, dayCell) {
                         ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>` : ''}
                         
                         ${entry.testMatch ? `<div class="test-match-indicator">Test match</div>` : ''}
-                        ${entry.endTime ? '' : `${isLive ? `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}"><span style="display:flex"><div class="live-dot"></div>Live</span></div>` : `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id="matchCountdown${entry.eventID}">${timeUntilMatch}</div>`}`}
+                        ${entry.endTime ? '' : `${isLive ? `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id='liveIndicator${entry.eventID}'><span style="display:flex"><div class="live-dot"></div>Live ${devMode && !entry.endTime ? `${liveResults.length + 1 > 12 ? '(Finishing up...)' : `(${liveResults.length + 1}/12)`}` : ''}</span></div>` : `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id="matchCountdown${entry.eventID}">${timeUntilMatch}</div>`}`}
                         ${devMode && !entry.endTime ? `<div class="test-match-indicator signed-up-count">Players signed up: ${team1.team_name}: ${entry.signedUpPlayerCounts[0]} | ${team2.team_name} ${entry.signedUpPlayerCounts[1]}</div>` : ''}
 
                         <div class="event-overlay" translate="no">
@@ -1090,6 +1097,22 @@ async function getTeamcolorsFallback() {
     teamColors = await response.json();
 }
 
+async function getLiveResults() {
+    return fetch('https://api.umkl.co.uk/live', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: "{}"
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    });
+}
+
 function displayCalendar() {
     const urlParams = new URLSearchParams(window.location.search);
     const dateParam = urlParams.get('date');
@@ -1221,6 +1244,50 @@ document.addEventListener('keydown', (event) => {
                 showDailyLog(dateParam);
             }           
             keySequence = [];
+
+            if (refreshTimer) clearTimeout(refreshTimer);
+
+            const updateFetch = async () => {
+                try {
+                    let liveResults = await getLiveResults();
+                    matchData = await getMatchData();
+                    if (overseasDateDisplay) {
+                        matchDataToUse = normalizeMatchData(matchData);
+                    } else {
+                        matchDataToUse = matchData;
+                    }
+                    const liveIndicatorDiv = document.getElementById(`liveIndicator${eventliveIndicatorToUpdate}`);
+                    if (liveIndicatorDiv) {
+                        let isLive = matchDataToUse[dateParam || Object.keys(matchDataToUse)[0]].some(entry => {
+                            if (entry.eventID == eventliveIndicatorToUpdate) {
+                                return !entry.endTime;
+                            }
+                            return false;
+                        });
+                        if (!isLive) {
+                            liveIndicatorDiv.innerHTML = '';
+                        } else {
+                            let teamAPoints = liveResults.reduce((total, race) => {
+                                return total + calculatePoints(race["1"] || []);
+                            }, 0);
+
+                            let teamBPoints = liveResults.reduce((total, race) => {
+                                return total + calculatePoints(race["2"] || []);
+                            }, 0);
+
+                            let scores = [teamAPoints, teamBPoints]
+
+                            console.log(scores);
+
+                            liveIndicatorDiv.innerHTML = `<span style="display:flex"><div class="live-dot"></div>Live ${devMode && !matchDataToUse[dateParam || Object.keys(matchDataToUse)[0]][0].endTime ? `${liveResults.length + 1 > 12 ? '(Finishing up...)' : `(${scores[0]} - ${scores[1]} | ${liveResults.length + 1}/12`})` : ''}</span>`;
+                        }
+                    };
+                } finally {
+                    refreshTimer = setTimeout(updateFetch, 30000);
+                }
+            };
+
+            refreshTimer = setTimeout(updateFetch, 30000);
         }
     }
 });

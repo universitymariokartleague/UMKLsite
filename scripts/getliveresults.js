@@ -21,7 +21,7 @@ let refreshTimer = null;
 
 let startTime;
 
-async function getLive() {
+async function getLiveResults() {
     return fetch('https://api.umkl.co.uk/live', {
         method: 'POST',
         headers: {
@@ -192,7 +192,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
         matchData = await getMatchData();
-        raceresults = await getLive();
+        raceresults = await getLiveResults();
         setScores();
         getLiveMatchTeams()
         errorMessage.innerHTML = "";
@@ -225,7 +225,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 window.lastMatchUpdate = Date.now();
             }
 
-            raceresults = await getLive();
+            raceresults = await getLiveResults();
             setScores();
             errorMessage.innerHTML = "";
         } catch (error) {
