@@ -809,8 +809,6 @@ function generateCalendarListView() {
                 </div>
             `
         });
-
-        HTMLOutput += `<hr>`
     };
 
     calendarListView.innerHTML = HTMLOutput;

@@ -1,18 +1,3 @@
-:root,
-:root.light-theme {
-    --standings-bg-color: #bc0839;
-    --standings-box-bg-color: #fff;
-    --standings-text-color: #bc0839;
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --standings-bg-color: #111111;
-        --standings-box-bg-color: #111111;
-        --standings-text-color: #fff;
-    }
-}
-
 :root.dark-theme {
     --standings-bg-color: #111111;
     --standings-box-bg-color: #111111;
@@ -20,6 +5,7 @@
 }
 
 .teamStandingsBox {
+    font-weight: bold;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -31,7 +17,7 @@
     min-height: 100px;
     border-radius: 10px;
 
-    font-family: "SF-Pro-Display-Bold";
+    font-family: "Montserrat";
 }
 
 .teamStandingsBox .teamStanding {
@@ -39,7 +25,7 @@
     gap: 7px;
     padding: 10px;
     cursor: pointer;
-    outline: 1px #bc0839 solid;
+    border: 1px solid #ccccccaa;
     background-color: var(--standings-box-bg-color);
     height: 50px;
     align-items: center;
@@ -49,7 +35,6 @@
 
 .teamStandingsBox .teamStanding:hover {
     color: #fff;
-    outline: 1px #fff solid;
     background-color: var(--accent-color) !important;
 }
 
@@ -61,7 +46,6 @@
 .teamStandingsBox .teamPosition {
     display: flex;
     color: #fff;
-    outline: 1px #fff solid;
     background-color: #bc0839;
     border-radius: 5px;
     align-items: center;
@@ -70,6 +54,14 @@
     height: 50px;
     width: 50px;
 }
+
+.teamStandingsBox .teamStanding:hover .teamPosition {
+    background-color: white;
+    color: var(--accent-color);
+    transition: 0.2s;
+}
+
+
 
 .teamStandingsBox .teamColour {
     border-radius: 5px;
@@ -106,11 +98,12 @@
     font-size: 14.5px;
 }
 
+
 .season-selection {
     display: flex;
     flex-direction: column;
     background-color: #cccccc10;
-    border: 1px solid #cccccc;
+    border: 1px solid #ccccccaa;
     border-radius: 10px;
     padding: 10px;
     margin: 20px 0;
@@ -120,7 +113,7 @@
     padding: 10px;
     font-size: 20px;
     border-radius: 5px;
-    border: 1px solid #cccccc;
+    border: 1px solid #ccccccaa;
     font-weight: bold;
     margin-bottom: 5px;
     outline: none;
@@ -171,6 +164,8 @@
     flex-direction: row;
     font-size: 25px;
 }
+
+
 
 .team {
     padding-left: 10px;

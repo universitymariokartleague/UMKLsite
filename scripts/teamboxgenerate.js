@@ -117,7 +117,7 @@ async function generateTeamBoxes(teamData, cached = false) {
                 <img class="teamLogo" src="${team.logo_src}" alt="${makePossessive(team.team_name)} team emblem"
                 ${cached ? '' : `onload="this.style.opacity=1"`} loading="lazy"
                 onerror="this.onerror=null; this.src='${placeholderLogo}';"/>
-                <div translate="no" class="teamName" title="${team.team_full_name}">${team.team_name.toUpperCase()}</div>
+                <div translate="no" class="teamName" title="${team.team_full_name}">${team.team_name}</div>
                 <div translate="no" class="teamPointsArea">
                     <div class="teamPoints">${team.team_season_points}</div>
                     <div class="teamStandings">${team.season_wins_losses[0]} - ${team.season_wins_losses[1]} (${matchesPlayed})</div>
@@ -317,7 +317,7 @@ async function updateSeasonText() {
 
 function updateButton() {
     const isGridView = localStorage.getItem("teamsGridView") == 1;
-    listViewButton.innerHTML = `<span class="fa-solid ${isGridView ? 'fa-bars' : 'fa-table-cells-large'}"></span> ${isGridView ? 'Grid View' : 'List View'}`;
+    listViewButton.innerHTML = `<span class="fa-solid ${isGridView ? 'fa-bars' : 'fa-table-cells-large'}"></span> ${isGridView ? 'List View' : 'Grid View'}`;
 }
 
 function generateListViewButton() {
