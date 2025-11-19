@@ -5,7 +5,7 @@
 const teamBoxFormatHTML = `
     <div class="team-info-wrapper">
         <img src="{{PFP}}" alt="{{username}} profile picture" title="{{username}} profile picture" class="user-image"
-        onload="this.style.opacity=1"/>
+        onload="this.style.opacity=1" onerror="this.onerror=null; this.src='assets/media/faq/defaultavatar.avif';"/>
         <hr>
         <div class="team-info-text">
             {{extraFields}}

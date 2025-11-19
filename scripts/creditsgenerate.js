@@ -26,7 +26,7 @@ const contributors = [
         discord: "https://discord.com/users/342974732938903563",
     },
     {
-        name: "zyposts",
+        name: "zydezu",
         discord: "https://discord.com/users/1202021758685949994",
         github: "https://github.com/zydezu/",
         email: "mailto:webmaster@umkl.co.uk"
