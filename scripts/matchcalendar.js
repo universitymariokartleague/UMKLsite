@@ -559,7 +559,7 @@ async function showDailyLog(date, dayCell) {
                         
                         ${entry.testMatch ? `<div class="test-match-indicator"><i class="fa-solid fa-test"></i> Test match</div>` : ''}
                         ${entry.endTime ? '' : `${isLive ? `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id='liveIndicator${entry.eventID}'><span style="display:flex"><div class="live-dot"></div>Live ${devMode && !entry.endTime ? `${liveResults.length + 1 > 12 ? '(Finishing up...)' : `(${liveResults.length + 1}/12)`}` : ''}</span></div>` : `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id="matchCountdown${entry.eventID}"><i class="fa-solid fa-clock"></i> ${timeUntilMatch}</div>`}`}
-                        ${devMode && !entry.endTime ? `<div class="test-match-indicator signed-up-count">Players signed up: ${team1.team_name}: ${entry.signedUpPlayerCounts[0]} | ${team2.team_name} ${entry.signedUpPlayerCounts[1]}</div>` : ''}
+                        ${devMode && !entry.endTime ? `<div class="test-match-indicator signed-up-count">Players signed up: ${team1.team_name}: ${entry.signedUpPlayerCounts[0]} | ${team2.team_name}: ${entry.signedUpPlayerCounts[1]}</div>` : ''}
 
                         <div class="event-overlay" translate="no">
                             <div class="event-box-team">
