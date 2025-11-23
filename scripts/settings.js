@@ -5,6 +5,7 @@
 */
 
 import { halloweenEasterEgg, xmasEasterEgg } from './eastereggs.js';
+export { disableThemeShortcut }
 
 const settingsBoxHTML = `
     <div class="hidden BGBlur" id="BGBlur"></div>
@@ -286,6 +287,7 @@ const easterCode = ['m', 'i', 'k', 'u'];
 const mkwEasterCode = ['m', 'k', 'w'];
 
 let mkwEasterEggToggled = false;
+let themeShortcutDisabled = false;
 
 document.addEventListener('keydown', (event) => {
     const tag = event.target.tagName.toLowerCase();
@@ -310,10 +312,14 @@ document.addEventListener('keydown', (event) => {
 
     if ((key === 't' || key === 'o') && !isKeyPressed) {
         isKeyPressed = true;
-        if (key === 't') toggleThemeLightDarkOnly();
+        if (key === 't' && !themeShortcutDisabled) toggleThemeLightDarkOnly();
         if (key === 'o') toggleSettingsPanel();
     }
 });
+
+function disableThemeShortcut() {
+    themeShortcutDisabled = true;
+}
 
 document.addEventListener('keyup', () => {
     isKeyPressed = false;

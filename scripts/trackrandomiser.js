@@ -4,6 +4,8 @@
     for tracks that have different names in PAL regions.
 */
 
+import { disableThemeShortcut } from './settings.js'; 
+
 const tracks = {
     SNES: [
         "Mario Circuit 1",
@@ -635,6 +637,7 @@ const tracks = {
     ],
 }
 
+const gameSelect = document.getElementById("game-select");
 const tracksContainer = document.getElementById("results");
 const pickedTracksList = document.getElementById("pickedTracks");
 const pickRandomTrackButton = document.getElementById("pickRandomTrack");
@@ -642,11 +645,14 @@ const clearRepicksButton = document.getElementById("clearRepicks");
 const PALNamesCheckbox = document.getElementById("palNames");
 
 let tracksPicked = [];
-let tracksPickedVisual = [];
 let lastTrack = null;
 
+let isKeyPressed = false;
+let keySequence = [];
+const CTSequence = ['c', 't', 'g', 'p'];
+
 function pickRandomTrack() {
-    const selectedGame = document.getElementById("game-select").value;
+    const selectedGame = gameSelect.value;
     const trackList = tracks[selectedGame];
     let tempRandomTrack = trackList[Math.floor(Math.random() * trackList.length)];
     if (tracksPicked.length < tracks[selectedGame].length) {
@@ -691,15 +697,32 @@ function rerender(selectedGame) {
     tracksContainer.innerHTML = `${lastTrack.us ? (PALNamesCheckbox.checked ? lastTrack.pal : lastTrack.us) : lastTrack}`;
 }
 
-function clearRepicks() {
-    tracksPicked = [];
-    pickedTracksList.innerHTML = "";
+function enableCTs() {
+    const option = document.createElement("option");
+    option.value = "CTGPR";
+    option.textContent = "CTGP Revolution (Wii)";
+    option.id = "ctgpr-option";
+
+    const wiiOption = gameSelect.querySelector('option[value="Wii"]');
+    console.log(wiiOption)
+    if (wiiOption) {
+        gameSelect.insertBefore(option, wiiOption.nextElementSibling);
+    } else {
+        gameSelect.appendChild(option);
+    }
+
+    gameSelect.value = "CTGPR"
+    clearRepicks();
 }
 
-document.getElementById("game-select").addEventListener("change", function () {
+function clearRepicks() {
     tracksPicked = [];
     tracksContainer.innerHTML = "Nothing picked";
     pickedTracksList.innerHTML = "";
+}
+
+gameSelect.addEventListener("change", function () {
+    clearRepicks();
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -710,6 +733,25 @@ document.addEventListener("DOMContentLoaded", () => {
 pickRandomTrackButton.addEventListener("click", pickRandomTrack);
 clearRepicksButton.addEventListener("click", clearRepicks);
 PALNamesCheckbox.addEventListener("click", function () {
-    const selectedGame = document.getElementById("game-select").value;
+    const selectedGame = gameSelect.value;
     rerender(selectedGame);
+});
+
+document.addEventListener('keydown', (event) => {
+    const key = event.key.toLowerCase();
+
+    if (!isKeyPressed) {
+        disableThemeShortcut();
+        keySequence.push(key);
+        if (keySequence.length > CTSequence.length) {
+            keySequence.shift();
+        }
+        if (keySequence.join('') == CTSequence.join('')) {
+            enableCTs();
+        }
+    }
+});
+
+document.addEventListener('keyup', () => {
+    isKeyPressed = false;
 });
