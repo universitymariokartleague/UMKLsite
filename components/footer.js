@@ -7,18 +7,7 @@ class UMKLFooter extends HTMLElement {
         const template = document.createElement("template");
         template.innerHTML = `
             <style>
-                .no-underline-link-footer { text-decoration: none }
-                .no-color-link { color: #FFF !important }
-                svg {
-                    width: 18px;
-                    height: 18px;
-                    fill: #FFF;
-                    margin-left: 2px;
-                    margin-bottom: -1px;
-                    vertical-align: middle;
-                    cursor: pointer;
-                }
-                a svg:hover { opacity: 0.75; }
+                .no-underline-link-footer{text-decoration:none}.no-color-link{color:#FFF!important}svg{width: 18px;height: 18px;fill: #FFF;margin-left: 2px;margin-bottom: -1px;vertical-align: middle;cursor: pointer;}a svg:hover {opacity: 0.75;transition: 0.1s ease-in-out;}
             </style>
 
             <div translate="no">
