@@ -2,15 +2,7 @@ class UMKLNavbar extends HTMLElement {
     constructor() {
         super();
 
-        function checkDatePeriod(startDay, startMonth, endDay, endMonth) {
-            let currentDate = new Date();
-            const start = new Date(currentDate.getFullYear(), startMonth - 1, startDay);
-            const end = new Date(currentDate.getFullYear(), endMonth - 1, endDay);
-            return currentDate >= start && currentDate <= end;
-        }
-
-        let style_colors = "";
-        if (checkDatePeriod(28, 10, 31, 10)) style_colors = ".navbar-container{background-color:#ff640a}#nav-dropdown-bar{background-color:#ff640a}";
+        function checkDatePeriod(e,o,a,r){let t=new Date;const n=new Date(t.getFullYear(),o-1,e),c=new Date(t.getFullYear(),r-1,a);return t>=n&&t<=c}let style_colors="";checkDatePeriod(28,10,31,10)&&(style_colors=".navbar-container{background-color:#ff640a}#nav-dropdown-bar{background-color:#ff640a}");
 
         const template = document.createElement("template");
         template.innerHTML = `
@@ -59,27 +51,7 @@ class UMKLNavbar extends HTMLElement {
     }
 
     connectedCallback() {
-        const shadow = this.shadowRoot;
-        const button = shadow.getElementById("nav-dropdown-button");
-        const dropdown = shadow.getElementById("nav-dropdown-bar");
-
-        button.addEventListener("click", () => {
-            const isOpen = dropdown.style.display === "block";
-            dropdown.style.display = isOpen ? "none" : "block";
-        });
-
-        const currentPath = window.location.pathname.replace(/\/+$/, "").split("/index.html")[0];
-        const links = shadow.querySelectorAll("#nav-bar a[href], #nav-dropdown-bar a[href]");
-        links.forEach(link => {
-            const linkPath = new URL(link.href).pathname.replace(/\/+$/, "");
-
-            const isRootIndex = (linkPath.endsWith("/index.html") && (currentPath === "" || currentPath === "/"));
-            const isSubPage = (currentPath.startsWith(linkPath) && linkPath !== "/");
-
-            if (isRootIndex || isSubPage) {
-                link.classList.add("nav-selected");
-            }
-        });
+        const shadow=this.shadowRoot,button=shadow.getElementById("nav-dropdown-button"),dropdown=shadow.getElementById("nav-dropdown-bar");button.addEventListener("click",(()=>{const t="block"===dropdown.style.display;dropdown.style.display=t?"none":"block"}));const currentPath=window.location.pathname.replace(/\/+$/,"").split("/index.html")[0],links=shadow.querySelectorAll("#nav-bar a[href], #nav-dropdown-bar a[href]");links.forEach((t=>{const n=new URL(t.href).pathname.replace(/\/+$/,""),e=n.endsWith("/index.html")&&(""===currentPath||"/"===currentPath),o=currentPath.startsWith(n)&&"/"!==n;(e||o)&&t.classList.add("nav-selected")}));
     }
 }
 
