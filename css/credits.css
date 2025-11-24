@@ -40,6 +40,15 @@
     gap: 5px;
 }
 
+.credits-icon {
+    color: var(--text-color);
+}
+
+.credits-icon:hover {
+    color: var(--link-color);
+    transition: 0.1s ease-in-out;
+}
+
 @media screen and (max-width: 767px) {
     .credits-wrapper {
         display: flex;

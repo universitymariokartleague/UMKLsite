@@ -445,16 +445,6 @@ blockquote {
     min-height: 340px;
 }
 
-.fa:hover, .fa-brands:hover {
-    opacity: 0.7;
-    transition: 0.1s ease-in-out;
-}
-
-.fa:active, .fa-brands:active {
-    opacity: 1;
-    transition: 0.1s ease-in-out;
-}
-
 .rule-category-box {
     border: 1px solid #cccccccc;
     border-radius: 10px;
@@ -558,4 +548,8 @@ umkl-footer {
     text-decoration: none;
     padding: 5px;
     z-index: 1;
+}
+
+svg {
+    color : "red";
 }
