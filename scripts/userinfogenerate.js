@@ -201,12 +201,14 @@ async function getCurrentSeason() {
             season: 0
         })
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        });
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+        return response.json();
+    });
 }
 
 async function getMatchData() {
@@ -217,12 +219,14 @@ async function getMatchData() {
         },
         body: "{}"
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        });
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+        return response.json();
+    });
 }
 
 async function getMatchDataFallback() {
@@ -245,12 +249,14 @@ async function getTeamdata(team, season) {
             season: `${season}`
         })
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        });
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+        return response.json();
+    });
 }
 
 document.addEventListener("DOMContentLoaded", async () => {

@@ -73,6 +73,8 @@ function generateSettingsPanel() {
         const tempStartDay = localStorage.getItem("startDay") || 1;
         const tempOverseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1 || false;
 
+        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+
         settingsBoxJS.innerHTML = `
             <div translate="yes" class="setting-sub-heading">Appearance</div><hr>
             <span translate="yes" class="settings-hover-info" data-info="Light, dark or automatic">Page theme</span><button id="toggleTheme" class="settings-option">${tempTheme}</button><br>
@@ -85,7 +87,8 @@ function generateSettingsPanel() {
             <span translate="yes" class="settings-hover-info" data-info="Use UK or local dates when overseas">Overseas date type</span><button id="toggleOverseasDateDisplayButton" class="settings-option">${tempOverseasDateDisplay ? 'Overseas' : 'UK'}</button><br/>
             
             <div translate="yes" class="setting-sub-heading">Website Data</div><hr>
-            <span translate="yes" class="settings-hover-info" data-info="Reloads the page">Reset settings to default</span><button id="clearLocalStorage" class="settings-option">Clear</button>
+            <span translate="yes">API requests sent: <span class="settings-option">${apiReqsSent}</span></span><br/>
+            <span translate="yes" class="settings-hover-info" data-info="Reloads the page">Reset settings to default</span><button id="clearLocalStorage" class="settings-option">Reset</button>
 
             <div translate="yes" class="settings-instructions">Hover/tap the options to see more information</div>
         `;
@@ -391,8 +394,6 @@ function mkwEasterEgg() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-    // if (localStorage.getItem("cookiesAccepted") !== "true") {
-    //     generateCookiesPopup();
-    // }
+    // if (localStorage.getItem("cookiesAccepted") !== "true") generateCookiesPopup();
     checkEasterEggs();
 });

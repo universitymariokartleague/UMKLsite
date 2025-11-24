@@ -1,3 +1,10 @@
+:root,
+:root.light-theme {
+    --standings-bg-color: #fff;
+    --standings-box-bg-color: #fff;
+    --standings-text-color: #111111;
+}
+
 @media (prefers-color-scheme: dark) {
     :root {
         --standings-bg-color: #111111;

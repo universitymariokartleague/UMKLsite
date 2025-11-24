@@ -26,6 +26,8 @@ async function getCurrentSeason() {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
         return response.json();
     });
 }
@@ -46,6 +48,8 @@ async function getTeamdata(team = "", season) {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
         return response.json();
     });
 }
