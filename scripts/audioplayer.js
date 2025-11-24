@@ -689,8 +689,10 @@ window.addEventListener('scroll', handleAudioStatusPosition);
 window.addEventListener('resize', handleAudioStatusPosition);
 document.addEventListener('DOMContentLoaded', handleAudioStatusPosition);
 
-setPlayIcon();
-audioBar.style.borderLeft = 0 + "px solid #fa5252"; // reset colours
-document.documentElement.style.setProperty('--audiohovercolour', '#fa5252');
-multiplier = setMultiplier(); // set "multiplier" as to not see the adjustment of the bar width
-audioBar.style = "width: " + 200 * multiplier + "px";
+if (!window.location.pathname.includes("credits")) {
+    setPlayIcon();
+    audioBar.style.borderLeft = 0 + "px solid #fa5252";
+    document.documentElement.style.setProperty('--audiohovercolour', '#fa5252');
+    multiplier = setMultiplier();
+    audioBar.style = "width: " + 200 * multiplier + "px";
+}
