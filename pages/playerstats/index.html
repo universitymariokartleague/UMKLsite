@@ -18,6 +18,7 @@
     
         <!-- Components -->
         <script type="module" src="components/navbar.js" defer></script>
+        <script type="module" src="components/footer.js" defer></script>
 
         <!-- Scripts -->
         <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
@@ -42,14 +43,6 @@
             </div>
         </main>
 
-        <footer translate="no">
-            © UMKL 2025 |
-            <a class="no-color-link" href="pages/credits/">Credits</a> |
-            <a class="fa fa-gear no-color-link settingsBoxOpener"></a> |
-            <a href="https://www.youtube.com/@universitymariokartleague" title="UMKL YouTube Channel" class="no-color-link no-underline-link-footer fa-brands fa-youtube"></a>
-            <a href="https://www.instagram.com/universitymariokartleague" title="UMKL Instagram Account" class="no-color-link no-underline-link-footer fa-brands fa-instagram"></a>
-            <a href="https://www.facebook.com/profile.php?id=61575273336011" title="UMKL Facebook Page" class="no-color-link no-underline-link-footer fa-brands fa-facebook"></a>            
-            <a href="https://discord.gg/jz3hKEmDss" title="UMKL Discord server" class="no-color-link no-underline-link-footer fa-brands fa-discord"></a>            
-        </footer>
+        <umkl-footer></umkl-footer>
     </body>
 </html>

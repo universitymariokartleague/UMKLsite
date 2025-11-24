@@ -145,14 +145,6 @@ li {
     margin-top: 1em;
 }
 
-footer {
-    color: #FFF;
-    background-color: var(--accent-color);
-    text-align: center;
-    padding: 5px;
-    z-index: 1;
-}
-
 [id] {
     scroll-margin-top: 60px; /* fix anchors */
 }
