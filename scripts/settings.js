@@ -5,7 +5,7 @@
 */
 
 import { halloweenEasterEgg, xmasEasterEgg } from './eastereggs.js';
-export { disableThemeShortcut }
+export { toggleSettingsPanel, disableThemeShortcut }
 
 const settingsBoxHTML = `
     <div class="hidden BGBlur" id="BGBlur"></div>

@@ -550,3 +550,12 @@ umkl-navbar {
     top: 0;
     z-index: 8;
 }
+
+umkl-footer {
+    color: #FFF;
+    background-color: var(--accent-color);
+    text-align: center;
+    text-decoration: none;
+    padding: 5px;
+    z-index: 1;
+}

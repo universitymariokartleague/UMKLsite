@@ -10,12 +10,12 @@ class UMKLNavbar extends HTMLElement {
         }
 
         let style_colors = "";
-        if (checkDatePeriod(28, 10, 31, 10)) style_colors = ".navbar-container{background-color:#ff640a}.nav-dropdown-content{background-color:#ff640a}";
+        if (checkDatePeriod(28, 10, 31, 10)) style_colors = ".navbar-container{background-color:#ff640a}#nav-dropdown-bar{background-color:#ff640a}";
 
         const template = document.createElement("template");
         template.innerHTML = `
             <style>
-                .nav-bar,.nav-bar ul{display:flex}.nav-flex a,.no-underline-link-footer{text-decoration:none}.nav-bar *,.nav-bar ::after,.nav-bar ::before,.navbar-container *,.navbar-container ::after,.navbar-container ::before{padding:0;margin:0}.navbar-container{background-color:var(--accent-color);position:fixed;width:100%;top:0;z-index:8}.navbar-container .nav-bar{max-width:min(800px,calc(100% - env(safe-area-inset-left) - env(safe-area-inset-right)));justify-content:space-between}.nav-bar{align-items:center;justify-content:center;width:calc(100% - 40px);max-width:800px;margin:auto}.nav-bar-title{color:#fff;display:flex;align-items:center;justify-content:center}.nav-bar-title h1,.nav-bar-title h2{margin-left:5px}.nav-bar-logo{height:35px;width:35px}.nav-bar ul li{list-style-type:none}.navbar-container .nav-bar ul li{margin:0 2px;padding:15px 0}.nav-flex a{color:#fff!important;padding:10px;border-radius:5px}.nav-selected{background-color:#ffffff20;outline:#ffffff83 solid 1px}.nav-flex a:hover{background-color:#ffffff56;transition:.1s}.nav-flex a:active{background-color:#ffffff80;transition:.1s}.nav-dropdown{display:none}a[target="_blank"].nav-bar-link::after{content:"";width:1em;height:1em;margin:0 0 .1em .15em;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' %3E%3Cpath d='M9 2v1h3.3L6 9.3l.7.7L13 3.7V7h1V2ZM4 4c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V7l-1 1v4c0 .6-.4 1-1 1H4c-.6 0-1-.4-1-1V6c0-.6.4-1 1-1h4l1-1Z' style='fill:%23FFFFFF'/%3E%3C/svg%3E");background-size:contain;display:inline-block;vertical-align:sub}@media screen and (max-width:767px){.nav-bar{height:48px}.nav-bar ul{display:none}.nav-dropdown-button{color:#fff;cursor:pointer;font-size:22px;width:100px;height:48px;line-height:52px;text-align:right;display:inline-block}.nav-dropdown{position:relative;display:inline-block}.nav-dropdown-content{display:none;position:absolute;right:-15px;background-color:var(--accent-color);min-width:160px;z-index:1;border:2px solid rgba(255,255,255,.6);border-radius:10px}.nav-dropdown-content a{color:#fff!important;text-decoration:none;padding:12px 16px;display:block;border-radius:8px}.nav-dropdown:hover .nav-dropdown-content{display:block}.nav-dropdown-content a:hover{background-color:#ffffff50}}@media screen and (min-width:768px){.dropdown-button{display:none!important}}${style_colors}
+                .nav-bar,.nav-bar ul{display:flex}.nav-flex a,.no-underline-link-footer{text-decoration:none}.nav-bar *,.nav-bar ::after,.nav-bar ::before,.navbar-container *,.navbar-container ::after,.navbar-container ::before{padding:0;margin:0}.navbar-container{background-color:var(--accent-color);position:fixed;width:100%;top:0;z-index:8}.navbar-container .nav-bar{max-width:min(800px,calc(100% - env(safe-area-inset-left) - env(safe-area-inset-right)));justify-content:space-between}.nav-bar{align-items:center;justify-content:center;width:calc(100% - 40px);max-width:800px;margin:auto}.nav-bar-title{color:#fff;display:flex;align-items:center;justify-content:center}.nav-bar-title h1,.nav-bar-title h2{margin-left:5px}.nav-bar-logo{height:35px;width:35px}.nav-bar ul li{list-style-type:none}.navbar-container .nav-bar ul li{margin:0 2px;padding:15px 0}.nav-flex a{color:#fff!important;padding:10px;border-radius:5px}.nav-selected{background-color:#ffffff20;outline:#ffffff83 solid 1px}.nav-flex a:hover{background-color:#ffffff56;transition:.1s}.nav-flex a:active{background-color:#ffffff80;transition:.1s}.nav-dropdown{display:none}a[target="_blank"].nav-bar-link::after{content:"";width:1em;height:1em;margin:0 0 .1em .15em;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' %3E%3Cpath d='M9 2v1h3.3L6 9.3l.7.7L13 3.7V7h1V2ZM4 4c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V7l-1 1v4c0 .6-.4 1-1 1H4c-.6 0-1-.4-1-1V6c0-.6.4-1 1-1h4l1-1Z' style='fill:%23FFFFFF'/%3E%3C/svg%3E");background-size:contain;display:inline-block;vertical-align:sub}@media screen and (max-width:767px){.nav-bar{height:48px}.nav-bar ul{display:none}#nav-dropdown-button{color:#fff;cursor:pointer;font-size:22px;width:100px;height:48px;line-height:52px;text-align:right;display:inline-block}.nav-dropdown{position:relative;display:inline-block}#nav-dropdown-bar{display:none;position:absolute;right:-15px;background-color:var(--accent-color);min-width:160px;z-index:1;border:2px solid rgba(255,255,255,.6);border-radius:10px}#nav-dropdown-bar a{color:#fff!important;text-decoration:none;padding:12px 16px;display:block;border-radius:8px}.nav-dropdown:hover #nav-dropdown-bar{display:block}#nav-dropdown-bar a:hover{background-color:#ffffff50}}@media screen and (min-width:768px){.dropdown-button{display:none!important}}${style_colors}svg{height:15px;margin-bottom:-2px!important;}
             </style>
             <div class="navbar-container" translate="no">
                 <div class="nav-bar">
@@ -30,18 +30,26 @@ class UMKLNavbar extends HTMLElement {
                             <li><a href="../../../pages/teams/">Teams</a></li>
                             <li><a href="../../../pages/matches/">Matches</a></li>
                             <li><a href="../../../pages/rules/">Rules/Guides</a></li>
-                            <li><a class="nav-bar-link" href="https://discord.gg/jz3hKEmDss" target="_blank">Discord</a></li>
+                            <li>
+                                <a class="nav-bar-link" href="https://discord.gg/jz3hKEmDss" target="_blank">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 18"><path d="M20.317 1.516A19.8 19.8 0 0 0 15.432.001a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.3 18.3 0 0 0-5.487 0 13 13 0 0 0-.617-1.25.08.08 0 0 0-.079-.037 19.7 19.7 0 0 0-4.885 1.515.1.1 0 0 0-.032.027C.533 6.192-.32 10.726.099 15.203a.08.08 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.08.08 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13 13 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10 10 0 0 0 .372-.292.07.07 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.07.07 0 0 1 .078.01 10.02 10.02 0 0 0 .373.292.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107 15.98 15.98 0 0 0 1.225 1.993.08.08 0 0 0 .084.028 19.8 19.8 0 0 0 6.002-3.03.08.08 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 0 0-.031-.03M8.02 12.476c-1.182 0-2.157-1.085-2.157-2.419s.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418m7.975 0c-1.183 0-2.157-1.085-2.157-2.419s.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418" fill="#fff"/></svg>
+                                    Discord
+                                </a>
+                            </li>
                         </ul>
                     </nav>
                     <div class="nav-dropdown">
-                        <div class="nav-dropdown-button">☰</div>
-                        <div class="nav-dropdown-content" id="nav-dropdown-bar">
+                        <div id="nav-dropdown-button">☰</div>
+                        <div id="nav-dropdown-bar">
                             <a href="../../../index.html">Home</a>
                             <a href="../../../pages/news/">News</a>
                             <a href="../../../pages/teams/">Teams</a>
                             <a href="../../../pages/matches/">Matches</a>
                             <a href="../../../pages/rules/">Rules/Guides</a>
-                            <a class="nav-bar-link" href="https://discord.gg/jz3hKEmDss" target="_blank">Discord</a>
+                            <a class="nav-bar-link" href="https://discord.gg/jz3hKEmDss" target="_blank">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 18"><path d="M20.317 1.516A19.8 19.8 0 0 0 15.432.001a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.3 18.3 0 0 0-5.487 0 13 13 0 0 0-.617-1.25.08.08 0 0 0-.079-.037 19.7 19.7 0 0 0-4.885 1.515.1.1 0 0 0-.032.027C.533 6.192-.32 10.726.099 15.203a.08.08 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.08.08 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13 13 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10 10 0 0 0 .372-.292.07.07 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.07.07 0 0 1 .078.01 10.02 10.02 0 0 0 .373.292.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107 15.98 15.98 0 0 0 1.225 1.993.08.08 0 0 0 .084.028 19.8 19.8 0 0 0 6.002-3.03.08.08 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 0 0-.031-.03M8.02 12.476c-1.182 0-2.157-1.085-2.157-2.419s.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418m7.975 0c-1.183 0-2.157-1.085-2.157-2.419s.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418" fill="#fff"/></svg>
+                                Discord
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -52,8 +60,8 @@ class UMKLNavbar extends HTMLElement {
 
     connectedCallback() {
         const shadow = this.shadowRoot;
-        const button = shadow.querySelector(".nav-dropdown-button");
-        const dropdown = shadow.querySelector(".nav-dropdown-content");
+        const button = shadow.getElementById("nav-dropdown-button");
+        const dropdown = shadow.getElementById("nav-dropdown-bar");
 
         button.addEventListener("click", () => {
             const isOpen = dropdown.style.display === "block";
