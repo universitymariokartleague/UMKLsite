@@ -4,7 +4,7 @@
     for tracks that have different names in PAL regions.
 */
 
-import { disableThemeShortcut } from './settings.js'; 
+import { disableThemeShortcut, disableSettingsShortcut } from './settings.js'; 
 
 const tracks = {
     SNES: [
@@ -635,6 +635,278 @@ const tracks = {
         "Yoshi's Woolly Raceway",
         "τ-Cryovolcano"
     ],
+    RR: [
+        "SNES Mario Circuit 1",
+        "SNES Donut Plains 1",
+        "SNES Ghost Valley 1",
+        "SNES Bowser Castle 1",
+        "SNES Mario Circuit 2",
+        "SNES Choco Island 1",
+        "SNES Ghost Valley 2",
+        "SNES Donut Plains 2",
+        "SNES Bowser Castle 2",
+        "SNES Mario Circuit 3",
+        "SNES Koopa Beach 1",
+        "SNES Choco Island 2",
+        "SNES Vanilla Lake 1",
+        "SNES Bowser Castle 3",
+        "SNES Mario Circuit 4",
+        "SNES Donut Plains 3",
+        "SNES Koopa Beach 2",
+        "SNES Ghost Valley 3",
+        "SNES Vanilla Lake 2",
+        "SNES Rainbow Road",
+
+        "N64 Luigi Raceway",
+        "N64 Moo Moo Farm",
+        "N64 Koopa Troopa Beach",
+        "N64 Kalamari Desert",
+        "N64 Toad's Turnpike",
+        "N64 Frappe Snowland",
+        "N64 Choco Mountain",
+        "N64 Mario Raceway",
+        "N64 Wario Stadium",
+        "N64 Sherbet Land",
+        "N64 Royal Raceway",
+        "N64 Bowser's Castle",
+        "N64 DK's Jungle Parkway",
+        "N64 Yoshi Valley",
+        "N64 Banshee Boardwalk",
+        "N64 Rainbow Road",
+
+        "GBA Peach Circuit",
+        "GBA Shy Guy Beach",
+        "GBA Riverside Park",
+        "GBA Bowser Castle 1",
+        "GBA Mario Circuit",
+        "GBA Boo Lake",
+        "GBA Cheese Land",
+        "GBA Bowser Castle 2",
+        "GBA Luigi Circuit",
+        "GBA Sky Garden",
+        "GBA Cheep-Cheep Island",
+        "GBA Sunset Wilds",
+        "GBA Snow Land",
+        "GBA Ribbon Road",
+        "GBA Yoshi Desert",
+        "GBA Bowser Castle 3",
+        "GBA Lakeside Park",
+        "GBA Broken Pier",
+        "GBA Bowser Castle 4",
+        "GBA Rainbow Road",
+
+        "GCN Luigi Circuit",
+        "GCN Peach Beach",
+        "GCN Baby Park",
+        "GCN Dry Dry Desert",
+        "GCN Mushroom Bridge",
+        "GCN Mario Circuit",
+        "GCN Daisy Cruiser",
+        "GCN Waluigi Stadium",
+        "GCN Sherbet Land",
+        "GCN Mushroom City",
+        "GCN Yoshi Circuit",
+        "GCN DK Mountain",
+        "GCN Wario Colosseum",
+        "GCN Dino Dino Jungle",
+        "GCN Bowser's Castle",
+        "GCN Rainbow Road",
+
+        "DS Figure 8 Circuit",
+        "DS Yoshi Falls",
+        "DS Cheep Cheep Beach",
+        "DS Luigi's Mansion",
+        "DS Desert Hills",
+        "DS Delfino Square",
+        "DS Waluigi Pinball",
+        "DS Shroom Ridge",
+        "DS DK Pass",
+        "DS Tick-Tock Clock",
+        "DS Mario Circuit",
+        "DS Airship Fortress",
+        "DS Wario Stadium",
+        "DS Peach Gardens",
+        "DS Bowser Castle",
+        "DS Rainbow Road",
+
+        "Wii Luigi Circuit",
+        "Wii Moo Moo Meadows",
+        "Wii Mushroom Gorge",
+        "Wii Toad's Factory",
+        "Wii Mario Circuit",
+        "Wii Coconut Mall",
+        "Wii DK Summit",
+        "Wii Wario's Gold Mine",
+        "Wii Daisy Circuit",
+        "Wii Koopa Cape",
+        "Wii Maple Treeway",
+        "Wii Grumble Volcano",
+        "Wii Dry Dry Ruins",
+        "Wii Moonview Highway",
+        "Wii Bowser's Castle",
+        "Wii Rainbow Road",
+
+        "3DS Toad Circuit",
+        "3DS Daisy Hills",
+        "3DS Cheep Cheep Lagoon",
+        "3DS Shy Guy Bazaar",
+        "3DS Wuhu Loop",
+        "3DS Mario Circuit",
+        "3DS Music Park",
+        "3DS Rock Rock Mountain",
+        "3DS Piranha Plant Slide",
+        "3DS Wario Shipyard",
+        "3DS Neo Bowser City",
+        "3DS Maka Wuhu",
+        "3DS DK Jungle",
+        "3DS Rosalina's Ice World",
+        "3DS Bowser's Castle",
+        "3DS Rainbow Road",
+
+        "Wii U Mario Kart Stadium",
+        "Wii U Sweet Sweet Canyon",
+        "Wii U Thwomp Ruins",
+        "Wii U Mario Circuit",
+        "Wii U Toad Harbor",
+        "Wii U Twisted Mansion",
+        "Wii U Shy Guy Falls",
+        "Wii U Dolphin Shoals",
+        "Wii U Electrodrome",
+        "Wii U Mount Wario",
+        "Wii U Cloudtop Cruise",
+        "Wii U Bone-Dry Dunes",
+        "Wii U Bowser's Castle",
+        "Wii U Rainbow Road",
+        "Wii U Dry Dry Desert",
+        "Wii U Royal Raceway",
+        "Wii U Excitebike Arena",
+        "wii U Hyrule Circuit",
+        "Wii U Cheese Land",
+        "Wii U Animal Crossing",
+        "Wii U Ribbon Road",
+        "Wii U Big Blue",
+        
+        "SW Sky-High Sundae",
+        "SW Yoshi's Island",
+
+        "Tour Tokyo Blur",
+        "Tour Madrid Drive",
+        "Tour Merry Mountain",
+        "Tour Ninja Hideaway",
+        
+        "RMX Mario Circuit 1",
+        "RMX Choco Island 1",
+        "RMX Rainbow Road 1",
+        "RMX Rainbow Road 2",
+        "RMX Vanilla Lake 1",
+        "RMX Vanilla Lake 2",
+        "RMX Ghost Valley 1",
+        "RMX Bowser Castle 1",
+        "RMX Donut Plains 1",
+
+        "Tour Bowser Castle 3",
+        "Tour Choco Mountain",
+        "Tour Peach Circuit",
+        "Tour Riverside Park",
+        "Tour Boo Lake",
+        "Tour Sky Garden",
+        "Tour Cheep-Cheep Island",
+        "Tour Sunset Wilds",
+        "Tour Snow Land",
+        "Tour Lakeside Park",
+
+        "GP Mario Beach",
+        "GP Bananan Ruins",
+        "GP Snow Panic",
+        "GP Bowser's Castle",
+        "GP Castle Wall",
+
+        "Beta Donut Plains 1",
+        "Beta Delfino Square",
+        "Beta Dokan Course",
+        "Beta Nokonoko Beach",
+
+        "Phendrana Frostbite",
+        "Honeymoon Lune",
+        "Poké Floats",
+        "DK Jungle Tour",
+        "Terra Ursae",
+        "Confectionery Cliffs",
+        "WP Tanks!",
+        "Cloud Mist Castle",
+        "Rooster Island",
+        "Wario's Cosmic Construction",
+        "Jiyuu Village",
+        "Cargo Bay",
+        "Jigsaw Circuit",
+        "Cruel Angel's Thesis",
+        "Whispy Woodlands",
+        "Stargaze Summit",
+        "Lava Road",
+        "Starry Cityscape",
+        "Stickerbush Sunset",
+        "Alone and Incomplete",
+        "Gallant Grotto",
+        "Fort Francis",
+        "Kingdom of Ghosts",
+        "Backside of the TV",
+        "Garden of Dreams",
+        "Overgrown Temple",
+        "Lava Lake",
+        "Timber Rapids",
+        "Musical Cliff",
+        "Toad's Temple",
+        "Luncheon Tour",
+        "Shy Guy Lumber Co.",
+        "Super Marine World",
+        "Icebound Stronghold",
+        "Kamek's Library",
+        "Wario Circuit",
+        "Hillside Circuit",
+        "Sunshine Island",
+        "Shadow Woods",
+        "Sundown Streets",
+        "Botania",
+        "Cascade Kingdom",
+        "Sandcastle Park",
+        "Emerald Coast",
+        "Super Bell Circuit",
+        "Midnight Museum",
+        "Crystal Canopy",
+        "Shy Guy Skies",
+        "Coral Cape",
+        "Kitayama Keep",
+        "Dolphin Harbor",
+        "Aqua Dungeon",
+        "Divine Paradise",
+        "DK Waterfall",
+        "Frigid Freezeway",
+        "Grassy Plains",
+        "Heavenly Sanctuary",
+        "Luigi's Island",
+        "Mystic Tangle",
+        "Maplewood Caverns",
+        "Parkway Boogie",
+        "Sunset Forest",
+        "Mushroom Valley",
+        "Comet Starway",
+        "The Seamlands",
+        "Northen Heights",
+        "Thunder City",
+        "Goomba Circuit",
+        "Propeller Paradise",
+        "Honeybee Hideout",
+        "Ghostly Gulch",
+        "Cubing Conundrum",
+        "Daisy Gardens",
+        "Lunar Lights",
+        "Fruity Folly",
+        "Electric Shredder",
+        "Fungal Jungle",
+        "Cherry Blossom Garden",
+        "Frostbrun Fortress",
+        "Seaside Palace"
+    ]
 }
 
 const gameSelect = document.getElementById("game-select");
@@ -649,7 +921,8 @@ let lastTrack = null;
 
 let isKeyPressed = false;
 let keySequence = [];
-const CTSequence = ['c', 't', 'g', 'p'];
+const CTSequence = ['c', 't', 'g', 'p','r'];
+const RRSequence = ['r', 'e', 't', 'r','o'];
 
 function pickRandomTrack() {
     const selectedGame = gameSelect.value;
@@ -715,6 +988,24 @@ function enableCTs() {
     clearRepicks();
 }
 
+function enableRR() {
+        const option = document.createElement("option");
+    option.value = "RR";
+    option.textContent = "Retro Rewind (Wii)";
+    option.id = "rr-option";
+
+    const wiiOption = gameSelect.querySelector('option[value="Wii"]');
+    console.log(wiiOption)
+    if (wiiOption) {
+        gameSelect.insertBefore(option, wiiOption.nextElementSibling);
+    } else {
+        gameSelect.appendChild(option);
+    }
+
+    gameSelect.value = "RR"
+    clearRepicks();
+}
+
 function clearRepicks() {
     tracksPicked = [];
     tracksContainer.innerHTML = "Nothing picked";
@@ -742,12 +1033,16 @@ document.addEventListener('keydown', (event) => {
 
     if (!isKeyPressed) {
         disableThemeShortcut();
+        disableSettingsShortcut();
         keySequence.push(key);
         if (keySequence.length > CTSequence.length) {
             keySequence.shift();
         }
         if (keySequence.join('') == CTSequence.join('')) {
             enableCTs();
+        }
+        if (keySequence.join('') == RRSequence.join('')) {
+            enableRR();
         }
     }
 });
