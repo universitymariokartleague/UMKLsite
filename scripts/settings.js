@@ -55,13 +55,11 @@ const toggleSettingsPanel = () => {
 };
 
 document.getElementById('settings-box-close-button').addEventListener('click', toggleSettingsPanel);
-document.querySelectorAll('.settingsBoxOpener').forEach(opener => opener.addEventListener('click', toggleSettingsPanel));
 
 const meta = document.querySelector('meta[name="color-scheme"]');
 const root = document.querySelector(":root");
 let darkThemeEnabled = meta.content == "dark" ? 1 : 0;
 
-// Panel
 function generateSettingsPanel() {
     try {
         const tempTheme = localStorage.getItem("darktheme") == 1 ? "Dark" : (localStorage.getItem("darktheme") == 0 ? "Light" : "Automatic");

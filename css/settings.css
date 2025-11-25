@@ -152,10 +152,6 @@
     visibility: hidden;
 }
 
-.settingsBoxOpener {
-    cursor: pointer;
-}
-
 #settingsBox hr, .settings-hr {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
@@ -166,21 +162,6 @@
 .setting-selectable {
     -webkit-user-select: all;
     user-select: all;
-}
-
-.settingsBoxOpener {
-    transform: rotate(-60deg);
-    transition: transform 0.2s ease-in-out;
-}
-
-.settingsBoxOpener:hover {
-    transform: rotate(0deg);
-    transition: transform 0.2s ease-in-out;
-}
-
-.settingsBoxOpener:active {
-    transform: rotate(-180deg);
-    transition: transform 0.2s ease-in-out;
 }
 
 @keyframes boxOpen { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); } 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
