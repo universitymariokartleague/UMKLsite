@@ -572,7 +572,7 @@ const tracks = {
         "Quaking Mad Cliffs",
         "Rainbow Road",
         "Rainbow Road: Solar Edition",
-        "Rosalina's Snow WorldΓÇÄ",
+        "Rosalina's Snow World",
         "Royal Rainbow",
         "Ruinated Peach's Castle",
         "Rush City Run",
