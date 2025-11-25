@@ -89,17 +89,33 @@ function renderResults(width) {
         yourTeamTotal += yourTeamScore;
         opponentTeamTotal += opponentTeamScore;
 
+        const delta = yourTeamScore - opponentTeamScore;
+        const deltaText = delta > 0 ? `+${delta}` : `${delta}`;
+        const deltaClass =
+            delta > 0 ? "delta delta-positive" :
+            delta < 0 ? "delta delta-negative" :
+            "delta delta-neutral";
+
         return `<b>${trackNames[index] ? trackNames[index] : `Race ${index + 1}`}</b>:
-        ${yourTeamScore}<br/>`;
+        ${yourTeamScore} <span class="${deltaClass}">(${deltaText})</span><br/>`;
     });
 
     const opponentRaceResults = positions.map((yourTeamPositions, index) => {
         const allPositions = Array.from({ length: 12 }, (_, i) => i + 1);
         const opponentPositions = allPositions.filter(pos => !yourTeamPositions.includes(pos));
 
+        const yourTeamScore = yourTeamPositions.reduce((sum, pos) => sum + calculateScore(pos), 0);
         const opponentTeamScore = opponentPositions.reduce((sum, pos) => sum + calculateScore(pos), 0);
+
+        const delta = opponentTeamScore - yourTeamScore;
+        const deltaText = delta > 0 ? `+${delta}` : `${delta}`;
+        const deltaClass =
+            delta > 0 ? "delta delta-positive" :
+            delta < 0 ? "delta delta-negative" :
+            "delta delta-neutral";
+
         return `<b>${trackNames[index] ? trackNames[index] : `Race ${index + 1}`}</b>:
-        ${opponentTeamScore}<br/>`;
+        ${opponentTeamScore} <span class="${deltaClass}">(${deltaText})</span><br/>`;
     });
 
     const teamNames = teamNamesInput.value

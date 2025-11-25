@@ -55,6 +55,20 @@
     height: 400px;
 }
 
+
+.delta-positive {
+    color: green;
+}
+
+.delta-negative {
+    color: red;
+}
+
+.delta-neutral {
+    color: orange;
+}
+
+
 @media screen and (max-width: 767px) {
     .score-calculator-input-areas {
         display: unset;
