@@ -9,6 +9,7 @@ const positionsInput = document.getElementById("positions-input");
 const teamResult = document.getElementById("team-result");
 const opponentResult = document.getElementById("opponent-result");
 const pointsDifference = document.getElementById("points-diff");
+const extraInfo = document.getElementById("extra-info");
 const scoreMap = [15, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 
 let chart;
@@ -70,6 +71,7 @@ function renderResults(width) {
         .split("\n")
         .map(line => line.split(",").map(Number).filter(Boolean));
 
+    let raceDeltas = []
     let yourTeamTotal = 0;
     let opponentTeamTotal = 0;
 
@@ -79,7 +81,7 @@ function renderResults(width) {
         .map(name => name.trim())
         .filter(name => name);
 
-    const teamRaceResults = positions.map((yourTeamPositions, index) => {
+    const teamRaceResults = positions.map((yourTeamPositions, i) => {
         const allPositions = Array.from({ length: 12 }, (_, i) => i + 1);
         const opponentPositions = allPositions.filter(pos => !yourTeamPositions.includes(pos));
 
@@ -89,34 +91,39 @@ function renderResults(width) {
         yourTeamTotal += yourTeamScore;
         opponentTeamTotal += opponentTeamScore;
 
-        const delta = yourTeamScore - opponentTeamScore;
-        const deltaText = delta > 0 ? `+${delta}` : `${delta}`;
-        const deltaClass =
-            delta > 0 ? "delta delta-positive" :
-            delta < 0 ? "delta delta-negative" :
-            "delta delta-neutral";
+        raceDeltas.push(yourTeamScore - opponentTeamScore);
 
-        return `<b>${trackNames[index] ? trackNames[index] : `Race ${index + 1}`}</b>:
-        ${yourTeamScore} <span class="${deltaClass}">(${deltaText})</span><br/>`;
+        return `<b>Race ${i + 1}</b>:
+        ${yourTeamScore}<br/>`;
     });
 
-    const opponentRaceResults = positions.map((yourTeamPositions, index) => {
+    const opponentRaceResults = positions.map((yourTeamPositions, i) => {
         const allPositions = Array.from({ length: 12 }, (_, i) => i + 1);
         const opponentPositions = allPositions.filter(pos => !yourTeamPositions.includes(pos));
 
-        const yourTeamScore = yourTeamPositions.reduce((sum, pos) => sum + calculateScore(pos), 0);
         const opponentTeamScore = opponentPositions.reduce((sum, pos) => sum + calculateScore(pos), 0);
 
-        const delta = opponentTeamScore - yourTeamScore;
-        const deltaText = delta > 0 ? `+${delta}` : `${delta}`;
-        const deltaClass =
-            delta > 0 ? "delta delta-positive" :
-            delta < 0 ? "delta delta-negative" :
-            "delta delta-neutral";
-
-        return `<b>${trackNames[index] ? trackNames[index] : `Race ${index + 1}`}</b>:
-        ${opponentTeamScore} <span class="${deltaClass}">(${deltaText})</span><br/>`;
+        return `<b>Race ${i + 1}</b>:
+        ${opponentTeamScore}<br/>`;
     });
+
+    const extraHTML = raceDeltas.map((diff, i) => {
+        const track = trackNames[i]
+        if (!track) return ``
+        return `
+        <div class="track-item">
+            <a href="pages/matches/stats/" title="Click to open the match stats page">
+                <img class="track-icon" onload="this.style.opacity=1" loading="lazy" src="assets/media/courses/mk8dxicons/${track.replaceAll(' ', '_').replaceAll("'", '').toLowerCase()}.avif" alt="${track}" onerror="this.onerror=null; this.src='assets/media/courses/mk8dxicons/.unknown.avif';">
+            </a>
+            <span class="track-label">Difference: ${diff}</span>
+        </div>`;
+    }).join('');
+    extraInfo.innerHTML = `
+    <details class="extra-info-box">
+        <summary>Extra info</summary>
+        <div class="track-frequency">${extraHTML}</div>
+    </details>
+    `;
 
     const teamNames = teamNamesInput.value
         .trim()
@@ -185,7 +192,7 @@ function renderResults(width) {
     const textColor = getComputedStyle(document.body).getPropertyValue('--text-color');
 
     let chartBackgroundPlugin = null;
-    if (width) {
+    if (width > 0) {
         chartBackgroundPlugin = {
             id: 'customCanvasBackgroundColor',
             beforeDraw: (chart) => {
@@ -203,7 +210,7 @@ function renderResults(width) {
         type: 'line',
         data: chartData,
         options: {
-            responsive: !width,
+            responsive: !(width > 0),
             animation: false,
             maintainAspectRatio: false,
             plugins: {
@@ -319,7 +326,7 @@ function renderResults(width) {
     if (chart) chart.destroy();
     const ctx = canvas.getContext('2d');
 
-    if (width) {
+    if (width > 0) {
         const aspectRatio = 2;
         canvas.width = width;
         canvas.height = Math.round(width / aspectRatio);

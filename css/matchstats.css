@@ -16,6 +16,7 @@
 }
 
 .track-icon {
+    max-width: 100%;
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
     border-radius: 10px;

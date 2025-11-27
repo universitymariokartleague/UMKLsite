@@ -4,9 +4,7 @@
 
 const teamBoxFormatHTML = `
     <div class="team-info-wrapper">
-        <div class="track-count-wrapper">
-            {{trackCounts}}
-        </div>
+        {{trackCounts}}
     </div>
 `;
 
@@ -77,9 +75,9 @@ function buildTrackCountDiv(data) {
     return `
         <div class="title">
             <h2>Track Frequency</h2>
-            ${length}/96 total tracks played
-            ${testMatchesCheckbox.checked ? '<span class="settings-extra-info">(including test matches)</span>' : ''}<br>
-        </div><br/>
+            <p class="p-no-spacing">${length}/96 total tracks played</p>
+            ${testMatchesCheckbox.checked ? '<span class="settings-extra-info">(including test matches)</span>' : ''}
+        </div>
         <div class="track-frequency">
             ${resultString}
         </div>

@@ -30,14 +30,14 @@
 }
 
 .result-box {
-    border: var(--button-outline);
+    border: 1px solid #ccccccaa;
     background-color: var(--bg-color);
     padding: 10px;
     margin: auto;
     width: 100vw;
     border-radius: 10px;
     position: relative;
-    font-size: 0.8em;
+    font-size: 0.9em;
 }
 
 .result-box h3 {
@@ -68,6 +68,33 @@
     color: orange;
 }
 
+#extra-info {
+    display:flex;
+    justify-content:center;
+}
+
+.extra-info-box {
+    border: 1px solid #ccccccaa;
+    border-radius: 10px;
+    padding: 15px;
+    width: 605px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.extra-info-box[open] .track-frequency {
+    margin: 10px 0 0;
+}
+
+.extra-info-box summary {
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.extra-info-box summary:hover {
+    text-decoration: underline;
+}
 
 @media screen and (max-width: 767px) {
     .score-calculator-input-areas {
