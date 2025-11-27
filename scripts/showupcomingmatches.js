@@ -237,7 +237,7 @@ async function showUpcomingMatches() {
                         const hours = Math.floor((totalSeconds % 86400) / 3600);
                         const minutes = Math.floor((totalSeconds % 3600) / 60);
                         const seconds = totalSeconds % 60;
-                        countdownElement.innerHTML = `${days > 0 ? `${days.toString()}d `: ''}${hours.toString()}:${minutes
+                        countdownElement.innerHTML = `<i class="fa-solid fa-clock"></i> ${days > 0 ? `${days.toString()}d `: ''}${hours.toString()}:${minutes
                             .toString()
                             .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
                     }
@@ -254,7 +254,7 @@ async function showUpcomingMatches() {
                     onload="this.style.opacity=1" loading="lazy"/>` : ''}
                     
                     ${entry.testMatch ? `<div class="test-match-indicator"><i class="fa-solid fa-test"></i> Test match</div>` : ''}
-                    ${isLive ? `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}"><span style="display:flex"><div class="live-dot"></div>Live</span></div>` : `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id="matchCountdown${entry.eventID}">${timeUntilMatch}</div>`}
+                    ${isLive ? `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}"><span style="display:flex"><div class="live-dot"></div>Live</span></div>` : `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id="matchCountdown${entry.eventID}"><i class="fa-solid fa-clock"></i> ${timeUntilMatch}</div>`}
                     
                     <div class="event-overlay">
                         <div class="event-box-team">
