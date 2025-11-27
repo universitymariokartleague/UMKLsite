@@ -17,6 +17,10 @@
                 ]
             ],
             "season": 1,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "York",
                 "Staffs"
@@ -43,6 +47,10 @@
                 ]
             ],
             "season": 1,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "Edinburgh",
                 "Keele"
@@ -69,6 +77,10 @@
                 ]
             ],
             "season": 1,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "Staffs",
                 "Keele"
@@ -93,6 +105,10 @@
                 ]
             ],
             "season": 1,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "York",
                 "Edinburgh"
@@ -119,6 +135,10 @@
                 ]
             ],
             "season": 1,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "Staffs",
                 "Edinburgh"
@@ -375,6 +395,10 @@
                 ]
             ],
             "season": 1,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "Keele",
                 "York"
@@ -2193,6 +2217,10 @@
                 ]
             ],
             "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "York",
                 "BIMM"
@@ -2454,6 +2482,10 @@
                 ]
             ],
             "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "Staffs",
                 "Warwick"
@@ -2715,6 +2747,10 @@
                 ]
             ],
             "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "York",
                 "Warwick"
@@ -2976,6 +3012,10 @@
                 ]
             ],
             "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "York",
                 "Liverpool"
@@ -3237,6 +3277,10 @@
                 ]
             ],
             "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "Staffs",
                 "Cambridge"
@@ -3498,6 +3542,10 @@
                 ]
             ],
             "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "York",
                 "Birmingham"
@@ -3759,6 +3807,10 @@
                 ]
             ],
             "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "Birmingham",
                 "Warwick"
@@ -4020,6 +4072,10 @@
                 ]
             ],
             "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "Birmingham",
                 "Cambridge"
@@ -4279,6 +4335,10 @@
                 ]
             ],
             "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "Warwick",
                 "Cambridge"
@@ -4540,6 +4600,10 @@
                 ]
             ],
             "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "York",
                 "Cambridge"
@@ -4802,6 +4866,10 @@
                 ]
             ],
             "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "Birmingham",
                 "Liverpool"
@@ -5062,6 +5130,10 @@
                 ]
             ],
             "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "Staffs",
                 "Glasgow"
@@ -5324,6 +5396,10 @@
                 ]
             ],
             "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "Warwick",
                 "Cambridge"
@@ -5586,6 +5662,10 @@
                 ]
             ],
             "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "York",
                 "BIMM"
@@ -5848,6 +5928,10 @@
                 ]
             ],
             "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "Keele",
                 "Uosheff"
@@ -6104,6 +6188,10 @@
                 ]
             ],
             "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
             "teamsInvolved": [
                 "Edinburgh",
                 "Brighton"
@@ -6115,6 +6203,1158 @@
                 "https://www.youtube.com/watch?v=lb2PWeXPgCI",
                 ""
             ]
+        }
+    ],
+    "2025-11-13": [
+        {
+            "description": "A 6v6 match between Edinburgh and Birmingham. \n\nMembers of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed on the UMKL YouTube channel. You can visit the channel here: https://www.youtube.com/@universitymariokartleague.",
+            "detailedResults": [
+                {
+                    "1": [
+                        4,
+                        5,
+                        8,
+                        9,
+                        11,
+                        12
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        3,
+                        6,
+                        7,
+                        10
+                    ],
+                    "track": "Sunshine Airport"
+                },
+                {
+                    "1": [
+                        3,
+                        5,
+                        6,
+                        7,
+                        10,
+                        11
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        4,
+                        8,
+                        9,
+                        12
+                    ],
+                    "track": "GBA Ribbon Road"
+                },
+                {
+                    "1": [
+                        3,
+                        7,
+                        8,
+                        9,
+                        10,
+                        11
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        5,
+                        6,
+                        4,
+                        12
+                    ],
+                    "track": "3DS Koopa City"
+                },
+                {
+                    "1": [
+                        1,
+                        5,
+                        6,
+                        7,
+                        11,
+                        12
+                    ],
+                    "2": [
+                        2,
+                        3,
+                        4,
+                        8,
+                        9,
+                        10
+                    ],
+                    "track": "GCN Yoshi Circuit"
+                },
+                {
+                    "1": [
+                        1,
+                        3,
+                        6,
+                        8,
+                        9,
+                        10
+                    ],
+                    "2": [
+                        2,
+                        4,
+                        5,
+                        7,
+                        11,
+                        12
+                    ],
+                    "track": "Yoshi's Island"
+                },
+                {
+                    "1": [
+                        1,
+                        4,
+                        7,
+                        8,
+                        10,
+                        11
+                    ],
+                    "2": [
+                        2,
+                        3,
+                        5,
+                        6,
+                        9,
+                        12
+                    ],
+                    "track": "Wild Woods"
+                },
+                {
+                    "1": [
+                        1,
+                        7,
+                        8,
+                        9,
+                        11,
+                        12
+                    ],
+                    "2": [
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        10
+                    ],
+                    "track": "Squeaky Clean Sprint"
+                },
+                {
+                    "1": [
+                        2,
+                        4,
+                        7,
+                        8,
+                        10,
+                        11
+                    ],
+                    "2": [
+                        1,
+                        3,
+                        5,
+                        6,
+                        9,
+                        12
+                    ],
+                    "track": "GBA Cheese Land"
+                },
+                {
+                    "1": [
+                        1,
+                        3,
+                        7,
+                        8,
+                        11,
+                        12
+                    ],
+                    "2": [
+                        2,
+                        4,
+                        5,
+                        6,
+                        9,
+                        10
+                    ],
+                    "track": "Wii Coconut Mall"
+                },
+                {
+                    "1": [
+                        2,
+                        3,
+                        5,
+                        6,
+                        7,
+                        8
+                    ],
+                    "2": [
+                        1,
+                        4,
+                        9,
+                        10,
+                        11,
+                        12
+                    ],
+                    "track": "Wii Wario's Gold Mine"
+                },
+                {
+                    "1": [
+                        1,
+                        5,
+                        7,
+                        8,
+                        10,
+                        11
+                    ],
+                    "2": [
+                        2,
+                        3,
+                        4,
+                        6,
+                        9,
+                        12
+                    ],
+                    "track": "Hyrule Circuit"
+                },
+                {
+                    "1": [
+                        1,
+                        7,
+                        8,
+                        9,
+                        10,
+                        12
+                    ],
+                    "2": [
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        11
+                    ],
+                    "track": "Wii DK's Snowboard Cross"
+                }
+            ],
+            "endTime": "21:41:59+00:00",
+            "eventID": "1436772982356971580",
+            "eventURL": "https://discord.com/events/1312070414113050624/1436772982356971580",
+            "results": [
+                [
+                    3,
+                    448,
+                    0
+                ],
+                [
+                    5,
+                    536,
+                    0
+                ]
+            ],
+            "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
+            "teamsInvolved": [
+                "Edinburgh",
+                "Birmingham"
+            ],
+            "testMatch": false,
+            "time": "20:00:00+00:00",
+            "title": "Edinburgh VS Birmingham",
+            "ytLinks": [
+                "https://youtube.com/live/hogUIRwuFvo?feature=share",
+                "https://youtube.com/live/q_IoewNwLJA?feature=share"
+            ]
+        },
+        {
+            "description": "A 6v6 match between Liverpool and Brighton. \n\nMembers of the relevant teams can sign up to compete in this match by clicking the sign-up button in the team's announcement channel.",
+            "detailedResults": [
+                {
+                    "1": [
+                        1,
+                        2,
+                        4,
+                        5,
+                        6,
+                        7
+                    ],
+                    "2": [
+                        3,
+                        8,
+                        9,
+                        10,
+                        11,
+                        12
+                    ],
+                    "track": "GCN Baby Park"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        7,
+                        10,
+                        12
+                    ],
+                    "2": [
+                        4,
+                        5,
+                        6,
+                        8,
+                        9,
+                        11
+                    ],
+                    "track": "3DS Rosalina's Ice World"
+                },
+                {
+                    "1": [
+                        1,
+                        3,
+                        5,
+                        7,
+                        9,
+                        8
+                    ],
+                    "2": [
+                        2,
+                        4,
+                        6,
+                        10,
+                        11,
+                        12
+                    ],
+                    "track": "3DS Rainbow Road"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        7,
+                        9,
+                        12
+                    ],
+                    "2": [
+                        4,
+                        5,
+                        6,
+                        8,
+                        10,
+                        11
+                    ],
+                    "track": "Wild Woods"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        5,
+                        9,
+                        6
+                    ],
+                    "2": [
+                        4,
+                        7,
+                        8,
+                        10,
+                        11,
+                        12
+                    ],
+                    "track": "3DS Melody Motorway"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        5,
+                        8,
+                        4
+                    ],
+                    "2": [
+                        6,
+                        7,
+                        9,
+                        10,
+                        11,
+                        12
+                    ],
+                    "track": "Wii Rainbow Road"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        11
+                    ],
+                    "2": [
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                        12
+                    ],
+                    "track": "DS Tick-Tock Clock"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        6,
+                        8,
+                        10,
+                        11
+                    ],
+                    "2": [
+                        3,
+                        4,
+                        5,
+                        7,
+                        9,
+                        12
+                    ],
+                    "track": "Piranha Plant Cove"
+                },
+                {
+                    "1": [
+                        2,
+                        3,
+                        4,
+                        7,
+                        8,
+                        11
+                    ],
+                    "2": [
+                        1,
+                        5,
+                        6,
+                        9,
+                        10,
+                        12
+                    ],
+                    "track": "Dragon Driftway"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        7,
+                        9,
+                        10,
+                        12
+                    ],
+                    "2": [
+                        3,
+                        4,
+                        5,
+                        6,
+                        10,
+                        11
+                    ],
+                    "track": "Bowser's Castle"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        9,
+                        11
+                    ],
+                    "2": [
+                        5,
+                        6,
+                        7,
+                        8,
+                        10,
+                        12
+                    ],
+                    "track": "Cloudtop Cruise"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        5,
+                        6,
+                        7,
+                        10
+                    ],
+                    "2": [
+                        3,
+                        4,
+                        8,
+                        9,
+                        11,
+                        12
+                    ],
+                    "track": "GCN DK Mountain"
+                }
+            ],
+            "endTime": "20:32:44+00:00",
+            "eventID": "1437547209238511728",
+            "eventURL": "https://discord.com/events/1312070414113050624/1437547209238511728",
+            "results": [
+                [
+                    10,
+                    603,
+                    0
+                ],
+                [
+                    13,
+                    381,
+                    0
+                ]
+            ],
+            "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
+            "teamsInvolved": [
+                "Liverpool",
+                "Brighton"
+            ],
+            "testMatch": false,
+            "time": "19:00:00+00:00",
+            "title": "Liverpool VS Brighton",
+            "ytLinks": [
+                "https://youtube.com/live/h4z6L8eQ02E?feature=share",
+                ""
+            ]
+        }
+    ],
+    "2025-11-16": [
+        {
+            "description": "A 6v6 match between Staffs and Uosheff. \n\nMembers of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed on the UMKL YouTube channel. You can visit the channel here: https://www.youtube.com/@universitymariokartleague.",
+            "detailedResults": [
+                {
+                    "1": [
+                        3,
+                        4,
+                        5,
+                        8,
+                        9,
+                        10
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        6,
+                        7,
+                        11,
+                        12
+                    ],
+                    "track": "GCN Yoshi Circuit"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        7,
+                        8
+                    ],
+                    "2": [
+                        5,
+                        6,
+                        9,
+                        10,
+                        11,
+                        12
+                    ],
+                    "track": "GCN Waluigi Stadium"
+                },
+                {
+                    "1": [
+                        2,
+                        3,
+                        6,
+                        7,
+                        9,
+                        11
+                    ],
+                    "2": [
+                        1,
+                        4,
+                        5,
+                        8,
+                        10,
+                        12
+                    ],
+                    "track": "GBA Cheese Land"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        4,
+                        5,
+                        9,
+                        11
+                    ],
+                    "2": [
+                        3,
+                        6,
+                        7,
+                        8,
+                        10,
+                        12
+                    ],
+                    "track": "Wii Grumble Volcano"
+                },
+                {
+                    "1": [
+                        1,
+                        5,
+                        6,
+                        7,
+                        8,
+                        11
+                    ],
+                    "2": [
+                        2,
+                        3,
+                        4,
+                        9,
+                        10,
+                        12
+                    ],
+                    "track": "SNES Mario Circuit 3"
+                },
+                {
+                    "1": [
+                        1,
+                        3,
+                        4,
+                        6,
+                        8,
+                        12
+                    ],
+                    "2": [
+                        2,
+                        5,
+                        7,
+                        9,
+                        10,
+                        11
+                    ],
+                    "track": "DS Shroom Ridge"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        5,
+                        6,
+                        10,
+                        11
+                    ],
+                    "2": [
+                        3,
+                        4,
+                        7,
+                        8,
+                        9,
+                        12
+                    ],
+                    "track": "Tour Paris Promenade"
+                },
+                {
+                    "1": [
+                        1,
+                        3,
+                        4,
+                        7,
+                        9,
+                        12
+                    ],
+                    "2": [
+                        2,
+                        5,
+                        6,
+                        8,
+                        10,
+                        11
+                    ],
+                    "track": "Toad Harbour"
+                },
+                {
+                    "1": [
+                        2,
+                        3,
+                        4,
+                        5,
+                        10,
+                        11
+                    ],
+                    "2": [
+                        1,
+                        6,
+                        7,
+                        8,
+                        9,
+                        12
+                    ],
+                    "track": "Twisted Mansion"
+                },
+                {
+                    "1": [
+                        3,
+                        6,
+                        7,
+                        8,
+                        9,
+                        12
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        4,
+                        5,
+                        10,
+                        11
+                    ],
+                    "track": "DS Tick-Tock Clock"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        10,
+                        11
+                    ],
+                    "2": [
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        12
+                    ],
+                    "track": "Hyrule Circuit"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        8,
+                        11
+                    ],
+                    "2": [
+                        5,
+                        6,
+                        7,
+                        9,
+                        10,
+                        12
+                    ],
+                    "track": "Wii Rainbow Road"
+                }
+            ],
+            "endTime": "20:52:44+00:00",
+            "eventID": "1436772291873607832",
+            "eventURL": "https://discord.com/events/1312070414113050624/1436772291873607832",
+            "results": [
+                [
+                    2,
+                    550,
+                    0
+                ],
+                [
+                    11,
+                    434,
+                    0
+                ]
+            ],
+            "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
+            "teamsInvolved": [
+                "Staffs",
+                "Uosheff"
+            ],
+            "testMatch": false,
+            "time": "19:30:00+00:00",
+            "title": "Staffs VS Uosheff",
+            "ytLinks": [
+                "https://youtube.com/live/2kJ7945Txd8?feature=share",
+                ""
+            ]
+        },
+        {
+            "description": "A 6v6 test match between Staffs and Oxford. This match serves to test the Cheep Cheep application and live streaming.\n\nMembers of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed on the UMKL YouTube channel. You can visit the channel here: https://www.youtube.com/@universitymariokartleague.",
+            "detailedResults": [
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        9
+                    ],
+                    "2": [
+                        6,
+                        7,
+                        8,
+                        10,
+                        11,
+                        12
+                    ],
+                    "track": "GCN Yoshi Circuit"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        4,
+                        5,
+                        6,
+                        10
+                    ],
+                    "2": [
+                        3,
+                        7,
+                        8,
+                        9,
+                        11,
+                        12
+                    ],
+                    "track": "Tour Paris Promenade"
+                },
+                {
+                    "1": [
+                        1,
+                        3,
+                        4,
+                        5,
+                        7,
+                        8
+                    ],
+                    "2": [
+                        2,
+                        6,
+                        9,
+                        10,
+                        11,
+                        12
+                    ],
+                    "track": "Electrodrome"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        4,
+                        5,
+                        8,
+                        9
+                    ],
+                    "2": [
+                        3,
+                        6,
+                        7,
+                        10,
+                        11,
+                        12
+                    ],
+                    "track": "3DS Alpine Pass"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        5,
+                        8,
+                        10
+                    ],
+                    "2": [
+                        4,
+                        6,
+                        7,
+                        9,
+                        11,
+                        12
+                    ],
+                    "track": "DS Tick-Tock Clock"
+                },
+                {
+                    "1": [
+                        1,
+                        3,
+                        4,
+                        5,
+                        6,
+                        11
+                    ],
+                    "2": [
+                        2,
+                        7,
+                        8,
+                        9,
+                        10,
+                        12
+                    ],
+                    "track": "Wii Moo Moo Meadows"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        5,
+                        8,
+                        10
+                    ],
+                    "2": [
+                        4,
+                        6,
+                        7,
+                        9,
+                        11,
+                        12
+                    ],
+                    "track": "Toad Harbour"
+                },
+                {
+                    "1": [
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        9,
+                        10,
+                        11,
+                        12
+                    ],
+                    "track": "SNES Rainbow Road"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        4,
+                        5,
+                        6,
+                        8
+                    ],
+                    "2": [
+                        3,
+                        7,
+                        9,
+                        10,
+                        11,
+                        12
+                    ],
+                    "track": "Sunshine Airport"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        5,
+                        6,
+                        7,
+                        12
+                    ],
+                    "2": [
+                        3,
+                        4,
+                        8,
+                        9,
+                        10,
+                        11
+                    ],
+                    "track": "3DS DK Jungle"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        7,
+                        9,
+                        10
+                    ],
+                    "2": [
+                        4,
+                        5,
+                        6,
+                        8,
+                        11,
+                        12
+                    ],
+                    "track": "Shy Guy Falls"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        8,
+                        10
+                    ],
+                    "2": [
+                        5,
+                        6,
+                        7,
+                        9,
+                        11,
+                        12
+                    ],
+                    "track": "3DS Melody Motorway"
+                }
+            ],
+            "endTime": "19:13:39+00:00",
+            "eventID": "1436902384423932045",
+            "eventURL": "https://discord.com/events/1312070414113050624/1436902384423932045",
+            "results": [
+                [
+                    2,
+                    629,
+                    0
+                ],
+                [
+                    8,
+                    355,
+                    0
+                ]
+            ],
+            "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
+            "teamsInvolved": [
+                "Staffs",
+                "Oxford"
+            ],
+            "testMatch": true,
+            "time": "18:00:00+00:00",
+            "title": "Staffs VS Oxford (Test Match)",
+            "ytLinks": [
+                "https://www.youtube.com/watch?v=aNnz7PNFjUQ",
+                ""
+            ]
+        }
+    ],
+    "2025-11-27": [
+        {
+            "description": "A 6v6 match between York and Warwick. \n\nMembers of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed on the UMKL YouTube channel. You can visit the channel here: https://www.youtube.com/@universitymariokartleague.",
+            "eventID": "1437093482140401777",
+            "eventURL": "https://discord.com/events/1312070414113050624/1437093482140401777",
+            "results": [],
+            "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                6
+            ],
+            "teamsInvolved": [
+                "York",
+                "Warwick"
+            ],
+            "testMatch": false,
+            "time": "19:00:00+00:00",
+            "title": "York VS Warwick",
+            "ytLinks": [
+                "https://youtube.com/live/r5IpNoZrdDg?feature=share",
+                "https://youtube.com/live/2f6_-yPNlD0?feature=share"
+            ]
+        }
+    ],
+    "2025-11-28": [
+        {
+            "description": "A 6v6 match between Cambridge and BIMM. \n\nMembers of the relevant teams can sign up to compete in this match by clicking the sign-up button in the team's announcement channel.",
+            "eventID": "1437373821136015421",
+            "eventURL": "https://discord.com/events/1312070414113050624/1437373821136015421",
+            "results": [],
+            "season": 2,
+            "signedUpPlayerCounts": [
+                5,
+                6
+            ],
+            "teamsInvolved": [
+                "Cambridge",
+                "BIMM"
+            ],
+            "testMatch": false,
+            "time": "19:00:00+00:00",
+            "title": "Cambridge VS BIMM",
+            "ytLinks": [
+                "https://youtube.com/live/rPWSgIJegrY?feature=share",
+                "https://youtube.com/live/bY6vHyjkZlg?feature=share"
+            ]
+        }
+    ],
+    "2025-11-29": [
+        {
+            "description": "A 6v6 match between Keele and Glasgow. \n\nMembers of the relevant teams can sign up to compete in this match by clicking the sign-up button in the team's announcement channel.",
+            "eventID": "1438458978278572093",
+            "eventURL": "https://discord.com/events/1312070414113050624/1438458978278572093",
+            "results": [],
+            "season": 2,
+            "signedUpPlayerCounts": [
+                4,
+                6
+            ],
+            "teamsInvolved": [
+                "Keele",
+                "Glasgow"
+            ],
+            "testMatch": false,
+            "time": "20:00:00+00:00",
+            "title": "Keele VS Glasgow",
+            "ytLinks": [
+                "https://youtube.com/live/NT93i6V6lFc?feature=share",
+                "https://youtube.com/live/6Qa83bS_Vfc?feature=share"
+            ]
+        }
+    ],
+    "2025-11-30": [
+        {
+            "description": "A 6v6 test match between Staffs and Leeds. This match is a test match - a friendly match that serves to test various features of the UMKL.\n\nMembers of the relevant teams can sign up to compete in this match by clicking the sign-up button in the team's announcement channel.",
+            "eventID": "1438116729187336297",
+            "eventURL": "https://discord.com/events/1312070414113050624/1438116729187336297",
+            "results": [],
+            "season": 2,
+            "signedUpPlayerCounts": [
+                6,
+                5
+            ],
+            "teamsInvolved": [
+                "Staffs",
+                "Leeds"
+            ],
+            "testMatch": true,
+            "time": "17:00:00+00:00",
+            "title": "Staffs VS Leeds (Test Match)"
         }
     ]
 }

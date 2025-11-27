@@ -50,5 +50,17 @@
     {
         "team_color": "#e0b3c7",
         "team_name": "Brighton"
+    },
+    {
+        "team_color": "#d17517",
+        "team_name": "Leeds"
+    },
+    {
+        "team_color": "#116300",
+        "team_name": "Bangor"
+    },
+    {
+        "team_color": "#66007b",
+        "team_name": "Aberystwyth"
     }
 ]

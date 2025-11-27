@@ -33,7 +33,7 @@
     },
     {
         "career_wins_losses": [
-            3,
+            4,
             1
         ],
         "championship_seasons": [],
@@ -42,7 +42,7 @@
             -2.1833
         ],
         "first_entry": 1,
-        "lifetime_matches_played": 4,
+        "lifetime_matches_played": 5,
         "place_id": 1826799578,
         "season": 1,
         "season_matches_played": 3,
@@ -52,7 +52,7 @@
             2,
             1
         ],
-        "team_career_points": 2108,
+        "team_career_points": 2658,
         "team_championships": 0,
         "team_color": "#a11212",
         "team_full_name": "University of Staffordshire",
@@ -64,7 +64,7 @@
     {
         "career_wins_losses": [
             2,
-            2
+            3
         ],
         "championship_seasons": [],
         "coords": [
@@ -72,7 +72,7 @@
             -3.1892
         ],
         "first_entry": 1,
-        "lifetime_matches_played": 4,
+        "lifetime_matches_played": 5,
         "place_id": 1826492520,
         "season": 1,
         "season_matches_played": 3,
@@ -82,7 +82,7 @@
             1,
             2
         ],
-        "team_career_points": 2093,
+        "team_career_points": 2541,
         "team_championships": 0,
         "team_color": "#287ac8",
         "team_full_name": "University of Edinburgh",
