@@ -1323,7 +1323,7 @@ document.addEventListener('keydown', async (event) => {
 
         for (const node of nodes) {
             try {
-                const matchBoxes = node.querySelectorAll('.match-box, .timer-indicator');
+                const matchBoxes = node.querySelectorAll('.match-box, .timer-indicator, .youtube-box');
                 matchBoxes.forEach(el => el.style.display = 'none');
 
                 const dataUrl = await htmlToImage.toPng(node, { pixelRatio: 2 });
