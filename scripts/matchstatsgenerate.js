@@ -57,7 +57,7 @@ function buildTrackCountDiv(data) {
             
             return `
                 <div class="track-item">
-                    <img class="track-icon" onload="this.style.opacity=1" loading="lazy" src="assets/media/courses/mk8dxicons/${track.replaceAll(' ', '_').replaceAll("'", '').toLowerCase()}.avif" alt="The icon for ${track}">
+                    <img class="track-icon" width="135px" style="aspect-ratio:45/31" onload="this.style.opacity=1" loading="lazy" src="assets/media/courses/mk8dxicons/${track.replaceAll(' ', '_').replaceAll("'", '').toLowerCase()}.avif" alt="The icon for ${track}">
                     <span class="track-label">
                         ${stats.count === maxCount ? "☆ " : ""}<b>${track}</b><br>
                         Played ${stats.count} ${stats.count === 1 ? "time" : "times"}<br>
