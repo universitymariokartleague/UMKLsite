@@ -113,9 +113,9 @@ function renderResults(width) {
         return `
         <div class="track-item">
             <a href="pages/matches/stats/" title="Click to open the match stats page">
-                <img class="track-icon" onload="this.style.opacity=1" loading="lazy" src="assets/media/courses/mk8dxicons/${track.replaceAll(' ', '_').replaceAll("'", '').toLowerCase()}.avif" alt="${track}" onerror="this.onerror=null; this.src='assets/media/courses/mk8dxicons/.unknown.avif';">
+                <img class="track-icon" onload="this.style.opacity=1" loading="lazy" src="assets/media/courses/mk8dxicons/${track.replaceAll(' ', '_').replaceAll("'", '').toLowerCase()}.avif" alt="The icon for ${track}" onerror="this.onerror=null; this.src='assets/media/courses/mk8dxicons/.unknown.avif';">
             </a>
-            <span class="track-label">Difference: ${diff}</span>
+            <span class="track-label">#${i + 1}<br/><b>${track}</b><br/>Difference: ${diff}</span>
         </div>`;
     }).join('');
     extraInfo.innerHTML = `
