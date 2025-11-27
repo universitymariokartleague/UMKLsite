@@ -24,7 +24,7 @@ function generateMessage() {
         : `Take a look at Season ${currentSeason.value}'s team standings in the University Mario Kart League!`;
 }
 
-shareButton.addEventListener("click", async () => {    
+async function shareButtonPressed() {
     if (getIsPopupShowing()) return;
 
     try {
@@ -64,6 +64,18 @@ shareButton.addEventListener("click", async () => {
             shareButton.innerHTML = getOriginalMessage();
         }, 2000);
     }
+}
+
+document.addEventListener('keydown', async (event) => {
+    const key = event.key.toLowerCase();
+
+    if (key == 's') {
+        shareButtonPressed();
+    }
+})
+
+shareButton.addEventListener("click", async () => {
+    shareButtonPressed();
 });
 
 seasonPicker.addEventListener("change", async function () {

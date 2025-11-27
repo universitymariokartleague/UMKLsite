@@ -146,9 +146,13 @@ function showPreview(message, isImage, imagePath, blob) {
     };
 
     const handleClickOutside = (e) => {
-        if (!preview.contains(e.target)) {
-            closePreview();
-        }
+        if (!preview.contains(e.target)) closePreview();
+    };
+
+    const handlePress = (e) => {
+        const key = e.key.toLowerCase();
+
+        if (key == 's') closePreview();
     };
 
     setTimeout(() => {
@@ -157,6 +161,7 @@ function showPreview(message, isImage, imagePath, blob) {
     }, 10);
 
     setTimeout(() => document.addEventListener('mousedown', handleClickOutside), 0);
+    setTimeout(() => document.addEventListener('keydown', handlePress), 0);
     previewTimeout = setTimeout(closePreview, 3000);
 }
 

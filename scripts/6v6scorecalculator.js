@@ -30,14 +30,14 @@ async function getTeamcolors() {
         },
         body: "{}"
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+            return response.json();
+        });
 }
 
 function calculateScore(position) {
@@ -138,7 +138,7 @@ function renderResults(width) {
     const diff = yourTeamTotal - opponentTeamTotal;
     const color = diff > 0 ? "green" : diff < 0 ? "red" : "black";
     const sign = diff > 0 ? "+" : "";
-    
+
     pointsDifference.innerHTML = `<h2 style="color: ${color};">${sign}${diff}</h2>`;
 
     // Render graph
@@ -214,7 +214,7 @@ function renderResults(width) {
             animation: false,
             maintainAspectRatio: false,
             plugins: {
-                    tooltip: {
+                tooltip: {
                     bodyFont: {
                         family: 'Montserrat',
                     },
@@ -305,8 +305,8 @@ function renderResults(width) {
                     grid: {
                         color: (context) => {
                             return context.tick.value % 100 === 0
-                            ? '#cccccc80'
-                            : '#cccccc30';
+                                ? '#cccccc80'
+                                : '#cccccc30';
                         }
                     }
                 }
@@ -388,6 +388,44 @@ document.addEventListener('themeChange', () => {
     renderResults();
 });
 
+async function shareButtonPressed() {
+    function canvasToBlob(canvas, type = "image/png", quality) {
+        return new Promise(resolve => {
+            canvas.toBlob(blob => resolve(blob), type, quality);
+        });
+    }
+
+    if (getIsPopupShowing()) return;
+    const useClipboard = isWindowsOrLinux() || !navigator.canShare;
+
+    renderResults(800);
+    const blob = await canvasToBlob(canvas);
+    renderResults();
+
+    const message = `Check out the results for ${matchName}!`
+
+    if (useClipboard) {
+        const success = await copyTextToClipboard(message);
+        shareButton.innerText = success ? "Copied to clipboard!" : "Failed to copy!";
+        showImagePreview(blob, blob.url, message)
+    } else {
+        await shareImage(
+            `${matchName} Results`,
+            message,
+            blob,
+            `6v6_results_${matchName.replaceAll(" ", "_")}.png`
+        )
+    }
+}
+
+document.addEventListener('keydown', async (event) => {
+    const key = event.key.toLowerCase();
+
+    if (key == 's') {
+        shareButtonPressed();
+    }
+})
+
 document.addEventListener("DOMContentLoaded", async () => {
     teamColors = await getTeamcolors();
     loadFromURLParams();
@@ -400,33 +438,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         setOriginalMessage(shareButton.innerHTML);
 
         shareButton.addEventListener("click", async () => {
-            function canvasToBlob(canvas, type = "image/png", quality) {
-                return new Promise(resolve => {
-                    canvas.toBlob(blob => resolve(blob), type, quality);
-                });
-            }
-
-            if (getIsPopupShowing()) return;
-            const useClipboard = isWindowsOrLinux() || !navigator.canShare;
-
-            renderResults(800);
-            const blob = await canvasToBlob(canvas);
-            renderResults();
-
-            const message = `Check out the results for ${matchName}!`
-
-            if (useClipboard) {
-                const success = await copyTextToClipboard(message);
-                shareButton.innerText = success ? "Copied to clipboard!" : "Failed to copy!";
-                showImagePreview(blob, blob.url, message)
-            } else {
-                await shareImage(
-                    `${matchName} Results`,
-                    message,
-                    blob,
-                    `6v6_results_${matchName.replaceAll(" ", "_")}.png`
-                )
-            }
+            await shareButtonPressed();
         });
     }
     inputArea.classList.remove("hidden");
