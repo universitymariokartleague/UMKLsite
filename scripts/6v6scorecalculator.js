@@ -21,6 +21,8 @@ const canvas = document.getElementById("scoreChart");
 
 let teamColors = [];
 let matchName = "";
+let currentPerspective = 0;
+let extraInfoOpened = false;
 
 async function getTeamcolors() {
     return fetch('https://api.umkl.co.uk/teamcolors', {
@@ -38,6 +40,14 @@ async function getTeamcolors() {
             localStorage.setItem("apiReqsSent", apiReqsSent + 1)
             return response.json();
         });
+}
+
+function makePossessive(name) {
+    if (!name) return '';
+    if (name.endsWith('s') || name.endsWith('S')) {
+        return `${name}'`;
+    }
+    return `${name}'s`;
 }
 
 function calculateScore(position) {
@@ -107,39 +117,55 @@ function renderResults(width) {
         ${opponentTeamScore}<br/>`;
     });
 
-    const extraHTML = raceDeltas.map((diff, i) => {
-        const track = trackNames[i]
-        if (!track) return ``
-        return `
-        <div class="track-item">
-            <a href="pages/matches/stats/" title="Click to open the match stats page">
-                <img class="track-icon" onload="this.style.opacity=1" loading="lazy" src="assets/media/courses/mk8dxicons/${track.replaceAll(' ', '_').replaceAll("'", '').toLowerCase()}.avif" alt="The icon for ${track}" onerror="this.onerror=null; this.src='assets/media/courses/mk8dxicons/.unknown.avif';">
-            </a>
-            <span class="track-label">#${i + 1}<br/><b>${track}</b><br/>Difference: ${diff}</span>
-        </div>`;
-    }).join('');
-    extraInfo.innerHTML = `
-    <details class="extra-info-box">
-        <summary>Extra info</summary>
-        <div class="track-frequency">${extraHTML}</div>
-    </details>
-    `;
-
     const teamNames = teamNamesInput.value
         .trim()
         .split("\n")
         .map(name => name.trim())
         .filter(name => name);
 
+    const extraHTML = raceDeltas.map((diff, i) => {
+        const track = trackNames[i]
+        if (!track) return ``
+        if (currentPerspective == 1) diff*=-1
+        const colorClass = diff > 0 ? "pos" : diff < 0 ? "neg" : "neutral";
+        return `
+        <div class="track-item">
+            <a href="pages/matches/stats/" title="Click to open the match stats page">
+                <img class="track-icon" width="135px" style="aspect-ratio:45/31" onload="this.style.opacity=1" loading="lazy" src="assets/media/courses/mk8dxicons/${track.replaceAll(' ', '_').replaceAll("'", '').toLowerCase()}.avif" alt="The icon for ${track}" onerror="this.onerror=null; this.src='assets/media/courses/mk8dxicons/.unknown.avif';">
+            </a>
+            <span class="track-label">#${i + 1}<br/><b>${track}</b><br/>Difference: <span class="diff-${colorClass}">${diff}</span></span>
+        </div>`;
+    }).join('');
+
+    extraInfo.innerHTML = `
+    <details class="extra-info-box" id="extra-info-box" ${extraInfoOpened ? 'open' : ''}>
+        <summary>Extra info</summary>
+        <div class="track-frequency">${extraHTML}</div>
+        <p class="no-bottom">
+            Point differences from ${makePossessive(teamNames[currentPerspective])} perspective
+            <button id="togglePerspective">Toggle perspective</button>
+        </p>
+    </details>
+    `;
+
+    const extraInfoBox = document.getElementById("extra-info-box")
+    extraInfoBox.addEventListener('toggle', () => {
+        extraInfoOpened = extraInfoBox.open;
+    });
+
+    const togglePerspective = document.getElementById("togglePerspective")
+    togglePerspective.addEventListener('click', () => {
+        currentPerspective ^= 1;
+        renderResults();
+    });
+
     teamResult.innerHTML = `<h3>${teamNames[0] || 'Your Team'} (Total: ${yourTeamTotal})</h3>${teamRaceResults.join("")}`;
 
     opponentResult.innerHTML = `<h3>${teamNames[1] || 'Opponent Team'} (Total: ${opponentTeamTotal})</h3>${opponentRaceResults.join("")}`;
 
     const diff = yourTeamTotal - opponentTeamTotal;
-    const color = diff > 0 ? "green" : diff < 0 ? "red" : "black";
-    const sign = diff > 0 ? "+" : "";
-
-    pointsDifference.innerHTML = `<h2 style="color: ${color};">${sign}${diff}</h2>`;
+    const colorClass = diff > 0 ? "pos" : diff < 0 ? "neg" : "neutral";
+    pointsDifference.innerHTML = `<h2 class="diff-${colorClass}">${diff > 0 ? "+" : ""}${diff}</h2>`;
 
     // Render graph
     const raceLabels = ["", ...(

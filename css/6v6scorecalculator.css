@@ -55,16 +55,15 @@
     height: 400px;
 }
 
-
-.delta-positive {
-    color: green;
+.diff-pos {
+    color: #1DBC60;
 }
 
-.delta-negative {
-    color: red;
+.diff-neg {
+    color: #FF0000;
 }
 
-.delta-neutral {
+.diff-neutral {
     color: orange;
 }
 

@@ -145,6 +145,10 @@ li {
     margin-top: 1em;
 }
 
+.no-bottom {
+    margin-bottom: 0;
+}
+
 [id] {
     scroll-margin-top: 60px; /* fix anchors */
 }
