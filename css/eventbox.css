@@ -7,6 +7,7 @@
     border-radius: 10px;
     overflow: hidden;
     border: 1px solid #ccccccaa;
+    background-color: var(--bg-color);
 }
 
 .team-box-container {

@@ -559,7 +559,7 @@ async function showDailyLog(date, dayCell) {
                         ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>` : ''}
                         
                         ${entry.testMatch ? `<div class="test-match-indicator"><i class="fa-solid fa-test"></i> Test match</div>` : ''}
-                        ${entry.endTime ? '' : `${isLive ? `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id='liveIndicator${entry.eventID}'><span style="display:flex"><div class="live-dot"></div>Live ${devMode && !entry.endTime ? `${liveResults.length + 1 > 12 ? '(Finishing up...)' : `(${liveResults.length + 1}/12)`}` : ''}</span></div>` : `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id="matchCountdown${entry.eventID}"><i class="fa-solid fa-clock"></i> ${timeUntilMatch}</div>`}`}
+                        ${entry.endTime ? '' : `${isLive ? `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id='liveIndicator${entry.eventID}'><span style="display:flex"><div class="live-dot"></div>Live ${devMode && !entry.endTime ? `${liveResults.length + 1 > 12 ? '(Finishing up...)' : `(${liveResults.length + 1}/12)`}` : ''}</span></div>` : `<div class="test-match-indicator timer-indicator ${entry.testMatch ? 'push-lower' : ''}" id="matchCountdown${entry.eventID}"><i class="fa-solid fa-clock"></i> ${timeUntilMatch}</div>`}`}
                         ${devMode && !entry.endTime ? `<div class="test-match-indicator signed-up-count">Players signed up: ${team1.team_name}: ${entry.signedUpPlayerCounts[0]} | ${team2.team_name}: ${entry.signedUpPlayerCounts[1]}</div>` : ''}
 
                         <div class="event-overlay" translate="no">
@@ -1316,19 +1316,29 @@ document.addEventListener('keydown', async (event) => {
     const key = event.key.toLowerCase();
 
     if (key == 's') {
-        const node = document.querySelector('.event-wrapper');
+        const nodes = document.querySelectorAll('.event-wrapper');
 
-        try {
-            const dataUrl = await htmlToImage.toPng(node, {
-                cacheBust: true,
-                pixelRatio: 2
-            });
+        for (const node of nodes) {
+            try {
+                const matchBoxes = node.querySelectorAll('.match-box, .timer-indicator');
+                matchBoxes.forEach(el => el.style.display = 'none');
 
-            const win = window.open();
-            win.document.write(`<img src="${dataUrl}" />`);
+                const dataUrl = await htmlToImage.toPng(node, { pixelRatio: 2 });
 
-        } catch (err) {
-            console.error("Capture failed:", err);
+                matchBoxes.forEach(el => el.style.display = '');
+
+                const response = await fetch(dataUrl);
+                const blob = await response.blob();
+
+                await navigator.clipboard.write([
+                    new ClipboardItem({ 'image/png': blob })
+                ]);
+
+                console.log('Copied image to clipboard!');
+
+            } catch (err) {
+                console.error("Capture failed:", err);
+            }
         }
     }
 });
