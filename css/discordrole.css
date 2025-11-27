@@ -33,6 +33,7 @@ body {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -43,19 +44,21 @@ body {
     padding: 15px;
 }
 
-/* Discord Theme Colors */
 .theme-light {
     background-color: #fcfcfc;
     color: #2e3338;
 }
+
 .theme-dark {
     background-color: #333239;
     color: #dcddde;
 }
+
 .theme-darker {
     background-color: #212025;
     color: #dcddde;
 }
+
 .theme-darkest {
     background-color: #0d0c0f;
     color: #dcddde;
