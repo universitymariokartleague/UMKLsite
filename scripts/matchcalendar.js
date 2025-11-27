@@ -24,6 +24,7 @@ const months = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
 ];
+const YTSVGPATH = `<img class="ytsvg" src="assets/media/calendar/youtubelogo.svg">`
 let currentlyShownDate = [2000, 0];
 let matchData = [];
 let matchDataToUse = [];
@@ -34,22 +35,16 @@ let isKeyPressed = false;
 let keySequence = [];
 const devModeSequence = ['d', 'e', 'v'];
 
-let refreshTimer = null;
-
+let devMode = false;
+let cached = false;
 let discardLogOnChange = false;
-
-let previewTimeout = null;
-let currentPreview = null;
-
 let listViewEnabled = false;
 let listViewToggledOnce = false;
-
 let overseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1 || false;
-let cached = false;
-
 let eventliveIndicatorToUpdate;
-let devMode = false;
-
+let previewTimeout = null;
+let currentPreview = null;
+let refreshTimer = null;
 let startTime;
 
 function createEmptyCells(count) {
@@ -573,8 +568,10 @@ async function showDailyLog(date, dayCell) {
                                 </a>
                                 <div class="youtube-box left-team">
                                     ${team1.ytLink ? `
-                                    <a class="no-underline-link-footer fa-brands fa-youtube ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
-                                    href="${team1.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'Open the livestream'}"></a>` : ''}
+                                    <a class="no-underline-link-footer ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
+                                    href="${team1.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'Open the livestream'}">
+                                        ${YTSVGPATH}
+                                    </a>` : ''}
                                 </div>
                             </div>
 
@@ -590,8 +587,10 @@ async function showDailyLog(date, dayCell) {
                                 </a>
                                 <div class="youtube-box right-team">
                                     ${team2.ytLink ? `
-                                    <a class="no-underline-link-footer fa-brands fa-youtube ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
-                                    href="${team2.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'Open the livestream'}"></a>` : ''}
+                                    <a class="no-underline-link-footer ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
+                                    href="${team2.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'Open the livestream'}">
+                                        ${YTSVGPATH}
+                                    </a>` : ''}
                                 </div>
                             </div>
                         </div>
@@ -763,8 +762,10 @@ function generateCalendarListView() {
                                 </a>
                                 <div class="youtube-box left-team">
                                     ${team1.ytLink ? `
-                                    <a class="no-underline-link-footer fa-brands fa-youtube ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
-                                    href="${team1.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'View the archived livestream'}"></a>` : ''}
+                                    <a class="no-underline-link-footer ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
+                                    href="${team1.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'View the archived livestream'}">
+                                    ${YOUTUBELOGOSVG}
+                                    </a>` : ''}
                                 </div>
                             </div>
 
@@ -780,8 +781,10 @@ function generateCalendarListView() {
                                 </a>
                                 <div class="youtube-box right-team">
                                     ${team2.ytLink ? `
-                                    <a class="no-underline-link-footer fa-brands fa-youtube ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
-                                    href="${team2.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'View the archived livestream'}"></a>` : ''}
+                                    <a class="no-underline-link-footer ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
+                                    href="${team2.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'View the archived livestream'}">
+                                    ${YOUTUBELOGOSVG}
+                                    </a>` : ''}
                                 </div>
                             </div>
                         </div>

@@ -167,13 +167,9 @@
 }
 
 .event-box-team .youtube-box {
-    font-size: 14px;
+    width: 25px;
+    bottom: -1px;
     position: absolute;
-    bottom: 2px;
-}
-
-.event-box-team .fa-youtube {
-    font-size: 22px;
 }
 
 .youtube-live-animation {
@@ -194,12 +190,12 @@
 
 .event-box-team .left-team {
     left: 0;
-    margin-left: 5px;
+    margin-left: 6px;
 }
 
 .event-box-team .right-team {
     right: 0;
-    margin-right: 5px;
+    margin-right: 6px;
 }
 
 .youtube-box a[target="_blank"]::after {
@@ -265,7 +261,16 @@
 }
 
 #calendarListView .event-box-team .youtube-box {
-    font-size: 1.5vmin;
+    width: 2.5vmin;
+}
+
+.youtube-box .ytsvg {
+    opacity: 1;
+}
+
+.youtube-box .ytsvg:hover {
+    opacity: 0.5;
+    transition: 0.1s ease-in-out;
 }
 
 #calendarListView .team-box-image {
@@ -309,7 +314,7 @@
     }
 
     .event-box-team .youtube-box {
-        font-size: 2.5vmin;
+        width: 3.5vmin;
     }
 
     .team-box-image {
@@ -321,10 +326,6 @@
         font-size: 5vmin;
         padding: 2vmin;
         border-radius: 5px;
-    }
-
-    .event-box-team .fa-youtube {
-        font-size: 18px;
     }
 
     .match-detail-container {

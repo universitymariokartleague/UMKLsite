@@ -6,14 +6,13 @@
 const upcomingMatchesBox = document.getElementById("upcomingMatchesBox");
 const upcomingMatchesError = document.getElementById("upcomingMatchesError");
 const MATCH_LENGTH_MINS = 90;
+const YTSVGPATH = `<img class="ytsvg" src="assets/media/calendar/youtubelogo.svg">`
 let matchData = [];
 let matchDataToUse = [];
 let teamColors = [];
 
 let overseasDateDisplay = true; // forced on this page since I can't get it working otherwise 
-
 let refreshTimer = null;
-
 let startTime;
 
 async function getMatchData() {
@@ -267,8 +266,10 @@ async function showUpcomingMatches() {
                             </a>
                             <div class="youtube-box left-team">
                                 ${team1.ytLink ? `
-                                <a class="no-underline-link-footer fa-brands fa-youtube ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
-                                href="${team1.ytLink}" target="_blank" title="Open the livestream"></a>` : ''}
+                                <a class="no-underline-link-footer ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
+                                href="${team1.ytLink}" target="_blank" title="Open the livestream">
+                                    ${YTSVGPATH}
+                                </a>` : ''}
                             </div>
                         </div>
 
@@ -284,8 +285,10 @@ async function showUpcomingMatches() {
                             </a>
                             <div class="youtube-box right-team">
                                 ${team2.ytLink ? `
-                                <a class="no-underline-link-footer fa-brands fa-youtube ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
-                                href="${team2.ytLink}" target="_blank" title="Open the livestream"></a>` : ''}
+                                <a class="no-underline-link-footer ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
+                                href="${team2.ytLink}" target="_blank" title="Open the livestream">
+                                    ${YTSVGPATH}
+                                </a>` : ''}
                             </div>
                         </div>
                     </div>
