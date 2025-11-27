@@ -420,7 +420,7 @@ async function showDailyLog(date, dayCell) {
                 <h3 style="margin: 3px">${formattedDate}</h3>                            
                 <button id="shareButton"><span class="fa-solid fa-share"></span> Share Date</button>
             </div>
-            <hr class="after-title" style="margin-bottom:0;">
+            <hr class="after-title" style="margin-bottom:10px;">
         ${sortedLog.map((entry, index) => {
             function createTeamObject(teamName) {
                 return {
@@ -549,7 +549,8 @@ async function showDailyLog(date, dayCell) {
             }
 
             return `
-                <div class="event-container">
+            <div class="event-wrapper">
+                <div class="event-container" id="event${index}">
                     <div class="team-box-container">
                         <div class="team-background left ${team1.class_name}"></div>
                         <div class="team-background right ${team2.class_name}"></div>
@@ -618,6 +619,7 @@ async function showDailyLog(date, dayCell) {
                         <p class="match-description">${autoLink(entry.description)}</p>
                     </details>
                 </div>
+            </div>
             `;
         }).join('')}
         `;
@@ -1308,6 +1310,27 @@ document.addEventListener('keydown', (event) => {
 
 document.addEventListener('keyup', () => {
     isKeyPressed = false;
+});
+
+document.addEventListener('keydown', async (event) => {
+    const key = event.key.toLowerCase();
+
+    if (key == 's') {
+        const node = document.querySelector('.event-wrapper');
+
+        try {
+            const dataUrl = await htmlToImage.toPng(node, {
+                cacheBust: true,
+                pixelRatio: 2
+            });
+
+            const win = window.open();
+            win.document.write(`<img src="${dataUrl}" />`);
+
+        } catch (err) {
+            console.error("Capture failed:", err);
+        }
+    }
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
