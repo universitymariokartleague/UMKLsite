@@ -6,7 +6,7 @@
 const upcomingMatchesBox = document.getElementById("upcomingMatchesBox");
 const upcomingMatchesError = document.getElementById("upcomingMatchesError");
 const MATCH_LENGTH_MINS = 90;
-const YTSVGPATH = `<img class="ytsvg" src="assets/media/calendar/youtubelogo.svg">`
+const YTSVGPATH = `<img class="ytsvg" alt="YouTube logo" src="assets/media/calendar/youtubelogo.svg">`
 let matchData = [];
 let matchDataToUse = [];
 let teamColors = [];

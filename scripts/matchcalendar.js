@@ -24,7 +24,7 @@ const months = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
 ];
-const YTSVGPATH = `<img class="ytsvg" src="assets/media/calendar/youtubelogo.svg">`
+const YTSVGPATH = `<img class="ytsvg" alt="YouTube logo" src="assets/media/calendar/youtubelogo.svg">`
 let currentlyShownDate = [2000, 0];
 let matchData = [];
 let matchDataToUse = [];

@@ -41,12 +41,12 @@ const sections = [
     },
     {
         title: "Cheep Cheep App",
-        description: `Development of the Cheep Cheep app, which is used on the UMKL Discord server, view the site's privacy policy <a href="pages/privacy">here</a>`,
+        description: `Development of the Cheep Cheep app, which is used on the UMKL Discord server, you can also <a href="pages/privacy">view the app's privacy policy</a>`,
         contributorIndexes: [0, 4, 5]
     },
     {
         title: "Website",
-        description: `All the source code for the website can be found at our <a href="https://github.com/universitymariokartleague/UMKLsite">GitHub repository</a>, view the site's privacy policy <a href="pages/privacy">here</a>`,
+        description: `All the source code for the website can be found at our <a href="https://github.com/universitymariokartleague/UMKLsite">GitHub repository</a>, you can also <a href="pages/privacy">view this site's privacy policy</a>`,
         contributorIndexes: [0, 4, 5]
     }
 ];

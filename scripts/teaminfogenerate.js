@@ -25,7 +25,7 @@ const teamBoxFormatHTML = `
     </div>
 
     <div class="map">
-        <iframe id="teamMapIFrame" src="pages/map/index.html?team={{teamName}}" frameborder="0"></iframe>
+        <iframe id="teamMapIFrame" title="A map of the UK showing the location of all the UMKL teams" src="pages/map/index.html?team={{teamName}}" frameborder="0"></iframe>
     </div>
 `;
 
