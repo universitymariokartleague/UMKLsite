@@ -65,3 +65,25 @@ hr {
 .match-details-wrapper #match-date {
     margin-left: auto;
 }
+
+@media (max-width: 600px) {
+    .match-card-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .match-score {
+        margin-left: 0;
+        padding: 5px 10px;
+    }
+
+    .match-details-wrapper {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .match-details-wrapper #match-date {
+        margin-left: 0;
+    }
+}

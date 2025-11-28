@@ -147,7 +147,7 @@ async function showTeamMatches() {
 
         const scoreData = getScoreForTeam(match, teamName);
 
-        let scoreHTML = "VS";
+        let scoreHTML = "Upcoming";
         let resultClass = "draw";
 
         if (scoreData) {
