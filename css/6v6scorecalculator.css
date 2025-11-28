@@ -56,15 +56,15 @@
 }
 
 .diff-pos {
-    color: #1DBC60;
+    color: #00ce7a;
 }
 
 .diff-neg {
-    color: #FF0000;
+    color: #ff6874;
 }
 
 .diff-neutral {
-    color: orange;
+    color: #ffbd3f;
 }
 
 #extra-info {

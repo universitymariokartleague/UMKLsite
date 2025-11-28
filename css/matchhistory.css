@@ -26,7 +26,7 @@
 }
 
 .match-score {
-    color: white;
+    color: black;
     font-weight: bold;
     margin-left: auto;
     height: 100%;
@@ -42,11 +42,11 @@
 }
 
 .match-score.win {
-    background-color: green;
+    background-color: #00ce7a;
 }
 
 .match-score.loss {
-    background-color: red;
+    background-color: #ff6874;
 }
 
 .match-score.draw {
