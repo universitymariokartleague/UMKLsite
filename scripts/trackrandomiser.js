@@ -977,7 +977,6 @@ function enableCTs() {
     option.id = "ctgpr-option";
 
     const wiiOption = gameSelect.querySelector('option[value="Wii"]');
-    console.log(wiiOption)
     if (wiiOption) {
         gameSelect.insertBefore(option, wiiOption.nextElementSibling);
     } else {
@@ -995,7 +994,6 @@ function enableRR() {
     option.id = "rr-option";
 
     const wiiOption = gameSelect.querySelector('option[value="Wii"]');
-    console.log(wiiOption)
     if (wiiOption) {
         gameSelect.insertBefore(option, wiiOption.nextElementSibling);
     } else {

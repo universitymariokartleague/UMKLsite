@@ -241,7 +241,6 @@ async function showTeamMatches() {
             if (now >= matchStart && now <= matchEnd) {
                 isLive = true;
                 const textColor = getComputedStyle(document.body).getPropertyValue('--highlight-color').slice(0, -2);
-                console.log(textColor)
                 scoreHTML = `<span style="display:flex; color:${textColor}"><div class="live-dot live-dot-adjusted"></div>Live</span>`;
                 resultClass = "live";
             }
