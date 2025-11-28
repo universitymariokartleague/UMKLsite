@@ -4,6 +4,7 @@
 */
 
 const matchHistoryBox = document.getElementById("JSMatchHistory");
+const MATCH_LENGTH_MINS = 90;
 
 let matchData = [];
 
@@ -227,6 +228,24 @@ async function showTeamMatches() {
         const locale = localStorage.getItem("locale") || "en-GB";
         let timeString = match.time || '00:00:00';
         const { formattedMatchTime, formattedLocalMatchTime, outsideUKTimezone } = formatMatchTime(match.matchDate, timeString, locale);
+
+        let isLive = false;
+        if (match.time) {
+            const [hours, minutes] = match.time.split(':');
+            const dateObj = new Date(match.matchDate);
+            dateObj.setHours(Number(hours), Number(minutes), 0, 0);
+
+            const now = new Date();
+            const matchStart = dateObj;
+            const matchEnd = new Date(matchStart.getTime() + MATCH_LENGTH_MINS * 60 * 1000);
+            if (now >= matchStart && now <= matchEnd) {
+                isLive = true;
+                const textColor = getComputedStyle(document.body).getPropertyValue('--highlight-color').slice(0, -2);
+                console.log(textColor)
+                scoreHTML = `<span style="display:flex; color:${textColor}"><div class="live-dot live-dot-adjusted"></div>Live</span>`;
+                resultClass = "live";
+            }
+        }
 
         const block = `
             <div class="team-match-card ${match.testMatch ? "test-match" : ""}" href="">

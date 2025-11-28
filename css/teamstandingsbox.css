@@ -61,7 +61,7 @@
 .teamStandingsBox .teamPosition {
     display: flex;
     color: #fff;
-    background-color: #bc0839;
+    background-color: var(--accent-color);
     border-radius: 5px;
     align-items: center;
     justify-content: center;
