@@ -133,7 +133,7 @@ function renderResults(width) {
             <a href="pages/matches/stats/" title="Click to open the match stats page">
                 <img class="track-icon" width="135px" style="aspect-ratio:45/31" onload="this.style.opacity=1" loading="lazy" src="assets/media/courses/mk8dxicons/${track.replaceAll(' ', '_').replaceAll("'", '').toLowerCase()}.avif" alt="The icon for ${track}" onerror="this.onerror=null; this.src='assets/media/courses/mk8dxicons/.unknown.avif';">
             </a>
-            <span class="track-label">#${i + 1}<br/><b>${track}</b><br/>Difference: <span class="diff-${colorClass}">${diff}</span></span>
+            <span class="track-label">#${i + 1}<br/><b>${track}</b><br/>Difference: <span class="diff-${colorClass}">${diff > 0 ? "+" : ""}${diff}</span></span>
         </div>`;
     }).join('');
 
