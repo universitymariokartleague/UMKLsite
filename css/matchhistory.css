@@ -15,7 +15,9 @@
 }
 
 .test-match {
-    opacity: 50%;
+    opacity: 0.6;
+    border: 1px solid #cccccc45;
+    border-radius: 8px
 }
 
 .match-card-wrapper {
@@ -26,7 +28,7 @@
 }
 
 .match-score {
-    color: black;
+    color: #FFF;
     font-weight: bold;
     margin-left: auto;
     height: 100%;
@@ -50,9 +52,8 @@
 }
 
 .match-score.draw {
-    background-color: grey;
+    background-color: rgb(175, 175, 175);
 }
-
 
 hr {
     margin: 12px 0;

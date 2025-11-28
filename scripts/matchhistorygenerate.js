@@ -7,6 +7,14 @@ const matchHistoryBox = document.getElementById("JSMatchHistory");
 
 let matchData = [];
 
+function makePossessive(name) {
+    if (!name) return '';
+    if (name.endsWith('s') || name.endsWith('S')) {
+        return `${name}'`;
+    }
+    return `${name}'s`;
+}
+
 function getTeamFromURL() {
     const params = new URLSearchParams(window.location.search);
     return params.get("team");
@@ -42,29 +50,36 @@ function getScoreForTeam(match, teamName) {
     };
 }
 
-
 function getResultClass(teamScore, otherScore) {
     if (teamScore > otherScore) return "win";
     if (teamScore < otherScore) return "loss";
     return "draw";
 }
 
-
 async function getMatchData() {
-    const res = await fetch("https://api.umkl.co.uk/matchdata", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+    return fetch('https://api.umkl.co.uk/matchdata', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
         body: "{}"
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+        return response.json();
     });
-
-    if (!res.ok) throw new Error("API failed");
-    return res.json();
 }
 
 async function getMatchDataFallback() {
-    const res = await fetch("database/matchdatafallback.json");
-    if (!res.ok) throw new Error("Fallback failed");
-    return res.json();
+    const response = await fetch(`database/matchdatafallback.json`);
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    matchData = await response.json();
 }
 
 function normalizeMatchData(matchData) {
@@ -91,13 +106,67 @@ function formatDate(dateStr) {
     });
 }
 
-function formatTime(dateStr, timeStr) {
-    if (!timeStr) return "TBC";
-    const d = new Date(`${dateStr}T${timeStr}`);
-    return d.toLocaleTimeString("en-GB", {
-        hour: "2-digit",
-        minute: "2-digit"
-    });
+function uses12HourClock(locale) {
+    const test = new Date('1970-01-01T13:00');
+    return test.toLocaleTimeString(locale).toLowerCase().includes('pm');
+}
+
+function formatMatchTime(date, timeString, locale) {
+    const is12Hour = uses12HourClock(locale);
+
+    const isoStr = `${date}T${timeString}`;
+    const dateObj = new Date(isoStr);
+
+    const UKTime = new Intl.DateTimeFormat(locale, {
+        timeZone: "Europe/London",
+        hour: is12Hour ? "numeric" : "2-digit",
+        minute: "2-digit",
+        hour12: is12Hour,
+    }).format(dateObj);
+
+    const localTime = new Intl.DateTimeFormat(locale, {
+        hour: is12Hour ? "numeric" : "2-digit",
+        minute: "2-digit",
+        hour12: is12Hour,
+    }).format(dateObj);
+
+    let outsideUKTimezone = checkTimezoneMatches(date, timeString);
+
+    let formattedMatchTime, formattedLocalMatchTime;
+    if (outsideUKTimezone) {
+        formattedMatchTime = UKTime;
+        formattedLocalMatchTime = localTime;
+    } else {
+        formattedMatchTime = UKTime;
+        formattedLocalMatchTime = null;
+    }
+
+    if (formattedMatchTime == formattedLocalMatchTime) {
+        outsideUKTimezone = false;
+    }
+
+    return { formattedMatchTime, formattedLocalMatchTime, outsideUKTimezone };
+}
+
+function checkTimezoneMatches(dateStr, timeStr) {
+    const match = timeStr.match(/([+-]\d{2}):([0-5]\d)$/);
+    if (!match) return false;
+
+    const [, offsetH, offsetM] = match;
+    const offsetMinutes = parseInt(offsetH, 10) * 60 + parseInt(offsetM, 10) * (offsetH.startsWith("-") ? -1 : 1);
+
+    const [hourStr, minuteStr] = timeStr.split(":");
+    const hours = parseInt(hourStr, 10);
+    const minutes = parseInt(minuteStr, 10);
+
+    const [year, month, day] = dateStr.split("-").map(Number);
+
+    const utcDate = new Date(Date.UTC(year, month - 1, day, hours, minutes));
+
+    const londonTime = new Date(utcDate.toLocaleString("en-GB", { timeZone: "Europe/London" }));
+    const londonOffsetMinutes = (londonTime - utcDate) / 60000;
+
+    return offsetMinutes !== londonOffsetMinutes;
 }
 
 async function showTeamMatches() {
@@ -111,7 +180,7 @@ async function showTeamMatches() {
     try {
         matchData = await getMatchData();
     } catch {
-        matchData = await getMatchDataFallback();
+        await getMatchDataFallback();
     }
 
     const allMatches = normalizeMatchData(matchData);
@@ -155,29 +224,27 @@ async function showTeamMatches() {
             resultClass = getResultClass(scoreData.teamScore, scoreData.otherScore);
         }
 
+        const locale = localStorage.getItem("locale") || "en-GB";
+        let timeString = match.time || '00:00:00';
+        const { formattedMatchTime, formattedLocalMatchTime, outsideUKTimezone } = formatMatchTime(match.matchDate, timeString, locale);
+
         const block = `
             <div class="team-match-card ${match.testMatch ? "test-match" : ""}" href="">
-
                 <div class="match-card-wrapper">
                     <img src="${getEmblem(otherTeam)}" 
-                        alt="${otherTeam} Emblem"
-                        class="team-match-emblem"
-                        width="40" height="40"
+                        alt="${makePossessive(otherTeam)} emblem"
+                        class="team-match-emblem" width="40" height="40"
                         onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';">
-
                     <h2>${otherTeam}</h2>
-
                     <div class="match-score ${resultClass}">
                         ${scoreHTML}
                     </div>
                 </div>
                 <hr>
-
                 <div class="match-details-wrapper">
-                    <span id="match-season">${match.testMatch ? 'Test Match' : `Season ${match.season}`}</span>
+                    <span id="match-season"><a href="pages/matches/?date=${match.matchDate}">${match.testMatch ? 'Test match' : `Season ${match.season}`}</a></span>
                     <span id="match-date">${formatDate(match.matchDate)}</span>
                 </div>
-
             </div>
         `;
 
