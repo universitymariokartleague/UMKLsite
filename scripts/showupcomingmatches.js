@@ -138,8 +138,15 @@ async function showUpcomingMatches() {
         <div class="after-title match-container-list">`;
 
         const sortedMatches = [...matches].sort((a, b) => {
-            const timeA = a.time || '00:00:00';
-            const timeB = b.time || '00:00:00';
+            const dateA = matchDataToUse[todayStr]?.includes(a) ? todayStr : tomorrowStr;
+            const dateB = matchDataToUse[todayStr]?.includes(b) ? todayStr : tomorrowStr;
+
+            if (dateA !== dateB) {
+                return dateA.localeCompare(dateB);
+            }
+
+            const timeA = a.time || "00:00:00";
+            const timeB = b.time || "00:00:00";
             return timeA.localeCompare(timeB);
         });
 
