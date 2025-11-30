@@ -24,10 +24,25 @@ const teamBoxFormatHTML = `
         </div>
     </div>
 
+    {{mapHTML}}
+`;
+
+const mapDefaultHTML = `
     <div class="map">
         <iframe id="teamMapIFrame" title="A map of the UK showing the location of all the UMKL teams" src="pages/map/index.html?team={{teamName}}" frameborder="0"></iframe>
     </div>
-`;
+`
+
+const mapMobileHTML = `
+    <details class="details-box">
+        <summary>
+            Open map
+        </summary>
+        <div class="map">
+            <iframe id="teamMapIFrame" title="A map of the UK showing the location of all the UMKL teams" src="pages/map/index.html?team={{teamName}}" frameborder="0"></iframe>
+        </div>
+    </details>
+`
 
 const JSTeamBox = document.getElementById("JSTeamBox")
 const teamNameBox = document.getElementById("teamNameBox")
@@ -88,6 +103,7 @@ async function generateTeamBox(teamData, showError) {
     const currentFields = buildTeamInfoTable(teamData, true);
 
     let tempTeamBox = teamBoxFormatHTML
+        .replace("{{mapHTML}}", window.innerWidth >= 768 ? mapDefaultHTML : mapMobileHTML)
         .replace("{{currentSeason}}", teamData.season)
         .replaceAll("{{teamName}}", teamData.team_name)
         .replaceAll("{{teamNamePossessive}}", makePossessive(teamData.team_name))
