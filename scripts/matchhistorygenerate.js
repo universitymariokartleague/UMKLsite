@@ -7,55 +7,36 @@ const matchHistoryBox = document.getElementById("JSMatchHistory");
 const MATCH_LENGTH_MINS = 90;
 
 let matchData = [];
+let startTime;
 
-function makePossessive(name) {
-    if (!name) return '';
-    if (name.endsWith('s') || name.endsWith('S')) {
-        return `${name}'`;
-    }
-    return `${name}'s`;
-}
+const makePossessive = name =>
+    !name ? "" : (name.endsWith("s") || name.endsWith("S") ? `${name}'` : `${name}'s`);
 
-function getTeamFromURL() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("team");
-}
+const getTeamFromURL = () =>
+    new URLSearchParams(window.location.search).get("team");
 
-function getEmblem(teamName) {
-    return `assets/media/teamemblems/${teamName.toUpperCase()}.avif`;
-}
+const getEmblem = teamName =>
+    `assets/media/teamemblems/${teamName.toUpperCase()}.avif`;
 
 function getScoreForTeam(match, teamName) {
-    if (!match.results || !match.teamsInvolved) return null;
+    const results = match.results;
+    if (!results || !match.teamsInvolved) return null;
 
     const teams = match.teamsInvolved;
-    const score = match.results;
+    const idx = teams.indexOf(teamName);
+    if (idx === -1) return null;
 
-    const teamIndex = teams.indexOf(teamName);
-
-    if (teamIndex === -1) {
-        return null
-    };
-
-    const otherIndex = teamIndex === 0 ? 1 : 0;
-
-
-    if (!score[teamIndex] || !score[otherIndex]) return null;
-
-    const teamScore = score[teamIndex][1];
-    const otherScore = score[otherIndex][1];
+    const opp = idx === 0 ? 1 : 0;
+    if (!Array.isArray(results[idx]) || results[idx].length < 2) return null;
 
     return {
-        teamScore,
-        otherScore
+        teamScore: results[idx][1],
+        otherScore: results[opp][1]
     };
 }
 
-function getResultClass(teamScore, otherScore) {
-    if (teamScore > otherScore) return "win";
-    if (teamScore < otherScore) return "loss";
-    return "draw";
-}
+const getResultClass = (t, o) =>
+    t > o ? "win" : t < o ? "loss" : "draw";
 
 async function getMatchData() {
     return fetch('https://api.umkl.co.uk/matchdata', {
@@ -98,9 +79,9 @@ function normalizeMatchData(matchData) {
     return flat;
 }
 
-function formatDate(dateStr) {
+function formatDate(dateStr, locale) {
     const d = new Date(dateStr);
-    return d.toLocaleDateString("en-GB", {
+    return d.toLocaleDateString(locale, {
         day: "numeric",
         month: "long",
         year: "numeric"
@@ -171,6 +152,8 @@ function checkTimezoneMatches(dateStr, timeStr) {
 }
 
 async function showTeamMatches() {
+    startTime = performance.now();
+    console.debug(`%cteaminfogenerate.js %c> %cGenerating team info box`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
     const teamName = getTeamFromURL();
 
     if (!teamName) {
@@ -202,12 +185,19 @@ async function showTeamMatches() {
     });
 
     const now = new Date();
+    const locale = localStorage.getItem("locale") || "en-GB";
+    const textColor = getComputedStyle(document.body).getPropertyValue('--highlight-color').slice(0, -2);
 
-    let upcomingHTML = `<h2>Next Match</h2>`;
-    let completedHTML = `<h2>Match History</h2>`;
+    const style = document.createElement('style');
+    style.innerHTML = `
+        a.team-link-color:link { color: ${textColor}!important }
+        a.team-link-color:visited { color: ${textColor}!important }
+        a.team-link-color:hover { color: ${textColor}!important }
+    `
+    document.head.appendChild(style);
 
-    let hasUpcomingMatches = false;
-    let hasCompletedMatches = false;
+    let upcomingBlocks = [];
+    let completedBlocks = [];
 
     teamMatches.forEach(match => {
         const matchDateTime = new Date(`${match.matchDate}T${match.time || "00:00:00"}`);
@@ -225,7 +215,6 @@ async function showTeamMatches() {
             resultClass = getResultClass(scoreData.teamScore, scoreData.otherScore);
         }
 
-        const locale = localStorage.getItem("locale") || "en-GB";
         let timeString = match.time || '00:00:00';
         const { formattedMatchTime, formattedLocalMatchTime, outsideUKTimezone } = formatMatchTime(match.matchDate, timeString, locale);
 
@@ -235,56 +224,60 @@ async function showTeamMatches() {
             const dateObj = new Date(match.matchDate);
             dateObj.setHours(Number(hours), Number(minutes), 0, 0);
 
-            const now = new Date();
             const matchStart = dateObj;
             const matchEnd = new Date(matchStart.getTime() + MATCH_LENGTH_MINS * 60 * 1000);
             if (now >= matchStart && now <= matchEnd) {
                 isLive = true;
-                const textColor = getComputedStyle(document.body).getPropertyValue('--highlight-color').slice(0, -2);
                 scoreHTML = `<span style="display:flex; color:${textColor}"><div class="live-dot live-dot-adjusted"></div>Live</span>`;
                 resultClass = "live";
             }
         }
 
+        const otherTeamLink = `pages/teams/details/?team=${otherTeam}`;
+
         const block = `
             <div class="team-match-card ${match.testMatch ? "test-match" : ""}" href="">
                 <div class="match-card-wrapper">
-                    <img src="${getEmblem(otherTeam)}" 
-                        alt="${makePossessive(otherTeam)} emblem"
-                        class="team-match-emblem" width="40" height="40"
-                        onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';">
-                    <h2>${otherTeam}</h2>
+                    <a href="${otherTeamLink}">    
+                        <img src="${getEmblem(otherTeam)}" 
+                            alt="${makePossessive(otherTeam)} emblem"
+                            class="team-match-emblem" width="40" height="40"
+                            onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';">
+                    </a>
+                    <h2 class="team-title"><a href="${otherTeamLink}">${otherTeam}</a></h2>
                     <div class="match-score ${resultClass}">
                         ${scoreHTML}
                     </div>
                 </div>
                 <hr>
                 <div class="match-details-wrapper">
-                    <span id="match-season"><a href="pages/matches/?date=${match.matchDate}">${match.testMatch ? 'Test match' : `Season ${match.season}`}</a></span>
-                    <span id="match-date">${formatDate(match.matchDate)}</span>
+                    <span id="match-season">${match.testMatch ? 'Test match' : `Season ${match.season}`}</span>
+                    <span id="match-date"><a class="team-link-color" href="pages/matches/?date=${match.matchDate}">${formattedMatchTime} ${formatDate(match.matchDate, locale)}</a></span>
                 </div>
             </div>
         `;
 
-
         if (isCompleted) {
-            hasCompletedMatches = true;
-            completedHTML += block;
+            completedBlocks.push(block);
         } else {
-            hasUpcomingMatches = true;
-            upcomingHTML += block;
+            upcomingBlocks.push(block);
         }
     });
 
-    if (!hasUpcomingMatches) upcomingHTML += `<p>No upcoming matches.</p>`;
-    if (!hasCompletedMatches) completedHTML += `<p>No previous matches.</p>`;
-
     matchHistoryBox.innerHTML = `
         <div class="team-match-history">
-            ${hasUpcomingMatches ? upcomingHTML + "<hr>" : ""}
-            ${completedHTML}
-        </div>
-    `;
+            ${upcomingBlocks.length ? `<h2>Next Match</h2>${upcomingBlocks.join("")}<hr>` : ''}
+            <h2>Match History</h2>
+            ${completedBlocks.length ? completedBlocks.join("") : "<p>No previous matches.</p>"}
+        </div>`;
+
+    matchHistoryBox.classList.add('fade-in');
+
+    console.debug(`%cmatchhistorygenerate.js %c> %cGenerated match history in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9b87ff", "color:#fff", "color:#c8bdff");
 }
+
+document.addEventListener('startDayChange', () => {
+    showTeamMatches();
+});
 
 document.addEventListener("DOMContentLoaded", showTeamMatches);

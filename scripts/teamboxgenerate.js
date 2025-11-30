@@ -132,13 +132,8 @@ async function generateTeamBoxes(teamData, cached = false) {
     }
 }
 
-function makePossessive(name) {
-    if (!name) return '';
-    if (name.endsWith('s') || name.endsWith('S')) {
-        return `${name}'`;
-    }
-    return `${name}'s`;
-}
+const makePossessive = name =>
+    !name ? "" : (name.endsWith("s") || name.endsWith("S") ? `${name}'` : `${name}'s`);
 
 async function getCurrentSeason() {
     return fetch('https://api.umkl.co.uk/seasoninfo', {

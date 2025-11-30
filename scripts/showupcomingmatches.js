@@ -448,13 +448,8 @@ function autoLink(text) {
     });
 }
 
-function makePossessive(name) {
-    if (!name) return '';
-    if (name.endsWith('s') || name.endsWith('S')) {
-        return `${name}'`;
-    }
-    return `${name}'s`;
-}
+const makePossessive = name =>
+    !name ? "" : (name.endsWith("s") || name.endsWith("S") ? `${name}'` : `${name}'s`);
 
 function makeTeamsColorStyles() {
     const styleSheet = document.createElement("style");

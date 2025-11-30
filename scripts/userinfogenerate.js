@@ -141,13 +141,8 @@ async function generatePlayerStatsBox(data, showError) {
     showErrorBox(showError);
 }
 
-function makePossessive(name) {
-    if (!name) return '';
-    if (name.endsWith('s') || name.endsWith('S')) {
-        return `${name}'`;
-    }
-    return `${name}'s`;
-}
+const makePossessive = name =>
+    !name ? "" : (name.endsWith("s") || name.endsWith("S") ? `${name}'` : `${name}'s`);
 
 async function editUserBox(userData) {
     const currentSeasonInfo = JSTeamBox.querySelector('.current-season-info .team-info-text');

@@ -77,7 +77,16 @@ hr {
     margin-right: 5px;
 }
 
-@media (max-width: 600px) {
+.team-title a {
+    color: inherit!important;
+    text-decoration: none;
+}
+
+.team-title a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 767px) {
     .match-card-wrapper {
         flex-direction: column;
         align-items: flex-start;
@@ -86,12 +95,12 @@ hr {
 
     .match-score {
         margin-left: 0;
-        padding: 5px 10px;
+        padding: 10px 0px;
     }
 
     .match-details-wrapper {
         flex-direction: column;
-        gap: 5px;
+        gap: 2px;
     }
 
     .match-details-wrapper #match-date {

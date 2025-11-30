@@ -103,7 +103,7 @@ async function generateTeamBox(teamData, showError) {
     const currentFields = buildTeamInfoTable(teamData, true);
 
     let tempTeamBox = teamBoxFormatHTML
-        .replace("{{mapHTML}}", window.innerWidth >= 768 ? mapDefaultHTML : mapMobileHTML)
+        .replace("{{mapHTML}}", window.innerWidth > 767 ? mapDefaultHTML : mapMobileHTML)
         .replace("{{currentSeason}}", teamData.season)
         .replaceAll("{{teamName}}", teamData.team_name)
         .replaceAll("{{teamNamePossessive}}", makePossessive(teamData.team_name))
@@ -143,13 +143,8 @@ async function generateTeamBox(teamData, showError) {
     showErrorBox(showError);
 }
 
-function makePossessive(name) {
-    if (!name) return '';
-    if (name.endsWith('s') || name.endsWith('S')) {
-        return `${name}'`;
-    }
-    return `${name}'s`;
-}
+const makePossessive = name =>
+    !name ? "" : (name.endsWith("s") || name.endsWith("S") ? `${name}'` : `${name}'s`);
 
 async function editTeamBox(teamData) {
     const currentSeasonInfo = JSTeamBox.querySelector('.current-season-info .team-info-text');
