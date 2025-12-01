@@ -3,6 +3,8 @@
     Shows their next match if they have one
 */
 
+import { generate6v6ScoreCalculatorLink } from './matchhelper.js';
+
 const matchHistoryBox = document.getElementById("JSMatchHistory");
 const MATCH_LENGTH_MINS = 90;
 
@@ -209,10 +211,12 @@ async function showTeamMatches() {
 
         let scoreHTML = "Upcoming";
         let resultClass = "draw";
+        let matchDetailsLink = '';
 
         if (scoreData) {
             scoreHTML = `${scoreData.teamScore} - ${scoreData.otherScore}`;
             resultClass = getResultClass(scoreData.teamScore, scoreData.otherScore);
+            matchDetailsLink = generate6v6ScoreCalculatorLink(match);
         }
 
         let timeString = match.time || '00:00:00';
@@ -246,7 +250,7 @@ async function showTeamMatches() {
                     </a>
                     <h2 class="team-title"><a href="${otherTeamLink}">${otherTeam}</a></h2>
                     <div class="match-score ${resultClass}">
-                        ${scoreHTML}
+                        ${matchDetailsLink ? `<a href="${matchDetailsLink}" title="View detailed results">${scoreHTML}</a>` : scoreHTML}
                     </div>
                 </div>
                 <hr>

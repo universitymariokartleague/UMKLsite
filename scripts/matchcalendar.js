@@ -4,6 +4,7 @@
     The calendar allows users to click on a date to view the matches scheduled for that day.
 */
 
+import { generate6v6ScoreCalculatorLink } from './matchhelper.js';
 import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareText, shareImage, showTextPopup, showImagePreview, setOriginalMessage } from './shareAPIhelper.js';
 
 const weekdayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
@@ -352,32 +353,6 @@ function changeShownDay(change) {
     return dates[newIndex];
 }
 
-function generate6v6ScoreCalculatorLink(entry) {
-    const url = new URL("pages/tools/6v6scorecalculator/", window.location.origin);
-
-    const positionsString = entry.detailedResults
-        .map(race => race[1].join(',')) // take only the "1" array - {1: Array(6), 2: Array(6), track: 'GCN Baby Park'}
-        .join('\n');
-
-    const tracksString = entry.detailedResults
-        .map(race => race.track)
-        .join('\n');
-
-    const teamsString = entry.teamsInvolved.join('\n');
-
-    const compressedMatchName = LZString.compressToEncodedURIComponent(entry.title);
-    const compressedPositions = LZString.compressToEncodedURIComponent(positionsString);
-    const compressedTracks = LZString.compressToEncodedURIComponent(tracksString);
-    const compressedTeams = LZString.compressToEncodedURIComponent(teamsString);
-
-    url.searchParams.set('m', compressedMatchName);
-    url.searchParams.set('p', compressedPositions);
-    url.searchParams.set('t', compressedTracks);
-    url.searchParams.set('n', compressedTeams);
-
-    return url;
-}
-
 async function showDailyLog(date, dayCell) {
     currentlyShownLog = date;
 
@@ -536,8 +511,8 @@ async function showDailyLog(date, dayCell) {
                 team2.ytLink = entry.ytLinks[1]
             }
 
-            let calculatorlink = '';
-            if (resultsHTML && entry.detailedResults) calculatorlink = generate6v6ScoreCalculatorLink(entry);
+            let matchDetailsLink = '';
+            if (resultsHTML && entry.detailedResults) matchDetailsLink = generate6v6ScoreCalculatorLink(entry);
 
             if (isLive && !entry.endTime) {
                 eventliveIndicatorToUpdate = entry.eventID;
@@ -575,7 +550,7 @@ async function showDailyLog(date, dayCell) {
                                 </div>
                             </div>
 
-                            <div class="score-box">${calculatorlink ? `<a href="${calculatorlink}" title="View detailed results">${resultsHTML ? formatResults(entry.results) : "VS"}</a>` : `${resultsHTML ? formatResults(entry.results) : "VS"}`}</div>       
+                            <div class="score-box">${matchDetailsLink ? `<a class="match-details-glow" href="${matchDetailsLink}" title="View detailed results">${resultsHTML ? formatResults(entry.results) : "VS"}</a>` : `${resultsHTML ? formatResults(entry.results) : "VS"}`}</div>       
 
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">
