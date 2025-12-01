@@ -245,8 +245,8 @@ function checkEasterEggs() {
         easterEgg = "aprilfools";
     } else if (checkDatePeriod(28, 10, 31, 10)) {
         easterEgg = "halloween";
-    } else if (checkDate(1, 12, 24, 12)) {
-        easterEgg = "xmaseve";
+    } else if (checkDate(7, 12, 24, 12)) {
+        easterEgg = "winter";
     } else if (checkDate(25, 12)) {
         easterEgg = "xmas";
     } else if (checkDate(31, 12)) {
@@ -263,8 +263,8 @@ function checkEasterEggs() {
             console.log("Happy Halloween!");
             halloweenEasterEgg();
             break;
-        case "xmaseve":
-            console.log("Merry Christmas Eve!");
+        case "winter":
+            console.log("Brrrrr-!");
             break;
         case "xmas":
             console.log("Merry Christmas!");
