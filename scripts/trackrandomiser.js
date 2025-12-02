@@ -383,6 +383,213 @@ const tracks = {
         "Mario Circuit",
         "Rainbow Road"
     ],
+    WORLD_ROUTES : [
+        "Acorn Heights → Boo Cinema",
+        "Acorn Heights → Dandelion Depths",
+        "Acorn Heights → Dry Bones Burnout",
+        "Acorn Heights → Mario Circuit",
+        "Acorn Heights → Toad's Factory",
+        "Airship Fortress → Bowser's Castle",
+        "Airship Fortress → Dry Bones Burnout",
+        "Airship Fortress → Shy Guy Bazaar",
+        "Airship Fortress → Toad's Factory",
+        "Boo Cinema → Acorn Heights",
+        "Boo Cinema → Dandelion Depths",
+        "Boo Cinema → Dry Bones Burnout",
+        "Boo Cinema → Mario Circuit",
+        "Boo Cinema → Starview Peak",
+        "Bowser's Castle → Airship Fortress",
+        "Bowser's Castle → Choco Mountain",
+        "Bowser's Castle → Dry Bones Burnout",
+        "Bowser's Castle → Mario Circuit",
+        "Bowser's Castle → Toad's Factory",
+        "Bowser's Castle → Wario Stadium",
+        "Cheep Cheep Falls → Choco Mountain",
+        "Cheep Cheep Falls → Dandelion Depths",
+        "Cheep Cheep Falls → DK Pass",
+        "Cheep Cheep Falls → Faraway Oasis",
+        "Cheep Cheep Falls → Moo Moo Meadows",
+        "Cheep Cheep Falls → Peach Stadium",
+        "Cheep Cheep Falls → Salty Salty Speedway",
+        "Cheep Cheep Falls → Starview Peak",
+        {us: "Cheep Cheep Falls → Wario Shipyard", pal: "Cheep Cheep Falls → Wario's Galleon"},
+        "Choco Mountain → Bowser's Castle",
+        "Choco Mountain → Cheep Cheep Falls",
+        "Choco Mountain → Crown City",
+        "Choco Mountain → Mario Bros. Circuit",
+        "Choco Mountain → Moo Moo Meadows",
+        "Choco Mountain → Peach Stadium",
+        "Choco Mountain → Shy Guy Bazaar",
+        "Choco Mountain → Toad's Factory",
+        "Choco Mountain → Wario Stadium",
+        "Choco Mountain → Whistlestop Summit",
+        "Crown City → Choco Mountain",
+        "Crown City → Desert Hills",
+        "Crown City → DK Spaceport",
+        "Crown City → Faraway Oasis",
+        "Crown City → Koopa Troopa Beach",
+        "Crown City → Mario Bros. Circuit",
+        "Crown City → Moo Moo Meadows",
+        "Crown City → Peach Stadium",
+        "Crown City → Wario Stadium",
+        "Crown City → Whistlestop Summit",
+        "Dandelion Depths → Acorn Heights",
+        "Dandelion Depths → Boo Cinema",
+        "Dandelion Depths → Cheep Cheep Falls",
+        "Dandelion Depths → DK Pass",
+        "Dandelion Depths → Mario Circuit",
+        "Dandelion Depths → Moo Moo Meadows",
+        "Dandelion Depths → Sky-High Sundae",
+        "Dandelion Depths → Starview Peak",
+        "Dandelion Depths → Toad's Factory",
+        "Desert Hills → Crown CIty",
+        "Desert Hills → Koopa Troopa Beach",
+        "Desert Hills → Mario Bros. Circuit",
+        "Desert Hills → Shy Guy Bazaar",
+        "Desert Hills → Whistlestop Summit",
+        "Dino Dino Jungle → Faraway Oasis",
+        "Dino Dino Jungle → Great ? Block Ruins",
+        "Dino Dino Jungle → Koopa Troopa Beach",
+        "Dino Dino Jungle → Peach Beach",
+        "Dino Dino Jungle → Salty Salty Speedway",
+        "DK Pass → Cheep Cheep Falls",
+        "DK Pass → Dandelion Depths",
+        "DK Pass → Moo Moo Meadows",
+        "DK Pass → Salty Salty Speedway",
+        "DK Pass → Sky-High Sundae",
+        "DK Pass → Starview Peak",
+        {us: "DK Pass → Wario Shipyard", pal: "DK Pass → Wario's Galleon"},
+        "DK Spaceport → Crown City",
+        "DK Spaceport → Desert Hills",
+        "DK Spaceport → Koopa Troopa Beach",
+        "DK Spaceport → Mario Bros. Circuit",
+        "DK Spaceport → Peach Stadium",
+        "DK Spaceport → Whistlestop Summit",
+        "Dry Bones Burnout → Acorn Heights",
+        "Dry Bones Burnout → Airship Fortress",
+        "Dry Bones Burnout → Boo Cinema",
+        "Dry Bones Burnout → Bowser's Castle",
+        "Dry Bones Burnout → Mario Circuit",
+        "Dry Bones Burnout → Moo Moo Meadows",
+        "Dry Bones Burnout → Toad's Factory",
+        "Dry Bones Burnout → Wario Stadium",
+        "Faraway Oasis → Cheep Cheep Falls",
+        "Faraway Oasis → Crown City",
+        "Faraway Oasis → Dino Dino Jungle",
+        "Faraway Oasis → Great ? Block Ruins",
+        "Faraway Oasis → Koopa Troopa Beach",
+        "Faraway Oasis → Peach Beach",
+        "Faraway Oasis → Peach Stadium",
+        "Faraway Oasis → Salty Salty Speedway",
+        "Great ? Block Ruins → Dino Dino Jungle",
+        "Great ? Block Ruins → Faraway Oasis",
+        "Great ? Block Ruins → Koopa Troopa Beach",
+        "Great ? Block Ruins → Peach Beach",
+        "Great ? Block Ruins → Salty Salty Speedway",
+        "Koopa Troopa Beach → Crown City",
+        "Koopa Troopa Beach → Dino Dino Jungle",
+        "Koopa Troopa Beach → DK Spaceport",
+        "Koopa Troopa Beach → Faraway Oasis",
+        "Koopa Troopa Beach → Peach Stadium",
+        "Mario Bros. Circuit → Choco Mountain",
+        "Mario Bros. Circuit → Crown City",
+        "Mario Bros. Circuit → Desert Hills",
+        "Mario Bros. Circuit → Shy Guy Bazaar",
+        "Mario Bros. Circuit → Toad's Factory",
+        "Mario Bros. Circuit → Wario Stadium",
+        "Mario Bros. Circuit → Whistlestop Summit",
+        "Mario Circuit → Acorn Heights",
+        "Mario Circuit → Boo Cinema",
+        "Mario Circuit → Bowser's Castle",
+        "Mario Circuit → Dandelion Depths",
+        "Mario Circuit → Dry Bones Burnout",
+        "Mario Circuit →  Moo Moo Meadows",
+        "Mario Circuit → Peach Stadium",
+        "Mario Circuit → Starview Peak",
+        "Mario Circuit → Toad's Factory",
+        "Moo Moo Meadows → Cheep Cheep Falls",
+        "Moo Moo Meadows → Choco Mountain",
+        "Moo Moo Meadows → Crown City",
+        "Moo Moo Meadows → Dandelion Depths",
+        "Moo Moo Meadows → DK Pass",
+        "Moo Moo Meadows → Dry Bones Burnout",
+        "Moo Moo Meadows → Mario Circuit",
+        "Moo Moo Meadows → Peach Stadium",
+        "Moo Moo Meadows → Toad's Factory",
+        "Peach Beach → Dino Dino Jungle",
+        "Peach Beach → Faraway Oasis",
+        "Peach Beach → Koopa Troopa Beach",
+        "Peach Beach → Great ? Block Ruins",
+        "Peach Beach → Salty Salty Speedway",
+        {us: "Peach Beach → Wario Shipyard", pal: "Peach Beach → Wario's Galleon"},
+        "Peach Stadium → Cheep Cheep Falls",
+        "Peach Stadium → Choco Mountain",
+        "Peach Stadium → Crown City",
+        "Peach Stadium → Faraway Oasis",
+        "Peach Stadium → Koopa Troopa Beach",
+        "Peach Stadium → Moo Moo Meadows",
+        "Peach Stadium → Rainbow Road",
+        "Peach Stadium → Toad's Factory",
+        "Salty Salty Speedway → Cheep Cheep Falls",
+        "Salty Salty Speedway → Dino Dino Jungle",
+        "Salty Salty Speedway → DK Pass",
+        "Salty Salty Speedway → Faraway Oasis",
+        "Salty Salty Speedway → Great ? Block Ruins",
+        "Salty Salty Speedway → Peach Beach",
+        {us: "Salty Salty Speedway → Wario Shipyard", pal: "Salty Salty Speedway → Wario's Galleon"},
+        "Shy Guy Bazaar → Airship Fortress",
+        "Shy Guy Bazaar → Choco Mountain",
+        "Shy Guy Bazaar → Desert Hills",
+        "Shy Guy Bazaar → Mario Bros. Circuit",
+        "Shy Guy Bazaar → Wario Stadium",
+        "Sky-High Sundae → Cheep Cheep Falls",
+        "Sky-High Sundae → Dandelion Depths",
+        "Sky-High Sundae → DK Pass",
+        "Sky-High Sundae → Salty Salty Speedway",
+        "Sky-High Sundae → Starview Peak",
+        {us: "Sky-High Sundae → Wario Shipyard", pal: "Sky-High Sundae → Wario's Galleon"},
+        "Starview Peak → Boo Cinema",
+        "Starview Peak → Cheep Cheep Falls",
+        "Starview Peak → Dandelion Depths",
+        "Starview Peak → DK Pass",
+        "Starview Peak → Mario Circuit",
+        "Starview Peak → Sky-High Sundae",
+        {us: "Starview Peak → Wario Shipyard", pal: "Starview Peak → Wario's Galleon"},
+        "Toad's Factory → Acorn Heights",
+        "Toad's Factory → Airship Fortress",
+        "Toad's Factory → Bowser's Castle",
+        "Toad's Factory → Choco Mountain",
+        "Toad's Factory → Crown City",
+        "Toad's Factory →  Dry Bones Burnout",
+        "Toad's Factory → Mario Bros. Circuit",
+        "Toad's Factory → Mario Circuit",
+        "Toad's Factory → Moo Moo Meadows",
+        "Toad's Factory → Peach Stadium",
+        "Toad's Factory → Wario Stadium",
+        {us: "Wario Shipyard → Cheep Cheep Falls", pal: "Wario's Galleon → Cheep Cheep Falls"},
+        {us: "Wario Shipyard → DK Pass", pal: "Wario's Galleon → DK Pass"},
+        {us: "Wario Shipyard → Peach Beach", pal: "Wario's Galleon → Peach Beach"},
+        {us: "Wario Shipyard → Salty Salty Speedway", pal: "Wario's Galleon → Salty Salty Speedway"},
+        {us: "Wario Shipyard → Sky-High Sundae", pal: "Wario's Galleon → Sky-High Sundae"},
+        {us: "Wario Shipyard → Starview Peak", pal: "Wario's Galleon → Starview Peak"},
+        "Wario Stadium → Airship Fortress",
+        "Wario Stadium → Bowser's Castle",
+        "Wario Stadium → Choco Mountain",
+        "Wario Stadium → Crown City",
+        "Wario Stadium → Dry Bones Burnout",
+        "Wario Stadium → Mario Bros. Circuit",
+        "Wario Stadium → Shy Guy Bazaar",
+        "Wario Stadium → Toad's Factory",
+        "Whistlestop Summit → Choco Mountain",
+        "Whistlestop Summit → Crown City",
+        "Whistlestop Summit → Desert Hills",
+        "Whistlestop Summit → DK Spaceport",
+        "Whistlestop Summit → Koopa Troopa Beach",
+        "Whistlestop Summit → Mario Bros. Circuit",
+        
+        
+
+    ],
     CTGPR: [
         "Abandoned Boardwalk",
         "Abyssal Ruins",
@@ -923,6 +1130,7 @@ let isKeyPressed = false;
 let keySequence = [];
 const CTSequence = ['c', 't', 'g', 'p','r'];
 const RRSequence = ['r', 'e', 't', 'r','o'];
+const routesSequence = ['r','o','u','t','e'];
 
 function pickRandomTrack() {
     const selectedGame = gameSelect.value;
@@ -988,7 +1196,7 @@ function enableCTs() {
 }
 
 function enableRR() {
-        const option = document.createElement("option");
+    const option = document.createElement("option");
     option.value = "RR";
     option.textContent = "Retro Rewind (Wii)";
     option.id = "rr-option";
@@ -1001,6 +1209,23 @@ function enableRR() {
     }
 
     gameSelect.value = "RR"
+    clearRepicks();
+}
+
+function enableMKWRoutes() {
+    const option = document.createElement("option");
+    option.value = "WORLD_ROUTES";
+    option.textContent = "Mario Kart World - Routes Only (NS2)";
+    option.id = "ns2-routes-option";
+
+    const worldOption = gameSelect.querySelector('option[value="WORLD"]');
+    if (worldOption) {
+        gameSelect.insertBefore(option, worldOption.nextElementSibling);
+    } else {
+        gameSelect.appendChild(option);
+    }
+
+    gameSelect.value = "WORLD_ROUTES"
     clearRepicks();
 }
 
@@ -1041,6 +1266,9 @@ document.addEventListener('keydown', (event) => {
         }
         if (keySequence.join('') == RRSequence.join('')) {
             enableRR();
+        }
+        if (keySequence.join('') == routesSequence.join('')){
+            enableMKWRoutes();
         }
     }
 });
