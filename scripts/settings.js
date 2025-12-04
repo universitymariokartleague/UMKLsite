@@ -444,7 +444,7 @@ function checkBrowserSupport() {
 
 function checkBrowserOSVersion() {
     const check = checkBrowserSupport();
-    if (check.upToDate) {
+    if (!check.upToDate) {
         const outdatedHTML = `<div class="outdated-browser">Your browser is outdated. A browser update may be required to access certain features (using ${check.message}).</div>`
         document.body.insertAdjacentHTML('afterbegin', outdatedHTML);
     };
