@@ -10,20 +10,20 @@
 
     --link-color: #fa5252;
     --link-hover-color: #ffb4b4;
-    --highlight-color: #f5255cA0;
+    --highlight-color: #f5255ca0;
 
     --button-color: #fa5252;
-    --button-background: rgba(255, 255, 255, 0.1);
-    --button-border: 1px solid rgba(0, 0, 0, 0.3);
-    --button-outline: 2px solid rgba(0, 0, 0, 0.6);
+    --button-background: #ffffff1a;
+    --button-border: 1px solid #0000004d;
+    --button-outline: 2px solid #00000099;
 
     --code-color: #000;
-    --code-bg-color: rgba(255, 255, 255, 0.5);
-    --code-border: 1px solid rgba(0, 0, 0, 0.6);
+    --code-bg-color: #ffffff80;
+    --code-border: 1px solid #00000099;
 
     --metion-color: #3246b4;
 
-    --box-area-bg-color: rgba(0, 0, 0, 0.015);
+    --box-area-bg-color: #00000004;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -36,20 +36,20 @@
     
         --link-color: #fa5252;
         --link-hover-color: #fff;
-        --highlight-color: #BC0839D0;
+        --highlight-color: #bc0839d0;
     
         --button-color: #fa5252;
-        --button-background: rgba(0, 0, 0, 0.4);
-        --button-border: 1px solid rgba(255, 255, 255, 0.3);
-        --button-outline: 2px solid rgba(255, 255, 255, 0.6);
+        --button-background: #00000066;
+        --button-border: 1px solid #ffffff4d;
+        --button-outline: 2px solid #ffffff99;
     
         --code-color: #fff;
-        --code-bg-color: rgba(0, 0, 0, 0.3);
-        --code-border: 1px solid rgba(255, 255, 255, 0.2);
+        --code-bg-color: #0000004d;
+        --code-border: 1px solid #ffffff33;
     
         --metion-color: #98acff;
 
-        --box-area-bg-color: rgba(255, 255, 255, 0.03);
+        --box-area-bg-color: #ffffff08;
     }
 }
 
@@ -62,25 +62,26 @@
 
     --link-color: #fa5252;
     --link-hover-color: #fff;
-    --highlight-color: #BC0839D0;
+    --highlight-color: #bc0839d0;
 
     --button-color: #fa5252;
-    --button-background: rgba(0, 0, 0, 0.4);
-    --button-border: 1px solid rgba(255, 255, 255, 0.3);
-    --button-outline: 2px solid rgba(255, 255, 255, 0.6);
+    --button-background: #00000066;
+    --button-border: 1px solid #ffffff4d;
+    --button-outline: 2px solid #ffffff99;
 
     --code-color: #fff;
-    --code-bg-color: rgba(0, 0, 0, 0.3);
-    --code-border: 1px solid rgba(255, 255, 255, 0.2);
+    --code-bg-color: #0000004d;
+    --code-border: 1px solid #ffffff33;
 
     --metion-color: #98acff;
 
-    --box-area-bg-color: rgba(255, 255, 255, 0.03);
+    --box-area-bg-color: #ffffff08;
 }
 
 /*adjust mobile text inflation*/
 html {
     -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
     text-size-adjust: 100%;
 }
 
@@ -159,7 +160,7 @@ li {
 }
 
 ::selection {
-    background-color: var(--highlight-color)
+    background-color: var(--highlight-color);
 }
 
 a:link {
@@ -544,4 +545,15 @@ umkl-footer {
     text-decoration: none;
     padding: 5px;
     z-index: 1;
+}
+
+.outdated-browser {
+    background-color: #5255fa;
+    color: #fff;
+    text-align: center;
+    position: fixed;
+    width: calc(100% - 10px);
+    padding: 5px;
+    top: 48px;
+    z-index: 18;
 }

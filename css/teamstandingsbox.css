@@ -71,12 +71,10 @@
 }
 
 .teamStandingsBox .teamStanding:hover .teamPosition {
-    background-color: white;
+    background-color: #fff;
     color: var(--accent-color);
     transition: 0.2s;
 }
-
-
 
 .teamStandingsBox .teamColour {
     border-radius: 5px;
@@ -179,8 +177,6 @@
     flex-direction: row;
     font-size: 25px;
 }
-
-
 
 .team {
     padding-left: 10px;

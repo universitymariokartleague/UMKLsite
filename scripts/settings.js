@@ -116,6 +116,7 @@ function toggleTheme() {
     sendThemeChangeEvent();
     generateSettingsPanel();
 }
+
 function toggleThemeLightDarkOnly() {
     const meta = document.querySelector('meta[name="color-scheme"]');
     const root = document.querySelector(":root");
@@ -396,7 +397,61 @@ function mkwEasterEgg() {
     document.head.appendChild(style);
 }
 
+function checkBrowserSupport() {
+    const ua = navigator.userAgent;
+
+    let fullSupport = false;
+    let message = "";
+
+    const chromeMatch = ua.match(/Chrome\/(\d+)/);
+    const edgeMatch = ua.match(/Edg\/(\d+)/);
+    if (chromeMatch) {
+        const v = Number(chromeMatch[1]);
+        fullSupport = v >= 92;
+        message = `Chrome ${v}`
+    } else if (edgeMatch) {
+        const v = Number(edgeMatch[1]);
+        fullSupport = v >= 92;
+        message = `Edge ${v}`
+    }
+
+    const firefoxMatch = ua.match(/Firefox\/(\d+)/);
+    if (firefoxMatch) {
+        const v = Number(firefoxMatch[1]);
+        fullSupport = v >= 113;
+        message = `Firefox ${v}`
+    }
+
+    const iosVersionMatch = ua.match(/Version\/(\d+(\.\d+)?)\s+Mobile/);
+    const safariDesktopMatch = ua.match(/Version\/(\d+(\.\d+)?)/);
+    if (/Safari/.test(ua) && !/Chrome|Chromium|Edg/.test(ua)) {
+        if (iosVersionMatch) {
+            const iosV = parseFloat(iosVersionMatch[1]);
+            fullSupport = iosV >= 16.4;
+            message = `iOS ${iosV}`;
+        }
+        else if (safariDesktopMatch) {
+            const safariV = parseFloat(safariDesktopMatch[1]);
+            fullSupport = safariV >= 16.4;
+            const macMatch = ua.match(/Mac OS X (\d+[_\.\d]*)/);
+            let macOS = macMatch ? macMatch[1].replace(/_/g, ".") : "";
+            message = `Safari ${safariV}` + (macOS ? ` on macOS ${macOS}` : "");
+        }
+    }
+
+    return { upToDate: fullSupport, message: message };
+}
+
+function checkBrowserOSVersion() {
+    const check = checkBrowserSupport();
+    if (check.upToDate) {
+        const outdatedHTML = `<div class="outdated-browser">Your browser is outdated. A browser update may be required to access certain features (using ${check.message}).</div>`
+        document.body.insertAdjacentHTML('afterbegin', outdatedHTML);
+    };
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     // if (localStorage.getItem("cookiesAccepted") !== "true") generateCookiesPopup();
+    checkBrowserOSVersion();
     checkEasterEggs();
 });
