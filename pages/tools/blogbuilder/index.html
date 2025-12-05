@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html data-overlayscrollbars-initialize="" lang="en">
+
+<html lang="en">
+<head>
+    <base href="../../../" />
+
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport" />
+    <title>Blog Builder | UMKL</title>
+    <meta content="Build a blog here for the UMKL site!" name="description" />
+    <link href="https://umkl.co.uk/assets/media/brand/favicon.png" rel="icon" type="image/png" />
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/settings.css" rel="stylesheet" />
+    <link href="css/blogbuilder.css" rel="stylesheet" />
+    <link href="css/ext/overlayscrollbars.min.css" rel="stylesheet" />
+    <meta content="dark light" name="color-scheme" />
+
+    <meta content="University Mario Kart League" property="og:title" />
+    <meta content="website" property="og:type" />
+    <meta content="https://umkl.co.uk/" property="og:url" />
+    <meta content="https://umkl.co.uk/assets/media/brand/UMKL_Banner_embed.avif" property="og:image" />
+    <meta content="Build a blog here for the UMKL site!" property="og:description" />
+    <meta content="#bc0839" name="theme-color" />
+
+    <!-- Include this to make the og:image larger -->
+    <meta content="summary_large_image" name="twitter:card" />
+
+    <!-- Scripts -->
+    <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+    <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
+    <script src="scripts/overlayscrollbar.js" defer></script>
+
+    <script type="module" src="scripts/blogbuilder.js" defer></script>
+    <script type="module" src="scripts/settings.js" defer></script>
+</head>
+<body>
+    <div id="loading-area">
+        <div class="loading-text">
+            Loading UMKL Blog Builder...<br/>
+            Please wait...
+            <div id="loading-bar"></div>
+        </div>
+        <div class="loading-tip">
+            <b>TIP</b>: A computer is recommended for use with the Blog Builder.
+        </div>
+    </div>
+
+    <div id="editing-area">
+        <div class="page-area-container">
+            <div id="page-area"></div>
+        </div>
+        <div id="editing-tools">
+            <p class="p-no-spacing">
+                <a class="no-color-link" href="pages/tools/">Exit blog builder</a>
+                <a class="no-color-link" title="Settings" id="settings-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="m22.311 6.557-.55-.954c-.415-.722-.623-1.083-.977-1.227s-.754-.03-1.555.196l-1.36.383a2.2 2.2 0 0 1-1.513-.19l-.375-.215a2.23 2.23 0 0 1-.878-1.078L14.73 2.36c-.245-.735-.368-1.103-.659-1.312-.29-.212-.678-.212-1.452-.212h-1.242c-.774 0-1.16 0-1.452.212-.291.209-.412.577-.658 1.312l-.372 1.112a2.23 2.23 0 0 1-.879 1.078l-.375.217a2.23 2.23 0 0 1-1.514.19l-1.36-.385c-.8-.226-1.2-.34-1.554-.196s-.562.505-.978 1.226l-.55.955c-.39.677-.584 1.015-.546 1.375s.298.65.82 1.23l1.149 1.286c.28.355.48.975.48 1.532s-.2 1.177-.48 1.532l-1.15 1.284c-.52.58-.781.871-.82 1.231-.037.36.157.699.547 1.375l.55.955c.416.72.624 1.082.978 1.226.354.145.754.03 1.555-.196l1.36-.384a2.23 2.23 0 0 1 1.514.19l.374.216c.401.256.709.635.878 1.078l.372 1.111c.245.736.368 1.104.659 1.315s.678.21 1.452.21h1.242c.774 0 1.161 0 1.452-.21.291-.211.414-.58.658-1.315l.373-1.11c.17-.445.477-.823.878-1.08l.374-.215a2.23 2.23 0 0 1 1.516-.19l1.36.384c.8.227 1.2.34 1.553.197.354-.145.562-.506.978-1.227l.55-.955c.39-.676.584-1.014.546-1.375-.038-.36-.298-.65-.82-1.231l-1.149-1.284c-.28-.357-.48-.975-.48-1.532s.2-1.177.48-1.532l1.15-1.285c.52-.58.781-.87.82-1.231.037-.36-.157-.698-.547-1.375Z" stroke="#141B34" stroke-width="1.671" style="fill:none;stroke:#fff;stroke-opacity:1" stroke-linecap="round"></path><path d="M15.852 11.97a3.9 3.9 0 1 1-7.8 0 3.9 3.9 0 0 1 7.8 0z" stroke="#141B34" stroke-width="1.671" style="fill:none;stroke:#fff;stroke-opacity:1"></path></svg> </a>
+            </p>
+            <div class="codeBox" id="elements-list">
+                <b>Elements List</b>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

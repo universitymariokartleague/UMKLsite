@@ -1,0 +1,99 @@
+#loading-area {
+    position: fixed;
+    width: 100%;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.loading-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+}
+
+#loading-bar {
+    opacity: 0;
+    margin-top: 15px;
+    width: 250px;
+    border-left: 0px solid var(--text-color);
+    height: 4px;
+    background-color: transparent;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.loading-tip {
+    position: fixed;
+    text-align: center;
+    bottom: 0;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+#editing-area {
+    opacity: 0;
+    z-index: 5;
+    display: flex;
+    flex: 1;
+    font-size: 16px;
+    transition: opacity 2.5s ease-in-out;
+}
+
+.page-area-container {
+    width: 1000px;
+}
+
+#page-area {
+    padding: 15px;
+    margin: 0 auto;
+    border: 2px solid var(--accent-color);
+    width: calc(100vw - 40px);
+    max-width: calc(800px - env(safe-area-inset-left));
+}
+
+#editing-tools {
+    flex: 1;
+    position: fixed;
+    right: 0;
+    width: calc(100vw - 1000px);
+    max-width: calc(600px - env(safe-area-inset-left));
+    height: 100vh;
+    color: #fff;
+    background-color: var(--accent-color);
+    padding: 15px;
+}
+
+#editBox {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    max-height: 80%;
+    width: 80%;
+    max-width: 550px;
+    padding: 10px;
+    color: #fff;
+    background-color: #bc083925;
+    border-radius: 10px;
+    z-index: 5;
+    box-shadow: var(--settings-shadow);
+    animation: boxOpen 0.15s cubic-bezier(0.22, 0.61, 0.36, 1);
+    overflow-y: auto;
+}
+
+.edit-box-close-button {
+    position: absolute;
+    float: right;
+    top: 15px;
+    right: 10px;
+}
+
+svg {
+    width: 18px;
+    height: 18px;
+    fill: #fff;
+    margin-left: 2px;
+    margin-bottom: -1px;
+    vertical-align: middle;
+    cursor: pointer;
+}
