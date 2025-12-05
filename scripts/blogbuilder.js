@@ -281,9 +281,11 @@ function generateEditUIHTML(i) {
     `;
 
     document.getElementById("apply-edit-button").addEventListener("click", () => {
+        const tagStrip = str => str.replace(/<[^>]*>/g, "");
+        
         keys.forEach((key, idx) => {
             const field = document.getElementById(`editAttribute${idx}`);
-            let newVal = field.value;
+            let newVal = tagStrip(field.value);
 
             if (key === "tags" || key === "writers" || key === "editors") {
                 newVal = newVal
