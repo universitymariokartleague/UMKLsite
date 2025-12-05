@@ -211,7 +211,6 @@ function buildBlog(data) {
     elementsList.innerHTML = `
         <b>Elements List</b><br>
         ${blogElements.map((el, index) => `${index + 1}. ${el.type}`).join("<br/>")}
-        <br/><br/><button id="exportElementsList">Export as JSON</button>
     `;
 
     for (let i = 0; i < blogElements.length; i++) {
@@ -220,7 +219,7 @@ function buildBlog(data) {
         });
     }
 
-    document.getElementById("exportElementsList").addEventListener("click", () => {
+    document.getElementById("export-elements-list").addEventListener("click", () => {
         const json = JSON.stringify(blogElements, null, 4);
         const blob = new Blob([json], { type: "application/json" });
 
@@ -252,12 +251,42 @@ function showElementEditUI(i) {
 function generateEditUIHTML(i) {
     const element = blogElements[i];
     editBoxLabel.innerText = `Edit ${friendlyTitles[element.type]} UI`
+
+    const keys = Object.keys(element);
+
+    const fieldsHTML = `
+        ${keys
+            .map((key, i) => `
+                <code>${key}</code><br/>
+                <textarea class="edit-ui-field" translate="no" id="editAttribute${i}">${element[key]}</textarea>
+            `
+            )
+            .join("<br/>")
+        }
+    `;
+
     editBoxJS.innerHTML = `
         <p>
             <div class="codeBoxTight">${JSON.stringify(element)}</div>
-            Edit fields:
+            Edit attributes:<br/>
+            ${fieldsHTML}
         </p>
+        <button id="apply-edit-button">Apply!</button>
     `;
+
+    document.getElementById("apply-edit-button").addEventListener("click", () => {
+        keys.forEach((key, idx) => {
+            const field = document.getElementById(`editAttribute${idx}`);
+            let newVal = field.value;
+            element[key] = newVal;
+        });
+
+        blogElements[i] = element;
+        buildBlog(blogElements);
+        showElementEditUI();
+
+        console.log("Updated element:", element);
+    });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -265,12 +294,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let loadProgress = 0;
     loadingBar.style.opacity = 1;
     const loadInterval = setInterval(() => {
-        loadProgress += 1;
+        loadProgress += 5;
         loadingBar.style.borderLeft = `${loadProgress * 2.5}px solid ${textColor}`;
         loadingBar.style.width = `${250 - (loadProgress * 2.5)}px`;
         if (loadProgress >= 100) {
             clearInterval(loadInterval);
             showBlogBuilder();
         }
-    }, 1);
+    }, 10);
 });
