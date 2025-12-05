@@ -19,7 +19,6 @@
     --settings-extra-info: #ffffff80;
 }
 
-/* Settings */
 #settingsBox {
     position: fixed;
     left: 50%;
@@ -31,7 +30,7 @@
     padding: 10px;
     background-color: var(--settings-box-color);
     border-radius: 10px;
-    z-index: 5;
+    z-index: 10;
     box-shadow: var(--settings-shadow);
     animation: boxOpen 0.15s cubic-bezier(0.22, 0.61, 0.36, 1);
     overflow-y: auto;
@@ -43,7 +42,7 @@
     top: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 5;
+    z-index: 9;
     background-color: rgba(0, 0, 0, 0.5);
     -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
@@ -106,6 +105,36 @@
     white-space: nowrap;
 }
 
+.settings-option {
+    float: right;
+}
+
+.hidden {
+    display: none;
+}
+
+.hide-settings-box {
+    animation: boxClose 0.1s ease-in-out !important;
+    opacity: 0;
+    visibility: hidden;
+}
+
+#settingsBox hr, .settings-hr {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.setting-selectable {
+    -webkit-user-select: all;
+    user-select: all;
+}
+
+@keyframes boxOpen { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); } 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+@keyframes BGBlurOn { 0% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes boxClose { 0% { opacity: 1; transform: translate(-50%, -50%) scale(1); visibility: visible; } 99% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); visibility: visible; } 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); visibility: hidden; } }
+
 @media screen and (max-width: 767px) {
     .settings-hover-info::after {
         white-space: unset;
@@ -137,33 +166,3 @@
         visibility: visible;
     }
 }
-
-.settings-option {
-    float: right;
-}
-
-.hidden {
-    display: none;
-}
-
-.hide-settings-box {
-    animation: boxClose 0.1s ease-in-out !important;
-    opacity: 0;
-    visibility: hidden;
-}
-
-#settingsBox hr, .settings-hr {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.setting-selectable {
-    -webkit-user-select: all;
-    user-select: all;
-}
-
-@keyframes boxOpen { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); } 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
-@keyframes BGBlurOn { 0% { opacity: 0; } 100% { opacity: 1; } }
-@keyframes boxClose { 0% { opacity: 1; transform: translate(-50%, -50%) scale(1); visibility: visible; } 99% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); visibility: visible; } 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); visibility: hidden; } }

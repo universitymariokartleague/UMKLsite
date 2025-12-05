@@ -550,7 +550,7 @@ async function showDailyLog(date, dayCell) {
                                 </div>
                             </div>
 
-                            <div class="score-box">${matchDetailsLink ? `<a class="match-details-glow" href="${matchDetailsLink}" title="View detailed results">${resultsHTML ? formatResults(entry.results) : "VS"}</a>` : `${resultsHTML ? formatResults(entry.results) : "VS"}`}</div>       
+                            <div class="score-box">${matchDetailsLink ? `<a class="no-underline-link" href="${matchDetailsLink}" title="View detailed results">${resultsHTML ? formatResults(entry.results) : "VS"}</a>` : `${resultsHTML ? formatResults(entry.results) : "VS"}`}</div>       
 
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">

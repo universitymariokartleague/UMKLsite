@@ -128,11 +128,10 @@
 
 .score-box a {
     color: var(--accent-color)!important;
-    text-decoration: none;
 }
 
 .score-box a:hover {
-    color: #ffb4b4!important;
+    text-decoration: underline;
 }
 
 .event-container .test-match-indicator {
@@ -271,20 +270,6 @@
 .youtube-box .ytsvg:hover {
     opacity: 0.5;
     transition: 0.1s ease-in-out;
-}
-
-.match-details-glow {
-    animation: glow 1.5s ease-in-out infinite alternate;
-}
-
-.match-details-glow:hover {
-    animation-play-state: paused;
-    opacity: 1;
-}
-
-@keyframes glow {
-    from { opacity: 0.5 }
-    to { opacity: 1 }
 }
 
 #calendarListView .team-box-image {
