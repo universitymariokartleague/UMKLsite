@@ -107,6 +107,16 @@ svg {
     height: 50px;
 }
 
+.iframe-wrapper iframe {
+    background-color: var(--accent-color);
+    border: 1px solid var(--text-color);
+    padding: 30px;
+}
+
+.iframe-wrapper {
+    padding: 5px;
+}
+
 @media screen and (max-width: 1199px) {
     #page-area {
         margin-bottom: 30vh;

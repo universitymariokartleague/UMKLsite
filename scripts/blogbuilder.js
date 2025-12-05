@@ -206,7 +206,10 @@ function buildBlog(data) {
 
             case "youtubeEmbed":
                 pageAreaHTML += `
-                    <iframe class="youtube-embed" id="element${elementCounter}" src="${element.link}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+                    <div class="iframe-wrapper">
+                        <iframe class="youtube-embed" id="element${elementCounter}" src="${element.link}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+                        Click the red border above edit the YouTube link
+                    </div>
                 `;
                 break;
         };
@@ -262,11 +265,18 @@ function generateEditUIHTML(i) {
 
     const fieldsHTML = `
         ${keys
-            .map((key, i) => `
-                <code>${key}</code><br/>
-                <textarea class="edit-ui-field" translate="no" id="editAttribute${i}">${element[key]}</textarea>
-            `
-            )
+            .map((key, i) => {
+                if (key === "type") {
+                    return `
+                        <code>${key}: ${element[key]}</code><br/>
+                    `;
+                }
+
+                return `
+                    <code>${key}</code><br/>
+                    <textarea class="edit-ui-field" translate="no" id="editAttribute${i}">${element[key]}</textarea>
+                `;
+            })
             .join("<br/>")
         }
     `;
@@ -284,24 +294,24 @@ function generateEditUIHTML(i) {
         const tagStrip = str => str.replace(/<[^>]*>/g, "");
         
         keys.forEach((key, idx) => {
-            const field = document.getElementById(`editAttribute${idx}`);
-            let newVal = tagStrip(field.value);
+            if (key !== "type") {
+                const field = document.getElementById(`editAttribute${idx}`);
+                let newVal = tagStrip(field.value);
 
-            if (key === "tags" || key === "writers" || key === "editors") {
-                newVal = newVal
-                    .split(",")
-                    .map(s => s.trim())
-                    .filter(s => s);
+                if (key === "tags" || key === "writers" || key === "editors") {
+                    newVal = newVal
+                        .split(",")
+                        .map(s => s.trim())
+                        .filter(s => s);
+                }
+
+                element[key] = newVal;
             }
-
-            element[key] = newVal;
         });
 
         blogElements[i] = element;
         buildBlog(blogElements);
         showElementEditUI();
-
-        console.log("Updated element:", element);
     });
 }
 
