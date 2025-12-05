@@ -122,8 +122,14 @@ function buildBlog(data) {
     blogElements.forEach(element => {
         switch (element.type) {
             case "blogInfo":
-                let writersString = element.writers.join(", ");
-                let editorsString = element.editors.join(", ");
+                let writersString = element.writers?.length
+                    ? `Written by ${element.writers.join(", ")}`
+                    : "";
+
+                let editorsString = element.editors?.length
+                    ? `Edited by ${element.editors.join(", ")}`
+                    : "";
+
                 let tagsHTML = "";
                 element.tags.forEach(tag => {
                     tagsHTML += `<tag translate="no">${tag}</tag> `;
@@ -136,7 +142,7 @@ function buildBlog(data) {
                         <div class="p-below-title">
                             ${element.date} | 
                             ${tagsHTML}
-                            <div class="news-credits">Written by ${writersString}<br>Edited by ${editorsString}</div>
+                            <div class="news-credits">${writersString}<br>${editorsString}</div>
                         </div>
                         <hr class="hr-below-title">
                     </div>
@@ -278,6 +284,14 @@ function generateEditUIHTML(i) {
         keys.forEach((key, idx) => {
             const field = document.getElementById(`editAttribute${idx}`);
             let newVal = field.value;
+
+            if (key === "tags" || key === "writers" || key === "editors") {
+                newVal = newVal
+                    .split(",")
+                    .map(s => s.trim())
+                    .filter(s => s);
+            }
+
             element[key] = newVal;
         });
 
