@@ -46,24 +46,6 @@ let defaultBlogElements = [
         content: "Note here!"
     },
     {
-        type: "blockquote",
-        alt: "warning",
-        header: "Warning",
-        content: "Warning here!"
-    },
-    {
-        type: "blockquote",
-        alt: "success",
-        header: "Success",
-        content: "Success here!"
-    },
-    {
-        type: "blockquote",
-        alt: "fail",
-        header: "Fail",
-        content: "Fail here!"
-    },
-    {
         type: "img",
         src: "assets/media/calendar/mikuheadshake.avif",
         alt: "Miku shaking her head",

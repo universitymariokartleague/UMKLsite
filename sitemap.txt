@@ -35,6 +35,7 @@ https://umkl.co.uk/pages/teams/details/
 https://umkl.co.uk/pages/test/apitest/
 https://umkl.co.uk/pages/tools/
 https://umkl.co.uk/pages/tools/6v6scorecalculator/
+https://umkl.co.uk/pages/tools/blogbuilder/
 https://umkl.co.uk/pages/tools/colourpicker/
 https://umkl.co.uk/pages/tools/comborandomiser/
 https://umkl.co.uk/pages/tools/favtrack/

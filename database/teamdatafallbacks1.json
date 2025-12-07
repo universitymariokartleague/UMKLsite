@@ -1,7 +1,7 @@
 [
     {
         "career_wins_losses": [
-            4,
+            5,
             0
         ],
         "championship_seasons": [
@@ -12,7 +12,7 @@
             -1.08
         ],
         "first_entry": 1,
-        "lifetime_matches_played": 4,
+        "lifetime_matches_played": 5,
         "place_id": 1826149980,
         "season": 1,
         "season_matches_played": 3,
@@ -22,7 +22,7 @@
             3,
             0
         ],
-        "team_career_points": 2399,
+        "team_career_points": 3012,
         "team_championships": 1,
         "team_color": "#1baa8b",
         "team_full_name": "University of York",
@@ -94,7 +94,7 @@
     {
         "career_wins_losses": [
             0,
-            4
+            5
         ],
         "championship_seasons": [],
         "coords": [
@@ -102,7 +102,7 @@
             -2.2278
         ],
         "first_entry": 1,
-        "lifetime_matches_played": 4,
+        "lifetime_matches_played": 5,
         "place_id": 1826124765,
         "season": 1,
         "season_matches_played": 3,
@@ -112,7 +112,7 @@
             0,
             3
         ],
-        "team_career_points": 1606,
+        "team_career_points": 1996,
         "team_championships": 0,
         "team_color": "#61b6cb",
         "team_full_name": "Keele University",

@@ -7268,9 +7268,251 @@
     "2025-11-27": [
         {
             "description": "A 6v6 match between York and Warwick. \n\nMembers of the relevant teams can sign up to compete in this match using the button in the team's announcement channel.\n\nThis match will be streamed on the UMKL YouTube channel. You can visit the channel here: https://www.youtube.com/@universitymariokartleague.",
+            "detailedResults": [
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        6,
+                        10
+                    ],
+                    "2": [
+                        5,
+                        7,
+                        8,
+                        9,
+                        11,
+                        12
+                    ],
+                    "track": "GCN Baby Park"
+                },
+                {
+                    "1": [
+                        1,
+                        3,
+                        4,
+                        5,
+                        6,
+                        11
+                    ],
+                    "2": [
+                        2,
+                        7,
+                        8,
+                        9,
+                        10,
+                        12
+                    ],
+                    "track": "Wii Moonview Highway"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        5,
+                        8,
+                        9
+                    ],
+                    "2": [
+                        4,
+                        6,
+                        7,
+                        10,
+                        11,
+                        12
+                    ],
+                    "track": "Sunshine Airport"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        4,
+                        6,
+                        7,
+                        10
+                    ],
+                    "2": [
+                        3,
+                        5,
+                        8,
+                        9,
+                        11,
+                        12
+                    ],
+                    "track": "GBA Cheese Land"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        9,
+                        10
+                    ],
+                    "2": [
+                        5,
+                        6,
+                        7,
+                        8,
+                        11,
+                        12
+                    ],
+                    "track": "SNES Donut Plains 3"
+                },
+                {
+                    "1": [
+                        1,
+                        3,
+                        5,
+                        8,
+                        10,
+                        11
+                    ],
+                    "2": [
+                        2,
+                        4,
+                        6,
+                        7,
+                        9,
+                        12
+                    ],
+                    "track": "3DS DK Jungle"
+                },
+                {
+                    "1": [
+                        1,
+                        3,
+                        4,
+                        6,
+                        7,
+                        9
+                    ],
+                    "2": [
+                        2,
+                        5,
+                        8,
+                        10,
+                        11,
+                        12
+                    ],
+                    "track": "DS Wario Stadium"
+                },
+                {
+                    "1": [
+                        3,
+                        4,
+                        6,
+                        7,
+                        8,
+                        10
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        5,
+                        9,
+                        11,
+                        12
+                    ],
+                    "track": "N64 Royal Raceway"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        12
+                    ],
+                    "2": [
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                        11
+                    ],
+                    "track": "Hyrule Circuit"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        8,
+                        9,
+                        10
+                    ],
+                    "2": [
+                        4,
+                        5,
+                        6,
+                        7,
+                        11,
+                        12
+                    ],
+                    "track": "Wii Rainbow Road"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        5,
+                        6,
+                        7
+                    ],
+                    "2": [
+                        4,
+                        8,
+                        9,
+                        10,
+                        11,
+                        12
+                    ],
+                    "track": "SNES Mario Circuit 3"
+                },
+                {
+                    "1": [
+                        1,
+                        3,
+                        4,
+                        5,
+                        8,
+                        9
+                    ],
+                    "2": [
+                        2,
+                        6,
+                        7,
+                        10,
+                        11,
+                        12
+                    ],
+                    "track": "3DS Rosalina's Ice World"
+                }
+            ],
+            "endTime": "20:06:24+00:00",
             "eventID": "1437093482140401777",
             "eventURL": "https://discord.com/events/1312070414113050624/1437093482140401777",
-            "results": [],
+            "results": [
+                [
+                    1,
+                    613,
+                    0
+                ],
+                [
+                    9,
+                    371,
+                    0
+                ]
+            ],
             "season": 2,
             "signedUpPlayerCounts": [
                 6,
@@ -7284,7 +7526,7 @@
             "time": "19:00:00+00:00",
             "title": "York VS Warwick",
             "ytLinks": [
-                "https://youtube.com/live/r5IpNoZrdDg?feature=share",
+                "https://www.youtube.com/watch?v=r5IpNoZrdDg",
                 "https://youtube.com/live/2f6_-yPNlD0?feature=share"
             ]
         }
@@ -7292,12 +7534,254 @@
     "2025-11-28": [
         {
             "description": "A 6v6 match between Cambridge and BIMM. \n\nMembers of the relevant teams can sign up to compete in this match by clicking the sign-up button in the team's announcement channel.",
+            "detailedResults": [
+                {
+                    "1": [
+                        4,
+                        5,
+                        6,
+                        7,
+                        9,
+                        12
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        3,
+                        8,
+                        10,
+                        11
+                    ],
+                    "track": "Sunshine Airport"
+                },
+                {
+                    "1": [
+                        2,
+                        4,
+                        5,
+                        7,
+                        10,
+                        11
+                    ],
+                    "2": [
+                        1,
+                        3,
+                        6,
+                        8,
+                        9,
+                        12
+                    ],
+                    "track": "Wii Daisy Circuit"
+                },
+                {
+                    "1": [
+                        6,
+                        7,
+                        9,
+                        10,
+                        11,
+                        12
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        8
+                    ],
+                    "track": "Dolphin Shoals"
+                },
+                {
+                    "1": [
+                        3,
+                        5,
+                        6,
+                        10,
+                        11,
+                        12
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        4,
+                        7,
+                        8,
+                        9
+                    ],
+                    "track": "Wii Rainbow Road"
+                },
+                {
+                    "1": [
+                        6,
+                        7,
+                        8,
+                        9,
+                        11,
+                        12
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        10
+                    ],
+                    "track": "N64 Royal Raceway"
+                },
+                {
+                    "1": [
+                        2,
+                        3,
+                        4,
+                        6,
+                        9,
+                        10
+                    ],
+                    "2": [
+                        1,
+                        5,
+                        7,
+                        8,
+                        11,
+                        12
+                    ],
+                    "track": "GBA Cheese Land"
+                },
+                {
+                    "1": [
+                        2,
+                        4,
+                        5,
+                        7,
+                        9,
+                        12
+                    ],
+                    "2": [
+                        1,
+                        3,
+                        6,
+                        8,
+                        10,
+                        11
+                    ],
+                    "track": "Squeaky Clean Sprint"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        6,
+                        7,
+                        10,
+                        11
+                    ],
+                    "2": [
+                        3,
+                        4,
+                        5,
+                        8,
+                        9,
+                        12
+                    ],
+                    "track": "GBA Ribbon Road"
+                },
+                {
+                    "1": [
+                        4,
+                        5,
+                        7,
+                        8,
+                        9,
+                        11
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        3,
+                        6,
+                        10,
+                        12
+                    ],
+                    "track": "DS Wario Stadium"
+                },
+                {
+                    "1": [
+                        4,
+                        7,
+                        8,
+                        9,
+                        10,
+                        11
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        3,
+                        5,
+                        6,
+                        12
+                    ],
+                    "track": "GBA Boo Lake"
+                },
+                {
+                    "1": [
+                        4,
+                        6,
+                        9,
+                        10,
+                        11,
+                        12
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        3,
+                        5,
+                        7,
+                        8
+                    ],
+                    "track": "Tour Paris Promenade"
+                },
+                {
+                    "1": [
+                        2,
+                        3,
+                        6,
+                        9,
+                        11,
+                        12
+                    ],
+                    "2": [
+                        1,
+                        4,
+                        5,
+                        7,
+                        8,
+                        10
+                    ],
+                    "track": "Wild Woods"
+                }
+            ],
+            "endTime": "20:15:55+00:00",
             "eventID": "1437373821136015421",
             "eventURL": "https://discord.com/events/1312070414113050624/1437373821136015421",
-            "results": [],
+            "results": [
+                [
+                    12,
+                    409,
+                    0
+                ],
+                [
+                    6,
+                    575,
+                    0
+                ]
+            ],
             "season": 2,
             "signedUpPlayerCounts": [
-                5,
+                6,
                 6
             ],
             "teamsInvolved": [
@@ -7308,20 +7792,262 @@
             "time": "19:00:00+00:00",
             "title": "Cambridge VS BIMM",
             "ytLinks": [
-                "https://youtube.com/live/rPWSgIJegrY?feature=share",
-                "https://youtube.com/live/bY6vHyjkZlg?feature=share"
+                "https://www.youtube.com/watch?v=rPWSgIJegrY",
+                "https://www.youtube.com/watch?v=bY6vHyjkZlg"
             ]
         }
     ],
     "2025-11-29": [
         {
             "description": "A 6v6 match between Keele and Glasgow. \n\nMembers of the relevant teams can sign up to compete in this match by clicking the sign-up button in the team's announcement channel.",
+            "detailedResults": [
+                {
+                    "1": [
+                        1,
+                        3,
+                        6,
+                        8,
+                        11,
+                        12
+                    ],
+                    "2": [
+                        2,
+                        4,
+                        5,
+                        7,
+                        9,
+                        10
+                    ],
+                    "track": "GCN Baby Park"
+                },
+                {
+                    "1": [
+                        2,
+                        4,
+                        8,
+                        9,
+                        11,
+                        12
+                    ],
+                    "2": [
+                        1,
+                        3,
+                        5,
+                        6,
+                        7,
+                        10
+                    ],
+                    "track": "Wii Moonview Highway"
+                },
+                {
+                    "1": [
+                        4,
+                        5,
+                        6,
+                        7,
+                        9,
+                        12
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        3,
+                        8,
+                        10,
+                        11
+                    ],
+                    "track": "Wii Coconut Mall"
+                },
+                {
+                    "1": [
+                        2,
+                        6,
+                        7,
+                        9,
+                        11,
+                        12
+                    ],
+                    "2": [
+                        1,
+                        3,
+                        4,
+                        5,
+                        8,
+                        10
+                    ],
+                    "track": "Big Blue"
+                },
+                {
+                    "1": [
+                        4,
+                        7,
+                        9,
+                        10,
+                        11,
+                        12
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        3,
+                        5,
+                        6,
+                        8
+                    ],
+                    "track": "Mute City"
+                },
+                {
+                    "1": [
+                        1,
+                        5,
+                        6,
+                        7,
+                        11,
+                        12
+                    ],
+                    "2": [
+                        2,
+                        3,
+                        4,
+                        8,
+                        9,
+                        10
+                    ],
+                    "track": "Sunshine Airport"
+                },
+                {
+                    "1": [
+                        4,
+                        6,
+                        7,
+                        9,
+                        10,
+                        12
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        3,
+                        5,
+                        8,
+                        11
+                    ],
+                    "track": "Mount Wario"
+                },
+                {
+                    "1": [
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        12
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        8,
+                        9,
+                        10,
+                        11
+                    ],
+                    "track": "Wii Mushroom Gorge"
+                },
+                {
+                    "1": [
+                        5,
+                        8,
+                        9,
+                        10,
+                        11,
+                        12
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        6,
+                        7
+                    ],
+                    "track": "Hyrule Circuit"
+                },
+                {
+                    "1": [
+                        4,
+                        6,
+                        7,
+                        8,
+                        10,
+                        11
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        3,
+                        5,
+                        9,
+                        12
+                    ],
+                    "track": "Electrodrome"
+                },
+                {
+                    "1": [
+                        3,
+                        5,
+                        7,
+                        8,
+                        11,
+                        12
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        4,
+                        6,
+                        9,
+                        10
+                    ],
+                    "track": "3DS DK Jungle"
+                },
+                {
+                    "1": [
+                        4,
+                        5,
+                        8,
+                        10,
+                        11,
+                        12
+                    ],
+                    "2": [
+                        1,
+                        2,
+                        3,
+                        6,
+                        7,
+                        9
+                    ],
+                    "track": "N64 Yoshi Valley"
+                }
+            ],
+            "endTime": "21:22:36+00:00",
             "eventID": "1438458978278572093",
             "eventURL": "https://discord.com/events/1312070414113050624/1438458978278572093",
-            "results": [],
+            "results": [
+                [
+                    4,
+                    390,
+                    0
+                ],
+                [
+                    7,
+                    594,
+                    0
+                ]
+            ],
             "season": 2,
             "signedUpPlayerCounts": [
-                4,
+                6,
                 6
             ],
             "teamsInvolved": [
@@ -7332,21 +8058,263 @@
             "time": "20:00:00+00:00",
             "title": "Keele VS Glasgow",
             "ytLinks": [
-                "https://youtube.com/live/NT93i6V6lFc?feature=share",
-                "https://youtube.com/live/6Qa83bS_Vfc?feature=share"
+                "",
+                ""
             ]
         }
     ],
     "2025-11-30": [
         {
             "description": "A 6v6 test match between Staffs and Leeds. This match is a test match - a friendly match that serves to test various features of the UMKL.\n\nMembers of the relevant teams can sign up to compete in this match by clicking the sign-up button in the team's announcement channel.",
+            "detailedResults": [
+                {
+                    "1": [
+                        2,
+                        3,
+                        4,
+                        5,
+                        8,
+                        9
+                    ],
+                    "2": [
+                        1,
+                        6,
+                        7,
+                        10,
+                        11,
+                        12
+                    ],
+                    "track": "Wii Wario's Gold Mine"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        5,
+                        6,
+                        9,
+                        12
+                    ],
+                    "2": [
+                        3,
+                        4,
+                        7,
+                        8,
+                        10,
+                        11
+                    ],
+                    "track": "N64 Rainbow Road"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        6,
+                        9,
+                        12
+                    ],
+                    "2": [
+                        4,
+                        5,
+                        7,
+                        8,
+                        10,
+                        11
+                    ],
+                    "track": "Tour Paris Promenade"
+                },
+                {
+                    "1": [
+                        1,
+                        3,
+                        5,
+                        6,
+                        7,
+                        10
+                    ],
+                    "2": [
+                        2,
+                        4,
+                        8,
+                        9,
+                        11,
+                        12
+                    ],
+                    "track": "GCN Yoshi Circuit"
+                },
+                {
+                    "1": [
+                        1,
+                        7,
+                        8,
+                        9,
+                        11,
+                        12
+                    ],
+                    "2": [
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        10
+                    ],
+                    "track": "Mute City"
+                },
+                {
+                    "1": [
+                        1,
+                        3,
+                        6,
+                        7,
+                        9,
+                        11
+                    ],
+                    "2": [
+                        2,
+                        4,
+                        5,
+                        8,
+                        10,
+                        12
+                    ],
+                    "track": "Sunshine Airport"
+                },
+                {
+                    "1": [
+                        2,
+                        4,
+                        6,
+                        8,
+                        9,
+                        10
+                    ],
+                    "2": [
+                        1,
+                        3,
+                        5,
+                        7,
+                        11,
+                        12
+                    ],
+                    "track": "Electrodrome"
+                },
+                {
+                    "1": [
+                        1,
+                        3,
+                        4,
+                        5,
+                        6,
+                        8
+                    ],
+                    "2": [
+                        2,
+                        7,
+                        9,
+                        10,
+                        11,
+                        12
+                    ],
+                    "track": "3DS Melody Motorway"
+                },
+                {
+                    "1": [
+                        1,
+                        3,
+                        4,
+                        5,
+                        8,
+                        12
+                    ],
+                    "2": [
+                        2,
+                        6,
+                        7,
+                        9,
+                        10,
+                        11
+                    ],
+                    "track": "Wii Moonview Highway"
+                },
+                {
+                    "1": [
+                        1,
+                        4,
+                        5,
+                        7,
+                        8,
+                        11
+                    ],
+                    "2": [
+                        2,
+                        3,
+                        6,
+                        9,
+                        10,
+                        12
+                    ],
+                    "track": "SNES Mario Circuit 3"
+                },
+                {
+                    "1": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        7,
+                        10
+                    ],
+                    "2": [
+                        5,
+                        6,
+                        8,
+                        9,
+                        11,
+                        12
+                    ],
+                    "track": "Wii Daisy Circuit"
+                },
+                {
+                    "1": [
+                        2,
+                        3,
+                        5,
+                        6,
+                        10,
+                        11
+                    ],
+                    "2": [
+                        1,
+                        4,
+                        7,
+                        8,
+                        9,
+                        12
+                    ],
+                    "track": "GCN Baby Park"
+                }
+            ],
+            "endTime": "18:42:19+00:00",
             "eventID": "1438116729187336297",
             "eventURL": "https://discord.com/events/1312070414113050624/1438116729187336297",
-            "results": [],
+            "results": [
+                [
+                    2,
+                    554,
+                    0
+                ],
+                [
+                    14,
+                    430,
+                    0
+                ]
+            ],
             "season": 2,
             "signedUpPlayerCounts": [
                 6,
-                5
+                6
             ],
             "teamsInvolved": [
                 "Staffs",
