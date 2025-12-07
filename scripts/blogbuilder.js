@@ -8,7 +8,6 @@ const elementsList = document.getElementById("elements-list");
 const pageArea = document.getElementById("page-area");
 const blogButtons = document.getElementById("blog-buttons");
 
-let blogElements = [];
 let friendlyTitles = {
     blogInfo: "Blog Information",
     h2: "Sub-Header",
@@ -19,8 +18,10 @@ let friendlyTitles = {
     img: "Image",
     blockquote: "Blockquote",
     youtubeEmbed: "YouTube Embed",
-
 }
+
+let blogElements = [];
+
 let defaultBlogElements = [
     {
         type: "blogInfo",
@@ -110,7 +111,101 @@ document.getElementById('settings-icon').addEventListener('click', toggleSetting
 function showBlogBuilder() {
     loadingArea.style.opacity = 0;
     editingArea.style.opacity = 1;
+    
+    buildBlogButtons();
     buildBlog(defaultBlogElements);
+}
+
+function buildBlogButtons() {
+    blogButtons.innerHTML = 'Add element:<br/>' + Object.entries(friendlyTitles)
+        .filter(([type]) => type !== "blogInfo")    
+        .map(([type, label]) => `
+            <button class="add-element-btn" data-type="${type}">
+                ${label} (${type})
+            </button>
+        `)
+        .join("<br/>");
+
+    blogButtons.addEventListener("click", (e) => {
+        const type = e.target.dataset.type;
+        if (!type) return;
+
+        const newElement = createElementTemplate(type);
+        blogElements.push(newElement);
+
+        buildBlog(blogElements);
+        showElementEditUI(blogElements.length - 1);
+    });
+}
+
+function createElementTemplate(type) {
+    switch (type) {
+        case "blogInfo":
+            return {
+                type: "blogInfo",
+                title: "",
+                date: "",
+                tags: [],
+                writers: [],
+                editors: []
+            };
+
+        case "h2":
+            return {
+                type: "h2",
+                content: ""
+            };
+
+        case "p":
+            return {
+                type: "p",
+                content: ""
+            };
+
+        case "pWithDetail":
+            return {
+                type: "pWithDetail",
+                content: "",
+                detail: ""
+            };
+
+        case "extraDetail":
+            return {
+                type: "extraDetail",
+                content: ""
+            };
+
+        case "codeBox":
+            return {
+                type: "codeBox",
+                content: ""
+            };
+
+        case "img":
+            return {
+                type: "img",
+                src: "",
+                alt: "",
+                description: ""
+            };
+
+        case "blockquote":
+            return {
+                type: "blockquote",
+                alt: "info",
+                header: "",
+                content: ""
+            };
+
+        case "youtubeEmbed":
+            return {
+                type: "youtubeEmbed",
+                link: ""
+            };
+
+        default:
+            return { type };
+    }
 }
 
 function buildBlog(data) {
@@ -271,24 +366,32 @@ function buildBlog(data) {
             });
         }
     }
-
-    document.getElementById("export-elements-list").addEventListener("click", () => {
-        const json = JSON.stringify(blogElements, null, 4);
-        const blob = new Blob([json], { type: "application/json" });
-
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-
-        const title = blogElements.find(e => e.type === "blogInfo")?.title || "Blog";
-
-        a.download = `${title.replace(/ /g, "")}Elements.json`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    });
 };
+
+function moveElementUp(i) {
+    if (i <= 0) return;
+
+    const temp = blogElements[i];
+    blogElements[i] = blogElements[i - 1];
+    blogElements[i - 1] = temp;
+
+    buildBlog(blogElements);
+}
+
+function moveElementDown(i) {
+    if (i >= blogElements.length - 1) return;
+
+    const temp = blogElements[i];
+    blogElements[i] = blogElements[i + 1];
+    blogElements[i + 1] = temp;
+
+    buildBlog(blogElements);
+}
+
+function deleteElement(i) {
+    blogElements.splice(i, 1);
+    buildBlog(blogElements);
+}
 
 function showElementEditUI(i) {
     BGBlur.classList.toggle("hidden");
@@ -364,30 +467,55 @@ function generateEditUIHTML(i) {
     });
 }
 
-function moveElementUp(i) {
-    if (i <= 0) return;
+document.getElementById("import-elements-list").addEventListener("click", () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "application/json";
 
-    const temp = blogElements[i];
-    blogElements[i] = blogElements[i - 1];
-    blogElements[i - 1] = temp;
+    input.addEventListener("change", () => {
+        const file = input.files[0];
+        if (!file) return;
 
-    buildBlog(blogElements);
-}
+        const reader = new FileReader();
 
-function moveElementDown(i) {
-    if (i >= blogElements.length - 1) return;
+        reader.onload = () => {
+            try {
+                const parsed = JSON.parse(reader.result);
 
-    const temp = blogElements[i];
-    blogElements[i] = blogElements[i + 1];
-    blogElements[i + 1] = temp;
+                if (!Array.isArray(parsed)) {
+                    alert("Invalid JSON: Expected an array.");
+                    return;
+                }
 
-    buildBlog(blogElements);
-}
+                blogElements = parsed;
+                buildBlog(blogElements);
+            } catch (err) {
+                alert("Invalid JSON:\n" + err.message);
+            }
+        };
 
-function deleteElement(i) {
-    blogElements.splice(i, 1);
-    buildBlog(blogElements);
-}
+        reader.readAsText(file);
+    });
+
+    input.click();
+});
+
+document.getElementById("export-elements-list").addEventListener("click", () => {
+    const json = JSON.stringify(blogElements, null, 4);
+    const blob = new Blob([json], { type: "application/json" });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+
+    const title = blogElements.find(e => e.type === "blogInfo")?.title || "Blog";
+
+    a.download = `${title.replace(/ /g, "")}Blog.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+});
 
 document.addEventListener("DOMContentLoaded", () => {
     let textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
