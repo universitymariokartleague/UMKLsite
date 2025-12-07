@@ -6,6 +6,7 @@ const loadingBar = document.getElementById("loading-bar");
 const editingArea = document.getElementById("editing-area");
 const elementsList = document.getElementById("elements-list");
 const pageArea = document.getElementById("page-area");
+const blogButtons = document.getElementById("blog-buttons");
 
 let blogElements = [];
 let friendlyTitles = {
@@ -228,13 +229,47 @@ function buildBlog(data) {
     pageArea.innerHTML = pageAreaHTML;
     elementsList.innerHTML = `
         <b>Blog Elements</b><br>
-        ${blogElements.map((el, index) => `<div class="element${index}outline">${index + 1}. ${el.type}</div>`).join("")}
+        ${blogElements.map((el, index) => `
+            <div class="element${index}outline">
+                <span id="element-list${index}">
+                    ${index + 1}. ${el.type}
+                </span>
+                ${el.type !== "blogInfo" ? `
+                    <span class="elements-edit">
+                        ${index > 1 ? `<span id="moveelementup${index}" class="elements-move">▲</span>` : ''}
+                        ${index < blogElements.length - 1 ? `<span id="moveelementdown${index}" class="elements-move">▼</span>` : ' '}
+                        <span id="deleteelement${index}" class="elements-move">×</span>
+                    </span>
+                ` : ''}
+            </div>`).join("")}
     `;
 
     for (let i = 0; i < blogElements.length; i++) {
         document.getElementById(`element${i}`).addEventListener("click", () => {
             showElementEditUI(i);
         });
+
+        document.getElementById(`element-list${i}`).addEventListener("click", () => {
+            showElementEditUI(i);
+        });
+
+        if (blogElements[i].type === "blogInfo") continue;
+
+        document.getElementById(`deleteelement${i}`).addEventListener("click", () => {
+            deleteElement(i);
+        });
+
+        if (i > 1) {
+            document.getElementById(`moveelementup${i}`).addEventListener("click", () => {
+                moveElementUp(i);
+            });
+        }
+
+        if (i < blogElements.length - 1) {
+            document.getElementById(`moveelementdown${i}`).addEventListener("click", () => {
+                moveElementDown(i);
+            });
+        }
     }
 
     document.getElementById("export-elements-list").addEventListener("click", () => {
@@ -324,10 +359,34 @@ function generateEditUIHTML(i) {
     });
 
     document.getElementById("delete-element-button").addEventListener("click", () => {
-        blogElements.splice(i, 1);
-        buildBlog(blogElements);
+        deleteElement(i);
         showElementEditUI();
     });
+}
+
+function moveElementUp(i) {
+    if (i <= 0) return;
+
+    const temp = blogElements[i];
+    blogElements[i] = blogElements[i - 1];
+    blogElements[i - 1] = temp;
+
+    buildBlog(blogElements);
+}
+
+function moveElementDown(i) {
+    if (i >= blogElements.length - 1) return;
+
+    const temp = blogElements[i];
+    blogElements[i] = blogElements[i + 1];
+    blogElements[i + 1] = temp;
+
+    buildBlog(blogElements);
+}
+
+function deleteElement(i) {
+    blogElements.splice(i, 1);
+    buildBlog(blogElements);
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -61,6 +61,15 @@
     color: #fff;
     background-color: var(--accent-color);
     padding: 15px;
+    overflow-y: scroll;
+}
+
+.elements-edit {
+    float: right;
+}
+
+.elements-move:hover {
+    text-decoration: underline;
 }
 
 #editBox {
@@ -128,6 +137,5 @@ svg {
         width: calc(100vw - 30px);
         max-width: unset;
         height: 25%;
-        overflow-y: scroll;
     }
 }
