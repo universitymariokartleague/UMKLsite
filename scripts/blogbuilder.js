@@ -517,6 +517,11 @@ document.getElementById("export-elements-list").addEventListener("click", () => 
     URL.revokeObjectURL(url);
 });
 
+document.getElementById("clear-elements-list").addEventListener("click", () => {
+    blogElements.splice(1);
+    buildBlog(blogElements);
+});
+
 document.addEventListener("DOMContentLoaded", () => {
     let textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
     let loadProgress = 0;
