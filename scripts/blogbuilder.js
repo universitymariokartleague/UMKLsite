@@ -120,6 +120,15 @@ function buildBlog(data) {
     let elementCounter = 0;
 
     blogElements.forEach(element => {
+        const style = document.createElement('style');
+        style.textContent = `
+            html:has(.element${elementCounter}outline:hover) .element${elementCounter}outline {
+                outline: 2px solid var(--text-color)!important;
+                cursor: pointer;
+            }
+        `
+        document.head.appendChild(style);
+
         switch (element.type) {
             case "blogInfo":
                 let writersString = element.writers?.length
@@ -136,7 +145,7 @@ function buildBlog(data) {
                 });
 
                 pageAreaHTML += `
-                    <div id="element${elementCounter}">
+                    <div id="element${elementCounter}" class="element${elementCounter}outline">
                         <a href="pages/news/">Back</a>
                         <h1>${element.title}</h1>
                         <div class="p-below-title">
@@ -150,16 +159,16 @@ function buildBlog(data) {
                 break;
 
             case "h2":
-                pageAreaHTML += `<h2 id="element${elementCounter}">${element.content}</h2>`;
+                pageAreaHTML += `<h2 id="element${elementCounter}" class="element${elementCounter}outline">${element.content}</h2>`;
                 break;
 
             case "p":
-                pageAreaHTML += `<p id="element${elementCounter}">${element.content}</p>`;
+                pageAreaHTML += `<p id="element${elementCounter}" class="element${elementCounter}outline">${element.content}</p>`;
                 break;
 
             case "pWithDetail":
                 pageAreaHTML += `
-                    <p id="element${elementCounter}">
+                    <p id="element${elementCounter}" class="element${elementCounter}outline">
                         ${element.content}<br>
                         <span class="settings-extra-info">
                             ${element.detail}
@@ -170,7 +179,7 @@ function buildBlog(data) {
 
             case "extraDetail":
                 pageAreaHTML += `
-                    <p id="element${elementCounter}">
+                    <p id="element${elementCounter}" class="element${elementCounter}outline">
                         <span class="settings-extra-info">
                             ${element.content}
                         </span>
@@ -180,7 +189,7 @@ function buildBlog(data) {
 
             case "codeBox":
                 pageAreaHTML += `
-                    <div class="codeBox" id="element${elementCounter}">
+                    <div class="codeBox element${elementCounter}outline" id="element${elementCounter}">
                         ${element.content}
                     </div>
                 `;
@@ -188,7 +197,7 @@ function buildBlog(data) {
 
             case "img":
                 pageAreaHTML += `
-                    <p id="element${elementCounter}">
+                    <p id="element${elementCounter}" class="element${elementCounter}outline">
                         <img class="image" src="${element.src}" alt="${element.alt}">
                         <span class="settings-extra-info">${element.description}</span>
                     </p>
@@ -197,7 +206,7 @@ function buildBlog(data) {
 
             case "blockquote":
                 pageAreaHTML += `
-                    <blockquote class="${element.alt}" id="element${elementCounter}">
+                    <blockquote class="${element.alt} element${elementCounter}outline" id="element${elementCounter}">
                         <b translate="no">${element.header}</b><br>
                         ${element.content}
                     </blockquote>
@@ -206,7 +215,7 @@ function buildBlog(data) {
 
             case "youtubeEmbed":
                 pageAreaHTML += `
-                    <div class="iframe-wrapper">
+                    <div class="iframe-wrapper element${elementCounter}outline">
                         <iframe class="youtube-embed" id="element${elementCounter}" src="${element.link}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
                         Click the red border above edit the YouTube link
                     </div>
@@ -218,8 +227,8 @@ function buildBlog(data) {
 
     pageArea.innerHTML = pageAreaHTML;
     elementsList.innerHTML = `
-        <b>Elements List</b><br>
-        ${blogElements.map((el, index) => `${index + 1}. ${el.type}`).join("<br/>")}
+        <b>Blog Elements</b><br>
+        ${blogElements.map((el, index) => `<div class="element${index}outline">${index + 1}. ${el.type}</div>`).join("")}
     `;
 
     for (let i = 0; i < blogElements.length; i++) {
@@ -287,7 +296,7 @@ function generateEditUIHTML(i) {
             Edit attributes:<br/>
             ${fieldsHTML}
         </p>
-        <button id="apply-edit-button">Apply!</button>
+        <button id="apply-edit-button">Apply Properties</button> <button id="delete-element-button">Delete element</button>
     `;
 
     document.getElementById("apply-edit-button").addEventListener("click", () => {
@@ -310,6 +319,12 @@ function generateEditUIHTML(i) {
         });
 
         blogElements[i] = element;
+        buildBlog(blogElements);
+        showElementEditUI();
+    });
+
+    document.getElementById("delete-element-button").addEventListener("click", () => {
+        blogElements.splice(i, 1);
         buildBlog(blogElements);
         showElementEditUI();
     });
