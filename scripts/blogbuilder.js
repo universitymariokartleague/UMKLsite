@@ -37,7 +37,7 @@ let defaultBlogElements = [
     },
     {
         type: "youtubeEmbed",
-        link: "https://www.youtube-nocookie.com/embed/jNQXAC9IVRw"
+        youtubeID: "jNQXAC9IVRw"
     },
     {
         type: "blockquote",
@@ -182,7 +182,7 @@ function createElementTemplate(type) {
         case "youtubeEmbed":
             return {
                 type: "youtubeEmbed",
-                link: ""
+                youtubeID: ""
             };
 
         default:
@@ -294,7 +294,7 @@ function buildBlog(data) {
             case "youtubeEmbed":
                 pageAreaHTML += `
                     <div class="iframe-wrapper element${elementCounter}outline">
-                        <iframe class="youtube-embed" id="element${elementCounter}" src="${element.link}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+                        <iframe class="youtube-embed" id="element${elementCounter}" src="https://www.youtube-nocookie.com/embed/${element.youtubeID}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
                         Click the red border above edit the YouTube link
                     </div>
                 `;
@@ -386,6 +386,26 @@ function showElementEditUI(i) {
     editBoxOpen = !editBoxOpen;
 }
 
+function extractYouTubeID(url) {
+    try {
+        const parsed = new URL(url);
+
+        if (parsed.searchParams.get("v")) {
+            return parsed.searchParams.get("v").replace(/[^0-9A-Za-z_-]/g, "");
+        }
+
+        if (parsed.hostname.includes("youtu.be")) {
+            return parsed.pathname.slice(1).replace(/[^0-9A-Za-z_-]/g, "");
+        }
+
+    } catch (e) {
+        return url;
+    }
+
+    const match = url.match(/[0-9A-Za-z_-]{11}/);
+    return match ? match[0] : null;
+}
+
 function generateEditUIHTML(i) {
     const element = blogElements[i];
     editBoxLabel.innerText = `Edit ${friendlyTitles[element.type]} UI`
@@ -432,6 +452,10 @@ function generateEditUIHTML(i) {
                         .split(",")
                         .map(s => s.trim())
                         .filter(s => s);
+                }
+
+                if (key === "youtubeID") {
+                    newVal = extractYouTubeID(newVal);
                 }
 
                 element[key] = newVal;
