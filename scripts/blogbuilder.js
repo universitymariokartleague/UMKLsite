@@ -95,7 +95,9 @@ function showBlogBuilder() {
     editingArea.style.opacity = 1;
     
     buildBlogButtons();
-    buildBlog(defaultBlogElements);
+    let savedBlog = JSON.parse(localStorage.getItem("blogBuilderBackup"));
+    if (!savedBlog) savedBlog = defaultBlogElements;
+    buildBlog(savedBlog);
 }
 
 function buildBlogButtons() {
@@ -190,7 +192,12 @@ function createElementTemplate(type) {
     }
 }
 
+function backupBlog(data) {
+    localStorage.setItem("blogBuilderBackup", JSON.stringify(data))
+}
+
 function buildBlog(data) {
+    backupBlog(data);
     blogElements = data;
 
     pageArea.innerHTML = "";
@@ -526,6 +533,10 @@ document.getElementById("export-elements-list").addEventListener("click", () => 
 document.getElementById("clear-elements-list").addEventListener("click", () => {
     blogElements.splice(1);
     buildBlog(blogElements);
+});
+
+document.getElementById("reset-default-elements-list").addEventListener("click", () => {
+    buildBlog(defaultBlogElements);
 });
 
 document.addEventListener("DOMContentLoaded", () => {
