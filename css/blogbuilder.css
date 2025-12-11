@@ -82,12 +82,14 @@
     max-width: 550px;
     padding: 10px;
     color: #fff;
-    background-color: #bc083925;
+    background-color: var(--settings-box-color);
     border-radius: 10px;
     z-index: 10;
     box-shadow: var(--settings-shadow);
-    animation: boxOpen 0.15s cubic-bezier(0.22, 0.61, 0.36, 1);
+    outline: 2px solid #ffffff50;
+    animation: boxOpen 0.2s;
     overflow-y: auto;
+    will-change: transform;
 }
 
 #editBGBlur {

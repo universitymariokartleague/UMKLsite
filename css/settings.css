@@ -32,8 +32,10 @@
     border-radius: 10px;
     z-index: 10;
     box-shadow: var(--settings-shadow);
-    animation: boxOpen 0.15s cubic-bezier(0.22, 0.61, 0.36, 1);
+    outline: 2px solid #ffffff50;
+    animation: boxOpen 0.2s;
     overflow-y: auto;
+    will-change: transform;
 }
 
 .BGBlur {
@@ -46,7 +48,8 @@
     background-color: rgba(0, 0, 0, 0.5);
     -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
-    animation: BGBlurOn 0.5s ease-in-out;
+    animation: BGBlurOn 0.2s;
+    will-change: opacity;
 }
 
 .setting-options {
@@ -133,7 +136,7 @@
 
 @keyframes boxOpen { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); } 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
 @keyframes BGBlurOn { 0% { opacity: 0; } 100% { opacity: 1; } }
-@keyframes boxClose { 0% { opacity: 1; transform: translate(-50%, -50%) scale(1); visibility: visible; } 99% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); visibility: visible; } 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); visibility: hidden; } }
+@keyframes boxClose { 0% { opacity: 1; transform: translate(-50%, -50%) scale(1); visibility: visible; } 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.85); visibility: hidden; } }
 
 @media screen and (max-width: 767px) {
     .settings-hover-info::after {
