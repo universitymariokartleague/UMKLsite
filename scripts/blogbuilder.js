@@ -21,8 +21,9 @@ let friendlyTitles = {
 }
 
 let blogElements = [];
+const images = {}; 
 
-let defaultBlogElements = [
+const defaultBlogElements = [
     {
         type: "blogInfo",
         title: "Blog Title",
@@ -192,13 +193,37 @@ function createElementTemplate(type) {
     }
 }
 
+function formatBytes(bytes) {
+    let units = ["B", "KB", "MB", "GB"];
+    let i = 0;
+    while (bytes >= 1024 && i < units.length - 1) {
+        bytes /= 1024;
+        i++;
+    }
+    return `${bytes.toFixed(2)}${units[i]}`;
+}
+
+function getLocalStorageBytes() {
+    let total = 0;
+
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        const value = localStorage.getItem(key);
+
+        total += new Blob([key]).size;
+        total += new Blob([value]).size;
+    }
+
+    return total;
+}
+
 function backupBlog(data) {
     localStorage.setItem("blogBuilderBackup", JSON.stringify(data))
 }
 
 function buildBlog(data) {
     backupBlog(data);
-    blogElements = data;
+    blogElements = structuredClone(data);
 
     pageArea.innerHTML = "";
     let pageAreaHTML = "";
@@ -325,8 +350,12 @@ function buildBlog(data) {
                         <span id="deleteelement${index}" class="elements-move">×</span>
                     </span>
                 ` : ''}
-            </div>`).join("")}
+            </div>
+        `).join("")}
     `;
+
+    const bytes = getLocalStorageBytes(localStorage);
+    if (bytes) document.getElementById("storage-used").innerHTML = formatBytes(bytes);
 
     for (let i = 0; i < blogElements.length; i++) {
         document.getElementById(`element${i}`).addEventListener("click", () => {
@@ -425,6 +454,10 @@ function generateEditUIHTML(i) {
                 if (key === "type") {
                     return `
                         <code>${key}: ${element[key]}</code><br/>
+                        ${element[key] == "img" && Object.keys(images).length > 0 ? 
+                            `<p>Choose an imported image:</p>` : 
+                            'Use the <code>Import Image</code> button to add images from your device'
+                        }
                     `;
                 }
 
@@ -537,6 +570,22 @@ document.getElementById("clear-elements-list").addEventListener("click", () => {
 
 document.getElementById("reset-default-elements-list").addEventListener("click", () => {
     buildBlog(defaultBlogElements);
+});
+
+document.getElementById("add-image").addEventListener("click", () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.multiple = true;
+
+    input.addEventListener("change", () => {
+        Array.from(input.files).forEach(file => {
+            images[file.name] = file;
+        });
+        console.log("Stored images:", images);
+    });
+
+    input.click();
 });
 
 document.addEventListener("DOMContentLoaded", () => {
