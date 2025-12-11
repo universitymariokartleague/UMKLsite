@@ -54,17 +54,6 @@ async function getTeamdata(team = "", season) {
     });
 }
 
-async function loadFonts() {
-    try {
-        await Promise.all([
-            loadFont('SF-Pro-Display-Bold', 'assets/font/SF-Pro-Display-Bold.woff2'),
-            loadFont('SF-Pro-Display-Black', 'assets/font/SF-Pro-Display-Black.woff2')
-        ]);
-    } catch (error) {
-        console.error('Failed to load fonts:', error);
-    }
-}
-
 async function loadFont(name, url) {
     const font = new FontFace(name, `url(${url})`);
     await font.load();
@@ -189,7 +178,7 @@ async function createTeamStandingsImage(season, isCurrentSeason, teamStandingsDa
 
     // Load and draw background
     try {
-        const bgImg = await loadImage('assets/canvas/graphics/teamstandingbgtall.png');
+        const bgImg = await loadImage('assets/media/graphics/teamstandingbgtall.avif');
         ctx.drawImage(bgImg, 0, 0);
     } catch (error) {
         console.error('Background image failed to load:', error);
