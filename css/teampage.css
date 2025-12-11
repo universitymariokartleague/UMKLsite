@@ -15,6 +15,10 @@
     width: 100%;
 }
 
+.team-info-wrapper a {
+    display: contents;
+}
+
 .team-info .map {
     width: 100%;
     display: flex;

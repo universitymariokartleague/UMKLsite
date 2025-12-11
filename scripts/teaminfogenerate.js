@@ -7,8 +7,10 @@
 
 const teamBoxFormatHTML = `
     <div class="team-info-wrapper">
-        <img width=200 height=200 src="{{logoSrc}}" alt="{{teamNamePossessive}} team logo" title="{{teamNamePossessive}} team logo" class="team-info-logo" loading="lazy"
-        onload="this.style.opacity=1" onerror="this.onerror=null; this.src='{{placeholderLogo}}';"/>
+        <a href="{{highResSrc}}">
+            <img width=200 height=200 src="{{logoSrc}}" alt="{{teamNamePossessive}} team logo" title="{{teamNamePossessive}} team logo\nClick to view a high-res version of this logo" class="team-info-logo" loading="lazy"
+            onload="this.style.opacity=1" onerror="this.onerror=null; this.src='{{placeholderLogo}}';"/>
+        </a>
         <hr>
         <div class="team-info-text">
             {{extraFields}}
@@ -94,9 +96,10 @@ async function generateTeamBox(teamData, showError) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.remove('fade-in');
 
-    const placeholderLogo = "assets/media/teamemblems/hres/DEFAULT.png";
+    const placeholderLogo = "assets/media/teamemblems/DEFAULT.avif";
     const teamNameUpper = teamData.team_name.toUpperCase();
-    const logoUrl = `assets/media/teamemblems/hres/${teamNameUpper}.png`;
+    const logoUrl = `assets/media/teamemblems/hres/${teamNameUpper}.avif`;
+    const highResUrl = `assets/media/teamemblems/og/${teamNameUpper}.png`;
     teamData.logo_src = logoUrl;
 
     const extraFields = buildTeamInfoTable(teamData);
@@ -109,7 +112,8 @@ async function generateTeamBox(teamData, showError) {
         .replaceAll("{{teamNamePossessive}}", makePossessive(teamData.team_name))
         .replace("{{className}}", teamData.class_name)
         .replace("{{teamNameLower}}", teamData.team_name.toLowerCase())
-        .replace("{{logoSrc}}", teamData.logo_src)
+        .replace("{{logoSrc}}", logoUrl)
+        .replace("{{highResSrc}}", highResUrl)
         .replace("{{placeholderLogo}}", placeholderLogo)
         .replace("{{extraFields}}", extraFields)
         .replace("{{currentFields}}", currentFields);
