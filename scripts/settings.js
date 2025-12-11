@@ -4,7 +4,7 @@
     It saves the settings in local storage and applies them to the page. 
 */
 
-import { halloweenEasterEgg, xmasEasterEgg } from './eastereggs.js';
+import { halloweenEasterEgg, winterEasterEgg } from './eastereggs.js';
 export { toggleSettingsPanel, disableThemeShortcut, disableSettingsShortcut  }
 
 const settingsBoxHTML = `
@@ -41,7 +41,7 @@ let settingsOpen = false;
 
 const weekdayNamesFull = ["Sunday", "Monday"];
 
-let easterEgg = null;
+let easterEgg;
 
 const toggleSettingsPanel = () => {
     BGBlur.classList.toggle("hidden");
@@ -246,7 +246,7 @@ function checkEasterEggs() {
         easterEgg = "aprilfools";
     } else if (checkDatePeriod(28, 10, 31, 10)) {
         easterEgg = "halloween";
-    } else if (checkDate(7, 12, 24, 12)) {
+    } else if (checkDatePeriod(7, 12, 24, 12)) {
         easterEgg = "winter";
     } else if (checkDate(25, 12)) {
         easterEgg = "xmas";
@@ -265,11 +265,12 @@ function checkEasterEggs() {
             halloweenEasterEgg();
             break;
         case "winter":
+            winterEasterEgg();
             console.log("Brrrrr-!");
             break;
         case "xmas":
             console.log("Merry Christmas!");
-            xmasEasterEgg();
+            winterEasterEgg();
             break;
         case "newyearseve":
             console.log("Happy New Year's Eve!");

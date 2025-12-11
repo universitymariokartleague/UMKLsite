@@ -9,7 +9,7 @@
     :root {
         --settings-box-color: rgba(0, 0, 0, 0.6);
         --settings-shadow: 0 0 1rem #e9e9e986;
-        --settings-extra-info: #ffffff80;    
+        --settings-extra-info: #ffffff80;
     }
 }
 
@@ -122,7 +122,8 @@
     visibility: hidden;
 }
 
-#settingsBox hr, .settings-hr {
+#settingsBox hr,
+.settings-hr {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
     margin-left: auto;
@@ -134,9 +135,60 @@
     user-select: all;
 }
 
-@keyframes boxOpen { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); } 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
-@keyframes BGBlurOn { 0% { opacity: 0; } 100% { opacity: 1; } }
-@keyframes boxClose { 0% { opacity: 1; transform: translate(-50%, -50%) scale(1); visibility: visible; } 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.85); visibility: hidden; } }
+.snowflake {
+    position: fixed;
+    width: 2px;
+    height: 2px;
+    background-color: white;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: fall 3s linear infinite;
+    z-index: 9;
+    filter: blur(1px);
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}
+
+@keyframes boxOpen {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.95);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes BGBlurOn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes boxClose {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+        visibility: visible;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.85);
+        visibility: hidden;
+    }
+}
 
 @media screen and (max-width: 767px) {
     .settings-hover-info::after {

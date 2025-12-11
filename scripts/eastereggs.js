@@ -2,7 +2,7 @@
     This script changes the theme of the site depending on the holiday.
 */
 
-export { halloweenEasterEgg, xmasEasterEgg };
+export { halloweenEasterEgg, winterEasterEgg };
 
 function injectMusic(path) {
     if (document.getElementById('audio')) return;
@@ -143,11 +143,11 @@ function halloweenEasterEgg() {
 
     for (let i = 0; i < 5; i++) {
         setTimeout(createFlyingGhost, Math.random() * 1000);
-    }    
+    }
     injectMusic("assets/bgm/halloween/loading playlist.mp3");
 }
 
-function xmasEasterEgg() {
+function winterEasterEgg() {
     const themeColors = {
         '--accent-color': '#d2bce8',
         '--link-color': '#d2bce8',
@@ -215,6 +215,28 @@ function xmasEasterEgg() {
         `;
         document.head.appendChild(style);
     }, 500);
+
+    document.addEventListener("mousemove", (event) => {
+        createSnowflake(event.clientX, event.clientY);
+    });
+
+    function createSnowflake(x, y) {
+        const snowflake = document.createElement("div");
+        snowflake.className = "snowflake";
+        snowflake.style.left = `${x}px`;
+        snowflake.style.top = `${y}px`;
+
+        const size = Math.random() * 4 + 2;
+        snowflake.style.width = `${size}px`;
+        snowflake.style.height = `${size}px`;
+        snowflake.style.animationDuration = `${Math.random() * 2 + 3}s`;
+
+        document.body.appendChild(snowflake);
+
+        setTimeout(() => {
+            snowflake.remove();
+        }, 3000);
+    }
 }
 
 function setupSnowflakes() {
