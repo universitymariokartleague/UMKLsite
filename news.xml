@@ -3,9 +3,9 @@
 	<channel>
 		<title>UMKL News</title>
 		<link>https://umkl.co.uk/pages/news/</link>
-		<description>&lt;![CDATA[ The latest news from the UMKL ]]&gt;</description>
+		<description>The latest news from the UMKL</description>
 		<language>en-gb</language>
-		<lastBuildDate>Fri, 12 Dec 2025 21:36:43 +0000</lastBuildDate>
+		<lastBuildDate>Fri, 12 Dec 2025 21:47:52 +0000</lastBuildDate>
 		<image>
 			<title>UMKL News</title>
 			<url>assets/media/brand/favicon.png</url>
@@ -15,7 +15,7 @@
 			<title>Season 2 Round 1 Fixtures Revealed!</title>
 			<link>https://umkl.co.uk/pages/news/2025-10-01/season-2-round-1-fixtures-revealed/</link>
 			<media:content url="https://umkl.co.uk/assets/media/news/season2fixtures.avif" type="image/avif" medium="image"> </media:content>
-			<description>&lt;div&gt;&lt;p&gt;The first round of Season 2 fixtures have been revealed, and we are kicking things off in style. In the coming weeks we will see 6 matches fought between 12 universities across the UK, and all of these will be live on the UMKL YouTube channel for you to enjoy!&lt;/p&gt;&lt;p&gt;Click &lt;a href="https://www.youtube.com/watch?v=eISfD64peMI"&gt;here&lt;/a&gt; or watch the video below to see watch matches will take place in round 1!&lt;/p&gt;&lt;iframe src="https://www.youtube-nocookie.com/embed/eISfD64peMI?si=KuW-4UfnSO1KWxbh"&gt;&lt;/iframe&gt;&lt;p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-10-01/season-2-round-1-fixtures-revealed/round2fixtures.avif"/&gt;
+			<description>&lt;![CDATA[ &lt;div&gt;&lt;p&gt;The first round of Season 2 fixtures have been revealed, and we are kicking things off in style. In the coming weeks we will see 6 matches fought between 12 universities across the UK, and all of these will be live on the UMKL YouTube channel for you to enjoy!&lt;/p&gt;&lt;p&gt;Click &lt;a href="https://www.youtube.com/watch?v=eISfD64peMI"&gt;here&lt;/a&gt; or watch the video below to see watch matches will take place in round 1!&lt;/p&gt;&lt;iframe src="https://www.youtube-nocookie.com/embed/eISfD64peMI?si=KuW-4UfnSO1KWxbh"&gt;&lt;/iframe&gt;&lt;p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-10-01/season-2-round-1-fixtures-revealed/round2fixtures.avif"/&gt;
 &lt;i&gt;Teams will compete in these matches in October.&lt;/i&gt;&lt;/p&gt;&lt;h2&gt;&lt;a href="https://umkl.co.uk/pages/teams/details/?team=York"&gt;York&lt;/a&gt; VS &lt;a href="https://umkl.co.uk/pages/teams/details/?team=BIMM"&gt;BIMM&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;
                     Our Season 1 title holders York are drawn against the oldest of newcomer teams BIMM. These teams last played 
                     a test match together in &lt;a href="https://umkl.co.uk/pages/matches/?date=2025-06-13"&gt;June&lt;/a&gt;, which fell in York's favour by a score of 
@@ -45,14 +45,14 @@
                     against a red hot Warwick side in an action packed match, where the winner takes all. 
                     Which of these new teams will make their mark on an incredible first round in the new 
                     season?
-                &lt;/p&gt;&lt;p&gt;Best of luck to all our teams, and may the best team win!&lt;/p&gt;&lt;/div&gt;</description>
+                &lt;/p&gt;&lt;p&gt;Best of luck to all our teams, and may the best team win!&lt;/p&gt;&lt;/div&gt; ]]&gt;</description>
 			<pubDate>Wed, 01 Oct 2025 00:00:00 +0000</pubDate>
 		</item>
 		<item>
 			<title>The Structure for Season 2</title>
 			<link>https://umkl.co.uk/pages/news/2025-09-29/the-structure-for-season-2/</link>
 			<media:content url="https://umkl.co.uk/assets/media/news/season2structure.avif" type="image/avif" medium="image"> </media:content>
-			<description>&lt;div&gt;&lt;p&gt;The upcoming season of UMKL will be using a Swiss Style system to determine the winner, but what exactly is that?&lt;/p&gt;&lt;p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-09-29/the-structure-for-season-2/season2structureupdated.avif"/&gt;
+			<description>&lt;![CDATA[ &lt;div&gt;&lt;p&gt;The upcoming season of UMKL will be using a Swiss Style system to determine the winner, but what exactly is that?&lt;/p&gt;&lt;p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-09-29/the-structure-for-season-2/season2structureupdated.avif"/&gt;
 &lt;i&gt;Season 2 is scheduled to start in October 2025.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;
                 A Swiss System Tournament, most commonly used in chess, draws opponents against each other based on their 
                 current standings and match records, resulting in closer matches and near accurate skill based matchmaking. 
@@ -68,14 +68,14 @@
                     This article is an explation of an announcement made on the UMKL Discord server, 
                     you can join the server here.
                 &lt;/i&gt;
-&lt;/p&gt;&lt;/div&gt;</description>
+&lt;/p&gt;&lt;/div&gt; ]]&gt;</description>
 			<pubDate>Mon, 29 Sep 2025 00:00:00 +0000</pubDate>
 		</item>
 		<item>
 			<title>Cheep Cheep Updates</title>
 			<link>https://umkl.co.uk/pages/news/2025-07-17/cheep-cheep-updates/</link>
 			<media:content url="https://umkl.co.uk/assets/media/news/newcommands.avif" type="image/avif" medium="image"> </media:content>
-			<description>&lt;div&gt;&lt;p&gt;Hi all! Here are a few updates.&lt;/p&gt;&lt;p&gt;
+			<description>&lt;![CDATA[ &lt;div&gt;&lt;p&gt;Hi all! Here are a few updates.&lt;/p&gt;&lt;p&gt;
                 It's been a few months since the announcement of 
                 &lt;mention&gt;@Cheep Cheep&lt;/mention&gt; app, 
                 since then a lot of new commands and features have been added.
@@ -121,40 +121,40 @@
                     This article is a summary of an announcement made on the UMKL Discord server, 
                     you can join the server here.
                 &lt;/i&gt;
-&lt;/p&gt;&lt;/div&gt;</description>
+&lt;/p&gt;&lt;/div&gt; ]]&gt;</description>
 			<pubDate>Thu, 17 Jul 2025 00:00:00 +0000</pubDate>
 		</item>
 		<item>
 			<title>Upcoming summer test matches!</title>
 			<link>https://umkl.co.uk/pages/news/2025-06-13/upcoming-summer-test-matches/</link>
 			<media:content url="https://umkl.co.uk/assets/media/news/summertestmatches.avif" type="image/avif" medium="image"> </media:content>
-			<description>&lt;div&gt;&lt;p&gt;More test matches between teams are being planned throughout the weeks as exams finish and summer approaches.&lt;/p&gt;&lt;p&gt;Please check the &lt;a href="https://umkl.co.uk/pages/matches/"&gt;matches&lt;/a&gt; page to see confirmed and upcoming matches.&lt;/p&gt;&lt;p&gt;Now is also a good time for board members to liaise with other universities and plan test matches with each other, especially if your team hasn't had a Test Match yet.&lt;/p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-06-13/upcoming-summer-test-matches/versus.avif"/&gt;&lt;br/&gt;&lt;i&gt;A match graphic, as seen in the events tab on the Discord server.&lt;/i&gt;&lt;p&gt;
+			<description>&lt;![CDATA[ &lt;div&gt;&lt;p&gt;More test matches between teams are being planned throughout the weeks as exams finish and summer approaches.&lt;/p&gt;&lt;p&gt;Please check the &lt;a href="https://umkl.co.uk/pages/matches/"&gt;matches&lt;/a&gt; page to see confirmed and upcoming matches.&lt;/p&gt;&lt;p&gt;Now is also a good time for board members to liaise with other universities and plan test matches with each other, especially if your team hasn't had a Test Match yet.&lt;/p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-06-13/upcoming-summer-test-matches/versus.avif"/&gt;&lt;br/&gt;&lt;i&gt;A match graphic, as seen in the events tab on the Discord server.&lt;/i&gt;&lt;p&gt;
                 These continued test matches further test the Cheep Cheep application and YouTube streaming. Members of the relevant 
                 teams can sign up to compete in this match using the button in the team's announcement channel.
             &lt;/p&gt;&lt;p&gt;
                 These matches will be streamed on the UMKL YouTube channel. 
                 You can watch upcoming livestreams &lt;a href="https://www.youtube.com/@universitymariokartleague/streams"&gt;here&lt;/a&gt;.
-            &lt;/p&gt;&lt;/div&gt;</description>
+            &lt;/p&gt;&lt;/div&gt; ]]&gt;</description>
 			<pubDate>Fri, 13 Jun 2025 00:00:00 +0000</pubDate>
 		</item>
 		<item>
 			<title>Test matches are being conducted!</title>
 			<link>https://umkl.co.uk/pages/news/2025-04-22/umkl-test-matches-are-being-conducted/</link>
 			<media:content url="https://umkl.co.uk/assets/media/news/testmatches.avif" type="image/avif" medium="image"> </media:content>
-			<description>&lt;div&gt;&lt;p&gt;Test matches are planned in the upcoming week, more will follow in the upcoming months.&lt;/p&gt;&lt;p&gt;Please check the &lt;a href="https://umkl.co.uk/pages/matches/"&gt;matches&lt;/a&gt; page to see confirmed and upcoming matches.&lt;/p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-04-22/umkl-test-matches-are-being-conducted/versus.avif"/&gt;&lt;br/&gt;&lt;i&gt;A match graphic, as seen in the events tab on the Discord server.&lt;/i&gt;&lt;p&gt;
+			<description>&lt;![CDATA[ &lt;div&gt;&lt;p&gt;Test matches are planned in the upcoming week, more will follow in the upcoming months.&lt;/p&gt;&lt;p&gt;Please check the &lt;a href="https://umkl.co.uk/pages/matches/"&gt;matches&lt;/a&gt; page to see confirmed and upcoming matches.&lt;/p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-04-22/umkl-test-matches-are-being-conducted/versus.avif"/&gt;&lt;br/&gt;&lt;i&gt;A match graphic, as seen in the events tab on the Discord server.&lt;/i&gt;&lt;p&gt;
                 The upcoming test matches will serve as a test of the Cheep Cheep app and YouTube streaming. Members of the relevant 
                 teams can sign up to compete in this match using the button in the team's announcement channel.
             &lt;/p&gt;&lt;p&gt;
                 These matches will be streamed from both team's perspectives on the UMKL YouTube channel. 
                 You can visit it &lt;a href="https://www.youtube.com/@universitymariokartleague"&gt;here&lt;/a&gt;.
-            &lt;/p&gt;&lt;/div&gt;</description>
+            &lt;/p&gt;&lt;/div&gt; ]]&gt;</description>
 			<pubDate>Tue, 22 Apr 2025 00:00:00 +0000</pubDate>
 		</item>
 		<item>
 			<title>Information for universities wanting to join</title>
 			<link>https://umkl.co.uk/pages/news/2025-04-19/uni-joining-info/</link>
 			<media:content url="https://umkl.co.uk/assets/media/news/mariokartbanner.avif" type="image/avif" medium="image"> </media:content>
-			<description>&lt;div&gt;&lt;h3&gt;Intro&lt;/h3&gt;&lt;p&gt;
+			<description>&lt;![CDATA[ &lt;div&gt;&lt;h3&gt;Intro&lt;/h3&gt;&lt;p&gt;
                 Joining the University Mario Kart League is a commitment to the future of Mario Kart e-sports in the United Kingdom, 
                 and we would love to have your university represented in the league. 
             &lt;/p&gt;&lt;p&gt;
@@ -219,14 +219,14 @@
             &lt;/p&gt;&lt;p&gt;
                 You can join our Discord server &lt;a href="https://discord.gg/jz3hKEmDss"&gt;here&lt;/a&gt;
                 and find our YouTube channel &lt;a href="https://www.youtube.com/@universitymariokartleague"&gt;here&lt;/a&gt;.
-            &lt;/p&gt;&lt;/div&gt;</description>
+            &lt;/p&gt;&lt;/div&gt; ]]&gt;</description>
 			<pubDate>Sun, 20 Apr 2025 00:00:00 +0000</pubDate>
 		</item>
 		<item>
 			<title>Join the UMKL Discord server!</title>
 			<link>https://umkl.co.uk/pages/news/2025-04-19/umkl-discord/</link>
 			<media:content url="https://umkl.co.uk/assets/media/news/discordinspire.avif" type="image/avif" medium="image"> </media:content>
-			<description>&lt;div&gt;&lt;p&gt;
+			<description>&lt;![CDATA[ &lt;div&gt;&lt;p&gt;
                 The University Mario Kart League 
                 &lt;a href="https://discord.gg/jz3hKEmDss"&gt;Discord server&lt;/a&gt; is the beating heart of our operations.
             &lt;/p&gt;&lt;p&gt;
@@ -256,14 +256,14 @@
                 come join our Discord server and be a part of our lovely community! 
             &lt;/p&gt;&lt;p&gt;
                 You can join our Discord server &lt;a href="https://discord.gg/jz3hKEmDss"&gt;here&lt;/a&gt;.&lt;br/&gt;
-&lt;/p&gt;&lt;/div&gt;</description>
+&lt;/p&gt;&lt;/div&gt; ]]&gt;</description>
 			<pubDate>Sat, 19 Apr 2025 00:00:00 +0000</pubDate>
 		</item>
 		<item>
 			<title>Welcome to the UMKL!</title>
 			<link>https://umkl.co.uk/pages/news/2025-04-19/umkl-intro</link>
 			<media:content url="https://umkl.co.uk/assets/media/news/umklbanner.avif" type="image/avif" medium="image"> </media:content>
-			<description>&lt;div&gt;&lt;p&gt;Welcome to the University Mario Kart League!&lt;/p&gt;&lt;p&gt;If you've reached this page, you probably have an idea of what we do, but we'll explain more below!&lt;/p&gt;&lt;p&gt;
+			<description>&lt;![CDATA[ &lt;div&gt;&lt;p&gt;Welcome to the University Mario Kart League!&lt;/p&gt;&lt;p&gt;If you've reached this page, you probably have an idea of what we do, but we'll explain more below!&lt;/p&gt;&lt;p&gt;
                 We're an independent gaming league made up of university teams across the country,
                 which compete in 6v6 Mario Kart 8 Deluxe matches.
             &lt;/p&gt;&lt;p&gt;
@@ -291,7 +291,7 @@
                 Our YouTube channel, where we livestream matches, can be visited &lt;a href="https://www.youtube.com/@universitymariokartleague"&gt;here&lt;/a&gt;.
             &lt;/p&gt;&lt;i&gt;
                 Please visit the credits to see everyone who worked on the University Mario Kart League.
-            &lt;/i&gt;&lt;/div&gt;</description>
+            &lt;/i&gt;&lt;/div&gt; ]]&gt;</description>
 			<pubDate>Sat, 19 Apr 2025 00:00:00 +0000</pubDate>
 		</item>
 	</channel>
