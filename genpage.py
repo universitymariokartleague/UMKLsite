@@ -3,59 +3,63 @@ from bs4 import BeautifulSoup
 
 BLANK_NEWS_PAGE = """<!DOCTYPE html>
 <html lang="en" data-overlayscrollbars-initialize>
-    <head>
-        <base href="../../../../">
-    
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-        <title>{TITLE} | UMKL</title>
-        <meta name="description" content="{DESC}">
-        <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/settings.css">
-        <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
-        <link rel="stylesheet" href="css/ext/fontawesome.min.css">
-        <meta name="color-scheme" content="dark light">
-    
-        <meta property="og:title" content="{TITLE} | UMKL" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://umkl.co.uk/{LINK}" />
-        <meta property="og:image" content="https://umkl.co.uk/{IMAGE}" />
-        <meta property="og:description" content="{DESC}" />
-        <meta name="theme-color" content="#bc0839" />
-    
-        <!-- Include this to make the og:image larger -->
-        <meta name="twitter:card" content="summary_large_image" />
-    
-        <!-- Components -->
-        <script type="module" src="components/navbar.js" defer></script>
-        <script type="module" src="components/footer.js" defer></script>
+<head>
+    <base href="../../../../">
 
-        <!-- Scripts -->
-        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-        <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
-        <script src="scripts/overlayscrollbar.js" defer></script>     
-        
-        <script type="module" src="scripts/settings.js" defer></script>
-    </head>
-    <body id="top" data-overlayscrollbars-initialize>
-        <umkl-navbar></umkl-navbar>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>{TITLE} | UMKL</title>
+    <meta name="description" content="{DESC}">
+    <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
+    <link rel="stylesheet" href="css/ext/fontawesome.min.css">
+    <meta name="color-scheme" content="dark light">
 
-        <main>
-            <a href="pages/news/">Back</a>
-            <h1>{TITLE}</h1>
-            <div class="p-below-title">
-                {DATE} | 
-                <tag translate="no">Intro</tag>
-                <div class="news-credits">Written by {AUTHOR1}, {AUTHOR2}.<br>Edited by {EDITOR}</div>
-            </div>
-            <hr class="hr-below-title">
+    <meta property="og:title" content="{TITLE} | UMKL" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://umkl.co.uk/{LINK}" />
+    <meta property="og:image" content="https://umkl.co.uk/{IMAGE}" />
+    <meta property="og:description" content="{DESC}" />
+    <meta content="#bc0839" name="theme-color" />
+    <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
+    <meta property="og:image:type" content="image/avif"/>
+    <meta property="og:image:width" content="1920"/>
+    <meta property="og:image:height" content="1080"/>
 
-            <p>{DESC}</p>
-        </main>
+    <!-- Include this to make the og:image larger -->
+    <meta name="twitter:card" content="summary_large_image" />
 
-        <umkl-footer></umkl-footer>
-    </body>
+    <!-- Components -->
+    <script type="module" src="components/navbar.js" defer></script>
+    <script type="module" src="components/footer.js" defer></script>
+
+    <!-- Scripts -->
+    <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+    <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
+    <script src="scripts/overlayscrollbar.js" defer></script>     
+    
+    <script type="module" src="scripts/settings.js" defer></script>
+</head>
+<body id="top" data-overlayscrollbars-initialize>
+    <umkl-navbar></umkl-navbar>
+
+    <main>
+        <a href="pages/news/">Back</a>
+        <h1>{TITLE}</h1>
+        <div class="p-below-title">
+            {DATE} | 
+            <tag translate="no">Intro</tag>
+            <div class="news-credits">Written by {AUTHOR1}, {AUTHOR2}.<br>Edited by {EDITOR}</div>
+        </div>
+        <hr class="hr-below-title">
+
+        <p>{DESC}</p>
+    </main>
+
+    <umkl-footer></umkl-footer>
+</body>
 </html>
 """
 
