@@ -3,9 +3,9 @@
 	<channel>
 		<title>UMKL News</title>
 		<link>https://umkl.co.uk/pages/news/</link>
-		<description>The latest news from the UMKL</description>
+		<description>&lt;![CDATA[ The latest news from the UMKL ]]&gt;</description>
 		<language>en-gb</language>
-		<lastBuildDate>Sun, 07 Dec 2025 05:35:16 +0000</lastBuildDate>
+		<lastBuildDate>Fri, 12 Dec 2025 21:36:43 +0000</lastBuildDate>
 		<image>
 			<title>UMKL News</title>
 			<url>assets/media/brand/favicon.png</url>
@@ -91,7 +91,7 @@
                 so more test matches will follow! 
                 So be sure to check the &lt;a href="https://umkl.co.uk/pages/matches/"&gt;matches&lt;/a&gt; page
                 for upcoming matches!
-            &lt;/p&gt;&lt;p&gt;Below are some newly added commands that can be used in the server!&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-07-17/cheep-cheep-updates/newcommands.png"/&gt;&lt;div&gt;
+            &lt;/p&gt;&lt;p&gt;Below are some newly added commands that can be used in the server!&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-07-17/cheep-cheep-updates/newcommands.avif"/&gt;&lt;div&gt;
 &lt;b&gt;Changelog for the 17/07/2025 update&lt;/b&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;/register&lt;/code&gt; removed, it is no longer required to use &lt;code&gt;/join&lt;/code&gt;&lt;/li&gt;
@@ -271,7 +271,7 @@
                 but this has quickly expanded to universities across the country! Currently 
                 we're still growing, with 6v6 test matches and friendlies being played until our 
                 next season starts next academic year.
-            &lt;/p&gt;&lt;img src="https://umkl.co.uk/assets/media/brand/UMKL_Season_2_Teaser.avif"/&gt;&lt;br/&gt;&lt;i&gt;Season 2 is scheduled to start in October 2025.&lt;/i&gt;&lt;p&gt;We're one season down, with our reigning champions York topping the charts for Season 1.&lt;/p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-04-19/umkl-intro/team_standings.avif"/&gt;&lt;br/&gt;&lt;i&gt;Some team logos were incomplete during Season 1.&lt;/i&gt;&lt;p&gt;
+            &lt;/p&gt;&lt;img src="https://umkl.co.uk/assets/media/brand/promo/UMKL_Season_2_Teaser.avif"/&gt;&lt;br/&gt;&lt;i&gt;Season 2 is scheduled to start in October 2025.&lt;/i&gt;&lt;p&gt;We're one season down, with our reigning champions York topping the charts for Season 1.&lt;/p&gt;&lt;img src="https://umkl.co.uk/pages/news/2025-04-19/umkl-intro/team_standings.avif"/&gt;&lt;br/&gt;&lt;i&gt;Some team logos were incomplete during Season 1.&lt;/i&gt;&lt;p&gt;
                 Currently, whilst we're working on our website and the next season's roster, we are currently 
                 having on-going test matches between our teams and practice rooms.
             &lt;/p&gt;&lt;p&gt;
