@@ -1,6 +1,6 @@
 import datetime, re, os, mimetypes
 import xml.etree.ElementTree as ET
-import xml.dom.minidom
+from lxml import etree as ET
 from bs4 import BeautifulSoup
 
 NEWS_INDEX = "pages/news/index.html"
@@ -135,13 +135,25 @@ def get_news_items():
     return items
 
 def build_rss(items):
-    rss = ET.Element("rss", version="2.0", attrib={"xmlns:media": "http://search.yahoo.com/mrss/"})
+    NSMAP = {
+        "media": "http://search.yahoo.com/mrss/"
+    }
+
+    rss = ET.Element(
+        "rss",
+        version="2.0",
+        nsmap=NSMAP
+    )
+
     channel = ET.SubElement(rss, "channel")
     ET.SubElement(channel, "title").text = FEED_TITLE
     ET.SubElement(channel, "link").text = FEED_LINK
     ET.SubElement(channel, "description").text = FEED_DESCRIPTION
     ET.SubElement(channel, "language").text = "en-gb"
-    ET.SubElement(channel, "lastBuildDate").text = datetime.datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S +0000")
+    ET.SubElement(channel, "lastBuildDate").text = datetime.datetime.utcnow().strftime(
+        "%a, %d %b %Y %H:%M:%S +0000"
+    )
+
     image = ET.SubElement(channel, "image")
     ET.SubElement(image, "title").text = FEED_TITLE
     ET.SubElement(image, "url").text = "https://umkl.co.uk/assets/media/brand/favicon.png"
@@ -149,26 +161,32 @@ def build_rss(items):
 
     for item in items:
         item_elem = ET.SubElement(channel, "item")
+
         ET.SubElement(item_elem, "title").text = item["title"]
         ET.SubElement(item_elem, "link").text = item["link"]
-        mime_type, _ = mimetypes.guess_type(item["image"])
-        if item["image"]:
-            media = ET.SubElement(
+
+        if item.get("image"):
+            mime_type, _ = mimetypes.guess_type(item["image"])
+            ET.SubElement(
                 item_elem,
-                "media:content",
-                {
-                    "url": item["image"],
-                    "type": mime_type or "image/webp",
-                    "medium": "image"
-                }
+                ET.QName(NSMAP["media"], "content"),
+                url=item["image"],
+                type=mime_type or "image/webp",
+                medium="image"
             )
-            media.text = " "
-        ET.SubElement(item_elem, "description").text = f'<![CDATA[ {item["description"]} ]]>'
+
+        clean_desc = re.sub(r"\s+", " ", item["description"]).strip()
+        desc = ET.SubElement(item_elem, "description")
+        desc.text = ET.CDATA(clean_desc)
+
         ET.SubElement(item_elem, "pubDate").text = item["pubDate"]
 
-    rough_string = ET.tostring(rss, encoding="utf-8", xml_declaration=True)
-    reparsed = xml.dom.minidom.parseString(rough_string)
-    return reparsed.toprettyxml(encoding="utf-8")
+    return ET.tostring(
+        rss,
+        encoding="utf-8",
+        xml_declaration=True,
+        pretty_print=True
+    )
 
 def generate_rss_feed():
     news_items = get_news_items()

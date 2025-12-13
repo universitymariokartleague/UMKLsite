@@ -7,3 +7,4 @@ discord-ext-modal-paginator
 multipledispatch
 gitpython
 bs4
+lxml
