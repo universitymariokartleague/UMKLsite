@@ -1,12 +1,12 @@
 Snow|true|false|false
-New Super Mario Bros. Wii - World 3.opus|winter.avif
-Super Mario Galaxy 2 - Freezy Flake Galaxy.opus|winter.avif
-Mario Kart 8 Deluxe - 3DS Rosalina's Ice World.opus|winter.avif
-Super Mario 3D World - Snowball Park.opus|winter.avif
-Super Mario Galaxy - Ice Mountain.opus|winter.avif
-Super Mario 3D World - WORLD 3.opus|winter.avif
-New Super Mario Bros. - World 5.opus|winter.avif
-Mario Kart 8 - GCN Sherbet Land.opus|winter.avif
-Super Mario 64 - Snow Mountain.opus|winter.avif
-Paper Mario Sticker Star - Snow Rise.opus|winter.avif
-Super Mario Odyssey - Shiveria Town.opus|winter.avif
+New Super Mario Bros. Wii - World 3.mp3|winter.avif
+Super Mario Galaxy 2 - Freezy Flake Galaxy.mp3|winter.avif
+Mario Kart 8 Deluxe - 3DS Rosalina's Ice World.mp3|winter.avif
+Super Mario 3D World - Snowball Park.mp3|winter.avif
+Super Mario Galaxy - Ice Mountain.mp3|winter.avif
+Super Mario 3D World - WORLD 3.mp3|winter.avif
+New Super Mario Bros. - World 5.mp3|winter.avif
+Mario Kart 8 - GCN Sherbet Land.mp3|winter.avif
+Super Mario 64 - Snow Mountain.mp3|winter.avif
+Paper Mario Sticker Star - Snow Rise.mp3|winter.avif
+Super Mario Odyssey - Shiveria Town.mp3|winter.avif
