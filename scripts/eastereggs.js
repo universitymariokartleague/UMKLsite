@@ -2,7 +2,7 @@
     This script changes the theme of the site depending on the holiday.
 */
 
-export { halloweenEasterEgg, winterEasterEgg, newYearCountDown };
+export { halloweenEasterEgg, winterEasterEgg, newYearCountDown, newYearFireworks };
 
 function injectMusic(path) {
     if (document.getElementById('audio')) return;
@@ -337,12 +337,22 @@ function newYearCountDown() {
         .new-year-countdown td {
             width: 0.4em;
             text-align: center;
-            padding: 0.1em;
+            padding: 0.05em;
             border: none;
         }
 
         .new-year-countdown td.separator {
             width: 0;
+        }
+
+        @media screen and (max-width: 767px) {
+            .new-year-countdown {
+                font-size: 2.4em;
+            }
+
+            .new-year-countdown td {
+                border: none;
+            }
         }
 
         @keyframes slideIn {
@@ -377,7 +387,8 @@ function newYearCountDown() {
     const nextYear = new Date(new Date().getFullYear() + 1, 0, 1);
 
     function getTimeRemaining() {
-        const diff = nextYear - new Date();
+        let diff = nextYear - new Date();
+        if (diff <= 0) diff = 0;
         return {
             hours: Math.floor(diff / 3600000).toString().padStart(2, '0'),
             minutes: Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0'),
@@ -385,11 +396,58 @@ function newYearCountDown() {
         };
     }
 
+    let countdownInterval;
+
     function updateCountdown() {
         const { hours, minutes, seconds } = getTimeRemaining();
         countdown.innerHTML = `<table><tr><td>${hours[0]}</td><td>${hours[1]}</td><td class="separator">:</td><td>${minutes[0]}</td><td>${minutes[1]}</td><td class="separator">:</td><td>${seconds[0]}</td><td>${seconds[1]}</td></tr></table>`;
+
+        if (hours === "00" && minutes === "00" && seconds === "00") {
+            countdown.innerHTML = `<div style="letter-spacing: 0;">HAPPY NEW YEAR ${nextYear.getFullYear()}</div>`;
+            clearInterval(countdownInterval);
+            console.log("Happy New Year!");
+            newYearFireworks();
+        }
     }
 
+    countdownInterval = setInterval(updateCountdown, 1000);
     updateCountdown();
-    setInterval(updateCountdown, 1000);
+}
+
+function newYearFireworks() {
+    const canvas = document.createElement('canvas');
+    canvas.className = 'fireworks';
+    canvas.style.position = 'fixed';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.pointerEvents = 'none';
+    document.body.appendChild(canvas);
+
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://cdn.jsdelivr.net/npm/fireworks-js@2.x/dist/index.umd.js';
+    script.onload = () => {
+        const fireworks = new window.Fireworks.default(canvas, {
+            gravity: 0,
+            traceLength: 1.5,
+            delay: { min: 10, max: 30 },
+            particles: 150,
+            sound: {
+                enabled: true,
+                files: [
+                    '../../../assets/media/eastereggs/newyears/explosion0.mp3',
+                    '../../../assets/media/eastereggs/newyears/explosion1.mp3',
+                    '../../../assets/media/eastereggs/newyears/explosion2.mp3'
+                ],
+                volume: {
+                    min: 1,
+                    max: 15
+                }
+            }
+        });
+        fireworks.start();
+
+        setInterval(() => fireworks.waitStop(), 15000)
+    }
+    document.body.appendChild(script);
 }
