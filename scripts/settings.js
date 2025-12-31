@@ -4,8 +4,8 @@
     It saves the settings in local storage and applies them to the page. 
 */
 
-import { halloweenEasterEgg, winterEasterEgg } from './eastereggs.js';
-export { toggleSettingsPanel, disableThemeShortcut, disableSettingsShortcut  }
+import { halloweenEasterEgg, winterEasterEgg, newYearCountDown } from './eastereggs.js';
+export { toggleSettingsPanel, disableThemeShortcut, disableSettingsShortcut }
 
 const settingsBoxHTML = `
     <div class="hidden BGBlur" id="BGBlur"></div>
@@ -273,10 +273,12 @@ function checkEasterEggs() {
             winterEasterEgg();
             break;
         case "newyearseve":
-            console.log("Happy New Year's Eve!");
+            console.log("Countdown to the New Year!");
+            newYearCountDown();
             break;
         case "newyear":
             console.log("Happy New Year!");
+            newYearFireworks();
             break;
         default:
             break;
