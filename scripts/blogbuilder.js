@@ -38,7 +38,7 @@ const defaultBlogElements = [
     },
     {
         type: "youtubeEmbed",
-        youtubeID: "jNQXAC9IVRw"
+        youtubeID: "eISfD64peMI"
     },
     {
         type: "blockquote",
@@ -48,7 +48,7 @@ const defaultBlogElements = [
     },
     {
         type: "img",
-        src: "assets/media/calendar/mikuheadshake.avif",
+        src: "https://umkl.co.uk/assets/media/calendar/mikuheadshake.avif",
         alt: "Miku shaking her head",
         description: "Write a description of the image here"
     },
@@ -87,6 +87,7 @@ const editBox = document.getElementById('editBox');
 const editBoxJS = document.getElementById('editBoxJS');
 const editBoxLabel = document.getElementById('edit-box-label');
 let editBoxOpen = false;
+let storageExceeded = false;
 
 document.getElementById('edit-box-close-button').addEventListener('click', showElementEditUI);
 document.getElementById('settings-icon').addEventListener('click', toggleSettingsPanel)
@@ -218,7 +219,11 @@ function getLocalStorageBytes() {
 }
 
 function backupBlog(data) {
-    localStorage.setItem("blogBuilderBackup", JSON.stringify(data))
+    try {
+        localStorage.setItem("blogBuilderBackup", JSON.stringify(data))
+    } catch (error) {
+        storageExceeded = true;
+    }
 }
 
 function buildBlog(data) {
@@ -355,7 +360,7 @@ function buildBlog(data) {
     `;
 
     const bytes = getLocalStorageBytes(localStorage);
-    if (bytes) document.getElementById("storage-used").innerHTML = formatBytes(bytes);
+    if (bytes) document.getElementById("storage-used").innerHTML = `${formatBytes(bytes)}/5MB${storageExceeded ? '<br/>Storage limit has been exceeded! Changes will not be saved!' : ''}`;
 
     for (let i = 0; i < blogElements.length; i++) {
         document.getElementById(`element${i}`).addEventListener("click", () => {
@@ -447,6 +452,7 @@ function generateEditUIHTML(i) {
     editBoxLabel.innerText = `Edit ${friendlyTitles[element.type]} UI`
 
     const keys = Object.keys(element);
+    const areImagesImported = Object.keys(images).length > 0;
 
     const fieldsHTML = `
         ${keys
@@ -454,10 +460,15 @@ function generateEditUIHTML(i) {
                 if (key === "type") {
                     return `
                         <code>${key}: ${element[key]}</code><br/>
-                        ${element[key] == "img" && Object.keys(images).length > 0 ? 
-                            `<p>Choose an imported image:</p>` : 
+                        ${element[key] == "img" && areImagesImported ? 
+                            `Choose an imported image:
+                            <select id="import-image-dropdown" class="edit-ui-field" style="height: unset">
+                                <option value="">Choose an image!</option>
+                                ${Object.keys(images).map(name => `<option value="${name}">${name}</option>`).join("")}
+                            </select>` : 
                             'Use the <code>Import Image</code> button to add images from your device'
                         }
+                        <br/>
                     `;
                 }
 
@@ -472,12 +483,30 @@ function generateEditUIHTML(i) {
 
     editBoxJS.innerHTML = `
         <p>
-            <div class="codeBoxTight">${JSON.stringify(element)}</div>
-            Edit attributes:<br/>
-            ${fieldsHTML}
+            <div class="codeBoxTight" style="max-height: 100px; overflow-y: auto;">${JSON.stringify(element)}</div>
+            Edit attributes: ${fieldsHTML}
         </p>
         <button id="apply-edit-button">Apply Properties</button> <button id="delete-element-button">Delete element</button>
     `;
+
+    if (element.type == "img" && areImagesImported) {
+        const dropdown = document.getElementById("import-image-dropdown");
+        dropdown.addEventListener("change", () => {
+            if (dropdown.value != "") {
+                editBoxLabel.innerText = "Loading image...";
+                const file = images[dropdown.value];
+                const reader = new FileReader();
+                reader.onload = () => {
+                    element.src = reader.result;
+                    element.alt = dropdown.value;
+                    blogElements[i] = element;
+                    buildBlog(blogElements);
+                    showElementEditUI();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
 
     document.getElementById("apply-edit-button").addEventListener("click", () => {
         const tagStrip = str => str.replace(/<[^>]*>/g, "");

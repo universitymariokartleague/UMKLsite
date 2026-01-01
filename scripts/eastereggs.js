@@ -2,7 +2,7 @@
     This script changes the theme of the site depending on the holiday.
 */
 
-export { halloweenEasterEgg, winterEasterEgg };
+export { halloweenEasterEgg, winterEasterEgg, newYearCountDown, newYearFireworks };
 
 function injectMusic(path) {
     if (document.getElementById('audio')) return;
@@ -46,6 +46,13 @@ function createElementWithStyles(tag, styles) {
     const element = document.createElement(tag);
     Object.assign(element.style, styles);
     return element;
+}
+
+async function loadFont(name, url) {
+    const font = new FontFace(name, `url(../../../${url})`);
+    await font.load();
+    document.fonts.add(font);
+    return font;
 }
 
 function halloweenEasterEgg() {
@@ -305,4 +312,142 @@ function setupSnowflakes() {
     };
 
     setInterval(createSnowflake, 50);
+}
+
+function newYearCountDown() {
+    const style = document.createElement('style');
+    style.textContent = `
+        .new-year-countdown {
+            position: fixed;
+            bottom: 30px;
+            right: 10px;
+            color: #ff0000;
+            font-family: 'digital', monospace;
+            font-size: 3em;
+            letter-spacing: -.1em;
+            user-select: none;
+            -webkit-user-select: none;
+            animation: glow 2.5s infinite alternate ease-in-out 0.5s, slideIn 0.5s ease-in-out;
+        }
+
+        .new-year-countdown table {
+            border-collapse: collapse;
+        }
+
+        .new-year-countdown td {
+            width: 0.4em;
+            text-align: center;
+            padding: 0.05em;
+            border: none;
+        }
+
+        .new-year-countdown td.separator {
+            width: 0;
+        }
+
+        @media screen and (max-width: 767px) {
+            .new-year-countdown {
+                font-size: 2.4em;
+            }
+
+            .new-year-countdown td {
+                border: none;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                right: -200px;
+                opacity: 0;
+            }
+            to {
+                right: 10px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 -40px #ff4c20, 0 0 -50px #ff4c20, 0 0 -60px #ff4c20, 0 0 -70px #ff4c20;
+            }
+            to {
+                text-shadow: 0 0 20px #ff4c20, 0 0 30px #ff4c20, 0 0 40px #ff4c20, 0 0 50px #ff4c20;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+
+    loadFont('digital', 'assets/font/DS-DIGII.woff2');
+
+    const countdown = document.createElement('div');
+    countdown.id = 'countdown';
+    countdown.classList.add('new-year-countdown');
+    document.body.appendChild(countdown);
+
+    const nextYear = new Date(new Date().getFullYear() + 1, 0, 1);
+
+    function getTimeRemaining() {
+        let diff = nextYear - new Date();
+        if (diff <= 0) diff = 0;
+        return {
+            hours: Math.floor(diff / 3600000).toString().padStart(2, '0'),
+            minutes: Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0'),
+            seconds: Math.floor((diff % 60000) / 1000).toString().padStart(2, '0')
+        };
+    }
+
+    let countdownInterval;
+
+    function updateCountdown() {
+        const { hours, minutes, seconds } = getTimeRemaining();
+        countdown.innerHTML = `<table><tr><td>${hours[0]}</td><td>${hours[1]}</td><td class="separator">:</td><td>${minutes[0]}</td><td>${minutes[1]}</td><td class="separator">:</td><td>${seconds[0]}</td><td>${seconds[1]}</td></tr></table>`;
+
+        if (hours === "00" && minutes === "00" && seconds === "00") {
+            countdown.innerHTML = `<div style="letter-spacing: 0;">HAPPY NEW YEAR ${nextYear.getFullYear()}</div>`;
+            clearInterval(countdownInterval);
+            console.log("Happy New Year!");
+            newYearFireworks();
+        }
+    }
+
+    countdownInterval = setInterval(updateCountdown, 1000);
+    updateCountdown();
+}
+
+function newYearFireworks() {
+    const canvas = document.createElement('canvas');
+    canvas.className = 'fireworks';
+    canvas.style.position = 'fixed';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.pointerEvents = 'none';
+    document.body.appendChild(canvas);
+
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://cdn.jsdelivr.net/npm/fireworks-js@2.x/dist/index.umd.js';
+    script.onload = () => {
+        const fireworks = new window.Fireworks.default(canvas, {
+            gravity: 0,
+            traceLength: 1.5,
+            delay: { min: 10, max: 30 },
+            particles: 150,
+            sound: {
+                enabled: true,
+                files: [
+                    '../../../assets/media/eastereggs/newyears/explosion0.mp3',
+                    '../../../assets/media/eastereggs/newyears/explosion1.mp3',
+                    '../../../assets/media/eastereggs/newyears/explosion2.mp3'
+                ],
+                volume: {
+                    min: 1,
+                    max: 15
+                }
+            }
+        });
+        fireworks.start();
+
+        setInterval(() => fireworks.waitStop(), 15000)
+    }
+    document.body.appendChild(script);
 }

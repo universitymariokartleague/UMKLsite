@@ -46,7 +46,7 @@
     margin: 0 5px 2px 5px;
     min-width: 200px;
     width: 200px;
-    height: 250px;
+    height: 265px;
     border-radius: 10px;
     overflow: hidden;
     position: relative;
@@ -59,7 +59,6 @@
 .news-box .news-image video,
 .news-box .news-image video {
 	width: 220px;
-    height: 110px;
     position: absolute;
 	top: 0;
 	left: 0;
@@ -67,7 +66,6 @@
     opacity: 0;
     transition: opacity 0.2s ease-in;
     object-fit: cover;
-    overflow-clip-margin: unset;
 }
 
 .news-box .news-text {

@@ -54,13 +54,6 @@ async function getTeamdata(team = "", season) {
     });
 }
 
-async function loadFont(name, url) {
-    const font = new FontFace(name, `url(${url})`);
-    await font.load();
-    document.fonts.add(font);
-    return font;
-}
-
 async function loadImage(url) {
     return new Promise((resolve, reject) => {
         const img = new Image();
