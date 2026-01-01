@@ -19,6 +19,10 @@
     display: contents;
 }
 
+.user-info-wrapper a {
+    display: unset;
+}
+
 .team-info .map {
     width: 100%;
     display: flex;
