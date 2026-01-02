@@ -1,3 +1,8 @@
+body {
+    max-width: 1920px;
+    margin: 0 auto;
+}
+
 #loading-area {
     position: fixed;
     width: 100%;
@@ -52,7 +57,6 @@
 }
 
 #editing-tools {
-    flex: 1;
     position: fixed;
     right: 0;
     width: calc(100vw - 1000px);
@@ -61,7 +65,6 @@
     color: #fff;
     background-color: var(--accent-color);
     padding: 15px;
-    overflow-y: scroll;
 }
 
 .elements-edit {

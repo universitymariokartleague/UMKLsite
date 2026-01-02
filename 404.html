@@ -7,6 +7,7 @@
     <title>404 | UMKL</title>
     <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
     <link rel="stylesheet" href="https://umkl.co.uk/css/style.css">
+    <link href="css/settings.css" rel="stylesheet" />
     <meta name="color-scheme" content="dark light">
 
     <!-- Components -->
@@ -14,6 +15,7 @@
     <script type="module" src="components/footer.js" defer></script>
 
     <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+    <script defer="" src="scripts/settings.js" type="module"></script>
 </head>
 
 <body id="top">

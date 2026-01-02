@@ -758,7 +758,7 @@ document.getElementById("export-elements-list").addEventListener("click", () => 
 
     const title = blogElements.find(e => e.type === "blogInfo")?.title || "Blog";
 
-    a.download = `${title.replace(/ /g, "")}Blog.json`;
+    a.download = `${title.replace(/ /g, "")}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -791,7 +791,20 @@ document.getElementById("add-image").addEventListener("click", () => {
 });
 
 document.getElementById("export-html").addEventListener("click", () => {
-    console.log(buildHTML(blogElements));
+    let resultHTML = buildHTML(blogElements);
+    const blob = new Blob([resultHTML], { type: "text/html" });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+
+    const title = blogElements.find(e => e.type === "blogInfo")?.title || "Blog";
+
+    a.download = `${title.replace(/ /g, "")}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 });
 
 document.addEventListener("DOMContentLoaded", () => {
