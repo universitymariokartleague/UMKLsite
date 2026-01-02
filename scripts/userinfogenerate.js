@@ -3,7 +3,7 @@
 */
 
 const teamBoxFormatHTML = `
-    <div class="team-info-wrapper">
+    <div class="team-info-wrapper user-info-wrapper">
         <img src="{{PFP}}" alt="{{username}} profile picture" title="{{username}} profile picture" class="user-image"
         onload="this.style.opacity=1" onerror="this.onerror=null; this.src='assets/media/faq/defaultavatar.avif';"/>
         <hr>
@@ -23,6 +23,8 @@ const teamBoxFormatHTML = `
                 {{currentFields}}
             </div>
         </div>
+
+        <p class="no-bottom">Card generated at {{timestamp}}</p>
     </div>
 `;
 
@@ -61,6 +63,19 @@ function formatDetailedPoints(matches_info) {
         .join(`,<br>`);
 }
 
+function formatSPDetails(sp_detailed) {
+    if (!sp_detailed || !sp_detailed.history) return "No SP data";
+    return `
+        SP from chatting: ${sp_detailed.chat_sp}<br>
+        SP gains/losses:
+        <ul class="sp-bullet-points">
+        ${Object.entries(sp_detailed.history)
+        .map(([date, info]) => {
+            return `<li>${info.change} SP on ${date} (${info.event})</li>`;
+        })
+        .join('')}</ul>`;
+}
+
 function buildUserInfoTable(data, isCurrent = false) {
     if (isCurrent) {
         return `
@@ -77,8 +92,8 @@ function buildUserInfoTable(data, isCurrent = false) {
             <tr><td class="table-key">Matches Played</td><td>${data.matches_played}</td></tr>
             <tr><td class="table-key">First Places (Podiums)</td><td>${data.first_places}</td></tr>
             <tr><td class="table-key">Highest Finish</td><td>${data.highest_finish}</td></tr>
-            <tr><td class="table-key">Career Points</td><td>${data.career_points} <details class="details-box"><summary>Detailed results</summary><p class="p-below-title">${formatDetailedPoints(data.match_data)}</p></details></td></tr>
-            <tr><td class="table-key">SP</td><td>${data.sp}</td></tr>
+            <tr><td class="table-key">Career Points</td><td>${data.career_points} <details class="details-box"><summary>Detailed results</summary>${formatDetailedPoints(data.match_data)}</details></td></tr>
+            <tr><td class="table-key">SP</td><td>${data.sp} <details class="details-box"><summary>SP details</summary>${formatSPDetails(data.sp_detailed)}</details></td></tr>
         </table>`;
 }
 
@@ -108,7 +123,8 @@ async function generatePlayerStatsBox(data, showError) {
         .replace("{{currentTeam}}", data.team)
         .replace("{{currentSeason}}", fetchedCurrentSeason)
         .replace("{{currentFields}}", currentFields)
-        .replace("{{extraFields}}", extraFields);
+        .replace("{{extraFields}}", extraFields)
+        .replace("{{timestamp}}", data.timestamp);
 
     if (teamData) {
         document.documentElement.style.setProperty('--highlight-color', `#${data.color}80`);
@@ -265,6 +281,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const compressed = urlParams.get('d');
     const json = LZString.decompressFromEncodedURIComponent(compressed);
     const data = JSON.parse(json);
+    console.log(data);
     fillInPageTitle(data)
 
     try {
