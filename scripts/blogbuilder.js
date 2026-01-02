@@ -92,6 +92,62 @@ let storageExceeded = false;
 document.getElementById('edit-box-close-button').addEventListener('click', showElementEditUI);
 document.getElementById('settings-icon').addEventListener('click', toggleSettingsPanel)
 
+const blogFormatHTML = `
+<!DOCTYPE html>
+<html lang="en" data-overlayscrollbars-initialize>
+<head>
+    <base href="../../../../">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>{{blogTitle}} | UMKL</title>
+    <meta name="description" content="{{blogDescription}}">
+    <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
+    <link rel="stylesheet" href="css/ext/fontawesome.min.css">
+    <meta name="color-scheme" content="dark light">
+
+    <meta property="og:title" content="{{blogTitle}} | UMKL" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://umkl.co.uk/pages/news/{{blogDate}}/{{blogTitleLink}}" />
+    <meta property="og:image" content="https://umkl.co.uk/pages/news/{{blogDate}}/{{blogTitleLink}}/{{blogImage}}" />
+    <meta property="og:description" content="{{blogDescription}}" />
+    <meta content="#bc0839" name="theme-color" />
+    <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
+    <meta property="og:image:type" content="image/avif"/>
+    <meta property="og:image:width" content="1920"/>
+    <meta property="og:image:height" content="1080"/>
+
+    <!-- Include this to make the og:image larger -->
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Components -->
+    <script type="module" src="components/navbar.js" defer></script>
+    <script type="module" src="components/footer.js" defer></script>
+
+    <!-- Scripts -->
+    <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+    <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
+    <script src="scripts/overlayscrollbar.js" defer></script>     
+    
+    <script type="module" src="scripts/settings.js" defer></script>
+</head>
+<body id="top" data-overlayscrollbars-initialize>
+    <umkl-navbar></umkl-navbar>
+
+    <main>
+        {{blogInfo}}
+        <hr class="hr-below-title">
+        {{blogContent}}
+    </main>
+
+    <umkl-footer></umkl-footer>
+</body>
+</html>
+`;
+
 function showBlogBuilder() {
     loadingArea.style.opacity = 0;
     editingArea.style.opacity = 1;
@@ -391,6 +447,123 @@ function buildBlog(data) {
     }
 };
 
+function buildHTML(data) {
+    blogElements = structuredClone(data);
+
+    let blogInfo = "";
+    let blogTitle, blogDescription, blogDate;
+    let blogHTML = "";
+
+    blogElements.forEach(element => {
+        switch (element.type) {
+            case "blogInfo":
+                let writersString = element.writers?.length
+                    ? `Written by ${element.writers.join(", ")}`
+                    : "";
+
+                let editorsString = element.editors?.length
+                    ? `Edited by ${element.editors.join(", ")}`
+                    : "";
+
+                let tagsHTML = "";
+                element.tags.forEach(tag => {
+                    tagsHTML += `<tag translate="no">${tag}</tag> `;
+                });
+
+                blogTitle = element.title;
+                blogDescription = "??????????"
+                blogDate = element.date;
+                
+                if (element.date && /^\d{2}\/\d{2}\/\d{4}$/.test(element.date)) {
+                    const [day, month, year] = element.date.split('/');
+                    blogDate = `${year}-${month}-${day}`;
+                } else {
+                    blogDate = "????-??-??"
+                }
+
+                blogInfo = `
+                    <a href="pages/news/">Back</a>
+                    <h1>${element.title}</h1>
+                    <div class="p-below-title">
+                        ${element.date} | 
+                        ${tagsHTML}
+                        <div class="news-credits">${writersString}<br>${editorsString}</div>
+                    </div>
+                `;
+                break;
+            
+            case "h2":
+                blogHTML += `<h2>${element.content}</h2>`;
+                break;
+
+            case "p":
+                blogHTML += `<p>${element.content}</p>`;
+                break;
+
+            case "pWithDetail":
+                blogHTML += `
+                    <p>
+                        ${element.content}<br>
+                        <span class="settings-extra-info">
+                            ${element.detail}
+                        </span>
+                    </p>
+                `;
+                break;
+
+            case "extraDetail":
+                blogHTML += `
+                    <p>
+                        <span class="settings-extra-info">
+                            ${element.content}
+                        </span>
+                    </p>
+                `;
+                break;
+
+            case "codeBox":
+                blogHTML += `
+                    <div class="codeBox">
+                        ${element.content}
+                    </div>
+                `;
+                break;
+
+            case "img":
+                blogHTML += `
+                    <p>
+                        <img class="image" src="${element.src}" alt="${element.alt}">
+                        <span class="settings-extra-info">${element.description}</span>
+                    </p>
+                `;
+                break;
+
+            case "blockquote":
+                blogHTML += `
+                    <blockquote class="${element.alt}">
+                        <b translate="no">${element.header}</b><br>
+                        ${element.content}
+                    </blockquote>
+                `;
+                break;
+
+            case "youtubeEmbed":
+                blogHTML += `
+                    <iframe class="youtube-embed" src="https://www.youtube-nocookie.com/embed/${element.youtubeID}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+                `;
+                break;
+        }
+    });
+
+    return blogFormatHTML
+        .replaceAll("{{blogTitle}}", blogTitle)
+        .replaceAll("{{blogTitleLink}}", blogTitle.toLowerCase().replace(" ", "-"))
+        .replaceAll("{{blogDescription}}", blogDescription)
+        .replaceAll("{{blogDate}}", blogDate)
+        .replace("{{blogInfo}}", blogInfo)
+        .replace("{{blogContent}}", blogHTML);
+}
+
 function moveElementUp(i) {
     if (i <= 0) return;
 
@@ -615,6 +788,10 @@ document.getElementById("add-image").addEventListener("click", () => {
     });
 
     input.click();
+});
+
+document.getElementById("export-html").addEventListener("click", () => {
+    console.log(buildHTML(blogElements));
 });
 
 document.addEventListener("DOMContentLoaded", () => {
