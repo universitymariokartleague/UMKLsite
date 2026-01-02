@@ -89,6 +89,11 @@
     text-decoration: underline;
 }
 
+.sp-bullet-points {
+    margin-block-start: 5px;
+    margin-block-end: 5px;
+}
+
 @media screen and (max-width: 767px) {
     .team-info {
         flex-direction: column;
