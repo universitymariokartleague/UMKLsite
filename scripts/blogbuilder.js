@@ -8,6 +8,13 @@ const elementsList = document.getElementById("elements-list");
 const pageArea = document.getElementById("page-area");
 const blogButtons = document.getElementById("blog-buttons");
 
+const importElementsListButton = document.getElementById("import-elements-list")
+const exportElementsListButton = document.getElementById("export-elements-list");
+const exportHTMLButton = document.getElementById("export-html");
+const addImageButton = document.getElementById("add-image");
+const clearElementsList = document.getElementById("clear-elements-list");
+const resetDefaultElementsListButton = document.getElementById("reset-default-elements-list")
+
 let friendlyTitles = {
     blogInfo: "Blog Information",
     h2: "Sub-Header",
@@ -88,9 +95,10 @@ const editBoxJS = document.getElementById('editBoxJS');
 const editBoxLabel = document.getElementById('edit-box-label');
 let editBoxOpen = false;
 let storageExceeded = false;
+let JSZipLoaded = false;
 
 document.getElementById('edit-box-close-button').addEventListener('click', showElementEditUI);
-document.getElementById('settings-icon').addEventListener('click', toggleSettingsPanel)
+document.getElementById('settings-icon').addEventListener('click', toggleSettingsPanel);
 
 const blogFormatHTML = `
 <!DOCTYPE html>
@@ -290,6 +298,8 @@ function buildBlog(data) {
     let pageAreaHTML = "";
     let elementCounter = 0;
 
+    let exportingAsHTML = true;
+
     blogElements.forEach(element => {
         const style = document.createElement('style');
         style.textContent = `
@@ -373,6 +383,10 @@ function buildBlog(data) {
                         <span class="settings-extra-info">${element.description}</span>
                     </p>
                 `;
+
+                if (element.src.includes("data:image/")) {
+                    exportingAsHTML = false;
+                }
                 break;
 
             case "blockquote":
@@ -395,6 +409,8 @@ function buildBlog(data) {
         };
         elementCounter++;
     });
+
+    exportHTMLButton.innerText = exportingAsHTML ? "Export HTML" : "Export Zip";
 
     pageArea.innerHTML = pageAreaHTML;
     elementsList.innerHTML = `
@@ -453,6 +469,8 @@ function buildHTML(data) {
     let blogInfo = "";
     let blogTitle, blogDescription, blogDate;
     let blogHTML = "";
+
+    const dataImages = [];
 
     blogElements.forEach(element => {
         switch (element.type) {
@@ -536,6 +554,21 @@ function buildHTML(data) {
                         <span class="settings-extra-info">${element.description}</span>
                     </p>
                 `;
+
+                if (element.src.includes("data:image/")) {
+                    let fileExtension = element.src.split(";")[0].split("/")[1];
+                    let imageFileName = element.alt.replace(`.${fileExtension}`, "") || `image${dataImages.length + 1}`;
+
+                    const base64Data = element.src.split(",")[1];
+                    const binaryString = atob(base64Data);
+                    const bytes = new Uint8Array(binaryString.length);
+                    for (let j = 0; j < binaryString.length; j++) {
+                        bytes[j] = binaryString.charCodeAt(j);
+                    }
+                    const blob = new Blob([bytes], { type: `image/${fileExtension}` });
+                    dataImages.push({ name: `${imageFileName}.${fileExtension}`, blob });
+                }
+
                 break;
 
             case "blockquote":
@@ -555,13 +588,15 @@ function buildHTML(data) {
         }
     });
 
-    return blogFormatHTML
+    let resultHTML = blogFormatHTML
         .replaceAll("{{blogTitle}}", blogTitle)
         .replaceAll("{{blogTitleLink}}", blogTitle.toLowerCase().replace(" ", "-"))
         .replaceAll("{{blogDescription}}", blogDescription)
         .replaceAll("{{blogDate}}", blogDate)
         .replace("{{blogInfo}}", blogInfo)
-        .replace("{{blogContent}}", blogHTML);
+        .replace("{{blogContent}}", blogHTML)
+
+    return { html: resultHTML, images: dataImages };
 }
 
 function moveElementUp(i) {
@@ -715,7 +750,7 @@ function generateEditUIHTML(i) {
     });
 }
 
-document.getElementById("import-elements-list").addEventListener("click", () => {
+importElementsListButton.addEventListener("click", () => {
     const input = document.createElement("input");
     input.type = "file";
     input.accept = "application/json";
@@ -748,7 +783,7 @@ document.getElementById("import-elements-list").addEventListener("click", () => 
     input.click();
 });
 
-document.getElementById("export-elements-list").addEventListener("click", () => {
+exportElementsListButton.addEventListener("click", () => {
     const json = JSON.stringify(blogElements, null, 4);
     const blob = new Blob([json], { type: "application/json" });
 
@@ -765,16 +800,16 @@ document.getElementById("export-elements-list").addEventListener("click", () => 
     URL.revokeObjectURL(url);
 });
 
-document.getElementById("clear-elements-list").addEventListener("click", () => {
+clearElementsList.addEventListener("click", () => {
     blogElements.splice(1);
     buildBlog(blogElements);
 });
 
-document.getElementById("reset-default-elements-list").addEventListener("click", () => {
+resetDefaultElementsListButton.addEventListener("click", () => {
     buildBlog(defaultBlogElements);
 });
 
-document.getElementById("add-image").addEventListener("click", () => {
+addImageButton.addEventListener("click", () => {
     const input = document.createElement("input");
     input.type = "file";
     input.accept = "image/*";
@@ -790,9 +825,31 @@ document.getElementById("add-image").addEventListener("click", () => {
     input.click();
 });
 
-document.getElementById("export-html").addEventListener("click", () => {
-    let resultHTML = buildHTML(blogElements);
-    const blob = new Blob([resultHTML], { type: "text/html" });
+function loadJSZipScript() {
+    return new Promise((resolve, reject) => {
+        if (JSZipLoaded) {
+            resolve();
+            return;
+        }
+        var script = document.createElement('script');
+        script.onload = function () {
+            JSZipLoaded = true;
+            resolve();
+        };
+        script.onerror = function () {
+            reject(new Error('Failed to load JSZip script'));
+        };
+        script.src = "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";
+        document.head.appendChild(script);
+    });
+}
+
+exportHTMLButton.addEventListener("click", () => {
+    let resultObject = buildHTML(blogElements);
+    const blob = new Blob([resultObject.html], { type: "text/html" });
+
+    console.log(resultObject.html);
+    console.log(resultObject.images);
 
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -800,11 +857,32 @@ document.getElementById("export-html").addEventListener("click", () => {
 
     const title = blogElements.find(e => e.type === "blogInfo")?.title || "Blog";
 
-    a.download = `${title.replace(/ /g, "")}.html`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    if (resultObject.images.length > 0) {
+        loadJSZipScript().then(() => {
+            const zip = new JSZip();
+            zip.file(`${title.replace(/ /g, "")}.html`, resultObject.html);
+            const imagesFolder = zip.folder("images");
+            resultObject.images.forEach(image => {
+                imagesFolder.file(image.name, image.blob);
+            });
+            zip.generateAsync({ type: "blob" }).then((content) => {
+                const zipUrl = URL.createObjectURL(content);
+                const link = document.createElement('a');
+                link.href = zipUrl;
+                link.download = `${title.replace(/ /g, "")}.zip`;
+                link.click();
+                URL.revokeObjectURL(zipUrl);
+            });
+        }).catch(error => {
+            console.error("Error loading JSZip:", error);
+        });
+    } else {
+        a.download = `${title.replace(/ /g, "")}.html`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
