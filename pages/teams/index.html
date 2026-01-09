@@ -1,79 +1,81 @@
 <!DOCTYPE html>
 <html lang="en" data-overlayscrollbars-initialize>
-    <head>
-        <base href="../../">
-    
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-        <title>Teams | UMKL</title>
-        <meta name="description" content="See the teams participating in the University Mario Kart League (UMKL)">
-        <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/settings.css">
-        <link rel="stylesheet" href="css/copypopup.css">
-        <link rel="stylesheet" href="css/teamstandingsbox.css">
-        <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
-        <link rel="stylesheet" href="css/ext/fontawesome.min.css">
-        <meta name="color-scheme" content="dark light">
-    
-        <meta property="og:title" content="University Mario Kart League | Teams" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://umkl.co.uk/pages/teams/" />
-        <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
-        <meta property="og:description" content="See the teams participating in the University Mario Kart League (UMKL)" />
-        <meta content="#bc0839" name="theme-color" />
+<head>
+    <base href="../../">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Teams | UMKL</title>
+    <meta name="description" content="See the teams participating in the University Mario Kart League (UMKL)">
+    <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/copypopup.css">
+    <link rel="stylesheet" href="css/teamstandingsbox.css">
+    <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
+    <link rel="stylesheet" href="css/ext/fontawesome.min.css">
+    <meta name="color-scheme" content="dark light">
+
+    <meta property="og:title" content="University Mario Kart League | Teams" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://umkl.co.uk/pages/teams/" />
+    <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
+    <meta property="og:description" content="See the teams participating in the University Mario Kart League (UMKL)" />
+    <meta content="#bc0839" name="theme-color" />
     <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
     <meta property="og:image:type" content="image/avif"/>
     <meta property="og:image:width" content="1920"/>
     <meta property="og:image:height" content="1080"/>
     
-        <!-- Include this to make the og:image larger -->
-        <meta name="twitter:card" content="summary_large_image">
+    <!-- Include this to make the og:image larger -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Components -->
+    <script type="module" src="components/navbar.js" defer></script>
+    <script type="module" src="components/footer.js" defer></script>
+
+    <!-- Scripts -->
+    <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+    <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
+    <script src="scripts/overlayscrollbar.js" defer></script>     
     
-        <!-- Components -->
-        <script type="module" src="components/navbar.js" defer></script>
-        <script type="module" src="components/footer.js" defer></script>
+    <script type="module" src="scripts/settings.js" defer></script>
+    <script type="module" src="scripts/teamboxgenerate.js" defer></script>
+    <script type="module" src="scripts/copystandingsimage.js" defer></script>
 
-        <!-- Scripts -->
-        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-        <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
-        <script src="scripts/overlayscrollbar.js" defer></script>     
-        
-        <script type="module" src="scripts/settings.js" defer></script>
-        <script type="module" src="scripts/teamboxgenerate.js" defer></script>
-        <script type="module" src="scripts/copystandingsimage.js" defer></script>
-    </head>
-    <body id="top" data-overlayscrollbars-initialize>
-        <umkl-navbar></umkl-navbar>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7588512808829908" crossorigin="anonymous"></script>
+</head>
+<body id="top" data-overlayscrollbars-initialize>
+    <umkl-navbar></umkl-navbar>
 
-        <main>
-            <noscript><blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as is it used on this page<br></blockquote></noscript>
+    <main>
+        <noscript><blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as is it used on this page<br></blockquote></noscript>
 
-            <h1>Teams</h1>
-            <p class="p-below-title">
-                Learn more about the teams and universities participating in the University Mario Kart League
-            </p>
+        <h1>Teams</h1>
+        <p class="p-below-title">
+            Learn more about the teams and universities participating in the University Mario Kart League
+        </p>
 
-            <hr class="hr-below-title">
-                        
-            <div class="season-selection">
-                <select id="season-select">
-                    <option value="1">Season 1</option>
-                    <option value="2" selected="selected">Season 2</option>
-                </select>
-                <div class="current-season-area">
-                    <div id="current-season">Upcoming (2025-2026)</div>
-                    <button id="listViewButton"><span class="fa-solid fa-table-cells-large"></span> Grid View</button>
-                    <button id="shareButton"><span class="fa-solid fa-share"></span> Share Standings</button>
-                </div>
+        <hr class="hr-below-title">
+                    
+        <div class="season-selection">
+            <select id="season-select">
+                <option value="1">Season 1</option>
+                <option value="2" selected="selected">Season 2</option>
+            </select>
+            <div class="current-season-area">
+                <div id="current-season">Upcoming (2025-2026)</div>
+                <button id="listViewButton"><span class="fa-solid fa-table-cells-large"></span> Grid View</button>
+                <button id="shareButton"><span class="fa-solid fa-share"></span> Share Standings</button>
             </div>
+        </div>
 
-            <span id="JSTeamBoxLoading">Fetching from the API...</span>
-            <div id="JSTeamBox" class="teamBoxContainer"></div>
+        <span id="JSTeamBoxLoading">Fetching from the API...</span>
+        <div id="JSTeamBox" class="teamBoxContainer"></div>
 
-            <div id="JSImagegen"></div>
-        </main>
+        <div id="JSImagegen"></div>
+    </main>
 
-        <umkl-footer></umkl-footer>
-    </body>
+    <umkl-footer></umkl-footer>
+</body>
 </html>

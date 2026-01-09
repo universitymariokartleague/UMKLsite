@@ -1,86 +1,88 @@
 <!DOCTYPE html>
 <html lang="en" data-overlayscrollbars-initialize>
-    <head>
-        <base href="../../">
-    
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-        <title>Matches | UMKL</title>
-        <meta name="description" content="See the upcoming matches participating in the University Mario Kart League (UMKL)">
-        <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/settings.css">
-        <link rel="stylesheet" href="css/calendar.css">
-        <link rel="stylesheet" href="css/eventbox.css">
-        <link rel="stylesheet" href="css/copypopup.css">
-        <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
-        <link rel="stylesheet" href="css/ext/fontawesome.min.css">
-        <meta name="color-scheme" content="dark light">
-    
-        <meta property="og:title" content="University Mario Kart League | Matches" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://umkl.co.uk/pages/teams/" />
-        <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/cheep_cheep_banner_cropped.avif" />
-        <meta property="og:description" content="See the upcoming matches in the University Mario Kart League (UMKL)" />
-        <meta content="#bc0839" name="theme-color" />
+<head>
+    <base href="../../">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Matches | UMKL</title>
+    <meta name="description" content="See the upcoming matches participating in the University Mario Kart League (UMKL)">
+    <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/calendar.css">
+    <link rel="stylesheet" href="css/eventbox.css">
+    <link rel="stylesheet" href="css/copypopup.css">
+    <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
+    <link rel="stylesheet" href="css/ext/fontawesome.min.css">
+    <meta name="color-scheme" content="dark light">
+
+    <meta property="og:title" content="University Mario Kart League | Matches" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://umkl.co.uk/pages/teams/" />
+    <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/cheep_cheep_banner_cropped.avif" />
+    <meta property="og:description" content="See the upcoming matches in the University Mario Kart League (UMKL)" />
+    <meta content="#bc0839" name="theme-color" />
     <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
     <meta property="og:image:type" content="image/avif"/>
     <meta property="og:image:width" content="1920"/>
     <meta property="og:image:height" content="1080"/>
-    
-        <!-- Include this to make the og:image larger -->
-        <meta name="twitter:card" content="summary_large_image">
-    
-        <!-- Components -->
-        <script type="module" src="components/navbar.js" defer></script>
-        <script type="module" src="components/footer.js" defer></script>
 
-        <!-- Scripts -->
-        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-        <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
-        <script src="scripts/overlayscrollbar.js" defer></script>
+    <!-- Include this to make the og:image larger -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Components -->
+    <script type="module" src="components/navbar.js" defer></script>
+    <script type="module" src="components/footer.js" defer></script>
+
+    <!-- Scripts -->
+    <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+    <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
+    <script src="scripts/overlayscrollbar.js" defer></script>
+    
+    <script type="module" src="scripts/settings.js" defer></script>
+    <script type="module" src="scripts/matchcalendar.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.13/dist/html-to-image.min.js"></script>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7588512808829908" crossorigin="anonymous"></script>
+</head>
+<body id="top" data-overlayscrollbars-initialize>
+    <umkl-navbar></umkl-navbar>
+
+    <main>
+        <noscript><blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as is it used on this page<br></blockquote></noscript>
+
+        <h1>Matches</h1>
+        <p class="p-below-title">
+            View upcoming and scheduled matches.
+            Please take a look at the <a href="pages/rules/match">match rules</a> before playing!<br>
+        </p>
+        <button style="margin-top: 5px;" id="listViewButton"><span class="fa-solid fa-bars"></span> List View</button>
+        <button style="margin-top: 5px;" onclick="location.href='pages/matches/stats'"><span class="fa-solid fa-trophy"></span> View Match Stats</button>
+        <hr class="hr-below-title">
+
+        <div id="calendarError"></div>
+
+        <blockquote class="hidden warning" id="overseasMessage"></blockquote>
         
-        <script type="module" src="scripts/settings.js" defer></script>
-        <script type="module" src="scripts/matchcalendar.js" defer></script>
-        <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.13/dist/html-to-image.min.js"></script>
-    </head>
-    <body id="top" data-overlayscrollbars-initialize>
-        <umkl-navbar></umkl-navbar>
-
-        <main>
-            <noscript><blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as is it used on this page<br></blockquote></noscript>
-
-            <h1>Matches</h1>
-            <p class="p-below-title">
-                View upcoming and scheduled matches.
-                Please take a look at the <a href="pages/rules/match">match rules</a> before playing!<br>
-            </p>
-            <button style="margin-top: 5px;" id="listViewButton"><span class="fa-solid fa-bars"></span> List View</button>
-            <button style="margin-top: 5px;" onclick="location.href='pages/matches/stats'"><span class="fa-solid fa-trophy"></span> View Match Stats</button>
-            <hr class="hr-below-title">
-
-            <div id="calendarError"></div>
-
-            <blockquote class="hidden warning" id="overseasMessage"></blockquote>
-            
-            <div id="calendarListView" class="hidden"></div>
-            
-            <div class="calendar-container" id="calendar-container">
-                <div class="calendar">
-                    <div class="calendar-header">
-                        <div class="month" id="monthYear">
-                        <a class="month-arrow" id="previousMonthButton"></a>
-                        <span class="month-name" id="goToCurrentMonthButton">Loading...</span>
-                        <a class="month-arrow" id="nextMonthButton"></a>
-                    </div>
+        <div id="calendarListView" class="hidden"></div>
+        
+        <div class="calendar-container" id="calendar-container">
+            <div class="calendar">
+                <div class="calendar-header">
+                    <div class="month" id="monthYear">
+                    <a class="month-arrow" id="previousMonthButton"></a>
+                    <span class="month-name" id="goToCurrentMonthButton">Loading...</span>
+                    <a class="month-arrow" id="nextMonthButton"></a>
                 </div>
-                <div class="calendar-body" id="calendarDays"></div>
             </div>
+            <div class="calendar-body" id="calendarDays"></div>
+        </div>
 
-            <div id="expandedLog"></div>
-        </main>
+        <div id="expandedLog"></div>
+    </main>
 
-        <umkl-footer></umkl-footer>
-    </body>
+    <umkl-footer></umkl-footer>
+</body>
 </html>
