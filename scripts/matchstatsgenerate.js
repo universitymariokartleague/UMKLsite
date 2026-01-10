@@ -75,8 +75,8 @@ function buildTrackCountDiv(data) {
     return `
         <div class="title">
             <h2>Track Frequency</h2>
-            <p class="p-no-spacing">${length}/96 total tracks played</p>
-            ${testMatchesCheckbox.checked ? '<span class="settings-extra-info">(including test matches)</span>' : ''}
+            <p class="p-no-spacing">${length}/96 total tracks played
+            ${testMatchesCheckbox.checked ? '<span class="settings-extra-info">(including test matches)</span>' : ''}</p>
         </div>
         <div class="track-frequency">
             ${resultString}
