@@ -67,6 +67,7 @@ body {
     color: #fff;
     background-color: var(--accent-color);
     padding: 15px;
+    overflow-y: auto;
 }
 
 .elements-edit {
