@@ -140,7 +140,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: blur(2.5px);
     opacity: 0;
     transition: opacity 0.1s ease-in;
     pointer-events: none;
@@ -249,9 +248,18 @@
 }
 
 @media screen and (max-width: 767px) {
+    .news-wrapper-full-page {
+        border: none;
+    }
+
+    .news-container-full-page, .news-container-full-page .news-container {
+        padding: 0;
+    }
+
     .news-container-full-page .news-box {
         width: 100%;
         height: 200px;
+        margin: 0;
     }
 
     .news-container-full-page .news-box .news-image img,
@@ -269,6 +277,6 @@
             rgba(0,0,0,0) clamp(25vw, 4vw, 3vw)
         );
         mask-repeat: no-repeat;
-        mask-size: cover;        
+        mask-size: cover;
     }
 }

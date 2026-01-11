@@ -97,6 +97,13 @@ function addNewsReelArea() {
             description: descEl ? descEl.textContent.trim() : '',
             tagsHTML: tagsHTML
         };
+    }).filter((item, index) => {
+        if (index < 3) return true;
+        if (!item.date) return true;
+        const [day, month, year] = item.date.split(" ")[0].split('/');
+        const itemDate = new Date(`${year}-${month}-${day}`);
+        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        return itemDate >= sevenDaysAgo;
     });
 
     const reelBox = document.createElement('div');
