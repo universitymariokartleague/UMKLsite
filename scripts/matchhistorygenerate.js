@@ -1,6 +1,6 @@
 /*
-    Displays a team's match history
-    Shows their next match if they have one
+    This script displays a team's match history,
+    and shows their next match if they have one.
 */
 
 import { generate6v6ScoreCalculatorLink } from './matchhelper.js';
