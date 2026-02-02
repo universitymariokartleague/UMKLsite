@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" data-overlayscrollbars-initialize>
+
+<head>
+    <base href="../../">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Changelog | UMKL</title>
+    <meta name="description" content="Changelogs from the University Mario Kart League (UMKL) site">
+    <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
+    <meta name="color-scheme" content="dark light">
+
+    <meta property="og:title" content="University Mario Kart League | Changelog" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://umkl.co.uk/pages/credits/" />
+    <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
+    <meta property="og:description" content="Credits for the University Mario Kart League (UMKL) site" />
+    <meta content="#bc0839" name="theme-color" />
+    <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
+    <meta property="og:image:type" content="image/avif"/>
+    <meta property="og:image:width" content="1920"/>
+    <meta property="og:image:height" content="1080"/>
+
+    <!-- Include this to make the og:image larger -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Components -->
+    <script type="module" src="components/navbar.js" defer></script>
+    <script type="module" src="components/footer.js" defer></script>
+
+    <!-- Scripts -->
+    <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+    <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
+    <script src="scripts/overlayscrollbar.js" defer></script>
+    <script type="module" src="scripts/settings.js" defer></script>
+</head>
+
+<body id="top" data-overlayscrollbars-initialize>
+    <umkl-navbar></umkl-navbar>
+
+    <main>
+        <h1>Changelog</h1>
+        <p class="p-below-title">View changelogs for past versions of Cheep Cheep and the UMKL website</p>
+        <hr class="hr-below-title">
+
+        <h2>2026-02-02</h2>
+        Related article: <a href="pages/news/2026-01-01/season-2-round-3-fixtures-revealed/">Season 2 Round 3 Fixtures Revealed!</a>
+        <div class="codeBox after-title">
+            <h3>Cheep Cheep/Discord</h3>
+            - Match announcements are now posted to the schedule channel<br>
+            - Cheep Cheep will now post new news articles from umkl.co.uk to the news-articles channel<br>
+            - SP now has a leaderboard in <code>/leaderboards</code><br>
+            - New command - <code>/leave-match</code> which removes yourself from a match you signed up for<br>
+            - Changed the dimensions of the graphic used as the image for Discord events<br>
+            - The new SP formula rewards more SP to all players, with a smaller variation of points for players on the winning team based on individual scores, compared to players on the losing team that now receive SP that scales more with individual score (this new formula applies to matches from <code>01/12/2025</code>)<br>
+            - (Board) Cheep Cheep now auto organises the team order based on the current standing when using <code>/create-match</code><br>
+            - (Board) <code>/add-match-results</code> now ends the match and discord event when results are verified<br>
+            - (Board) New command - <code>/generate-yt-thumbnails</code> which generates the YouTube thumbnails for match livestreams<br>
+            - (Board) Fixed a bug where test matches couldn't be created for teams not participating in the current season<br>
+            - (Board) Add commands <code>/add-next-round-pairings</code> and <code>/start-next-round</code><br>
+            - Various bug fixes<br><br>
+
+            <h3>UMKL website</h3>
+            - Improved liveresults<br>
+            - The 6v6 Score Calculator https://umkl.co.uk/pages/tools/6v6scorecalculator/ can now generate graphs for race scores over a match, these graphs and links can be shared<br>
+            - Some new pages and features on the website<br>
+            - Added keyboard shortcuts to more pages on umkl.co.uk<br>
+            - You can now click match results on the matches page on umkl.co.uk, and share the results graph<br>
+            - Add a combo randomiser tool<br>
+            - Merge FAQ with Rules to make the Rules/Guides page<br>
+            - Added a page that shows changelogs on the website<br>
+            - Added more easter eggs<br>
+        </div><br>
+
+        <h2>2025-08-03</h2>
+        <div class="codeBox after-title">
+            - On umkl.co.uk, viewing match times overseas now shows when the match will happen in both your time zone and UK time<br>
+            - New commands (board only) - /add-yt-link and /remove-yt-link, to manage YouTube links shown for matches on umkl.co.uk<br>
+            - Renamed /add-result to /add-match-results, and /add-results-to-liveresults to /add-race-results-to-liveresults<br>
+        </div><br>
+
+        <h2>2025-07-17</h2>
+        Related article: <a href="pages/news/2025-07-17/cheep-cheep-updates/">Cheep Cheep Updates</a>
+        <div class="codeBox after-title">
+            - <code>/register</code> removed, it is no longer required to use /join<br>
+            - New command - <code>/leaderboards</code><br>
+            - Formatted <code>YYYY-MM-DD</code> to <code>DD/MM/YYYY</code> in embeds (only for outputted text, not for command inputs)<br>
+            - Added the match versus image on the sign up embed<br>
+            - Changed the date in the sign up embed to a timestamp<br>
+            - New command - <code>/change-team-colour</code> (board only)<br>
+            - Internal changes to SQL/DB threading<br>
+            - Internal changes to the API used on umkl.co.uk<br>
+            - Tweaked graphics to add shadowing beneath text to improve contrast and readability<br>
+            - New command - <code>/generate-stream-overlay</code><br>
+            - Fixed <code>/team-profile</code><br>
+            - New commands (liveresults used for a streaming overlay) - <code>/add-results-to-liveresults</code>, <code>/edit-results-in-liveresults</code>, <code>/reset-liveresults</code><br>
+            - New command - <code>/submit-room-code</code><br>
+            - New command - <code>/report-disconnection</code><br>
+            - Added some easter eggs<br>
+        </div>
+    </main>
+
+    <umkl-footer></umkl-footer>
+</body>
+</html>

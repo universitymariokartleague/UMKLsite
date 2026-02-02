@@ -41,7 +41,7 @@ const sections = [
     },
     {
         title: "Cheep Cheep App",
-        description: `Development of the Cheep Cheep app, which is used on the UMKL Discord server, you can also <a href="pages/privacy">view the app's privacy policy</a>`,
+        description: `Development of the Cheep Cheep app, which is used on the UMKL Discord server. <a href="pages/privacy">View the app's privacy policy</a>, you can also <a href="pages/changelog">view the changelog</a>.`,
         contributorIndexes: [0, 4, 5]
     },
     {
