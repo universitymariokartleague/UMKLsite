@@ -6,19 +6,20 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Changelog | UMKL</title>
+    <title>Videos | UMKL</title>
     <meta name="description" content="See all the videos form the UMKL here">
     <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/videolist.css">
     <link rel="stylesheet" href="css/ext/overlayscrollbars.min.css">
     <meta name="color-scheme" content="dark light">
 
-    <meta property="og:title" content="University Mario Kart League | Changelog" />
+    <meta property="og:title" content="University Mario Kart League | Videos" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://umkl.co.uk/pages/credits/" />
+    <meta property="og:url" content="https://umkl.co.uk/pages/videos/" />
     <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
-    <meta property="og:description" content="Changelogs from the UMKL site" />
+    <meta property="og:description" content="See all the videos form the UMKL here" />
     <meta content="#bc0839" name="theme-color" />
     <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
     <meta property="og:image:type" content="image/avif"/>
@@ -37,6 +38,8 @@
     <script defer src="scripts/overlayscrollbars.browser.es6.min.js"></script>
     <script src="scripts/overlayscrollbar.js" defer></script>
     <script type="module" src="scripts/settings.js" defer></script>
+    <script type="module" src="scripts/videosgenerate.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
 </head>
 
 <body id="top" data-overlayscrollbars-initialize>
@@ -44,10 +47,12 @@
 
     <main>
         <h1>Videos</h1>
-        <p class="p-below-title">See all the videos uploaded from the UMKL here</p>
+        <p class="p-below-title">See all the videos uploaded from the <a href="https://www.youtube.com/@universitymariokartleague">UMKL YouTube channel</a> here</p>
         <hr class="hr-below-title">
 
-
+        <div id="videosError"></div>
+        <div id="videosGenerate"></div>
+        <div id="liveVideosGenerate"></div>
     </main>
 
     <umkl-footer></umkl-footer>

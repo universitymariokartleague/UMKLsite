@@ -1147,14 +1147,14 @@ function loadCalendarView() {
     listViewButton.innerHTML = `${listViewEnabled ? `<span class="fa-solid fa-calendar"></span> Calendar View` : `<span class="fa-solid fa-bars"></span> List View`}`
 }
 
-function testOutsideUK() {
+function checkIfOutsideUK() {
     let { _, __, outsideUKTimezone } = formatMatchTime('2025-01-01', '00:00:00+01:00', "en-GB");
 
     if (outsideUKTimezone) {
         overseasMessage.classList.remove("hidden");
         overseasMessage.innerHTML = `
-            <b translate="no">Note</b><br/>You seem to be outside the UK.
-            Times and dates displayed will show the UK time, then your local time next to it.<br/>
+            <b translate="no">Note</b><br>You seem to be outside the UK.
+            Times and dates displayed will show the UK time, then your local time next to it.<br>
             <b>Overseas date type:</b> <button id="overseasDisplayButton"><span class="fa-solid fa-bars"></span> Overseas Display Toggle</button>
         `;
         generateOverseasDateDisplayButton();
@@ -1320,7 +1320,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     console.debug(`%cmatchcalendar.js %c> %cFetching calendar...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
     generateListViewButton();
-    testOutsideUK();
+    checkIfOutsideUK();
 
     if (localStorage.matchDataCache && localStorage.teamColorsCache) {
         cached = true;

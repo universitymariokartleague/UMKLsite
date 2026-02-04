@@ -80,12 +80,12 @@ function generateSettingsPanel() {
             <span translate="yes" class="settings-hover-info" data-info="Calendar or list view">Matches page layout</span><button id="toggleCalendarListView" class="settings-option">${calendarListView ? "List view" : "Calendar view"}</button><br>
 
             <div translate="yes" class="setting-sub-heading">${tempLocale == "en-GB" ? "Localisation" : "Localization"}</div><hr class="settings-hr">
-            <span translate="yes" class="settings-hover-info" data-info="UK or US date/time format">Locale</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button><br/>
-            <span translate="yes" class="settings-hover-info" data-info="Monday or Sunday">First day of week</span><button id="toggleStartDayButton" class="settings-option">${weekdayNamesFull[tempStartDay]}</button><br/>
-            <span translate="yes" class="settings-hover-info" data-info="Use UK or local dates when overseas">Overseas date type</span><button id="toggleOverseasDateDisplayButton" class="settings-option">${tempOverseasDateDisplay ? 'Overseas' : 'UK'}</button><br/>
+            <span translate="yes" class="settings-hover-info" data-info="UK or US date/time format">Locale</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button><br>
+            <span translate="yes" class="settings-hover-info" data-info="Monday or Sunday">First day of week</span><button id="toggleStartDayButton" class="settings-option">${weekdayNamesFull[tempStartDay]}</button><br>
+            <span translate="yes" class="settings-hover-info" data-info="Use UK or local dates when overseas">Overseas date type</span><button id="toggleOverseasDateDisplayButton" class="settings-option">${tempOverseasDateDisplay ? 'Overseas' : 'UK'}</button><br>
             
             <div translate="yes" class="setting-sub-heading">Website Data</div><hr>
-            <span translate="yes">API requests sent: <span class="settings-option">${apiReqsSent}</span></span><br/>
+            <span translate="yes">API requests sent: <span class="settings-option">${apiReqsSent}</span></span><br>
             <span translate="yes" class="settings-hover-info" data-info="Reloads the page">Reset settings to default</span><button id="clearLocalStorage" class="settings-option">Reset</button>
 
             <div translate="yes" class="settings-instructions">Hover/tap the options to see more information</div>

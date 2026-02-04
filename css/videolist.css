@@ -1,0 +1,84 @@
+.videos-wrapper, #liveVideosGenerate {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 5px 0 10px 0;
+}
+
+#videosGenerate {
+    margin-bottom: 20px;
+}
+
+.video-thumbnail {
+    max-width: 100%;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    border-radius: 10px;
+    margin-bottom: 5px;
+}
+
+.live-video-container {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #ccccccaa;
+    padding: 10px;
+    border-radius: 10px;
+    gap: 5px;
+    width: 100%;
+}
+
+.test-match-container {
+    opacity: 0.8;
+    border: 1px dashed #ccccccaa;
+}
+
+.video-card {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    width: 184px;
+    border: 1px solid #ccccccaa;
+    transition: border 0.2s ease-in-out;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.video-card:hover {
+    border: 1px solid var(--text-color);
+}
+
+.video-info {
+    font-size: 13.5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.video-section-info p {
+    margin-bottom: 0;
+}
+
+.team-videos-container {
+    display: flex;
+    gap: 5px;
+    margin-left: auto;
+}
+
+h2 {
+    margin-bottom: 5px;
+}
+
+.video-section-info h2 {
+    margin: 0;
+}
+
+.video-section-info h2 a, .video-section-info a {
+    margin: 0;
+    color: inherit !important;
+    text-decoration: none;
+}
+
+.video-section-info h2 a:hover, .video-section-info a:hover {
+    text-decoration: underline;
+}

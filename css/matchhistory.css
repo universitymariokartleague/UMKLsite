@@ -15,8 +15,8 @@
 }
 
 .test-match {
-    opacity: 0.6;
-    border: 1px solid #cccccc45;
+    opacity: 0.8;
+    border: 1px dashed #ccccccaa;
     border-radius: 8px
 }
 

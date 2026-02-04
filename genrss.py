@@ -1,3 +1,7 @@
+# Please use .runbeforecommit.py instead
+#
+# This script generates the RSS feed based of news articles on the UMKL site
+
 import datetime, re, os, mimetypes
 import xml.etree.ElementTree as ET
 from lxml import etree as ET
@@ -193,6 +197,5 @@ def generate_rss_feed():
     rss_xml = build_rss(news_items)
     with open("news.xml", "wb") as f:
         f.write(rss_xml)
-    print("RSS feed generated as news.xml")
 
 generate_rss_feed()

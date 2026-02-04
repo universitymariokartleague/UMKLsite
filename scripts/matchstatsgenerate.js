@@ -43,13 +43,13 @@ function buildTrackCountDiv(data) {
                 const sortedTeams = Object.entries(stats.teamCounts)
                     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
 
-                teamFrequencyString = '<b>Frequency for teams</b><br/>' + sortedTeams
+                teamFrequencyString = '<b>Frequency for teams</b><br>' + sortedTeams
                     .map(([team, count]) => `${team}: ${count}`)
                     .join("<br>");
             }
 
             if (daysPlayedCheckbox.checked) {
-                datesPlayedString = '<b>Dates played on</b><br/>' + 
+                datesPlayedString = '<b>Dates played on</b><br>' + 
                     stats.matchDates
                         .map(date => `<a target="_blank" href="pages/matches?date=${date}">${date}</a>`)
                         .join("<br>");

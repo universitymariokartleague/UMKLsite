@@ -167,14 +167,14 @@ function showBlogBuilder() {
 }
 
 function buildBlogButtons() {
-    blogButtons.innerHTML = 'Add element:<br/>' + Object.entries(friendlyTitles)
+    blogButtons.innerHTML = 'Add element:<br>' + Object.entries(friendlyTitles)
         .filter(([type]) => type !== "blogInfo")    
         .map(([type, label]) => `
             <button class="add-element-btn" data-type="${type}">
                 ${label} (${type})
             </button>
         `)
-        .join("<br/>");
+        .join("<br>");
 
     blogButtons.addEventListener("click", (e) => {
         const type = e.target.dataset.type;
@@ -432,7 +432,7 @@ function buildBlog(data) {
     `;
 
     const bytes = getLocalStorageBytes(localStorage);
-    if (bytes) document.getElementById("storage-used").innerHTML = `${formatBytes(bytes)}/5MB${storageExceeded ? '<br/>Storage limit has been exceeded! Changes will not be saved!' : ''}`;
+    if (bytes) document.getElementById("storage-used").innerHTML = `${formatBytes(bytes)}/5MB${storageExceeded ? '<br>Storage limit has been exceeded! Changes will not be saved!' : ''}`;
 
     for (let i = 0; i < blogElements.length; i++) {
         document.getElementById(`element${i}`).addEventListener("click", () => {
@@ -667,7 +667,7 @@ function generateEditUIHTML(i) {
             .map((key, i) => {
                 if (key === "type") {
                     return `
-                        <code>${key}: ${element[key]}</code><br/>
+                        <code>${key}: ${element[key]}</code><br>
                         ${element[key] == "img" && areImagesImported ? 
                             `Choose an imported image:
                             <select id="import-image-dropdown" class="edit-ui-field" style="height: unset">
@@ -676,16 +676,16 @@ function generateEditUIHTML(i) {
                             </select>` : 
                             'Use the <code>Import Image</code> button to add images from your device'
                         }
-                        <br/>
+                        <br>
                     `;
                 }
 
                 return `
-                    <code>${key}</code><br/>
+                    <code>${key}</code><br>
                     <textarea class="edit-ui-field" translate="no" id="editAttribute${i}">${element[key]}</textarea>
                 `;
             })
-            .join("<br/>")
+            .join("<br>")
         }
     `;
 

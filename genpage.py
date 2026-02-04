@@ -1,3 +1,7 @@
+# Please use .runbeforecommit.py instead
+#
+# This script generates new blog pages from a template for the UMKL site
+
 import os, re
 from bs4 import BeautifulSoup
 

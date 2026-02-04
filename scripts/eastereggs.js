@@ -151,7 +151,7 @@ function halloweenEasterEgg() {
     for (let i = 0; i < 5; i++) {
         setTimeout(createFlyingGhost, Math.random() * 1000);
     }
-    injectMusic("assets/bgm/halloween/loading playlist.mp3");
+    injectMusic("assets/media/bgm/halloween/loading playlist.mp3");
 }
 
 function winterEasterEgg() {
@@ -211,7 +211,7 @@ function winterEasterEgg() {
     document.head.appendChild(style);
 
     setupSnowflakes();
-    injectMusic("assets/bgm/xmas/loading playlist.mp3");
+    injectMusic("assets/media/bgm/xmas/loading playlist.mp3");
 
     setTimeout(() => {
         const style = document.createElement('style');

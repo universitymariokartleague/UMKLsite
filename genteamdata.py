@@ -1,4 +1,6 @@
-# Please use .runbeforecommit.py
+# Please use .runbeforecommit.py instead
+#
+# This script generates backups for various API data
 
 import json, requests
 

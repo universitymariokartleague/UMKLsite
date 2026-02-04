@@ -1,4 +1,4 @@
-# Please use .runbeforecommit.py
+# Please use .runbeforecommit.py instead
 
 import os
 
