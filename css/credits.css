@@ -26,6 +26,10 @@
     gap: 10px;
 }
 
+.credit-container a {
+    height: 26px;
+}
+
 .credit-image {
     border-radius: 5px;
     opacity: 0;
