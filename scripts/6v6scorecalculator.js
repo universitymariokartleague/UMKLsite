@@ -135,11 +135,11 @@ function renderResults(width) {
     extraInfo.innerHTML = `
     <details class="extra-info-box" id="extra-info-box" ${extraInfoOpened ? 'open' : ''}>
         <summary>Extra info</summary>
-        <div class="track-frequency">${extraHTML}</div>
-        <p class="no-bottom">
+        <p class="perspective-text">
             Point differences from ${makePossessive(teamNames[currentPerspective])} perspective
             <button id="togglePerspective">Toggle perspective</button>
         </p>
+        <div class="track-frequency">${extraHTML}</div>
     </details>
     `;
 

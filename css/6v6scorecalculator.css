@@ -95,6 +95,10 @@
     text-decoration: underline;
 }
 
+.perspective-text {
+    margin: 5px 0 0 0;
+}
+
 @media screen and (max-width: 767px) {
     .score-calculator-input-areas {
         display: unset;
