@@ -28,9 +28,6 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
     <meta property="og:description" content="{DESC}" />
     <meta content="#bc0839" name="theme-color" />
     <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
-    <meta property="og:image:type" content="image/avif"/>
-    <meta property="og:image:width" content="1920"/>
-    <meta property="og:image:height" content="1080"/>
 
     <!-- Include this to make the og:image larger -->
     <meta name="twitter:card" content="summary_large_image" />
