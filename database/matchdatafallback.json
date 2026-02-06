@@ -8325,6 +8325,26 @@
             "title": "Staffs VS Leeds (Test Match)"
         }
     ],
+    "2026-02-20": [
+        {
+            "description": "A 6v6 match between Cambridge and Brighton. \n\nMembers of these teams can sign up to compete in this match by clicking the 'Sign Up' button in the team's announcement channel.",
+            "eventID": "1469360654996476017",
+            "eventURL": "https://discord.com/events/1312070414113050624/1469360654996476017",
+            "results": [],
+            "season": 2,
+            "signedUpPlayerCounts": [
+                0,
+                1
+            ],
+            "teamsInvolved": [
+                "Cambridge",
+                "Brighton"
+            ],
+            "testMatch": false,
+            "time": "19:00:00+00:00",
+            "title": "Cambridge VS Brighton"
+        }
+    ],
     "2026-02-22": [
         {
             "description": "A 6v6 match between York and Birmingham. \n\nMembers of these teams can sign up to compete in this match by clicking the 'Sign Up' button in the team's announcement channel.",

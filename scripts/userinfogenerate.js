@@ -102,7 +102,7 @@ function fillInPageTitle(data) {
     teamNameBox.innerText = `${makePossessive(data.username)} Stats`;
 }
 
-async function generatePlayerStatsBox(data, showError) {
+async function generateProfileBox(data, showError) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.remove('fade-in');
 
@@ -306,7 +306,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     fetchedCurrentSeason = parseInt(await getCurrentSeason());
                     matchData = await getMatchData();
                     showError = 0;
-                    await generatePlayerStatsBox(data, showError);
+                    await generateProfileBox(data, showError);
                 } catch (err) {
                     showErrorBox(showError);
                     refreshTimer = setTimeout(retryFetch, 2000);
@@ -315,7 +315,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             refreshTimer = setTimeout(retryFetch, 2000);
         }
     }
-    await generatePlayerStatsBox(data, showError);
+    await generateProfileBox(data, showError);
 
     console.debug(`%cuserinfogenerate.js %c> %cGenerated user info box in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
 });

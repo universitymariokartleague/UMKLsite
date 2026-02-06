@@ -19,7 +19,6 @@ https://umkl.co.uk/pages/news/2025-09-29/the-structure-for-season-2/
 https://umkl.co.uk/pages/news/2025-10-01/season-2-round-1-fixtures-revealed/
 https://umkl.co.uk/pages/news/2025-11-06/season-2-round-2-fixtures-revealed/
 https://umkl.co.uk/pages/news/2026-01-01/season-2-round-3-fixtures-revealed/
-https://umkl.co.uk/pages/playerstats/
 https://umkl.co.uk/pages/policies/universityrelations/
 https://umkl.co.uk/pages/privacy/
 https://umkl.co.uk/pages/rules/
@@ -44,3 +43,4 @@ https://umkl.co.uk/pages/tools/favtrack/
 https://umkl.co.uk/pages/tools/trackrandomiser/
 https://umkl.co.uk/pages/changelog/
 https://umkl.co.uk/pages/videos/
+https://umkl.co.uk/pages/profile/
