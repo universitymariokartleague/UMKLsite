@@ -326,7 +326,7 @@ function createSPGraph(data, teamColor) {
     const dates = Object.keys(history).sort();
     
     const firstDate = new Date(dates[0]);
-    const fakeStartDate = new Date(firstDate.getTime() - (90 * 24 * 60 * 60 * 1000)); // 3 months before
+    const fakeStartDate = new Date(firstDate.getTime() - (60 * 24 * 60 * 60 * 1000)); // 2 months before
     const fakeDateStr = fakeStartDate.toISOString().split('T')[0];
     const extendedDates = [fakeDateStr, ...dates];
     const extendedValues = [0];
