@@ -1,0 +1,129 @@
+.profile-card-wrapper {
+    margin-top: 20px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-card {
+    background: linear-gradient(145deg, rgba(255,255,255,0.85), rgba(255,255,255,0.7));
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 
+        0 8px 32px rgba(0,0,0,0.1),
+        0 4px 16px rgba(0,0,0,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.6),
+        inset 0 -1px 0 rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+    border: 2px solid var(--team-color, #ccc);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: transform 0.1s ease-out;
+    width: 400px;
+    max-width: 100%;
+    transform-style: preserve-3d;
+    will-change: transform;
+    perspective: 1000px;
+}
+
+.profile-card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    gap: 15px;
+}
+
+.profile-card-avatar {
+    width: 65px;
+    height: 65px;
+    border-radius: 15px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+    border: 3px solid var(--team-color, #ccc);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    object-fit: cover;
+}
+
+.profile-card-user-info h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.profile-card-user-info p {
+    margin: 5px 0 0 0;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.profile-card-stats, .profile-card-detailed-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 10px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.75em;
+    color: #666;
+    margin-bottom: 5px;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: var(--team-color, #333);
+}
+
+.profile-card-sp-graph {
+    margin-bottom: 15px;
+}
+
+.graph-title {
+    margin: 0 0 10px 0;
+    font-size: 0.9em;
+    color: #666;
+    font-weight: 600;
+}
+
+.sp-graph-container {
+    background: rgba(255,255,255,0.3);
+    border-radius: 12px;
+    padding: 10px;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+#spGraph {
+    width: 100%;
+    height: auto;
+    max-height: 150px;
+}
+
+.umkl-stamp {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    background: var(--team-color, #333);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7em;
+    font-weight: bold;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    opacity: 0.9;
+}

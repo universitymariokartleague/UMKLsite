@@ -20,7 +20,7 @@
 }
 
 .user-info-wrapper a {
-    display: unset;
+    width: fit-content;
 }
 
 .team-info .map {

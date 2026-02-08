@@ -1,0 +1,37 @@
+[
+    {
+        "name": "UMKL Red",
+        "sp_cost": 10,
+        "type": "colour"
+    },
+    {
+        "name": "Blue",
+        "sp_cost": 150,
+        "type": "colour"
+    },
+    {
+        "name": "Sparkly",
+        "sp_cost": 1580,
+        "type": "overlay"
+    },
+    {
+        "name": "Rainbow",
+        "sp_cost": 2050,
+        "type": "colour"
+    },
+    {
+        "name": "Mario Kart 8 Deluxe background",
+        "sp_cost": 250,
+        "type": "bg"
+    },
+    {
+        "name": "Mario Kart World background",
+        "sp_cost": 350,
+        "type": "bg"
+    },
+    {
+        "name": "Super Mario Maker 2 background",
+        "sp_cost": 450,
+        "type": "bg"
+    }
+]
