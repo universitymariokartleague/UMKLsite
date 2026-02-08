@@ -49,7 +49,7 @@ const profileCardFormatHTML = `
                         <span class="stat-value">{{highestFinish}}</span>
                     </div>
                 </div>
-                <div class="umkl-stamp">UMKL</div>
+                <div class="card-timestamp">Generated {{timestamp}}</div>
             </div>
         </div>
     </div>
@@ -153,7 +153,8 @@ async function generateProfileBox(data, showError) {
         .replace("{{color}}", data.color || "ccc")
         .replace("{{teamWins}}", data.team_wins || "0")
         .replace("{{firstPlaces}}", data.first_places || "0")
-        .replace("{{highestFinish}}", data.highest_finish || "N/A");
+        .replace("{{highestFinish}}", data.highest_finish || "N/A")
+        .replace("{{timestamp}}", data.timestamp);
 
     if (teamData) {
         document.documentElement.style.setProperty('--highlight-color', `#${data.color}80`);
