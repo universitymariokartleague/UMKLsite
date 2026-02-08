@@ -440,7 +440,7 @@ function createSPGraph(data, teamColor) {
             
             ctx.save();
             ctx.translate(x, canvas.height - padding + 10);
-            ctx.rotate(-Math.PI / 15);
+            ctx.rotate(-Math.PI / 10);
             ctx.textAlign = 'right';
             ctx.fillText(date, 0, 0);
             ctx.restore();
