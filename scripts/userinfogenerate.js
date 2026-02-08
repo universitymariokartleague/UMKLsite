@@ -467,9 +467,11 @@ function createSPGraph(data, teamColor) {
         const x = padding + timeRatio * graphWidth;
         const y = canvas.height - padding - (extendedValues[index] / gridMax) * graphHeight;
         
-        ctx.beginPath();
-        ctx.arc(x, y, 4, 0, 2 * Math.PI);
-        ctx.fill();
+        if (index > 0) {
+            ctx.beginPath();
+            ctx.arc(x, y, 4, 0, 2 * Math.PI);
+            ctx.fill();
+        }
     });
 }
 
