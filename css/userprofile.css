@@ -124,3 +124,17 @@
     border-radius: 5px;
     font-size: 10px;
 }
+
+@media screen and (max-width: 767px) {
+    .profile-card-wrapper {
+        padding: 0px;
+    }
+
+    .profile-card-stats, .profile-card-detailed-stats {
+        gap: 5px;
+    }
+
+    .stat-value {
+        font-size: 1em;
+    }
+}
