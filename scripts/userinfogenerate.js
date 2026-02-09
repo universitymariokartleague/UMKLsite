@@ -5,6 +5,7 @@
 const profileCardFormatHTML = `
     <div class="profile-card-wrapper">
         <div class="profile-card" style="--team-color: #{{color}};">
+            <img src="assets/media/brand/guidelines/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.75" />
             <div class="profile-card-content">
                 <div class="profile-card-header">
                     <img src="{{PFP}}" alt="{{username}} profile picture" class="profile-card-avatar" 
