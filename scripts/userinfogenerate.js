@@ -31,7 +31,7 @@ const profileCardFormatHTML = `
                 <div class="profile-card-sp-graph">
                     <p class="graph-title">SP History</p>
                     <div class="sp-graph-container">
-                        <canvas id="spGraph" width="350" height="150"></canvas>
+                        <canvas id="spGraph"></canvas>
                     </div>
                 </div>
                 <p class="graph-title">Extra stats</p>
@@ -59,7 +59,7 @@ const userCardBox = document.getElementById("userCardBox")
 const teamNameBox = document.getElementById("teamNameBox")
 const startYear = 2023;
 
-let matchData, teamData;
+let data, matchData, teamData;
 const currentSeason = 2;
 let fetchedCurrentSeason = currentSeason;
 
@@ -103,27 +103,6 @@ function formatSPDetails(sp_detailed) {
         .join('')}</ul>`;
 }
 
-function buildUserInfoTable(data, isCurrent = false) {
-    if (isCurrent) {
-        return `
-            <table class="team-info-table">
-                <tr><td class="table-key">Wins/Losses (Position)</td><td>${data.season_wins_losses[0]} - ${data.season_wins_losses[1]} ${data.team_season_points > 0 ? `(${toOrdinal(data.season_position)})` : ''}</td></tr>
-                <tr><td class="table-key">Matches Played</td><td>${data.season_matches_played}</td></tr>
-                <tr><td class="table-key">Points (Penalties)</td><td>${data.team_season_points} (${data.season_penalties})</td></tr>
-            </table>`;
-    }
-    return `
-        <table class="team-info-table">
-            <tr><td class="table-key">Current Team</td><td>${data.team}</td></tr>
-            <tr><td class="table-key">Team Wins</td><td>${data.team_wins}</td></tr>
-            <tr><td class="table-key">Matches Played</td><td>${data.matches_played}</td></tr>
-            <tr><td class="table-key">First Places (Podiums)</td><td>${data.first_places}</td></tr>
-            <tr><td class="table-key">Highest Finish</td><td>${data.highest_finish}</td></tr>
-            <tr><td class="table-key">Career Points</td><td>${data.career_points} <details class="details-box"><summary>Detailed results</summary>${formatDetailedPoints(data.match_data)}</details></td></tr>
-            <tr><td class="table-key">SP</td><td>${data.sp} <details class="details-box"><summary>SP details</summary>${formatSPDetails(data.sp_detailed)}</details></td></tr>
-        </table>`;
-}
-
 function fillInPageTitle(data) {
     document.title = `${makePossessive(data.username)} Profile`;
     teamNameBox.innerText = `${makePossessive(data.username)} Profile`;
@@ -138,10 +117,6 @@ async function generateProfileBox(data, showError) {
     } catch (error) {
         console.debug(`%cuserinfogenerate.js %c> %c${data.username} does not belong to a team`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
     }
-
-    let currentFields = `${data.username} doesn't belong to a team!`
-
-    if (teamData) currentFields = buildUserInfoTable(teamData, true);
 
     let tempProfileCard = profileCardFormatHTML
         .replace("{{PFP}}", data.pfp.replace("png", "webp"))
@@ -163,7 +138,7 @@ async function generateProfileBox(data, showError) {
     userCardBox.innerHTML = tempProfileCard;
     userCardBox.classList.add('fade-in');
 
-    setTimeout(() => createSPGraph(data, `#${data.color}`), 100);
+    createSPGraph(data, `#${data.color}`);
     addCard3DEffect();
 
     function addCard3DEffect() {
@@ -311,13 +286,15 @@ function createSPGraph(data, teamColor) {
     const canvas = document.getElementById('spGraph');
     if (!canvas) return;
 
+    canvas.width = canvas.clientWidth * 2;
+    canvas.height = canvas.clientHeight * 2;
+
     const ctx = canvas.getContext('2d');
     const spData = data.sp_detailed;
 
     if (!spData || !spData.history || Object.keys(spData.history).length === 0) {
         ctx.fillStyle = '#111111';
-        ctx.font = '12px Montserrat';
-        ctx.textAlign = 'center';
+        ctx.font = '24px Montserrat';
         ctx.fillText('No SP history available', canvas.width / 2, canvas.height / 2);
         return;
     }
@@ -350,14 +327,14 @@ function createSPGraph(data, teamColor) {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const padding = 25;
+    const padding = 38;
     const graphWidth = canvas.width - (padding * 2);
     const graphHeight = canvas.height - (padding * 2);
 
     const maxValue = Math.max(...extendedValues);
 
     ctx.strokeStyle = '#cccccc';
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(padding, padding);
     ctx.lineTo(padding, canvas.height - padding);
@@ -380,9 +357,9 @@ function createSPGraph(data, teamColor) {
     
     const gridMax = getGraphRoundNumber(maxValue);
 
-    ctx.strokeStyle = '#ccc';
+    ctx.strokeStyle = '#cccccc';
     ctx.fillStyle = '#666';
-    ctx.font = '9px Montserrat';
+    ctx.font = '18px Montserrat';
     ctx.textAlign = 'right';
     ctx.setLineDash([2, 2]);
     
@@ -406,7 +383,7 @@ function createSPGraph(data, teamColor) {
     ctx.setLineDash([]);
 
     ctx.strokeStyle = teamColor;
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 3;
     ctx.beginPath();
 
     extendedDates.forEach((_, index) => {
@@ -431,7 +408,7 @@ function createSPGraph(data, teamColor) {
 
     if (extendedDates.length > 0) {
         ctx.fillStyle = '#666';
-        ctx.font = '8px Montserrat';
+        ctx.font = '16px Montserrat';
         
         displayIndices.forEach(index => {
             const timeRatio = (dateTimestamps[index] - fakeStartTime) / timeRange;
@@ -439,7 +416,7 @@ function createSPGraph(data, teamColor) {
             const date = extendedDates[index];
             
             ctx.save();
-            ctx.translate(x, canvas.height - padding + 10);
+            ctx.translate(x, canvas.height - padding + 12);
             ctx.rotate(-Math.PI / 10);
             ctx.textAlign = 'right';
             ctx.fillText(date, 0, 0);
@@ -449,7 +426,7 @@ function createSPGraph(data, teamColor) {
 
     if (extendedDates.length > 0) {
         ctx.fillStyle = teamColor;
-        ctx.font = '9px Montserrat';
+        ctx.font = '18px Montserrat';
         ctx.textAlign = 'center';
         
         displayIndices.forEach(index => {
@@ -457,7 +434,7 @@ function createSPGraph(data, teamColor) {
             const x = padding + timeRatio * graphWidth;
             const y = canvas.height - padding - (extendedValues[index] / gridMax) * graphHeight;
             
-            ctx.fillText(extendedValues[index], x, y - 8);
+            ctx.fillText(extendedValues[index], x, y - 12);
         });
     }
 
@@ -469,7 +446,7 @@ function createSPGraph(data, teamColor) {
         
         if (index > 0) {
             ctx.beginPath();
-            ctx.arc(x, y, 4, 0, 2 * Math.PI);
+            ctx.arc(x, y, 8, 0, 2 * Math.PI);
             ctx.fill();
         }
     });
@@ -523,6 +500,12 @@ async function getTeamdata(team, season) {
     });
 }
 
+window.addEventListener("resize", async () => {
+    if (data) { 
+        createSPGraph(data, `#${data.color}`);
+    }
+});
+
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     console.debug(`%cuserinfogenerate.js %c> %cGenerating player info box`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
@@ -532,7 +515,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!urlParams.has('d')) window.location.href = "/";
     const compressed = urlParams.get('d');
     const json = LZString.decompressFromEncodedURIComponent(compressed);
-    const data = JSON.parse(json);
+    data = JSON.parse(json);
 
     let mappedProfileItems = [];
     if (urlParams.has('u')) {
