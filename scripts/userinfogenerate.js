@@ -295,7 +295,7 @@ function createSPGraph(data, teamColor) {
     if (!spData || !spData.history || Object.keys(spData.history).length === 0) {
         ctx.fillStyle = '#111111';
         ctx.font = '24px Montserrat';
-        ctx.fillText('No SP history available', canvas.width / 2, canvas.height / 2);
+        ctx.fillText('No history available', 5, 20);
         return;
     }
 
