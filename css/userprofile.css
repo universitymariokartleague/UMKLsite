@@ -1,6 +1,5 @@
 .profile-card-wrapper {
     margin-top: 20px;
-    padding: 10px;
     display: flex;
     justify-content: center;
 }
@@ -56,6 +55,10 @@
     margin: 5px 0 0 0;
     color: #666;
     font-size: 0.9em;
+}
+
+.profile-card-team a {
+    color: var(--team-color)!important;
 }
 
 .profile-card-stats, .profile-card-detailed-stats {
@@ -116,12 +119,12 @@
 
 .card-timestamp {
     position: absolute;
-    bottom: 5px;
-    right: 12px;
+    top: 0;
+    right: 5px;
     text-align: right;
     color: #333;
     opacity: 0.5;
-    border-radius: 5px;
+    padding: 5px;
     font-size: 10px;
 }
 
@@ -145,8 +148,8 @@
 }
 
 @media screen and (max-width: 767px) {
-    .profile-card-wrapper {
-        padding: 0px;
+    .profile-card {
+        padding: 10px 10px 25px 10px;
     }
 
     .profile-card-stats, .profile-card-detailed-stats {
@@ -162,5 +165,11 @@
         height: 20px;
         top: 10px;
         right: 10px;
+    }
+
+    .card-timestamp {
+        padding: 2px;
+        right: 10px;
+        font-size: 9px;
     }
 }

@@ -100,6 +100,15 @@ async function getTeamcolorsFallback() {
     teamColors = await response.json();
 }
 
+function formatDate(dateStr, locale) {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString(locale, {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
+}
+
 async function getVideoIDs() {
     const response = await fetch(`pages/videos/videoids.json`);
     if (!response.ok) {
@@ -119,6 +128,8 @@ function displayVideos() {
 }
 
 function displayLiveVideos() {
+    const locale = localStorage.getItem("locale") || "en-GB";
+
     liveVideosGenerate.innerHTML = `<h2>Livestreams</h2>`
     liveVideosGenerate.innerHTML += Object.keys(matchData).reverse().map(dateKey => {
         return matchData[dateKey].map(entry => {
@@ -155,7 +166,7 @@ function displayLiveVideos() {
                                 <a href="pages/teams/details/?team=${entry.teamsInvolved[1]}">${entry.teamsInvolved[1]}</a>
                             </h2>
                             <a href="${generate6v6ScoreCalculatorLink(entry)}">${entry.testMatch ? "<b>Test match</b>" : `Season ${entry.season}`}</a>
-                            | <a href="pages/matches/?date=${dateKey}">${dateKey}</a>
+                            | <a href="pages/matches/?date=${dateKey}">${formatDate(dateKey, locale)}</a>
                             <p>
                                 ${autoLink(entry.description.split("\n")[0].replace(CUTDESCRIPTION, ""))}
                             </p>
@@ -167,6 +178,11 @@ function displayLiveVideos() {
         }).join('');
     }).join('');
 }
+
+document.addEventListener('startDayChange', () => {
+    displayVideos();
+    displayLiveVideos();
+});
 
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();

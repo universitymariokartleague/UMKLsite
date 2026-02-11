@@ -208,7 +208,6 @@ function generateTeamMatches(teamName) {
             }
 
             let timeString = match.time || '00:00:00';
-            const { formattedMatchTime, formattedLocalMatchTime, outsideUKTimezone } = formatMatchTime(match.matchDate, timeString, locale);
 
             let isLive = false;
             if (match.time) {
@@ -244,7 +243,7 @@ function generateTeamMatches(teamName) {
                     <hr>
                     <div class="match-details-wrapper">
                         <span id="match-season">${match.testMatch ? 'Test match' : `Season ${match.season}`}</span>
-                        <span id="match-date"><a class="team-link-color" href="pages/matches/?date=${match.matchDate}">${formattedMatchTime} ${formatDate(match.matchDate, locale)}</a></span>
+                        <span id="match-date"><a class="team-link-color" href="pages/matches/?date=${match.matchDate}">${formatDate(match.matchDate, locale)}</a></span>
                     </div>
                 </div>
             `;

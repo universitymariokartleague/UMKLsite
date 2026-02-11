@@ -6,6 +6,7 @@ const profileCardFormatHTML = `
     <div class="profile-card-wrapper">
         <div class="profile-card" style="--team-color: #{{color}};">
             <img src="assets/media/brand/guidelines/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.75" />
+            <div class="card-timestamp"><span class="fa-solid fa-clock"></span></span> {{timestamp}}</div>
             <div class="profile-card-content">
                 <div class="profile-card-header">
                     <img src="{{PFP}}" alt="{{username}} profile picture" class="profile-card-avatar" 
@@ -38,20 +39,19 @@ const profileCardFormatHTML = `
                 <p class="graph-title">Extra stats</p>
                 <div class="profile-card-detailed-stats">
                     <div class="stat-item">
-                        <span class="stat-label">Matches Played</span>
+                        <span class="stat-label">Matches <br>Played</span>
                         <span class="stat-value">{{matchesPlayed}}</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">First Places (Podiums)</span>
+                        <span class="stat-label">First Places <br>(Podiums)</span>
                         <span class="stat-value">{{firstPlaces}}</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">Highest Finish</span>
+                        <span class="stat-label">Highest <br>Finish</span>
                         <span class="stat-value">{{highestFinish}}</span>
                     </div>
                 </div>
                 <div class="card-help">{{cardExtraText}}</div>
-                <div class="card-timestamp">Generated {{timestamp}}</div>
             </div>
         </div>
     </div>
@@ -133,7 +133,7 @@ async function generateProfileBox(data, showError) {
         .replace("{{teamWins}}", data.team_wins || "0")
         .replace("{{firstPlaces}}", data.first_places || "0")
         .replace("{{highestFinish}}", data.highest_finish || "N/A")
-        .replace("{{timestamp}}", data.timestamp)
+        .replace("{{timestamp}}", new Date(data.timestamp).toLocaleString("en-GB", { hour: '2-digit', minute: '2-digit' }) + " " + new Date(data.timestamp).toLocaleDateString("en-GB"))
         .replace("{{cardExtraText}}", "Use /profile to see your own card!");
 
     if (teamData) {
@@ -597,7 +597,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     ).join(', ');
 
     console.log(data);
-    fillInPageTitle(data)
+    fillInPageTitle(data);
 
     try {
         matchData = await getMatchData();
