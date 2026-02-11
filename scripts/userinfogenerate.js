@@ -62,7 +62,9 @@ const startYear = 2023;
 
 let data, matchData, teamData;
 const currentSeason = 2;
+let graphResScale = 2;
 let fetchedCurrentSeason = currentSeason;
+let takingCardScreenshot = false;
 
 let refreshTimer = null;
 
@@ -170,11 +172,10 @@ async function generateProfileBox(data, showError) {
             currentX += (targetX - currentX) * SMOOTH;
             currentY += (targetY - currentY) * SMOOTH;
 
-            card.style.transform =
-                `perspective(900px)
-                translateY(-5px)
-                rotateX(${currentX}deg)
-                rotateY(${currentY}deg)`;
+            const rotateX = takingCardScreenshot ? 0 : currentX;
+            const rotateY = takingCardScreenshot ? 0 : currentY;
+            
+            card.style.transform = `perspective(900px) translateY(-5px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
 
             requestAnimationFrame(animate);
         }
@@ -287,16 +288,16 @@ function createSPGraph(data, teamColor) {
     const canvas = document.getElementById('spGraph');
     if (!canvas) return;
 
-    canvas.width = canvas.clientWidth * 2;
-    canvas.height = canvas.clientHeight * 2;
+    canvas.width = canvas.clientWidth * graphResScale;
+    canvas.height = canvas.clientHeight * graphResScale;
 
     const ctx = canvas.getContext('2d');
     const spData = data.sp_detailed;
 
     if (!spData || !spData.history || Object.keys(spData.history).length === 0) {
         ctx.fillStyle = '#111111';
-        ctx.font = '24px Montserrat';
-        ctx.fillText('No history available', 5, 20);
+        ctx.font = `${12 * graphResScale}px Montserrat`;
+        ctx.fillText('No history available', 5, 10 * graphResScale);
         return;
     }
 
@@ -328,14 +329,14 @@ function createSPGraph(data, teamColor) {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const padding = 38;
-    const graphWidth = canvas.width - (padding * 2);
+    const padding = 20 * graphResScale;
+    const graphWidth = canvas.width - (padding * 2) - (5 * graphResScale);
     const graphHeight = canvas.height - (padding * 2);
 
     const maxValue = Math.max(...extendedValues);
 
     ctx.strokeStyle = '#cccccc';
-    ctx.lineWidth = 2;
+    ctx.lineWidth = graphResScale;
     ctx.beginPath();
     ctx.moveTo(padding, padding);
     ctx.lineTo(padding, canvas.height - padding);
@@ -358,9 +359,10 @@ function createSPGraph(data, teamColor) {
     
     const gridMax = getGraphRoundNumber(maxValue);
 
+    // Draw graph and y-axis labels
     ctx.strokeStyle = '#cccccc';
     ctx.fillStyle = '#666';
-    ctx.font = '18px Montserrat';
+    ctx.font = `${10 * graphResScale}px Montserrat`;
     ctx.textAlign = 'right';
     ctx.setLineDash([2, 2]);
     
@@ -379,12 +381,13 @@ function createSPGraph(data, teamColor) {
         } else {
             label = value.toString();
         }
-        ctx.fillText(label, padding - 5, y + 3);
+        ctx.fillText(label, padding - 2 * graphResScale, y + 3 * graphResScale);
     }
     ctx.setLineDash([]);
 
+    // Draw graph line
     ctx.strokeStyle = teamColor;
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 1.5 * graphResScale;
     ctx.beginPath();
 
     extendedDates.forEach((_, index) => {
@@ -396,6 +399,7 @@ function createSPGraph(data, teamColor) {
     });
     ctx.stroke();
 
+    // Draw dates on the x-axis
     const maxLabels = 8;
     const labelStep = Math.max(1, Math.floor(extendedDates.length / maxLabels));
     const displayIndices = [];
@@ -409,25 +413,28 @@ function createSPGraph(data, teamColor) {
 
     if (extendedDates.length > 0) {
         ctx.fillStyle = '#666';
-        ctx.font = '16px Montserrat';
+        ctx.font = `${10 * graphResScale}px Montserrat`;
         
         displayIndices.forEach(index => {
             const timeRatio = (dateTimestamps[index] - fakeStartTime) / timeRange;
             const x = padding + timeRatio * graphWidth;
             const date = extendedDates[index];
-            
+            const dateObj = new Date(date);
+            const formattedDate = `${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${dateObj.getFullYear().toString().slice(-2)}`;
+
             ctx.save();
-            ctx.translate(x, canvas.height - padding + 12);
+            ctx.translate(x, canvas.height - padding + 7 * graphResScale);
             ctx.rotate(-Math.PI / 10);
             ctx.textAlign = 'right';
-            ctx.fillText(date, 0, 0);
+            ctx.fillText(formattedDate, 0, 0);
             ctx.restore();
         });
     }
 
+    // Draw values
     if (extendedDates.length > 0) {
         ctx.fillStyle = teamColor;
-        ctx.font = '18px Montserrat';
+        ctx.font = `${11 * graphResScale}px Montserrat`;
         ctx.textAlign = 'center';
         
         displayIndices.forEach(index => {
@@ -435,10 +442,11 @@ function createSPGraph(data, teamColor) {
             const x = padding + timeRatio * graphWidth;
             const y = canvas.height - padding - (extendedValues[index] / gridMax) * graphHeight;
             
-            ctx.fillText(extendedValues[index], x, y - 12);
+            ctx.fillText(extendedValues[index], x, y - 7 * graphResScale);
         });
     }
 
+    // Draw points
     ctx.fillStyle = teamColor;
     extendedDates.forEach((_, index) => {
         const timeRatio = (dateTimestamps[index] - fakeStartTime) / timeRange;
@@ -447,7 +455,7 @@ function createSPGraph(data, teamColor) {
         
         if (index > 0) {
             ctx.beginPath();
-            ctx.arc(x, y, 8, 0, 2 * Math.PI);
+            ctx.arc(x, y, 4 * graphResScale, 0, 2 * Math.PI);
             ctx.fill();
         }
     });
@@ -503,6 +511,51 @@ async function getTeamdata(team, season) {
 
 window.addEventListener("resize", async () => {
     if (data) { 
+        createSPGraph(data, `#${data.color}`);
+    }
+});
+
+document.addEventListener('keydown', async (event) => {
+    const key = event.key.toLowerCase();
+
+    if (key == 's') {
+        const node = document.getElementById("userCardBox");
+        const profileCard = document.querySelector(".profile-card");
+
+        profileCard.style.transition = 'none';
+        const originalTransition = profileCard.style.transition;
+
+        takingCardScreenshot = true;
+        graphResScale = 4;
+        createSPGraph(data, `#${data.color}`);
+        
+        try {
+            const rect = profileCard.getBoundingClientRect();
+
+            const dataUrl = await htmlToImage.toPng(node, {
+                pixelRatio: 4,
+                width: rect.width + 40,
+                height: node.scrollHeight + 40, 
+                style: {
+                    transform: `translateX(-145px)`
+                }
+            });
+
+            const response = await fetch(dataUrl);
+            const blob = await response.blob();
+
+            await navigator.clipboard.write([
+                new ClipboardItem({ 'image/png': blob })
+            ]);
+
+            console.log('Copied image to clipboard!');
+        } catch (err) {
+            console.error("Capture failed:", err);
+        }
+
+        profileCard.style.transition = originalTransition;
+        takingCardScreenshot = false;
+        graphResScale = 2;
         createSPGraph(data, `#${data.color}`);
     }
 });
