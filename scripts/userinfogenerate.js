@@ -50,6 +50,7 @@ const profileCardFormatHTML = `
                         <span class="stat-value">{{highestFinish}}</span>
                     </div>
                 </div>
+                <div class="card-help">{{cardExtraText}}</div>
                 <div class="card-timestamp">Generated {{timestamp}}</div>
             </div>
         </div>
@@ -132,7 +133,8 @@ async function generateProfileBox(data, showError) {
         .replace("{{teamWins}}", data.team_wins || "0")
         .replace("{{firstPlaces}}", data.first_places || "0")
         .replace("{{highestFinish}}", data.highest_finish || "N/A")
-        .replace("{{timestamp}}", data.timestamp);
+        .replace("{{timestamp}}", data.timestamp)
+        .replace("{{cardExtraText}}", "Use /profile to see your own card!");
 
     if (teamData) {
         document.documentElement.style.setProperty('--highlight-color', `#${data.color}80`);
