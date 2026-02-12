@@ -113,6 +113,7 @@ const startYear = 2023;
 
 let data, matchData, teamData;
 const currentSeason = 2;
+const shareResScale = 3;
 let graphResScale = 2;
 let fetchedCurrentSeason = currentSeason;
 let takingCardScreenshot = false;
@@ -692,14 +693,14 @@ async function generateCardImage() {
     profileCard.style.transition = 'none';
 
     takingCardScreenshot = true;
-    graphResScale = 4;
+    graphResScale = shareResScale;
     createSPGraph(data, `#${data.color}`);
     
     try {
         const rect = profileCard.getBoundingClientRect();
 
         const dataUrl = await htmlToImage.toPng(node, {
-            pixelRatio: 4,
+            pixelRatio: shareResScale,
             width: rect.width + 40,
             height: node.scrollHeight + 40, 
             style: {
