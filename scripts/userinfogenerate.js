@@ -114,6 +114,7 @@ const startYear = 2023;
 let data, matchData, teamData;
 const currentSeason = 2;
 const shareResScale = 3;
+let cardImageBlob;
 let graphResScale = 2;
 let fetchedCurrentSeason = currentSeason;
 let takingCardScreenshot = false;
@@ -685,7 +686,9 @@ document.addEventListener('keydown', async (event) => {
     }
 });
 
-async function generateCardImage() {
+async function preloadCardImage() {
+    console.log("preloading..")
+
     const node = document.getElementById("userCardBox");
     const profileCard = document.querySelector(".profile-card");
 
@@ -695,7 +698,7 @@ async function generateCardImage() {
     takingCardScreenshot = true;
     graphResScale = shareResScale;
     createSPGraph(data, `#${data.color}`);
-    
+
     try {
         const rect = profileCard.getBoundingClientRect();
 
@@ -708,11 +711,24 @@ async function generateCardImage() {
             }
         });
 
+        const response = await fetch(dataUrl);
+        cardImageBlob = await response.blob();
+    } catch (err) {
+        console.error("Capture failed:", err);
+    }
+
+    profileCard.style.transition = originalTransition;
+    takingCardScreenshot = false;
+    graphResScale = 2;
+    createSPGraph(data, `#${data.color}`);
+}
+
+async function generateCardImage() {
+    try {
         if (getIsPopupShowing()) return;
         const useClipboard = isWindowsOrLinux() || !navigator.canShare;
 
-        const response = await fetch(dataUrl);
-        const blob = await response.blob();
+        const blob = cardImageBlob;
 
         const message = `Check out the UMKL profile for ${data.username}!`
 
@@ -730,13 +746,8 @@ async function generateCardImage() {
         }
         console.log('Copied image to clipboard!');
     } catch (err) {
-        console.error("Capture failed:", err);
+        console.error("Failed to copy to clipboard!:", err);
     }
-
-    profileCard.style.transition = originalTransition;
-    takingCardScreenshot = false;
-    graphResScale = 2;
-    createSPGraph(data, `#${data.color}`);
 }
 
 function showCardProfileItems() {    
@@ -784,13 +795,13 @@ function showCardProfileItems() {
                     populateItemsGrid('all');
                     attachCategoryListeners();
                     profileCard.style.transform = 'rotateY(0deg)';
-                }, 200);
+                }, 240);
             }, 50);
 
             setTimeout(() => {
                 profileCard.style.transition = 'transform 0.1s ease-out';
                 isFlipping = false;
-            }, 350)
+            }, 400)
         } catch (err) {
             isFlipping = false;
             console.error("Loading card items failed:", err);
@@ -813,19 +824,15 @@ async function goBackToProfile() {
         profileCard.style.transform = 'rotateY(90deg)';
 
         setTimeout(async () => {
-            // Clean up existing effects and listeners before replacing content
             cleanupCard3DEffect();
             cleanupProfileEventListeners();
             
             profileCardContent.innerHTML = generateProfileCardContent(data);
             
-            // Restore logo and timestamp elements
             const logoHTML = `<img src="assets/media/brand/guidelines/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.75" />`;
             const timestampHTML = `<div class="card-timestamp"><span class="fa-solid fa-clock"></span> ${new Date(data.timestamp).toLocaleString("en-GB", { hour: '2-digit', minute: '2-digit' }) + " " + new Date(data.timestamp).toLocaleDateString("en-GB")}</div>`;
             
-            // Insert logo at the beginning of profile card (before content)
             profileCard.insertAdjacentHTML('afterbegin', logoHTML);
-            // Insert timestamp after logo (before content)
             profileCard.insertAdjacentHTML('afterbegin', timestampHTML);
             
             profileCard.style.transform = 'rotateY(0deg)';
@@ -833,13 +840,14 @@ async function goBackToProfile() {
             createSPGraph(data, `#${data.color}`);
             attachProfileEventListeners();
             addCard3DEffect();
-        }, 200);
+        }, 240);
     }, 50);
 
     setTimeout(() => {
         profileCard.style.transition = 'transform 0.1s ease-out';
         isFlipping = false;
-    }, 350)
+        preloadCardImage();
+    }, 400)
 }
 
 function populateItemsGrid(category) {
@@ -847,9 +855,9 @@ function populateItemsGrid(category) {
     const filteredItems = category === "all"
         ? data.profile_items 
         : data.profile_items.filter(item => item.type === category);
-    
+
     grid.innerHTML = "";
-    
+
     availableItems = data.profile_items
     filteredItems.forEach((item, index) => {
         const isEquipped = isItemEquipped(item);
@@ -997,7 +1005,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const shareButton = document.getElementById("shareButton");
 
     setOriginalMessage(shareButton.innerHTML);
-
+    preloadCardImage();
     shareButton.addEventListener("click", async () => {
         if (currentlyShowingItems) {
             goBackToProfile();
