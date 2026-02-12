@@ -1,6 +1,7 @@
 /*
     This script generates a user's info page card, along with allowing customisations.
 */
+import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareImage, showImagePreview, setOriginalMessage } from './shareAPIhelper.js';
 
 const profileCardFormatHTML = `
     <div class="profile-card-wrapper">
@@ -343,7 +344,6 @@ async function generateProfileBox(data, showError) {
         console.debug(`%cuserinfogenerate.js %c> %c${data.username} does not belong to a team`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
     }
 
-    // Clean up any existing effects and listeners
     cleanupCard3DEffect();
     cleanupProfileEventListeners();
 
@@ -676,47 +676,67 @@ document.addEventListener('keydown', async (event) => {
     const key = event.key.toLowerCase();
 
     if (key == 's') {
-        const node = document.getElementById("userCardBox");
-        const profileCard = document.querySelector(".profile-card");
-
-        profileCard.style.transition = 'none';
-        const originalTransition = profileCard.style.transition;
-        goBackToProfile();
-
-        takingCardScreenshot = true;
-        graphResScale = 4;
-        createSPGraph(data, `#${data.color}`);
-        
-        try {
-            const rect = profileCard.getBoundingClientRect();
-
-            const dataUrl = await htmlToImage.toPng(node, {
-                pixelRatio: 4,
-                width: rect.width + 40,
-                height: node.scrollHeight + 40, 
-                style: {
-                    transform: `translateX(-145px)`
-                }
-            });
-
-            const response = await fetch(dataUrl);
-            const blob = await response.blob();
-
-            await navigator.clipboard.write([
-                new ClipboardItem({ 'image/png': blob })
-            ]);
-
-            console.log('Copied image to clipboard!');
-        } catch (err) {
-            console.error("Capture failed:", err);
+        if (currentlyShowingItems) {
+            goBackToProfile();
+            await new Promise(resolve => setTimeout(resolve, 400));
         }
-
-        profileCard.style.transition = originalTransition;
-        takingCardScreenshot = false;
-        graphResScale = 2;
-        createSPGraph(data, `#${data.color}`);
+        await generateCardImage();
     }
 });
+
+async function generateCardImage() {
+    const node = document.getElementById("userCardBox");
+    const profileCard = document.querySelector(".profile-card");
+
+    const originalTransition = profileCard.style.transition;
+    profileCard.style.transition = 'none';
+
+    takingCardScreenshot = true;
+    graphResScale = 4;
+    createSPGraph(data, `#${data.color}`);
+    
+    try {
+        const rect = profileCard.getBoundingClientRect();
+
+        const dataUrl = await htmlToImage.toPng(node, {
+            pixelRatio: 4,
+            width: rect.width + 40,
+            height: node.scrollHeight + 40, 
+            style: {
+                transform: `translateX(-145px)`
+            }
+        });
+
+        if (getIsPopupShowing()) return;
+        const useClipboard = isWindowsOrLinux() || !navigator.canShare;
+
+        const response = await fetch(dataUrl);
+        const blob = await response.blob();
+
+        const message = `Check out the UMKL profile for ${data.username}!`
+
+        if (useClipboard) {
+            const success = await copyTextToClipboard(message);
+            shareButton.innerText = success ? "Copied to clipboard!" : "Failed to copy!";
+            showImagePreview(blob, blob.url, message)
+        } else {
+            await shareImage(
+                `${data.username} UMKL Profile`,
+                message,
+                blob,
+                `${data.username.replaceAll(" ", "_")}_UMKL_profile.png`
+            )
+        }
+        console.log('Copied image to clipboard!');
+    } catch (err) {
+        console.error("Capture failed:", err);
+    }
+
+    profileCard.style.transition = originalTransition;
+    takingCardScreenshot = false;
+    graphResScale = 2;
+    createSPGraph(data, `#${data.color}`);
+}
 
 function showCardProfileItems() {    
     if (!isFlipping && !currentlyShowingItems) {
@@ -898,6 +918,10 @@ function saveItemEquips() {
     goBackToProfile()
 }
 
+// Make functions globally accessible for onclick handlers
+window.saveItemEquips = saveItemEquips;
+window.goBackToProfile = goBackToProfile;
+
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     console.debug(`%cuserinfogenerate.js %c> %cGenerating player info box`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
@@ -968,6 +992,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
     await generateProfileBox(data, showError);
+
+    const shareButton = document.getElementById("shareButton");
+
+    setOriginalMessage(shareButton.innerHTML);
+
+    shareButton.addEventListener("click", async () => {
+        if (currentlyShowingItems) {
+            goBackToProfile();
+            await new Promise(resolve => setTimeout(resolve, 400));
+        }
+        await generateCardImage();
+    });
 
     console.debug(`%cuserinfogenerate.js %c> %cGenerated user info box in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
 });
