@@ -687,8 +687,6 @@ document.addEventListener('keydown', async (event) => {
 });
 
 async function preloadCardImage() {
-    console.log("preloading..")
-
     const node = document.getElementById("userCardBox");
     const profileCard = document.querySelector(".profile-card");
 
