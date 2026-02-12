@@ -46,14 +46,14 @@
 
 .profile-card-user-info h3 {
     margin: 0;
-    color: #333;
+    color: #111111;
     font-size: 1.2em;
     font-weight: 600;
 }
 
 .profile-card-user-info p {
     margin: 5px 0 0 0;
-    color: #666;
+    color: #333;
     font-size: 0.9em;
 }
 
@@ -80,7 +80,7 @@
 .stat-label {
     display: block;
     font-size: 0.75em;
-    color: #666;
+    color: #333;
     margin-bottom: 5px;
     letter-spacing: 0.5px;
 }
@@ -89,7 +89,7 @@
     display: block;
     font-size: 1.1em;
     font-weight: bold;
-    color: var(--team-color, #333);
+    color: var(--team-color, #111111);
 }
 
 .profile-card-sp-graph {
@@ -99,7 +99,7 @@
 .graph-title {
     margin: 0 0 10px 0;
     font-size: 0.9em;
-    color: #666;
+    color: #333;
     font-weight: 600;
 }
 
@@ -122,7 +122,7 @@
     top: 0;
     right: 5px;
     text-align: right;
-    color: #333;
+    color: #111111;
     opacity: 0.5;
     padding: 5px;
     font-size: 10px;
@@ -140,20 +140,224 @@
 .card-help {
     position: absolute;
     bottom: 8px;
-    padding: 3px;
+    padding: 3px 10px;
     font-size: 12px;
-    background: var(--team-color, #333);
-    border-radius: 5px;
+    background: var(--team-color, #111111);
+    border-radius: 20px;
     color: #fff;
 }
 
+.customise-button {
+    position: absolute;
+    bottom: 8px;
+    right: 25px;
+}
+
+.items-interface-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.items-interface {
+    height: 504px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+}
+
+.items-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.items-grid {
+    flex: 1;
+    overflow-y: auto;
+    display: grid;
+    padding: 0 10px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.items-footer {
+    position: sticky;
+    bottom: 0;
+    padding: 10px 0 0 0;
+    z-index: 10;
+}
+
+.items-title {
+    text-align: center;
+    margin: 0 0 20px 0;
+    color: #111111;
+}
+
+.items-categories {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.customise-button {
+    border: 2px solid var(--team-color, #ccc);
+    background: #FFF;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9em;
+    color: #333;
+}
+
+.customise-button:hover {
+    background: var(--team-color, #ccc);
+    color: #FFF;
+}
+
+.customise-button.active {
+    background: var(--team-color, #ccc);
+    color: #FFF;
+}
+
+.category-button {
+    padding: 6px 12px;
+    border: 2px solid var(--team-color, #ccc);
+    background: #FFF;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9em;
+    color: #333;
+}
+
+.category-button:hover {
+    background: var(--team-color, #ccc);
+    color: #FFF;
+}
+
+.category-button.active {
+    background: var(--team-color, #ccc);
+    color: #FFF;
+}
+
+.item-card {
+    background: #FFF;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    padding: 12px;
+    max-height: 142px;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.item-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border: 2px solid var(--team-color, #ccc);
+}
+
+.item-card.equipped {
+    border-color: var(--team-color, #00ce7a);
+    background: var(--team-color, #ccc);
+}
+
+.item-card.equipped:hover {
+    border: 2px solid #FFF;
+}
+
+.item-preview {
+    width: 100%;
+    aspect-ratio: 16/9;
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+    object-fit: cover;
+    margin: 0 auto 10px;
+}
+
+.item-name {
+    margin: 0 0 5px 0;
+    color: #111111;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item-type {
+    outline: 1px solid #cccccc;
+    background: #FFF;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    color: #333;
+    text-transform: capitalize;
+}
+
+.items-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.button-cancel, .button-save {
+    padding: 12px 24px;
+    border: 2px solid var(--team-color, #ccc);
+    background: #FFF;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1em;
+}
+
+.button-cancel:hover {
+    background: #f0f0f0;
+}
+
+.button-save {
+    background: var(--team-color, #ccc);
+    color: #fff;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
 @media screen and (max-width: 767px) {
+    .profile-card-wrapper {
+        padding: 0 12px;
+        margin-top: 20px;
+    }
+
     .profile-card {
-        padding: 10px 10px 25px 10px;
+        padding: 20px;
+    }
+
+    .profile-card-header {
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+
+    .profile-card-avatar {
+        width: 60px;
+        height: 60px;
     }
 
     .profile-card-stats, .profile-card-detailed-stats {
-        gap: 5px;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .stat-item {
+        padding: 12px 8px;
     }
 
     .stat-value {
@@ -162,14 +366,37 @@
 
     .profile-umkl-logo {
         position: absolute;
-        height: 20px;
-        top: 10px;
-        right: 10px;
+        height: 24px;
+        top: 12px;
+        right: 12px;
     }
 
     .card-timestamp {
-        padding: 2px;
-        right: 10px;
-        font-size: 9px;
+        padding: 4px 6px;
+        right: 12px;
+        top: 12px;
+        font-size: 10px;
+    }
+
+    .items-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+        padding: 0 12px;
+    }
+
+    .items-categories {
+        gap: 6px;
+        margin-bottom: 16px;
+        padding: 0 4px;
+    }
+
+    .category-button {
+        padding: 6px 12px;
+        font-size: 0.8em;
+    }
+
+    .customise-button {
+        padding: 6px 12px;
+        font-size: 0.8em;
     }
 }
