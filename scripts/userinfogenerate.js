@@ -488,7 +488,7 @@ function createSPGraph(data, teamColor) {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const padding = 20 * graphResScale;
+    const padding = 22 * graphResScale;
     const graphWidth = canvas.width - (padding * 2) - (5 * graphResScale);
     const graphHeight = canvas.height - (padding * 2);
 
@@ -508,9 +508,9 @@ function createSPGraph(data, teamColor) {
         const normalized = max / magnitude;
         
         let rounded;
-        if (normalized <= 1.5) rounded = 1;
-        else if (normalized <= 3) rounded = 2;
-        else if (normalized <= 7) rounded = 5;
+        if (normalized <= 1) rounded = 1;
+        else if (normalized <= 2) rounded = 2;
+        else if (normalized <= 5) rounded = 5;
         else rounded = 10;
         
         return rounded * magnitude;
@@ -854,7 +854,7 @@ async function goBackToProfile() {
     setTimeout(() => {
         profileCard.style.transition = 'transform 0.1s ease-out';
         isFlipping = false;
-        preloadCardImage();
+        // preloadCardImage();
     }, 400)
 }
 
