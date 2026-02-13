@@ -175,7 +175,7 @@ function fillInPageTitle(data) {
 
 function generateProfileCardHTML(data) {
     return profileCardFormatHTML
-        .replace("{{PFP}}", data.pfp.replace("png", "webp"))
+        .replace("{{PFP}}", data.pfp.replace("png", "webp").replace("gif", "webp"))
         .replaceAll("{{username}}", data.username)
         .replaceAll("{{team}}", data.team || "No Team")
         .replace("{{careerPoints}}", data.career_points || "0")
@@ -192,7 +192,7 @@ function generateProfileCardHTML(data) {
 
 function generateProfileCardContent(data) {
     return profileCardContentFormatHTML
-        .replace("{{PFP}}", data.pfp.replace("png", "webp"))
+        .replace("{{PFP}}", data.pfp.replace("png", "webp").replace("gif", "webp"))
         .replaceAll("{{username}}", data.username)
         .replaceAll("{{team}}", data.team || "No Team")
         .replace("{{careerPoints}}", data.career_points || "0")
