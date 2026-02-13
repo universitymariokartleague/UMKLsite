@@ -706,20 +706,24 @@ async function preloadCardImage() {
         let cardHelpDiv = document.querySelector('.card-help');
         cardHelpDiv.style.width = '85%';
 
-        const dataUrl = await htmlToImage.toPng(node, {
-            pixelRatio: shareResScale,
-            width: rect.width + 40,
-            height: node.scrollHeight + 40, 
-            style: {
-                transform: `translateX(-145px)`
-            }
-        });
+        let dataURL;
 
-        showCardProfileItemsButton.style.display = '';
-        cardHelpDiv.style.width = '';
+        setTimeout(async () => {
+            dataURL = await htmlToImage.toPng(node, {
+                pixelRatio: shareResScale,
+                width: rect.width + 40,
+                height: node.scrollHeight + 40, 
+                style: {
+                    transform: `translateX(-145px)`
+                }
+            });
 
-        const response = await fetch(dataUrl);
-        cardImageBlob = await response.blob();
+            showCardProfileItemsButton.style.display = '';
+            cardHelpDiv.style.width = '';
+
+            const response = await fetch(dataURL);
+            cardImageBlob = await response.blob();
+        }, 5)
     } catch (err) {
         console.error("Capture failed:", err);
     }
