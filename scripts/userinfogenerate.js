@@ -700,6 +700,12 @@ async function preloadCardImage() {
     try {
         const rect = profileCard.getBoundingClientRect();
 
+        let showCardProfileItemsButton = document.getElementById("showCardProfileItemsButton");
+        showCardProfileItemsButton.style.display = 'none';
+
+        let cardHelpDiv = document.querySelector('.card-help');
+        cardHelpDiv.style.width = '85%';
+
         const dataUrl = await htmlToImage.toPng(node, {
             pixelRatio: shareResScale,
             width: rect.width + 40,
@@ -708,6 +714,9 @@ async function preloadCardImage() {
                 transform: `translateX(-145px)`
             }
         });
+
+        showCardProfileItemsButton.style.display = '';
+        cardHelpDiv.style.width = '';
 
         const response = await fetch(dataUrl);
         cardImageBlob = await response.blob();
@@ -742,7 +751,8 @@ async function generateCardImage() {
                 `${data.username.replaceAll(" ", "_")}_UMKL_profile.png`
             )
         }
-        console.log('Copied image to clipboard!');
+
+        console.debug(`%cuserinfogenerate.js %c> %cCopied image to clipboard!`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
     } catch (err) {
         console.error("Failed to copy to clipboard!:", err);
     }
@@ -919,7 +929,7 @@ function saveItemEquips() {
     });
 
     equippedItemsData["username"] = data.username;
-    console.log('Saving equipped items:', equippedItemsData);
+    console.debug(`%cuserinfogenerate.js %c> %cSaving equipped items: ${JSON.stringify(equippedItemsData)}`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
     localStorage.setItem("userProfileSettings", JSON.stringify(equippedItemsData));
 
     goBackToProfile()
