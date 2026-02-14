@@ -5,6 +5,8 @@
     --text-color: #111111;
     --bg-color: #ccccccbb;
     --map-opacity: 1;
+    --map-shadow: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.25));
+    font-family: Montserrat, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -12,6 +14,7 @@
         --text-color: #fff;
         --bg-color: #111111;
         --map-opacity: 0.2;
+        --map-shadow: drop-shadow(0 4px 6px rgba(255, 255, 255, 0.5));
     }
 }
 
@@ -35,14 +38,8 @@ body {
     cursor: move;
 }
 
-@keyframes fade-in {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+#UKMap {
+    filter: var(--map-shadow);
 }
 
 .map-container, #worldMap {
@@ -73,7 +70,6 @@ body {
 }
 
 .dot-label {
-    font-family: Montserrat, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     position: absolute;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -89,10 +85,11 @@ body {
     user-select: none;
 }
 
-.zoom-controls {
+.zoom-controls,
+.weather-display {
     position: absolute;
-    right: 5px;
     top: 5px;
+    right: 5px;
     z-index: 10;
     display: flex;
     flex-direction: column;
@@ -105,15 +102,17 @@ body {
     box-shadow: 0 2px 6px #0002;
     padding: 4px;
     opacity: 0;
-    animation: fadeIn 0.25s ease-in-out forwards;
+    animation: fade-in 0.25s ease-in-out forwards;
     -webkit-user-select: none;
     user-select: none;
 }
 
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-    }
+.zoom-controls {
+    top: 38px;
+}
+
+.weather-display {
+    cursor: auto;
 }
 
 .controls-button {
@@ -130,4 +129,14 @@ body {
     border-radius: 5px;
     cursor: pointer;
     outline: none;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }

@@ -13,8 +13,7 @@ const mapBounds = {
     maxLon: 1.73,    // Eastern edge
 };
 
-let teamLocations = [];
-let coords = [];
+let teamLocations, coords, weatherData;
 let teamParam = "";
 let loadedOnce = false;
 let startTime;
@@ -177,6 +176,17 @@ function onTouchEnd() {
     lastTouchDist = null;
 }
 
+async function getWeather(lat, long) {
+    console.debug(`%cmaprender.js %c> %cFetching location weather from the open-meteo API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    return fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,weather_code,is_day`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    });
+}
+
 async function getTeamlocations() {
     console.debug(`%cmaprender.js %c> %cFetching teamlocations from the API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     return fetch('https://api.umkl.co.uk/teamlocations', {
@@ -234,16 +244,6 @@ function createZoomControls() {
         return btn;
     };
 
-    // controls.appendChild(makeBtn('+', 'Zoom In', () => {
-    //     scale = Math.min(maxScale, scale * 1.2);
-    //     updateTransform();
-    // }));
-
-    // controls.appendChild(makeBtn('-', 'Zoom Out', () => {
-    //     scale = Math.max(minScale, scale / 1.2);
-    //     updateTransform();
-    // }));
-
     controls.appendChild(makeBtn(`fa-solid fa-refresh`, 'Reset map position', () => {
         scale = DEFAULT_SCALE;
         panX = DEFAULT_PAN_X;
@@ -252,6 +252,89 @@ function createZoomControls() {
     }));
 
     wrapper.appendChild(controls);
+}
+
+function getWeatherDescription(code) {
+    if (code === 0) return "Clear sky";
+
+    if (code === 1) return "Mainly clear";
+    if (code === 2) return "Partly cloudy";
+    if (code === 3) return "Overcast";
+
+    if (code === 45) return "Fog";
+    if (code === 48) return "Depositing rime fog";
+
+    if (code >= 51 && code <= 55) return "Drizzle";
+    if (code === 56 || code === 57) return "Freezing drizzle";
+
+    if (code >= 61 && code <= 65) return "Rain";
+    if (code === 66 || code === 67) return "Freezing rain";
+
+    if (code >= 71 && code <= 75) return "Snow fall";
+    if (code === 77) return "Snow grains";
+
+    if (code >= 80 && code <= 82) return "Rain showers";
+
+    if (code === 85 || code === 86) return "Snow showers";
+
+    if (code === 95) return "Thunderstorm";
+    if (code === 96 || code === 99) return "Thunderstorm with hail";
+
+    return "Unknown weather";
+}
+
+function getWeatherIcon(code, isDay = true) {
+    const day = {
+        clear: "☀️",
+        partly: "🌤️",
+        cloudy: "☁️",
+        fog: "🌫️",
+        drizzle: "🌦️",
+        rain: "🌧️",
+        snow: "❄️",
+        shower: "🌦️",
+        storm: "⛈️"
+    };
+
+    const night = {
+        clear: "🌙",
+        partly: "☁️",
+        cloudy: "☁️",
+        fog: "🌫️",
+        drizzle: "🌧️",
+        rain: "🌧️",
+        snow: "❄️",
+        shower: "🌧️",
+        storm: "⛈️"
+    };
+
+    const icon = isDay ? day : night;
+
+    if (code === 0) return icon.clear;
+    if ([1,2].includes(code)) return icon.partly;
+    if (code === 3) return icon.cloudy;
+    if ([45,48].includes(code)) return icon.fog;
+    if (code >= 61 && code <= 65) return icon.rain;
+    if (code >= 51 && code <= 60) return icon.drizzle;
+    if (code >= 66 && code <= 67) return icon.drizzle;
+    if (code >= 71 && code <= 77) return icon.snow;
+    if (code >= 80 && code <= 82) return icon.shower;
+    if (code >= 95) return icon.storm;
+
+    return "❔";
+}
+
+function createWeatherBox() {
+    const weatherDiv = document.createElement('div');
+    weatherDiv.className = 'weather-display';
+    weatherDiv.id = 'weather-display';
+
+    const code = weatherData.current.weather_code;
+
+    weatherDiv.textContent = `${getWeatherIcon(code, weatherData.current.is_day === 1)} ${Math.round(weatherData.current.temperature_2m)}${weatherData.current_units.temperature_2m}`;
+    weatherDiv.title = `${getWeatherDescription(code)} at ${weatherData.current.temperature_2m}${weatherData.current_units.temperature_2m}`;
+
+    wrapper.appendChild(weatherDiv);
 }
 
 function placeDots() {
@@ -284,7 +367,7 @@ function placeDots() {
         @keyframes dot-fade-in { from { opacity: 0; } to { opacity: 1; } }
     `);
 
-    coords.forEach(({ coords: [lat, lon], color, name }) => {
+    coords.forEach(async ({ coords: [lat, lon], color, name }) => {
         const { x, y } = latLonToPixel(lat, lon, w, h);
         const isCurrentTeam = name === teamParam;
         const colorClass = `pulse-${color.replace('#', '')}`;
@@ -315,6 +398,11 @@ function placeDots() {
 
         dotPositions.push({ x, y, color, name, isCurrentTeam, colorClass, fadeDelay });
         dotBoxes.push({ x: x - 8, y: y - 8, width: 12, height: 12 });
+
+        if (!weatherData && isCurrentTeam) { 
+            weatherData = await getWeather(lat, lon);
+            createWeatherBox();
+        }
     });
 
     // Place labels with collision detection
