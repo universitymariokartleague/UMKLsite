@@ -7,7 +7,7 @@
 .profile-card {
     background: linear-gradient(145deg, rgba(255,255,255,0.85), rgba(255,255,255,0.7));
     border-radius: 20px;
-    padding: 25px;
+    padding: 25px 25px 10px 25px;
     box-shadow: 
         0 8px 32px rgba(0,0,0,0.1),
         0 4px 16px rgba(0,0,0,0.08),
@@ -65,7 +65,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 15px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .stat-item {
@@ -123,7 +123,7 @@
     right: 5px;
     text-align: right;
     color: #111111;
-    opacity: 0.5;
+    opacity: 0.4;
     padding: 5px;
     font-size: 10px;
 }
@@ -137,21 +137,40 @@
     transition: opacity 0.2s ease-in;
 }
 
+.profile-footer-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 5px;
+}
+
 .card-help {
-    position: absolute;
-    bottom: 8px;
-    padding: 3px 10px;
-    font-size: 12px;
+    padding: 5px 10px;
+    font-weight: bold;
     text-align: center;
     background: var(--team-color, #111111);
-    border-radius: 20px;
-    color: #fff;
+    border-radius: 15px;
+    font-size: 0.7em;
+    color: #FFF;
 }
 
 .customise-button {
-    position: absolute;
-    bottom: 8px;
-    right: 25px;
+    border: 2px solid var(--team-color, #ccc);
+    background: #FFF;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 0.9em;
+    color: #333;
+}
+
+.customise-button:hover {
+    background: var(--team-color, #ccc);
+    color: #FFF!important;
+}
+
+.customise-button.active {
+    background: var(--team-color, #ccc);
+    color: #FFF;
 }
 
 .items-interface-wrapper {
@@ -161,7 +180,7 @@
 }
 
 .items-interface {
-    height: 504px;
+    height: 518px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -204,26 +223,6 @@
     justify-content: center;
 }
 
-.customise-button {
-    border: 2px solid var(--team-color, #ccc);
-    background: #FFF;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 0.9em;
-    color: #333;
-}
-
-.customise-button:hover {
-    background: var(--team-color, #ccc);
-    color: #FFF;
-}
-
-.customise-button.active {
-    background: var(--team-color, #ccc);
-    color: #FFF;
-}
-
 .category-button {
     padding: 6px 12px;
     border: 2px solid var(--team-color, #ccc);
@@ -237,12 +236,12 @@
 
 .category-button:hover {
     background: var(--team-color, #ccc);
-    color: #FFF;
+    color: #FFF!important;
 }
 
 .category-button.active {
     background: var(--team-color, #ccc);
-    color: #FFF;
+    color: #FFF!important;
 }
 
 .item-card {
@@ -264,6 +263,10 @@
 .item-card.equipped {
     border-color: var(--team-color, #00ce7a);
     background: var(--team-color, #ccc);
+}
+
+.item-card.equipped .item-name {
+    color: #FFF!important;
 }
 
 .item-card.equipped:hover {
@@ -299,18 +302,20 @@
 
 .items-actions {
     display: flex;
-    gap: 15px;
+    flex-direction: row;
     justify-content: center;
+    gap: 5px;
+    width: 100%;
 }
 
 .button-cancel, .button-save {
-    padding: 12px 24px;
+    padding: 4px 10px;
+    border-radius: 15px;
     border: 2px solid var(--team-color, #ccc);
     background: #FFF;
-    border-radius: 8px;
+    width: 100%;
+    font-size: 0.9em;
     cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 1em;
 }
 
 .button-cancel:hover {
@@ -319,7 +324,11 @@
 
 .button-save {
     background: var(--team-color, #ccc);
-    color: #fff;
+    color: #FFF!important
+}
+
+.button-save:hover {
+    color: #FFF!important
 }
 
 @keyframes fade-in {
@@ -334,17 +343,17 @@
 
 @media screen and (max-width: 767px) {
     .profile-card-wrapper {
-        padding: 0 12px;
+        padding: 0;
         margin-top: 20px;
     }
 
     .profile-card {
-        padding: 20px;
+        padding: 10px 10px 5px 10px;
     }
 
     .profile-card-header {
         gap: 16px;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     .profile-card-avatar {
@@ -354,7 +363,6 @@
 
     .profile-card-stats, .profile-card-detailed-stats {
         gap: 12px;
-        margin-bottom: 20px;
     }
 
     .stat-item {
@@ -365,18 +373,15 @@
         font-size: 1em;
     }
 
+    .item-card {
+        max-height: unset;
+    }
+
     .profile-umkl-logo {
         position: absolute;
         height: 24px;
-        top: 12px;
-        right: 12px;
-    }
-
-    .card-timestamp {
-        padding: 4px 6px;
-        right: 12px;
-        top: 12px;
-        font-size: 10px;
+        top: 50px;
+        right: 8px;
     }
 
     .items-grid {
@@ -396,8 +401,7 @@
         font-size: 0.8em;
     }
 
-    .customise-button {
-        padding: 6px 12px;
-        font-size: 0.8em;
+    .profile-footer-info, .items-actions {
+        flex-direction: column;
     }
 }

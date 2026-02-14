@@ -52,8 +52,10 @@ const profileCardFormatHTML = `
                         <span class="stat-value">{{highestFinish}}</span>
                     </div>
                 </div>
-                <div class="card-help">{{cardExtraText}}</div>
-                {{profileCustomisationButton}}
+                <div class="profile-footer-info">
+                    <div class="card-help">{{cardExtraText}}</div>
+                    {{profileCustomisationButton}}
+                </div>
             </div>
         </div>
     </div>
@@ -103,13 +105,14 @@ const profileCardContentFormatHTML = `
             <span class="stat-value">{{highestFinish}}</span>
         </div>
     </div>
-    <div class="card-help">{{cardExtraText}}</div>
-    {{profileCustomisationButton}}
+    <div class="profile-footer-info">
+        <div class="card-help">{{cardExtraText}}</div>
+        {{profileCustomisationButton}}
+    </div>
 `;
 
 const userCardBox = document.getElementById("userCardBox")
 const teamNameBox = document.getElementById("teamNameBox")
-const startYear = 2023;
 
 let data, matchData, teamData;
 const currentSeason = 2;
@@ -128,6 +131,7 @@ let currentEquippedItems = {
     overlay: null,
     background: null
 };
+let cardChanged = false;
 
 let refreshTimer = null;
 let startTime;
@@ -143,29 +147,6 @@ function findMatchByEventID(eventID) {
         }
     }
     return null;
-}
-
-function formatDetailedPoints(matches_info) {
-    return matches_info
-        .map(match_info => {
-            const found = findMatchByEventID(match_info.eventID);
-            const { date, match } = found;
-            return `<a href="pages/matches/?date=${date}">${match.title}</a> - ${match_info.points} points`;
-        })
-        .join(`,<br>`);
-}
-
-function formatSPDetails(sp_detailed) {
-    if (!sp_detailed || !sp_detailed.history) return "No SP data";
-    return `
-        SP from chatting: ${sp_detailed.chat_sp}<br>
-        SP gains/losses from matches:
-        <ul class="sp-bullet-points">
-        ${Object.entries(sp_detailed.history)
-        .map(([date, info]) => {
-            return `<li>${info.change} SP on ${date} (${info.event})</li>`;
-        })
-        .join('')}</ul>`;
 }
 
 function fillInPageTitle(data) {
@@ -679,7 +660,6 @@ document.addEventListener('keydown', async (event) => {
 
     if (key == 's') {
         if (currentlyShowingItems) {
-            goBackToProfile();
             await new Promise(resolve => setTimeout(resolve, 400));
         }
         await generateCardImage();
@@ -704,7 +684,7 @@ async function preloadCardImage() {
         showCardProfileItemsButton.style.display = 'none';
 
         let cardHelpDiv = document.querySelector('.card-help');
-        cardHelpDiv.style.width = '85%';
+        cardHelpDiv.style.width = '100%';
 
         let dataURL;
 
@@ -714,7 +694,7 @@ async function preloadCardImage() {
                 width: rect.width + 40,
                 height: node.scrollHeight + 40, 
                 style: {
-                    transform: `translateX(-145px)`
+                    transform: `translateX(-150px)`
                 }
             });
 
@@ -728,6 +708,7 @@ async function preloadCardImage() {
         console.error("Capture failed:", err);
     }
 
+    cardChanged = false;
     profileCard.style.transition = originalTransition;
     takingCardScreenshot = false;
     graphResScale = 2;
@@ -858,8 +839,8 @@ async function goBackToProfile() {
     setTimeout(() => {
         profileCard.style.transition = 'transform 0.1s ease-out';
         isFlipping = false;
-        // preloadCardImage();
-    }, 400)
+        if (cardChanged) preloadCardImage();
+    }, 550)
 }
 
 function populateItemsGrid(category) {
@@ -899,10 +880,16 @@ function createItemElement(item, index, isEquipped) {
 }
 
 function toggleItemEquip(type, itemIndex) {    
-    if (currentEquippedItems[type] === itemIndex) {
+    const filteredItems = document.querySelector(".category-button.active").dataset.category === "all"
+        ? data.profile_items
+        : data.profile_items.filter(item => item.type === type);
+    const item = filteredItems[itemIndex];
+    const globalIndex = data.profile_items.indexOf(item);
+    
+    if (currentEquippedItems[type] === globalIndex) {
         currentEquippedItems[type] = null;
     } else {
-        currentEquippedItems[type] = itemIndex;
+        currentEquippedItems[type] = globalIndex;
     }
     
     const activeCategory = document.querySelector(".category-button.active").dataset.category;
@@ -933,7 +920,9 @@ function saveItemEquips() {
     });
 
     equippedItemsData["username"] = data.username;
+    cardChanged = true;
     console.debug(`%cuserinfogenerate.js %c> %cSaving equipped items: ${JSON.stringify(equippedItemsData)}`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
+    
     localStorage.setItem("userProfileSettings", JSON.stringify(equippedItemsData));
 
     goBackToProfile()
@@ -1019,8 +1008,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     setOriginalMessage(shareButton.innerHTML);
     preloadCardImage();
     shareButton.addEventListener("click", async () => {
-        if (currentlyShowingItems) {
-            goBackToProfile();
+        if (cardChanged && currentlyShowingItems) {
             await new Promise(resolve => setTimeout(resolve, 400));
         }
         await generateCardImage();
