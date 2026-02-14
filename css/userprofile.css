@@ -152,6 +152,7 @@
     border-radius: 15px;
     font-size: 0.7em;
     color: #FFF;
+    display: none;
 }
 
 .customise-button {
@@ -161,6 +162,7 @@
     cursor: pointer;
     font-size: 0.9em;
     color: #333;
+    width: 100%;
 }
 
 .customise-button:hover {

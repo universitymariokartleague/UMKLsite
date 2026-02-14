@@ -6,7 +6,7 @@ import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareImage, s
 const profileCardFormatHTML = `
     <div class="profile-card-wrapper">
         <div class="profile-card" style="--team-color: #{{color}};">
-            <img src="assets/media/brand/guidelines/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.75" />
+            <img src="assets/media/brand/guidelines/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />
             <div class="card-timestamp"><span class="fa-solid fa-clock"></span> {{timestamp}}</div>
             <div class="profile-card-content">
                 <div class="profile-card-header">
@@ -582,7 +582,7 @@ function createSPGraph(data, teamColor) {
             const x = padding + timeRatio * graphWidth;
             const y = canvas.height - padding - (extendedValues[index] / gridMax) * graphHeight;
             
-            ctx.fillText(extendedValues[index], x, y - 7 * graphResScale);
+            ctx.fillText(extendedValues[index], x, y + 15 * graphResScale);
         });
     }
 
@@ -673,6 +673,8 @@ async function preloadCardImage() {
     const originalTransition = profileCard.style.transition;
     profileCard.style.transition = 'none';
 
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+
     takingCardScreenshot = true;
     graphResScale = shareResScale;
     createSPGraph(data, `#${data.color}`);
@@ -684,22 +686,23 @@ async function preloadCardImage() {
         showCardProfileItemsButton.style.display = 'none';
 
         let cardHelpDiv = document.querySelector('.card-help');
-        cardHelpDiv.style.width = '100%';
+        cardHelpDiv.style.display = 'block';
+        if (!isMobile) cardHelpDiv.style.width = '100%';
 
         let dataURL;
 
         setTimeout(async () => {
             dataURL = await htmlToImage.toPng(node, {
                 pixelRatio: shareResScale,
-                width: rect.width + 40,
+                width: isMobile ? rect.width : rect.width + 40,
                 height: node.scrollHeight + 40, 
                 style: {
-                    transform: `translateX(-150px)`
+                    transform: isMobile ? 'none' : `translateX(-150px)`
                 }
             });
 
             showCardProfileItemsButton.style.display = '';
-            cardHelpDiv.style.width = '';
+            cardHelpDiv.style.display = '';
 
             const response = await fetch(dataURL);
             cardImageBlob = await response.blob();
@@ -718,9 +721,22 @@ async function preloadCardImage() {
 async function generateCardImage() {
     try {
         if (getIsPopupShowing()) return;
-        const useClipboard = isWindowsOrLinux() || !navigator.canShare;
 
-        const blob = cardImageBlob;
+        let blob = cardImageBlob;
+        const maxAttempts = 50;
+        let attempts = 0;
+        while (!blob && attempts < maxAttempts) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            blob = cardImageBlob;
+            attempts++;
+        }
+
+        if (!blob) {
+            console.error("cardImageBlob is still empty after waiting");
+            return;
+        }
+
+        const useClipboard = isWindowsOrLinux() || !navigator.canShare;
 
         const message = `Check out the UMKL profile for ${data.username}!`
 
@@ -822,7 +838,7 @@ async function goBackToProfile() {
             
             profileCardContent.innerHTML = generateProfileCardContent(data);
             
-            const logoHTML = `<img src="assets/media/brand/guidelines/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.75" />`;
+            const logoHTML = `<img src="assets/media/brand/guidelines/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />`;
             const timestampHTML = `<div class="card-timestamp"><span class="fa-solid fa-clock"></span> ${new Date(data.timestamp).toLocaleString("en-GB", { hour: '2-digit', minute: '2-digit' }) + " " + new Date(data.timestamp).toLocaleDateString("en-GB")}</div>`;
             
             profileCard.insertAdjacentHTML('afterbegin', logoHTML);
