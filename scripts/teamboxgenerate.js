@@ -227,9 +227,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadFont('SF-Pro-Display-Bold', 'assets/font/SF-Pro-Display-Bold.woff2');
     
     if (localStorage.teamDataCache) {
-        JSTeamBoxLoading.innerHTML = ""
-        console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes (cache)...`, "color:#9452ff", "color:#fff", "color:#c29cff");
-        await generateTeamBoxes(JSON.parse(localStorage.teamDataCache), true)
+        try {
+            JSTeamBoxLoading.innerHTML = ""
+            console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes (cache)...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+            await generateTeamBoxes(JSON.parse(localStorage.teamDataCache), true)
+        } catch {
+            localStorage.teamDataCache = "";
+        }
     }
 
     try {

@@ -191,12 +191,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     await getVideoIDs();
 
     if (localStorage.matchDataCache && localStorage.teamColorsCache) {
-        cached = true;
-        console.debug(`%cvideosgenerate.js %c> %cRendering videos (cache)...`, "color:#ff6687", "color:#fff", "color:#ffb3c3");
-        matchData = JSON.parse(localStorage.matchDataCache)
-        teamColors = JSON.parse(localStorage.teamColorsCache)
-        displayVideos();
-        displayLiveVideos();
+        try {
+            cached = true;
+            console.debug(`%cvideosgenerate.js %c> %cRendering videos (cache)...`, "color:#ff6687", "color:#fff", "color:#ffb3c3");
+            matchData = JSON.parse(localStorage.matchDataCache)
+            teamColors = JSON.parse(localStorage.teamColorsCache)
+            displayVideos();
+            displayLiveVideos();
+        } catch (error) {
+            localStorage.matchDataCache = "";
+            localStorage.teamColorsCache = "";   
+        }
     }
 
     try {

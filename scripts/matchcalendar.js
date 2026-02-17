@@ -372,7 +372,7 @@ async function showDailyLog(date, dayCell) {
         window.history.replaceState({}, '', newUrl);
     }
     const locale = localStorage.getItem("locale") || "en-GB";
-
+    
     const log = matchDataToUse[date] || [];
     if (log.length) {
         let liveResults = await getLiveResults();
@@ -1098,14 +1098,12 @@ function displayCalendar() {
     if (dateParam && matchData[dateParam]) {
         console.debug(`%cmatchcalendar.js %c> %cURL parameter detected`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
         const dateObj = new Date(dateParam);
-        showDailyLog(dateParam);
         generateCalendar(dateObj.getMonth(), dateObj.getFullYear(), dateParam);
+        showDailyLog(dateParam);
     } else {
         const currentDate = new Date();
-        if (!discardLogOnChange) {
-            showDailyLog(currentDate.toISOString().split('T')[0]);
-        }
         generateCalendar(currentDate.getMonth(), currentDate.getFullYear());
+        showDailyLog(currentDate.toISOString().split('T')[0]);
     }
 }
 
@@ -1323,12 +1321,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     checkIfOutsideUK();
 
     if (localStorage.matchDataCache && localStorage.teamColorsCache) {
-        cached = true;
-        console.debug(`%cmatchcalendar.js %c> %cRendering calendar (cache)...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-        matchData = JSON.parse(localStorage.matchDataCache)
-        teamColors = JSON.parse(localStorage.teamColorsCache)
-        makeTeamsColorStyles();
-        loadCalendarView();
+        try {
+            cached = true;
+            console.debug(`%cmatchcalendar.js %c> %cRendering calendar (cache)...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+            matchData = JSON.parse(localStorage.matchDataCache);
+            teamColors = JSON.parse(localStorage.teamColorsCache);
+            makeTeamsColorStyles();
+            loadCalendarView();
+        } catch {
+            localStorage.matchDataCache = "";
+            localStorage.teamColorsCache = "";
+        }
     }
 
     try {
@@ -1368,10 +1371,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     localStorage.setItem("matchDataCache", JSON.stringify(matchData));
     localStorage.setItem("teamColorsCache", JSON.stringify(teamColors));
+    document.dispatchEvent(new CustomEvent('removeScrollbarFromCalendarListView'));
+    cached = false;
     listViewToggledOnce = false;
     discardLogOnChange = false;
-    cached = false;
-    document.dispatchEvent(new CustomEvent('removeScrollbarFromCalendarListView'));
     makeTeamsColorStyles();
     loadCalendarView();
     console.debug(`%cmatchcalendar.js %c> %cMatch data loaded in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
