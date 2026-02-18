@@ -266,7 +266,7 @@ function generateTeamMatches(teamName) {
     matchHistoryBox.classList.add('fade-in');
 
     const toggleTestMatches = document.getElementById("toggleTestMatches");
-    toggleTestMatches.addEventListener('click', () => {
+    toggleTestMatches?.addEventListener('click', () => {
         showTestMatches ^= 1;
         generateTeamMatches(teamNameFromURL);
     });
