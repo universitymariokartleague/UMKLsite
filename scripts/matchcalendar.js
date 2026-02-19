@@ -739,7 +739,7 @@ function generateCalendarListView() {
                                     ${team1.ytLink ? `
                                     <a class="no-underline-link-footer ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
                                     href="${team1.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'View the archived livestream'}">
-                                    ${YOUTUBELOGOSVG}
+                                    ${YTSVGPATH}
                                     </a>` : ''}
                                 </div>
                             </div>
@@ -758,7 +758,7 @@ function generateCalendarListView() {
                                     ${team2.ytLink ? `
                                     <a class="no-underline-link-footer ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
                                     href="${team2.ytLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'View the archived livestream'}">
-                                    ${YOUTUBELOGOSVG}
+                                    ${YTSVGPATH}
                                     </a>` : ''}
                                 </div>
                             </div>
