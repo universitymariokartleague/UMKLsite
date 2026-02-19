@@ -1193,10 +1193,6 @@ function toggleListView(enable) {
             }, 300);
         }
         listViewEnabled = false;
-        const listViewButton = document.getElementById("listViewButton");
-        if (listViewButton) {
-            listViewButton.innerHTML = `<span class="fa-solid fa-bars"></span> List View`;
-        }
     }
 }
 
