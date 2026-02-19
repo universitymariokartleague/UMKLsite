@@ -47,6 +47,7 @@ let previewTimeout = null;
 let currentPreview = null;
 let refreshTimer = null;
 let startTime;
+let listViewOverlay = null;
 
 function createEmptyCells(count) {
     for (let i = 0; i < count; i++) {
@@ -623,7 +624,24 @@ function generateCalendarListView() {
 
     const locale = localStorage.getItem("locale") || "en-GB";
 
-    calendarListView.innerHTML = "";
+    if (listViewOverlay) {
+        listViewOverlay.remove();
+    }
+
+    listViewOverlay = document.createElement('div');
+    listViewOverlay.id = 'listViewOverlay';
+    listViewOverlay.innerHTML = `
+        <div class="list-view-slide-over">
+            <div class="list-view-header">
+                <h2>All Matches</h2>
+                <button class="close-list-view-button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            </div>
+            <div class="list-view-content" id="listViewContent"></div>
+        </div>
+    `;
+    document.body.appendChild(listViewOverlay);
+
+    const listViewContent = listViewOverlay.querySelector('#listViewContent');
     let HTMLOutput = "";
 
     for (let i = 0; i < sortedDates.length; i++) {
@@ -640,7 +658,7 @@ function generateCalendarListView() {
 
         const formattedDate = parseLocalDate(date).toLocaleString(locale, { dateStyle: "full" });
         HTMLOutput += `
-            <h3 id=${date}>${formattedToday == date ? ' ☆ ' : ''}${formattedDate}</h3>
+            <h3 class="list-view-date-header" data-date="${date}">${formattedToday == date ? ' ☆ ' : ''}${formattedDate}</h3>
         `
 
         const sortedMatches = [...matchDataToUse[date]].sort((a, b) => {
@@ -715,6 +733,10 @@ function generateCalendarListView() {
                 team1.ytLink = entry.ytLinks[0]
                 team2.ytLink = entry.ytLinks[1]
             }
+
+            let matchDetailsLink = '';
+            if (resultsHTML && entry.detailedResults) matchDetailsLink = generate6v6ScoreCalculatorLink(entry);
+
             HTMLOutput += `
                 <div class="event-container">
                     <div class="team-box-container">
@@ -744,7 +766,7 @@ function generateCalendarListView() {
                                 </div>
                             </div>
 
-                            <div class="score-box">${resultsHTML ? resultsHTML : "VS"}</div>       
+                            <div class="score-box">${matchDetailsLink ? `<a class="no-underline-link" href="${matchDetailsLink}" title="View detailed results">${resultsHTML ? formatResults(entry.results) : "VS"}</a>` : `${resultsHTML ? formatResults(entry.results) : "VS"}`}</div>   
 
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">
@@ -776,7 +798,7 @@ function generateCalendarListView() {
                                         <span title="Local time" style="display: inline-flex; align-items: center;">
                                         |&nbsp;<i class="overseas-time-clock fa-solid fa-clock"></i>${formattedLocalMatchTime}</span>` : ''}
                                 </h2>
-                                ${!overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
+                                ${!overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ''}
                                 ${isLive ? '<div class="live-dot"></div>' : ''}
                             </div>
                         </div>
@@ -791,29 +813,59 @@ function generateCalendarListView() {
         });
     };
 
-    calendarListView.innerHTML = HTMLOutput;
+    listViewContent.innerHTML = HTMLOutput;
+
+    listViewContent.querySelectorAll('.list-view-date-header').forEach(header => {
+        header.style.cursor = 'pointer';
+        header.addEventListener('click', () => {
+            const date = header.dataset.date;
+            const urlParams = new URLSearchParams(window.location.search);
+            urlParams.set('date', date);
+            const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+            window.history.pushState({}, '', newUrl);
+            toggleListView(false);
+            displayCalendar();
+        });
+    });
+
+    listViewOverlay.querySelector('.close-list-view-button').addEventListener('click', () => {
+        toggleListView(false);
+    });
+
+    listViewOverlay.addEventListener('click', (e) => {
+        if (e.target === listViewOverlay) {
+            toggleListView(false);
+        }
+    });
+
+    requestAnimationFrame(() => {
+        listViewOverlay.classList.add('active');
+    });
+
+    scrollMatchList();
 }
 
 function scrollMatchList() {
     const today = new Date();
-    const formattedToday = today.toISOString().split("T")[0];
+    const formattedToday = [
+        today.getFullYear(),
+        String(today.getMonth() + 1).padStart(2, '0'),
+        String(today.getDate()).padStart(2, '0')
+    ].join('-');
 
     const urlParams = new URLSearchParams(window.location.search);
     const dateParam = urlParams.get('date');
 
-    const target = document.getElementById(dateParam ? dateParam : formattedToday);
+    const listViewContent = document.getElementById('listViewContent');
+    if (!listViewContent) return;
 
-    // Try to scroll to the date given, else scroll to bottom
+    const targetDate = dateParam || formattedToday;
+    const target = listViewContent.querySelector(`.list-view-date-header[data-date="${targetDate}"]`);
+
     if (target) {
-        calendarListView.scrollTo({
-            top: target.offsetTop - calendarListView.offsetTop
+        listViewContent.scrollTo({
+            top: target.offsetTop - listViewContent.offsetTop - 20
         });
-        return target.offsetTop - calendarListView.offsetTop;
-    } else {
-        calendarListView.scrollTo({
-            top: calendarListView.scrollHeight
-        });
-        return calendarListView.scrollHeight;
     }
 }
 
@@ -1112,37 +1164,48 @@ function generateListViewButton() {
 
     listViewButton.onclick = () => {
         listViewEnabled = !listViewEnabled;
-        listViewButton.innerHTML = `${listViewEnabled ? `<span class="fa-solid fa-calendar"></span> Calendar View` : `<span class="fa-solid fa-bars"></span> List View`}`
-
-        changeCalendarView(listViewEnabled);
-
-        localStorage.setItem("calendarListView", listViewEnabled ? 1 : 0);
+        toggleListView(listViewEnabled);
     }
 }
 
 function changeCalendarView(listView) {
     if (listView) {
         generateCalendarListView();
-        calendarListView.classList.remove("hidden")
-        calendarContainer.classList.add("hidden")
-        if (!listViewToggledOnce) {
-            let y = scrollMatchList();
-            document.dispatchEvent(new CustomEvent('scrollbarToCalendarListView', { detail: { scrollToY: y } }));
-        }
-        listViewToggledOnce = true;
     } else {
-        document.dispatchEvent(new CustomEvent('removeScrollbarFromCalendarListView'));
+        toggleListView(false);
         displayCalendar();
-        calendarListView.classList.add("hidden")
-        calendarContainer.classList.remove("hidden")
+    }
+}
+
+function toggleListView(enable) {
+    if (enable) {
+        generateCalendarListView();
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = '';
+        if (listViewOverlay) {
+            listViewOverlay.classList.remove('active');
+            setTimeout(() => {
+                if (listViewOverlay) {
+                    listViewOverlay.remove();
+                    listViewOverlay = null;
+                }
+            }, 300);
+        }
+        listViewEnabled = false;
+        const listViewButton = document.getElementById("listViewButton");
+        if (listViewButton) {
+            listViewButton.innerHTML = `<span class="fa-solid fa-bars"></span> List View`;
+        }
     }
 }
 
 function loadCalendarView() {
-    const calendarListView = localStorage.getItem("calendarListView") == 1 || false;
-    changeCalendarView(calendarListView);
-    listViewEnabled = calendarListView;
-    listViewButton.innerHTML = `${listViewEnabled ? `<span class="fa-solid fa-calendar"></span> Calendar View` : `<span class="fa-solid fa-bars"></span> List View`}`
+    if (listViewEnabled) {
+        generateCalendarListView();
+    } else {
+        displayCalendar();
+    }
 }
 
 function checkIfOutsideUK() {
@@ -1158,10 +1221,6 @@ function checkIfOutsideUK() {
         generateOverseasDateDisplayButton();
     }
 }
-
-document.addEventListener('calendarListViewChange', async () => {
-    loadCalendarView();
-})
 
 function updateButton() {
     const tempOverseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1;
@@ -1281,6 +1340,12 @@ document.addEventListener('keydown', (event) => {
 
 document.addEventListener('keyup', () => {
     isKeyPressed = false;
+});
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && listViewOverlay && listViewOverlay.classList.contains('active')) {
+        toggleListView(false);
+    }
 });
 
 document.addEventListener('keydown', async (event) => {

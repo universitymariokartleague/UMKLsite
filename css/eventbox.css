@@ -251,6 +251,173 @@
     overflow-y: auto;
 }
 
+#listViewOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+#listViewOverlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.list-view-slide-over {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    background-color: var(--bg-color);
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.3);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+#listViewOverlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.list-view-slide-over {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    background-color: var(--bg-color);
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.3);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+#listViewOverlay.active .list-view-slide-over {
+    transform: translateX(0);
+}
+
+.list-view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px 10px 20px;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--bg-color);
+    flex-shrink: 0;
+}
+
+.list-view-date-header:hover {
+    text-decoration: underline;
+}
+
+.list-view-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--text-color);
+}
+
+.close-list-view-button {
+    background: var(--button-bg);
+    border: var(--button-border);
+    color: var(--text-color);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.close-list-view-button:hover {
+    background: var(--accent-color);
+    color: #FFF;
+}
+
+.list-view-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    max-height: calc(100vh - 80px);
+}
+
+.list-view-content h3 {
+    margin: 20px 0 10px 0;
+    color: var(--text-color);
+    font-size: 1.1rem;
+}
+
+.list-view-content hr {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 10px 0;
+}
+
+.list-view-content .event-container {
+    margin-bottom: 20px;
+}
+
+.list-view-content .event-overlay {
+    padding: 10px;
+}
+
+.list-view-content .event-box-team {
+    font-size: 1vmin;
+}
+
+.list-view-content .event-box-team .youtube-box {
+    width: 2.5vmin;
+}
+
+.list-view-content .team-box-image {
+    max-height: 7.5vmin;
+    max-width: 7.5vmin;
+}
+
+.list-view-content .score-box {
+    font-size: 2.5vmin;
+    padding: 1vmin;
+    border-radius: 5px;
+}
+
+.list-view-content .match-date-time-box {
+    font-size: 15px;
+}
+
+@media screen and (max-width: 767px) {
+    .list-view-slide-over {
+        max-width: 100%;
+    }
+    
+    .list-view-content .event-box-team {
+        font-size: 2vmin;
+    }
+
+    .list-view-content .team-box-image {
+        max-height: 12vmin;
+        max-width: 12vmin;
+    }
+
+    .list-view-content .score-box {
+        font-size: 5vmin;
+        padding: 2vmin;
+    }
+}
+
 #calendarListView .event-overlay {
     padding: 10px;
 }

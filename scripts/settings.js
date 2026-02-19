@@ -64,7 +64,6 @@ function generateSettingsPanel() {
     try {
         const tempTheme = localStorage.getItem("darktheme") == 1 ? "Dark" : (localStorage.getItem("darktheme") == 0 ? "Light" : "Automatic");
         const gridView = localStorage.getItem("teamsGridView") == 1 || false;
-        const calendarListView = localStorage.getItem("calendarListView") == 1 || false;
         
         const tempLocale = localStorage.getItem("locale") || "en-GB";
         const tempLocaleDisplay = tempLocale === "en-GB" ? "English (UK)" : "English (US)";
@@ -77,7 +76,6 @@ function generateSettingsPanel() {
             <div translate="yes" class="setting-sub-heading">Appearance</div><hr>
             <span translate="yes" class="settings-hover-info" data-info="Light, dark or automatic">Page theme</span><button id="toggleTheme" class="settings-option">${tempTheme}</button><br>
             <span translate="yes" class="settings-hover-info" data-info="List or grid view">Teams page layout</span><button id="toggleListView" class="settings-option">${gridView ? "Grid view" : "List view"}</button><br>
-            <span translate="yes" class="settings-hover-info" data-info="Calendar or list view">Matches page layout</span><button id="toggleCalendarListView" class="settings-option">${calendarListView ? "List view" : "Calendar view"}</button><br>
 
             <div translate="yes" class="setting-sub-heading">${tempLocale == "en-GB" ? "Localisation" : "Localization"}</div><hr class="settings-hr">
             <span translate="yes" class="settings-hover-info" data-info="UK or US date/time format">Locale</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button><br>
@@ -141,14 +139,6 @@ function toggleListView() {
     generateSettingsPanel();
 }
 
-function toggleCalendarListView() {
-    const calendarListView = localStorage.getItem("calendarListView") == 1 ? 0 : 1;
-    localStorage.setItem("calendarListView", calendarListView);
-    console.debug(`%csettings.js %c> %cset calendarListView to ${calendarListView}`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
-    document.dispatchEvent(new CustomEvent('calendarListViewChange'));
-    generateSettingsPanel();
-}
-
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
     if (!localStorage.getItem("darktheme")) {
         darkThemeEnabled = event.matches ? 1 : 0;
@@ -203,7 +193,6 @@ function clearLocalStorage() {
 function generateEventListeners() {
     document.getElementById('toggleTheme').addEventListener('click', toggleTheme);
     document.getElementById('toggleListView').addEventListener('click', toggleListView);
-    document.getElementById('toggleCalendarListView').addEventListener('click', toggleCalendarListView);
     document.getElementById('toggleStartDayButton').addEventListener('click', toggleStartDay);
     document.getElementById('toggleLocaleTypeButton').addEventListener('click', toggleLocale);
     document.getElementById('toggleOverseasDateDisplayButton').addEventListener('click', toggleOverseasDateDisplayButton);
