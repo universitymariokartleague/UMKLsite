@@ -1356,7 +1356,11 @@ async function generateMatchImage() {
         const dateParam = urlParams.get('date');
         const locale = localStorage.getItem("locale") || "en-GB";
         const formattedDate = parseLocalDate(dateParam).toLocaleString(locale, { dateStyle: "full" });
-        const message = `Check out this match happening on ${dateParam}!`
+        const message = `Check out this match happening on ${formattedDate}!`
+
+        // TODO: work for multiple matches on one day
+        // TODO: use past tense for completed matches
+        // TODO: add date to graphic
 
         if (useClipboard) {
             const success = await copyTextToClipboard(message);
