@@ -721,6 +721,7 @@ async function preloadCardImage() {
 async function generateCardImage() {
     try {
         if (getIsPopupShowing()) return;
+        const useClipboard = isWindowsOrLinux() || !navigator.canShare;
 
         let blob = cardImageBlob;
         const maxAttempts = 50;
@@ -736,9 +737,7 @@ async function generateCardImage() {
             return;
         }
 
-        const useClipboard = isWindowsOrLinux() || !navigator.canShare;
-
-        const message = `Check out the UMKL profile for ${data.username}!`
+        const message = `Check out the UMKL profile for ${data.username}!`;
 
         if (useClipboard) {
             const success = await copyTextToClipboard(message);

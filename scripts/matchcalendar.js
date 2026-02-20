@@ -1025,22 +1025,7 @@ function createShareButtonListener(formattedDate) {
     setOriginalMessage(shareButton.innerHTML);
 
     shareButton.addEventListener("click", async () => {
-        if (getIsPopupShowing()) return;
-        const useClipboard = isWindowsOrLinux() || !navigator.canShare;
-
-        const message = `Check out these UMKL matches on ${formattedDate}! ${window.location.href}`
-
-        if (useClipboard) {
-            const success = await copyTextToClipboard(message);
-            shareButton.innerText = success ? "Copied to clipboard!" : "Failed to copy!";
-            const messageWithURL = `Check out these UMKL matches on ${formattedDate}! <a href="${window.location.href}">${window.location.href}</a>`
-            showTextPopup(messageWithURL)
-        } else {
-            await shareText(
-                `UMKL Matches on ${formattedDate}`,
-                message
-            )
-        }
+        generateMatchImage();
     })
 }
 
@@ -1165,15 +1150,6 @@ function generateListViewButton() {
     listViewButton.onclick = () => {
         listViewEnabled = !listViewEnabled;
         toggleListView(listViewEnabled);
-    }
-}
-
-function changeCalendarView(listView) {
-    if (listView) {
-        generateCalendarListView();
-    } else {
-        toggleListView(false);
-        displayCalendar();
     }
 }
 
@@ -1348,32 +1324,58 @@ document.addEventListener('keydown', async (event) => {
     const key = event.key.toLowerCase();
 
     if (key == 's') {
+        generateMatchImage();
+    }
+});
+
+async function generateMatchImage() {
+    try {
+        if (getIsPopupShowing()) return;
+        const useClipboard = isWindowsOrLinux() || !navigator.canShare;
+
+        let blob;
         const nodes = document.querySelectorAll('.event-wrapper');
 
         for (const node of nodes) {
-            try {
-                const matchBoxes = node.querySelectorAll('.match-box, .timer-indicator, .youtube-box');
-                matchBoxes.forEach(el => el.style.display = 'none');
+            const matchBoxes = node.querySelectorAll('.match-box, .timer-indicator, .youtube-box');
+            matchBoxes.forEach(el => el.style.display = 'none');
 
-                const dataUrl = await htmlToImage.toPng(node, { pixelRatio: 2 });
+            const eventContainer = node.querySelector('.event-container');
+            eventContainer.style.paddingBottom = '29px';
 
-                matchBoxes.forEach(el => el.style.display = '');
+            const dataUrl = await htmlToImage.toPng(node, { pixelRatio: 2 });
 
-                const response = await fetch(dataUrl);
-                const blob = await response.blob();
+            matchBoxes.forEach(el => el.style.display = '');
+            eventContainer.style.paddingBottom = '';
 
-                await navigator.clipboard.write([
-                    new ClipboardItem({ 'image/png': blob })
-                ]);
-
-                console.log('Copied image to clipboard!');
-
-            } catch (err) {
-                console.error("Capture failed:", err);
-            }
+            const response = await fetch(dataUrl);
+            blob = await response.blob();
         }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date');
+        const locale = localStorage.getItem("locale") || "en-GB";
+        const formattedDate = parseLocalDate(dateParam).toLocaleString(locale, { dateStyle: "full" });
+        const message = `Check out this match happening on ${dateParam}!`
+
+        if (useClipboard) {
+            const success = await copyTextToClipboard(message);
+            shareButton.innerText = success ? "Copied to clipboard!" : "Failed to copy!";
+            showImagePreview(blob, blob.url, message)
+        } else {
+            await shareImage(
+                `Match Sharing`,
+                message,
+                blob,
+                `UMKL_match.png`
+            )
+        }
+
+        console.debug(`%cuserinfogenerate.js %c> %cCopied image to clipboard!`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
+    } catch (err) {
+        console.error("Failed to copy to clipboard!:", err);
     }
-});
+}
 
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
