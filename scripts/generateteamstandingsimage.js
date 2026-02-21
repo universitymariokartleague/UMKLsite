@@ -9,8 +9,7 @@ let currentSeason;
 
 // Constants
 const TEAM_ICON_DIR = "assets/media/teamemblems/";
-const DEFAULT_FONT = "SF-Pro-Display-Bold";
-const DEFAULT_FONT_HEAVY = "SF-Pro-Display-Black";
+const DEFAULT_FONT = "Montserrat";
 
 async function getCurrentSeason() {
     return fetch('https://api.umkl.co.uk/seasoninfo', {
@@ -63,14 +62,14 @@ async function loadImage(url) {
     });
 }
 
-function addText(ctx, text, pos, font, size, color, anchor = "left", spacing = 5, shadow = false) {
-    ctx.font = `${size}px "${font}"`;
+function addText(ctx, text, pos, font, size, color, anchor = "left", spacing = 5, shadow = false, fontWeight = "bold") {
+    ctx.font = `${fontWeight} ${size}px "${font}"`;
     ctx.fillStyle = color;
     ctx.textBaseline = "alphabetic";
 
     if (shadow) {
-        ctx.shadowColor = "rgba(0, 0, 0, 0.1)";
-        ctx.shadowBlur = 15;
+        ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
+        ctx.shadowBlur = 25;
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 2;
     } else {
@@ -147,10 +146,8 @@ function drawRoundedRect(ctx, x, y, width, height, radius, fill, stroke, strokeW
 }
 
 async function createTeamStandingsImage(season, isCurrentSeason, teamStandingsData) {
-    // await loadFonts();
-
     // Constants
-    const TITLE_POSITION = [200, 126];
+    const TITLE_POSITION = [200, 127];
     const TITLE_FONT_SIZE = 60;
     const TITLE_COLOR = "#ffffff";
     const ACCENT_COLOR = "#bc0839";
@@ -180,21 +177,21 @@ async function createTeamStandingsImage(season, isCurrentSeason, teamStandingsDa
     }
 
     // Add title
-    addText(ctx, `SEASON ${season}`, [TITLE_POSITION[0], TITLE_POSITION[1] - 55], 
+    addText(ctx, `Season ${season}`, [TITLE_POSITION[0], TITLE_POSITION[1] - 56], 
            DEFAULT_FONT, TITLE_FONT_SIZE - 15, TITLE_COLOR, "l", 5, true);
-    addText(ctx, "TEAM STANDINGS", TITLE_POSITION, 
+    addText(ctx, "Team Standings", TITLE_POSITION, 
            DEFAULT_FONT, TITLE_FONT_SIZE, TITLE_COLOR, "l", 5, true);
 
     // Add timestamp or season status
-    drawRoundedRect(ctx, TITLE_POSITION[0] + 562.5, TITLE_POSITION[1] - 110, 
-                345, 45, 12, TITLE_COLOR);
+    drawRoundedRect(ctx, TITLE_POSITION[0] + 540.5, TITLE_POSITION[1] - 112, 
+                370, 45, 15, TITLE_COLOR);
     const timestamp = new Date().toLocaleDateString('en-GB');
     if (isCurrentSeason) {
-        addText(ctx, `Standings as of ${timestamp}`, [TITLE_POSITION[0] + 735, TITLE_POSITION[1] - 79], 
-               DEFAULT_FONT, TITLE_FONT_SIZE - 35, ACCENT_COLOR, "m");
+        addText(ctx, `Standings as of ${timestamp}`, [TITLE_POSITION[0] + 725, TITLE_POSITION[1] - 81], 
+               DEFAULT_FONT, TITLE_FONT_SIZE - 35, ACCENT_COLOR, "m", 5, false, "600");
     } else {
-        addText(ctx, "This season has concluded", [TITLE_POSITION[0] + 735, TITLE_POSITION[1] - 79], 
-               DEFAULT_FONT, TITLE_FONT_SIZE - 35, ACCENT_COLOR, "m");
+        addText(ctx, "This season has concluded", [TITLE_POSITION[0] + 725, TITLE_POSITION[1] - 81], 
+               DEFAULT_FONT, TITLE_FONT_SIZE - 35, ACCENT_COLOR, "m", 5, false, "600");
     }
 
     // Draw team standings
@@ -202,11 +199,11 @@ async function createTeamStandingsImage(season, isCurrentSeason, teamStandingsDa
         const teamdata = teamStandingsData[i];
 
         // Add position marker
-        addText(ctx, `${i+1}`, [INIT_POS[0] - POSITION_OFFSET, INIT_POS[1] - 4], 
+        addText(ctx, `${i+1}`, [INIT_POS[0] - POSITION_OFFSET, INIT_POS[1] - 3], 
                DEFAULT_FONT, 52, TITLE_COLOR, "m");
 
         // Add team name
-        addText(ctx, teamdata.team_name.toUpperCase(), [INIT_POS[0] + TEAM_NAME_OFFSET, INIT_POS[1]], 
+        addText(ctx, teamdata.team_name, [INIT_POS[0] + TEAM_NAME_OFFSET, INIT_POS[1]], 
                DEFAULT_FONT, 60, ACCENT_COLOR, "l");
 
         // Add team emblem
@@ -219,7 +216,7 @@ async function createTeamStandingsImage(season, isCurrentSeason, teamStandingsDa
         }
 
         // Add team color box
-        drawRoundedRect(ctx, INIT_POS[0] - 70, INIT_POS[1] - 57, 
+        drawRoundedRect(ctx, INIT_POS[0] - 70, INIT_POS[1] - 58, 
                        TEAM_COLOR_BOX_SIZE[0], TEAM_COLOR_BOX_SIZE[1], 8, teamdata.team_color);
         
         // Add points
@@ -228,9 +225,9 @@ async function createTeamStandingsImage(season, isCurrentSeason, teamStandingsDa
 
         // Add match counter
         const matches = teamdata.season_matches_played;
-        const matchText = `${teamdata.season_wins_losses[0]} - ${teamdata.season_wins_losses[1]} (${matches})`.toUpperCase();
+        const matchText = `${teamdata.season_wins_losses[0]} - ${teamdata.season_wins_losses[1]} (${matches})`;
         addText(ctx, matchText, [INIT_POS[0] + POINTS_X_OFFSET, INIT_POS[1] + 10], 
-               DEFAULT_FONT, 20, ACCENT_COLOR, "r");
+               DEFAULT_FONT, 22, ACCENT_COLOR, "r", 5, true, 500);
 
         // Update Y position for next team
         INIT_POS[1] += POSITION_OFFSET;

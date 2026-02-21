@@ -224,7 +224,7 @@ async function getTeamdataFallback(season) {
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     generateListViewButton();
-    await loadFont('SF-Pro-Display-Bold', 'assets/font/SF-Pro-Display-Bold.woff2');
+    // await loadFont('SF-Pro-Display-Bold', 'assets/font/SF-Pro-Display-Bold.woff2');
     
     if (localStorage.teamDataCache) {
         try {

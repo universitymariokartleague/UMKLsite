@@ -111,6 +111,9 @@
     font-size: 14.5px;
 }
 
+.teamStandings {
+    font-weight: 500;
+}
 
 .season-selection {
     display: flex;
