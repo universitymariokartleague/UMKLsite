@@ -14,16 +14,19 @@ function generate6v6ScoreCalculatorLink(entry) {
         .join('\n');
 
     const teamsString = entry.teamsInvolved.join('\n');
+    const penalties = entry.results.map(r => r[2]).join(',');
 
     const compressedMatchName = LZString.compressToEncodedURIComponent(entry.title);
     const compressedPositions = LZString.compressToEncodedURIComponent(positionsString);
     const compressedTracks = LZString.compressToEncodedURIComponent(tracksString);
     const compressedTeams = LZString.compressToEncodedURIComponent(teamsString);
+    const compressedPenalties = LZString.compressToEncodedURIComponent(penalties);
 
     url.searchParams.set('m', compressedMatchName);
     url.searchParams.set('p', compressedPositions);
     url.searchParams.set('t', compressedTracks);
     url.searchParams.set('n', compressedTeams);
+    url.searchParams.set('pen', compressedPenalties);
 
     return url;
 }

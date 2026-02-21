@@ -16,11 +16,12 @@ let chart;
 let defaultTeamColors = ["#1baa8b", "#a11212"];
 const trackNamesInput = document.getElementById("track-names-input");
 const teamNamesInput = document.getElementById("team-names-input");
+const penaltyDisclaimer = document.getElementById("penalty-disclaimer");
 
 const canvas = document.getElementById("scoreChart");
 
 let teamColors = [];
-let matchName = "";
+let matchName, penalties;
 let currentPerspective = 0;
 let extraInfoOpened = false;
 
@@ -154,13 +155,24 @@ function renderResults(width) {
         renderResults();
     });
 
-    teamResult.innerHTML = `<h3>${teamNames[0] || 'Your Team'} (Total: ${yourTeamTotal})</h3>${teamRaceResults.join("")}`;
+    teamResult.innerHTML = `<h3>${teamNames[0] || 'Your Team'} (Total: ${yourTeamTotal})</h3>${teamRaceResults.join("")} ${penalties[0] > 0 ? `<span class="diff-neg"><b>Penalty: ${penalties[0]}</b></span>` : ""}`;
 
-    opponentResult.innerHTML = `<h3>${teamNames[1] || 'Opponent Team'} (Total: ${opponentTeamTotal})</h3>${opponentRaceResults.join("")}`;
+    opponentResult.innerHTML = `<h3>${teamNames[1] || 'Opponent Team'} (Total: ${opponentTeamTotal - penalties[1]})</h3>${opponentRaceResults.join("")} ${penalties[1] > 0 ? `<span class="diff-neg"><b>Penalty: ${penalties[1]}</b></span>` : ""}`;
 
-    const diff = yourTeamTotal - opponentTeamTotal;
+    const yourPenalty = penalties[0] || 0;
+    const opponentPenalty = penalties[1] || 0;
+    const diff = yourTeamTotal - opponentTeamTotal - yourPenalty + opponentPenalty;
     const colorClass = diff > 0 ? "pos" : diff < 0 ? "neg" : "neutral";
     pointsDifference.innerHTML = `<h2 class="diff-${colorClass}">${diff > 0 ? "+" : ""}${diff}</h2>`;
+
+    if (penalties[0] || penalties[1]) {
+        const yourTeam = teamNames[0] || 'Your Team';
+        const opponentTeam = teamNames[1] || 'Opponent Team';
+        const yourPenaltyText = penalties[0] ? `a penalty of <b>${penalties[0]}</b> was applied to ${yourTeam}` : '';
+        const opponentPenaltyText = penalties[1] ? `a penalty of <b>${penalties[1]}</b> was applied to ${opponentTeam}` : '';
+        const penaltyTexts = [yourPenaltyText, opponentPenaltyText].filter(Boolean);
+        penaltyDisclaimer.innerHTML = `This graph shows the match score before ${penaltyTexts.join(' and ')}.`;
+    }
 
     // Render graph
     const raceLabels = ["", ...(
@@ -383,6 +395,7 @@ function loadFromURLParams() {
     const tracksCompressed = urlParams.get('t');
     const teamsCompressed = urlParams.get('n');
     const matchNameCompressed = urlParams.get('m');
+    const penaltiesCompressed = urlParams.get('pen');
 
     if (positionsCompressed) {
         const positionsRaw = LZString.decompressFromEncodedURIComponent(positionsCompressed);
@@ -402,6 +415,12 @@ function loadFromURLParams() {
 
     if (matchNameCompressed) {
         matchName = LZString.decompressFromEncodedURIComponent(matchNameCompressed);
+    }
+
+    if (penaltiesCompressed) {
+        penalties = LZString.decompressFromEncodedURIComponent(penaltiesCompressed).split(',').map(Number);
+    } else {
+        penalties = [0, 0];
     }
 }
 
