@@ -227,7 +227,7 @@ async function createTeamStandingsImage(season, isCurrentSeason, teamStandingsDa
         const matches = teamdata.season_matches_played;
         const matchText = `${teamdata.season_wins_losses[0]} - ${teamdata.season_wins_losses[1]} (${matches})`;
         addText(ctx, matchText, [INIT_POS[0] + POINTS_X_OFFSET, INIT_POS[1] + 10], 
-               DEFAULT_FONT, 22, ACCENT_COLOR, "r", 5, true, 500);
+               DEFAULT_FONT, 22, ACCENT_COLOR, "r", 5, true, 600);
 
         // Update Y position for next team
         INIT_POS[1] += POSITION_OFFSET;
