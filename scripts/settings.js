@@ -9,7 +9,7 @@ export { toggleSettingsPanel, disableThemeShortcut, disableSettingsShortcut }
 
 const settingsBoxHTML = `
     <div class="hidden BGBlur" id="BGBlur"></div>
-    <div translate="no" class="hidden hide-settings-box" id="settingsBox" data-overlayscrollbars-initialize>
+    <div translate="no" class="hidden hide-settings-box" id="settingsBox">
         <div class="settings-box-close-button">
             <button id="settings-box-close-button">Close</button>
         </div>

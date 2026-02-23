@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-overlayscrollbars-initialize>
+<html lang="en">
     <head>    
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -9,7 +9,6 @@
         <link rel="stylesheet" href="../../../css/style.css">
         <link rel="stylesheet" href="../../../css/settings.css">
         <link rel="stylesheet" href="../../../css/rules.css">
-        <link rel="stylesheet" href="../../../css/ext/overlayscrollbars.min.css">
         <link rel="stylesheet" href="../../../css/ext/fontawesome.min.css">
         <meta name="color-scheme" content="dark light">
     
@@ -29,13 +28,10 @@
         <script type="module" src="../../../components/footer.js"></script>
 
         <!-- Scripts -->
-        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-        <script src="../../../scripts/overlayscrollbars.browser.es6.min.js" defer></script>
-        <script src="../../../scripts/overlayscrollbar.js" defer></script>    
-        
+        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>        
         <script type="module" src="../../../scripts/settings.js" defer></script>
     </head>
-    <body id="top" data-overlayscrollbars-initialize>
+    <body id="top">
         <umkl-navbar></umkl-navbar>
 
         <main>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-overlayscrollbars-initialize="" lang="en">
+<html lang="en">
 
 <head>
     <base href="../../" />
@@ -13,7 +13,6 @@
     <link href="css/eventbox.css" rel="stylesheet">
     <link href="css/news.css" rel="stylesheet" />
     <link href="css/settings.css" rel="stylesheet" />
-    <link href="css/ext/overlayscrollbars.min.css" rel="stylesheet" />
     <link href="css/ext/fontawesome.min.css" rel="stylesheet" />
     <meta content="dark light" name="color-scheme" />
 
@@ -33,9 +32,6 @@
 
     <!-- Scripts -->
     <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() { let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) } checkTheme();</script>
-    <script defer="" src="scripts/overlayscrollbars.browser.es6.min.js"></script>
-    <script defer="" src="scripts/overlayscrollbar.js"></script>
-
     <script defer="" src="scripts/settings.js" type="module"></script>
     <script defer="" src="scripts/showupcomingmatches.js" type="module"></script>
     <script defer="" src="scripts/tagnewsposts.js" type="module"></script>
@@ -43,7 +39,7 @@
     <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.x/dist/index.umd.js"></script>
 </head>
 
-<body data-overlayscrollbars-initialize="" id="top">
+<body id="top">
     <umkl-navbar></umkl-navbar>
 
     <main>
