@@ -315,6 +315,13 @@ function setupSnowflakes() {
 }
 
 function newYearCountDown() {
+    return new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://cdn.jsdelivr.net/npm/fireworks-js@2.x/dist/index.umd.js';
+        script.onload = resolve;
+        document.body.appendChild(script);
+    }).then(() => {
     const style = document.createElement('style');
     style.textContent = `
         .new-year-countdown {
@@ -412,9 +419,26 @@ function newYearCountDown() {
 
     countdownInterval = setInterval(updateCountdown, 1000);
     updateCountdown();
+    });
 }
 
 function newYearFireworks() {
+    if (!window.Fireworks) {
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://cdn.jsdelivr.net/npm/fireworks-js@2.x/dist/index.umd.js';
+        return new Promise(resolve => {
+            script.onload = () => {
+                createFireworksCanvas();
+                resolve();
+            };
+            document.body.appendChild(script);
+        });
+    }
+    createFireworksCanvas();
+}
+
+function createFireworksCanvas() {
     const canvas = document.createElement('canvas');
     canvas.className = 'fireworks';
     canvas.style.position = 'fixed';
@@ -423,31 +447,25 @@ function newYearFireworks() {
     canvas.style.pointerEvents = 'none';
     document.body.appendChild(canvas);
 
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'https://cdn.jsdelivr.net/npm/fireworks-js@2.x/dist/index.umd.js';
-    script.onload = () => {
-        const fireworks = new window.Fireworks.default(canvas, {
-            gravity: 0,
-            traceLength: 1.5,
-            delay: { min: 10, max: 30 },
-            particles: 150,
-            sound: {
-                enabled: true,
-                files: [
-                    '../../../assets/media/eastereggs/newyears/explosion0.mp3',
-                    '../../../assets/media/eastereggs/newyears/explosion1.mp3',
-                    '../../../assets/media/eastereggs/newyears/explosion2.mp3'
-                ],
-                volume: {
-                    min: 1,
-                    max: 15
-                }
+    const fireworks = new window.Fireworks.default(canvas, {
+        gravity: 0,
+        traceLength: 1.5,
+        delay: { min: 10, max: 30 },
+        particles: 150,
+        sound: {
+            enabled: true,
+            files: [
+                '../../../assets/media/eastereggs/newyears/explosion0.mp3',
+                '../../../assets/media/eastereggs/newyears/explosion1.mp3',
+                '../../../assets/media/eastereggs/newyears/explosion2.mp3'
+            ],
+            volume: {
+                min: 1,
+                max: 15
             }
-        });
-        fireworks.start();
+        }
+    });
+    fireworks.start();
 
-        setInterval(() => fireworks.waitStop(), 15000)
-    }
-    document.body.appendChild(script);
+    setInterval(() => fireworks.waitStop(), 15000)
 }
