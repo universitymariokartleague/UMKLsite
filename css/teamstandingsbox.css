@@ -82,6 +82,11 @@
     width: 12px;
     height: 50px;
 }
+
+.teamStanding picture {
+    height: 50px;
+    width: 50px;
+}
  
 .teamStandingsBox .teamLogo {
     margin-left: 5px;
@@ -92,7 +97,7 @@
 }
 
 .teamStandingsBox .teamName {
-    margin-left: 6px;
+    margin-left: 12px;
     font-size: 42px;
 }
 
@@ -107,11 +112,9 @@
     font-size: 35px;
 }
 
-.teamStandingsBox .teamPointsArea .teamStandings {
-    font-size: 14.5px;
-}
-
+.teamStandingsBox .teamPointsArea .teamStandings,
 .teamStandings {
+    font-size: 14.5px;
     font-weight: 600;
 }
 
@@ -147,7 +150,7 @@
     margin-left: 5px;
 }
 
-#listViewButton{
+.current-season-area #shareButton {
     margin-left: auto;
 }
 
@@ -236,7 +239,8 @@
         height: clamp(1rem, 7.5vw, 5em);
     }
     
-    .teamStandingsBox .teamLogo {
+    .teamStandingsBox .teamLogo,
+    .teamStanding picture {
         margin-left: 0;
         height: clamp(0.25rem, 7.5vw, 5em);
         width: clamp(0.25rem, 7.5vw, 5em);
