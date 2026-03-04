@@ -5,6 +5,79 @@
     overflow: hidden; /* This contains the scrollbar within the rounded corners */
 }
 
+#news-search {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ccccccaa;
+    border-radius: 10px;
+    transition: border-color 0.2s;
+}
+
+#news-search-wrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+#news-search {
+    flex: 1;
+    min-width: 100px;
+    padding: 8px 12px;
+    border: 1px solid #ccccccaa;
+    border-radius: 10px;
+    margin-bottom: 0;
+    transition: border-color 0.2s;
+}
+
+#news-search-clear {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #666;
+    padding: 0 8px;
+    margin-bottom: 10px;
+}
+
+.news-search-tag-chip {
+    display: flex;
+    position: absolute;
+    text-transform: capitalize;
+    align-items: center;
+    padding: 2px 6px;
+    background-color: #bc0839;
+    color: white;
+    margin: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.news-search-tag-remove {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    margin-left: 5px;
+    width: 15px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+#news-no-results {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}
+
+#news-no-results button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+}
+
 .news-container {
     display: flex;
     flex-direction: row;
@@ -177,18 +250,6 @@
 
 .news-reel-tags {
     margin-left: 2px;
-}
-
-.news-reel-tags tag {
-    background-color: rgba(88, 101, 242, 0.5);
-    border: 1px solid rgba(152, 172, 255, 0.7);
-    margin-right: 4px;
-    color: rgba(255, 255, 255, 0.75);
-}
-
-.news-reel-tags tag:hover {
-    background-color: rgba(88, 101, 242, 0.8);
-    border: 1px solid rgba(152, 172, 255, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -12,11 +12,6 @@
     --link-hover-color: #ffb4b4;
     --highlight-color: #f5255ca0;
 
-    --button-color: #fa5252;
-    --button-background: #ffffff1a;
-    --button-border: 1px solid #0000004d;
-    --button-outline: 2px solid #00000099;
-
     --code-color: #000;
     --code-bg-color: #ffffff80;
     --code-border: 1px solid #00000099;
@@ -38,11 +33,6 @@
         --link-hover-color: #fff;
         --highlight-color: #bc0839d0;
     
-        --button-color: #fa5252;
-        --button-background: #00000066;
-        --button-border: 1px solid #ffffff4d;
-        --button-outline: 2px solid #ffffff99;
-    
         --code-color: #fff;
         --code-bg-color: #0000004d;
         --code-border: 1px solid #ffffff33;
@@ -63,11 +53,6 @@
     --link-color: #fa5252;
     --link-hover-color: #fff;
     --highlight-color: #bc0839d0;
-
-    --button-color: #fa5252;
-    --button-background: #00000066;
-    --button-border: 1px solid #ffffff4d;
-    --button-outline: 2px solid #ffffff99;
 
     --code-color: #fff;
     --code-bg-color: #0000004d;
@@ -211,14 +196,14 @@ a[target="_blank"]::after {
 }
 
 button {
-    background: var(--button-background);
+    background-color: var(--accent-color);
     font-weight: 600;
     border-radius: 5px;
     font-size: 15px;
-    color: var(--button-color);
-    border: var(--button-border);
+    color: #fff;
+    border: 1px solid #ffffff15;
     cursor: pointer;
-    transition: transform 0.1s, color 0.08s, outline 0.05s;
+    transition: transform 0.1s, color 0.1s, background-color 0.1s;
 }
 
 button:active {
@@ -227,8 +212,9 @@ button:active {
 
 button:hover,
 button:focus {
-    color: var(--text-color) !important;
-    outline: var(--button-outline);
+    color: var(--accent-color) !important;
+    background: #fff;
+    outline: 1px solid var(--accent-color);
 }
 
 @media (prefers-reduced-motion) {
@@ -288,23 +274,28 @@ mention {
 }
 
 tag {
-    color: var(--metion-color);
+    color: #FFF;
+    background-color: var(--accent-color);
+    border: 1px solid var(--accent-color);
     font-size: 15px;
     padding: 0px 5px;
-    background-color: rgba(88, 101, 242, 0.25);
-    border: 1px solid rgba(152, 172, 255, 0.6);
-    transition: background-color 0.1s, border 0.1s;
     border-radius: 5px;
+    transition: transform 0.1s, color 0.1s, background-color 0.1s;
     -webkit-user-select: all;
     user-select: all;
 }
 
 tag:hover {
-    background-color: rgba(88, 101, 242, 0.75);
-    border: 1px solid rgba(152, 172, 255, 1);
+    color: var(--accent-color);
+    background: #fff;
+    outline: 1px solid var(--accent-color);
 }
 
-mention::selection, tag::selection {
+.tag-link {
+    text-decoration: none;
+}
+
+mention::selection {
     background-color: rgba(88, 101, 242, 0.5);
 }
 
@@ -321,20 +312,6 @@ new {
     margin: 5px;
     -webkit-user-select: none;
     user-select: none;
-}
-
-.tag-link {
-    text-decoration: none;
-}
-
-.tag-link-text:hover {
-    color: #FFF!important;
-    text-decoration: none;
-    transition: color 0.10s;
-}
-
-.tag-selected {
-    border: 1px solid var(--text-color);
 }
 
 hr {
