@@ -53,7 +53,7 @@ class UMKLNavbar extends HTMLElement {
     }
 
     connectedCallback() {
-        const shadow=this.shadowRoot,button=shadow.getElementById("nav-dropdown-button"),dropdown=shadow.getElementById("nav-dropdown-bar");button.addEventListener("click",(()=>{const t="block"===dropdown.style.display;dropdown.style.display=t?"none":"block"}));const currentPath=window.location.pathname.replace(/\/+$/,"").split("/index.html")[0],links=shadow.querySelectorAll("#nav-bar a[href], #nav-dropdown-bar a[href]");links.forEach((t=>{const n=new URL(t.href).pathname.replace(/\/+$/,""),e=n.endsWith("/index.html")&&(""===currentPath||"/"===currentPath),o=currentPath.startsWith(n)&&"/"!==n;(e||o)&&t.classList.add("nav-selected")}));
+        const shadow=this.shadowRoot,button=shadow.getElementById("nav-dropdown-button"),dropdown=shadow.getElementById("nav-dropdown-bar");button.addEventListener("click",((t)=>{t.stopPropagation();const e="block"===dropdown.style.display;dropdown.style.display=e?"none":"block"}));document.addEventListener("click",(()=>{dropdown.style.display="none"}));const currentPath=window.location.pathname.replace(/\/+$/,"").split("/index.html")[0],links=shadow.querySelectorAll("#nav-bar a[href], #nav-dropdown-bar a[href]");links.forEach((t=>{const n=new URL(t.href).pathname.replace(/\/+$/,""),e=n.endsWith("/index.html")&&(""===currentPath||"/"===currentPath),o=currentPath.startsWith(n)&&"/"!==n;(e||o)&&t.classList.add("nav-selected")}));
     }
 }
 
