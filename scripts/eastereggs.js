@@ -63,8 +63,7 @@ function halloweenEasterEgg() {
         '--accent-color': '#ff640a',
         '--link-color': '#ff640a',
         '--link-hover-color': '#ffcaab',
-        '--highlight-color': '#ff640ad0',
-        '--button-color': '#ff640a'
+        '--highlight-color': '#ff640ad0'
     };
     Object.entries(themeColors).forEach(([k, v]) => root.style.setProperty(k, v));
 

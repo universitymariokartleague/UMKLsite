@@ -207,7 +207,7 @@
     .settings-hover-info::after {
         content: attr(data-info);
         background-color: var(--bg-color);
-        border: var(--button-border);
+        border: var(--box-border);
         padding: 0 5px 0 5px;
         border-radius: 5px;
         opacity: 0;

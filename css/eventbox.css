@@ -234,7 +234,7 @@
     font-family: "Montserrat", system-ui, sans-serif;
     font-weight: 600;
     background-color: var(--bg-color);
-    border: var(--button-border);
+    border: var(--box-border);
     padding: 0 1px;
     border-radius: 5px;
     display: inline-block;
@@ -315,7 +315,7 @@
 
 .close-list-view-button {
     background: var(--button-bg);
-    border: var(--button-border);
+    border: var(--box-border);
     color: var(--text-color);
     width: 35px;
     height: 35px;
@@ -453,7 +453,7 @@
     font-family: "Montserrat", system-ui, sans-serif;
     font-weight: 600;
     background-color: var(--bg-color);
-    border: var(--button-border);
+    border: var(--box-border);
     padding: 0 1px;
     border-radius: 5px;
     display: inline-block;
