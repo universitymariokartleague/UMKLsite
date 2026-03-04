@@ -428,9 +428,9 @@ function showMonthPicker(currentDate) {
             </select>
             <select title="Select a year" class="popupDropdown" id="yearDropdown">
                 ${Array.from({ length: maxYear - minYear + 1 }, (_, i) => {
-                    const y = minYear + i;
-                    return `<option value="${y}"${y === currentlyShownDate[0] ? ' selected' : ''}>${y}</option>`;
-                }).join('')}
+        const y = minYear + i;
+        return `<option value="${y}"${y === currentlyShownDate[0] ? ' selected' : ''}>${y}</option>`;
+    }).join('')}
             </select>
             <button title="Return to the current date" class="currentDateButton" id="currentDateButton"><i class="fa-solid fa-calendar"></i></button>
         </div>
@@ -896,9 +896,27 @@ window.addEventListener('popstate', () => {
     }
 });
 
+function findEventByID(graphEventID) {
+    if (!graphEventID) return null;
+
+    for (const [date, events] of Object.entries(matchData)) {
+        const found = events.find(event => event.eventID === graphEventID);
+        if (found) {
+            return found;
+        }
+    }
+
+    return null;
+}
+
 function displayCalendar() {
     const urlParams = new URLSearchParams(window.location.search);
     const dateParam = urlParams.get('date');
+    const graphEventID = urlParams.get('graphEventID');
+    if (graphEventID) {
+        let event = findEventByID(graphEventID);
+        window.location.href = generate6v6ScoreCalculatorLink(event);
+    }
     if (dateParam && matchData[dateParam]) {
         console.debug(`%cmatchcalendar.js %c> %cURL parameter detected`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
         const dateObj = new Date(dateParam);
