@@ -134,6 +134,22 @@ svg {
     padding: 5px;
 }
 
+#editing-tools button {
+    background-color: #fff;
+    color: var(--accent-color);
+}
+
+#editing-tools button:active {
+    transform: scale(0.95);
+}
+
+#editing-tools button:hover,
+#editing-tools button:focus {
+    color: #fff !important;
+    background: var(--accent-color);
+    outline: 1px solid #fff;
+}
+
 @media screen and (max-width: 1199px) {
     #page-area {
         margin-bottom: 30vh;
