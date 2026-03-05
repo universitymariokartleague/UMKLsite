@@ -243,9 +243,11 @@ function renderResults(width) {
         type: 'line',
         data: chartData,
         options: {
+            devicePixelRatio: Math.max(window.devicePixelRatio, 2),
             responsive: !(width > 0),
             animation: false,
             maintainAspectRatio: false,
+            events: [],
             plugins: {
                 tooltip: {
                     bodyFont: {
