@@ -279,8 +279,7 @@ function renderResults(width) {
                 datalabels: {
                     display: true,
                     font: {
-                        family: 'Montserrat',
-                        size: 10
+                        family: 'Montserrat'
                     },
                     color: textColor,
                     align: (context) => {
@@ -319,7 +318,8 @@ function renderResults(width) {
                 x: {
                     ticks: {
                         font: {
-                            family: 'Montserrat'
+                            family: 'Montserrat',
+                            size: (ctx) => (ctx.tick.label && ctx.tick.label.length > 20) ? 9 : 12
                         },
                         color: textColor
                     },
