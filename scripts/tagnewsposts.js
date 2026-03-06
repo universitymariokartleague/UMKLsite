@@ -321,7 +321,7 @@ function addSearchBar() {
 document.addEventListener("DOMContentLoaded", () => {
     if (newsReel) {
         addNewsReelArea();
+        addSearchBar();
     }
     addLinksToTags();
-    addSearchBar();
 });
