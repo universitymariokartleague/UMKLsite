@@ -223,7 +223,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
             console.debug(`%cgetlivedata.js %c> %cRefreshing live data...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
 
-            if (!window.lastMatchUpdate || Date.now() - window.lastMatchUpdate >= 120000) {
+            if (!window.lastMatchUpdate || Date.now() - window.lastMatchUpdate >= 60000) {
                 matchData = await getMatchData();
                 getLiveMatchTeams();
                 window.lastMatchUpdate = Date.now();
@@ -235,9 +235,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         } catch (error) {
             errorMessage.innerHTML = `Retrying: attempt ${window.retryCount}`;
         } finally {
-            refreshTimer = setTimeout(updateFetch, 3000);
+            refreshTimer = setTimeout(updateFetch, 2000);
         }
     };
 
-    refreshTimer = setTimeout(updateFetch, 3000);
+    refreshTimer = setTimeout(updateFetch, 2000);
 });
