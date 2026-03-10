@@ -8,8 +8,11 @@
 const teamBoxFormatHTML = `
     <div class="team-info-wrapper">
         <a href="{{highResSrc}}">
-            <img width=200 height=200 src="{{logoSrc}}" alt="{{teamNamePossessive}} team logo" title="{{teamNamePossessive}} team logo\nClick to view a high-res version of this logo" class="team-info-logo" loading="lazy"
-            onload="this.style.opacity=1" onerror="this.onerror=null; this.src='{{placeholderLogo}}';"/>
+            <picture>
+                <source srcset="{{logoSrcAvif}}" type="image/avif">
+                <img width=200 height=200 src="{{logoSrc}}" alt="{{teamNamePossessive}} team logo" title="{{teamNamePossessive}} team logo\nClick to view a high-res version of this logo" class="team-info-logo" loading="lazy"
+                onload="this.style.opacity=1" onerror="this.onerror=null; this.src='{{placeholderLogo}}'; this.parentNode.querySelector('source').srcset='{{placeholderLogoAvif}}';"/>
+            </picture>
         </a>
         <hr>
         <div class="team-info-text">
@@ -97,8 +100,10 @@ async function generateTeamBox(teamData, showError) {
     JSTeamBox.classList.remove('fade-in');
 
     const placeholderLogo = "assets/media/teamemblems/DEFAULT.avif";
+    const placeholderLogoPng = "assets/media/teamemblems/og/DEFAULT.png";
     const teamNameUpper = teamData.team_name.toUpperCase();
-    const logoUrl = `assets/media/teamemblems/hres/${teamNameUpper}.avif`;
+    const logoUrl = `assets/media/teamemblems/og/${teamNameUpper}.png`;
+    const logoUrlAvif = `assets/media/teamemblems/hres/${teamNameUpper}.avif`;
     const highResUrl = `assets/media/teamemblems/og/${teamNameUpper}.png`;
     teamData.logo_src = logoUrl;
 
@@ -113,8 +118,10 @@ async function generateTeamBox(teamData, showError) {
         .replace("{{className}}", teamData.class_name)
         .replace("{{teamNameLower}}", teamData.team_name.toLowerCase())
         .replace("{{logoSrc}}", logoUrl)
+        .replace("{{logoSrcAvif}}", logoUrlAvif)
         .replace("{{highResSrc}}", highResUrl)
-        .replace("{{placeholderLogo}}", placeholderLogo)
+        .replace("{{placeholderLogo}}", placeholderLogoPng)
+        .replace("{{placeholderLogoAvif}}", placeholderLogo)
         .replace("{{extraFields}}", extraFields)
         .replace("{{currentFields}}", currentFields);
 

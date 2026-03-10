@@ -16,7 +16,7 @@
 }
 
 .team-info-wrapper a {
-    display: contents;
+    display: block;
 }
 
 .user-info-wrapper a {
@@ -35,6 +35,7 @@
     width: 200px;
     opacity: 0;
     transition: opacity 0.2s ease-in;
+    display: block;
 }
 
 .current-season-info {
