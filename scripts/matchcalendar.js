@@ -449,6 +449,11 @@ function showMonthPicker(currentDate) {
     const monthDropdown = preview.querySelector('#monthDropdown');
     const yearDropdown = preview.querySelector('#yearDropdown');
 
+    const resetAutoCloseTimer = () => {
+        clearTimeout(previewTimeout);
+        previewTimeout = setTimeout(closePreview, 5000);
+    };
+
     const handleDropdownChange = () => {
         generateCalendar(Number(monthDropdown.value), Number(yearDropdown.value));
         resetAutoCloseTimer();
@@ -458,11 +463,6 @@ function showMonthPicker(currentDate) {
     yearDropdown.addEventListener('click', resetAutoCloseTimer);
     monthDropdown.addEventListener('change', handleDropdownChange);
     yearDropdown.addEventListener('change', handleDropdownChange);
-
-    const resetAutoCloseTimer = () => {
-        clearTimeout(previewTimeout);
-        previewTimeout = setTimeout(closePreview, 5000);
-    };
 
     const closePreview = () => {
         if (!preview?.parentNode) return;

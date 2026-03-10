@@ -329,7 +329,7 @@ async function showUpcomingMatches() {
             </div>
             `;
         };
-        html += `</div><hr />`;
+        html += `</div><hr>`;
 
         upcomingMatchesBox.classList.add('fade-in');
         upcomingMatchesBox.innerHTML += html;
