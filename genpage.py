@@ -118,13 +118,20 @@ def create_new_blog():
     link = create_slug(title)
     url_date = "-".join(reversed(date.split("/")))
 
+    image_jpg = image.rsplit('.', 1)[0] + '.jpg' if '.' in image else image + '.jpg'
+
     new_blog = f"""
                 <div class="news-box">
                     <article class="news-text">
                         <a href="pages/news/{url_date}/{link}/"><span class="news-title">{title}</span></a><br>
                         <span class="news-desc">{description}</span>
                     </article>
-                    <div class="news-image"><img onload="this.style.opacity=1" loading="lazy" src="{image}" alt="{alt}"></div>
+                    <div class="news-image">
+                        <picture>
+                            <source srcset="{image}" type="image/avif">
+                            <img src="{image_jpg}" alt="{alt}" onload="this.style.opacity=1" loading="lazy">
+                        </picture>
+                    </div>
                     <span class="news-date">{date} 
                         <span class="tags">
                             <tag>REPLACETAG</tag>

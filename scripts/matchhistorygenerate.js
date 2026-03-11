@@ -19,8 +19,10 @@ const makePossessive = name =>
 const getTeamFromURL = () =>
     new URLSearchParams(window.location.search).get("team");
 
-const getEmblem = teamName =>
-    `assets/media/teamemblems/${teamName.toUpperCase()}.avif`;
+const getEmblem = teamName => ({
+    avif: `assets/media/teamemblems/${teamName.toUpperCase()}.avif`,
+    png: `assets/media/teamemblems/${teamName.toUpperCase()}.png`
+});
 
 function getScoreForTeam(match, teamName) {
     const results = match.results;
@@ -230,10 +232,13 @@ function generateTeamMatches(teamName) {
                 <div class="team-match-card ${match.testMatch ? "test-match" : ""}" href="">
                     <div class="match-card-wrapper">
                         <a href="${otherTeamLink}">    
-                            <img src="${getEmblem(otherTeam)}" 
-                                alt="${makePossessive(otherTeam)} emblem"
-                                class="team-match-emblem" width="40" height="40"
-                                onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';">
+                            <picture>
+                                <source srcset="${getEmblem(otherTeam).avif}" type="image/avif">
+                                <img src="${getEmblem(otherTeam).png}" 
+                                    alt="${makePossessive(otherTeam)} emblem"
+                                    class="team-match-emblem" width="40" height="40"
+                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png'; this.parentNode.querySelector('source').srcset='assets/media/teamemblems/DEFAULT.avif';">
+                            </picture>
                         </a>
                         <h2 class="team-title"><a href="${otherTeamLink}">${otherTeam}</a></h2>
                         <div class="match-score ${resultClass}">
