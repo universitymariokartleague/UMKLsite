@@ -167,11 +167,13 @@
 
 .customise-button:hover {
     background: var(--team-color, #ccc);
+    outline: none;
     color: #FFF!important;
 }
 
 .customise-button.active {
     background: var(--team-color, #ccc);
+    outline: none;
     color: #FFF;
 }
 
@@ -238,11 +240,13 @@
 
 .category-button:hover {
     background: var(--team-color, #ccc);
+    outline: none;
     color: #FFF!important;
 }
 
 .category-button.active {
     background: var(--team-color, #ccc);
+    outline: none;
     color: #FFF!important;
 }
 
@@ -313,7 +317,8 @@
 .button-cancel, .button-save {
     padding: 4px 10px;
     border-radius: 15px;
-    border: 2px solid var(--team-color, #ccc);
+    border: 2px solid var(--accent-color)!important;
+    color: var(--accent-color)!important;
     background: #FFF;
     width: 100%;
     font-size: 0.9em;
@@ -321,16 +326,21 @@
 }
 
 .button-cancel:hover {
-    background: #f0f0f0;
+    color: #FFF!important;
+    background: var(--accent-color)!important;
+    outline: none;
 }
 
 .button-save {
-    background: var(--team-color, #ccc);
-    color: #FFF!important
+    border: 2px solid var(--team-color, #ccc)!important;
+    background: #FFF!important;
+    color: var(--team-color)!important;
 }
 
 .button-save:hover {
-    color: #FFF!important
+    color: #FFF!important;
+    background: var(--team-color, #ccc)!important;
+    outline: none;
 }
 
 @keyframes fade-in {
