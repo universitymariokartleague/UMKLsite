@@ -10,14 +10,14 @@
         "type": "colour"
     },
     {
-        "name": "Sparkly",
-        "sp_cost": 980,
-        "type": "overlay"
-    },
-    {
         "name": "Rainbow",
         "sp_cost": 1050,
         "type": "colour"
+    },
+    {
+        "name": "Sparkly",
+        "sp_cost": 980,
+        "type": "overlay"
     },
     {
         "name": "Cheep Cheep",

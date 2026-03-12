@@ -7,7 +7,6 @@ const profileCardFormatHTML = `
     <div class="profile-card-wrapper">
         <div class="profile-card" style="--team-color: #{{color}};">
             <img src="assets/media/brand/guidelines/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />
-            <div class="card-timestamp"><span class="fa-solid fa-clock"></span> {{timestamp}}</div>
             <div class="profile-card-content">
                 <div class="profile-card-header">
                     <img src="{{PFP}}" alt="{{username}} profile picture" class="profile-card-avatar" 
@@ -166,7 +165,6 @@ function generateProfileCardHTML(data) {
         .replace("{{teamWins}}", data.team_wins || "0")
         .replace("{{firstPlaces}}", data.first_places || "0")
         .replace("{{highestFinish}}", data.highest_finish || "N/A")
-        .replace("{{timestamp}}", new Date(data.timestamp).toLocaleString("en-GB", { hour: '2-digit', minute: '2-digit' }) + " " + new Date(data.timestamp).toLocaleDateString("en-GB"))
         .replace("{{cardExtraText}}", "Use /profile to see your own card!")
         .replace("{{profileCustomisationButton}}", areProfileItems ? `<button class="customise-button" id="showCardProfileItemsButton"><span class="fa-solid fa-paintbrush"></span> Customise profile</button>` : '');
 }
@@ -183,7 +181,6 @@ function generateProfileCardContent(data) {
         .replace("{{teamWins}}", data.team_wins || "0")
         .replace("{{firstPlaces}}", data.first_places || "0")
         .replace("{{highestFinish}}", data.highest_finish || "N/A")
-        .replace("{{timestamp}}", new Date(data.timestamp).toLocaleString("en-GB", { hour: '2-digit', minute: '2-digit' }) + " " + new Date(data.timestamp).toLocaleDateString("en-GB"))
         .replace("{{cardExtraText}}", "Use /profile to see your own card!")
         .replace("{{profileCustomisationButton}}", areProfileItems ? `<button class="customise-button" id="showCardProfileItemsButton"><span class="fa-solid fa-paintbrush"></span> Customise profile</button>` : '');
 }
@@ -801,7 +798,6 @@ function showCardProfileItems() {
                     `;
                     
                     document.querySelector(".profile-umkl-logo")?.remove();
-                    document.querySelector(".card-timestamp")?.remove();
                     populateItemsGrid('all');
                     attachCategoryListeners();
                     profileCard.style.transform = 'rotateY(0deg)';
@@ -840,16 +836,15 @@ async function goBackToProfile() {
             profileCardContent.innerHTML = generateProfileCardContent(data);
             
             const logoHTML = `<img src="assets/media/brand/guidelines/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />`;
-            const timestampHTML = `<div class="card-timestamp"><span class="fa-solid fa-clock"></span> ${new Date(data.timestamp).toLocaleString("en-GB", { hour: '2-digit', minute: '2-digit' }) + " " + new Date(data.timestamp).toLocaleDateString("en-GB")}</div>`;
             
             profileCard.insertAdjacentHTML('afterbegin', logoHTML);
-            profileCard.insertAdjacentHTML('afterbegin', timestampHTML);
             
             profileCard.style.transform = 'rotateY(0deg)';
 
             createSPGraph(data, `#${data.color}`);
             attachProfileEventListeners();
             addCard3DEffect();
+            applyEquippedItemsToCard();
         }, 240);
     }, 50);
 
@@ -949,6 +944,91 @@ function saveItemEquips() {
 window.saveItemEquips = saveItemEquips;
 window.goBackToProfile = goBackToProfile;
 
+function loadEquippedItems() {
+    try {
+        const saved = localStorage.getItem("userProfileSettings");
+        if (saved) {
+            const equipped = JSON.parse(saved);
+            if (equipped.username === data.username) {
+                if (equipped.background) {
+                    currentEquippedItems.background = data.profile_items.findIndex(item => item.name === equipped.background.name);
+                }
+                if (equipped.overlay) {
+                    currentEquippedItems.overlay = data.profile_items.findIndex(item => item.name === equipped.overlay.name);
+                }
+                if (equipped.colour) {
+                    currentEquippedItems.colour = data.profile_items.findIndex(item => item.name === equipped.colour.name);
+                }
+            }
+        }
+    } catch (e) {
+        console.error("Error loading equipped items:", e);
+    }
+}
+
+function applyEquippedItemsToCard() {
+    const profileCard = document.querySelector(".profile-card");
+    if (!profileCard) return;
+
+    profileCard.style.backgroundImage = "";
+    const existingOverlay = profileCard.querySelector(".profile-card-overlay");
+    if (existingOverlay) {
+        existingOverlay.remove();
+    }
+
+    const colourMap = {
+        "UMKL Red": "#ff0000",
+        "Blue": "#0066ff",
+        "Rainbow": "linear-gradient(135deg, #ff9eb5, #ffcc99, #fff5a5, #c5e8d0, #c9daff)"
+    };
+
+    if (currentEquippedItems.background !== null && currentEquippedItems.background !== undefined) {
+        const item = data.profile_items[currentEquippedItems.background];
+        if (item && item.type === "background") {
+            const bgFileName = item.name.replace(/ /g, "_").toLowerCase();
+            profileCard.style.backgroundImage = `url('assets/media/profile/${bgFileName}.avif')`;
+            profileCard.style.backgroundSize = "cover";
+            profileCard.style.backgroundPosition = "center";
+        }
+    }
+
+    if (currentEquippedItems.overlay !== null && currentEquippedItems.overlay !== undefined) {
+        const item = data.profile_items[currentEquippedItems.overlay];
+        if (item && item.type === "overlay") {
+            const overlayFileName = item.name.replace(/ /g, "_").toLowerCase();
+            let existingOverlay = profileCard.querySelector(".profile-card-overlay");
+            if (!existingOverlay) {
+                existingOverlay = document.createElement("div");
+                existingOverlay.className = "profile-card-overlay";
+                profileCard.appendChild(existingOverlay);
+            }
+            existingOverlay.style.backgroundImage = `url('assets/media/profile/${overlayFileName}.avif')`;
+            existingOverlay.style.backgroundSize = "cover";
+            existingOverlay.style.backgroundPosition = "center";
+            existingOverlay.style.position = "absolute";
+            existingOverlay.style.inset = "0";
+            existingOverlay.style.pointerEvents = "none";
+            existingOverlay.style.zIndex = "1";
+            existingOverlay.style.opacity = "0.1";
+        }
+    }
+
+    if (currentEquippedItems.colour !== null && currentEquippedItems.colour !== undefined) {
+        const item = data.profile_items[currentEquippedItems.colour];
+        if (item && item.type === "colour") {
+            if (item.name === "Rainbow") {
+                profileCard.style.border = "3px solid transparent";
+                profileCard.style.background = `linear-gradient(145deg, rgba(255,255,255,0.85), rgba(255,255,255,0.7)) padding-box, ${colourMap["Rainbow"]} border-box`;
+            } else {
+                const colorValue = colourMap[item.name] || item.name;
+                profileCard.style.setProperty('--team-color', colorValue);
+            }
+        }
+    } else {
+        profileCard.style.setProperty('--team-color', `#${data.color}`);
+    }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     console.debug(`%cuserinfogenerate.js %c> %cGenerating player info box`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
@@ -984,6 +1064,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         typeof item === 'object' ? item.name || JSON.stringify(item) : item
     ).join(', ');
 
+    loadEquippedItems();
+
     console.log(data);
     fillInPageTitle(data);
 
@@ -1010,6 +1092,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     matchData = await getMatchData();
                     showError = 0;
                     await generateProfileBox(data, showError);
+                    applyEquippedItemsToCard();
                 } catch (err) {
                     showErrorBox(showError);
                     refreshTimer = setTimeout(retryFetch, 2000);
@@ -1019,6 +1102,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
     await generateProfileBox(data, showError);
+
+    applyEquippedItemsToCard();
 
     const shareButton = document.getElementById("shareButton");
 
