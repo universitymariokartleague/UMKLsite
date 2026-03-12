@@ -540,7 +540,7 @@ function createSPGraph(data, teamColor) {
     ctx.stroke();
 
     // Draw dates on the x-axis
-    const maxLabels = 8;
+    const maxLabels = 4;
     const labelStep = Math.max(1, Math.floor(extendedDates.length / maxLabels));
     const displayIndices = [];
     
@@ -563,7 +563,7 @@ function createSPGraph(data, teamColor) {
             const formattedDate = `${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${dateObj.getFullYear().toString().slice(-2)}`;
 
             ctx.save();
-            ctx.translate(x, canvas.height - padding + 7 * graphResScale);
+            ctx.translate(x, canvas.height - padding + 9 * graphResScale);
             ctx.rotate(-Math.PI / 10);
             ctx.textAlign = 'right';
             ctx.fillText(formattedDate, 0, 0);
@@ -582,7 +582,9 @@ function createSPGraph(data, teamColor) {
             const x = padding + timeRatio * graphWidth;
             const y = canvas.height - padding - (extendedValues[index] / gridMax) * graphHeight;
             
-            ctx.fillText(extendedValues[index], x, y + 15 * graphResScale);
+            const topY = padding + 10 * graphResScale;
+            const textOffset = y - topY < 20 * graphResScale ? 15 * graphResScale : -8 * graphResScale;
+            ctx.fillText(extendedValues[index], x, y + textOffset);
         });
     }
 
@@ -595,7 +597,7 @@ function createSPGraph(data, teamColor) {
         
         if (index > 0) {
             ctx.beginPath();
-            ctx.arc(x, y, 4 * graphResScale, 0, 2 * Math.PI);
+            ctx.arc(x, y, 3 * graphResScale, 0, 2 * Math.PI);
             ctx.fill();
         }
     });
