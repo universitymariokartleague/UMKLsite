@@ -1,5 +1,5 @@
 /*
-    This script is responsible for displaying a clickable calendar with upcoming matches on the 
+    This script is responsible for displaying a clickable calendar with upcoming matches on the
     matches page. It fetches match data from a JSON file and displays it in a calendar format.
     The calendar allows users to click on a date to view the matches scheduled for that day.
 */
@@ -652,6 +652,7 @@ function createMatchHTML(entry, index, date, locale, is12Hour, liveResults) {
                     <summary>Match details</summary>
                     <p class="match-description">${autoLink(entry.description)}</p>
                 </details>
+                ${devMode ? `<pre class="codeBox">${JSON.stringify(entry, null, 2)}</pre>` : ''}
             </div>
         </div>
     `;
@@ -681,8 +682,8 @@ async function showDailyLog(date, dayCell) {
         const is12Hour = uses12HourClock(locale);
 
         expandedLog.innerHTML = `
-            <div class="current-season-area"> 
-                <h3 style="margin: 3px">${formattedDate}</h3>                            
+            <div class="current-season-area">
+                <h3 style="margin: 3px">${formattedDate}</h3>
                 <button id="shareButton"><span class="fa-solid fa-share"></span> Share Date</button>
             </div>
             <hr class="after-title" style="margin-bottom:10px;">
