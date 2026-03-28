@@ -1,6 +1,9 @@
 # This script is intended to be run before committing changes to ensure that the latest JSON files are generated.
 
-import genteamdata, makesitemap, genrss, getytthumbnails
+import genrss
+import genteamdata
+import makesitemap
+
 
 def run_pre_commit_tasks():
     """
@@ -17,11 +20,8 @@ def run_pre_commit_tasks():
     print("Generating sitemap...")
     makesitemap.generate_sitemap()
 
-    # Generate the YouTube IDs for videos on the UMKL YouTube channel (excluding livestreams)
-    print("Generating YouTube IDs...")
-    getytthumbnails.get_yt_ids_for_channel("https://www.youtube.com/@universitymariokartleague/videos")
-
     print("All tasks completed successfully!")
+
 
 if __name__ == "__main__":
     run_pre_commit_tasks()

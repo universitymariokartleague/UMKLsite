@@ -2,16 +2,21 @@
 #
 # This script generates the RSS feed based of news articles on the UMKL site
 
-import datetime, re, os, mimetypes
+import datetime
+import mimetypes
+import os
+import re
 import xml.etree.ElementTree as ET
-from lxml import etree as ET
+
 from bs4 import BeautifulSoup
+from lxml import etree as ET
 
 NEWS_INDEX = "pages/news/index.html"
 SITE_URL = "https://umkl.co.uk/"
 FEED_TITLE = "UMKL News"
 FEED_LINK = "https://umkl.co.uk/pages/news/"
 FEED_DESCRIPTION = "The latest news from the UMKL"
+
 
 def extract_main_html(main_tag: BeautifulSoup, base_url: str) -> str:
     """Generate an RSS description"""
@@ -52,13 +57,20 @@ def extract_main_html(main_tag: BeautifulSoup, base_url: str) -> str:
 
     return f"<div>{html_str}</div>"
 
+
 def get_news_items():
     items = []
     with open(NEWS_INDEX, encoding="utf-8") as f:
         html = f.read()
 
     soup = BeautifulSoup(html, "html.parser")
-    container = soup.find("div", {"class": "news-container after-title news-container-full-page", "id": "news-container"})
+    container = soup.find(
+        "div",
+        {
+            "class": "news-container after-title news-container-full-page",
+            "id": "news-container",
+        },
+    )
     if not container:
         return items
 
@@ -83,7 +95,7 @@ def get_news_items():
 
         def clean_text(text):
             # Remove newlines and collapse multiple spaces to one
-            return re.sub(r'\s+', ' ', text).strip()
+            return re.sub(r"\s+", " ", text).strip()
 
         title = clean_text(title_tag.get_text()) if title_tag else "No Title"
         link = SITE_URL + a_tag["href"].lstrip("/") if a_tag else SITE_URL
@@ -92,8 +104,12 @@ def get_news_items():
         if a_tag and a_tag["href"]:
             try:
                 # Resolve local file path
-                relative_path = a_tag["href"].lstrip("/")  # e.g. "pages/news/2025-07-17/some-article/"
-                local_path = os.path.join(relative_path, "index.html")  # e.g. "pages/news/2025-07-17/some-article/index.html"
+                relative_path = a_tag["href"].lstrip(
+                    "/"
+                )  # e.g. "pages/news/2025-07-17/some-article/"
+                local_path = os.path.join(
+                    relative_path, "index.html"
+                )  # e.g. "pages/news/2025-07-17/some-article/index.html"
 
                 with open(local_path, encoding="utf-8") as f:
                     news_html = f.read()
@@ -123,31 +139,30 @@ def get_news_items():
             if m:
                 pubdate_str = m.group(1)
         try:
-            pubdate = datetime.datetime.strptime(pubdate_str, "%d/%m/%Y").replace(tzinfo=datetime.timezone.utc)
+            pubdate = datetime.datetime.strptime(pubdate_str, "%d/%m/%Y").replace(
+                tzinfo=datetime.timezone.utc
+            )
         except Exception:
             pubdate = datetime.datetime.now(datetime.timezone.utc)
 
-        items.append({
-            "title": title,
-            "link": link,
-            "description": description,
-            "image": image,
-            "pubDate": pubdate.strftime("%a, %d %b %Y %H:%M:%S +0000")
-        })
+        items.append(
+            {
+                "title": title,
+                "link": link,
+                "description": description,
+                "image": image,
+                "pubDate": pubdate.strftime("%a, %d %b %Y %H:%M:%S +0000"),
+            }
+        )
 
     # items.sort(key=lambda x: x["pubDate"], reverse=True)
     return items
 
-def build_rss(items):
-    NSMAP = {
-        "media": "http://search.yahoo.com/mrss/"
-    }
 
-    rss = ET.Element(
-        "rss",
-        version="2.0",
-        nsmap=NSMAP
-    )
+def build_rss(items):
+    NSMAP = {"media": "http://search.yahoo.com/mrss/"}
+
+    rss = ET.Element("rss", version="2.0", nsmap=NSMAP)
 
     channel = ET.SubElement(rss, "channel")
     ET.SubElement(channel, "title").text = FEED_TITLE
@@ -160,7 +175,9 @@ def build_rss(items):
 
     image = ET.SubElement(channel, "image")
     ET.SubElement(image, "title").text = FEED_TITLE
-    ET.SubElement(image, "url").text = "https://umkl.co.uk/assets/media/brand/favicon.png"
+    ET.SubElement(
+        image, "url"
+    ).text = "https://umkl.co.uk/assets/media/brand/favicon.png"
     ET.SubElement(image, "link").text = "https://umkl.co.uk/"
 
     for item in items:
@@ -176,7 +193,7 @@ def build_rss(items):
                 ET.QName(NSMAP["media"], "content"),
                 url=item["image"],
                 type=mime_type or "image/webp",
-                medium="image"
+                medium="image",
             )
 
         clean_desc = re.sub(r"\s+", " ", item["description"]).strip()
@@ -185,17 +202,14 @@ def build_rss(items):
 
         ET.SubElement(item_elem, "pubDate").text = item["pubDate"]
 
-    return ET.tostring(
-        rss,
-        encoding="utf-8",
-        xml_declaration=True,
-        pretty_print=True
-    )
+    return ET.tostring(rss, encoding="utf-8", xml_declaration=True, pretty_print=True)
+
 
 def generate_rss_feed():
     news_items = get_news_items()
     rss_xml = build_rss(news_items)
     with open("news.xml", "wb") as f:
         f.write(rss_xml)
+
 
 generate_rss_feed()

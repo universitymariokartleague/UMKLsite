@@ -2,6 +2,7 @@ https://umkl.co.uk/
 https://umkl.co.uk/404
 https://umkl.co.uk/404.html
 https://umkl.co.uk/
+https://umkl.co.uk/pages/changelog/
 https://umkl.co.uk/pages/credits/
 https://umkl.co.uk/pages/live/
 https://umkl.co.uk/pages/livereversed/
@@ -21,6 +22,7 @@ https://umkl.co.uk/pages/news/2025-11-06/season-2-round-2-fixtures-revealed/
 https://umkl.co.uk/pages/news/2026-01-01/season-2-round-3-fixtures-revealed/
 https://umkl.co.uk/pages/policies/universityrelations/
 https://umkl.co.uk/pages/privacy/
+https://umkl.co.uk/pages/profile/
 https://umkl.co.uk/pages/rules/
 https://umkl.co.uk/pages/rules/brand/
 https://umkl.co.uk/pages/rules/cheepcheepcommands/
@@ -41,6 +43,3 @@ https://umkl.co.uk/pages/tools/colourpicker/
 https://umkl.co.uk/pages/tools/comborandomiser/
 https://umkl.co.uk/pages/tools/favtrack/
 https://umkl.co.uk/pages/tools/trackrandomiser/
-https://umkl.co.uk/pages/changelog/
-https://umkl.co.uk/pages/videos/
-https://umkl.co.uk/pages/profile/
