@@ -1,62 +1,62 @@
 [
-    {
-        "name": "UMKL Red",
-        "sp_cost": 10,
-        "type": "colour"
-    },
-    {
-        "name": "Blue",
-        "sp_cost": 50,
-        "type": "colour"
-    },
-    {
-        "name": "Rainbow",
-        "sp_cost": 1050,
-        "type": "colour"
-    },
-    {
-        "name": "Sparkly",
-        "sp_cost": 980,
-        "type": "overlay"
-    },
-    {
-        "name": "Cheep Cheep",
-        "sp_cost": 75,
-        "type": "background"
-    },
-    {
-        "name": "Cheep Cheep Wrap",
-        "sp_cost": 125,
-        "type": "background"
-    },
-    {
-        "name": "Mario Kart 8",
-        "sp_cost": 200,
-        "type": "background"
-    },
-    {
-        "name": "Mario Kart 8 Deluxe",
-        "sp_cost": 250,
-        "type": "background"
-    },
-    {
-        "name": "Mario Kart 8 Deluxe Booster Course Pass",
-        "sp_cost": 300,
-        "type": "background"
-    },
-    {
-        "name": "Mario Kart World",
-        "sp_cost": 450,
-        "type": "background"
-    },
-    {
-        "name": "Super Mario Maker 2",
-        "sp_cost": 550,
-        "type": "background"
-    },
-    {
-        "name": "Super Mario Maker 2 Gameplay",
-        "sp_cost": 575,
-        "type": "background"
-    }
+  {
+    "name": "UMKL Red",
+    "sp_cost": 10,
+    "type": "colour"
+  },
+  {
+    "name": "Blue",
+    "sp_cost": 50,
+    "type": "colour"
+  },
+  {
+    "name": "Rainbow",
+    "sp_cost": 1050,
+    "type": "colour"
+  },
+  {
+    "name": "Sparkly",
+    "sp_cost": 980,
+    "type": "overlay"
+  },
+  {
+    "name": "Cheep Cheep",
+    "sp_cost": 75,
+    "type": "background"
+  },
+  {
+    "name": "Cheep Cheep Wrap",
+    "sp_cost": 125,
+    "type": "background"
+  },
+  {
+    "name": "Mario Kart 8",
+    "sp_cost": 200,
+    "type": "background"
+  },
+  {
+    "name": "Mario Kart 8 Deluxe",
+    "sp_cost": 250,
+    "type": "background"
+  },
+  {
+    "name": "Mario Kart 8 Deluxe Booster Course Pass",
+    "sp_cost": 300,
+    "type": "background"
+  },
+  {
+    "name": "Mario Kart World",
+    "sp_cost": 450,
+    "type": "background"
+  },
+  {
+    "name": "Super Mario Maker 2",
+    "sp_cost": 550,
+    "type": "background"
+  },
+  {
+    "name": "Super Mario Maker 2 Gameplay",
+    "sp_cost": 575,
+    "type": "background"
+  }
 ]

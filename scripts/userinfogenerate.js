@@ -3,66 +3,9 @@
 */
 import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareImage, showImagePreview, setOriginalMessage } from './shareAPIhelper.js';
 
-const profileCardFormatHTML = `
-    <div class="profile-card-wrapper">
-        <div class="profile-card" style="--team-color: #{{color}};">
-            <img src="assets/media/brand/guidelines/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />
-            <div class="profile-card-content">
-                <div class="profile-card-header">
-                    <img src="{{PFP}}" alt="{{username}} profile picture" class="profile-card-avatar" 
-                        onload="this.style.opacity=1" onerror="this.onerror=null; this.src='assets/media/faq/defaultavatar.avif';"/>
-                    <div class="profile-card-user-info">
-                        <h3 class="profile-card-username">{{username}}</h3>
-                        <p class="profile-card-team"><a href="pages/teams/details/?team={{team}}">{{team}}</a></p>
-                    </div>
-                </div>
-                <div class="profile-card-stats">
-                    <div class="stat-item">
-                        <span class="stat-label">Career Points</span>
-                        <span class="stat-value">{{careerPoints}}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Team Wins</span>
-                        <span class="stat-value">{{teamWins}}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">SP</span>
-                        <span class="stat-value">{{sp}}</span>
-                    </div>
-                </div>
-                <div class="profile-card-sp-graph">
-                    <p class="graph-title">SP History</p>
-                    <div class="sp-graph-container">
-                        <canvas id="spGraph"></canvas>
-                    </div>
-                </div>
-                <p class="graph-title">Extra stats</p>
-                <div class="profile-card-detailed-stats">
-                    <div class="stat-item">
-                        <span class="stat-label">Matches <br>Played</span>
-                        <span class="stat-value">{{matchesPlayed}}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">First Places <br>(Podiums)</span>
-                        <span class="stat-value">{{firstPlaces}}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Highest <br>Finish</span>
-                        <span class="stat-value">{{highestFinish}}</span>
-                    </div>
-                </div>
-                <div class="profile-footer-info">
-                    <div class="card-help">{{cardExtraText}}</div>
-                    {{profileCustomisationButton}}
-                </div>
-            </div>
-        </div>
-    </div>
-`;
-
-const profileCardContentFormatHTML = `
+const profileCardContentHTML = `
     <div class="profile-card-header">
-        <img src="{{PFP}}" alt="{{username}} profile picture" class="profile-card-avatar" 
+        <img src="{{PFP}}" alt="{{username}} profile picture" class="profile-card-avatar"
             onload="this.style.opacity=1" onerror="this.onerror=null; this.src='assets/media/faq/defaultavatar.avif';"/>
         <div class="profile-card-user-info">
             <h3 class="profile-card-username">{{username}}</h3>
@@ -110,6 +53,17 @@ const profileCardContentFormatHTML = `
     </div>
 `;
 
+const profileCardFormatHTML = `
+    <div class="profile-card-wrapper">
+        <div class="profile-card" style="--team-color: #{{color}};">
+            <img src="assets/media/brand/guidelines/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />
+            <div class="profile-card-content">
+                {{profileCardContent}}
+            </div>
+        </div>
+    </div>
+`;
+
 const userCardBox = document.getElementById("userCardBox")
 const teamNameBox = document.getElementById("teamNameBox")
 
@@ -135,6 +89,21 @@ let cardChanged = false;
 let refreshTimer = null;
 let startTime;
 
+async function umklFetch(url, body = null) {
+    const options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+    };
+    if (body) options.body = JSON.stringify(body);
+
+    const response = await fetch(url, options);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+    const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+    localStorage.setItem("apiReqsSent", apiReqsSent + 1);
+    return response.json();
+}
+
 function findMatchByEventID(eventID) {
     for (const date in matchData) {
         const matches = matchData[date];
@@ -153,8 +122,8 @@ function fillInPageTitle(data) {
     teamNameBox.innerText = `${makePossessive(data.username)} Profile`;
 }
 
-function generateProfileCardHTML(data) {
-    return profileCardFormatHTML
+function generateProfileCardContent(data) {
+    return profileCardContentHTML
         .replace("{{PFP}}", data.pfp.replace("png", "webp").replace("gif", "webp"))
         .replaceAll("{{username}}", data.username)
         .replaceAll("{{team}}", data.team || "No Team")
@@ -169,20 +138,8 @@ function generateProfileCardHTML(data) {
         .replace("{{profileCustomisationButton}}", areProfileItems ? `<button class="customise-button" id="showCardProfileItemsButton"><span class="fa-solid fa-paintbrush"></span> Customise profile</button>` : '');
 }
 
-function generateProfileCardContent(data) {
-    return profileCardContentFormatHTML
-        .replace("{{PFP}}", data.pfp.replace("png", "webp").replace("gif", "webp"))
-        .replaceAll("{{username}}", data.username)
-        .replaceAll("{{team}}", data.team || "No Team")
-        .replace("{{careerPoints}}", data.career_points || "0")
-        .replace("{{matchesPlayed}}", data.matches_played || "0")
-        .replace("{{sp}}", data.sp || "0")
-        .replace("{{color}}", data.color || "ccc")
-        .replace("{{teamWins}}", data.team_wins || "0")
-        .replace("{{firstPlaces}}", data.first_places || "0")
-        .replace("{{highestFinish}}", data.highest_finish || "N/A")
-        .replace("{{cardExtraText}}", "Use /profile to see your own card!")
-        .replace("{{profileCustomisationButton}}", areProfileItems ? `<button class="customise-button" id="showCardProfileItemsButton"><span class="fa-solid fa-paintbrush"></span> Customise profile</button>` : '');
+function generateProfileCardHTML(data) {
+    return profileCardFormatHTML.replace("{{profileCardContent}}", generateProfileCardContent(data));
 }
 
 let profileCustomizeButtonHandler = null;
@@ -197,14 +154,19 @@ function cleanupProfileEventListeners() {
     }
 }
 
+let profileButtonTimeout = null;
+
 function attachProfileEventListeners() {
     cleanupProfileEventListeners();
 
     if (areProfileItems) {
         const showCardProfileItemsButton = document.getElementById("showCardProfileItemsButton");
         if (showCardProfileItemsButton) {
-            profileCustomizeButtonHandler = () => { 
-                showCardProfileItems(); 
+            profileCustomizeButtonHandler = () => {
+                if (profileButtonTimeout) clearTimeout(profileButtonTimeout);
+                profileButtonTimeout = setTimeout(() => {
+                    showCardProfileItems();
+                }, 50);
             };
             showCardProfileItemsButton.addEventListener("click", profileCustomizeButtonHandler);
         }
@@ -218,34 +180,29 @@ let card3DMouseLeaveHandler = null;
 let card3DGlareMouseMoveHandler = null;
 
 function cleanupCard3DEffect() {
-    if (card3DMouseMoveHandler) {
-        document.removeEventListener("mousemove", card3DMouseMoveHandler);
-        card3DMouseMoveHandler = null;
-    }
-    if (card3DMouseLeaveHandler) {
-        document.removeEventListener("mouseleave", card3DMouseLeaveHandler);
-        card3DMouseLeaveHandler = null;
-    }
-    if (card3DGlareMouseMoveHandler) {
-        document.removeEventListener("mousemove", card3DGlareMouseMoveHandler);
-        card3DGlareMouseMoveHandler = null;
-    }
+    const handlers = [card3DMouseMoveHandler, card3DMouseLeaveHandler, card3DGlareMouseMoveHandler];
+    const events = ["mousemove", "mouseleave", "mousemove"];
+
+    handlers.forEach((handler, i) => {
+        if (handler) {
+            document.removeEventListener(events[i], handler);
+        }
+    });
+
+    card3DMouseMoveHandler = card3DMouseLeaveHandler = card3DGlareMouseMoveHandler = null;
+
     if (card3DAnimationId) {
         cancelAnimationFrame(card3DAnimationId);
         card3DAnimationId = null;
     }
-    
-    const existingGlare = document.querySelector(".profile-card > div[style*='mix-blend-mode: overlay']");
-    if (existingGlare) {
-        existingGlare.remove();
-    }
-    
+
+    document.querySelector(".profile-card > div[style*='mix-blend-mode: overlay']")?.remove();
     card3DEffectActive = false;
 }
 
 function addCard3DEffect() {
     cleanupCard3DEffect();
-    
+
     const card = document.querySelector(".profile-card");
     if (!card) return;
 
@@ -281,10 +238,10 @@ function addCard3DEffect() {
 
         const rotateX = takingCardScreenshot ? 0 : currentX;
         const rotateY = takingCardScreenshot ? 0 : currentY;
-        
+
         if (!isFlipping) {
             card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        } 
+        }
 
         card3DAnimationId = requestAnimationFrame(animate);
     }
@@ -332,7 +289,7 @@ async function generateProfileBox(data, showError) {
     if (teamData) {
         document.documentElement.style.setProperty('--highlight-color', `#${data.color}80`);
     }
-    
+
     userCardBox.innerHTML = tempProfileCard;
 
     attachProfileEventListeners();
@@ -402,23 +359,7 @@ function toOrdinal(n) {
 }
 
 async function getCurrentSeason() {
-    return fetch('https://api.umkl.co.uk/seasoninfo', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            season: 0
-        })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
+    return umklFetch('https://api.umkl.co.uk/seasoninfo', { season: 0 });
 }
 
 function createSPGraph(data, teamColor) {
@@ -440,18 +381,18 @@ function createSPGraph(data, teamColor) {
 
     const history = spData.history;
     const dates = Object.keys(history).sort();
-    
+
     const firstDate = new Date(dates[0]);
     const fakeStartDate = new Date(firstDate.getTime() - (60 * 24 * 60 * 60 * 1000)); // 2 months before
     const fakeDateStr = fakeStartDate.toISOString().split('T')[0];
     const extendedDates = [fakeDateStr, ...dates];
     const extendedValues = [0];
-    
+
     const dateTimestamps = extendedDates.map(date => new Date(date).getTime());
     const fakeStartTime = dateTimestamps[0];
     const maxTime = dateTimestamps[dateTimestamps.length - 1];
     const timeRange = maxTime - fakeStartTime || 1;
-    
+
     let cumulative = 0;
     extendedDates.forEach((date, index) => {
         if (index === 0) {
@@ -484,16 +425,16 @@ function createSPGraph(data, teamColor) {
         const exponent = Math.floor(Math.log10(max));
         const magnitude = Math.pow(10, exponent);
         const normalized = max / magnitude;
-        
+
         let rounded;
         if (normalized <= 1) rounded = 1;
         else if (normalized <= 2) rounded = 2;
         else if (normalized <= 5) rounded = 5;
         else rounded = 10;
-        
+
         return rounded * magnitude;
     };
-    
+
     const gridMax = getGraphRoundNumber(maxValue);
 
     // Draw graph and y-axis labels
@@ -502,16 +443,16 @@ function createSPGraph(data, teamColor) {
     ctx.font = `${10 * graphResScale}px Montserrat`;
     ctx.textAlign = 'right';
     ctx.setLineDash([2, 2]);
-    
+
     for (let i = 0; i <= 5; i++) {
         const y = padding + (graphHeight / 5) * i;
         const value = Math.round(gridMax * (1 - i / 5));
-        
+
         ctx.beginPath();
         ctx.moveTo(padding, y);
         ctx.lineTo(canvas.width - padding, y);
         ctx.stroke();
-        
+
         let label;
         if (value >= 1000) {
             label = (value / 1000) + 'K';
@@ -540,7 +481,7 @@ function createSPGraph(data, teamColor) {
     const maxLabels = 4;
     const labelStep = Math.max(1, Math.floor(extendedDates.length / maxLabels));
     const displayIndices = [];
-    
+
     for (let i = 1; i < extendedDates.length; i += labelStep) {
         displayIndices.push(i);
     }
@@ -551,7 +492,7 @@ function createSPGraph(data, teamColor) {
     if (extendedDates.length > 0) {
         ctx.fillStyle = '#666';
         ctx.font = `${10 * graphResScale}px Montserrat`;
-        
+
         displayIndices.forEach(index => {
             const timeRatio = (dateTimestamps[index] - fakeStartTime) / timeRange;
             const x = padding + timeRatio * graphWidth;
@@ -573,12 +514,12 @@ function createSPGraph(data, teamColor) {
         ctx.fillStyle = teamColor;
         ctx.font = `${11 * graphResScale}px Montserrat`;
         ctx.textAlign = 'center';
-        
+
         displayIndices.forEach(index => {
             const timeRatio = (dateTimestamps[index] - fakeStartTime) / timeRange;
             const x = padding + timeRatio * graphWidth;
             const y = canvas.height - padding - (extendedValues[index] / gridMax) * graphHeight;
-            
+
             const topY = padding + 10 * graphResScale;
             const textOffset = y - topY < 20 * graphResScale ? 15 * graphResScale : -8 * graphResScale;
             ctx.fillText(extendedValues[index], x, y + textOffset);
@@ -591,7 +532,7 @@ function createSPGraph(data, teamColor) {
         const timeRatio = (dateTimestamps[index] - fakeStartTime) / timeRange;
         const x = padding + timeRatio * graphWidth;
         const y = canvas.height - padding - (extendedValues[index] / gridMax) * graphHeight;
-        
+
         if (index > 0) {
             ctx.beginPath();
             ctx.arc(x, y, 3 * graphResScale, 0, 2 * Math.PI);
@@ -601,21 +542,7 @@ function createSPGraph(data, teamColor) {
 }
 
 async function getMatchData() {
-    return fetch('https://api.umkl.co.uk/matchdata', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: "{}"
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
+    return umklFetch('https://api.umkl.co.uk/matchdata', {});
 }
 
 async function getMatchDataFallback() {
@@ -628,28 +555,11 @@ async function getMatchDataFallback() {
 
 async function getTeamdata(team, season) {
     console.debug(`%cuserinfogenerate.js %c> %cFetching playerdata from the API...`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
-    return fetch('https://api.umkl.co.uk/teamdata', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            team: `${team}`,
-            season: `${season}`
-        })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
+    return umklFetch('https://api.umkl.co.uk/teamdata', { team: `${team}`, season: `${season}` });
 }
 
 window.addEventListener("resize", async () => {
-    if (data) { 
+    if (data) {
         createSPGraph(data, `#${data.color}`);
     }
 });
@@ -694,7 +604,7 @@ async function preloadCardImage() {
             dataURL = await htmlToImage.toPng(node, {
                 pixelRatio: shareResScale,
                 width: isMobile ? rect.width : rect.width + 40,
-                height: node.scrollHeight + 40, 
+                height: node.scrollHeight + 40,
                 style: {
                     transform: isMobile ? 'none' : `translateX(-150px)`
                 }
@@ -757,7 +667,7 @@ async function generateCardImage() {
     }
 }
 
-function showCardProfileItems() {    
+function showCardProfileItems() {
     if (!isFlipping && !currentlyShowingItems) {
         const profileCard = document.querySelector(".profile-card");
         const profileCardContent = document.querySelector(".profile-card-content");
@@ -769,10 +679,10 @@ function showCardProfileItems() {
             profileCard.style.transform = 'rotateY(90deg)';
             profileCard.style.transition = 'transform 0.25s ease-in-out';
             profileCard.style.transformStyle = 'preserve-3d';
-            
+
             setTimeout(() => {
                 profileCard.style.transform = 'rotateY(90deg)';
-                
+
                 setTimeout(() => {
                     profileCardContent.innerHTML = `
                         <div class="items-interface-wrapper">
@@ -796,7 +706,7 @@ function showCardProfileItems() {
                             </div>
                         </div>
                     `;
-                    
+
                     document.querySelector(".profile-umkl-logo")?.remove();
                     populateItemsGrid('all');
                     attachCategoryListeners();
@@ -815,7 +725,7 @@ function showCardProfileItems() {
     }
 }
 
-async function goBackToProfile() {    
+async function goBackToProfile() {
     const profileCard = document.querySelector(".profile-card");
     const profileCardContent = document.querySelector(".profile-card-content");
 
@@ -825,20 +735,20 @@ async function goBackToProfile() {
     profileCard.style.transform = 'rotateY(90deg)';
     profileCard.style.transition = 'transform 0.25s ease-in-out';
     profileCard.style.transformStyle = 'preserve-3d';
-    
+
     setTimeout(() => {
         profileCard.style.transform = 'rotateY(90deg)';
 
         setTimeout(async () => {
             cleanupCard3DEffect();
             cleanupProfileEventListeners();
-            
+
             profileCardContent.innerHTML = generateProfileCardContent(data);
-            
+
             const logoHTML = `<img src="assets/media/brand/guidelines/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />`;
-            
+
             profileCard.insertAdjacentHTML('afterbegin', logoHTML);
-            
+
             profileCard.style.transform = 'rotateY(0deg)';
 
             createSPGraph(data, `#${data.color}`);
@@ -858,7 +768,7 @@ async function goBackToProfile() {
 function populateItemsGrid(category) {
     const grid = document.getElementById("itemsGrid");
     const filteredItems = category === "all"
-        ? data.profile_items 
+        ? data.profile_items
         : data.profile_items.filter(item => item.type === category);
 
     grid.innerHTML = "";
@@ -891,19 +801,19 @@ function createItemElement(item, index, isEquipped) {
     return div;
 }
 
-function toggleItemEquip(type, itemIndex) {    
+function toggleItemEquip(type, itemIndex) {
     const filteredItems = document.querySelector(".category-button.active").dataset.category === "all"
         ? data.profile_items
         : data.profile_items.filter(item => item.type === type);
     const item = filteredItems[itemIndex];
     const globalIndex = data.profile_items.indexOf(item);
-    
+
     if (currentEquippedItems[type] === globalIndex) {
         currentEquippedItems[type] = null;
     } else {
         currentEquippedItems[type] = globalIndex;
     }
-    
+
     const activeCategory = document.querySelector(".category-button.active").dataset.category;
     populateItemsGrid(activeCategory);
 }
@@ -924,6 +834,8 @@ function attachCategoryListeners() {
 }
 
 function saveItemEquips() {
+    if (isFlipping) return;
+
     const equippedItemsData = {};
     Object.keys(currentEquippedItems).forEach(type => {
         if (currentEquippedItems[type] !== null) {
@@ -934,7 +846,7 @@ function saveItemEquips() {
     equippedItemsData["username"] = data.username;
     cardChanged = true;
     console.debug(`%cuserinfogenerate.js %c> %cSaving equipped items: ${JSON.stringify(equippedItemsData)}`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
-    
+
     localStorage.setItem("userProfileSettings", JSON.stringify(equippedItemsData));
 
     goBackToProfile()
@@ -947,18 +859,14 @@ window.goBackToProfile = goBackToProfile;
 function loadEquippedItems() {
     try {
         const saved = localStorage.getItem("userProfileSettings");
-        if (saved) {
-            const equipped = JSON.parse(saved);
-            if (equipped.username === data.username) {
-                if (equipped.background) {
-                    currentEquippedItems.background = data.profile_items.findIndex(item => item.name === equipped.background.name);
-                }
-                if (equipped.overlay) {
-                    currentEquippedItems.overlay = data.profile_items.findIndex(item => item.name === equipped.overlay.name);
-                }
-                if (equipped.colour) {
-                    currentEquippedItems.colour = data.profile_items.findIndex(item => item.name === equipped.colour.name);
-                }
+        if (!saved) return;
+
+        const equipped = JSON.parse(saved);
+        if (equipped.username !== data.username) return;
+
+        for (const type of ['background', 'overlay', 'colour']) {
+            if (equipped[type]) {
+                currentEquippedItems[type] = data.profile_items.findIndex(item => item.name === equipped[type].name);
             }
         }
     } catch (e) {
@@ -971,10 +879,7 @@ function applyEquippedItemsToCard() {
     if (!profileCard) return;
 
     profileCard.style.backgroundImage = "";
-    const existingOverlay = profileCard.querySelector(".profile-card-overlay");
-    if (existingOverlay) {
-        existingOverlay.remove();
-    }
+    profileCard.querySelector(".profile-card-overlay")?.remove();
 
     const colourMap = {
         "UMKL Red": "#ff0000",
@@ -982,19 +887,19 @@ function applyEquippedItemsToCard() {
         "Rainbow": "linear-gradient(135deg, #ff9eb5, #ffcc99, #fff5a5, #c5e8d0, #c9daff)"
     };
 
-    if (currentEquippedItems.background !== null && currentEquippedItems.background !== undefined) {
+    if (currentEquippedItems.background != null) {
         const item = data.profile_items[currentEquippedItems.background];
-        if (item && item.type === "background") {
+        if (item?.type === "background") {
             const bgFileName = item.name.replace(/ /g, "_").toLowerCase();
-            profileCard.style.backgroundImage = `url('assets/media/profile/${bgFileName}.avif')`;
+            profileCard.style.backgroundImage = `url('assets/media/profile/bg/${bgFileName}.avif')`;
             profileCard.style.backgroundSize = "cover";
             profileCard.style.backgroundPosition = "center";
         }
     }
 
-    if (currentEquippedItems.overlay !== null && currentEquippedItems.overlay !== undefined) {
+    if (currentEquippedItems.overlay != null) {
         const item = data.profile_items[currentEquippedItems.overlay];
-        if (item && item.type === "overlay") {
+        if (item?.type === "overlay") {
             const overlayFileName = item.name.replace(/ /g, "_").toLowerCase();
             let existingOverlay = profileCard.querySelector(".profile-card-overlay");
             if (!existingOverlay) {
@@ -1002,26 +907,27 @@ function applyEquippedItemsToCard() {
                 existingOverlay.className = "profile-card-overlay";
                 profileCard.appendChild(existingOverlay);
             }
-            existingOverlay.style.backgroundImage = `url('assets/media/profile/${overlayFileName}.avif')`;
-            existingOverlay.style.backgroundSize = "cover";
-            existingOverlay.style.backgroundPosition = "center";
-            existingOverlay.style.position = "absolute";
-            existingOverlay.style.inset = "0";
-            existingOverlay.style.pointerEvents = "none";
-            existingOverlay.style.zIndex = "1";
-            existingOverlay.style.opacity = "0.1";
+            Object.assign(existingOverlay.style, {
+                backgroundImage: `url('assets/media/profile/${overlayFileName}.avif')`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                position: "absolute",
+                inset: "0",
+                pointerEvents: "none",
+                zIndex: "1",
+                opacity: "0.1"
+            });
         }
     }
 
-    if (currentEquippedItems.colour !== null && currentEquippedItems.colour !== undefined) {
+    if (currentEquippedItems.colour != null) {
         const item = data.profile_items[currentEquippedItems.colour];
-        if (item && item.type === "colour") {
+        if (item?.type === "colour") {
             if (item.name === "Rainbow") {
                 profileCard.style.border = "3px solid transparent";
                 profileCard.style.background = `linear-gradient(145deg, rgba(255,255,255,0.85), rgba(255,255,255,0.7)) padding-box, ${colourMap["Rainbow"]} border-box`;
             } else {
-                const colorValue = colourMap[item.name] || item.name;
-                profileCard.style.setProperty('--team-color', colorValue);
+                profileCard.style.setProperty('--team-color', colourMap[item.name] || item.name);
             }
         }
     } else {
@@ -1047,7 +953,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             const response = await fetch('database/profileunlockitems.json');
             const unlockItems = await response.json();
-            
+
             mappedProfileItems = uParam.split('').map((char, index) => {
                 if (char === '1' && index < unlockItems.length) {
                     return unlockItems[index];
@@ -1060,7 +966,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     data.profile_items = mappedProfileItems;
-    data.profile_items_readable = mappedProfileItems.map(item => 
+    data.profile_items_readable = mappedProfileItems.map(item =>
         typeof item === 'object' ? item.name || JSON.stringify(item) : item
     ).join(', ');
 
