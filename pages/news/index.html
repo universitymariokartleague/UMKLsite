@@ -10,8 +10,8 @@
     <meta content="See all the news concerning the UMKL" name="description" />
     <link href="assets/media/brand/favicon.png" rel="icon" type="image/png" />
     <link href="css/style.css" rel="stylesheet" />
-    <link href="css/news.css" rel="stylesheet">
-    <link href="css/settings.css" rel="stylesheet" />
+    <link href="css/news.css" rel="stylesheet" />
+    <link href="css/settings.css" rel="stylesheet">
     <link href="css/ext/fontawesome.min.css" rel="stylesheet" />
     <meta content="dark light" name="color-scheme" />
 
@@ -26,11 +26,11 @@
     <meta content="summary_large_image" name="twitter:card" />
 
     <!-- Components -->
-    <script type="module" src="components/navbar.js" defer></script>
-    <script type="module" src="components/footer.js" defer></script>
+    <script defer="" src="components/navbar.js" type="module"></script>
+    <script defer="" src="components/footer.js" type="module"></script>
 
     <!-- Scripts -->
-    <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() { let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) } checkTheme();</script>
+    <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();</script>
     <script defer="" src="scripts/settings.js" type="module"></script>
     <script defer="" src="scripts/tagnewsposts.js" type="module"></script>
     </link>
@@ -51,21 +51,44 @@
         </div>
 
         <div id="news-search-wrapper">
-            <input type="text" id="news-search" placeholder="Search news..." />
+            <input id="news-search" placeholder="Search news..." type="text" />
         </div>
 
         <div class="news-wrapper news-wrapper-full-page">
             <div class="news-container after-title news-container-full-page" id="news-container">
-                                <div class="news-box">
+                <div class="news-box">
                     <article class="news-text">
-                        <a href="pages/news/2026-01-01/season-2-round-3-fixtures-revealed/"><span
-                                class="news-title">Season 2 Round 3 Fixtures Revealed!</span></a><br />
-                        <span class="news-desc">The matches for Round 3 of Season 2 have been revealed! Find out who will be facing each other here!</span>
+                        <a href="pages/news/2026-03-31/season-2-round-4-fixtures-revealed/"><span
+                                class="news-title">Season 2
+                                Round 4 Fixtures Revealed!</span></a><br />
+                        <span class="news-desc">The matches for Round 4 of Season 2 have been revealed! Find out who
+                            will be facing each other here!</span>
                     </article>
                     <div class="news-image">
                         <picture>
-                            <source srcset="assets/media/news/season2fixtures3.avif" type="image/avif">
-                            <img src="assets/media/news/season2fixtures3.jpg" alt="Matches Season 2 - Round 3" loading="lazy" onload="this.style.opacity=1">
+                            <source srcset="assets/media/news/season2fixtures4.avif" type="image/avif" />
+                            <img alt="Matches Season 2 - Round 4" loading="lazy" onload="this.style.opacity=1"
+                                src="assets/media/news/season2fixtures4.jpg" />
+                        </picture>
+                    </div>
+                    <span class="news-date">31/03/2026
+                        <span class="tags">
+                            <tag>Season 2</tag>
+                        </span>
+                    </span>
+                </div>
+                <div class="news-box">
+                    <article class="news-text">
+                        <a href="pages/news/2026-01-01/season-2-round-3-fixtures-revealed/"><span
+                                class="news-title">Season 2 Round 3 Fixtures Revealed!</span></a><br />
+                        <span class="news-desc">The matches for Round 3 of Season 2 have been revealed! Find out who
+                            will be facing each other here!</span>
+                    </article>
+                    <div class="news-image">
+                        <picture>
+                            <source srcset="assets/media/news/season2fixtures3.avif" type="image/avif" />
+                            <img alt="Matches Season 2 - Round 3" loading="lazy" onload="this.style.opacity=1"
+                                src="assets/media/news/season2fixtures3.jpg" />
                         </picture>
                     </div>
                     <span class="news-date">01/01/2026
@@ -78,12 +101,14 @@
                     <article class="news-text">
                         <a href="pages/news/2025-11-06/season-2-round-2-fixtures-revealed/"><span
                                 class="news-title">Season 2 Round 2 Fixtures Revealed!</span></a><br />
-                        <span class="news-desc">The second round of Season 2 fixtures has been revealed! Find out who will be facing each other here!</span>
+                        <span class="news-desc">The second round of Season 2 fixtures has been revealed! Find out who
+                            will be facing each other here!</span>
                     </article>
                     <div class="news-image">
                         <picture>
-                            <source srcset="assets/media/news/season2fixtures2.avif" type="image/avif">
-                            <img src="assets/media/news/season2fixtures2.jpg" alt="Matches Season 2 - Round 2" loading="lazy" onload="this.style.opacity=1">
+                            <source srcset="assets/media/news/season2fixtures2.avif" type="image/avif" />
+                            <img alt="Matches Season 2 - Round 2" loading="lazy" onload="this.style.opacity=1"
+                                src="assets/media/news/season2fixtures2.jpg" />
                         </picture>
                     </div>
                     <span class="news-date">06/11/2025
@@ -96,12 +121,14 @@
                     <article class="news-text">
                         <a href="pages/news/2025-10-01/season-2-round-1-fixtures-revealed/"><span
                                 class="news-title">Season 2 Round 1 Fixtures Revealed!</span></a><br />
-                        <span class="news-desc">The first round of Season 2 fixtures has been revealed! Find out who will be facing each other here!</span>
+                        <span class="news-desc">The first round of Season 2 fixtures has been revealed! Find out who
+                            will be facing each other here!</span>
                     </article>
                     <div class="news-image">
                         <picture>
-                            <source srcset="assets/media/news/season2fixtures.avif" type="image/avif">
-                            <img src="assets/media/news/season2fixtures.jpg" alt="Matches Season 2 - Round 1" loading="lazy" onload="this.style.opacity=1">
+                            <source srcset="assets/media/news/season2fixtures.avif" type="image/avif" />
+                            <img alt="Matches Season 2 - Round 1" loading="lazy" onload="this.style.opacity=1"
+                                src="assets/media/news/season2fixtures.jpg" />
                         </picture>
                     </div>
                     <span class="news-date">01/10/2025
@@ -119,8 +146,9 @@
                     </article>
                     <div class="news-image">
                         <picture>
-                            <source srcset="assets/media/news/season2structure.avif" type="image/avif">
-                            <img src="assets/media/news/season2structure.jpg" alt="How will Season 2 work?" loading="lazy" onload="this.style.opacity=1">
+                            <source srcset="assets/media/news/season2structure.avif" type="image/avif" />
+                            <img alt="How will Season 2 work?" loading="lazy" onload="this.style.opacity=1"
+                                src="assets/media/news/season2structure.jpg" />
                         </picture>
                     </div>
                     <span class="news-date">29/09/2025 <span class="tags">
@@ -136,8 +164,9 @@
                     </article>
                     <div class="news-image">
                         <picture>
-                            <source srcset="assets/media/news/newcommands.avif" type="image/avif">
-                            <img src="assets/media/news/newcommands.jpg" alt="An image showing new commands that can be used with the Cheep Cheep app" loading="lazy" onload="this.style.opacity=1">
+                            <source srcset="assets/media/news/newcommands.avif" type="image/avif" />
+                            <img alt="An image showing new commands that can be used with the Cheep Cheep app"
+                                loading="lazy" onload="this.style.opacity=1" src="assets/media/news/newcommands.jpg" />
                         </picture>
                     </div>
                     <span class="news-date">17/07/2025 <span class="tags">
@@ -155,8 +184,10 @@
                     </article>
                     <div class="news-image">
                         <picture>
-                            <source srcset="assets/media/news/summertestmatches.avif" type="image/avif">
-                            <img src="assets/media/news/summertestmatches.jpg" alt="An image showing new commands that can be used with the Cheep Cheep app" loading="lazy" onload="this.style.opacity=1">
+                            <source srcset="assets/media/news/summertestmatches.avif" type="image/avif" />
+                            <img alt="An image showing new commands that can be used with the Cheep Cheep app"
+                                loading="lazy" onload="this.style.opacity=1"
+                                src="assets/media/news/summertestmatches.jpg" />
                         </picture>
                     </div>
                     <span class="news-date">13/06/2025 <span class="tags">
@@ -172,8 +203,9 @@
                     </article>
                     <div class="news-image">
                         <picture>
-                            <source srcset="assets/media/news/testmatches.avif" type="image/avif">
-                            <img src="assets/media/news/testmatches.jpg" alt="An image depicting Cheep Cheep in the ocean" loading="lazy" onload="this.style.opacity=1">
+                            <source srcset="assets/media/news/testmatches.avif" type="image/avif" />
+                            <img alt="An image depicting Cheep Cheep in the ocean" loading="lazy"
+                                onload="this.style.opacity=1" src="assets/media/news/testmatches.jpg" />
                         </picture>
                     </div>
                     <span class="news-date">22/04/2025 <span class="tags">
@@ -188,8 +220,9 @@
                     </article>
                     <div class="news-image">
                         <picture>
-                            <source srcset="assets/media/news/mariokartbanner.avif" type="image/avif">
-                            <img src="assets/media/news/mariokartbanner.jpg" alt="An promotional image for Mario Kart 8 Deluxe" loading="lazy" onload="this.style.opacity=1">
+                            <source srcset="assets/media/news/mariokartbanner.avif" type="image/avif" />
+                            <img alt="An promotional image for Mario Kart 8 Deluxe" loading="lazy"
+                                onload="this.style.opacity=1" src="assets/media/news/mariokartbanner.jpg" />
                         </picture>
                     </div>
                     <span class="news-date">20/04/2025 <span class="tags">
@@ -205,8 +238,9 @@
                     </article>
                     <div class="news-image">
                         <picture>
-                            <source srcset="assets/media/news/discordinspire.avif" type="image/avif">
-                            <img src="assets/media/news/discordinspire.jpg" alt="A piece of Discord promotional artwork" loading="lazy" onload="this.style.opacity=1">
+                            <source srcset="assets/media/news/discordinspire.avif" type="image/avif" />
+                            <img alt="A piece of Discord promotional artwork" loading="lazy"
+                                onload="this.style.opacity=1" src="assets/media/news/discordinspire.jpg" />
                         </picture>
                     </div>
                     <span class="news-date">19/04/2025 <span class="tags">
@@ -224,8 +258,9 @@
                     </article>
                     <div class="news-image">
                         <picture>
-                            <source srcset="assets/media/news/umklbanner.avif" type="image/avif">
-                            <img src="assets/media/news/umklbanner.jpg" alt="An image showing the UMKL logo" loading="lazy" onload="this.style.opacity=1">
+                            <source srcset="assets/media/news/umklbanner.avif" type="image/avif" />
+                            <img alt="An image showing the UMKL logo" loading="lazy" onload="this.style.opacity=1"
+                                src="assets/media/news/umklbanner.jpg" />
                         </picture>
                     </div>
                     <span class="news-date">19/04/2025 <span class="tags">

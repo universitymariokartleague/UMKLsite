@@ -64,22 +64,7 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
 
 
 def main():
-    """
-    Main function to prompt the user for page creation options and execute the corresponding action.
-
-    Prompts:
-        - Asks the user to select the type of page to create.
-        - Options:
-            1. Create a blog page.
-    """
-    print("What page would you like to create?")
-    print("1 | Blog page")
-    selection = int(input("Selection > "))
-    match selection:
-        case 1:
-            create_new_blog()
-        case _:
-            print("Invalid selection")
+    create_new_blog()
 
 
 def create_slug(title):
@@ -88,6 +73,29 @@ def create_slug(title):
     slug = re.sub(r"[^\w-]", "", slug)
     slug = re.sub(r"-+", "-", slug)
     return slug.strip("-")
+
+
+def update_news_container(filepath, blog_html):
+    soup = BeautifulSoup(
+        open(filepath, "r", encoding="utf-8"),
+        "html.parser",
+        preserve_whitespace_tags={"html"},
+    )
+
+    news_container = soup.find("div", id="news-container")
+    news_container.insert(0, BeautifulSoup(blog_html, "html.parser"))
+
+    new_container_soup = BeautifulSoup(str(news_container), "html.parser")
+
+    # Find and replace the container
+    old_container = soup.find("div", id="news-container")
+    new_container = new_container_soup.find("div", id="news-container")
+
+    if old_container and new_container:
+        old_container.replace_with(new_container)
+
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write(soup.prettify())
 
 
 def create_new_blog():
@@ -118,7 +126,13 @@ def create_new_blog():
     description = input("Enter blog description > ")
     image = input("Enter blog image link > ")
     alt = input("Enter an alt description for the image > ")
-    date = input("Enter blog date (DD/MM/YYYY) > ")
+    date = input("Enter blog date (DD/MM/YYYY) (leave blank to use the current date)> ")
+    tags_input = input("Enter tags (comma separated) > ")
+    tags = (
+        "".join(f"<tag>{tag.strip()}</tag>" for tag in tags_input.split(","))
+        if tags_input
+        else ""
+    )
 
     link = create_slug(title)
     url_date = "-".join(reversed(date.split("/")))
@@ -139,55 +153,14 @@ def create_new_blog():
                     </div>
                     <span class="news-date">{date}
                         <span class="tags">
-                            <tag>REPLACETAG</tag>
+                            <tag>{tags}</tag>
                         </span>
                     </span>
                 </div>
     """
 
-    # news page
-    soup = BeautifulSoup(
-        open(f"pages/news/index.html", "r", encoding="utf-8"),
-        "html.parser",
-        preserve_whitespace_tags={"html"},
-    )
-
-    news_container = soup.find("div", id="news-container")
-    news_container.insert(0, BeautifulSoup(new_blog, "html.parser"))
-
-    new_container_soup = BeautifulSoup(str(news_container), "html.parser")
-
-    # Find and replace the container
-    old_container = soup.find("div", id="news-container")
-    new_container = new_container_soup.find("div", id="news-container")
-
-    if old_container and new_container:
-        old_container.replace_with(new_container)
-
-    with open("pages/news/index.html", "w", encoding="utf-8") as f:
-        f.write(soup.prettify())
-
-    # home page
-    soup = BeautifulSoup(
-        open(f"index.html", "r", encoding="utf-8"),
-        "html.parser",
-        preserve_whitespace_tags={"html"},
-    )
-
-    news_container = soup.find("div", id="news-container")
-    news_container.insert(0, BeautifulSoup(new_blog, "html.parser"))
-
-    new_container_soup = BeautifulSoup(str(news_container), "html.parser")
-
-    # Find and replace the container
-    old_container = soup.find("div", id="news-container")
-    new_container = new_container_soup.find("div", id="news-container")
-
-    if old_container and new_container:
-        old_container.replace_with(new_container)
-
-    with open("index.html", "w", encoding="utf-8") as f:
-        f.write(soup.prettify())
+    update_news_container("pages/news/index.html", new_blog)
+    update_news_container("index.html", new_blog)
 
     print("News articles added to front page and sites/news/")
 
