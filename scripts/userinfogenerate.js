@@ -71,7 +71,7 @@ let data, matchData, teamData;
 const currentSeason = 2;
 const shareResScale = 3;
 let cardImageBlob;
-let graphResScale = 2;
+let graphResScale = shareResScale;
 let fetchedCurrentSeason = currentSeason;
 let takingCardScreenshot = false;
 let isFlipping = false;
@@ -369,6 +369,8 @@ function createSPGraph(data, teamColor) {
     canvas.width = canvas.clientWidth * graphResScale;
     canvas.height = canvas.clientHeight * graphResScale;
 
+    console.log(graphResScale)
+
     const ctx = canvas.getContext('2d');
     const spData = data.sp_detailed;
 
@@ -585,7 +587,6 @@ async function preloadCardImage() {
     const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
     takingCardScreenshot = true;
-    graphResScale = shareResScale;
     createSPGraph(data, `#${data.color}`);
 
     try {
@@ -623,8 +624,11 @@ async function preloadCardImage() {
     cardChanged = false;
     profileCard.style.transition = originalTransition;
     takingCardScreenshot = false;
-    graphResScale = 2;
-    createSPGraph(data, `#${data.color}`);
+    setTimeout(() => {
+        graphResScale = 2;
+        createSPGraph(data, `#${data.color}`);
+        graphResScale = shareResScale;
+    }, 100);
 }
 
 async function generateCardImage() {
@@ -920,6 +924,7 @@ function applyEquippedItemsToCard() {
         }
     }
 
+    profileCard.style.setProperty('--team-color', `#${data.color}`);
     if (currentEquippedItems.colour != null) {
         const item = data.profile_items[currentEquippedItems.colour];
         if (item?.type === "colour") {
@@ -930,8 +935,6 @@ function applyEquippedItemsToCard() {
                 profileCard.style.setProperty('--team-color', colourMap[item.name] || item.name);
             }
         }
-    } else {
-        profileCard.style.setProperty('--team-color', `#${data.color}`);
     }
 }
 
