@@ -52,14 +52,14 @@ async function getMatchData() {
         },
         body: "{}"
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+            return response.json();
+        });
 }
 
 async function getMatchDataFallback() {
@@ -219,7 +219,7 @@ function generateTeamMatches(teamName) {
 
                 const matchStart = dateObj;
                 const matchEnd = new Date(matchStart.getTime() + MATCH_LENGTH_MINS * 60 * 1000);
-                if (now >= matchStart && now <= matchEnd) {
+                if (now >= matchStart && now <= matchEnd && !match.endTime) {
                     isLive = true;
                     scoreHTML = `<span style="display:flex; color:${textColor}"><div class="live-dot live-dot-adjusted"></div>Live</span>`;
                     resultClass = "live";
@@ -231,10 +231,10 @@ function generateTeamMatches(teamName) {
             const block = `
                 <div class="team-match-card ${match.testMatch ? "test-match" : ""}" href="">
                     <div class="match-card-wrapper">
-                        <a href="${otherTeamLink}">    
+                        <a href="${otherTeamLink}">
                             <picture>
                                 <source srcset="${getEmblem(otherTeam).avif}" type="image/avif">
-                                <img src="${getEmblem(otherTeam).png}" 
+                                <img src="${getEmblem(otherTeam).png}"
                                     alt="${makePossessive(otherTeam)} emblem"
                                     class="team-match-emblem" width="40" height="40"
                                     onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png'; this.parentNode.querySelector('source').srcset='assets/media/teamemblems/DEFAULT.avif';">
