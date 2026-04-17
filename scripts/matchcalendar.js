@@ -920,13 +920,20 @@ function findEventByID(graphEventID) {
     return null;
 }
 
-function displayCalendar() {
+async function displayCalendar() {
     const urlParams = new URLSearchParams(window.location.search);
     const dateParam = urlParams.get('date');
     const graphEventID = urlParams.get('graphEventID');
     if (graphEventID) {
         let event = findEventByID(graphEventID);
-        window.location.href = generate6v6ScoreCalculatorLink(event);
+        if (!event) {
+            matchData = await getMatchData();
+            matchDataToUse = overseasDateDisplay ? normalizeMatchData(matchData) : matchData;
+            event = findEventByID(graphEventID);
+        }
+        if (event) {
+            window.location.href = generate6v6ScoreCalculatorLink(event);
+        }
     }
     if (dateParam && matchData[dateParam]) {
         console.debug(`%cmatchcalendar.js %c> %cURL parameter detected`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
