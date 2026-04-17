@@ -94,69 +94,6 @@ function formatDate(dateStr, locale) {
     });
 }
 
-function uses12HourClock(locale) {
-    const test = new Date('1970-01-01T13:00');
-    return test.toLocaleTimeString(locale).toLowerCase().includes('pm');
-}
-
-function formatMatchTime(date, timeString, locale) {
-    const is12Hour = uses12HourClock(locale);
-
-    const isoStr = `${date}T${timeString}`;
-    const dateObj = new Date(isoStr);
-
-    const UKTime = new Intl.DateTimeFormat(locale, {
-        timeZone: "Europe/London",
-        hour: is12Hour ? "numeric" : "2-digit",
-        minute: "2-digit",
-        hour12: is12Hour,
-    }).format(dateObj);
-
-    const localTime = new Intl.DateTimeFormat(locale, {
-        hour: is12Hour ? "numeric" : "2-digit",
-        minute: "2-digit",
-        hour12: is12Hour,
-    }).format(dateObj);
-
-    let outsideUKTimezone = checkTimezoneMatches(date, timeString);
-
-    let formattedMatchTime, formattedLocalMatchTime;
-    if (outsideUKTimezone) {
-        formattedMatchTime = UKTime;
-        formattedLocalMatchTime = localTime;
-    } else {
-        formattedMatchTime = UKTime;
-        formattedLocalMatchTime = null;
-    }
-
-    if (formattedMatchTime == formattedLocalMatchTime) {
-        outsideUKTimezone = false;
-    }
-
-    return { formattedMatchTime, formattedLocalMatchTime, outsideUKTimezone };
-}
-
-function checkTimezoneMatches(dateStr, timeStr) {
-    const match = timeStr.match(/([+-]\d{2}):([0-5]\d)$/);
-    if (!match) return false;
-
-    const [, offsetH, offsetM] = match;
-    const offsetMinutes = parseInt(offsetH, 10) * 60 + parseInt(offsetM, 10) * (offsetH.startsWith("-") ? -1 : 1);
-
-    const [hourStr, minuteStr] = timeStr.split(":");
-    const hours = parseInt(hourStr, 10);
-    const minutes = parseInt(minuteStr, 10);
-
-    const [year, month, day] = dateStr.split("-").map(Number);
-
-    const utcDate = new Date(Date.UTC(year, month - 1, day, hours, minutes));
-
-    const londonTime = new Date(utcDate.toLocaleString("en-GB", { timeZone: "Europe/London" }));
-    const londonOffsetMinutes = (londonTime - utcDate) / 60000;
-
-    return offsetMinutes !== londonOffsetMinutes;
-}
-
 function generateTeamMatches(teamName) {
     const allMatches = normalizeMatchData(matchData);
 
@@ -209,9 +146,6 @@ function generateTeamMatches(teamName) {
                 matchDetailsLink = generate6v6ScoreCalculatorLink(match);
             }
 
-            let timeString = match.time || '00:00:00';
-
-            let isLive = false;
             if (match.time) {
                 const [hours, minutes] = match.time.split(':');
                 const dateObj = new Date(match.matchDate);
@@ -220,7 +154,6 @@ function generateTeamMatches(teamName) {
                 const matchStart = dateObj;
                 const matchEnd = new Date(matchStart.getTime() + MATCH_LENGTH_MINS * 60 * 1000);
                 if (now >= matchStart && now <= matchEnd && !match.endTime) {
-                    isLive = true;
                     scoreHTML = `<span style="display:flex; color:${textColor}"><div class="live-dot live-dot-adjusted"></div>Live</span>`;
                     resultClass = "live";
                 }
