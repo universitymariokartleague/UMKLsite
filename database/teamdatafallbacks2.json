@@ -1,6 +1,66 @@
 [
     {
         "career_wins_losses": [
+            1,
+            3
+        ],
+        "championship_seasons": [],
+        "coords": [
+            52.2053,
+            0.1192
+        ],
+        "first_entry": 2,
+        "lifetime_matches_played": 4,
+        "place_id": 1826229713,
+        "season": 2,
+        "season_matches_played": 4,
+        "season_penalties": 0,
+        "season_position": 1,
+        "season_wins_losses": [
+            1,
+            3
+        ],
+        "team_career_points": 1977,
+        "team_championships": 0,
+        "team_color": "#85b09a",
+        "team_full_name": "University of Cambridge",
+        "team_id": 12,
+        "team_name": "Cambridge",
+        "team_place": "Cambridge, England",
+        "team_season_points": 1977
+    },
+    {
+        "career_wins_losses": [
+            2,
+            2
+        ],
+        "championship_seasons": [],
+        "coords": [
+            53.4094,
+            -2.9785
+        ],
+        "first_entry": 2,
+        "lifetime_matches_played": 4,
+        "place_id": 1826558678,
+        "season": 2,
+        "season_matches_played": 4,
+        "season_penalties": 0,
+        "season_position": 2,
+        "season_wins_losses": [
+            2,
+            2
+        ],
+        "team_career_points": 1882,
+        "team_championships": 0,
+        "team_color": "#1f2b7d",
+        "team_full_name": "University of Liverpool",
+        "team_id": 10,
+        "team_name": "Liverpool",
+        "team_place": "Liverpool, England",
+        "team_season_points": 1882
+    },
+    {
+        "career_wins_losses": [
             6,
             0
         ],
@@ -17,7 +77,7 @@
         "season": 2,
         "season_matches_played": 3,
         "season_penalties": 0,
-        "season_position": 1,
+        "season_position": 3,
         "season_wins_losses": [
             3,
             0
@@ -47,7 +107,7 @@
         "season": 2,
         "season_matches_played": 3,
         "season_penalties": 0,
-        "season_position": 2,
+        "season_position": 4,
         "season_wins_losses": [
             2,
             1
@@ -77,7 +137,7 @@
         "season": 2,
         "season_matches_played": 3,
         "season_penalties": 0,
-        "season_position": 3,
+        "season_position": 5,
         "season_wins_losses": [
             2,
             1
@@ -107,7 +167,7 @@
         "season": 2,
         "season_matches_played": 3,
         "season_penalties": 0,
-        "season_position": 4,
+        "season_position": 6,
         "season_wins_losses": [
             2,
             1
@@ -137,7 +197,7 @@
         "season": 2,
         "season_matches_played": 3,
         "season_penalties": 0,
-        "season_position": 5,
+        "season_position": 7,
         "season_wins_losses": [
             2,
             1
@@ -167,7 +227,7 @@
         "season": 2,
         "season_matches_played": 3,
         "season_penalties": 0,
-        "season_position": 6,
+        "season_position": 8,
         "season_wins_losses": [
             2,
             1
@@ -197,7 +257,7 @@
         "season": 2,
         "season_matches_played": 3,
         "season_penalties": 0,
-        "season_position": 7,
+        "season_position": 9,
         "season_wins_losses": [
             2,
             1
@@ -218,36 +278,6 @@
         ],
         "championship_seasons": [],
         "coords": [
-            52.2053,
-            0.1192
-        ],
-        "first_entry": 2,
-        "lifetime_matches_played": 3,
-        "place_id": 1826229713,
-        "season": 2,
-        "season_matches_played": 3,
-        "season_penalties": 0,
-        "season_position": 8,
-        "season_wins_losses": [
-            1,
-            2
-        ],
-        "team_career_points": 1490,
-        "team_championships": 0,
-        "team_color": "#85b09a",
-        "team_full_name": "University of Cambridge",
-        "team_id": 12,
-        "team_name": "Cambridge",
-        "team_place": "Cambridge, England",
-        "team_season_points": 1490
-    },
-    {
-        "career_wins_losses": [
-            1,
-            2
-        ],
-        "championship_seasons": [],
-        "coords": [
             55.8611,
             -4.25
         ],
@@ -257,7 +287,7 @@
         "season": 2,
         "season_matches_played": 3,
         "season_penalties": 0,
-        "season_position": 9,
+        "season_position": 10,
         "season_wins_losses": [
             1,
             2
@@ -270,36 +300,6 @@
         "team_name": "Glasgow",
         "team_place": "Glasgow, Scotland",
         "team_season_points": 1404
-    },
-    {
-        "career_wins_losses": [
-            1,
-            2
-        ],
-        "championship_seasons": [],
-        "coords": [
-            53.4094,
-            -2.9785
-        ],
-        "first_entry": 2,
-        "lifetime_matches_played": 3,
-        "place_id": 1826558678,
-        "season": 2,
-        "season_matches_played": 3,
-        "season_penalties": 0,
-        "season_position": 10,
-        "season_wins_losses": [
-            1,
-            2
-        ],
-        "team_career_points": 1385,
-        "team_championships": 0,
-        "team_color": "#1f2b7d",
-        "team_full_name": "University of Liverpool",
-        "team_id": 10,
-        "team_name": "Liverpool",
-        "team_place": "Liverpool, England",
-        "team_season_points": 1385
     },
     {
         "career_wins_losses": [
