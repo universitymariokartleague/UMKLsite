@@ -179,12 +179,12 @@ function onTouchEnd() {
 async function getWeather(lat, long) {
     console.debug(`%cmaprender.js %c> %cFetching location weather from the open-meteo API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     return fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,weather_code,is_day`)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        });
 }
 
 async function getTeamlocations() {
@@ -196,14 +196,14 @@ async function getTeamlocations() {
         },
         body: JSON.stringify({})
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+            return response.json();
+        });
 }
 
 async function getTeamlocationsFallback() {
@@ -311,9 +311,9 @@ function getWeatherIcon(code, isDay = true) {
     const icon = isDay ? day : night;
 
     if (code === 0) return icon.clear;
-    if ([1,2].includes(code)) return icon.partly;
+    if ([1, 2].includes(code)) return icon.partly;
     if (code === 3) return icon.cloudy;
-    if ([45,48].includes(code)) return icon.fog;
+    if ([45, 48].includes(code)) return icon.fog;
     if (code >= 61 && code <= 65) return icon.rain;
     if (code >= 51 && code <= 60) return icon.drizzle;
     if (code >= 66 && code <= 67) return icon.drizzle;
@@ -374,7 +374,9 @@ function placeDots() {
         const fadeDelay = isCurrentTeam ? 0 : (0.25 + Math.random() * 0.25).toFixed(3);
 
         // Dot
-        const dot = document.createElement('div');
+        const dot = document.createElement('a');
+        dot.href = `/pages/teams/details/?team=${encodeURIComponent(name)}`;
+        dot.target = '_parent';
         dot.className = `dot pulse ${colorClass}`;
         Object.assign(dot.style, {
             backgroundColor: color,
@@ -399,7 +401,7 @@ function placeDots() {
         dotPositions.push({ x, y, color, name, isCurrentTeam, colorClass, fadeDelay });
         dotBoxes.push({ x: x - 8, y: y - 8, width: 12, height: 12 });
 
-        if (!weatherData && isCurrentTeam) { 
+        if (!weatherData && isCurrentTeam) {
             weatherData = await getWeather(lat, lon);
             createWeatherBox();
         }
@@ -407,7 +409,7 @@ function placeDots() {
 
     // Place labels with collision detection
     dotPositions.forEach(({ x, y, color, name, isCurrentTeam, colorClass, fadeDelay }, dotIdx) => {
-        const label = document.createElement('div');
+        const label = document.createElement('a');
         label.translate = false;
         label.className = 'dot-label';
         label.textContent = name;
