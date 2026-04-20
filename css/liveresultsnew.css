@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+html {
+    font-size: calc(100vw / 192);
+    /* 1920 base: 1vw = 10px equivalent */
+}
+
+body {
+    font-family: "Montserrat", sans-serif;
+    background: #fff;
+    color: #fff;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    position: fixed;
+    top: 12px;
+    right: 29%;
+}
+
+h1 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 3.5rem;
+    /* relative to html font-size above */
+    margin: 1rem 1rem 0 0;
+    text-shadow: 0 0 15px rgba(0, 0, 0, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+@keyframes growText {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.25);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.grow {
+    display: inline-block;
+    animation: growText 1.55s ease;
+}
+
+.liveteamlogo {
+    height: 4rem;
+    width: auto;
+    margin: 0 5px;
+    vertical-align: middle;
+    filter: drop-shadow(0 0 15px rgba(0, 0, 0, 1));
+}
+
+.liveErrorMessage {
+    font-size: 1rem;
+    line-height: 1rem;
+    margin-right: 5rem;
+}
