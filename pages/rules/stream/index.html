@@ -30,7 +30,7 @@
     <script type="module" src="components/footer.js" defer></script>
 
     <!-- Scripts -->
-    <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+    <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();</script>
 
     <script type="module" src="scripts/settings.js" defer></script>
 </head>
@@ -41,60 +41,149 @@
     <main>
         <a href="pages/rules/">Back</a>
         <h1>Streaming Guidelines</h1>
-        <p class="p-below-title">Guidelines for streamers and instructions on how to set up OBS</p>
+        <p class="p-below-title">This guide covers how to set up OBS for UMKL matches - including adding the correct
+            sources, configuring audio, and going live on YouTube</p>
         <hr class="hr-below-title">
 
-        <h2>OBS Set Up</h2>
-        <p class="p-below-title">
-            The below guide will cover how to set up OBS with the UMKL overlay and stream matches to YouTube.
-        </p><br>
+        <p>
+            The below guide will cover the basics of OBS, and how to get your stream setup! If you have any questions,
+            don't hesitate to ask in <code>#board-chat</code>.
+        </p>
 
-        <h3>Overview</h3>
+        <blockquote class="fail">
+            <b>Warning</b>
+            <br>
+            Please do not show the matches' room ID on the stream! Cover it or change the scene in OBS (to black or an
+            intermission screen, for example) if you're entering it on stream.
+        </blockquote>
+
+        <h2>OBS Setup</h2>
+
+        <h3>Setting Up Resolution and Codecs</h3>
         <p class="p-below-title">
-            Use <code translate="no">/generate-stream-overlay</code> on the 
-            UMKL Discord server to generate a stream overlay for
-            yourself or somebody else, this overlay will be for
-            UMKL streams in your streaming software.
+            First, we want to make sure your OBS settings are configured correctly.
+            You can set your resolution and codecs in the <code>Video</code> section of the settings menu.
+        </p>
+        <p>
+            <picture>
+                <source srcset="assets/media/streaming/resolutionsettings.avif" type="image/avif">
+                <img class="image" src="assets/media/streaming/resolutionsettings.jpg"
+                    alt="The resolution settings menu in OBS">
+            </picture>
+        </p>
+        <p>
+            Common resolutions used include <code>1920x1080 (1080p)</code>, <code>1280x720 (720p)</code> and
+            <code>2560x1440 (1440p)</code>,
+            you would usually set your resolution to match your monitor's native resolution.
+        </p>
+        <p>
+            <picture>
+                <source srcset="assets/media/streaming/resolutioncanvassettings.avif" type="image/avif">
+                <img class="image" src="assets/media/streaming/resolutioncanvassettings.jpg"
+                    alt="The resolution settings menu in OBS, with a dropdown showing available resolutions">
+            </picture>
+        </p>
+        <p>
+            Base (canvas) resolution and output (scaled) resolution should usually be the same.
+        </p>
+        <p>
+            It's usually a good idea to switch from software encoding (the default) to hardware
+            encoding in the <code>Output</code> section of OBS settings. This offloads the encoding work to your GPU and
+            can resolve performance
+            issues, especially on older hardware.
+        </p>
+        <p>
+            <picture>
+                <source srcset="assets/media/streaming/codecsettings.avif" type="image/avif">
+                <img class="image" src="assets/media/streaming/codecsettings.jpg"
+                    alt="The codec settings menu in OBS, with a dropdown showing available codecs">
+            </picture>
+        </p>
+        <p>
+            You can also set the bitrate in this menu aswell. See <a
+                href="https://support.google.com/youtube/answer/2853702?hl=en-GB">YouTube's
+                bitrate guidelines</a> for details.
+        </p>
+        <p>
+            Use a high enough bitrate for a clear picture. At 1080p60
+            (H.264), 12 Mbps is
+            recommended. If you are streaming at 1440p or 4K, you can use higher bitrate if your upload
+            speed allows it. </p>
+        <p>
+            Run an internet speedtest on <a href="fast.com">fast.com</a> to check your upload speed for streaming.
+        </p>
+
+        <h3>Generating Your Stream Overlay</h3>
+        <p class="p-below-title">
+            Before opening OBS, generate a personalised stream overlay from the UMKL Discord server using this app
+            command:
+        </p>
+        <p><code translate="no">/generate-stream-overlay</code></p>
+        <p>
+            You can run this command for yourself or for someone else in the UMKL Discord server. It generates an stream
+            overlay image, that you can then download and use in OBS as a source.
+            It displays your Discord username to identify which team's perspective is being shown.
         </p>
         <p>
             <picture>
                 <source srcset="assets/media/streaming/generatestreamoverlaycommand.avif" type="image/avif">
-                <img class="image" src="assets/media/streaming/generatestreamoverlaycommand.jpg" alt="An image of OBS with the various overlay on top of the stream">
+                <img class="image" src="assets/media/streaming/generatestreamoverlaycommand.jpg"
+                    alt="The /generate-stream-overlay Discord command">
             </picture>
         </p>
 
-        <h3>Adding Sources</h3>
-        <p>
-            <picture>
-                <source srcset="assets/media/streaming/OBSlayout.avif" type="image/avif">
-                <img class="image" src="assets/media/streaming/OBSlayout.jpg" alt="An image of OBS with the various overlay on top of the stream">
-            </picture>
-            <span class="settings-extra-info">Please note that team icons placed at the top of the output screen will automatically show the correct team icons when a match starts</span>
-        </p>
+        <h3>Adding Sources in OBS</h3>
         <p class="p-below-title">
-            In OBS, adding sources is how you will construct the visuals on your stream.
-            <br>List of sources
-            <ul>
-                <li>Discord VC Overlay (follow the instructions on <a href="https://streamkit.discord.com/overlay">https://streamkit.discord.com/overlay</a>)</li>
-                <li>Score Overlay (<a href="https://live.umkl.co.uk/">https://live.umkl.co.uk/</a> or <a href="https://liverev.umkl.co.uk/">https://liverev.umkl.co.uk/</a> depending on the team order - the first team seen in match titles is <code>live</code>, and the second team is <code>liverev</code>)</li>
-                <li>Stream Overlay (Can be generated with <code translate="no">/generate-stream-overlay</code> in the UMKL Discord server)</li>
-                <li>Video Capture Device (Capture Card)</li>
-            </ul>
-            Sources at the top will display on top of sources below it.
-
-            <blockquote class="warning">
-                <b translate="no">A Note About Audio</b>
-                <br>There are two ways to hear audio from Discord in your stream.
-                <br>You can use <code translate="no">Desktop Audio</code> to
-                capture audio from Discord, but it is recommended to use add an <code translate="no">Application Audio Capture (BETA)</code>
-                source and directly capture audio from the Discord application, as this will avoid any potential double audio issues.
-                <br><b>Be sure to mute any audio sources that aren't in use.</b>
-                <br><br>
-                If you want to hear game audio without the need of splitters, you can right-click<br><code translate="no">Video Capture Device</code>
-                in the <code translate="no">Audio Mixer</code> panel, select <code translate="no">Advanced Audio Properties</code> and set <code translate="no">Audio Monitoring</code>
-                for the capture card to <code translate="no">Monitor and Output</code> to hear game audio through OBS and your computer.
-            </blockquote>
+            Sources are the building blocks of what viewers see on stream. Add them in the order below - sources higher
+            in the list appear on top of those beneath them.
         </p>
+        <ol>
+            <li>
+                <strong>Discord Voice Overlay</strong> - Set this up at
+                <a href="https://streamkit.discord.com/overlay">streamkit.discord.com/overlay</a>
+                and add it as a Browser source in OBS.
+            </li>
+            <li>
+                <strong>Score Overlay</strong> - Add as a Browser source using one of the following URLs, depending on
+                your team's position in the match title:
+                <ul>
+                    <li>Use <a href="https://live.umkl.co.uk/"><code>live.umkl.co.uk</code></a> if your team is listed
+                        <em>first</em>
+                    </li>
+                    <li>Use <a href="https://liverev.umkl.co.uk/"><code>liverev.umkl.co.uk</code></a> if your team is
+                        listed <em>second</em></li>
+                </ul>
+                <span class="settings-extra-info">Team icons at the top of the screen update automatically when a match
+                    starts.</span>
+            </li>
+            <li>
+                <strong>Stream Overlay</strong> - Add the URL generated with <code
+                    translate="no">/generate-stream-overlay</code> as a Browser source.
+            </li>
+            <li>
+                <strong>Video Capture Device</strong> - Add your capture card as a Video Capture Device source. This
+                captures the game footage itself.
+            </li>
+        </ol>
+
+        <blockquote class="warning">
+            <b>Setting Up Audio</b>
+            <br>
+            There are two ways to capture Discord audio:
+            <ul>
+                <li><strong>Desktop Audio</strong> - captures all system sound, but can cause double audio if Discord
+                    audio is also coming through your headset.</li>
+                <li><strong>Application Audio Capture (Beta)</strong> - captures Discord directly and avoids double
+                    audio. <em>This is the recommended option.</em></li>
+            </ul>
+            <b>Mute any audio sources that aren't actively in use.</b>
+            <br><br>
+            <b>To hear game audio without a splitter:</b> Right-click <code translate="no">Video Capture Device</code>
+            in the <code translate="no">Audio Mixer</code>, select <code translate="no">Advanced Audio
+                Properties</code>, and set <code translate="no">Audio Monitoring</code> to <code translate="no">Monitor
+                and Output</code>.
+        </blockquote>
+
         <p>
             <video controls playsinline loop class="image">
                 <source src="assets/media/streaming/OBSsourcespickAV1.mp4" type='video/mp4; codecs="av01.0.05M.08"'>
@@ -103,17 +192,21 @@
             </video>
         </p>
 
-        <h3>Entering a Stream Key</h3>
+        <h3>Entering The Stream Key</h3>
         <p class="p-below-title">
-            To enter a stream key in OBS, navigate to <code translate="no">Settings</code> and click the <code translate="no">Stream</code> tab.
-            Select <br><code translate="no">YouTube - RTMPS</code> in the service dropdown, click <code translate="no">Use Stream Key (advanced)</code>
-            and paste in your team's stream key.
-
-            <blockquote class="info">
-                <b translate="no">Note</b>
-                <br>Please contact a board member to recieve your team's stream key if you don't have it yet.
-            </blockquote>
+            To connect OBS to your team's YouTube channel:
         </p>
+        <ol>
+            <li>Open <code translate="no">Settings</code> in OBS and go to the <code translate="no">Stream</code> tab.
+            </li>
+            <li>Set the service to <code translate="no">YouTube - RTMPS</code>.</li>
+            <li>Select <code translate="no">Use Stream Key (advanced)</code>.</li>
+            <li>Paste in your team's stream key.</li>
+        </ol>
+        <blockquote class="info">
+            <b>Don't have a stream key?</b>
+            <br>Contact a board member to receive your team's stream key.
+        </blockquote>
         <p>
             <video controls playsinline loop class="image">
                 <source src="assets/media/streaming/streamkeyAV1.mp4" type='video/mp4; codecs="av01.0.05M.08"'>
@@ -122,59 +215,47 @@
             </video>
         </p>
 
-        <h3>Multiple Profiles</h3>
+        <h3>Multiple Profiles <em>(Optional)</em></h3>
         <p class="p-below-title">
-            In OBS you can create multiple profiles. You can change them with the 'Profile' dropdown menu.
-            This is useful if you need to switch streaming destinations (ie: personal account and UMKL channel).
+            OBS profiles let you save separate stream configurations. If you stream to both a personal account and the
+            UMKL channel, create a profile for each and switch between them using the <strong>Profile</strong> dropdown
+            menu.
         </p>
         <p>
             <picture>
                 <source srcset="assets/media/streaming/switchprofile.avif" type="image/avif">
-                <img class="image" src="assets/media/streaming/switchprofile.jpg" alt="">
+                <img class="image" src="assets/media/streaming/switchprofile.jpg" alt="The OBS Profile dropdown menu">
             </picture>
         </p>
 
         <h3>Audio Mixing</h3>
         <p class="p-below-title">
-            Before streaming, ensure your sources are mixed well. The image below can be used as a guide for what
-            volumes should be used on different sources.
+            Before going live, check that your audio levels are well balanced. Use the image below as a guide. As a
+            general rule:
         </p>
+        <ul>
+            <li>Game audio should be audible but not dominating</li>
+            <li>Discord voice should be clear and sitting above background noise</li>
+            <li>Mute any sources not in active use</li>
+        </ul>
         <p>
             <picture>
                 <source srcset="assets/media/streaming/OBSaudioguide.avif" type="image/avif">
-                <img style="max-width: 380px;" class="image" src="assets/media/streaming/OBSaudioguide.jpg" alt="">
+                <img style="max-width: 380px;" class="image" src="assets/media/streaming/OBSaudioguide.jpg"
+                    alt="Recommended OBS audio levels">
             </picture>
         </p>
 
-        <h2>Notes</h2>
-
+        <h2>Additional Notes</h2>
         <ul class="p-below-title">
             <li>
-                Please note that the stream overlay will contain 
-                your Discord username, to signify which team's perspective the stream is from, 
-                this is so it matches the username shown on results graphics and such. 
-                Please ensure your DM settings on Discord are as you'd like bearing this information
-                in mind
-            </li>
-
-            <li>
-                Ideally we would want at least one person playing on each team to be able to stream
-                the match (this isn't a requirement but it's ideal)
-            </li>
-
-            <li>
-                Ensure your bitrate is set high enough for the stream to look good,
-                <a href="https://support.google.com/youtube/answer/2853702?hl=en-GB">Bitrate Guidelines on YouTube Help</a><br>
-                At 1080p60 (H.264), 12 Mbps bitrate is recommended. If your connection allows it, it can be benificial to stream at 1440p or 4K resolutions
-                for access to higher bitrates on YouTube
-            </li>
-
-            <li>
-                Do not show the room code on-screen, block it from the screen if needed
+                <strong>Stream overlay username:</strong> Your overlay will show your Discord username to identify your
+                team's perspective. Make sure your Discord DM settings are configured as you'd like before going live.
             </li>
         </ul>
     </main>
 
     <umkl-footer></umkl-footer>
 </body>
+
 </html>
