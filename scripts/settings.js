@@ -384,7 +384,6 @@ function isOutsideUK() {
 
 function checkIfOutsideUK() {
     if (!isOutsideUK()) return;
-    console.log("outsidetheUK")
 
     const banner = document.createElement("div");
     banner.textContent = "Currently outside the UK - some dates and times may only show for the UK timezone";
