@@ -11,7 +11,7 @@ let matchData = [];
 let matchDataToUse = [];
 let teamColors = [];
 
-let overseasDateDisplay = true; // forced on this page since I can't get it working otherwise 
+let overseasDateDisplay = true; // forced on this page since I can't get it working otherwise
 let refreshTimer = null;
 let startTime;
 
@@ -23,14 +23,14 @@ async function getMatchData() {
         },
         body: "{}"
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+            return response.json();
+        });
 }
 
 async function getMatchDataFallback() {
@@ -49,14 +49,14 @@ async function getTeamColors() {
         },
         body: "{}"
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+            return response.json();
+        });
 }
 
 async function getTeamcolorsFallback() {
@@ -163,28 +163,14 @@ async function showUpcomingMatches() {
 
             const matchDateStr = (matchDataToUse[todayStr]?.includes(entry) ? todayStr : tomorrowStr);
             const formattedDate = formatDateWithoutYear(parseLocalDate(matchDateStr));
-            
+
             let timeString = entry.time || '00:00:00';
             const { formattedMatchTime, formattedLocalMatchTime, outsideUKTimezone } = formatMatchTime(matchDateStr, timeString, locale);
-            
+
             let formattedLocalDate, dayRelation;
             if (outsideUKTimezone) {
                 formattedLocalDate = new Date(`${matchDateStr}T${timeString}`).toLocaleString(locale, { dateStyle: "short" });
                 dayRelation = compareDayRelation(formattedLocalDate, matchDateStr);
-            }
-
-            let isLive = false;
-            if (entry.time) {
-                const [hours, minutes] = entry.time.split(':');
-                const dateObj = new Date(matchDateStr);
-                dateObj.setHours(Number(hours), Number(minutes), 0, 0);
-
-                const now = new Date();
-                const matchStart = dateObj;
-                const matchEnd = new Date(matchStart.getTime() + MATCH_LENGTH_MINS * 60 * 1000);
-                if (now >= matchStart && now <= matchEnd) {
-                    isLive = true;
-                }
             }
 
             if (entry.ytLinks) {
@@ -194,13 +180,8 @@ async function showUpcomingMatches() {
 
             const isoStr = `${matchDateStr}T${entry.time}`;
             const dateObj = new Date(isoStr);
-            const londonFormatter = new Intl.DateTimeFormat("en-GB", {
-                timeZone: "Europe/London",
-                timeZoneName: "short"
-            });
-            const parts = londonFormatter.formatToParts(dateObj);
-            const zoneName = parts.find(p => p.type === "timeZoneName")?.value || "";
 
+            let isLive = false;
             let timeUntilMatch;
             if (!isLive) {
                 const now = new Date();
@@ -243,14 +224,14 @@ async function showUpcomingMatches() {
                         const hours = Math.floor((totalSeconds % 86400) / 3600);
                         const minutes = Math.floor((totalSeconds % 3600) / 60);
                         const seconds = totalSeconds % 60;
-                        countdownElement.innerHTML = `<i class="fa-solid fa-clock"></i> ${days > 0 ? `${days.toString()}d `: ''}${hours.toString()}:${minutes
+                        countdownElement.innerHTML = `<i class="fa-solid fa-clock"></i> ${days > 0 ? `${days.toString()}d ` : ''}${hours.toString()}:${minutes
                             .toString()
                             .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
                     }
                 }, 1000);
             }
 
-            html += `            
+            html += `
             <div class="event-container">
                 <div class="team-box-container">
                     <div class="team-background left ${team1.class_name}"></div>
@@ -258,10 +239,10 @@ async function showUpcomingMatches() {
                     ${!entry.testMatch ? `<img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.avif"
                     alt="Team background overlay"
                     onload="this.style.opacity=1" loading="lazy"/>` : ''}
-                    
+
                     ${entry.testMatch ? `<div class="test-match-indicator"><i class="fa-solid fa-test"></i> Test match</div>` : ''}
                     ${isLive ? `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}"><span style="display:flex"><div class="live-dot"></div>Live</span></div>` : `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id="matchCountdown${entry.eventID}"><i class="fa-solid fa-clock"></i> ${timeUntilMatch}</div>`}
-                    
+
                     <div class="event-overlay">
                         <div class="event-box-team">
                             <a class="no-underline-link no-color-link team-box-underline-hover" href="${team1.link}">
@@ -280,7 +261,7 @@ async function showUpcomingMatches() {
                             </div>
                         </div>
 
-                        <div class="score-box">VS</div>       
+                        <div class="score-box">VS</div>
 
                         <div class="event-box-team">
                             <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">
@@ -311,12 +292,12 @@ async function showUpcomingMatches() {
                             ${overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
                             <i class="${outsideUKTimezone ? 'local-time-clock' : ''} fa-solid fa-clock"></i>
                             <h2>
-                                <span title="${zoneName}">${formattedMatchTime}</span>
+                                <span translate="no">${formattedMatchTime}</span>
                                 ${outsideUKTimezone ? `
                                     <span title="Local time" style="display: inline-flex; align-items: center;">
                                     |&nbsp;<i class="overseas-time-clock fa-solid fa-clock"></i>${formattedLocalMatchTime}</span>` : ''}
-                            </h2>       
-                            ${!overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}                     
+                            </h2>
+                            ${!overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
                             ${isLive ? '<div class="live-dot"></div>' : ''}
                         </div>
                     </div>

@@ -520,6 +520,7 @@ function createMatchHTML(entry, index, date, locale, is12Hour, liveResults) {
 
     let isLive = false;
     let timeUntilMatch;
+    let dateObjTimezone;
     if (entry.time) {
         const [hours, minutes] = entry.time.split(':');
         const dateObj = new Date(date);
@@ -531,7 +532,9 @@ function createMatchHTML(entry, index, date, locale, is12Hour, liveResults) {
         if (now >= matchStart && now <= matchEnd) {
             isLive = true;
         } else if (!entry.endTime) {
-            const diffMs = dateObj.getTime() - now.getTime();
+            const isoStr = `${date}T${entry.time}`;
+            dateObjTimezone = new Date(isoStr);
+            const diffMs = dateObjTimezone.getTime() - now.getTime();
             if (diffMs <= 0) {
                 timeUntilMatch = "0:00:00";
             } else {
@@ -540,7 +543,9 @@ function createMatchHTML(entry, index, date, locale, is12Hour, liveResults) {
                 const hours = Math.floor((totalSeconds % 86400) / 3600);
                 const minutes = Math.floor((totalSeconds % 3600) / 60);
                 const seconds = totalSeconds % 60;
-                timeUntilMatch = `${days > 0 ? `${days}d ` : ''}${hours}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+                timeUntilMatch = `${days > 0 ? `${days.toString()}d ` : ''}${hours.toString()}:${minutes
+                    .toString()
+                    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
             }
         }
 
@@ -551,7 +556,7 @@ function createMatchHTML(entry, index, date, locale, is12Hour, liveResults) {
                     const countdownElement = document.getElementById(countdownId);
                     if (!countdownElement) { clearInterval(interval); return; }
                     const now = new Date();
-                    const diffMs = dateObj.getTime() - now.getTime();
+                    const diffMs = dateObjTimezone.getTime() - now.getTime();
                     if (diffMs <= 0) {
                         countdownElement.innerHTML = "0:00:00";
                         clearInterval(interval);
@@ -820,7 +825,7 @@ function generateCalendarListView() {
                                 ${overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
                                 <i class="${outsideUKTimezone ? 'local-time-clock' : ''} fa-solid fa-clock"></i>
                                 <h2>
-                                    <span title="${matchEndedText}">${formattedMatchTime}</span>
+                                    <span translate="no" title="${matchEndedText}">${formattedMatchTime}</span>
                                     ${outsideUKTimezone ? `<span title="Local time" style="display: inline-flex; align-items: center;">|&nbsp;<i class="overseas-time-clock fa-solid fa-clock"></i>${formattedLocalMatchTime}</span>` : ''}
                                 </h2>
                                 ${!overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ''}
@@ -975,8 +980,8 @@ function checkIfOutsideUK() {
     if (outsideUKTimezone) {
         overseasMessage.classList.remove("hidden");
         overseasMessage.innerHTML = `
-            <b translate="no">Note</b><br>You seem to be outside the UK.
-            Times and dates displayed will show the UK time, then your local time next to it.<br>
+            <b translate="no">Note</b><br>Outside the UK,
+            times and dates displayed will show according to the UK timezone, with your local time next to it.<br>
             <b>Overseas date type:</b> <button id="overseasDisplayButton"><span class="fa-solid fa-bars"></span> Overseas Display Toggle</button>
         `;
         generateOverseasDateDisplayButton();

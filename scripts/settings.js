@@ -1,7 +1,7 @@
 /*
-    This script manages the settings panel for the website. It creates a settings 
+    This script manages the settings panel for the website. It creates a settings
     menu that allows users to change the theme, locale, and various other settings.
-    It saves the settings in local storage and applies them to the page. 
+    It saves the settings in local storage and applies them to the page.
 */
 
 import { halloweenEasterEgg, winterEasterEgg, newYearCountDown, newYearFireworks } from './eastereggs.js';
@@ -26,7 +26,7 @@ const cookiesBox = `
             You can read our privacy policy <a href="pages/privacy/">here</a>.
         </p>
         <form method="dialog">
-            <button id="cookieAccept">OK</button> 
+            <button id="cookieAccept">OK</button>
             <button id="cookieSettings">Settings</button>
         </form>
     </dialog>
@@ -63,7 +63,7 @@ let darkThemeEnabled = meta.content == "dark" ? 1 : 0;
 function generateSettingsPanel() {
     try {
         const tempTheme = localStorage.getItem("darktheme") == 1 ? "Dark" : (localStorage.getItem("darktheme") == 0 ? "Light" : "Automatic");
-        
+
         const tempLocale = localStorage.getItem("locale") || "en-GB";
         const tempLocaleDisplay = tempLocale === "en-GB" ? "English (UK)" : "English (US)";
         const tempStartDay = localStorage.getItem("startDay") || 1;
@@ -79,7 +79,7 @@ function generateSettingsPanel() {
             <span translate="yes" class="settings-hover-info" data-info="UK or US date/time format">Locale</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button><br>
             <span translate="yes" class="settings-hover-info" data-info="Monday or Sunday">First day of week</span><button id="toggleStartDayButton" class="settings-option">${weekdayNamesFull[tempStartDay]}</button><br>
             <span translate="yes" class="settings-hover-info" data-info="Use UK or local dates when overseas">Overseas date type</span><button id="toggleOverseasDateDisplayButton" class="settings-option">${tempOverseasDateDisplay ? 'Overseas' : 'UK'}</button><br>
-            
+
             <div translate="yes" class="setting-sub-heading">Website Data</div><hr>
             <span translate="yes">API requests sent: <span class="settings-option">${apiReqsSent}</span></span><br>
             <span translate="yes" class="settings-hover-info" data-info="Reloads the page">Reset settings to default</span><button id="clearLocalStorage" class="settings-option">Reset</button>
@@ -157,7 +157,7 @@ function toggleStartDay() {
     generateSettingsPanel();
 }
 
-function toggleLocale() {    
+function toggleLocale() {
     const locales = ["en-GB", "en-US"];
     const currentLocale = localStorage.getItem("locale") || "en-GB";
     const newLocale = locales[(locales.indexOf(currentLocale) + 1) % locales.length];
@@ -378,7 +378,29 @@ function mkwEasterEgg() {
     document.head.appendChild(style);
 }
 
+function isOutsideUK() {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone !== "Europe/London";
+}
+
+function checkIfOutsideUK() {
+    if (!isOutsideUK()) return;
+    console.log("outsidetheUK")
+
+    const banner = document.createElement("div");
+    banner.textContent = "Currently outside the UK - some dates and times may only show for the UK timezone";
+    banner.style.cssText = "background:#1256d2;color:#fff;text-align:center;padding:4px;font-size:14px;position:fixed;top:48px;left:0;width:100%;";
+    document.body.prepend(banner);
+
+    const style = document.createElement("style");
+    style.textContent = `
+        body { padding-top: 20px !important; }
+        .navbar-container { top: 0 !important; }
+    `;
+    document.head.appendChild(style);
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     // if (localStorage.getItem("cookiesAccepted") !== "true") generateCookiesPopup();
     checkEasterEggs();
+    checkIfOutsideUK();
 });
