@@ -394,6 +394,9 @@ function checkIfOutsideUK() {
     style.textContent = `
         body { padding-top: 20px !important; }
         .navbar-container { top: 0 !important; }
+        @media (max-width: 768px) {
+            body { padding-top: 36px !important; }
+        }
     `;
     document.head.appendChild(style);
 }
