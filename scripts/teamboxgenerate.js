@@ -141,7 +141,7 @@ const retryFetch = debounce(async () => {
 document.addEventListener("DOMContentLoaded", async () => {
     const startTime = performance.now();
     const cached = localStorage.getItem(CACHE_KEY);
-    
+
     if (cached) {
         try {
             JSTeamBoxLoading.innerHTML = "";
@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             retryFetch();
         }
     }
-    
+
     await generateTeamBoxes(teamData);
     console.debug(`%cteamboxgenerate.js %c> %cGenerated updated team data in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9452ff", "color:#fff", "color:#c29cff");
     localStorage.setItem(CACHE_KEY, JSON.stringify(teamData));
@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 document.addEventListener('listViewChange', async () => {
     await getTeamDataSafe(currentSeason);
-    console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes...`, "color:#9452ff", "color:#fff", "color:#c29cff");    
+    console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     await generateTeamBoxes(teamData, false);
 });
 
@@ -213,11 +213,18 @@ seasonPicker.addEventListener("change", function () {
 
 async function updateSeasonText() {
     let seasonStatus = "Unknown...";
+    let seasonMatchesCompleted = "";
+    let seasonPercentage = "";
     try {
-        seasonStatus = (await fetchSeasonInfo(currentSeason))[1];
+        let seasonInfo = await fetchSeasonInfo(currentSeason);
+        seasonStatus = seasonInfo[1];
+        seasonMatchesCompleted = seasonInfo[2];
+        const [completed, total] = seasonMatchesCompleted.split('/').map(Number);
+        seasonPercentage = `${Math.round((completed / total) * 100)}%`;
     } catch {
         // Keep default
     }
     currentSeasonText.innerText = `${seasonStatus} (${START_YEAR + currentSeason}-${START_YEAR + 1 + currentSeason})`;
+    currentSeasonText.title = `${seasonMatchesCompleted} (${seasonPercentage})`;
     currentSeasonText.classList.add('fade-in');
 }
