@@ -387,7 +387,7 @@ function checkIfOutsideUK() {
 
     const banner = document.createElement("div");
     banner.textContent = "Currently outside the UK - some dates and times may only show for the UK timezone";
-    banner.style.cssText = "background:#1256d2;color:#fff;text-align:center;padding:4px;font-size:14px;position:fixed;top:48px;left:0;width:100%;z-index:99;";
+    banner.style.cssText = "background:#1256d2;color:#fff;text-align:center;padding:4px;font-size:14px;position:fixed;top:48px;left:0;width:100%;z-index:5;";
     document.body.prepend(banner);
 
     const style = document.createElement("style");
