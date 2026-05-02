@@ -160,7 +160,7 @@ const tracks = {
     MK7: [
         "Toad Circuit",
         "Daisy Hills",
-        { us: "Cheep Cheep Lagoon", pal: "Cheep-Cheep Cape" },
+        { us: "Cheep Cheep Lagoon", pal: "Cheep Cheep Cape" },
         "Shy Guy Bazaar",
         { us: "Wuhu Loop", pal: "Wuhu Island Loop" },
         "Mario Circuit",
