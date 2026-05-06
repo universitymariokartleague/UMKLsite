@@ -195,11 +195,29 @@ async function createTeamStandingsImage(season, isCurrentSeason, teamStandingsDa
     }
 
     // Draw team standings
+    // Compute tie-aware positions based on team_season_points
+    const standingsForRank = teamStandingsData.slice().sort((a, b) => Number(b.team_season_points) - Number(a.team_season_points));
+    const posByName = {};
+    let lastPoints = null;
+    let lastPosition = 0;
+    for (let idx = 0; idx < standingsForRank.length; idx++) {
+        const t = standingsForRank[idx];
+        const pts = Number(t.team_season_points);
+        if (pts === lastPoints) {
+            posByName[t.team_name] = lastPosition;
+        } else {
+            lastPosition = idx + 1;
+            posByName[t.team_name] = lastPosition;
+            lastPoints = pts;
+        }
+    }
+
     for (let i = 0; i < Math.min(teamStandingsData.length, MAX_TEAMS); i++) {
         const teamdata = teamStandingsData[i];
 
-        // Add position marker
-        addText(ctx, `${i+1}`, [INIT_POS[0] - POSITION_OFFSET, INIT_POS[1] - 3], 
+        // Add position marker (use tie-aware position when available)
+        const displayPos = posByName[teamdata.team_name] ?? (i + 1);
+        addText(ctx, `${displayPos}`, [INIT_POS[0] - POSITION_OFFSET, INIT_POS[1] - 3], 
                DEFAULT_FONT, 52, TITLE_COLOR, "m");
 
         // Add team name

@@ -77,6 +77,22 @@ async function generateTeamBoxes(data, cached = false) {
         team.link_name = team.team_name;
     }
 
+    // Tie handling - teams with equal points have the same position
+    const sortedByPoints = data.slice().sort((a, b) => Number(b.team_season_points) - Number(a.team_season_points));
+    let lastPoints = null;
+    let lastPosition = 0;
+    for (let i = 0; i < sortedByPoints.length; i++) {
+        const t = sortedByPoints[i];
+        const pts = Number(t.team_season_points);
+        if (pts === lastPoints) {
+            t._computedPosition = lastPosition;
+        } else {
+            lastPosition = i + 1;
+            t._computedPosition = lastPosition;
+            lastPoints = pts;
+        }
+    }
+
     for (const team of data) {
         const row = document.createElement('div');
         row.className = "teamStanding";
@@ -90,7 +106,7 @@ async function generateTeamBoxes(data, cached = false) {
 
         const opacityStyle = cached ? '' : 'onload="this.style.opacity=1"';
         row.innerHTML = `
-            <div translate="no" class="teamPosition">${team.season_position}</div>
+            <div translate="no" class="teamPosition">${team._computedPosition ?? team.season_position}</div>
             <div class="teamColour" style="background-color:${team.team_color}"></div>
             <picture>
                 <source srcset="${team.logo_src_avif}" type="image/avif">
