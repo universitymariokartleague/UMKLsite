@@ -1,5 +1,5 @@
 /*
-    This script is used to generate standing images for the share button 
+    This script is used to generate standing images for the share button
     on the teams page.
 */
 export { generateTeamStandingsImage };
@@ -21,14 +21,14 @@ async function getCurrentSeason() {
             season: 0
         })
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+            return response.json();
+        });
 }
 
 async function getTeamdata(team = "", season) {
@@ -43,14 +43,14 @@ async function getTeamdata(team = "", season) {
             season: `${season}`
         })
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+            return response.json();
+        });
 }
 
 async function loadImage(url) {
@@ -86,7 +86,7 @@ function addText(ctx, text, pos, font, size, color, anchor = "left", spacing = 5
 
     if (anchor.includes("m")) { // middle alignment
         x -= metrics.width / 2;
-    } 
+    }
     else if (anchor.includes("r")) { // right alignment
         x -= metrics.width;
     }
@@ -95,18 +95,18 @@ function addText(ctx, text, pos, font, size, color, anchor = "left", spacing = 5
     if (text.includes("\n")) {
         const lines = text.split("\n");
         const lineHeight = size * 1; // Approximate line height
-        
+
         for (const line of lines) {
             const lineMetrics = ctx.measureText(line);
             let lineX = x;
-            
+
             if (anchor.includes("m")) {
                 lineX -= lineMetrics.width / 2;
-            } 
+            }
             else if (anchor.includes("r")) {
                 lineX -= lineMetrics.width;
             }
-            
+
             ctx.fillText(line, lineX, y);
             y += lineHeight + spacing;
         }
@@ -177,25 +177,24 @@ async function createTeamStandingsImage(season, isCurrentSeason, teamStandingsDa
     }
 
     // Add title
-    addText(ctx, `Season ${season}`, [TITLE_POSITION[0], TITLE_POSITION[1] - 56], 
-           DEFAULT_FONT, TITLE_FONT_SIZE - 15, TITLE_COLOR, "l", 5, true);
-    addText(ctx, "Team Standings", TITLE_POSITION, 
-           DEFAULT_FONT, TITLE_FONT_SIZE, TITLE_COLOR, "l", 5, true);
+    addText(ctx, `Season ${season}`, [TITLE_POSITION[0], TITLE_POSITION[1] - 56],
+        DEFAULT_FONT, TITLE_FONT_SIZE - 15, TITLE_COLOR, "l", 5, true);
+    addText(ctx, "Team Standings", TITLE_POSITION,
+        DEFAULT_FONT, TITLE_FONT_SIZE, TITLE_COLOR, "l", 5, true);
 
     // Add timestamp or season status
-    drawRoundedRect(ctx, TITLE_POSITION[0] + 540.5, TITLE_POSITION[1] - 112, 
-                370, 45, 15, TITLE_COLOR);
+    drawRoundedRect(ctx, TITLE_POSITION[0] + 540.5, TITLE_POSITION[1] - 112,
+        370, 45, 15, TITLE_COLOR);
     const timestamp = new Date().toLocaleDateString('en-GB');
     if (isCurrentSeason) {
-        addText(ctx, `Standings as of ${timestamp}`, [TITLE_POSITION[0] + 725, TITLE_POSITION[1] - 81], 
-               DEFAULT_FONT, TITLE_FONT_SIZE - 35, ACCENT_COLOR, "m", 5, false, "600");
+        addText(ctx, `Standings as of ${timestamp}`, [TITLE_POSITION[0] + 725, TITLE_POSITION[1] - 81],
+            DEFAULT_FONT, TITLE_FONT_SIZE - 35, ACCENT_COLOR, "m", 5, false, "600");
     } else {
-        addText(ctx, "This season has concluded", [TITLE_POSITION[0] + 725, TITLE_POSITION[1] - 81], 
-               DEFAULT_FONT, TITLE_FONT_SIZE - 35, ACCENT_COLOR, "m", 5, false, "600");
+        addText(ctx, "This season has concluded", [TITLE_POSITION[0] + 725, TITLE_POSITION[1] - 81],
+            DEFAULT_FONT, TITLE_FONT_SIZE - 35, ACCENT_COLOR, "m", 5, false, "600");
     }
 
-    // Draw team standings
-    // Compute tie-aware positions based on team_season_points
+    // Tie handling - teams with equal points have the same position
     const standingsForRank = teamStandingsData.slice().sort((a, b) => Number(b.team_season_points) - Number(a.team_season_points));
     const posByName = {};
     let lastPoints = null;
@@ -217,12 +216,12 @@ async function createTeamStandingsImage(season, isCurrentSeason, teamStandingsDa
 
         // Add position marker (use tie-aware position when available)
         const displayPos = posByName[teamdata.team_name] ?? (i + 1);
-        addText(ctx, `${displayPos}`, [INIT_POS[0] - POSITION_OFFSET, INIT_POS[1] - 3], 
-               DEFAULT_FONT, 52, TITLE_COLOR, "m");
+        addText(ctx, `${displayPos}`, [INIT_POS[0] - POSITION_OFFSET, INIT_POS[1] - 3],
+            DEFAULT_FONT, 52, TITLE_COLOR, "m");
 
         // Add team name
-        addText(ctx, teamdata.team_name, [INIT_POS[0] + TEAM_NAME_OFFSET, INIT_POS[1]], 
-               DEFAULT_FONT, 60, ACCENT_COLOR, "l");
+        addText(ctx, teamdata.team_name, [INIT_POS[0] + TEAM_NAME_OFFSET, INIT_POS[1]],
+            DEFAULT_FONT, 60, ACCENT_COLOR, "l");
 
         // Add team emblem
         try {
@@ -234,23 +233,23 @@ async function createTeamStandingsImage(season, isCurrentSeason, teamStandingsDa
         }
 
         // Add team color box
-        drawRoundedRect(ctx, INIT_POS[0] - 70, INIT_POS[1] - 58, 
-                       TEAM_COLOR_BOX_SIZE[0], TEAM_COLOR_BOX_SIZE[1], 8, teamdata.team_color);
-        
+        drawRoundedRect(ctx, INIT_POS[0] - 70, INIT_POS[1] - 58,
+            TEAM_COLOR_BOX_SIZE[0], TEAM_COLOR_BOX_SIZE[1], 8, teamdata.team_color);
+
         // Add points
-        addText(ctx, `${teamdata.team_season_points}`, [INIT_POS[0] + POINTS_X_OFFSET, INIT_POS[1] + POINTS_Y_OFFSET], 
-               DEFAULT_FONT, 50, ACCENT_COLOR, "r");
+        addText(ctx, `${teamdata.team_season_points}`, [INIT_POS[0] + POINTS_X_OFFSET, INIT_POS[1] + POINTS_Y_OFFSET],
+            DEFAULT_FONT, 50, ACCENT_COLOR, "r");
 
         // Add match counter
         const matches = teamdata.season_matches_played;
         const matchText = `${teamdata.season_wins_losses[0]} - ${teamdata.season_wins_losses[1]} (${matches})`;
-        addText(ctx, matchText, [INIT_POS[0] + POINTS_X_OFFSET, INIT_POS[1] + 10], 
-               DEFAULT_FONT, 22, ACCENT_COLOR, "r", 5, true, 600);
+        addText(ctx, matchText, [INIT_POS[0] + POINTS_X_OFFSET, INIT_POS[1] + 10],
+            DEFAULT_FONT, 22, ACCENT_COLOR, "r", 5, true, 600);
 
         // Update Y position for next team
         INIT_POS[1] += POSITION_OFFSET;
     }
-    
+
     // Calculate final height and crop
     const finalHeight = POSITION_OFFSET * Math.min(teamStandingsData.length, MAX_TEAMS) + 164;
     const croppedCanvas = document.createElement('canvas');
