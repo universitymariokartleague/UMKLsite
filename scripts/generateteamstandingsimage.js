@@ -5,7 +5,7 @@
 export { generateTeamStandingsImage };
 
 let startTime;
-let currentSeason;
+let seasonStatus;
 
 // Constants
 const TEAM_ICON_DIR = "assets/media/teamemblems/";
@@ -145,7 +145,7 @@ function drawRoundedRect(ctx, x, y, width, height, radius, fill, stroke, strokeW
     }
 }
 
-async function createTeamStandingsImage(season, isCurrentSeason, teamStandingsData) {
+async function createTeamStandingsImage(season, seasonOngoing, teamStandingsData) {
     // Constants
     const TITLE_POSITION = [200, 127];
     const TITLE_FONT_SIZE = 60;
@@ -186,7 +186,7 @@ async function createTeamStandingsImage(season, isCurrentSeason, teamStandingsDa
     drawRoundedRect(ctx, TITLE_POSITION[0] + 540.5, TITLE_POSITION[1] - 112,
         370, 45, 15, TITLE_COLOR);
     const timestamp = new Date().toLocaleDateString('en-GB');
-    if (isCurrentSeason) {
+    if (seasonOngoing) {
         addText(ctx, `Standings as of ${timestamp}`, [TITLE_POSITION[0] + 725, TITLE_POSITION[1] - 81],
             DEFAULT_FONT, TITLE_FONT_SIZE - 35, ACCENT_COLOR, "m", 5, false, "600");
     } else {
@@ -269,9 +269,9 @@ async function createTeamStandingsImage(season, isCurrentSeason, teamStandingsDa
 async function generateTeamStandingsImage(season) {
     startTime = performance.now();
 
-    currentSeason = (await getCurrentSeason())[0];
+    seasonStatus = (await getCurrentSeason())[1];
     let teamStandings = await getTeamdata("", season);
 
     console.debug(`%cgenerateteamstandingsimage.js %c> %cGenerated team standings image in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
-    return createTeamStandingsImage(season, season == currentSeason, teamStandings)
+    return createTeamStandingsImage(season, seasonStatus == "Ongoing", teamStandings)
 }
