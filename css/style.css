@@ -27,17 +27,17 @@
         --text-color: #fff;
         --hr-color: #ffffffA0;
         --bg-color: #111111;
-    
+
         --accent-color: #bc0839;
-    
+
         --link-color: #fa5252;
         --link-hover-color: #fff;
         --highlight-color: #bc0839d0;
-    
+
         --code-color: #fff;
         --code-bg-color: #0000004d;
         --code-border: 1px solid #ffffff33;
-    
+
         --mention-color: #98acff;
         --box-border: 1px solid #ffffff4d;
         --box-outline: 2px solid #ffffff99;
@@ -139,7 +139,8 @@ li {
 }
 
 [id] {
-    scroll-margin-top: 60px; /* fix anchors */
+    scroll-margin-top: 60px;
+    /* fix anchors */
 }
 
 .image {
@@ -182,16 +183,16 @@ a[target="_blank"]::after {
 }
 
 .no-color-link {
-    color: #FFF!important;
+    color: #FFF !important;
 }
 
 .no-color-link-themed {
-    color: var(--text-color)!important;
+    color: var(--text-color) !important;
 }
 
 .no-underline-link {
     text-decoration: none;
-    transition: none!important;
+    transition: none !important;
 }
 
 .no-underline-link-footer {
@@ -337,54 +338,116 @@ hr.hr-below-title {
 
 /*blockquote*/
 blockquote {
-	border-left: 5px solid rgba(255, 102, 102, 0.9);
-	padding: 15px;
-	margin-left: 0px;
-	margin-right: 0px;
-	background-color: rgba(0, 0, 0, 0.4);
-	border: 1px solid rgba(255, 255, 255, 0.2);
-	border-radius: 10px;
+    border-left: 5px solid rgba(255, 102, 102, 0.9);
+    padding: 15px;
+    margin-left: 0px;
+    margin-right: 0px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
 }
 
 .miniquote {
-	border-left: 3px solid rgb(255, 255, 255, 0.8);
-	background-color: rgba(0, 0, 0, 0.5);
-	width: fit-content;
-	border: 0;
-	border-radius: 0;
-	padding: 10px;
-	-webkit-backdrop-filter: blur(5px);
-	backdrop-filter: blur(5px);
+    border-left: 3px solid rgb(255, 255, 255, 0.8);
+    background-color: rgba(0, 0, 0, 0.5);
+    width: fit-content;
+    border: 0;
+    border-radius: 0;
+    padding: 10px;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
 }
 
 .success {
-	border: 2px solid rgba(8, 255, 111, 0.5);
-	background-color: rgba(8, 255, 111, 0.3);
+    border: 2px solid rgba(8, 255, 111, 0.5);
+    background-color: rgba(8, 255, 111, 0.3);
 }
 
 .info {
-	border: 2px solid rgba(33, 150, 243, 0.5);
-	background-color: rgba(33, 150, 243, 0.3);
+    border: 2px solid rgba(33, 150, 243, 0.5);
+    background-color: rgba(33, 150, 243, 0.3);
 }
 
 .warning {
-	border: 2px solid rgba(255, 152, 0, 0.5);
-	background-color: rgba(255, 152, 0, 0.3);
+    border: 2px solid rgba(255, 152, 0, 0.5);
+    background-color: rgba(255, 152, 0, 0.3);
 }
 
 .fail {
-	border: 2px solid rgba(253, 60, 26, 0.5);
-	background-color: rgba(253, 60, 26, 0.3);
+    border: 2px solid rgba(253, 60, 26, 0.5);
+    background-color: rgba(253, 60, 26, 0.3);
 }
 
 .rainbow {
-	border-left: 0px;
-	border: 1px solid rgba(253, 60, 26, 0.5);
-	box-shadow: 0px 0px 15px 5px rgba(255, 255, 255, 0.2);
-	animation: rainbow 4s infinite;
+    border-left: 0px;
+    border: 1px solid rgba(253, 60, 26, 0.5);
+    box-shadow: 0px 0px 15px 5px rgba(255, 255, 255, 0.2);
+    animation: rainbow 4s infinite;
 }
 
-@keyframes rainbow{0%,100%{border-color:rgba(255,0,0,.7);background-color:rgba(255,0,0,.15)}8%{border-color:rgba(255,127,0,.7);background-color:rgba(255,127,0,.15)}16%{border-color:rgba(255,255,0,.7);background-color:rgba(255,255,0,.15)}25%{border-color:rgba(127,255,0,.7);background-color:rgba(127,255,0,.15)}33%{border-color:rgba(0,255,0,.7);background-color:rgba(0,255,0,.15)}41%{border-color:rgba(0,255,127,.7);background-color:rgba(0,255,127,.15)}50%{border-color:rgba(0,255,255,.7);background-color:rgba(0,255,255,.15)}58%{border-color:rgba(0,127,255,.7);background-color:rgba(0,127,255,.15)}66%{border-color:rgba(0,0,255,.7);background-color:rgba(0,0,255,.15)}75%{border-color:rgba(127,0,255,.7);background-color:rgba(127,0,255,.15)}83%{border-color:rgba(255,0,255,.7);background-color:rgba(255,0,255,.15)}91%{border-color:rgba(255,0,127,.7);background-color:rgba(255,0,127,.15)}}
+@keyframes rainbow {
+
+    0%,
+    100% {
+        border-color: rgba(255, 0, 0, .7);
+        background-color: rgba(255, 0, 0, .15)
+    }
+
+    8% {
+        border-color: rgba(255, 127, 0, .7);
+        background-color: rgba(255, 127, 0, .15)
+    }
+
+    16% {
+        border-color: rgba(255, 255, 0, .7);
+        background-color: rgba(255, 255, 0, .15)
+    }
+
+    25% {
+        border-color: rgba(127, 255, 0, .7);
+        background-color: rgba(127, 255, 0, .15)
+    }
+
+    33% {
+        border-color: rgba(0, 255, 0, .7);
+        background-color: rgba(0, 255, 0, .15)
+    }
+
+    41% {
+        border-color: rgba(0, 255, 127, .7);
+        background-color: rgba(0, 255, 127, .15)
+    }
+
+    50% {
+        border-color: rgba(0, 255, 255, .7);
+        background-color: rgba(0, 255, 255, .15)
+    }
+
+    58% {
+        border-color: rgba(0, 127, 255, .7);
+        background-color: rgba(0, 127, 255, .15)
+    }
+
+    66% {
+        border-color: rgba(0, 0, 255, .7);
+        background-color: rgba(0, 0, 255, .15)
+    }
+
+    75% {
+        border-color: rgba(127, 0, 255, .7);
+        background-color: rgba(127, 0, 255, .15)
+    }
+
+    83% {
+        border-color: rgba(255, 0, 255, .7);
+        background-color: rgba(255, 0, 255, .15)
+    }
+
+    91% {
+        border-color: rgba(255, 0, 127, .7);
+        background-color: rgba(255, 0, 127, .15)
+    }
+}
 
 #current-season {
     opacity: 0;
@@ -410,9 +473,11 @@ blockquote {
     0% {
         box-shadow: 0 0 0 0 rgba(188, 8, 57, 0.7);
     }
+
     70% {
         box-shadow: 0 0 0 8px rgba(188, 8, 57, 0);
     }
+
     100% {
         box-shadow: 0 0 0 0 rgba(188, 8, 57, 0);
     }
@@ -462,16 +527,19 @@ blockquote {
     vertical-align: middle;
 }
 
-#JSTeamBox, #JSMatchHistory {
+#JSTeamBox,
+#JSMatchHistory {
     margin-bottom: 20px;
 }
 
-#JSTeamBox, #JSMatchHistory {
+#JSTeamBox,
+#JSMatchHistory {
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
 }
 
-#JSTeamBox.fade-in, #JSMatchHistory.fade-in {
+#JSTeamBox.fade-in,
+#JSMatchHistory.fade-in {
     opacity: 1;
 }
 
@@ -514,7 +582,6 @@ umkl-navbar {
     position: fixed;
     width: 100%;
     height: 48px;
-    top: 0;
     z-index: 8;
 }
 
@@ -524,5 +591,6 @@ umkl-footer {
     text-align: center;
     text-decoration: none;
     padding: 5px;
+    height: 20px;
     z-index: 1;
 }
