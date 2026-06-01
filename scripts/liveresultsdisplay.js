@@ -10,6 +10,9 @@ const firstTeamLogo = document.getElementById("firstteamlogo");
 const secondTeamLogo = document.getElementById("secondteamlogo");
 const errorMessage = document.getElementById("errormessage");
 
+const urlParams = new URLSearchParams(window.location.search);
+const swapped = urlParams.get('order') === 'second';
+
 const MATCH_LENGTH_MINS = 90;
 
 const scoreMap = [15, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
@@ -29,14 +32,14 @@ async function getLiveResults() {
         },
         body: "{}"
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+            return response.json();
+        });
 }
 
 async function getMatchData() {
@@ -47,14 +50,14 @@ async function getMatchData() {
         },
         body: "{}"
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+            return response.json();
+        });
 }
 
 function getLiveMatchTeams() {
@@ -109,8 +112,11 @@ function getLiveMatchTeams() {
     const teamNames = liveMatches.map(entry => entry.teamsInvolved)[0];
     receivedValidLogos = Boolean(teamNames && teamNames[0] && teamNames[1]);
     if (teamNames) {
-        firstTeamLogo.src = `assets/media/teamemblems/${teamNames[0].toUpperCase()}.avif`
-        secondTeamLogo.src = `assets/media/teamemblems/${teamNames[1].toUpperCase()}.avif`
+        const [logoA, logoB] = swapped
+            ? [teamNames[1], teamNames[0]]
+            : [teamNames[0], teamNames[1]];
+        firstTeamLogo.src = `assets/media/teamemblems/${logoA.toUpperCase()}.avif`
+        secondTeamLogo.src = `assets/media/teamemblems/${logoB.toUpperCase()}.avif`
     }
 }
 
@@ -160,7 +166,7 @@ function setScores() {
 
     let scores = [teamAPoints, teamBPoints]
 
-    const [newFirst, newSecond] = [scores[0], scores[1]];
+    const [newFirst, newSecond] = swapped ? [scores[1], scores[0]] : [scores[0], scores[1]];
 
     const currentFirst = parseInt(firstTeamScore.innerText) || 0;
     const currentSecond = parseInt(secondTeamScore.innerText) || 0;
