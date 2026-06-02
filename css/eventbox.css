@@ -265,11 +265,6 @@
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-#listViewOverlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
 .list-view-slide-over {
     position: absolute;
     top: 0;

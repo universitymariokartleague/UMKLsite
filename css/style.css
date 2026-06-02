@@ -494,42 +494,11 @@ blockquote {
     }
 }
 
-.discordRolePreviewContainer {
-    min-height: 340px;
-}
-
 .rule-category-box {
     border: 1px solid #cccccccc;
     border-radius: 10px;
     padding: 15px;
     margin-bottom: 10px;
-}
-
-#currentTeamColors {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50px;
-    margin-top: 5px;
-    border-radius: 10px;
-    padding: 10px;
-    border: 1px solid #ccccccaa;
-    background-color: var(--box-area-bg-color);
-}
-
-.color-box {
-    width: 35px;
-    aspect-ratio: 1 / 1;
-    border-radius: 5px;
-    margin: 2px;
-    opacity: 0;
-    animation: fadeIn 0.2s ease-in-out forwards;
-}
-
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-    }
 }
 
 .question-mark-icon {
@@ -538,20 +507,10 @@ blockquote {
     vertical-align: middle;
 }
 
-#JSTeamBox,
-#JSMatchHistory {
-    margin-bottom: 20px;
-}
-
-#JSTeamBox,
-#JSMatchHistory {
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
-}
-
-#JSTeamBox.fade-in,
-#JSMatchHistory.fade-in {
-    opacity: 1;
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
 }
 
 dialog.cookie-popup {

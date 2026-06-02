@@ -95,6 +95,18 @@
     margin-block-end: 5px;
 }
 
+#JSTeamBox,
+#JSMatchHistory {
+    margin-bottom: 20px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#JSTeamBox.fade-in,
+#JSMatchHistory.fade-in {
+    opacity: 1;
+}
+
 @media screen and (max-width: 767px) {
     .team-info {
         flex-direction: column;

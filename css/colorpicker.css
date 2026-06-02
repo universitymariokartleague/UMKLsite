@@ -29,6 +29,27 @@
     float: right;
 }
 
+#currentTeamColors {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    margin-top: 5px;
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid #ccccccaa;
+    background-color: var(--box-area-bg-color);
+}
+
+.color-box {
+    width: 35px;
+    aspect-ratio: 1 / 1;
+    border-radius: 5px;
+    margin: 2px;
+    opacity: 0;
+    animation: fadeIn 0.2s ease-in-out forwards;
+}
+
 @media (max-width: 767px) {
     #colorWheel {
         float: unset;
