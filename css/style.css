@@ -71,7 +71,17 @@ html {
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
     text-size-adjust: 100%;
-    background-color: #bc0839;
+    background-color: var(--bg-color);
+}
+
+@view-transition {
+    navigation: auto;
+}
+
+@media screen and (max-width: 767px) {
+    @view-transition {
+        navigation: none;
+    }
 }
 
 body,
@@ -101,10 +111,6 @@ main {
     margin-top: 65px;
     margin-bottom: 20px;
     font-size: 16px;
-}
-
-@view-transition {
-    navigation: auto;
 }
 
 h1,

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <base href="../../">
 
@@ -30,11 +31,11 @@
     <script type="module" src="components/footer.js" defer></script>
 
     <!-- Scripts -->
-    <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-    
+    <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();</script>
+
     <script type="module" src="scripts/settings.js" defer></script>
-<link rel="modulepreload" href="components/navbar.js">
-<link rel="modulepreload" href="components/footer.js">
+    <link rel="modulepreload" href="components/navbar.js">
+    <link rel="modulepreload" href="components/footer.js">
 </head>
 
 <body id="top">
@@ -45,68 +46,103 @@
         <p class="p-below-title">Various tools and pages</p>
         <hr class="hr-below-title">
 
-        <div class="tool-grid">
-            <a href="pages/tools/6v6scorecalculator/" class="tool-button">
-                <div class="tool-icon">
-                    <picture>
-                        <source srcset="assets/media/tools/6v6_score_calculator.avif" type="image/avif">
-                        <img src="assets/media/tools/6v6_score_calculator.png" alt="6v6 Score Calculator Icon">
-                    </picture>
-                </div>
-                <div class="tool-label">6v6 Score Calculator</div>
-            </a>
-            <a href="pages/tools/blogbuilder/" class="tool-button">
-                <div class="tool-icon">
-                    <picture>
-                        <source srcset="assets/media/tools/blog_builder.avif" type="image/avif">
-                        <img src="assets/media/tools/blog_builder.png" alt="Blog Builder Icon">
-                    </picture>
-                </div>
-                <div class="tool-label">Blog Builder</div>
-            </a>
-            <a href="pages/tools/colourpicker/" class="tool-button">
-                <div class="tool-icon">
-                    <picture>
-                        <source srcset="assets/media/tools/colour_picker.avif" type="image/avif">
-                        <img src="assets/media/tools/colour_picker.png" alt="Colour Picker Icon">
-                    </picture>
-                </div>
-                <div class="tool-label">Colour Picker</div>
-            </a>
-            
-            <a href="pages/tools/favtrack/" class="tool-button">
-                <div class="tool-icon">
-                    <picture>
-                        <source srcset="assets/media/tools/favourite_course.avif" type="image/avif">
-                        <img src="assets/media/tools/favourite_course.png" alt="Favourite Course Icon">
-                    </picture>
-                </div>
-                <div class="tool-label">Favourite Course</div>
-            </a>
-
-            <a href="pages/tools/comborandomiser/" class="tool-button">
-                <div class="tool-icon">
-                    <picture>
-                        <source srcset="assets/media/tools/combo_randomiser.avif" type="image/avif">
-                        <img src="assets/media/tools/combo_randomiser.png" alt="Combo Randomiser Icon">
-                    </picture>
-                </div>
-                <div class="tool-label">Combo Randomiser</div>
-            </a>
-
-            <a href="pages/tools/trackrandomiser/" class="tool-button">
-                <div class="tool-icon">
-                    <picture>
-                        <source srcset="assets/media/tools/course_randomiser.avif" type="image/avif">
-                        <img src="assets/media/tools/course_randomiser.png" alt="Course Randomiser Icon">
-                    </picture>
-                </div>
-                <div class="tool-label">Course Randomiser</div>
-            </a>
+        <div class="tool-section">
+            <h2>Blogging Tools</h2>
+            <div class="tool-grid">
+                <a href="pages/tools/blogbuilder/" class="tool-button">
+                    <div class="tool-icon">
+                        <picture>
+                            <source srcset="assets/media/tools/blog_builder.avif" type="image/avif">
+                            <img src="assets/media/tools/blog_builder.png" alt="Blog Builder Icon">
+                        </picture>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label">Blog Builder</div>
+                        <div class="tool-desc">Build, create and export a news post for the UMKL site</div>
+                    </div>
+                </a>
+            </div>
         </div>
 
+        <div class="tool-section">
+            <h2>League Tools</h2>
+            <div class="tool-grid">
+                <a href="pages/tools/colourpicker/" class="tool-button">
+                    <div class="tool-icon">
+                        <picture>
+                            <source srcset="assets/media/tools/colour_picker.avif" type="image/avif">
+                            <img src="assets/media/tools/colour_picker.png" alt="Colour Picker Icon">
+                        </picture>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label">Colour Picker</div>
+                        <div class="tool-desc">Pick a colour and visualise how it looks as a role on Discord</div>
+                    </div>
+                </a>
+
+                <a href="pages/tools/6v6scorecalculator/" class="tool-button">
+                    <div class="tool-icon">
+                        <picture>
+                            <source srcset="assets/media/tools/6v6_score_calculator.avif" type="image/avif">
+                            <img src="assets/media/tools/6v6_score_calculator.png" alt="6v6 Score Calculator Icon">
+                        </picture>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label">6v6 Score Calculator</div>
+                        <div class="tool-desc">Calculate and visualise point scores from a 6v6 match</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="tool-section">
+            <h2>Game Tools</h2>
+            <div class="tool-grid">
+                <a href="pages/tools/trackrandomiser/" class="tool-button">
+                    <div class="tool-icon">
+                        <picture>
+                            <source srcset="assets/media/tools/course_randomiser.avif" type="image/avif">
+                            <img src="assets/media/tools/course_randomiser.png" alt="Course Randomiser Icon">
+                        </picture>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label">Course Randomiser</div>
+                        <div class="tool-desc">Randomise a track pick with various options across all the
+                            Mario Kart games</div>
+                    </div>
+                </a>
+
+                <a href="pages/tools/favtrack/" class="tool-button">
+                    <div class="tool-icon">
+                        <picture>
+                            <source srcset="assets/media/tools/favourite_course.avif" type="image/avif">
+                            <img src="assets/media/tools/favourite_course.png" alt="Favourite Course Icon">
+                        </picture>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label">Favourite Course</div>
+                        <div class="tool-desc">Find out your favourite track using pairwise ranking</div>
+                    </div>
+                </a>
+
+                <a href="pages/tools/comborandomiser/" class="tool-button">
+                    <div class="tool-icon">
+                        <picture>
+                            <source srcset="assets/media/tools/combo_randomiser.avif" type="image/avif">
+                            <img src="assets/media/tools/combo_randomiser.png" alt="Combo Randomiser Icon">
+                        </picture>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label">Combo Randomiser</div>
+                        <div class="tool-desc">Randomise a character and vehicle combo across all the Mario Kart games
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
     </main>
 
     <umkl-footer></umkl-footer>
 </body>
+
 </html>

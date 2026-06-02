@@ -10,7 +10,8 @@
         <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/settings.css">
-            <link rel="stylesheet" href="css/ext/fontawesome.min.css">
+        <link rel="stylesheet" href="css/tools.css">
+        <link rel="stylesheet" href="css/ext/fontawesome.min.css">
         <meta name="color-scheme" content="dark light">
 
         <meta property="og:title" content="UMKL | Rules/Guides" />
@@ -19,7 +20,7 @@
         <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
         <meta property="og:description" content="View rules and guidelines for various aspects of the UMKL" />
         <meta content="#bc0839" name="theme-color" />
-    <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
+        <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
 
         <!-- Include this to make the og:image larger -->
         <meta name="twitter:card" content="summary_large_image">
@@ -30,10 +31,10 @@
 
         <!-- Scripts -->
         <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-        
+
         <script type="module" src="scripts/settings.js" defer></script>
-    <link rel="modulepreload" href="components/navbar.js">
-    <link rel="modulepreload" href="components/footer.js">
+        <link rel="modulepreload" href="components/navbar.js">
+        <link rel="modulepreload" href="components/footer.js">
     </head>
 
     <body id="top">
@@ -44,50 +45,73 @@
             <p class="p-below-title">View rules and guidelines for various aspects of the UMKL</p>
             <hr class="hr-below-title">
 
-            <div class="rules-container">
-                <div class="rule-category-box">
-                    <h2>Match Rules</h2>
-                    <p class="p-below-title">Rules and regulations for matches</p>
-                    <a href="pages/rules/match/" class="button">View</a>
+            <div class="tool-section">
+                <h2>Rules & Guidelines</h2>
+                <div class="tool-grid">
+                    <a href="pages/rules/match/" class="tool-button">
+                        <div class="tool-icon">
+                            <i class="fa-solid fa-flag"></i>
+                        </div>
+                        <div class="tool-info">
+                            <div class="tool-label">Match Rules</div>
+                            <div class="tool-desc">Rules and regulations for matches</div>
+                        </div>
+                    </a>
+
+                    <a href="pages/rules/team/" class="tool-button">
+                        <div class="tool-icon">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+                        <div class="tool-info">
+                            <div class="tool-label">Team Guidelines</div>
+                            <div class="tool-desc">Rules and guidelines for new teams wanting to join the UMKL</div>
+                        </div>
+                    </a>
+
+                    <a href="pages/rules/brand/" class="tool-button">
+                        <div class="tool-icon">
+                            <i class="fa-solid fa-paintbrush"></i>
+                        </div>
+                        <div class="tool-info">
+                            <div class="tool-label">Brand Guidelines</div>
+                            <div class="tool-desc">Guidelines for the use of intellectual property belonging to the UMKL</div>
+                        </div>
+                    </a>
+
+                    <a href="pages/rules/stream/" class="tool-button">
+                        <div class="tool-icon">
+                            <i class="fa-solid fa-play"></i>
+                        </div>
+                        <div class="tool-info">
+                            <div class="tool-label">Streaming Guidelines</div>
+                            <div class="tool-desc">Guidelines for streamers and instructions on how to set up OBS</div>
+                        </div>
+                    </a>
                 </div>
+            </div>
 
-                <div class="rule-category-box">
-                    <h2>Team Guidelines</h2>
-                    <p class="p-below-title">Rules and guidelines for new teams wanting to join the UMKL</p>
-                    <a href="pages/rules/team/" class="button">View</a>
-                </div>
+            <div class="tool-section">
+                <h2>Discord & Cheep Cheep</h2>
+                <div class="tool-grid">
+                    <a href="pages/rules/cheepcheepcommands/" class="tool-button">
+                        <div class="tool-icon">
+                            <span class="tool-icon-char">☰</span>
+                        </div>
+                        <div class="tool-info">
+                            <div class="tool-label">Commands Documentation</div>
+                            <div class="tool-desc">Documentation for all Cheep Cheep commands on the Discord server</div>
+                        </div>
+                    </a>
 
-                <div class="rule-category-box">
-                    <h2>Brand Guidelines</h2>
-                    <p class="p-below-title">Guidelines for the use of intellectual property belonging to the UMKL</p>
-                    <a href="pages/rules/brand/" class="button">View</a>
-                </div>
-
-                <div class="rule-category-box">
-                    <h2>Streaming Guidelines</h2>
-                    <p class="p-below-title">Guidelines for streamers and instructions on how to set up OBS</p>
-                    <a href="pages/rules/stream/" class="button">View</a>
-                </div>
-
-                <hr>
-
-                <div class="rule-category-box">
-                    <h2>Discord/Cheep Cheep Commands Documentation</h2>
-                    <p class="p-below-title">
-                        Documentation for all <a href="pages/news/2025-04-19/umkl-discord/">Cheep Cheep</a> 
-                        commands on the <a href="https://discord.gg/jz3hKEmDss">Discord server</a>, split into 
-                        sections for players and for board members
-                    </p>
-                    <a href="pages/rules/cheepcheepcommands/" class="button">View</a>
-                </div>
-
-                <div class="rule-category-box">
-                    <h2>Discord/Cheep Cheep FAQ</h2>
-                    <p class="p-below-title">
-                        Frequently asked questions concerning the <a href="https://discord.gg/jz3hKEmDss">Discord server</a> 
-                        and <a href="pages/news/2025-04-19/umkl-discord/">Cheep Cheep app</a>
-                    </p>
-                    <a href="pages/rules/faq/" class="button">View</a>
+                    <a href="pages/rules/faq/" class="tool-button">
+                        <div class="tool-icon">
+                            <span class="tool-icon-char">?</span>
+                        </div>
+                        <div class="tool-info">
+                            <div class="tool-label">FAQ</div>
+                            <div class="tool-desc">Frequently asked questions concerning the Discord server and Cheep Cheep app</div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </main>
