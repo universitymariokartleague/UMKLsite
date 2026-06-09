@@ -87,7 +87,7 @@ function buildTeamInfoTable(teamData, isCurrent = false) {
             ${teamData.team_place ? `<tr><td class="table-key">Location</td><td>${teamData.team_place}</td></tr>` : ''}
             <tr><td class="table-key">Institution</td><td>${teamData.team_full_name}</td></tr>
             <tr><td class="table-key">First Entry</td><td>${teamData.first_entry ? `Season ${teamData.first_entry}` : `N/A`} <span class="settings-extra-info">${teamData.first_entry ? `(${startYear + teamData.first_entry}-${startYear + 1 + teamData.first_entry})` : ''}</span></td></tr>
-            <tr><td class="table-key">Season Titles</td><td>${teamData.team_championships} <span class="settings-extra-info">${formatChampionshipSeasons(teamData.championship_seasons)}</span></td></tr>
+            <tr><td class="table-key">Season Wins</td><td>${teamData.team_championships} <span class="settings-extra-info">${formatChampionshipSeasons(teamData.championship_seasons)}</span></td></tr>
             <tr><td class="table-key">Lifetime<br>Wins/Losses</td><td>${teamData.career_wins_losses[0]} - ${teamData.career_wins_losses[1]}</td></tr>
             <tr><td class="table-key">Lifetime Points</td><td>${teamData.team_career_points}</td></tr>
             <tr><td class="table-key">Lifetime Matches Played</td><td>${teamData.lifetime_matches_played}</td></tr>
@@ -309,7 +309,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (error && error.message && error.message.includes('429')) {
                 showError = 2;
             }
-            showErrorBox(showError);        
+            showErrorBox(showError);
         } finally {
             refreshTimer = setTimeout(updateFetch, UPDATEINVERVAL);
         }
