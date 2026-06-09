@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="css/brand.css">
     <link rel="stylesheet" href="css/settings.css">
     <link rel="stylesheet" href="css/ext/fontawesome.min.css">
+    <link rel="modulepreload" href="components/navbar.js">
+    <link rel="modulepreload" href="components/footer.js">
     <meta name="color-scheme" content="dark light">
 
     <meta property="og:title" content="UMKL | Brand Guidelines" />
@@ -35,8 +37,6 @@
     <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();</script>
 
     <script type="module" src="scripts/settings.js" defer></script>
-    <link rel="modulepreload" href="components/navbar.js">
-    <link rel="modulepreload" href="components/footer.js">
 </head>
 
 <body id="top">
@@ -45,7 +45,8 @@
     <main>
         <a href="pages/rules/">Back</a>
         <h1 style="view-transition-name: brand-guidelines">Brand Guidelines</h1>
-        <p class="p-below-title" style="view-transition-name: brand-guidelines-desc">Guidelines for the use of intellectual property belonging to the UMKL</p>
+        <p class="p-below-title" style="view-transition-name: brand-guidelines-desc">Guidelines for the use of
+            intellectual property belonging to the UMKL</p>
         <hr class="hr-below-title">
 
         <h2>Our Logo</h2>

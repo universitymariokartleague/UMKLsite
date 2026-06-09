@@ -1,100 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>    
-        <base href="../../../">
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-        <title>Discord/Cheep Cheep Commands Documentation | UMKL</title>
-        <meta name="description" content="Documentation for all Cheep Cheep commands on the Discord server, split into sections for players and for board members on the UMKL">
-        <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/settings.css">
-            <link rel="stylesheet" href="css/ext/fontawesome.min.css">
-        <meta name="color-scheme" content="dark light">
-    
-        <meta property="og:title" content="UMKL | Discord/Cheep Cheep Commands Documentation" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://umkl.co.uk/pages/rules/team/" />
-        <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
-        <meta property="og:description" content="Documentation for all Cheep Cheep commands on the Discord server, split into sections for players and for board members on the UMKL" />
-        <meta content="#bc0839" name="theme-color" />
-    <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
-    
-        <!-- Include this to make the og:image larger -->
-        <meta name="twitter:card" content="summary_large_image">
-    
-        <!-- Components -->
-        <script type="module" src="components/navbar.js" defer></script>
-        <script type="module" src="components/footer.js" defer></script>
+<head>
+    <base href="../../../">
 
-        <!-- Scripts -->
-        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-        <script type="module" src="scripts/settings.js" defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Discord/Cheep Cheep Commands Documentation | UMKL</title>
+    <meta name="description"
+        content="Documentation for all Cheep Cheep commands on the Discord server, split into sections for players and for board members on the UMKL">
+    <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/ext/fontawesome.min.css">
     <link rel="modulepreload" href="components/navbar.js">
     <link rel="modulepreload" href="components/footer.js">
-    </head>
-    <body id="top">
-        <umkl-navbar></umkl-navbar>
+    <meta name="color-scheme" content="dark light">
 
-        <main>
-            <a href="pages/rules/">Back</a>
-            <h1 style="view-transition-name: commands-documentation">Discord/Cheep Cheep Commands Documentation</h1>
-            <p class="p-below-title" style="view-transition-name: commands-documentation-desc">Documentation for all Cheep Cheep commands on the Discord server</p>
-            <hr class="hr-below-title">
+    <meta property="og:title" content="UMKL | Discord/Cheep Cheep Commands Documentation" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://umkl.co.uk/pages/rules/team/" />
+    <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
+    <meta property="og:description"
+        content="Documentation for all Cheep Cheep commands on the Discord server, split into sections for players and for board members on the UMKL" />
+    <meta content="#bc0839" name="theme-color" />
+    <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
 
-            <h2>Commands usable by all members</h2>
-            <p class="p-below-title">All players can use these commands</p><br>
+    <!-- Include this to make the og:image larger -->
+    <meta name="twitter:card" content="summary_large_image">
 
-            <h3>General</h3>
-            <p>
-                <div class="codeBoxTight">/join</div>
-                Joins a <a href="pages/teams">team</a>, this a required to participate in UMKL matches.
-            </p>
-            <p>
-                <div class="codeBoxTight">/user-profile</div>
-                View a specific user's profile (yourself or someone elses)
-            </p>
-            <p>
-                <div class="codeBoxTight">/team-profile</div>
-                View a team's profile and stats
-            </p>
-            <p>
-                <div class="codeBoxTight">/leaderboards</div>
-                View different UMKL leaderboards, such as Season Points and Lifetime Points (Team/Individual) and also SP
-            </p><br>
+    <!-- Components -->
+    <script type="module" src="components/navbar.js" defer></script>
+    <script type="module" src="components/footer.js" defer></script>
 
-            <h3>Match</h3>
-            <p>
-                <div class="codeBoxTight">/submit-room-code</div>
-                Share the room code for the match to both teams, used when a room is opened before the match starts so everyone can join
-            </p>
-            <p>
-                <div class="codeBoxTight">/report-disconnection</div>
-                Use this command to report a disconnection for yourself or someone else on your team
-            </p>
-            <p>
-                <div class="codeBoxTight">/generate-stream-overlay</div>
-                Generate a stream overlay for yourself or someone else, designed for streaming UMKL matches and for use with <a href="pages/rules/stream/">livestreaming from OBS</a> 
-            </p>
+    <!-- Scripts -->
+    <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();</script>
+    <script type="module" src="scripts/settings.js" defer></script>
+</head>
 
-            <h3>Live Score</h3>
-            <p class="p-below-title">Commands for use with the live score graphic, as shown on <a href="pages/rules/stream/">livestreams</a></p><br>
-            <div class="codeBoxTight">/add-live-score-positions</div>
-            Add the results of a race, which will update the live score graphic     
-            <p>
-                <div class="codeBoxTight">/edit-live-score-positions</div>
-                Edit the results of a previous race, which will update the live score graphic
-            </p>
-            <p>
-                <div class="codeBoxTight">/clear-live-score</div>
-                Reset the live score streaming graphic, setting the score to 0-0
-            </p>
+<body id="top">
+    <umkl-navbar></umkl-navbar>
 
-            <h2>Commands only usable by board members</h2>
-            <p class="p-below-title">Only board members can use these commands</p><br>
-        </main>
+    <main>
+        <a href="pages/rules/">Back</a>
+        <h1 style="view-transition-name: commands-documentation">Discord/Cheep Cheep Commands Documentation</h1>
+        <p class="p-below-title" style="view-transition-name: commands-documentation-desc">Documentation for all Cheep
+            Cheep commands on the Discord server</p>
+        <hr class="hr-below-title">
 
-        <umkl-footer></umkl-footer>
-    </body>
+        <h2>Commands usable by all members</h2>
+        <p class="p-below-title">All players can use these commands</p><br>
+
+        <h3>General</h3>
+        <p>
+        <div class="codeBoxTight">/join</div>
+        Joins a <a href="pages/teams">team</a>, this a required to participate in UMKL matches.
+        </p>
+        <p>
+        <div class="codeBoxTight">/user-profile</div>
+        View a specific user's profile (yourself or someone elses)
+        </p>
+        <p>
+        <div class="codeBoxTight">/team-profile</div>
+        View a team's profile and stats
+        </p>
+        <p>
+        <div class="codeBoxTight">/leaderboards</div>
+        View different UMKL leaderboards, such as Season Points and Lifetime Points (Team/Individual) and also SP
+        </p><br>
+
+        <h3>Match</h3>
+        <p>
+        <div class="codeBoxTight">/submit-room-code</div>
+        Share the room code for the match to both teams, used when a room is opened before the match starts so everyone
+        can join
+        </p>
+        <p>
+        <div class="codeBoxTight">/report-disconnection</div>
+        Use this command to report a disconnection for yourself or someone else on your team
+        </p>
+        <p>
+        <div class="codeBoxTight">/generate-stream-overlay</div>
+        Generate a stream overlay for yourself or someone else, designed for streaming UMKL matches and for use with <a
+            href="pages/rules/stream/">livestreaming from OBS</a>
+        </p>
+
+        <h3>Live Score</h3>
+        <p class="p-below-title">Commands for use with the live score graphic, as shown on <a
+                href="pages/rules/stream/">livestreams</a></p><br>
+        <div class="codeBoxTight">/add-live-score-positions</div>
+        Add the results of a race, which will update the live score graphic
+        <p>
+        <div class="codeBoxTight">/edit-live-score-positions</div>
+        Edit the results of a previous race, which will update the live score graphic
+        </p>
+        <p>
+        <div class="codeBoxTight">/clear-live-score</div>
+        Reset the live score streaming graphic, setting the score to 0-0
+        </p>
+
+        <h2>Commands only usable by board members</h2>
+        <p class="p-below-title">Only board members can use these commands</p><br>
+    </main>
+
+    <umkl-footer></umkl-footer>
+</body>
+
 </html>

@@ -1,89 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <base href="../../../">
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-        <title>6v6 Score Calculator | UMKL</title>
-        <meta name="description" content="Calculate and visualise point scores from a 6v6 match on the UMKL site">
-        <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/6v6scorecalculator.css">
-        <link rel="stylesheet" href="css/matchstats.css">
-        <link rel="stylesheet" href="css/settings.css">
-        <link rel="stylesheet" href="css/copypopup.css">
-            <link rel="stylesheet" href="css/ext/fontawesome.min.css">
-        <meta name="color-scheme" content="dark light">
+<head>
+    <base href="../../../">
 
-        <meta property="og:title" content="UMKL | 6v6 Score Calculator" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://umkl.co.uk/pages/tools/trackrandomiser/" />
-        <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
-        <meta property="og:description" content="Calculate and visualise point scores from a 6v6 match on the UMKL site" />
-        <meta content="#bc0839" name="theme-color" />
-    <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
-
-        <!-- Include this to make the og:image larger -->
-        <meta name="twitter:card" content="summary_large_image">
-
-        <!-- Components -->
-        <script type="module" src="components/navbar.js" defer></script>
-        <script type="module" src="components/footer.js" defer></script>
-
-        <!-- Scripts -->
-        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-        
-        <script type="module" src="scripts/settings.js" defer></script>
-        <script type="module" src="scripts/6v6scorecalculator.js" defer></script>
-        <script type="module" src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-        <script type="module" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js" defer></script>
-        <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>6v6 Score Calculator | UMKL</title>
+    <meta name="description" content="Calculate and visualise point scores from a 6v6 match on the UMKL site">
+    <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/6v6scorecalculator.css">
+    <link rel="stylesheet" href="css/matchstats.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/copypopup.css">
+    <link rel="stylesheet" href="css/ext/fontawesome.min.css">
     <link rel="modulepreload" href="components/navbar.js">
     <link rel="modulepreload" href="components/footer.js">
-    </head>
+    <meta name="color-scheme" content="dark light">
 
-    <body id="top">
-        <umkl-navbar></umkl-navbar>
+    <meta property="og:title" content="UMKL | 6v6 Score Calculator" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://umkl.co.uk/pages/tools/trackrandomiser/" />
+    <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
+    <meta property="og:description" content="Calculate and visualise point scores from a 6v6 match on the UMKL site" />
+    <meta content="#bc0839" name="theme-color" />
+    <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
 
-        <main>
-            <a href="../../pages/tools/">Back</a>
-            <h1>6v6 Score Calculator</h1>
-            <p class="p-below-title">Calculate and visualise point scores from a 6v6 match</p>
-            <hr class="hr-below-title">
+    <!-- Include this to make the og:image larger -->
+    <meta name="twitter:card" content="summary_large_image">
 
-            <div class="score-calculator-input-areas hidden" id="inputArea">
-                <div class="positions-input-area">
-                    <label for="positions-input">Input your teams' positions</label><br>
-                    <textarea translate="no" placeholder="1,2,3,4,5,6
+    <!-- Components -->
+    <script type="module" src="components/navbar.js" defer></script>
+    <script type="module" src="components/footer.js" defer></script>
+
+    <!-- Scripts -->
+    <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();</script>
+
+    <script type="module" src="scripts/settings.js" defer></script>
+    <script type="module" src="scripts/6v6scorecalculator.js" defer></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script type="module"
+        src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"
+        defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
+</head>
+
+<body id="top">
+    <umkl-navbar></umkl-navbar>
+
+    <main>
+        <a href="../../pages/tools/">Back</a>
+        <h1>6v6 Score Calculator</h1>
+        <p class="p-below-title">Calculate and visualise point scores from a 6v6 match</p>
+        <hr class="hr-below-title">
+
+        <div class="score-calculator-input-areas hidden" id="inputArea">
+            <div class="positions-input-area">
+                <label for="positions-input">Input your teams' positions</label><br>
+                <textarea translate="no" placeholder="1,2,3,4,5,6
 7,8,9,10,11,12" id="positions-input"></textarea><br>
-                </div>
-                <div class="positions-input-area">
-                    <label for="track-names-input">Input track names (optional)</label><br>
-                    <textarea translate="no" placeholder="SNES Mario Circuit 3
+            </div>
+            <div class="positions-input-area">
+                <label for="track-names-input">Input track names (optional)</label><br>
+                <textarea translate="no" placeholder="SNES Mario Circuit 3
 Yoshi's Island" id="track-names-input"></textarea>
 
-                    <label for="track-names-input">Input team names (optional)</label><br>
-                    <textarea translate="no" placeholder="York
+                <label for="track-names-input">Input team names (optional)</label><br>
+                <textarea translate="no" placeholder="York
 Staffs" id="team-names-input"></textarea>
-                </div>
             </div>
-            
-            <div class="result-container">
-                <div class="result-box" id="team-result"><h3>Your Team</h3></div>
-                <div class="points-diff" id="points-diff"><h2>±0</h2></div>
-                <div class="result-box" id="opponent-result"><h3>Opponent Team</h3></div>
+        </div>
+
+        <div class="result-container">
+            <div class="result-box" id="team-result">
+                <h3>Your Team</h3>
             </div>
-
-            <div id="extra-info"></div>
-
-            <div class="score-graph">
-                <canvas id="scoreChart"></canvas>
+            <div class="points-diff" id="points-diff">
+                <h2>±0</h2>
             </div>
+            <div class="result-box" id="opponent-result">
+                <h3>Opponent Team</h3>
+            </div>
+        </div>
 
-            <p id="penalty-disclaimer"></p>
-        </main>
+        <div id="extra-info"></div>
 
-        <umkl-footer></umkl-footer>
-    </body>
+        <div class="score-graph">
+            <canvas id="scoreChart"></canvas>
+        </div>
+
+        <p id="penalty-disclaimer"></p>
+    </main>
+
+    <umkl-footer></umkl-footer>
+</body>
+
 </html>

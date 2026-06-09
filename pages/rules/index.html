@@ -1,121 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <base href="../../">
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-        <title>Rules/Guides | UMKL</title>
-        <meta name="description" content="View rules and guidelines for various aspects of the UMKL">
-        <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/settings.css">
-        <link rel="stylesheet" href="css/tools.css">
-        <link rel="stylesheet" href="css/ext/fontawesome.min.css">
-        <meta name="color-scheme" content="dark light">
+<head>
+    <base href="../../">
 
-        <meta property="og:title" content="UMKL | Rules/Guides" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://umkl.co.uk/pages/rules/" />
-        <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
-        <meta property="og:description" content="View rules and guidelines for various aspects of the UMKL" />
-        <meta content="#bc0839" name="theme-color" />
-        <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Rules/Guides | UMKL</title>
+    <meta name="description" content="View rules and guidelines for various aspects of the UMKL">
+    <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/tools.css">
+    <link rel="stylesheet" href="css/ext/fontawesome.min.css">
+    <link rel="modulepreload" href="components/navbar.js">
+    <link rel="modulepreload" href="components/footer.js">
+    <meta name="color-scheme" content="dark light">
 
-        <!-- Include this to make the og:image larger -->
-        <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:title" content="UMKL | Rules/Guides" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://umkl.co.uk/pages/rules/" />
+    <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
+    <meta property="og:description" content="View rules and guidelines for various aspects of the UMKL" />
+    <meta content="#bc0839" name="theme-color" />
+    <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
 
-        <!-- Components -->
-        <script type="module" src="components/navbar.js" defer></script>
-        <script type="module" src="components/footer.js" defer></script>
+    <!-- Include this to make the og:image larger -->
+    <meta name="twitter:card" content="summary_large_image">
 
-        <!-- Scripts -->
-        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+    <!-- Components -->
+    <script type="module" src="components/navbar.js" defer></script>
+    <script type="module" src="components/footer.js" defer></script>
 
-        <script type="module" src="scripts/settings.js" defer></script>
-        <link rel="modulepreload" href="components/navbar.js">
-        <link rel="modulepreload" href="components/footer.js">
-    </head>
+    <!-- Scripts -->
+    <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();</script>
 
-    <body id="top">
-        <umkl-navbar></umkl-navbar>
+    <script type="module" src="scripts/settings.js" defer></script>
+</head>
 
-        <main>
-            <h1>Rules and Guides</h1>
-            <p class="p-below-title">View rules and guidelines for various aspects of the UMKL</p>
-            <hr class="hr-below-title">
+<body id="top">
+    <umkl-navbar></umkl-navbar>
 
-            <div class="tool-section">
-                <h2>Rules & Guidelines</h2>
-                <div class="tool-grid">
-                    <a href="pages/rules/match/" class="tool-button">
-                        <div class="tool-icon">
-                            <i class="fa-solid fa-flag"></i>
+    <main>
+        <h1>Rules and Guides</h1>
+        <p class="p-below-title">View rules and guidelines for various aspects of the UMKL</p>
+        <hr class="hr-below-title">
+
+        <div class="tool-section">
+            <h2>Rules & Guidelines</h2>
+            <div class="tool-grid">
+                <a href="pages/rules/match/" class="tool-button">
+                    <div class="tool-icon">
+                        <i class="fa-solid fa-flag"></i>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label" style="view-transition-name: match-rules">Match Rules</div>
+                        <div class="tool-desc" style="view-transition-name: match-rules-desc">Rules and regulations for
+                            matches</div>
+                    </div>
+                </a>
+
+                <a href="pages/rules/team/" class="tool-button">
+                    <div class="tool-icon">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label" style="view-transition-name: team-guidelines">Team Guidelines</div>
+                        <div class="tool-desc" style="view-transition-name: team-guidelines-desc">Rules and guidelines
+                            for new teams wanting to join the UMKL</div>
+                    </div>
+                </a>
+
+                <a href="pages/rules/brand/" class="tool-button">
+                    <div class="tool-icon">
+                        <i class="fa-solid fa-paintbrush"></i>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label" style="view-transition-name: brand-guidelines">Brand Guidelines</div>
+                        <div class="tool-desc" style="view-transition-name: brand-guidelines-desc">Guidelines for the
+                            use of intellectual property belonging to the UMKL</div>
+                    </div>
+                </a>
+
+                <a href="pages/rules/stream/" class="tool-button">
+                    <div class="tool-icon">
+                        <i class="fa-solid fa-play"></i>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label" style="view-transition-name: streaming-guidelines">Streaming Guidelines
                         </div>
-                        <div class="tool-info">
-                            <div class="tool-label" style="view-transition-name: match-rules">Match Rules</div>
-                            <div class="tool-desc" style="view-transition-name: match-rules-desc">Rules and regulations for matches</div>
-                        </div>
-                    </a>
-
-                    <a href="pages/rules/team/" class="tool-button">
-                        <div class="tool-icon">
-                            <i class="fa-solid fa-trophy"></i>
-                        </div>
-                        <div class="tool-info">
-                            <div class="tool-label" style="view-transition-name: team-guidelines">Team Guidelines</div>
-                            <div class="tool-desc" style="view-transition-name: team-guidelines-desc">Rules and guidelines for new teams wanting to join the UMKL</div>
-                        </div>
-                    </a>
-
-                    <a href="pages/rules/brand/" class="tool-button">
-                        <div class="tool-icon">
-                            <i class="fa-solid fa-paintbrush"></i>
-                        </div>
-                        <div class="tool-info">
-                            <div class="tool-label" style="view-transition-name: brand-guidelines">Brand Guidelines</div>
-                            <div class="tool-desc" style="view-transition-name: brand-guidelines-desc">Guidelines for the use of intellectual property belonging to the UMKL</div>
-                        </div>
-                    </a>
-
-                    <a href="pages/rules/stream/" class="tool-button">
-                        <div class="tool-icon">
-                            <i class="fa-solid fa-play"></i>
-                        </div>
-                        <div class="tool-info">
-                            <div class="tool-label" style="view-transition-name: streaming-guidelines">Streaming Guidelines</div>
-                            <div class="tool-desc" style="view-transition-name: streaming-guidelines-desc">Guidelines for streamers and instructions on how to set up OBS</div>
-                        </div>
-                    </a>
-                </div>
+                        <div class="tool-desc" style="view-transition-name: streaming-guidelines-desc">Guidelines for
+                            streamers and instructions on how to set up OBS</div>
+                    </div>
+                </a>
             </div>
+        </div>
 
-            <div class="tool-section">
-                <h2>Discord & Cheep Cheep</h2>
-                <div class="tool-grid">
-                    <a href="pages/rules/cheepcheepcommands/" class="tool-button">
-                        <div class="tool-icon">
-                            <span class="tool-icon-char">☰</span>
-                        </div>
-                        <div class="tool-info">
-                            <div class="tool-label" style="view-transition-name: commands-documentation">Commands Documentation</div>
-                            <div class="tool-desc" style="view-transition-name: commands-documentation-desc">Documentation for all Cheep Cheep commands on the Discord server</div>
-                        </div>
-                    </a>
+        <div class="tool-section">
+            <h2>Discord & Cheep Cheep</h2>
+            <div class="tool-grid">
+                <a href="pages/rules/cheepcheepcommands/" class="tool-button">
+                    <div class="tool-icon">
+                        <span class="tool-icon-char">☰</span>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label" style="view-transition-name: commands-documentation">Commands
+                            Documentation</div>
+                        <div class="tool-desc" style="view-transition-name: commands-documentation-desc">Documentation
+                            for all Cheep Cheep commands on the Discord server</div>
+                    </div>
+                </a>
 
-                    <a href="pages/rules/faq/" class="tool-button">
-                        <div class="tool-icon">
-                            <span class="tool-icon-char">?</span>
-                        </div>
-                        <div class="tool-info">
-                            <div class="tool-label" style="view-transition-name: faq">FAQ</div>
-                            <div class="tool-desc" style="view-transition-name: faq-desc">Frequently asked questions concerning the Discord server and Cheep Cheep app</div>
-                        </div>
-                    </a>
-                </div>
+                <a href="pages/rules/faq/" class="tool-button">
+                    <div class="tool-icon">
+                        <span class="tool-icon-char">?</span>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label" style="view-transition-name: faq">FAQ</div>
+                        <div class="tool-desc" style="view-transition-name: faq-desc">Frequently asked questions
+                            concerning the Discord server and Cheep Cheep app</div>
+                    </div>
+                </a>
             </div>
-        </main>
+        </div>
+    </main>
 
-        <umkl-footer></umkl-footer>
-    </body>
+    <umkl-footer></umkl-footer>
+</body>
+
 </html>

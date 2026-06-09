@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <base href="../../../">
 
@@ -7,9 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover.0">
     <title>Discord Role Screen</title>
     <link rel="stylesheet" href="css/discordrole.css">
-<link rel="modulepreload" href="components/navbar.js">
-<link rel="modulepreload" href="components/footer.js">
 </head>
+
 <body translate="no">
     <div class="message theme-light">
         <picture>
@@ -24,7 +24,7 @@
             <div class="message-text">rocks are really old</div>
         </div>
     </div>
-    
+
     <div class="message theme-dark">
         <picture>
             <source srcset="assets/media/faq/wumpus.avif" type="image/avif">
@@ -38,7 +38,7 @@
             <div class="message-text">rocks are really old</div>
         </div>
     </div>
-    
+
     <div class="message theme-darker">
         <picture>
             <source srcset="assets/media/faq/wumpus.avif" type="image/avif">
@@ -68,10 +68,10 @@
     </div>
 
     <script>
-        window.addEventListener('message', function(event) {
+        window.addEventListener('message', function (event) {
             if (event.data.type === 'setRoleColor') {
                 const color = event.data.color;
-                
+
                 const usernames = document.querySelectorAll('.username');
                 usernames.forEach(username => {
                     username.style.color = color;
@@ -80,4 +80,5 @@
         });
     </script>
 </body>
+
 </html>

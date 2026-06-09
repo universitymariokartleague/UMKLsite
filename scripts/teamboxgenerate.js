@@ -97,10 +97,10 @@ async function generateTeamBoxes(data, cached = false) {
         const row = document.createElement('div');
         row.className = "teamStanding";
         row.setAttribute('tabindex', '0');
-        row.addEventListener('click', () => window.location.href = `pages/teams/details?team=${team.link_name}`);
+        row.addEventListener('click', () => window.location.href = `pages/teams/details/?team=${team.link_name}`);
         row.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
-                window.location.href = `pages/teams/details?team=${team.link_name}`;
+                window.location.href = `pages/teams/details/?team=${team.link_name}`;
             }
         });
 

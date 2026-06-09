@@ -1,72 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>    
-        <base href="../../../">
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-        <title>Team Guidelines | UMKL</title>
-        <meta name="description" content="The team creation rules for the UMKL">
-        <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/settings.css">
-        <link rel="stylesheet" href="css/colorpicker.css">
-        <link rel="stylesheet" href="css/discordrolepreview.css">
-            <link rel="stylesheet" href="css/ext/fontawesome.min.css">
-        <link rel="stylesheet" href="css/ext/coloris.min.css">
-        <meta name="color-scheme" content="dark light">
-    
-        <meta property="og:title" content="UMKL | Team Guidelines" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://umkl.co.uk/pages/rules/team/" />
-        <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
-        <meta property="og:description" content="The team creation rules for the UMKL" />
-        <meta content="#bc0839" name="theme-color" />
-    <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
-    
-        <!-- Include this to make the og:image larger -->
-        <meta name="twitter:card" content="summary_large_image">
-    
-        <!-- Components -->
-        <script type="module" src="components/navbar.js" defer></script>
-        <script type="module" src="components/footer.js" defer></script>
+<head>
+    <base href="../../../">
 
-        <!-- Scripts -->
-        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-        <script type="module" src="scripts/coloris.js" defer></script>
-        <script type="module" src="scripts/createcolorwheel.js" defer></script>
-        <script type="module" src="scripts/settings.js" defer></script>
-        <script type="module" src="scripts/getteamcolors.js" defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Team Guidelines | UMKL</title>
+    <meta name="description" content="The team creation rules for the UMKL">
+    <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/colorpicker.css">
+    <link rel="stylesheet" href="css/discordrolepreview.css">
+    <link rel="stylesheet" href="css/ext/fontawesome.min.css">
+    <link rel="stylesheet" href="css/ext/coloris.min.css">
     <link rel="modulepreload" href="components/navbar.js">
     <link rel="modulepreload" href="components/footer.js">
-    </head>
-    <body id="top">
-        <umkl-navbar></umkl-navbar>
+    <meta name="color-scheme" content="dark light">
 
-        <main>
-            <a href="pages/rules/">Back</a>
-            <h1 style="view-transition-name: team-guidelines">Team Guidelines</h1>
-            <p class="p-below-title" style="view-transition-name: team-guidelines-desc">Rules and guidelines for new teams wanting to join the UMKL</p>
-            <hr class="hr-below-title">
+    <meta property="og:title" content="UMKL | Team Guidelines" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://umkl.co.uk/pages/rules/team/" />
+    <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
+    <meta property="og:description" content="The team creation rules for the UMKL" />
+    <meta content="#bc0839" name="theme-color" />
+    <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
 
-            <blockquote class="fail">
-                <b translate="no">Important</b><br>
-                Please make sure you have fully read <a href="pages/news/2025-04-19/uni-joining-info/">Information for universities wanting to join</a> 
-                for information about joining the UMKL before you read this page.
-            </blockquote>
+    <!-- Include this to make the og:image larger -->
+    <meta name="twitter:card" content="summary_large_image">
 
-            <h2>Name</h2>
-            <p class="p-below-title">The name by which your team will be known in the UMKL</p>
-            <ul>
-                <li>Team names must be <b>10 characters or less</b></li>
-                <li>Do not use numbers or special characters</li>
-                <li>Choose a simple name that most people recognise your university by.
-                    For example, a suitable name for the University of Staffordshire's team would be "Staffs",
-                    as this is what the university is most known as colloquially
-                </li>
-            </ul>
+    <!-- Components -->
+    <script type="module" src="components/navbar.js" defer></script>
+    <script type="module" src="components/footer.js" defer></script>
 
-            <div class="discordRolePreviewContainer">
+    <!-- Scripts -->
+    <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();</script>
+    <script type="module" src="scripts/coloris.js" defer></script>
+    <script type="module" src="scripts/createcolorwheel.js" defer></script>
+    <script type="module" src="scripts/settings.js" defer></script>
+    <script type="module" src="scripts/getteamcolors.js" defer></script>
+</head>
+
+<body id="top">
+    <umkl-navbar></umkl-navbar>
+
+    <main>
+        <a href="pages/rules/">Back</a>
+        <h1 style="view-transition-name: team-guidelines">Team Guidelines</h1>
+        <p class="p-below-title" style="view-transition-name: team-guidelines-desc">Rules and guidelines for new teams
+            wanting to join the UMKL</p>
+        <hr class="hr-below-title">
+
+        <blockquote class="fail">
+            <b translate="no">Important</b><br>
+            Please make sure you have fully read <a href="pages/news/2025-04-19/uni-joining-info/">Information for
+                universities wanting to join</a>
+            for information about joining the UMKL before you read this page.
+        </blockquote>
+
+        <h2>Name</h2>
+        <p class="p-below-title">The name by which your team will be known in the UMKL</p>
+        <ul>
+            <li>Team names must be <b>10 characters or less</b></li>
+            <li>Do not use numbers or special characters</li>
+            <li>Choose a simple name that most people recognise your university by.
+                For example, a suitable name for the University of Staffordshire's team would be "Staffs",
+                as this is what the university is most known as colloquially
+            </li>
+        </ul>
+
+        <div class="discordRolePreviewContainer">
             <h2 class="h-below-ul">Colour</h2>
 
             <p class="p-below-title">The colour is a core part of a team's identity</p>
@@ -77,8 +81,8 @@
 
             <ul>
                 <li>Your colour must be sufficiently visible across all Discord themes.
-                    Your team colour is the role colour your team will receive on Discord, 
-                    and will be used as an accent colour across various UMKL graphics, 
+                    Your team colour is the role colour your team will receive on Discord,
+                    and will be used as an accent colour across various UMKL graphics,
                     so consider colour contrast with dark and light modes when picking
                 </li>
             </ul>
@@ -87,7 +91,7 @@
                 Please use the colour picker below or use an external one
                 <a target="_blank" href="https://www.google.com/search?q=hex+colour+picker">here</a>.
             </p>
-            
+
             <p class="color-picker square">
                 <input value="#1baa8b" id="color-picker" class="coloris" type="text" data-coloris>
                 <span id="colorMessage">Current colour: <code translate="no">#1baa8b</code></span>
@@ -95,7 +99,7 @@
 
             <p class="p-below-title">Below are the team colours of existing teams:</p>
             <div id="currentTeamColors"></div>
-            
+
             <canvas id="colorWheel" width="350" height="275"></canvas>
             <ul>
                 <li>Must be used in the command as a hex colour code</li>
@@ -110,20 +114,23 @@
         </div>
 
         <h2>Emblem</h2>
-            <p class="p-below-title">Your team will be represented through your emblem, this does not need to be submitted immediately upon your team's creation</p>
-            <ul>
-                <li>The team should submit their own emblem, which will be used for all graphics in the league</li>
-                <li>Should be of a 1:1 (square) ratio and submitted as a <code translate="no">.png</code> file (with transparency)</li>
-                <li>Should represent your university, team name, or location, rather than just Mario or Nintendo. 
-                    This ensures each emblem has a unique feel from one another,
-                    it also enables your team to be easily recognised by people outside of the league</li>
-                <li>Must not be similar to other team's emblems</li>
-                <li>Your emblem may be altered by board members if deemed necessary</li>
-            </ul>
+        <p class="p-below-title">Your team will be represented through your emblem, this does not need to be submitted
+            immediately upon your team's creation</p>
+        <ul>
+            <li>The team should submit their own emblem, which will be used for all graphics in the league</li>
+            <li>Should be of a 1:1 (square) ratio and submitted as a <code translate="no">.png</code> file (with
+                transparency)</li>
+            <li>Should represent your university, team name, or location, rather than just Mario or Nintendo.
+                This ensures each emblem has a unique feel from one another,
+                it also enables your team to be easily recognised by people outside of the league</li>
+            <li>Must not be similar to other team's emblems</li>
+            <li>Your emblem may be altered by board members if deemed necessary</li>
+        </ul>
 
-            <p class="p-below-title">If you are unsure about your emblem, please contact a board member for advice</p>
-        </main>
+        <p class="p-below-title">If you are unsure about your emblem, please contact a board member for advice</p>
+    </main>
 
-        <umkl-footer></umkl-footer>
-    </body>
+    <umkl-footer></umkl-footer>
+</body>
+
 </html>

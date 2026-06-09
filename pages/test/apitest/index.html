@@ -1,66 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <base href="../../../">
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-        <title>apitest | UMKL</title>
-        <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/settings.css">
-            <link rel="stylesheet" href="css/ext/fontawesome.min.css">
-        <meta name="color-scheme" content="dark light">
+<head>
+    <base href="../../../">
 
-        <!-- Components -->
-        <script type="module" src="components/navbar.js" defer></script>
-        <script type="module" src="components/footer.js" defer></script>
-
-        <!-- Scripts -->
-        <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-        <script type="module" src="scripts/settings.js" defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>apitest | UMKL</title>
+    <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/ext/fontawesome.min.css">
     <link rel="modulepreload" href="components/navbar.js">
     <link rel="modulepreload" href="components/footer.js">
-    </head>
+    <meta name="color-scheme" content="dark light">
 
-    <body id="top">
-        <umkl-navbar></umkl-navbar>
+    <!-- Components -->
+    <script type="module" src="components/navbar.js" defer></script>
+    <script type="module" src="components/footer.js" defer></script>
 
-        <main>
-            <h1>apitest</h1>
-            <hr class="hr-below-title">
+    <!-- Scripts -->
+    <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();</script>
+    <script type="module" src="scripts/settings.js" defer></script>
+</head>
 
-            Tables from API (/teamdata) (live)
-            <br>Took: <span id="timeTaken"></span>ms to generate
-            <div id="teamdataTable"></div>
+<body id="top">
+    <umkl-navbar></umkl-navbar>
 
-            <hr>
+    <main>
+        <h1>apitest</h1>
+        <hr class="hr-below-title">
 
-            Current season (/currentseason) (live)
-            <br>Took: <span id="timeTaken3"></span>ms to generate
-            <div id="currentseason"></div>
+        Tables from API (/teamdata) (live)
+        <br>Took: <span id="timeTaken"></span>ms to generate
+        <div id="teamdataTable"></div>
 
-            <hr>
+        <hr>
 
-            Tables from API (/teamcolors) (live)
-            <br>Took: <span id="timeTaken2"></span>ms to generate
-            <div id="teamcolors"></div>
+        Current season (/currentseason) (live)
+        <br>Took: <span id="timeTaken3"></span>ms to generate
+        <div id="currentseason"></div>
 
-            <hr>
+        <hr>
 
-            Tables from API (/teamlocations) (live)
-            <br>Took: <span id="timeTaken4"></span>ms to generate
-            <div id="teamlocations"></div>
+        Tables from API (/teamcolors) (live)
+        <br>Took: <span id="timeTaken2"></span>ms to generate
+        <div id="teamcolors"></div>
 
-            <hr>
+        <hr>
 
-            Tables from API (/matchdata) (live)
-            <br>Took: <span id="timeTaken5"></span>ms to generate
-            <div id="matchdata"></div>
-        </main>
+        Tables from API (/teamlocations) (live)
+        <br>Took: <span id="timeTaken4"></span>ms to generate
+        <div id="teamlocations"></div>
 
-        <umkl-footer></umkl-footer>
-    </body>
+        <hr>
+
+        Tables from API (/matchdata) (live)
+        <br>Took: <span id="timeTaken5"></span>ms to generate
+        <div id="matchdata"></div>
+    </main>
+
+    <umkl-footer></umkl-footer>
+</body>
+
 </html>
 
 <script>
@@ -122,7 +124,7 @@
             const data = await getMatchData();
             document.getElementById("timeTaken5").innerHTML = performance.now() - startTime;
             const matchArray = Object.entries(data).flatMap(([date, matches]) =>
-                matches.map(match => ({ date, ...match }))
+                matches.map(match => ({date, ...match}))
             );
             createHTMLTable("matchdata", matchArray, teammatchdataTable)
 
@@ -143,14 +145,14 @@
                 season: `${season}`
             })
         })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+                localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+                return response.json();
+            });
     }
 
     function getCurrentSeason(season = 0) {
@@ -163,14 +165,14 @@
                 season: season
             })
         })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+                localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+                return response.json();
+            });
     }
 
     async function getTeamcolors() {
@@ -181,14 +183,14 @@
             },
             body: "{}"
         })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+                localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+                return response.json();
+            });
     }
 
     async function getTeamlocations() {
@@ -199,14 +201,14 @@
             },
             body: JSON.stringify({})
         })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+                localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+                return response.json();
+            });
     }
 
     async function getMatchData() {
@@ -217,20 +219,20 @@
             },
             body: "{}"
         })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+                localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+                return response.json();
+            });
     }
 
     function createHTMLTable(tableName, data, group) {
         const tableContainer = document.createElement('div');
         tableContainer.className = 'table-container';
-        
+
         const title = document.createElement('h2');
         title.textContent = tableName;
         tableContainer.appendChild(title);
@@ -279,26 +281,26 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             font-size: 0.6em;
         }
-        
+
         .data-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
         }
-        
+
         .data-table th, .data-table td {
             padding: 8px 12px;
             border: 1px solid #ddd;
             text-align: left;
         }
-        
+
         .data-table th {
             background-color: var(--accent-color);
             color: white;
             position: sticky;
             top: 0;
         }
-        
+
         .error {
             color: #e74c3c;
             padding: 10px;
@@ -308,7 +310,7 @@
     `;
     document.head.appendChild(style);
 
-    (async function() {
+    (async function () {
         await printCurrentSeason();
         await constructTeamdataJSON();
         await constructTeamcolorsJSON();

@@ -20,6 +20,8 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/settings.css">
     <link rel="stylesheet" href="css/ext/fontawesome.min.css">
+    <link rel="modulepreload" href="components/navbar.js">
+    <link rel="modulepreload" href="components/footer.js">
     <meta name="color-scheme" content="dark light">
 
     <meta property="og:title" content="{TITLE} | UMKL" />
