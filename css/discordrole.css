@@ -4,23 +4,8 @@
     src: url("../assets/font/gg-sans.woff2");
 }
 
-:root,
-:root.light-theme {
-    --bg-color: #fff;
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg-color: #111111;
-    }
-}
-
-:root.dark-theme {
-    --bg-color: #111111;
-}
-
 body {
-    background-color: var(--bg-color);
+    background-color: #0d0c0f;
     color: #dcddde;
     font-family: "gg-sans", 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     margin: 0;

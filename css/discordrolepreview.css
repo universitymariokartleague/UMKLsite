@@ -1,5 +1,5 @@
 #discordRoleiFrame {
-    height: 308px;
+    height: 315px;
     width: 250px;
     border-radius: 10px;
     outline: 1px solid #ccccccaa;
@@ -22,11 +22,14 @@
 }
 
 @media (max-width: 767px) {
-    #discordRoleiFrame, #cheepCheepRoleiFrame {
+
+    #discordRoleiFrame,
+    #cheepCheepRoleiFrame {
         width: 100%;
     }
 
-    .discordRolePreview, .cheepCheepRolePreview {
+    .discordRolePreview,
+    .cheepCheepRolePreview {
         float: none;
         margin-top: 0;
         width: auto;
