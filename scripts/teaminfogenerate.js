@@ -14,7 +14,6 @@ const teamBoxFormatHTML = `
                 onload="this.style.opacity=1" onerror="this.onerror=null; this.src='{{placeholderLogo}}'; this.parentNode.querySelector('source').srcset='{{placeholderLogoAvif}}';"/>
             </picture>
         </a>
-        <hr>
         <div class="team-info-text">
             {{extraFields}}
         </div>
@@ -95,6 +94,79 @@ function buildTeamInfoTable(teamData, isCurrent = false) {
     `;
 }
 
+function spawnConfetti() {
+    const canvas = document.createElement('canvas');
+    canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999';
+    document.body.appendChild(canvas);
+
+    const ctx = canvas.getContext('2d');
+    const colors = ['#FFD700', '#FFC200', '#FFB800', '#FFE066', '#FFF3A3', '#FFFFFF'];
+    const countStart = Math.round(window.innerWidth / 12);
+    const countEnd = Math.round(countStart * 0.5);
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+
+    const makeParticle = () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        w: Math.random() * 8 + 4,
+        h: Math.random() * 4 + 2,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        speed: Math.random() * 1.5 + 0.5,
+        drift: (Math.random() - 0.5) * 0.8,
+        angle: Math.random() * Math.PI * 2,
+        spin: (Math.random() - 0.5) * 0.08,
+        dying: false,
+    });
+
+    const particles = Array.from({ length: countStart }, makeParticle);
+
+    setTimeout(() => {
+        let excess = particles.length - countEnd;
+        for (let i = particles.length - 1; i >= 0 && excess > 0; i--, excess--) {
+            particles[i].dying = true;
+        }
+    }, 1000);
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = particles.length - 1; i >= 0; i--) {
+            const p = particles[i];
+            ctx.save();
+            ctx.globalAlpha = 0.75;
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.angle);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            ctx.restore();
+
+            p.y += p.speed;
+            p.x += p.drift;
+            p.angle += p.spin;
+
+            if (p.y > canvas.height + 10) {
+                if (p.dying) {
+                    particles.splice(i, 1);
+                } else {
+                    p.y = -10;
+                    p.x = Math.random() * canvas.width;
+                }
+            }
+        }
+
+        requestAnimationFrame(draw);
+    }
+
+    requestAnimationFrame(draw);
+}
+
 async function generateTeamBox(teamData, showError) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.remove('fade-in');
@@ -128,6 +200,27 @@ async function generateTeamBox(teamData, showError) {
     document.documentElement.style.setProperty('--highlight-color', `${teamData.team_color}80`);
     JSTeamBox.innerHTML = tempTeamBox;
     JSTeamBox.classList.add('fade-in');
+
+    JSTeamBox.querySelector('details')?.addEventListener('toggle', function () {
+        if (this.open) {
+            const iframe = this.querySelector('iframe');
+            if (iframe) {
+                iframe.style.width = '50%';
+                requestAnimationFrame(() => { iframe.style.width = '100%'; });
+            }
+        }
+    });
+
+    if (teamData.championship_seasons?.includes(currentSeason)) {
+        if (!document.getElementById('champion-banner')) {
+            const banner = document.createElement('blockquote');
+            banner.id = 'champion-banner';
+            banner.className = 'champion';
+            banner.innerHTML = `<b>Season ${currentSeason} Champions!</b><br>Congratulations to ${teamData.team_name} on winning Season ${currentSeason} of the UMKL!`;
+            document.querySelector('main')?.insertBefore(banner, JSTeamBox);
+            spawnConfetti();
+        }
+    }
 
     (function injectLiveDotStyle() {
         const style = document.createElement('style');

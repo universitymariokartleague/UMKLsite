@@ -255,7 +255,7 @@ async function showUpcomingMatches() {
                             <div class="youtube-box left-team">
                                 ${team1.ytLink ? `
                                 <a class="no-underline-link-footer ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
-                                href="${team1.ytLink}" target="_blank" title="Open the livestream">
+                                href="${team1.ytLink}" target="_blank" title="Watch the livestream on YouTube">
                                     ${YTSVGPATH}
                                 </a>` : ''}
                             </div>
@@ -274,7 +274,7 @@ async function showUpcomingMatches() {
                             <div class="youtube-box right-team">
                                 ${team2.ytLink ? `
                                 <a class="no-underline-link-footer ${isLive ? 'youtube-live-animation' : 'no-color-link'}"
-                                href="${team2.ytLink}" target="_blank" title="Open the livestream">
+                                href="${team2.ytLink}" target="_blank" title="Watch the livestream on YouTube">
                                     ${YTSVGPATH}
                                 </a>` : ''}
                             </div>

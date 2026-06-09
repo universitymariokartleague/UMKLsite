@@ -413,6 +413,10 @@ function placeDots() {
         label.translate = false;
         label.className = 'dot-label';
         label.textContent = name;
+        label.href = `/pages/teams/details/?team=${encodeURIComponent(name)}`;
+        label.target = '_parent';
+        label.addEventListener('pointerdown', e => e.stopPropagation());
+        label.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
         if (isCurrentTeam) label.style.fontWeight = 'bold';
 
         Object.assign(label.style, {

@@ -95,7 +95,7 @@ async function generateTeamBoxes(data, cached = false) {
 
     for (const team of data) {
         const row = document.createElement('div');
-        row.className = "teamStanding";
+        row.className = "teamStanding" + (team.championship_seasons?.includes(currentSeason) ? " champion-standing" : "");
         row.setAttribute('tabindex', '0');
         row.addEventListener('click', () => window.location.href = `pages/teams/details/?team=${team.link_name}`);
         row.addEventListener('keydown', (e) => {

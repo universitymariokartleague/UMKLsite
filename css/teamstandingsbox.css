@@ -25,7 +25,7 @@
     flex-direction: column;
     gap: 12px;
     padding: 15px;
-    
+
     color: var(--standings-text-color);
     background-color: var(--standings-bg-color);
     border: 1px solid #ccccccaa;
@@ -87,7 +87,7 @@
     height: 50px;
     width: 50px;
 }
- 
+
 .teamStandingsBox .teamLogo {
     margin-left: 5px;
     height: 50px;
@@ -116,6 +116,18 @@
 .teamStandings {
     font-size: 14.5px;
     font-weight: 600;
+}
+
+.teamStandingsBox .teamStanding.champion-standing .teamPosition {
+    background: linear-gradient(135deg, #b8860b, #ffd700, #b8860b);
+    background-size: 200% 200%;
+    animation: champion-shimmer 3s ease-in-out infinite alternate;
+    color: #3a2800;
+}
+
+@keyframes champion-shimmer {
+    from { background-position: 0% 50%; }
+    to   { background-position: 100% 50%; }
 }
 
 .season-selection {
@@ -195,7 +207,7 @@
 }
 
 .team-logo {
-    width: 40px; 
+    width: 40px;
     height: 40px;
     opacity: 0;
     transition: opacity 0.2s ease-in;
@@ -210,7 +222,7 @@
         margin-left: unset;
     }
 
-    #listViewButton{
+    #listViewButton {
         margin-left: unset;
     }
 
@@ -238,7 +250,7 @@
         width: clamp(0.25rem, 1.875vw, 5em);
         height: clamp(1rem, 7.5vw, 5em);
     }
-    
+
     .teamStandingsBox .teamLogo,
     .teamStanding picture {
         margin-left: 0;

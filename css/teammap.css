@@ -85,6 +85,13 @@ body {
     user-select: none;
 }
 
+a.dot-label {
+    pointer-events: auto;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 .zoom-controls,
 .weather-display {
     position: absolute;

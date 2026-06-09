@@ -161,6 +161,23 @@ function generateTeamMatches(teamName) {
 
             const otherTeamLink = `pages/teams/details/?team=${otherTeam}`;
 
+            const ytLinksHTML = (() => {
+                const links = match.ytLinks;
+                if (!links?.length) return '';
+                const ytImg = `<img class="yt-btn-logo" src="assets/media/calendar/youtubelogo.svg" alt="YouTube logo">`;
+                if (links.length === 1) {
+                    return `<div class="yt-links"><a class="yt-btn" href="${links[0]}" target="_blank" rel="noopener" title="Watch the livestream on YouTube">${ytImg}</a></div>`;
+                }
+                const teams = match.teamsInvolved ?? [];
+                const orderedLinks = [...links];
+                const currentIdx = teams.indexOf(teamName);
+                if (currentIdx === 1) orderedLinks.reverse();
+                const labels = orderedLinks.length === 2 && teams.length === 2
+                    ? (currentIdx === 1 ? [...teams].reverse() : teams)
+                    : orderedLinks.map((_, i) => i + 1);
+                return `<div class="yt-links">${orderedLinks.map((url, i) => `<a class="yt-btn" href="${url}" target="_blank" rel="noopener" title="Watch the livestream on YouTube (${labels[i]})">${ytImg}</a>`).join('')}</div>`;
+            })();
+
             const block = `
                 <div class="team-match-card ${match.testMatch ? "test-match" : ""}" href="">
                     <div class="match-card-wrapper">
@@ -181,6 +198,7 @@ function generateTeamMatches(teamName) {
                     <hr>
                     <div class="match-details-wrapper">
                         <span id="match-season">${match.testMatch ? 'Test match' : `Season ${match.season}`}</span>
+                        ${ytLinksHTML}
                         <span id="match-date"><a class="team-link-color" href="pages/matches/?date=${match.matchDate}">${formatDate(match.matchDate, locale)}</a></span>
                     </div>
                 </div>

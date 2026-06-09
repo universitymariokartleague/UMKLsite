@@ -81,6 +81,32 @@ hr {
     margin-left: auto;
 }
 
+.yt-links {
+    display: flex;
+    gap: 5px;
+    margin-left: 8px;
+}
+
+.yt-btn {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none !important;
+}
+
+.yt-btn-logo {
+    height: 18px;
+    opacity: 0.85;
+    transition: opacity 0.15s;
+}
+
+.yt-btn:hover .yt-btn-logo {
+    opacity: 1;
+}
+
+.yt-btn[target="_blank"]::after {
+    content: none !important;
+}
+
 .live-dot-adjusted {
     margin-left: 0;
     margin-right: 5px;
@@ -108,11 +134,12 @@ hr {
     }
 
     .match-details-wrapper {
-        flex-direction: column;
+        flex-wrap: wrap;
         gap: 2px;
     }
 
     .match-details-wrapper #match-date {
+        width: 100%;
         margin-left: 0;
     }
 }

@@ -15,6 +15,10 @@
     width: 100%;
 }
 
+.team-info-wrapper img {
+    padding: 10px 0 10px 0;
+}
+
 .team-info-wrapper a {
     display: block;
 }
@@ -77,10 +81,6 @@
     height: 150px;
 }
 
-.details-box {
-    overflow: hidden;
-}
-
 .details-box summary {
     font-weight: bold;
     cursor: pointer;
@@ -117,4 +117,5 @@
         width: 100%;
         height: auto;
     }
+
 }
