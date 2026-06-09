@@ -27,6 +27,11 @@
     color: white;
 }
 
+.brand-standard ::selection {
+    background-color: white;
+    color: #BC0839;
+}
+
 .brand-white {
     background-color: white;
     outline: 1px solid #00000050;
