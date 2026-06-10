@@ -70,10 +70,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         matchData = await getMatchData();
         teamColors = await getTeamColors();
     } catch (error) {
-        console.debug(`%cmatchcalendar.js %c> %cAPI failed - using fallback information...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-        await getMatchDataFallback();
-        await getTeamColorsFallback();
-
         if (error?.message?.includes('429')) {
             calendarError.innerHTML = `<blockquote class="fail"><b>API error</b><br>Your device or network is sending too many requests, so you have been rate-limited. Please try again later.</blockquote>`;
         } else {
@@ -121,18 +117,6 @@ const fetchAPI = async (endpoint, body = {}) => {
 const getMatchData = () => fetchAPI('matchdata', {});
 const getTeamColors = () => fetchAPI('teamcolors', {});
 const getLiveResults = () => fetchAPI('live', {});
-
-const getMatchDataFallback = async () => {
-    const response = await fetch('database/matchdatafallback.json');
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    matchData = await response.json();
-};
-
-const getTeamColorsFallback = async () => {
-    const response = await fetch('database/teamcolorsfallback.json');
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    teamColors = await response.json();
-};
 
 const makePossessive = name => !name ? "" : (name.endsWith("s") || name.endsWith("S") ? `${name}'` : `${name}'s`);
 

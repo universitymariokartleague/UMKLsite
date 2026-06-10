@@ -206,14 +206,6 @@ async function getTeamlocations() {
         });
 }
 
-async function getTeamlocationsFallback() {
-    const response = await fetch(`database/teamlocationsfallback.json`);
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
-}
-
 function latLonToPixel(lat, lon, width, height) {
     const { minLon, maxLon, minLat, maxLat } = mapBounds;
 
@@ -524,11 +516,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     teamParam = urlParams.get('team') || "";
 
-    try {
-        teamLocations = await getTeamlocations();
-    } catch {
-        teamLocations = await getTeamlocationsFallback();
-    }
+    teamLocations = await getTeamlocations();
 
     coords = teamLocations
         .filter(t => t.coords)

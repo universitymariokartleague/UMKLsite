@@ -33,14 +33,6 @@ async function getMatchData() {
         });
 }
 
-async function getMatchDataFallback() {
-    const response = await fetch(`database/matchdatafallback.json`);
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    matchData = await response.json();
-}
-
 async function getTeamColors() {
     return fetch('https://api.umkl.co.uk/teamcolors', {
         method: 'POST',
@@ -57,14 +49,6 @@ async function getTeamColors() {
             localStorage.setItem("apiReqsSent", apiReqsSent + 1)
             return response.json();
         });
-}
-
-async function getTeamcolorsFallback() {
-    const response = await fetch(`database/teamcolorsfallback.json`);
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    teamColors = await response.json();
 }
 
 function normalizeMatchData(matchData) {
@@ -463,10 +447,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             upcomingMatchesError.innerHTML = `<blockquote class="fail"><b>API error</b><br>Your device or network is sending too many requests, so you have been rate-limited. Please try again later.</blockquote>`;
             return;
         } else {
-            console.debug(`%cshowupcomingmatches.js %c> %cAPI failed - using fallback information...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-            await getMatchDataFallback();
-            await getTeamcolorsFallback();
-
             upcomingMatchesError.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch match data from the API, the below information may not be up to date!</blockquote>`;
 
             if (refreshTimer) clearTimeout(refreshTimer);

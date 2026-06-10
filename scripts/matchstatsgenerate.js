@@ -186,14 +186,6 @@ async function getMatchData() {
     });
 }
 
-async function getMatchDataFallback() {
-    const response = await fetch(`database/matchdatafallback.json`);
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    matchData = await response.json();
-}
-
 async function getTeamcolors() {
     return fetch('https://api.umkl.co.uk/teamcolors', {
         method: 'POST',
@@ -210,14 +202,6 @@ async function getTeamcolors() {
         localStorage.setItem("apiReqsSent", apiReqsSent + 1)
         return response.json();
     });
-}
-
-async function getTeamcolorsFallback() {
-    const response = await fetch(`database/teamcolorsfallback.json`);
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    teamColors = await response.json();
 }
 
 async function getCurrentSeason() {
@@ -252,10 +236,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         matchData = await getMatchData();
         teamColors = await getTeamcolors();
     } catch (error) {
-        console.debug(`%cmatchstatsgenerate.js %c> %cAPI failed - using fallback information...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
-        await getMatchDataFallback();
-        await getTeamcolorsFallback();
-
         if (error && error.message && error.message.includes('429')) {
             showError = 2;
         } else {

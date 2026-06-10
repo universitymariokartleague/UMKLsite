@@ -25,14 +25,6 @@ async function getTeamcolors() {
     });
 }
 
-async function getTeamcolorsFallback() {
-    const response = await fetch(`database/teamcolorsfallback.json`);
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    teamColors = await response.json();
-}
-
 function createColorBox(name, color) {
     const colorDiv = document.createElement("div");
     colorDiv.className = "color-box";
@@ -49,12 +41,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     console.debug(`%cgetteamcolors.js %c> %cGetting team colors...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
     
-    try {
-        teamColors = await getTeamcolors();
-    } catch (error) {
-        console.debug(`%cgetteamcolors.js %c> %cAPI failed - using fallback information...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
-        await getTeamcolorsFallback();
-    }
+    teamColors = await getTeamcolors();
 
     teamColors.forEach(({ team_name: name, team_color: color }) => {
         createColorBox(name, color);

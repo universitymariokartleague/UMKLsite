@@ -547,14 +547,6 @@ async function getMatchData() {
     return umklFetch('https://api.umkl.co.uk/matchdata', {});
 }
 
-async function getMatchDataFallback() {
-    const response = await fetch(`database/matchdatafallback.json`);
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    matchData = await response.json();
-}
-
 async function getTeamdata(team, season) {
     console.debug(`%cuserinfogenerate.js %c> %cFetching playerdata from the API...`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
     return umklFetch('https://api.umkl.co.uk/teamdata', { team: `${team}`, season: `${season}` });
@@ -982,8 +974,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         matchData = await getMatchData();
         fetchedCurrentSeason = parseInt(await getCurrentSeason());
     } catch (error) {
-        console.debug(`%cuserinfogenerate.js %c> %cAPI failed - retrying...`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
-        await getMatchDataFallback();
         showError = 1;
 
         if (error && error.message && error.message.includes('429')) {

@@ -62,14 +62,6 @@ async function getMatchData() {
         });
 }
 
-async function getMatchDataFallback() {
-    const response = await fetch(`database/matchdatafallback.json`);
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    matchData = await response.json();
-}
-
 function normalizeMatchData(matchData) {
     const flat = [];
 
@@ -238,11 +230,7 @@ async function showTeamMatches() {
         return;
     }
 
-    try {
-        matchData = await getMatchData();
-    } catch {
-        await getMatchDataFallback();
-    }
+    matchData = await getMatchData();
 
     generateTeamMatches(teamNameFromURL);
     console.debug(`%cmatchhistorygenerate.js %c> %cGenerated match history in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9b87ff", "color:#fff", "color:#c8bdff");

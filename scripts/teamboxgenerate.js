@@ -43,13 +43,6 @@ const fetchTeamData = async (season) => {
     return data;
 };
 
-const fetchFallback = async (season) => {
-    const response = await fetch(`database/teamdatafallbacks${season}.json`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    localStorage.setItem("apiReqsSent", (parseInt(localStorage.getItem("apiReqsSent")) || 0) + 1);
-    return response.json();
-};
-
 const makePossessive = name => !name ? "" : (name.endsWith("s") || name.endsWith("S") ? `${name}'` : `${name}'s`);
 
 const debounce = (fn, delay) => {
@@ -131,9 +124,7 @@ async function getTeamDataSafe(season) {
     try {
         teamData = await fetchTeamData(season);
     } catch {
-        console.debug(`%cteamboxgenerate.js %c> %cAPI failed - using fallback information...`, "color:#9452ff", "color:#fff", "color:#c29cff");
         JSTeamBoxLoading.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch team data from the API, the below information may not be up to date!</blockquote>`;
-        teamData = await fetchFallback(season);
     }
 }
 
@@ -171,9 +162,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
         teamData = await fetchTeamData(currentSeason);
     } catch (error) {
-        console.debug(`%cteamboxgenerate.js %c> %cAPI failed - using fallback information...`, "color:#9452ff", "color:#fff", "color:#c29cff");
         showError(`<b>API error</b><br>Failed to fetch team data from the API, the below information may not be up to date!`);
-        teamData = await fetchFallback(currentSeason);
 
         if (error.message?.includes('429')) {
             showError(`<b>API error</b><br>Your device or network is sending too many requests, so you have been rate-limited. Please try again later.`);

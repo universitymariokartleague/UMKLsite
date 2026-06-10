@@ -314,15 +314,6 @@ async function getPlayerdata(team = "", season = "") {
     return response.json();
 }
 
-async function getPlayerdataFallback(currentTeam) {
-    const response = await fetch(`database/teamdatafallbacks${currentSeason}.json`);
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const allTeams = await response.json();
-    return allTeams.filter(team => team.team_name === currentTeam);
-}
-
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     console.debug(`%cteaminfogenerate.js %c> %cGenerating team info box`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
@@ -356,8 +347,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             window.location.href = "/pages/teams";
         }
 
-        console.debug(`%cteaminfogenerate.js %c> %cAPI failed - using fallback information...`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
-        playerData = await getPlayerdataFallback(currentTeam);
         showError = 1;
 
         if (error && error.message && error.message.includes('429')) {
