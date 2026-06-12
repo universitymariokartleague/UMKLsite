@@ -857,7 +857,11 @@ function scrollMatchList() {
     if (!listViewContent) return;
 
     const targetDate = dateParam || formattedToday;
-    const target = listViewContent.querySelector(`.list-view-date-header[data-date="${targetDate}"]`);
+    let target = listViewContent.querySelector(`.list-view-date-header[data-date="${targetDate}"]`);
+    if (!target) {
+        const allHeaders = [...listViewContent.querySelectorAll('.list-view-date-header[data-date]')];
+        target = allHeaders.find(h => h.dataset.date >= targetDate) || allHeaders.at(-1);
+    }
     if (target) listViewContent.scrollTo({ top: target.offsetTop - listViewContent.offsetTop - 20 });
 }
 

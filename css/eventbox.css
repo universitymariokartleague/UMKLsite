@@ -128,7 +128,7 @@
 }
 
 .score-box a {
-    color: var(--accent-color)!important;
+    color: var(--accent-color) !important;
 }
 
 .score-box a:hover {
@@ -177,7 +177,9 @@
 }
 
 @keyframes youtubeLiveAnimation {
-    0%, 100% {
+
+    0%,
+    100% {
         color: #FFF;
         text-shadow: 0 0 8px rgba(255, 255, 255, 1);
     }
@@ -360,17 +362,13 @@
     font-size: 1vmin;
 }
 
-.list-view-content .event-box-team .youtube-box {
-    width: 2.5vmin;
-}
-
 .list-view-content .team-box-image {
-    max-height: 7.5vmin;
-    max-width: 7.5vmin;
+    max-height: 5.5vmin;
+    max-width: 5.5vmin;
 }
 
 .list-view-content .score-box {
-    font-size: 2.5vmin;
+    font-size: 22px;
     padding: 1vmin;
     border-radius: 5px;
 }
@@ -383,7 +381,7 @@
     .list-view-slide-over {
         max-width: 100%;
     }
-    
+
     .list-view-content .event-box-team {
         font-size: 2vmin;
     }
