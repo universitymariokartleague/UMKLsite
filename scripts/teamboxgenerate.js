@@ -1,7 +1,7 @@
 /*
     This script generates the team boxes on the teams page. These boxes display
-    information about each team, including their team name, logo, position, points,
-    and institution. The script fetches data from the API and creates the
+    information about each team, including their team name, logo, position,
+    and points. The script fetches data from the API and creates the
     HTML elements dynamically. It also handles caching of the data to improve performance.
 */
 const JSTeamBox = document.getElementById("JSTeamBox");
@@ -31,6 +31,16 @@ const fetchAPI = async (endpoint, body) => {
     return response.json();
 };
 
+const getSeasonInfoCache = () => {
+    try { return JSON.parse(localStorage.getItem(SEASON_CACHE_KEY)) || {}; } catch { return {}; }
+};
+
+const setSeasonInfoCache = (season, data) => {
+    const cache = getSeasonInfoCache();
+    cache[season] = data;
+    localStorage.setItem(SEASON_CACHE_KEY, JSON.stringify(cache));
+};
+
 const fetchSeasonInfo = async (season = 0) => {
     console.debug(`%cteamboxgenerate.js %c> %cFetching seasoninfo from the API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     return fetchAPI('seasoninfo', { season });
@@ -38,76 +48,63 @@ const fetchSeasonInfo = async (season = 0) => {
 
 const fetchTeamData = async (season) => {
     console.debug(`%cteamboxgenerate.js %c> %cFetching teamdata from the API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
-    const data = await fetchAPI('teamdata', { team: "", season: `${season}` });
-    JSTeamBoxLoading.innerHTML = "";
-    return data;
+    return fetchAPI('teamdata', { team: "", season: `${season}` });
 };
 
 const makePossessive = name => !name ? "" : (name.endsWith("s") || name.endsWith("S") ? `${name}'` : `${name}'s`);
 
-const debounce = (fn, delay) => {
-    let timer;
-    return (...args) => {
-        clearTimeout(timer);
-        timer = setTimeout(() => fn(...args), delay);
-    };
+const showError = (message) => {
+    JSTeamBoxLoading.innerHTML = `<blockquote class="fail">${message}</blockquote>`;
 };
 
-async function generateTeamBoxes(data, cached = false) {
+async function generateTeamBoxes(data) {
+    const alreadyRendered = JSTeamBox.children.length > 0;
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.add('fade-in');
     JSTeamBox.classList.remove('teamBoxContainer');
 
+    // Compute tie-aware positions without mutating data
+    const positionMap = new Map();
+    const sorted = data.slice().sort((a, b) => Number(b.team_season_points) - Number(a.team_season_points));
+    let lastPoints = null, lastPosition = 0;
+    for (let i = 0; i < sorted.length; i++) {
+        const pts = Number(sorted[i].team_season_points);
+        if (pts !== lastPoints) { lastPosition = i + 1; lastPoints = pts; }
+        positionMap.set(sorted[i], lastPosition);
+    }
+
     const placeholderLogoAvif = "assets/media/teamemblems/DEFAULT.avif";
     const placeholderLogoPng = "assets/media/teamemblems/og/DEFAULT.png";
+    const imgAttr = alreadyRendered ? 'style="opacity:1"' : 'onload="this.style.opacity=1"';
     const fragment = document.createDocumentFragment();
     const teamStandingsBox = document.createElement('div');
     teamStandingsBox.classList.add("teamStandingsBox");
 
     for (const team of data) {
-        team.logo_src_avif = `assets/media/teamemblems/${team.team_name.toUpperCase()}.avif`;
-        team.logo_src_png = `assets/media/teamemblems/og/${team.team_name.toUpperCase()}.png`;
-        team.link_name = team.team_name;
-    }
+        const name = team.team_name;
+        const nameUpper = name.toUpperCase();
+        const avif = `assets/media/teamemblems/${nameUpper}.avif`;
+        const png = `assets/media/teamemblems/og/${nameUpper}.png`;
+        const dest = `pages/teams/details/?team=${name}`;
 
-    // Tie handling - teams with equal points have the same position
-    const sortedByPoints = data.slice().sort((a, b) => Number(b.team_season_points) - Number(a.team_season_points));
-    let lastPoints = null;
-    let lastPosition = 0;
-    for (let i = 0; i < sortedByPoints.length; i++) {
-        const t = sortedByPoints[i];
-        const pts = Number(t.team_season_points);
-        if (pts === lastPoints) {
-            t._computedPosition = lastPosition;
-        } else {
-            lastPosition = i + 1;
-            t._computedPosition = lastPosition;
-            lastPoints = pts;
-        }
-    }
-
-    for (const team of data) {
         const row = document.createElement('div');
         row.className = "teamStanding" + (team.championship_seasons?.includes(currentSeason) ? " champion-standing" : "");
         row.setAttribute('tabindex', '0');
-        row.addEventListener('click', () => window.location.href = `pages/teams/details/?team=${team.link_name}`);
+        row.addEventListener('click', () => window.location.href = dest);
         row.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                window.location.href = `pages/teams/details/?team=${team.link_name}`;
-            }
+            if (e.key === 'Enter' || e.key === ' ') window.location.href = dest;
         });
 
-        const opacityStyle = cached ? '' : 'onload="this.style.opacity=1"';
         row.innerHTML = `
-            <div translate="no" class="teamPosition">${team._computedPosition ?? team.season_position}</div>
+            <div translate="no" class="teamPosition">${positionMap.get(team) ?? team.season_position}</div>
             <div class="teamColour" style="background-color:${team.team_color}"></div>
             <picture>
-                <source srcset="${team.logo_src_avif}" type="image/avif">
-                <img class="teamLogo" src="${team.logo_src_png}" alt="${makePossessive(team.team_name)} team emblem"
-                ${opacityStyle} loading="lazy"
+                <source srcset="${avif}" type="image/avif">
+                <img class="teamLogo" src="${png}" alt="${makePossessive(name)} team emblem"
+                ${imgAttr} loading="lazy"
                 onerror="this.onerror=null; this.src='${placeholderLogoPng}'; this.parentNode.querySelector('source').srcset='${placeholderLogoAvif}';">
             </picture>
-            <div translate="no" class="teamName" title="${team.team_full_name}">${team.team_name}</div>
+            <div translate="no" class="teamName" title="${team.team_full_name}">${name}</div>
             <div translate="no" class="teamPointsArea">
                 <div class="teamPoints">${team.team_season_points}</div>
                 <div class="teamStandings">${team.season_wins_losses[0]} - ${team.season_wins_losses[1]} (${team.season_matches_played})</div>
@@ -123,27 +120,28 @@ async function generateTeamBoxes(data, cached = false) {
 async function getTeamDataSafe(season) {
     try {
         teamData = await fetchTeamData(season);
+        JSTeamBoxLoading.innerHTML = "";
     } catch {
         JSTeamBoxLoading.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch team data from the API, the below information may not be up to date!</blockquote>`;
     }
 }
 
-const showError = (message) => {
-    JSTeamBoxLoading.innerHTML = `<blockquote class="fail">${message}</blockquote>`;
-};
-
-const retryFetch = debounce(async () => {
-    try {
-        retryCount++;
-        teamData = await fetchTeamData(currentSeason);
-        await generateTeamBoxes(teamData);
-        generateSeasonPicker();
-        updateSeasonText();
-    } catch {
-        showError(`<b>API error - Retrying: attempt ${retryCount}</b><br>Failed to fetch team data from the API, the below information may not be up to date!`);
-        refreshTimer = setTimeout(retryFetch, 2000);
-    }
-}, 2000);
+function scheduleRetry() {
+    clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(async () => {
+        try {
+            retryCount++;
+            teamData = await fetchTeamData(currentSeason);
+            JSTeamBoxLoading.innerHTML = "";
+            await generateTeamBoxes(teamData);
+            generateSeasonPicker();
+            updateSeasonText();
+        } catch {
+            showError(`<b>API error - Retrying: attempt ${retryCount}</b><br>Failed to fetch team data from the API, the below information may not be up to date!`);
+            scheduleRetry();
+        }
+    }, 2000);
+}
 
 document.addEventListener("DOMContentLoaded", async () => {
     const startTime = performance.now();
@@ -151,34 +149,55 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (cached) {
         try {
-            JSTeamBoxLoading.innerHTML = "";
-            console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes (cache)...`, "color:#9452ff", "color:#fff", "color:#c29cff");
-            await generateTeamBoxes(JSON.parse(cached), true);
+            const parsedCache = JSON.parse(cached);
+            if (parsedCache?.length > 0) {
+                JSTeamBoxLoading.innerHTML = "";
+                console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes (cache)...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+                await generateTeamBoxes(parsedCache);
+            } else {
+                localStorage.removeItem(CACHE_KEY);
+            }
         } catch {
             localStorage.removeItem(CACHE_KEY);
         }
     }
 
-    try {
-        teamData = await fetchTeamData(currentSeason);
-    } catch (error) {
-        showError(`<b>API error</b><br>Failed to fetch team data from the API, the below information may not be up to date!`);
-
-        if (error.message?.includes('429')) {
-            showError(`<b>API error</b><br>Your device or network is sending too many requests, so you have been rate-limited. Please try again later.`);
-        } else {
-            retryFetch();
+    const seasonInfoCache = getSeasonInfoCache();
+    if (seasonInfoCache[0] != null) {
+        const cachedSeasonNum = parseInt(seasonInfoCache[0]);
+        if (!isNaN(cachedSeasonNum)) {
+            currentSeason = cachedSeasonNum;
+            maxSeason = currentSeason;
         }
     }
 
-    await generateTeamBoxes(teamData);
-    console.debug(`%cteamboxgenerate.js %c> %cGenerated updated team data in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9452ff", "color:#fff", "color:#c29cff");
-    localStorage.setItem(CACHE_KEY, JSON.stringify(teamData));
+    const [teamResult, seasonResult] = await Promise.allSettled([
+        fetchTeamData(currentSeason),
+        fetchSeasonInfo(0)
+    ]);
 
-    try {
-        currentSeason = parseInt(await fetchSeasonInfo(0));
+    if (teamResult.status === 'fulfilled') {
+        teamData = teamResult.value;
+        JSTeamBoxLoading.innerHTML = "";
+        await generateTeamBoxes(teamData);
+        console.debug(`%cteamboxgenerate.js %c> %cGenerated updated team data in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9452ff", "color:#fff", "color:#c29cff");
+        localStorage.setItem(CACHE_KEY, JSON.stringify(teamData));
+    } else {
+        const msg = teamResult.reason?.message;
+        if (msg?.includes('429')) {
+            showError(`<b>API error</b><br>Your device or network is sending too many requests, so you have been rate-limited. Please try again later.`);
+        } else {
+            showError(`<b>API error</b><br>Failed to fetch team data from the API, the below information may not be up to date!`);
+            scheduleRetry();
+        }
+        JSTeamBox.classList.add('fade-in');
+    }
+
+    if (seasonResult.status === 'fulfilled') {
+        setSeasonInfoCache(0, seasonResult.value);
+        currentSeason = parseInt(seasonResult.value);
         maxSeason = currentSeason;
-    } catch {
+    } else {
         console.debug(`%cteamboxgenerate.js %c> %cAPI failed - using fallback information...`, "color:#9452ff", "color:#fff", "color:#c29cff");
     }
 
@@ -189,7 +208,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 document.addEventListener('listViewChange', async () => {
     await getTeamDataSafe(currentSeason);
     console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes...`, "color:#9452ff", "color:#fff", "color:#c29cff");
-    await generateTeamBoxes(teamData, false);
+    await generateTeamBoxes(teamData);
 });
 
 function generateSeasonPicker() {
@@ -217,19 +236,25 @@ seasonPicker.addEventListener("change", function () {
 });
 
 async function updateSeasonText() {
-    let seasonStatus = "Unknown...";
-    let seasonMatchesCompleted = "";
-    let seasonPercentage = "";
+    const render = (status, matches) => {
+        currentSeasonText.innerText = `${status} (${START_YEAR + currentSeason}-${START_YEAR + 1 + currentSeason})`;
+        if (matches) {
+            const [c, t] = matches.split('/').map(Number);
+            currentSeasonText.title = `${matches} (${Math.round((c / t) * 100)}%)`;
+        } else {
+            currentSeasonText.title = "";
+        }
+        currentSeasonText.classList.add('fade-in');
+    };
+
+    const cachedInfo = getSeasonInfoCache()[currentSeason];
+    if (cachedInfo?.[1]) render(cachedInfo[1], cachedInfo[2] || "");
+
     try {
-        let seasonInfo = await fetchSeasonInfo(currentSeason);
-        seasonStatus = seasonInfo[1];
-        seasonMatchesCompleted = seasonInfo[2];
-        const [completed, total] = seasonMatchesCompleted.split('/').map(Number);
-        seasonPercentage = `${Math.round((completed / total) * 100)}%`;
+        const seasonInfo = await fetchSeasonInfo(currentSeason);
+        setSeasonInfoCache(currentSeason, seasonInfo);
+        render(seasonInfo[1], seasonInfo[2]);
     } catch {
-        // Keep default
+        if (!cachedInfo?.[1]) render("Unknown...", "");
     }
-    currentSeasonText.innerText = `${seasonStatus} (${START_YEAR + currentSeason}-${START_YEAR + 1 + currentSeason})`;
-    currentSeasonText.title = `${seasonMatchesCompleted} (${seasonPercentage})`;
-    currentSeasonText.classList.add('fade-in');
 }

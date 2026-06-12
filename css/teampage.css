@@ -95,6 +95,20 @@
     margin-block-end: 5px;
 }
 
+.champion {
+    border: 2px solid rgba(255, 200, 0, 0.7);
+    background: linear-gradient(135deg, rgba(255, 185, 0, 0.25), rgba(255, 215, 0, 0.15));
+    color: #ffe87a;
+    text-shadow: 0 0 8px rgba(255, 210, 0, 0.5);
+}
+
+:root.light-theme .champion {
+    color: #7a5a00;
+    text-shadow: none;
+    border-color: rgba(180, 130, 0, 0.7);
+    background: linear-gradient(135deg, rgba(255, 200, 0, 0.2), rgba(255, 220, 50, 0.12));
+}
+
 #JSTeamBox,
 #JSMatchHistory {
     margin-bottom: 20px;
