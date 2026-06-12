@@ -32,7 +32,7 @@ async function getCurrentSeason() {
 }
 
 async function getTeamdata(team = "", season) {
-    console.debug(`%cteamboxgenerate.js %c> %cFetching teamdata from the API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    console.debug(`%cgenerateteamstandingsimage.js %c> %cFetching teamdata from the API...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
     return fetch('https://api.umkl.co.uk/teamdata', {
         method: 'POST',
         headers: {
@@ -272,16 +272,30 @@ async function generateTeamStandingsImage(season) {
     try {
         seasonStatus = (await getCurrentSeason())[1];
     } catch {
-        seasonStatus = "";
+        try {
+            const sic = JSON.parse(localStorage.getItem('seasonInfoCache')) || {};
+            seasonStatus = (sic[season] ?? sic[0])?.[1] ?? "";
+        } catch {
+            seasonStatus = "";
+        }
     }
 
     let teamStandings;
     try {
         teamStandings = await getTeamdata("", season);
     } catch {
-        return null;
+        try {
+            const cached = JSON.parse(localStorage.getItem('teamDataCache'));
+            if (cached?.length > 0) {
+                teamStandings = cached;
+            } else {
+                return null;
+            }
+        } catch {
+            return null;
+        }
     }
 
     console.debug(`%cgenerateteamstandingsimage.js %c> %cGenerated team standings image in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
-    return createTeamStandingsImage(season, seasonStatus == "Ongoing", teamStandings)
+    return createTeamStandingsImage(season, seasonStatus === "Ongoing", teamStandings);
 }

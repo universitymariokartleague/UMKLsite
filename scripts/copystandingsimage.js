@@ -31,10 +31,14 @@ async function shareButtonPressed() {
         const useClipboard = isWindowsOrLinux() || !navigator.canShare;
         if (useClipboard) shareButton.innerHTML = "Generating image...";
 
+        if (!blob) blob = await generateTeamStandingsImage(currentSeason.value);
+        if (!blob) {
+            shareButton.innerText = "Failed to generate image!";
+            setTimeout(() => { shareButton.innerHTML = getOriginalMessage(); }, 2000);
+            return;
+        }
+
         if (useClipboard) {
-            if (!blob) {
-                blob = await generateTeamStandingsImage(currentSeason.value);
-            }
             const success = await copyImageToClipboard(blob);
             shareButton.innerText = success ? "Image copied to clipboard!" : "Failed to copy!";
             if (success) {
@@ -45,10 +49,6 @@ async function shareButtonPressed() {
                 }, 2000);
             }
         } else {
-            if (!blob) {
-                blob = await generateTeamStandingsImage(currentSeason.value);
-            }
-
             await shareImage(
                 "UMKL Team Standings",
                 generateMessage(),
