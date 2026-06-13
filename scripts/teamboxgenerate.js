@@ -4,6 +4,7 @@
     and points. The script fetches data from the API and creates the
     HTML elements dynamically. It also handles caching of the data to improve performance.
 */
+
 const JSTeamBox = document.getElementById("JSTeamBox");
 const JSTeamBoxLoading = document.getElementById("JSTeamBoxLoading");
 const seasonPicker = document.getElementById("season-select");
@@ -63,23 +64,7 @@ async function populateAllTeamsDropdown() {
     const teamSelect = document.getElementById('team-select');
     if (!teamSelect || allTeamsPopulated) return;
 
-    const fetches = [];
-    for (let s = 1; s <= maxSeason; s++) {
-        fetches.push(fetchTeamData(s).catch(() => []));
-    }
-    const results = await Promise.all(fetches);
-
-    const seen = new Set();
-    const allTeams = [];
-    for (const seasonTeams of results) {
-        for (const team of seasonTeams) {
-            if (!seen.has(team.team_name)) {
-                seen.add(team.team_name);
-                allTeams.push(team);
-            }
-        }
-    }
-    allTeams.sort((a, b) => a.team_name.localeCompare(b.team_name));
+    const allTeams = (await fetchAPI('teamcolors', {}).catch(() => [])).sort((a, b) => a.team_name.localeCompare(b.team_name));
 
     teamSelect.innerHTML = '<option value="" disabled selected>View a team\'s page...</option>';
     for (const team of allTeams) {
