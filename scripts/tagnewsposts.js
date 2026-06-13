@@ -114,9 +114,12 @@ function addNewsReelArea() {
 
     const reelBox = document.createElement('div');
     reelBox.id = 'news-reel-box';
+    const showArrows = data.length > 1;
     reelBox.innerHTML = `
         <div class="news-reel-viewport">
             <div class="news-reel-track"></div>
+            ${showArrows ? `<button class="news-reel-prev" aria-label="Previous slide"></button>
+            <button class="news-reel-next" aria-label="Next slide"></button>` : ''}
             <div class="news-reel-indicators"></div>
             <div class="news-reel-progress-bar">
                 <div class="news-reel-progress"></div>
@@ -196,6 +199,9 @@ function addNewsReelArea() {
             goToSlide(parseInt(e.target.dataset.index, 10));
         });
     });
+
+    reelBox.querySelector('.news-reel-prev')?.addEventListener('click', () => goToSlide(currentIndex - 1));
+    reelBox.querySelector('.news-reel-next')?.addEventListener('click', () => goToSlide(currentIndex + 1));
 
     reelBox.addEventListener('mouseenter', () => {
         clearInterval(timer);
