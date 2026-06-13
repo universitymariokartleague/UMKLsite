@@ -13,6 +13,10 @@ let showTestMatches = 0;
 let teamNameFromURL;
 let startTime;
 
+const CACHE_KEY = 'matchDataCache';
+const getMatchCache = () => { try { return JSON.parse(localStorage.getItem(CACHE_KEY)) || null; } catch { return null; } };
+const setMatchCache = (data) => { try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch {} };
+
 const makePossessive = name =>
     !name ? "" : (name.endsWith("s") || name.endsWith("S") ? `${name}'` : `${name}'s`);
 
@@ -222,7 +226,6 @@ function generateTeamMatches(teamName) {
 
 async function showTeamMatches() {
     startTime = performance.now();
-    console.debug(`%cteaminfogenerate.js %c> %cGenerating team info box`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
     teamNameFromURL = getTeamFromURL();
 
     if (!teamNameFromURL) {
@@ -230,9 +233,24 @@ async function showTeamMatches() {
         return;
     }
 
-    matchData = await getMatchData();
+    const cached = getMatchCache();
+    if (cached) {
+        matchData = cached;
+        generateTeamMatches(teamNameFromURL);
+    }
 
-    generateTeamMatches(teamNameFromURL);
+    try {
+        const fresh = await getMatchData();
+        setMatchCache(fresh);
+        matchData = fresh;
+        generateTeamMatches(teamNameFromURL);
+    } catch (error) {
+        console.debug(`%cmatchhistorygenerate.js %c> %cFailed to fetch match data: ${error.message}`, "color:#9b87ff", "color:#fff", "color:#c8bdff");
+        if (!cached) {
+            matchHistoryBox.innerHTML = `<p>Failed to load match history.</p>`;
+        }
+    }
+
     console.debug(`%cmatchhistorygenerate.js %c> %cGenerated match history in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9b87ff", "color:#fff", "color:#c8bdff");
 }
 

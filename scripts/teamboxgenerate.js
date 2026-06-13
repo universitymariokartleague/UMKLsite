@@ -237,7 +237,7 @@ seasonPicker.addEventListener("change", function () {
 
 async function updateSeasonText() {
     const render = (status, matches) => {
-        currentSeasonText.innerText = `${status} (${START_YEAR + currentSeason}-${START_YEAR + 1 + currentSeason})`;
+        currentSeasonText.innerText = `${status} (${START_YEAR + currentSeason}-${String(START_YEAR + 1 + currentSeason).slice(-2)})`;
         if (matches) {
             const [c, t] = matches.split('/').map(Number);
             currentSeasonText.title = `${matches} (${Math.round((c / t) * 100)}%)`;
