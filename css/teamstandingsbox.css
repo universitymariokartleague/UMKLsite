@@ -156,6 +156,24 @@
     background-color: var(--bg-color);
 }
 
+.team-select-divider {
+    margin: 8px 0;
+    height: 1px;
+    border: none;
+    background-color: #ccccccaa;
+}
+
+#team-select {
+    padding: 8px 10px;
+    font-size: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccccccaa;
+    outline: none;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    cursor: pointer;
+}
+
 .current-season-area {
     display: flex;
 }

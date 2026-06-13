@@ -115,6 +115,18 @@ async function generateTeamBoxes(data) {
 
     teamStandingsBox.appendChild(fragment);
     JSTeamBox.appendChild(teamStandingsBox);
+
+    const teamSelect = document.getElementById('team-select');
+    if (teamSelect) {
+        teamSelect.innerHTML = '<option value="" disabled selected>View a team\'s page...</option>';
+        const sorted = data.slice().sort((a, b) => a.team_name.localeCompare(b.team_name));
+        for (const team of sorted) {
+            const opt = document.createElement('option');
+            opt.value = `pages/teams/details/?team=${encodeURIComponent(team.team_name)}`;
+            opt.textContent = team.team_name;
+            teamSelect.appendChild(opt);
+        }
+    }
 }
 
 async function getTeamDataSafe(season) {
@@ -233,6 +245,10 @@ const handleSeasonChange = async () => {
 seasonPicker.addEventListener("change", function () {
     currentSeason = parseInt(this.value);
     handleSeasonChange();
+});
+
+document.getElementById('team-select')?.addEventListener('change', function () {
+    window.location.href = this.value;
 });
 
 async function updateSeasonText() {
