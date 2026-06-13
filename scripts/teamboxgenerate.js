@@ -57,6 +57,40 @@ const showError = (message) => {
     JSTeamBoxLoading.innerHTML = `<blockquote class="fail">${message}</blockquote>`;
 };
 
+let allTeamsPopulated = false;
+
+async function populateAllTeamsDropdown() {
+    const teamSelect = document.getElementById('team-select');
+    if (!teamSelect || allTeamsPopulated) return;
+
+    const fetches = [];
+    for (let s = 1; s <= maxSeason; s++) {
+        fetches.push(fetchTeamData(s).catch(() => []));
+    }
+    const results = await Promise.all(fetches);
+
+    const seen = new Set();
+    const allTeams = [];
+    for (const seasonTeams of results) {
+        for (const team of seasonTeams) {
+            if (!seen.has(team.team_name)) {
+                seen.add(team.team_name);
+                allTeams.push(team);
+            }
+        }
+    }
+    allTeams.sort((a, b) => a.team_name.localeCompare(b.team_name));
+
+    teamSelect.innerHTML = '<option value="" disabled selected>View a team\'s page...</option>';
+    for (const team of allTeams) {
+        const opt = document.createElement('option');
+        opt.value = `pages/teams/details/?team=${encodeURIComponent(team.team_name)}`;
+        opt.textContent = team.team_name;
+        teamSelect.appendChild(opt);
+    }
+    allTeamsPopulated = true;
+}
+
 async function generateTeamBoxes(data) {
     const alreadyRendered = JSTeamBox.children.length > 0;
     JSTeamBox.innerHTML = "";
@@ -115,18 +149,6 @@ async function generateTeamBoxes(data) {
 
     teamStandingsBox.appendChild(fragment);
     JSTeamBox.appendChild(teamStandingsBox);
-
-    const teamSelect = document.getElementById('team-select');
-    if (teamSelect) {
-        teamSelect.innerHTML = '<option value="" disabled selected>View a team\'s page...</option>';
-        const sorted = data.slice().sort((a, b) => a.team_name.localeCompare(b.team_name));
-        for (const team of sorted) {
-            const opt = document.createElement('option');
-            opt.value = `pages/teams/details/?team=${encodeURIComponent(team.team_name)}`;
-            opt.textContent = team.team_name;
-            teamSelect.appendChild(opt);
-        }
-    }
 }
 
 async function getTeamDataSafe(season) {
@@ -215,6 +237,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     generateSeasonPicker();
     updateSeasonText();
+    populateAllTeamsDropdown();
 });
 
 document.addEventListener('listViewChange', async () => {
