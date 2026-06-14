@@ -14,16 +14,16 @@ const mapBounds = {
 };
 
 const oceanZones = [
-    { minLon: -0.5,  maxLon: 2.5,  minLat: 51.0, maxLat: 61.0 },  // North Sea
-    { minLon: -5.5,  maxLon: 2.5,  minLat: 49.9, maxLat: 51.2 },  // English Channel
-    { minLon: -6.5,  maxLon: -3.0, minLat: 51.0, maxLat: 55.0 },  // Irish Sea / St George's Channel
-    { minLon: -9.0,  maxLon: -5.5, minLat: 49.5, maxLat: 61.0 },  // Atlantic Ocean
-    { minLon: -7.0,  maxLon: 0.5,  minLat: 58.5, maxLat: 61.0 },  // North of Scotland
-    { minLon: -4.0,  maxLon: -1.5, minLat: 57.3, maxLat: 58.0 },  // Moray Firth
-    { minLon: -3.2,  maxLon: -1.0, minLat: 55.9, maxLat: 56.3 },  // Firth of Forth
-    { minLon: -5.5,  maxLon: -2.5, minLat: 51.0, maxLat: 51.7 },  // Bristol Channel
-    { minLon: -4.5,  maxLon: -2.5, minLat: 54.5, maxLat: 54.9 },  // Solway Firth
-    { minLon:  0.0,  maxLon: 0.8,  minLat: 52.6, maxLat: 53.0 },  // The Wash
+    { minLon: -0.5, maxLon: 2.5, minLat: 51.0, maxLat: 61.0 },  // North Sea
+    { minLon: -5.5, maxLon: 2.5, minLat: 49.9, maxLat: 51.2 },  // English Channel
+    { minLon: -6.5, maxLon: -3.0, minLat: 51.0, maxLat: 55.0 },  // Irish Sea / St George's Channel
+    { minLon: -9.0, maxLon: -5.5, minLat: 49.5, maxLat: 61.0 },  // Atlantic Ocean
+    { minLon: -7.0, maxLon: 0.5, minLat: 58.5, maxLat: 61.0 },  // North of Scotland
+    { minLon: -4.0, maxLon: -1.5, minLat: 57.3, maxLat: 58.0 },  // Moray Firth
+    { minLon: -3.2, maxLon: -1.0, minLat: 55.9, maxLat: 56.3 },  // Firth of Forth
+    { minLon: -5.5, maxLon: -2.5, minLat: 51.0, maxLat: 51.7 },  // Bristol Channel
+    { minLon: -4.5, maxLon: -2.5, minLat: 54.5, maxLat: 54.9 },  // Solway Firth
+    { minLon: 0.0, maxLon: 0.8, minLat: 52.6, maxLat: 53.0 },  // The Wash
 ];
 
 let teamLocations, coords, weatherData;
@@ -55,18 +55,18 @@ function getIframeSize() {
 }
 
 // Variables to track zoom and pan state
-const DEFAULT_SCALE = 1;
+const DEFAULT_SCALE = 0.9;
 const DEFAULT_PAN_X = 0;
 const basePanY = Math.round(
-    -150 + (getIframeSize().height - 538) / (576 - 538) * (-112 + 150)
+    -120 + (getIframeSize().height - 538) / (576 - 538) * (-112 + 150)
 );
 const DEFAULT_PAN_Y = top.innerWidth < 767 ? (basePanY + 90) / 2 : basePanY;
 
 let scale = DEFAULT_SCALE;
 let panX = DEFAULT_PAN_X;
 let panY = DEFAULT_PAN_Y;
-let minScale = 1;
-let maxScale = 1;
+let minScale = 0.7;
+let maxScale = 2;
 let isPanning = false;
 let startPan = { x: 0, y: 0 };
 let lastTouchDist = null;
@@ -442,7 +442,7 @@ function placeDots() {
         Object.assign(label.style, {
             opacity: 0,
             backgroundColor: `${color}${isCurrentTeam ? '60' : '40'}`,
-            animation: `dotLabelFadeIn-${colorClass} ${loadedOnce ? 0 : 0.5}s ease-in-out ${loadedOnce ? 0 : (parseFloat(fadeDelay) + ((name === teamParam) ? 0 : 0.25))}s forwards`
+            animation: `dotLabelFadeIn-${colorClass} ${loadedOnce ? 0 : 0.5}s ease-in-out ${loadedOnce ? 0 : (parseFloat(fadeDelay) + (isCurrentTeam ? 0 : 0.25))}s forwards`
         });
 
         injectStyle(`dotLabelFadeIn-${colorClass}`, `
@@ -452,47 +452,30 @@ function placeDots() {
             }
         `);
 
-        // Candidate positions for label
         const labelWidth = name.length * 10;
         const labelHeight = 24;
-        const positions = [
-            { left: x - labelWidth / 2, top: y + 30 },              // south (below) — tried first so coast teams land in the sea
-            { left: x - labelWidth / 2, top: y - labelHeight - 14 }, // north (above)
-            { left: x + 15,             top: y - 11 },               // east
-            { left: x + 25,             top: y - labelHeight + 4 },  // northeast
-            { left: x - labelWidth - 34, top: y - 11 },              // west
-            { left: x - labelWidth - 10, top: y - labelHeight + 4 }, // northwest
-            { left: x - labelWidth - 10, top: y + 12 },              // southwest
-            { left: x + 15,             top: y + 12 },               // southeast
-        ];
 
-        // Add spiral positions around dot, constrained to map bounds
-        const ringCount = 10, radiusStep = 20, degreesPerCircle = 360, angleStep = 1;
-        for (let r = 2; r <= ringCount; r++) {
-            const radius = r * radiusStep;
-            for (let deg = 0; deg < degreesPerCircle; deg += angleStep) {
-                const angleRad = deg * Math.PI / 180;
-                const left = x + radius * Math.cos(angleRad) - labelWidth / 2;
-                const top = y + radius * Math.sin(angleRad) - labelHeight / 2;
-                positions.push({ left, top });
+        // Generate candidates at all angles for each radius, tag each as ocean or not,
+        // then sort ocean-first / closer-first so find() always picks the best available spot.
+        const candidates = [];
+        for (let radius = 60; radius <= 350; radius += 15) {
+            for (let deg = 0; deg < 360; deg += 5) {
+                const rad = deg * Math.PI / 180;
+                const left = x + radius * Math.cos(rad) - labelWidth / 2;
+                const top  = y + radius * Math.sin(rad) - labelHeight / 2;
+                candidates.push({ left, top, radius, ocean: isInOcean(left + labelWidth / 2, top + labelHeight / 2, w, h) });
             }
         }
+        candidates.sort((a, b) => (b.ocean - a.ocean) || (a.radius - b.radius));
 
-        const isNonColliding = pos => {
-            const centerX = pos.left + labelWidth / 2;
-            const centerY = pos.top + labelHeight / 2;
-            const newRect = { x: centerX - labelWidth * 0.75, y: centerY - labelHeight * 0.75, width: labelWidth * 1.5, height: labelHeight * 1.2 };
-            const collidesLabel = labels.some(l => !(newRect.x > l.x + l.width || newRect.x + newRect.width < l.x || newRect.y > l.y + l.height || newRect.y + newRect.height < l.y));
-            const collidesDot = dotBoxes.some((d, i) => i !== dotIdx && !(newRect.x > d.x + d.width || newRect.x + newRect.width < d.x || newRect.y > d.y + d.height || newRect.y + newRect.height < d.y));
-            return !collidesLabel && !collidesDot;
+        const isNonColliding = ({ left, top }) => {
+            const cx = left + labelWidth / 2, cy = top + labelHeight / 2;
+            const r = { x: cx - labelWidth * 0.75, y: cy - labelHeight * 0.75, width: labelWidth * 1.5, height: labelHeight * 1.2 };
+            return !labels.some(l   => !(r.x > l.x + l.width   || r.x + r.width < l.x   || r.y > l.y + l.height   || r.y + r.height < l.y))
+                && !dotBoxes.some((d, i) => i !== dotIdx && !(r.x > d.x + d.width || r.x + r.width < d.x || r.y > d.y + d.height || r.y + r.height < d.y));
         };
 
-        // Prefer ocean positions, fall back to any non-colliding position
-        const foundPosition =
-            positions.find(pos => isNonColliding(pos) && isInOcean(pos.left + labelWidth / 2, pos.top + labelHeight / 2, w, h)) ||
-            positions.find(pos => isNonColliding(pos));
-
-        const finalPos = foundPosition || positions[0];
+        const finalPos = candidates.find(isNonColliding) ?? candidates[0];
 
         label.style.left = `${finalPos.left}px`;
         label.style.top = `${finalPos.top}px`;
