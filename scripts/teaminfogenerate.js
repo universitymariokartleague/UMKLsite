@@ -119,7 +119,7 @@ function buildTeamInfoTable(teamData, isCurrent = false) {
 
     return `
         <table class="team-info-table">
-            ${teamData.team_place ? `<tr><td class="table-key">Location</td><td>${teamData.team_place}</td></tr>` : ''}
+            ${teamData.team_place ? `<tr><td class="table-key">Location</td><td><a href="https://www.google.com/maps/search/?q=${encodeURIComponent(teamData.team_place)}" target="_blank" rel="noopener noreferrer" style="color:${teamData.team_color}">${teamData.team_place}</a></td></tr>` : ''}
             <tr><td class="table-key">Institution</td><td>${teamData.team_full_name}</td></tr>
             <tr><td class="table-key">First Entry</td><td>${teamData.first_entry ? `Season ${teamData.first_entry}` : `N/A`} <span class="settings-extra-info">${teamData.first_entry ? `(${startYear + teamData.first_entry}-${String(startYear + 1 + teamData.first_entry).slice(-2)})` : ''}</span></td></tr>
             <tr><td class="table-key">Season Wins</td><td>${teamData.team_championships} <span class="settings-extra-info">${formatChampionshipSeasons(teamData.championship_seasons)}</span></td></tr>

@@ -171,7 +171,6 @@
     outline: none;
     background-color: var(--bg-color);
     color: var(--text-color);
-    cursor: pointer;
 }
 
 .current-season-area {

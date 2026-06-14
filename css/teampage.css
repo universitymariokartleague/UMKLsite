@@ -75,7 +75,6 @@
     font-weight: bold;
     outline: none;
     background-color: var(--bg-color);
-    cursor: pointer;
 }
 
 #teamMapIFrame {

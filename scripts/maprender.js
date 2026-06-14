@@ -344,7 +344,7 @@ function getWeatherIcon(code, isDay = true) {
     return "❔";
 }
 
-function createWeatherBox() {
+function createWeatherBox(lat, lon) {
     const weatherDiv = document.createElement('div');
     weatherDiv.className = 'weather-display';
     weatherDiv.id = 'weather-display';
@@ -352,7 +352,11 @@ function createWeatherBox() {
     const code = weatherData.current.weather_code;
 
     weatherDiv.textContent = `${getWeatherIcon(code, weatherData.current.is_day === 1)} ${Math.round(weatherData.current.temperature_2m)}${weatherData.current_units.temperature_2m}`;
-    weatherDiv.title = `${getWeatherDescription(code)} at ${weatherData.current.temperature_2m}${weatherData.current_units.temperature_2m}`;
+    weatherDiv.title = `${getWeatherDescription(code)} at ${weatherData.current.temperature_2m}${weatherData.current_units.temperature_2m}\nClick to open Windy`;
+    weatherDiv.style.cursor = 'pointer';
+    weatherDiv.addEventListener('click', () => {
+        window.open(`https://www.windy.com/?${lat},${lon},10`, '_blank', 'noopener,noreferrer');
+    });
 
     wrapper.appendChild(weatherDiv);
 }
@@ -423,7 +427,7 @@ function placeDots() {
 
         if (!weatherData && isCurrentTeam) {
             weatherData = await getWeather(lat, lon);
-            createWeatherBox();
+            createWeatherBox(lat, lon);
         }
     });
 
