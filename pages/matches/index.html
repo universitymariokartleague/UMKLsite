@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <base href="../../">
 
@@ -34,49 +35,58 @@
     <script type="module" src="/components/footer.js" defer></script>
 
     <!-- Scripts -->
-    <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
+    <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();</script>
 
     <script type="module" src="scripts/settings.js" defer></script>
     <script type="module" src="scripts/matchcalendar.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.13/dist/html-to-image.min.js"></script>
 </head>
+
 <body id="top">
     <umkl-navbar></umkl-navbar>
 
     <main>
-        <noscript><blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as is it used on this page<br></blockquote></noscript>
+        <noscript>
+            <blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as is it used on this
+                page<br></blockquote>
+        </noscript>
 
         <h1>Matches</h1>
         <p class="p-below-title">
             View upcoming and scheduled matches.
             Please take a look at the <a href="pages/rules/match">match rules</a> before playing!<br>
         </p>
-        <button style="margin-top: 5px;" id="listViewButton"><span class="fa-solid fa-bars"></span> Show Match List</button>
-        <button style="margin-top: 5px;" onclick="location.href='pages/matches/stats'"><span class="fa-solid fa-trophy"></span> View Match Stats</button>
+        <button style="margin-top: 5px;" id="listViewButton"><span class="fa-solid fa-bars"></span> Show Match
+            List</button>
+        <button style="margin-top: 5px;" onclick="location.href='pages/matches/stats'"><span
+                class="fa-solid fa-trophy"></span> View Match Stats</button>
+        <button style="margin-top: 5px;" onclick="location.href='webcal://api.umkl.co.uk/matches.ics'"><span
+                class="fa-solid fa-calendar"></span> Add Calendar (.ics)</button>
         <hr class="hr-below-title">
 
         <div id="calendarError"></div>
 
         <blockquote class="hidden warning" id="overseasMessage"></blockquote>
-        
+
         <div id="calendarListView" class="hidden"></div>
-        
+
         <div class="calendar-container" id="calendar-container">
             <div class="calendar">
                 <div class="calendar-header">
                     <div class="month" id="monthYear">
-                    <a class="month-arrow" id="previousMonthButton"></a>
-                    <span class="month-name" id="goToCurrentMonthButton">Loading...</span>
-                    <a class="month-arrow" id="nextMonthButton"></a>
+                        <a class="month-arrow" id="previousMonthButton"></a>
+                        <span class="month-name" id="goToCurrentMonthButton">Loading...</span>
+                        <a class="month-arrow" id="nextMonthButton"></a>
+                    </div>
                 </div>
+                <div class="calendar-body" id="calendarDays"></div>
             </div>
-            <div class="calendar-body" id="calendarDays"></div>
-        </div>
 
-        <div id="expandedLog"></div>
+            <div id="expandedLog"></div>
     </main>
 
     <umkl-footer></umkl-footer>
 </body>
+
 </html>
