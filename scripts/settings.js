@@ -386,16 +386,16 @@ function checkIfOutsideUK() {
     if (!isOutsideUK()) return;
 
     const banner = document.createElement("div");
-    banner.textContent = "Currently outside the UK - some dates and times may only show for the UK timezone";
+    banner.textContent = "Currently outside the UK - some timing may only account for the UK";
     banner.style.cssText = "background:#1256d2;color:#fff;text-align:center;padding:4px;font-size:14px;position:fixed;top:48px;left:0;width:100%;z-index:5;";
     document.body.prepend(banner);
 
     const style = document.createElement("style");
     style.textContent = `
-        body { padding-top: 20px !important; }
+        main { padding-top: 20px !important; }
         .navbar-container { top: 0 !important; }
         @media (max-width: 768px) {
-            body { padding-top: 36px !important; }
+            main { padding-top: 36px !important; }
         }
     `;
     document.head.appendChild(style);
