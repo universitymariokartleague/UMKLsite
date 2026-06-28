@@ -75,7 +75,7 @@ function renderContributor(person) {
 
     return `
         <div translate="no" class="credit-container">
-            <a href="${person.discord}"><img onload="this.style.opacity=1" loading="lazy" class="credit-image" src="assets/media/credits/${person.name}.avif"></a>
+            <a href="${person.discord}"><img onload="this.style.opacity=1" loading="lazy" class="credit-image" src="https://api.umkl.co.uk/pfps/${person.name}"></a>
             <div class="credit-info">
                 <b>${person.name}</b>
                 <div class="credit-socials">${socials}</div>
