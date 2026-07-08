@@ -56,7 +56,7 @@ const profileCardContentHTML = `
 const profileCardFormatHTML = `
     <div class="profile-card-wrapper">
         <div class="profile-card" style="--team-color: #{{color}};">
-            <img src="assets/media/brand/guidelines/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />
+            <img src="assets/media/profile/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />
             <div class="profile-card-content">
                 {{profileCardContent}}
             </div>
@@ -741,7 +741,7 @@ async function goBackToProfile() {
 
             profileCardContent.innerHTML = generateProfileCardContent(data);
 
-            const logoHTML = `<img src="assets/media/brand/guidelines/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />`;
+            const logoHTML = `<img src="assets/media/profile/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />`;
 
             profileCard.insertAdjacentHTML('afterbegin', logoHTML);
 

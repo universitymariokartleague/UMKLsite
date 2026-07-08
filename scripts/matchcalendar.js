@@ -590,17 +590,14 @@ function createMatchHTML(entry, index, date, locale, is12Hour, liveResults) {
                 <div class="team-box-container">
                     <div class="team-background left ${team1.class_name}"></div>
                     <div class="team-background right ${team2.class_name}"></div>
-                    ${!entry.testMatch ? `<picture><source srcset="assets/media/calendar/event_box_overlay.avif" type="image/avif"><img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.png" alt="Team background overlay" ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/></picture>` : ''}
+                    ${!entry.testMatch ? `<img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.avif" alt="Team background overlay" ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>` : ''}
                     ${entry.testMatch ? `<div class="test-match-indicator"><i class="fa-solid fa-test"></i> Test match</div>` : ''}
                     ${entry.endTime ? '' : `${isLive ? `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id='liveIndicator${entry.eventID}'><span style="display:flex"><div class="live-dot"></div>Live ${devMode && !entry.endTime ? `${liveResults.length + 1 > 12 ? '(Finishing up...)' : `(${liveResults.length + 1}/12)`}` : ''}</span></div>` : `<div class="test-match-indicator timer-indicator ${entry.testMatch ? 'push-lower' : ''}" id="matchCountdown${entry.eventID}"><i class="fa-solid fa-clock"></i> ${timeUntilMatch}</div>`}`}
                     ${devMode && !entry.endTime ? `<div class="test-match-indicator signed-up-count">Players signed up: ${team1.team_name}: ${entry.signedUpPlayerCounts[0]} | ${team2.team_name}: ${entry.signedUpPlayerCounts[1]}</div>` : ''}
                     <div class="event-overlay" translate="no">
                         <div class="event-box-team">
                             <a class="no-underline-link no-color-link team-box-underline-hover" href="${team1.link}">
-                                <picture>
-                                        <source srcset="assets/media/teamemblems/${team1.team_name.toUpperCase()}.avif" type="image/avif">
-                                        <img height="100px" class="team-box-image" src="assets/media/teamemblems/og/${team1.team_name.toUpperCase()}.png" alt="${makePossessive(team1.team_name)} team logo" loading="lazy" ${cached ? `` : 'onload="this.style.opacity=1"'} onerror="this.onerror=null; this.src='assets/media/teamemblems/og/DEFAULT.png'; this.parentNode.querySelector('source').srcset='assets/media/teamemblems/DEFAULT.avif';">
-                                    </picture>
+                                <img height="100px" class="team-box-image" src="assets/media/teamemblems/og/${team1.team_name.toUpperCase()}.png" alt="${makePossessive(team1.team_name)} team logo" loading="lazy" ${cached ? `` : 'onload="this.style.opacity=1"'} onerror="this.onerror=null; this.src='assets/media/teamemblems/og/DEFAULT.png'; this.parentNode.querySelector('source').srcset='assets/media/teamemblems/DEFAULT.avif';">
                                 <h2>${team1.team_name}</h2>
                             </a>
                             <div class="youtube-box left-team">
@@ -610,10 +607,7 @@ function createMatchHTML(entry, index, date, locale, is12Hour, liveResults) {
                         <div class="score-box">${matchDetailsLink ? `<a class="no-underline-link" href="${matchDetailsLink}" title="View detailed results">${resultsHTML || "VS"}</a>` : `${resultsHTML || "VS"}`}</div>
                         <div class="event-box-team">
                             <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">
-                                <picture>
-                                        <source srcset="assets/media/teamemblems/${team2.team_name.toUpperCase()}.avif" type="image/avif">
-                                        <img height="100px" class="team-box-image" src="assets/media/teamemblems/og/${team2.team_name.toUpperCase()}.png" alt="${makePossessive(team2.team_name)} team logo" loading="lazy" ${cached ? `` : 'onload="this.style.opacity=1"'} onerror="this.onerror=null; this.src='assets/media/teamemblems/og/DEFAULT.png'; this.parentNode.querySelector('source').srcset='assets/media/teamemblems/DEFAULT.avif';">
-                                    </picture>
+                                <img height="100px" class="team-box-image" src="assets/media/teamemblems/og/${team2.team_name.toUpperCase()}.png" alt="${makePossessive(team2.team_name)} team logo" loading="lazy" ${cached ? `` : 'onload="this.style.opacity=1"'} onerror="this.onerror=null; this.src='assets/media/teamemblems/og/DEFAULT.png'; this.parentNode.querySelector('source').srcset='assets/media/teamemblems/DEFAULT.avif';">
                                 <h2>${team2.team_name}</h2>
                             </a>
                             <div class="youtube-box right-team">
@@ -773,15 +767,12 @@ function generateCalendarListView() {
                     <div class="team-box-container">
                         <div class="team-background left ${team1.class_name}"></div>
                         <div class="team-background right ${team2.class_name}"></div>
-                        ${!entry.testMatch ? `<picture><source srcset="assets/media/calendar/event_box_overlay.avif" type="image/avif"><img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.jpg" alt="Team background overlay" ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/></picture>` : ''}
+                        ${!entry.testMatch ? `<img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.avif" alt="Team background overlay" ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>` : ''}
                         ${entry.testMatch ? `<div class="test-match-indicator"><i class="fa-solid fa-test"></i> Test match</div>` : ''}
                         <div class="event-overlay">
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link team-box-underline-hover" href="${team1.link}">
-                                    <picture>
-                                        <source srcset="assets/media/teamemblems/${team1.team_name.toUpperCase()}.avif" type="image/avif">
-                                        <img height="100px" class="team-box-image" src="assets/media/teamemblems/og/${team1.team_name.toUpperCase()}.png" alt="${makePossessive(team1.team_name)} team logo" loading="lazy" ${cached ? `` : 'onload="this.style.opacity=1"'} onerror="this.onerror=null; this.src='assets/media/teamemblems/og/DEFAULT.png'; this.parentNode.querySelector('source').srcset='assets/media/teamemblems/DEFAULT.avif';">
-                                    </picture>
+                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/og/${team1.team_name.toUpperCase()}.png" alt="${makePossessive(team1.team_name)} team logo" loading="lazy" ${cached ? `` : 'onload="this.style.opacity=1"'} onerror="this.onerror=null; this.src='assets/media/teamemblems/og/DEFAULT.png'; this.parentNode.querySelector('source').srcset='assets/media/teamemblems/DEFAULT.avif';">
                                     <h2>${team1.team_name}</h2>
                                 </a>
                                 <div class="youtube-box left-team">
@@ -791,10 +782,7 @@ function generateCalendarListView() {
                             <div class="score-box">${matchDetailsLink ? `<a class="no-underline-link" href="${matchDetailsLink}" title="View detailed results">${resultsHTML || "VS"}</a>` : `${resultsHTML || "VS"}`}</div>
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">
-                                    <picture>
-                                        <source srcset="assets/media/teamemblems/${team2.team_name.toUpperCase()}.avif" type="image/avif">
-                                        <img height="100px" class="team-box-image" src="assets/media/teamemblems/og/${team2.team_name.toUpperCase()}.png" alt="${makePossessive(team2.team_name)} team logo" loading="lazy" ${cached ? `` : 'onload="this.style.opacity=1"'} onerror="this.onerror=null; this.src='assets/media/teamemblems/og/DEFAULT.png'; this.parentNode.querySelector('source').srcset='assets/media/teamemblems/DEFAULT.avif';">
-                                    </picture>
+                                    <img height="100px" class="team-box-image" src="assets/media/teamemblems/og/${team2.team_name.toUpperCase()}.png" alt="${makePossessive(team2.team_name)} team logo" loading="lazy" ${cached ? `` : 'onload="this.style.opacity=1"'} onerror="this.onerror=null; this.src='assets/media/teamemblems/og/DEFAULT.png'; this.parentNode.querySelector('source').srcset='assets/media/teamemblems/DEFAULT.avif';">
                                     <h2>${team2.team_name}</h2>
                                 </a>
                                 <div class="youtube-box right-team">

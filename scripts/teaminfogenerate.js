@@ -217,7 +217,7 @@ function generateTeamBox(teamData, showError) {
     const placeholderLogoPng = "assets/media/teamemblems/og/DEFAULT.png";
     const teamNameUpper = teamData.team_name.toUpperCase();
     const logoUrl = `assets/media/teamemblems/og/${teamNameUpper}.png`;
-    const logoUrlAvif = `assets/media/teamemblems/hres/${teamNameUpper}.avif`;
+    const logoUrlAvif = `assets/media/teamemblems/${teamNameUpper}.avif`;
 
     latestSeason = teamData.season;
     viewingSeason = latestSeason;

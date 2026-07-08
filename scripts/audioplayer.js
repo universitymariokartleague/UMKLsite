@@ -1,7 +1,7 @@
-/* 
-    A javascript audio player that can play a playlist of audio files, with a custom UI 
-    playlist, and download functionality. It supports live radio streams, scrubbing, 
-    and keyboard controls. The player can be embedded in a webpage and is responsive 
+/*
+    A javascript audio player that can play a playlist of audio files, with a custom UI
+    playlist, and download functionality. It supports live radio streams, scrubbing,
+    and keyboard controls. The player can be embedded in a webpage and is responsive
     to screen size changes.
 
     This code was written a long time ago and probably needs updating... -_-
@@ -73,7 +73,7 @@ function newMediaData() {
         title: audioName,
         artist: playListTitle,
         album: playListTitle,
-        artwork: containsAlbumArt ? [{ src: path + imagesrc, type: "image/png" }] : [{ src: "assets/media/teamemblems/hres/DEFAULT.png", type: "image/png" }]
+        artwork: containsAlbumArt ? [{ src: path + imagesrc, type: "image/png" }] : [{ src: "assets/media/teamemblems/DEFAULT.png", type: "image/png" }]
     });
 }
 navigator.mediaSession.setActionHandler('previoustrack', function () {
@@ -259,20 +259,20 @@ function setMultiplier() {
     if (window.innerWidth <= 1000) {
         let safeAreaRight = 0;
         let safeAreaLeft = 0;
-        
+
         // Try to get safe area values
         try {
             const style = getComputedStyle(document.documentElement);
-            safeAreaRight = parseInt(style.getPropertyValue("--safe-area-inset-right") || 
-                                   style.getPropertyValue("env(safe-area-inset-right)")) || 0;
-            safeAreaLeft = parseInt(style.getPropertyValue("--safe-area-inset-left") || 
-                                  style.getPropertyValue("env(safe-area-inset-left)")) || 0;
+            safeAreaRight = parseInt(style.getPropertyValue("--safe-area-inset-right") ||
+                style.getPropertyValue("env(safe-area-inset-right)")) || 0;
+            safeAreaLeft = parseInt(style.getPropertyValue("--safe-area-inset-left") ||
+                style.getPropertyValue("env(safe-area-inset-left)")) || 0;
         } catch {
             // Fallback values if env() isn't supported
             safeAreaRight = 0;
             safeAreaLeft = 0;
         }
-        
+
         return (document.documentElement.clientWidth - 200 - safeAreaRight - safeAreaLeft) / 200;
     } else {
         return 1.2;
@@ -320,9 +320,9 @@ function positionBar(event, isTouch) {
     if (!loaded) return; // dont do anything for unloaded audio
     if (isTouch) var posX = event.touches[0].clientX - event.target.getBoundingClientRect().left; //x position within the element.
     else var posX = event.clientX - event.target.getBoundingClientRect().left; //x position within the element.
-    
+
     let seekingTime = (posX / 200 / multiplier) * audio.duration
-        
+
     if (isLiveOnce) isLiveLoading = 1; // count ticks incase loading fails
     if ('fastSeek' in audio) {
         audio.fastSeek(seekingTime);
@@ -354,7 +354,7 @@ setInterval(function checkKeysDown() { // still more efficient and pleasing than
     if (playedOnce) {
         if (scrubKeyArray.some(isTrue)) { // keys that are held are stored in an array (two items - left key / right key)
             heldCount += 1;
-            if (heldCount < 2 || heldCount > 40 && heldCount % 2 == 0 || heldCount > 150) { // initial skip, wait a second ... skip rapidly every '2' cycles, 
+            if (heldCount < 2 || heldCount > 40 && heldCount % 2 == 0 || heldCount > 150) { // initial skip, wait a second ... skip rapidly every '2' cycles,
                 // then after more time, increase the length of skips
                 if (scrubKeyArray[0]) skipAudio(-5);
                 if (scrubKeyArray[1]) skipAudio(5);
@@ -412,7 +412,7 @@ getPlaylist();
 
 async function getPlaylist() {
     let playlistData = document.getElementById("audioStatus").dataset.playlist; //attempt to retrieve playlist file from audioStatus class data
-    
+
     path = decodeURI(audio.src).substring(0, audio.src.lastIndexOf('/')) + "/" //remove %20's (and likewise) from link, get path without the audio filename (so what folder it'd be in)
     if (!playlistData) return; //if the playlist .txt file doesn't exist - terminate
 
@@ -453,7 +453,7 @@ async function setPlaylistData() {
         }
     }
     playlist = playlist.slice(1); // remove the first item (playlist information has already been set)
-        
+
     playlistOriginal = JSON.parse(JSON.stringify(playlist)) // original playlist with extra data
     for (let i = 0; i < playlist.length; i++) { // only keep audio.srcs in playlist
         playlist[i] = playlist[i].split("|")[0];
@@ -596,7 +596,7 @@ function downloadAllTracks() {
 async function zipTracksToDownload() {
     const zip = new JSZip();
     let completedDownloads = 0; // Track actual completed downloads
-    
+
     // Update progress function that uses the actual count
     function updateProgress() {
         const percent = Math.ceil(completedDownloads / playlist.length * 100);
@@ -653,26 +653,26 @@ async function zipTracksToDownload() {
 }
 
 function handleAudioStatusPosition() {
-	const audioStatus = document.getElementById('audioStatus');
-	const main = document.querySelector('main');
-	const footer = document.querySelector('footer');
+    const audioStatus = document.getElementById('audioStatus');
+    const main = document.querySelector('main');
+    const footer = document.querySelector('footer');
 
-	if (!audioStatus || !main || !footer) return;
+    if (!audioStatus || !main || !footer) return;
 
-	const isMobile = window.innerWidth <= 1000;
+    const isMobile = window.innerWidth <= 1000;
 
-	if (!isMobile) {
-		audioStatus.style.position = '';
-		audioStatus.style.bottom = '';
-		main.style.paddingBottom = '';
-		return;
-	}
+    if (!isMobile) {
+        audioStatus.style.position = '';
+        audioStatus.style.bottom = '';
+        main.style.paddingBottom = '';
+        return;
+    }
 
-	if (typeof playedOnce !== 'undefined' && playedOnce) {
-		main.style.paddingBottom = '125px';
-	} else {
-		main.style.paddingBottom = '';
-	}
+    if (typeof playedOnce !== 'undefined' && playedOnce) {
+        main.style.paddingBottom = '125px';
+    } else {
+        main.style.paddingBottom = '';
+    }
 
     const footerRect = footer.getBoundingClientRect();
     const windowHeight = window.innerHeight;
