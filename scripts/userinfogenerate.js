@@ -946,7 +946,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         areProfileItems = true;
         const uParam = urlParams.get('u');
         try {
-            const response = await fetch('database/profileunlockitems.json');
+            const response = await fetch('assets/media/profile/profileunlockitems.json');
             const unlockItems = await response.json();
 
             mappedProfileItems = uParam.split('').map((char, index) => {
