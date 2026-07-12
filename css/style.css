@@ -154,6 +154,49 @@ li {
     /* fix anchors */
 }
 
+h1 a,
+h2 a,
+h3 a,
+h4 a {
+    color: #fff;
+    text-decoration: none;
+}
+
+h1 a::before,
+h2 a::before,
+h3 a::before,
+h4 a::before {
+    content: "#";
+    display: inline-block;
+    margin-right: 0.35em;
+    color: #888;
+}
+
+h1 a:hover,
+h2 a:hover,
+h3 a:hover,
+h4 a:hover {
+    text-decoration: underline;
+}
+
+h1:target,
+h2:target,
+h3:target,
+h4:target {
+    animation: anchor-highlight 2s ease-out;
+    border-radius: 4px;
+}
+
+@keyframes anchor-highlight {
+    from {
+        background-color: var(--highlight-color);
+    }
+
+    to {
+        background-color: transparent;
+    }
+}
+
 .image {
     width: 100%;
     border-radius: 10px;
@@ -195,6 +238,13 @@ a[target="_blank"]::after {
 @media (prefers-reduced-motion) {
     a:link {
         transition: none;
+    }
+
+    h1:target,
+    h2:target,
+    h3:target,
+    h4:target {
+        animation: none;
     }
 }
 

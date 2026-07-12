@@ -59,12 +59,13 @@
             intermission screen, for example) if you're entering it on stream.
         </blockquote>
 
-        <h2>OBS Setup</h2>
+        <h2 id="obs-setup"><a href="pages/rules/stream/#obs-setup">OBS Setup</a></h2>
 
-        <h3>Setting Up Resolution and Codecs</h3>
+        <h3 id="setting-up-resolution-frame-rate-and-codecs"><a href="pages/rules/stream/#setting-up-resolution-frame-rate-and-codecs">Setting Up Resolution, Frame Rate and Codecs</a></h3>
         <p class="p-below-title">
             First, we want to make sure your OBS settings are configured correctly.
-            You can set your resolution and codecs in the <code>Video</code> section of the settings menu.
+            You can set your resolution, frame rate and codecs in the <code>Video</code> and <code>Output</code>
+            sections of the settings menu.
         </p>
         <p>
             <img class="image" src="assets/media/streaming/resolutionsettings.avif"
@@ -83,19 +84,23 @@
             Base (canvas) resolution and output (scaled) resolution should usually be the same.
         </p>
         <p>
+            Your <code>FPS</code> (frame rate) is also set on this page. Most modern systems should be
+            able to handle <code>60FPS</code>, so set it to this. This matches the framerate of the game,
+            be sure to check your capture card settings aswell, make sure it is outputting at <code>60FPS</code> too.
+        </p>
+        <p>
             It's usually a good idea to switch from software encoding (the default) to hardware
             encoding in the <code>Output</code> section of OBS settings. This offloads the encoding work to your GPU and
-            can resolve performance
-            issues, especially on older hardware.
+            can resolve performance issues, especially on weaker devices.
         </p>
         <p>
             <img class="image" src="assets/media/streaming/codecsettings.avif"
                     alt="The codec settings menu in OBS, with a dropdown showing available codecs">
         </p>
         <p>
-            You can also set the bitrate in this menu aswell. See <a
-                href="https://support.google.com/youtube/answer/2853702?hl=en-GB">YouTube's
-                bitrate guidelines</a> for details.
+            You can also set the bitrate in this menu aswell. See
+            <a target="_blank" href="https://support.google.com/youtube/answer/2853702?hl=en-GB">YouTube's bitrate guidelines</a>
+            for details.
         </p>
         <p>
             Use a high enough bitrate for a clear picture. At 1080p60
@@ -103,10 +108,10 @@
             recommended. If you are streaming at 1440p or 4K, you can use higher bitrate if your upload
             speed allows it. </p>
         <p>
-            Run an internet speedtest on <a href="fast.com">fast.com</a> to check your upload speed for streaming.
+            Run an <a target="_blank" href="https://www.google.com/search?q=speedtest">internet speedtest</a> to check your upload speed for streaming.
         </p>
 
-        <h3>Generating Your Stream Overlay</h3>
+        <h3 id="generating-your-stream-overlay"><a href="pages/rules/stream/#generating-your-stream-overlay">Generating Your Stream Overlay</a></h3>
         <p class="p-below-title">
             Before opening OBS, generate a personalised stream overlay from the UMKL Discord server using this app
             command:
@@ -122,7 +127,7 @@
                     alt="The /generate-stream-overlay Discord command">
         </p>
 
-        <h3>Adding Sources in OBS</h3>
+        <h3 id="adding-sources-in-obs"><a href="pages/rules/stream/#adding-sources-in-obs">Adding Sources in OBS</a></h3>
         <p class="p-below-title">
             Sources are the building blocks of what viewers see on stream. Add them in the order below - sources higher
             in the list appear on top of those beneath them.
@@ -182,7 +187,25 @@
             </video>
         </p>
 
-        <h3>Entering The Stream Key</h3>
+        <h3 id="arranging-your-stream-layout"><a href="pages/rules/stream/#arranging-your-stream-layout">Arranging Your Stream Layout</a></h3>
+        <p class="p-below-title">
+            Once your sources are added, arrange them into a clean layout so viewers can follow the match easily.
+        </p>
+        <p>
+            <img class="image" src="assets/media/streaming/OBSlayout.avif"
+                    alt="An example OBS stream layout with the score overlay, stream overlay and gameplay capture arranged on screen">
+        </p>
+        <ul>
+            <li>Resize and position each source using the red bounding box handles in the OBS preview window.</li>
+            <li>Keep the score overlay and stream overlay fully visible and unobstructed - don't let the video capture
+                source cover them.</li>
+            <li>Leave space near the room ID area of your gameplay so it can easily be covered or cut to an
+                intermission scene, per the warning above.</li>
+            <li>Consider creating a separate <strong>Intermission</strong> scene (e.g. a static image or colour) to
+                switch to between races or if the room ID needs to be shown.</li>
+        </ul>
+
+        <h3 id="entering-the-stream-key"><a href="pages/rules/stream/#entering-the-stream-key">Entering The Stream Key</a></h3>
         <p class="p-below-title">
             To connect OBS to your team's YouTube channel:
         </p>
@@ -205,7 +228,7 @@
             </video>
         </p>
 
-        <h3>Multiple Profiles <em>(Optional)</em></h3>
+        <h3 id="multiple-profiles"><a href="pages/rules/stream/#multiple-profiles">Multiple Profiles <em>(Optional)</em></a></h3>
         <p class="p-below-title">
             OBS profiles let you save separate stream configurations. If you stream to both a personal account and the
             UMKL channel, create a profile for each and switch between them using the <strong>Profile</strong> dropdown
@@ -215,7 +238,7 @@
             <img class="image" src="assets/media/streaming/switchprofile.avif" alt="The OBS Profile dropdown menu">
         </p>
 
-        <h3>Audio Mixing</h3>
+        <h3 id="audio-mixing"><a href="pages/rules/stream/#audio-mixing">Audio Mixing</a></h3>
         <p class="p-below-title">
             Before going live, check that your audio levels are well balanced. Use the image below as a guide. As a
             general rule:
@@ -230,7 +253,47 @@
                     alt="Recommended OBS audio levels">
         </p>
 
-        <h2>Additional Notes</h2>
+        <h3 id="testing-your-stream-before-a-match"><a href="pages/rules/stream/#testing-your-stream-before-a-match">Testing Your Stream Before a Match</a></h3>
+        <p class="p-below-title">
+            Always do a test run before a match starts, rather than discovering an issue once it's live. A few minutes
+            of testing beforehand can save a lot of trouble during the match itself.
+        </p>
+        <ol>
+            <li>
+                <strong>Check OBS's Stats window</strong> - Open it via <code translate="no">View → Docks → Stats</code>.
+                Watch for <code translate="no">Dropped Frames</code> and high <code translate="no">Render/Encoding
+                    Lag</code>, both of which usually mean your bitrate, resolution or frame rate are too high for your
+                hardware or upload speed.
+            </li>
+            <li>
+                <strong>Test on your personal YouTube account first</strong> - You can switch to a personal OBS profile (see
+                <a href="pages/rules/stream/#multiple-profiles">Multiple Profiles</a> above) and go live privately or unlisted there for a few minutes before the
+                match. This lets you confirm video, audio and overlays are all working without anyone else seeing it,
+                and without risking an accidental public test on the UMKL channel.
+            </li>
+            <li>
+                <strong>Check the delay</strong> - YouTube live has a short delay before your stream appears. Confirm
+                the video is smooth and not stuttering once it catches up.
+            </li>
+            <li>
+                <strong>Check your audio</strong> - Make sure Discord voice and game audio are both audible, balanced,
+                and in sync with the video, and that no source is unintentionally muted or left unmuted.
+            </li>
+            <li>
+                <strong>Check your overlays</strong> - Confirm the score overlay is showing the right match and updates
+                once it starts, and that the stream overlay is displaying the correct username.
+            </li>
+            <li>
+                <strong>Double check the room ID is hidden</strong> - Switch through your scenes to make sure the
+                match's room ID isn't visible anywhere on stream, per the warning at the top of this page.
+            </li>
+            <li>
+                <strong>End the test stream</strong> before the match begins, then switch back to your team's OBS
+                profile and stream key, and go live on the team channel once you're ready for the match.
+            </li>
+        </ol>
+
+        <h2 id="additional-notes"><a href="pages/rules/stream/#additional-notes">Additional Notes</a></h2>
         <ul class="p-below-title">
             <li>
                 <strong>Stream overlay username:</strong> Your overlay will show your Discord username to identify your
