@@ -15,6 +15,11 @@ const addImageButton = document.getElementById("add-image");
 const clearElementsList = document.getElementById("clear-elements-list");
 const resetDefaultElementsListButton = document.getElementById("reset-default-elements-list")
 
+window.addEventListener("beforeunload", (e) => {
+    e.preventDefault();
+    e.returnValue = "";
+});
+
 let friendlyTitles = {
     blogInfo: "Blog Information",
     h2: "Sub-Header",

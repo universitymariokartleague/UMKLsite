@@ -23,7 +23,7 @@ const cookiesBox = `
         <p style="margin: 0 0 5px 0;">
             This site uses cookies to store your preferences. Cloudflare is also used for site analytics.
             By using this site, you agree to these uses.<br>
-            You can read our privacy policy <a href="pages/privacy/">here</a>.
+            You can read our privacy policy <a href="pages/rules/privacy/">here</a>.
         </p>
         <form method="dialog">
             <button id="cookieAccept">OK</button>
