@@ -378,6 +378,31 @@ function mkwEasterEgg() {
     document.head.appendChild(style);
 }
 
+function localizeBlogDates() {
+    const locale = localStorage.getItem("locale") || "en-GB";
+    const dateRegex = /^(\s*)(\d{2})\/(\d{2})\/(\d{4})/;
+
+    document.querySelectorAll('.p-below-title, .news-date').forEach(el => {
+        const node = el.firstChild;
+        if (!node || node.nodeType !== Node.TEXT_NODE) return;
+
+        if (el.dataset.rawText === undefined) el.dataset.rawText = node.textContent;
+
+        const match = el.dataset.rawText.match(dateRegex);
+        if (!match) return;
+
+        const [, leadingWhitespace, day, month, year] = match;
+        const dateOptions = el.classList.contains('news-date')
+            ? { dateStyle: "short" }
+            : { day: "numeric", month: "long", year: "numeric" };
+        const formatted = new Date(`${year}-${month}-${day}`).toLocaleDateString(locale, dateOptions);
+
+        node.textContent = el.dataset.rawText.replace(dateRegex, leadingWhitespace + formatted);
+    });
+}
+
+document.addEventListener('startDayChange', localizeBlogDates);
+
 function isOutsideUK() {
     return Intl.DateTimeFormat().resolvedOptions().timeZone !== "Europe/London";
 }
@@ -405,4 +430,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     // if (localStorage.getItem("cookiesAccepted") !== "true") generateCookiesPopup();
     checkEasterEggs();
     checkIfOutsideUK();
+    localizeBlogDates();
 });

@@ -93,10 +93,13 @@ function addNewsReelArea() {
 
             let date = '';
             if (dateEl) {
-                date = dateEl.textContent.trim();
-                const [day, month, year] = date.split(" ")[0].split('/');
+                // dataset.rawText (set by settings.js) holds the unlocalized DD/MM/YYYY
+                // date, since dateEl's own text may have already been localized for display.
+                const rawDate = (dateEl.dataset.rawText || dateEl.textContent).trim();
+                const [day, month, year] = rawDate.split('/');
                 const itemDate = new Date(`${year}-${month}-${day}`);
                 if (i >= firstThree && itemDate < sevenDaysAgo) continue;
+                date = dateEl.firstChild?.nodeType === Node.TEXT_NODE ? dateEl.firstChild.textContent.trim() : rawDate;
             }
 
             data.push({
@@ -139,7 +142,7 @@ function addNewsReelArea() {
             <div class="news-reel-gradient"></div>
             <a class="news-reel-card" href="${item.href}">
                 <div class="news-reel-meta">
-                    ${item.date ? `<span class="news-reel-date">${item.date.split(" ")[0]}</span>` : ''}
+                    ${item.date ? `<span class="news-reel-date">${item.date}</span>` : ''}
                     <span class="news-reel-tags">${item.tagsHTML}</span>
                 </div>
                 <h3 class="news-reel-title">${item.title}</h3>
