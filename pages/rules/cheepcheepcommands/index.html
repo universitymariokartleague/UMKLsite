@@ -17,7 +17,7 @@
 
     <meta property="og:title" content="UMKL | Discord/Cheep Cheep Commands Documentation" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://umkl.co.uk/pages/rules/team/" />
+    <meta property="og:url" content="https://umkl.co.uk/pages/rules/cheepcheepcommands/" />
     <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
     <meta property="og:description"
         content="Documentation for all Cheep Cheep commands on the Discord server, split into sections for players and for board members on the UMKL" />
@@ -48,59 +48,220 @@
             Cheep commands on the Discord server</p>
         <hr class="hr-below-title">
 
-        <h2>Commands usable by all members</h2>
-        <p class="p-below-title">All players can use these commands</p><br>
+        <h2>Commands Usable by All Members</h2>
+        <p class="p-below-title">All players can use these commands</p>
 
-        <h3>General</h3>
-        <p>
-        <div class="codeBoxTight">/join</div>
-        Joins a <a href="pages/teams">team</a>, this a required to participate in UMKL matches.
-        </p>
-        <p>
-        <div class="codeBoxTight">/user-profile</div>
-        View a specific user's profile (yourself or someone elses)
-        </p>
-        <p>
-        <div class="codeBoxTight">/team-profile</div>
-        View a team's profile and stats
-        </p>
-        <p>
-        <div class="codeBoxTight">/leaderboards</div>
-        View different UMKL leaderboards, such as Season Points and Lifetime Points (Team/Individual) and also SP
-        </p><br>
+        <h3 class="h-below-ul">General</h3>
+        <div class="command">
+            <div class="codeBoxTight">/join</div>
+            <p>Joins a <a href="pages/teams/">team</a>, required to participate in UMKL matches.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/user-profile</div>
+            <p>View a specific user's profile (yourself or someone else's), showing their team, wins, matches played,
+            podiums, highest finish, career points and SP.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/team-profile</div>
+            <p>View a team's profile and stats, including location, institution, season position, win/loss record,
+            points, penalties and championships.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/leaderboards</div>
+            <p>View different UMKL leaderboards: Season/Lifetime Points and Season/Lifetime Best Match Score (both
+            Team/Individual), and SP.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/view-sp-from-match</div>
+            <p>View how much SP was earned in a specific match you played.</p>
+        </div>
+
+        <blockquote class="info">
+            <b translate="no">Note</b><br>
+            SP is earned by playing in matches and being active in the <a target="_blank" href="https://discord.gg/jz3hKEmDss">UMKL Discord server</a>.
+        </blockquote>
+
+        <div class="command">
+            <div class="codeBoxTight">/export-my-data</div>
+            <p>Download all data associated with your account as a zip file.</p>
+        </div>
 
         <h3>Match</h3>
-        <p>
-        <div class="codeBoxTight">/submit-room-code</div>
-        Share the room code for the match to both teams, used when a room is opened before the match starts so everyone
-        can join
-        </p>
-        <p>
-        <div class="codeBoxTight">/report-disconnection</div>
-        Use this command to report a disconnection for yourself or someone else on your team
-        </p>
-        <p>
-        <div class="codeBoxTight">/generate-stream-overlay</div>
-        Generate a stream overlay for yourself or someone else, designed for streaming UMKL matches and for use with <a
-            href="pages/rules/stream/">livestreaming from OBS</a>
-        </p>
+        <blockquote class="info">
+            <b translate="no">Note</b><br>
+            Signing up for a match isn't a command - use the "Sign Up" button in your team's announcements channel,
+            then fill in your display name and friend code to be added to the match roster.
+        </blockquote>
+
+        <div class="command">
+            <div class="codeBoxTight">/submit-room-code</div>
+            <p>Share the room code for the match with both teams, used when a room is opened before the match starts so
+            everyone can join.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/report-disconnection</div>
+            <p>Report a disconnection for yourself or someone else on your team.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/leave-match</div>
+            <p>Remove yourself from a match you've signed up for.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/generate-stream-overlay</div>
+            <p>Generate a stream overlay for yourself or someone else, designed for streaming UMKL matches and for use
+            with <a href="pages/rules/stream/">livestreaming from OBS</a>.</p>
+        </div>
 
         <h3>Live Score</h3>
         <p class="p-below-title">Commands for use with the live score graphic, as shown on <a
-                href="pages/rules/stream/">livestreams</a></p><br>
-        <div class="codeBoxTight">/add-live-score-positions</div>
-        Add the results of a race, which will update the live score graphic
-        <p>
-        <div class="codeBoxTight">/edit-live-score-positions</div>
-        Edit the results of a previous race, which will update the live score graphic
-        </p>
-        <p>
-        <div class="codeBoxTight">/clear-live-score</div>
-        Reset the live score streaming graphic, setting the score to 0-0
-        </p>
+                href="pages/rules/stream/">livestreams</a></p>
 
-        <h2>Commands only usable by board members</h2>
-        <p class="p-below-title">Only board members can use these commands</p><br>
+        <div class="command">
+            <div class="codeBoxTight">/add-live-score-positions</div>
+            <p>Add the results of a race, which will update the live score graphic.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/edit-live-score-positions</div>
+            <p>Edit the results of a previous race, which will update the live score graphic.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/clear-live-score</div>
+            <p>Reset the live score streaming graphic, setting the score to 0-0.</p>
+        </div>
+
+        <h2>Commands Only Usable by Board Members</h2>
+        <p class="p-below-title">Only board members can use these commands</p>
+
+        <h3 class="h-below-ul">Teams</h3>
+        <div class="command">
+            <div class="codeBoxTight">/create-team</div>
+            <p>Create a new team to represent a university. This automatically creates the team's Discord channels,
+            roles and category.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/change-team-colour</div>
+            <p>Change the colour a team uses.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/change-team-name</div>
+            <p>Change the name of a team.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/enter-team-into-season</div>
+            <p>Enter a team into the current season.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/remove-team-from-season</div>
+            <p>Remove a team from the current season.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/request-stream-key</div>
+            <p>Get your team's stream key, used for <a href="pages/rules/stream/">livestreaming</a> matches.</p>
+        </div>
+
+        <h3>Match</h3>
+        <div class="command">
+            <div class="codeBoxTight">/create-match</div>
+            <p>Create a new match between two teams. This generates a versus image, creates a Discord scheduled event,
+            and posts sign-up embeds in each team's channel.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/edit-match-title</div>
+            <p>Edit an existing match's title.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/edit-match-description</div>
+            <p>Edit an existing match's description.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/edit-match-date</div>
+            <p>Reschedule an existing match to a new date.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/edit-match-time</div>
+            <p>Edit an existing match's time.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/add-yt-link</div>
+            <p>Add a YouTube link to a match's livestream.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/remove-yt-link</div>
+            <p>Remove a YouTube link from a match's livestream.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/substitute-player</div>
+            <p>Substitute one player in a match for another, before the match starts.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/remove-player</div>
+            <p>Remove a player from a match.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/add-match-results</div>
+            <p>Add the results of your team's players in a match. Results go through an Approve/Reject/Add Penalties
+            verification step in the board's results channel before being finalised.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/generate-yt-thumbnails</div>
+            <p>Generate the YouTube thumbnails for both teams in a match's livestream.</p>
+        </div>
+
+        <h3>Season</h3>
+        <div class="command">
+            <div class="codeBoxTight">/start-season</div>
+            <p>Start a new season of the UMKL.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/start-next-round</div>
+            <p>Start the next round of the season and send out match organisation threads.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/add-next-round-pairings</div>
+            <p>Add the team pairings for the next round.</p>
+        </div>
+
+        <h3>Admin</h3>
+        <div class="command">
+            <div class="codeBoxTight">/restart</div>
+            <p>Restart the Cheep Cheep app.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/request-board-password</div>
+            <p>Get the board password.</p>
+        </div>
+
+        <div class="command">
+            <div class="codeBoxTight">/request-media-password</div>
+            <p>Get the media team password.</p>
+        </div>
     </main>
 
     <umkl-footer></umkl-footer>

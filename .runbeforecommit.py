@@ -3,7 +3,6 @@
 import genrss
 import makesitemap
 
-
 def run_pre_commit_tasks():
     """
     Run pre-commit tasks to ensure the latest JSON files are generated.

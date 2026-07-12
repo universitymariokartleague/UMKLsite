@@ -10,7 +10,6 @@ https://umkl.co.uk/pages/matches/stats/
 https://umkl.co.uk/pages/news/
 https://umkl.co.uk/pages/news/2025-04-19/umkl-discord/
 https://umkl.co.uk/pages/news/2025-04-19/umkl-intro/
-https://umkl.co.uk/pages/news/2025-04-19/uni-joining-info/
 https://umkl.co.uk/pages/news/2025-04-22/umkl-test-matches-are-being-conducted/
 https://umkl.co.uk/pages/news/2025-06-13/upcoming-summer-test-matches/
 https://umkl.co.uk/pages/news/2025-07-17/cheep-cheep-updates/
@@ -19,7 +18,6 @@ https://umkl.co.uk/pages/news/2025-10-01/season-2-round-1-fixtures-revealed/
 https://umkl.co.uk/pages/news/2025-11-06/season-2-round-2-fixtures-revealed/
 https://umkl.co.uk/pages/news/2026-01-01/season-2-round-3-fixtures-revealed/
 https://umkl.co.uk/pages/news/2026-03-31/season-2-round-4-fixtures-revealed/
-https://umkl.co.uk/pages/policies/universityrelations/
 https://umkl.co.uk/pages/privacy/
 https://umkl.co.uk/pages/profile/
 https://umkl.co.uk/pages/rules/
@@ -31,6 +29,8 @@ https://umkl.co.uk/pages/rules/faq/
 https://umkl.co.uk/pages/rules/match/
 https://umkl.co.uk/pages/rules/stream/
 https://umkl.co.uk/pages/rules/team/
+https://umkl.co.uk/pages/rules/joining/
+https://umkl.co.uk/pages/rules/universityrelations/
 https://umkl.co.uk/pages/sitemap/
 https://umkl.co.uk/pages/teams/
 https://umkl.co.uk/pages/teams/details/

@@ -273,13 +273,42 @@ code {
 
 .codeBoxTight {
     font-size: 14px;
-    padding: 10px;
-    margin-bottom: 10px;
+    padding: 6px 10px;
+    margin: 10px 0;
+    width: fit-content;
     line-height: 1.6;
     background-color: rgba(15, 15, 15, 0.5);
     outline: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 10px;
     color: #fff;
+}
+
+.command {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin: 10px 0;
+}
+
+.command .codeBoxTight {
+    flex-shrink: 0;
+    min-width: 220px;
+    margin: 0;
+}
+
+.command p {
+    margin: 0;
+}
+
+@media screen and (max-width: 767px) {
+    .command {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .command .codeBoxTight {
+        min-width: 0;
+    }
 }
 
 mention {

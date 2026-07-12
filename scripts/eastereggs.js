@@ -12,7 +12,7 @@ function injectMusic(path) {
         <audio id="audio" src="${path}" preload="auto"></audio>
         <script type="text/javascript" src="scripts/audioplayer.js" id="audioPlayerScript" defer></script>
         <div id="audioStatus" data-playlist="bgm.txt" class="hidden">
-            <span id="BGMName">Music</span><br />
+            <span id="BGMName">Music</span><br>
             <div class="audioControls">
                 <span class="playContainer">
                     <img src="" id="playIcon" />
@@ -26,7 +26,7 @@ function injectMusic(path) {
             </div>
             <p id="playlistText" class="hidden"></p>
         </div>
-        <noscript><blockquote class="rainbow"><b>Javascript disabled!</b><br />Please enable javascript, as is it used on this page<br /></blockquote></noscript>
+        <noscript><blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as is it used on this page<br></blockquote></noscript>
     `;
     document.body.appendChild(audioContainer);
 
@@ -150,7 +150,7 @@ function halloweenEasterEgg() {
     for (let i = 0; i < 5; i++) {
         setTimeout(createFlyingGhost, Math.random() * 1000);
     }
-    injectMusic("assets/media/bgm/halloween/loading playlist.mp3");
+    injectMusic("assets/media/bgm/halloween/loading playlist.opus");
 }
 
 function winterEasterEgg() {
@@ -210,7 +210,7 @@ function winterEasterEgg() {
     document.head.appendChild(style);
 
     setupSnowflakes();
-    injectMusic("assets/media/bgm/xmas/loading playlist.mp3");
+    injectMusic("assets/media/bgm/xmas/loading playlist.opus");
 
     setTimeout(() => {
         const style = document.createElement('style');
@@ -454,9 +454,9 @@ function createFireworksCanvas() {
         sound: {
             enabled: true,
             files: [
-                '../../../assets/media/eastereggs/newyears/explosion0.mp3',
-                '../../../assets/media/eastereggs/newyears/explosion1.mp3',
-                '../../../assets/media/eastereggs/newyears/explosion2.mp3'
+                '../../../assets/media/eastereggs/newyears/explosion0.opus',
+                '../../../assets/media/eastereggs/newyears/explosion1.opus',
+                '../../../assets/media/eastereggs/newyears/explosion2.opus'
             ],
             volume: {
                 min: 1,
