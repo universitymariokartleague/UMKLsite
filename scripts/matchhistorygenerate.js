@@ -24,8 +24,8 @@ const getTeamFromURL = () =>
     new URLSearchParams(window.location.search).get("team");
 
 const getEmblem = teamName => ({
-    avif: `assets/media/teamemblems/${teamName.toUpperCase()}.avif`,
-    png: `assets/media/teamemblems/${teamName.toUpperCase()}.png`
+    avif: `https://api.umkl.co.uk/teamemblems/${teamName.toUpperCase()}`,
+    png: `https://api.umkl.co.uk/teamemblems/${teamName.toUpperCase()}?og`
 });
 
 function getScoreForTeam(match, teamName) {
@@ -182,8 +182,7 @@ function generateTeamMatches(teamName) {
                                 <source srcset="${getEmblem(otherTeam).avif}" type="image/avif">
                                 <img src="${getEmblem(otherTeam).png}"
                                     alt="${makePossessive(otherTeam)} emblem"
-                                    class="team-match-emblem" width="40" height="40"
-                                    onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.png'; this.parentNode.querySelector('source').srcset='assets/media/teamemblems/DEFAULT.avif';">
+                                    class="team-match-emblem" width="40" height="40">
                             </picture>
                         </a>
                         <h2 class="team-title"><a href="${otherTeamLink}">${otherTeam}</a></h2>
@@ -212,7 +211,7 @@ function generateTeamMatches(teamName) {
         <div class="team-match-history">
             ${upcomingBlocks.length ? `<div><h2>Next Match</h2><button id="toggleTestMatches">${showTestMatches ? "Hide test matches" : "Show test matches"}</button></div>${upcomingBlocks.join("")}<hr>` : ''}
             <h2>Match History</h2>
-            ${completedBlocks.length ? completedBlocks.join("") : "<p>No previous matches.</p>"}
+            ${completedBlocks.length ? completedBlocks.join("") : "<p class='p-below-title'>No previous matches.</p>"}
         </div>`;
 
     matchHistoryBox.classList.add('fade-in');

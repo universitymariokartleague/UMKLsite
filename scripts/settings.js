@@ -8,14 +8,13 @@ import { halloweenEasterEgg, winterEasterEgg, newYearCountDown, newYearFireworks
 export { toggleSettingsPanel, disableThemeShortcut, disableSettingsShortcut }
 
 const settingsBoxHTML = `
-    <div class="hidden BGBlur" id="BGBlur"></div>
-    <div translate="no" class="hidden hide-settings-box" id="settingsBox">
+    <dialog translate="no" id="settingsBox" tabindex="-1">
         <div class="settings-box-close-button">
             <button id="settings-box-close-button">Close</button>
         </div>
         <div translate="yes" class="settings-title">Settings</div>
         <div class="setting-options" id="settingsBoxJS"></div>
-    </div>
+    </dialog>
 `;
 
 const cookiesBox = `
@@ -34,27 +33,46 @@ const cookiesBox = `
 
 document.body.insertAdjacentHTML('beforeend', settingsBoxHTML);
 
-const BGBlur = document.getElementById('BGBlur');
 const settingsBox = document.getElementById('settingsBox');
 const settingsBoxJS = document.getElementById('settingsBoxJS');
-let settingsOpen = false;
 
 const weekdayNamesFull = ["Sunday", "Monday"];
 
 let easterEgg;
 
-const toggleSettingsPanel = () => {
-    BGBlur.classList.toggle("hidden");
-    settingsBox.classList.toggle('hide-settings-box');
-    if (!settingsOpen) {
-        generateSettingsPanel();
-        settingsBox.classList.remove('hidden');
-        BGBlur.addEventListener("click", toggleSettingsPanel);
-    }
-    settingsOpen = !settingsOpen;
+const closeSettingsPanel = () => {
+    if (!settingsBox.open || settingsBox.classList.contains('closing')) return;
+    settingsBox.classList.add('closing');
+    settingsBox.addEventListener('animationend', () => {
+        settingsBox.classList.remove('closing');
+        settingsBox.close();
+    }, { once: true });
 };
 
-document.getElementById('settings-box-close-button').addEventListener('click', toggleSettingsPanel);
+const toggleSettingsPanel = () => {
+    if (settingsBox.open) {
+        closeSettingsPanel();
+    } else {
+        generateSettingsPanel();
+        settingsBox.showModal();
+        // Prevent the browser from autofocusing the close button, which would
+        // otherwise make it look permanently hovered.
+        settingsBox.focus();
+    }
+};
+
+settingsBox.addEventListener('click', (e) => {
+    const rect = settingsBox.getBoundingClientRect();
+    const clickedInside = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+    if (!clickedInside) closeSettingsPanel();
+});
+
+settingsBox.addEventListener('cancel', (e) => {
+    e.preventDefault();
+    closeSettingsPanel();
+});
+
+document.getElementById('settings-box-close-button').addEventListener('click', closeSettingsPanel);
 
 const meta = document.querySelector('meta[name="color-scheme"]');
 const root = document.querySelector(":root");

@@ -81,6 +81,14 @@ hr {
     margin-left: auto;
 }
 
+.match-details-wrapper #match-date a {
+    text-decoration: none;
+}
+
+.match-details-wrapper #match-date a:hover {
+    text-decoration: underline;
+}
+
 .yt-links {
     display: flex;
     gap: 5px;

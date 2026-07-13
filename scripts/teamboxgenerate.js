@@ -58,23 +58,106 @@ const showError = (message) => {
     JSTeamBoxLoading.innerHTML = `<blockquote class="fail">${message}</blockquote>`;
 };
 
-let allTeamsPopulated = false;
+const teamPickerButton = document.getElementById('teamPickerButton');
+const teamPickerDialog = document.getElementById('teamPickerDialog');
+const teamPickerClose = document.getElementById('teamPickerClose');
+const teamPickerGrid = document.getElementById('teamPickerGrid');
+const pickerSortSelect = document.getElementById('sortSelect');
 
-async function populateAllTeamsDropdown() {
-    const teamSelect = document.getElementById('team-select');
-    if (!teamSelect || allTeamsPopulated) return;
+const PICKER_SORT_KEY = 'teamPickerSortMode';
+let pickerSortMode = localStorage.getItem(PICKER_SORT_KEY) || 'joined';
+let allTeamsCache = null;
 
-    const allTeams = (await fetchAPI('teamcolors', {}).catch(() => [])).sort((a, b) => a.team_name.localeCompare(b.team_name));
+function sortPickerTeams(teams) {
+    const sorted = teams.slice();
 
-    teamSelect.innerHTML = '<option value="" disabled selected>View a team\'s page...</option>';
-    for (const team of allTeams) {
-        const opt = document.createElement('option');
-        opt.value = `pages/teams/details/?team=${encodeURIComponent(team.team_name)}`;
-        opt.textContent = team.team_name;
-        teamSelect.appendChild(opt);
+    if (pickerSortMode === 'alpha') {
+        sorted.sort((a, b) => a.team_name.localeCompare(b.team_name));
+    } else if (pickerSortMode === 'joined') {
+        // The API already returns teams in join order, so no sorting is needed.
+    } else {
+        const dataByName = new Map(teamData.map(t => [t.team_name, t]));
+        sorted.sort((a, b) => {
+            const va = dataByName.get(a.team_name)?.season_position ?? Infinity;
+            const vb = dataByName.get(b.team_name)?.season_position ?? Infinity;
+            return (Number(va) - Number(vb)) || a.team_name.localeCompare(b.team_name);
+        });
     }
-    allTeamsPopulated = true;
+    return sorted;
 }
+
+function renderTeamPickerGrid() {
+    if (!teamPickerGrid || !allTeamsCache) return;
+
+    teamPickerGrid.innerHTML = '';
+    for (const team of sortPickerTeams(allTeamsCache)) {
+        const nameUpper = team.team_name.toUpperCase();
+        const link = document.createElement('a');
+        link.className = 'team-picker-item';
+        link.href = `pages/teams/details/?team=${encodeURIComponent(team.team_name)}`;
+        link.style.setProperty('--team-color', team.team_color);
+        link.innerHTML = `
+            <picture>
+                <source srcset="https://api.umkl.co.uk/teamemblems/${nameUpper}" type="image/avif">
+                <img class="team-picker-icon" src="https://api.umkl.co.uk/teamemblems/${nameUpper}?og" alt="${makePossessive(team.team_name)} team emblem" loading="lazy">
+            </picture>
+            <span class="team-picker-name">${team.team_name}</span>
+        `;
+        teamPickerGrid.appendChild(link);
+    }
+}
+
+async function populateTeamPicker() {
+    if (!teamPickerGrid) return;
+
+    if (!allTeamsCache) {
+        allTeamsCache = await fetchAPI('teamcolors', {}).catch(() => []);
+        if (!allTeamsCache.length) {
+            teamPickerGrid.innerHTML = '<span class="team-picker-loading">Failed to load teams.</span>';
+            return;
+        }
+    }
+    renderTeamPickerGrid();
+}
+
+if (pickerSortSelect) {
+    pickerSortSelect.value = pickerSortMode;
+    pickerSortSelect.addEventListener('change', function () {
+        pickerSortMode = this.value;
+        localStorage.setItem(PICKER_SORT_KEY, pickerSortMode);
+        renderTeamPickerGrid();
+    });
+}
+
+function closeTeamPickerDialog() {
+    if (!teamPickerDialog.open || teamPickerDialog.classList.contains('closing')) return;
+    teamPickerDialog.classList.add('closing');
+    teamPickerDialog.addEventListener('animationend', () => {
+        teamPickerDialog.classList.remove('closing');
+        teamPickerDialog.close();
+    }, { once: true });
+}
+
+teamPickerButton?.addEventListener('click', () => {
+    populateTeamPicker();
+    teamPickerDialog.showModal();
+    // Prevent the browser from autofocusing the close button, which would
+    // otherwise make it look permanently hovered.
+    teamPickerDialog.focus();
+});
+
+teamPickerClose?.addEventListener('click', closeTeamPickerDialog);
+
+teamPickerDialog?.addEventListener('click', (e) => {
+    const rect = teamPickerDialog.getBoundingClientRect();
+    const clickedInside = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+    if (!clickedInside) closeTeamPickerDialog();
+});
+
+teamPickerDialog?.addEventListener('cancel', (e) => {
+    e.preventDefault();
+    closeTeamPickerDialog();
+});
 
 async function generateTeamBoxes(data) {
     const alreadyRendered = JSTeamBox.children.length > 0;
@@ -92,8 +175,6 @@ async function generateTeamBoxes(data) {
         positionMap.set(sorted[i], lastPosition);
     }
 
-    const placeholderLogoAvif = "assets/media/teamemblems/DEFAULT.avif";
-    const placeholderLogoPng = "assets/media/teamemblems/og/DEFAULT.png";
     const imgAttr = alreadyRendered ? 'style="opacity:1"' : 'onload="this.style.opacity=1"';
     const fragment = document.createDocumentFragment();
     const teamStandingsBox = document.createElement('div');
@@ -102,8 +183,8 @@ async function generateTeamBoxes(data) {
     for (const team of data) {
         const name = team.team_name;
         const nameUpper = name.toUpperCase();
-        const avif = `assets/media/teamemblems/${nameUpper}.avif`;
-        const png = `assets/media/teamemblems/og/${nameUpper}.png`;
+        const avif = `https://api.umkl.co.uk/teamemblems/${nameUpper}`;
+        const png = `https://api.umkl.co.uk/teamemblems/${nameUpper}?og`;
         const dest = `pages/teams/details/?team=${name}`;
 
         const row = document.createElement('div');
@@ -120,8 +201,7 @@ async function generateTeamBoxes(data) {
             <picture>
                 <source srcset="${avif}" type="image/avif">
                 <img class="teamLogo" src="${png}" alt="${makePossessive(name)} team emblem"
-                ${imgAttr} loading="lazy"
-                onerror="this.onerror=null; this.src='${placeholderLogoPng}'; this.parentNode.querySelector('source').srcset='${placeholderLogoAvif}';">
+                ${imgAttr} loading="lazy">
             </picture>
             <div translate="no" class="teamName" title="${team.team_full_name}">${name}</div>
             <div translate="no" class="teamPointsArea">
@@ -222,7 +302,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     generateSeasonPicker();
     updateSeasonText();
-    populateAllTeamsDropdown();
 });
 
 document.addEventListener('listViewChange', async () => {
@@ -253,10 +332,6 @@ const handleSeasonChange = async () => {
 seasonPicker.addEventListener("change", function () {
     currentSeason = parseInt(this.value);
     handleSeasonChange();
-});
-
-document.getElementById('team-select')?.addEventListener('change', function () {
-    window.location.href = this.value;
 });
 
 async function updateSeasonText() {

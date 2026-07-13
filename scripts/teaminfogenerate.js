@@ -11,7 +11,7 @@ const teamBoxFormatHTML = `
             <picture>
                 <source srcset="{{logoSrcAvif}}" type="image/avif">
                 <img width=200 height=200 src="{{logoSrc}}" alt="{{teamNamePossessive}} team logo" title="{{teamNamePossessive}} team logo\nClick to view a high-res version of this logo" class="team-info-logo" loading="lazy"
-                onload="this.style.opacity=1" onerror="this.onerror=null; this.src='{{placeholderLogo}}'; this.parentNode.querySelector('source').srcset='{{placeholderLogoAvif}}';"/>
+                onload="this.style.opacity=1"/>
             </picture>
         </a>
         <div class="team-info-text">
@@ -19,7 +19,7 @@ const teamBoxFormatHTML = `
         </div>
         <div class="current-season-info">
             <div class="heading-wrapper">
-                <h2>Stats for</h2> <span style="margin-left: 8px">{{seasonHeading}}</span>
+                <span style="margin-right: 8px">{{seasonHeading}}</span> <h2>Stats</h2>
                 <div class="live-dot"></div>
             </div>
             <div class="team-info-text">
@@ -213,11 +213,9 @@ function generateTeamBox(teamData, showError) {
     JSTeamBox.innerHTML = "";
     JSTeamBox.classList.remove('fade-in');
 
-    const placeholderLogoAvif = "assets/media/teamemblems/DEFAULT.avif";
-    const placeholderLogoPng = "assets/media/teamemblems/og/DEFAULT.png";
     const teamNameUpper = teamData.team_name.toUpperCase();
-    const logoUrl = `assets/media/teamemblems/og/${teamNameUpper}.png`;
-    const logoUrlAvif = `assets/media/teamemblems/${teamNameUpper}.avif`;
+    const logoUrl = `https://api.umkl.co.uk/teamemblems/${teamNameUpper}?og`;
+    const logoUrlAvif = `https://api.umkl.co.uk/teamemblems/${teamNameUpper}`;
 
     latestSeason = teamData.season;
     viewingSeason = latestSeason;
@@ -242,8 +240,6 @@ function generateTeamBox(teamData, showError) {
         .replace("{{logoSrc}}", logoUrl)
         .replace("{{logoSrcAvif}}", logoUrlAvif)
         .replace("{{highResSrc}}", logoUrl)
-        .replace("{{placeholderLogo}}", placeholderLogoPng)
-        .replace("{{placeholderLogoAvif}}", placeholderLogoAvif)
         .replace("{{extraFields}}", buildTeamInfoTable(teamData))
         .replace("{{currentFields}}", buildTeamInfoTable(teamData, true));
 

@@ -73,7 +73,7 @@ function newMediaData() {
         title: audioName,
         artist: playListTitle,
         album: playListTitle,
-        artwork: containsAlbumArt ? [{ src: path + imagesrc, type: "image/png" }] : [{ src: "assets/media/teamemblems/DEFAULT.png", type: "image/png" }]
+        artwork: containsAlbumArt ? [{ src: path + imagesrc, type: "image/png" }] : [{ src: "https://api.umkl.co.uk/teamemblems/DEFAULT?og", type: "image/png" }]
     });
 }
 navigator.mediaSession.setActionHandler('previoustrack', function () {

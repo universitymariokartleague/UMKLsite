@@ -115,8 +115,8 @@ function getLiveMatchTeams() {
         const [logoA, logoB] = swapped
             ? [teamNames[1], teamNames[0]]
             : [teamNames[0], teamNames[1]];
-        firstTeamLogo.src = `assets/media/teamemblems/${logoA.toUpperCase()}.avif`
-        secondTeamLogo.src = `assets/media/teamemblems/${logoB.toUpperCase()}.avif`
+        firstTeamLogo.src = `https://api.umkl.co.uk/teamemblems/${logoA.toUpperCase()}`
+        secondTeamLogo.src = `https://api.umkl.co.uk/teamemblems/${logoB.toUpperCase()}`
     }
 }
 

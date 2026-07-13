@@ -80,9 +80,22 @@ function clampPan() {
     panY = Math.max(-maxPanY, Math.min(maxPanY, panY));
 }
 
+let zoomControlsEl = null;
+
+function isAtDefaultView() {
+    return Math.abs(scale - DEFAULT_SCALE) < 0.001
+        && Math.abs(panX - DEFAULT_PAN_X) < 0.5
+        && Math.abs(panY - DEFAULT_PAN_Y) < 0.5;
+}
+
+function updateControlsVisibility() {
+    zoomControlsEl?.classList.toggle('visible', !isAtDefaultView());
+}
+
 function updateTransform() {
     clampPan();
     container.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+    updateControlsVisibility();
 }
 
 function getTouchDistance(touches) {
@@ -251,6 +264,7 @@ function latLonToPixel(lat, lon, width, height) {
 function createZoomControls() {
     const controls = document.createElement('div');
     controls.className = 'zoom-controls';
+    zoomControlsEl = controls;
 
     const makeBtn = (iconClass, title, onClick) => {
         const btn = document.createElement('button');

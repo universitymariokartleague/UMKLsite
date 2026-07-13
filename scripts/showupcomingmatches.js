@@ -230,10 +230,9 @@ async function showUpcomingMatches() {
                     <div class="event-overlay">
                         <div class="event-box-team">
                             <a class="no-underline-link no-color-link team-box-underline-hover" href="${team1.link}">
-                                <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team1.team_name.toUpperCase()}.avif"
+                                <img height="100px" class="team-box-image" src="https://api.umkl.co.uk/teamemblems/${team1.team_name.toUpperCase()}"
                                 alt="${makePossessive(team1.team_name)} team logo"
-                                onload="this.style.opacity=1" loading="lazy"
-                                onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';"/>
+                                onload="this.style.opacity=1" loading="lazy"/>
                                 <h2>${team1.team_name}</h2>
                             </a>
                             <div class="youtube-box left-team">
@@ -249,10 +248,9 @@ async function showUpcomingMatches() {
 
                         <div class="event-box-team">
                             <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">
-                                <img height="100px" class="team-box-image" src="assets/media/teamemblems/${team2.team_name.toUpperCase()}.avif"
+                                <img height="100px" class="team-box-image" src="https://api.umkl.co.uk/teamemblems/${team2.team_name.toUpperCase()}"
                                 alt="${makePossessive(team1.team_name)} team logo"
-                                onload="this.style.opacity=1" loading="lazy"
-                                onerror="this.onerror=null; this.src='assets/media/teamemblems/DEFAULT.avif';"/>
+                                onload="this.style.opacity=1" loading="lazy"/>
                                 <h2>${team2.team_name}</h2>
                             </a>
                             <div class="youtube-box right-team">

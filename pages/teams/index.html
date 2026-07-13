@@ -65,12 +65,30 @@
             <div class="current-season-area">
                 <div id="current-season">Upcoming (2025-2026)</div>
                 <button id="shareButton"><span class="fa-solid fa-share"></span> Share Standings</button>
+                <button type="button" id="teamPickerButton" class="team-picker-button">
+                    <i class="fa-solid fa-th-large"></i> View a team's page
+                </button>
             </div>
-            <hr class="team-select-divider">
-            <select id="team-select">
-                <option value="" disabled selected>View a team's page...</option>
-            </select>
         </div>
+
+        <dialog id="teamPickerDialog" class="team-picker-dialog" tabindex="-1">
+            <div class="team-picker-header">
+                <div class="team-picker-title-row">
+                    <h2>View a team's page</h2>
+                    <select id="sortSelect" class="team-sort-select" title="Sort teams by">
+                        <option value="joined" selected>Sort by join date</option>
+                        <option value="alpha">Sort alphabetically</option>
+                        <option value="position">Sort by position</option>
+                    </select>
+                </div>
+                <button type="button" id="teamPickerClose" class="close-list-view-button" aria-label="Close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div id="teamPickerGrid" class="team-picker-grid">
+                <span class="team-picker-loading">Loading teams...</span>
+            </div>
+        </dialog>
 
         <span id="JSTeamBoxLoading">Fetching from the API...</span>
         <div id="JSTeamBox" class="teamBoxContainer"></div>

@@ -311,26 +311,6 @@
     color: var(--text-color);
 }
 
-.close-list-view-button {
-    background: var(--button-bg);
-    border: var(--box-border);
-    color: var(--text-color);
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    transition: background-color 0.2s, transform 0.2s;
-}
-
-.close-list-view-button:hover {
-    background: var(--accent-color);
-    color: #FFF;
-}
-
 .list-view-content {
     flex: 1;
     overflow-y: auto;

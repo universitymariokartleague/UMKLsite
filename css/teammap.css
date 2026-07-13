@@ -108,14 +108,27 @@ a.dot-label {
     border: 1px solid #ccc;
     box-shadow: 0 2px 6px #0002;
     padding: 4px;
-    opacity: 0;
-    animation: fade-in 0.25s ease-in-out forwards;
     -webkit-user-select: none;
     user-select: none;
 }
 
+.weather-display {
+    opacity: 0;
+    animation: fade-in 0.25s ease-in-out forwards;
+}
+
 .zoom-controls {
     top: 38px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.zoom-controls.visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
 }
 
 .weather-display {

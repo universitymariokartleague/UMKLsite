@@ -6,9 +6,7 @@ export { generateTeamStandingsImage };
 
 let startTime;
 let seasonStatus;
-
-// Constants
-const TEAM_ICON_DIR = "assets/media/teamemblems/";
+const TEAM_ICON_DIR = "https://api.umkl.co.uk/teamemblems/";
 const DEFAULT_FONT = "Montserrat";
 
 async function getCurrentSeason() {
@@ -56,8 +54,9 @@ async function getTeamdata(team = "", season) {
 async function loadImage(url) {
     return new Promise((resolve, reject) => {
         const img = new Image();
+        img.crossOrigin = "anonymous";
         img.onload = () => resolve(img);
-        img.onerror = () => img.src = `${TEAM_ICON_DIR}/DEFAULT.avif`;
+        img.onerror = () => reject(new Error(`Failed to load image: ${url}`));
         img.src = url;
     });
 }
@@ -225,7 +224,7 @@ async function createTeamStandingsImage(season, seasonOngoing, teamStandingsData
 
         // Add team emblem
         try {
-            const emblemPath = `${TEAM_ICON_DIR}${teamdata.team_name.toUpperCase()}.avif`;
+            const emblemPath = `${TEAM_ICON_DIR}${teamdata.team_name.toUpperCase()}`;
             const icon = await loadImage(emblemPath);
             ctx.drawImage(icon, INIT_POS[0] - 35, INIT_POS[1] - 57, TEAM_ICON_SIZE[0], TEAM_ICON_SIZE[1]);
         } catch (error) {
