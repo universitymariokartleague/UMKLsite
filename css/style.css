@@ -544,6 +544,12 @@ blockquote {
     }
 }
 
+.garbled-text {
+    font-family: monospace;
+    letter-spacing: 1px;
+    color: var(--link-hover-color);
+}
+
 #current-season {
     opacity: 0;
     transition: opacity 0.2s ease-in-out;

@@ -137,13 +137,16 @@ body {
 .embed-title {
     font-weight: 600;
     font-size: 1em;
-    margin-bottom: 8px;
     color: #ffffff;
 }
 
 .embed-description {
     font-size: 0.875em;
     margin-bottom: 8px;
+}
+
+.embed-description p {
+    margin-top: 8px;
 }
 
 .embed-image img {

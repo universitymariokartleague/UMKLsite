@@ -21,10 +21,18 @@
     outline: 1px solid #ccccccaa;
 }
 
+#cheepCheepResultsIframe {
+    height: 525px;
+    width: 500px;
+    border-radius: 10px;
+    outline: 1px solid #ccccccaa;
+}
+
 @media (max-width: 767px) {
 
     #discordRoleiFrame,
-    #cheepCheepRoleiFrame {
+    #cheepCheepRoleiFrame,
+    #cheepCheepResultsIframe {
         width: 100%;
     }
 

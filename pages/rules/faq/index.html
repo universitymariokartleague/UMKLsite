@@ -13,10 +13,8 @@
     <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/settings.css">
-    <link rel="stylesheet" href="css/colorpicker.css">
     <link rel="stylesheet" href="css/discordrolepreview.css">
     <link rel="stylesheet" href="css/ext/fontawesome.min.css">
-    <link rel="stylesheet" href="css/ext/coloris.min.css">
 
     <meta property="og:title" content="UMKL | Discord/Cheep Cheep FAQ" />
     <meta property="og:type" content="website" />
@@ -38,11 +36,9 @@
 
     <!-- Scripts -->
     <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();</script>
-    <script type="module" src="scripts/coloris.js" defer></script>
-    <script type="module" src="scripts/createcolorwheel.js" defer></script>
     <script type="module" src="scripts/settings.js" defer></script>
     <script type="module" src="scripts/lostworldeasteregg.js" defer></script>
-    <script type="module" src="scripts/getteamcolors.js" defer></script>
+    <script type="module" src="scripts/spmystery.js" defer></script>
 </head>
 
 <body id="top">
@@ -62,19 +58,48 @@
             alt="An image of Cheep Cheep in the ocean" />
         <hr class="hr-below-title">
 
+        <h2 id="how-it-works"><a href="pages/rules/faq/#how-it-works">How Cheep Cheep Works</a></h2>
+        <p class="p-no-spacing">
+            <mention translate="no">@Cheep Cheep</mention> is the custom Discord bot that runs the UMKL. It manages
+            everything from team creation and player sign-ups, to running matches, verifying results and tracking
+            stats, all through Discord slash commands.
+        </p>
+        <p>
+            In short, Cheep Cheep:
+        </p>
+        <ul>
+            <li>Creates and manages team channels, roles and categories</li>
+            <li>Handles player sign-ups and substitutions for matches</li>
+            <li>Verifies match results and calculates points, SP and standings</li>
+            <li>Powers live score overlays and stream graphics</li>
+            <li>Feeds the <a href="pages/matches/">matches</a>, <a href="pages/teams/">teams</a> and leaderboard
+                data shown across this website via its API</li>
+        </ul>
+        <p>
+            See the <a href="pages/rules/cheepcheepcommands/">Discord/Cheep Cheep Commands Documentation</a> page for
+            a full list of commands. The rest of this page answers common questions about how everything fits
+            together.
+        </p>
+
+        <hr>
+
         <h3>Page Contents</h3>
         <ul class="after-title">
             <li><a href="pages/rules/faq/#missing-channel">Why can't I see my team's channel? What should I do?</a></li>
             <li><a href="pages/rules/faq/#wrong-team">I joined the wrong team! What should I do?</a></li>
             <li><a href="pages/rules/faq/#before-match">What should I do before a match starts?</a></li>
-            <li><a href="pages/rules/faq/#no-discord">A member on my team doesn't have a Discord account? What do I do
-                    about them?</a></li>
-            <li><a href="pages/rules/faq/#create-team">What does the /create-team command do? Who can join a team?</a>
+            <li><a href="pages/rules/faq/#results-verified">How are match results verified once they're submitted?</a>
             </li>
-            <li><a href="pages/rules/faq/#hex-code">What is a hex colour code?</a></li>
+            <li><a href="pages/rules/faq/#sp-points">What is SP and how do I earn it?</a></li>
+            <li><a href="pages/rules/faq/#leaderboards-profiles">What do the leaderboard and profile commands
+                    show?</a></li>
+            <li><a href="pages/rules/faq/#season-rounds">How are matchups decided each round?</a></li>
+            <li><a href="pages/rules/faq/#no-discord">A member on my team doesn't have a Discord account? What should I do
+                    about them?</a></li>
             <li><a href="pages/rules/faq/#profile-questionmark">Why is there a <img class="question-mark-icon"
                         src="assets/media/faq/questionmark.avif" alt="A question mark placeholder icon"> on my team's
                     profile?</a></li>
+            <li><a href="pages/rules/faq/#behind-the-scenes">What does Cheep Cheep actually run on?</a></li>
         </ul>
 
         <hr>
@@ -84,12 +109,17 @@
             Members of your team need to use the <code translate="no">/join</code> command
             to join, this will give them the correct role and allow them to view their team's channel.
         </p>
+        <p>
+            Each team's channels (announcements, chat and voice channel) are only visible to members with that
+            team's Discord role - everyone else, including other teams, can't see them at all. Picking your team
+            with <code translate="no">/join</code> is what gives you this role and makes the channels appear.
+        </p>
 
         <hr>
 
         <h4 id="wrong-team">I joined the wrong team! What should I do?</h4>
         <p class="p-no-spacing">
-            Please contact a member of the board and they will place you in the right team.
+            Please contact a board member and they will place you in the right team.
         </p>
 
         <hr>
@@ -116,86 +146,70 @@
 
         <hr>
 
-        <h4 id="no-discord">A member on my team doesn't have a Discord account? What do I do about them?</h4>
+        <h4 id="results-verified">How are match results verified once they're submitted?</h4>
+        <p class="p-no-spacing">
+            After a match, a board members will submit both teams' scores using
+            <code translate="no">/add-match-results</code>. This posts a verification embed in the board's results
+            channel, which will then be approved or rejected, penalties can also be added if applicable.
+        </p>
+        <p>
+            Once approved, Cheep Cheep automatically generates the results and winner graphics, updates the team
+            standings, distributes SP to players, closes out the match's Discord event, and posts an
+            announcement to the results channel:
+        </p>
+
+        <div class="cheepCheepRolePreview">
+            <iframe id="cheepCheepResultsIframe" src="pages/rules/faq/cheepcheepresults.html" frameborder="0"></iframe>
+        </div>
+
+        <hr>
+
+        <h4 id="sp-points">What is SP and how do I earn it?</h4>
+        <p class="p-no-spacing">
+            SP stands for <span id="sp-mystery" class="garbled-text" translate="no">????? ??????</span>, and is
+            something you can accumulate.
+        </p>
+        <p>You earn SP by:</p>
+        <ul>
+            <li>Playing in matches, with a bonus for winning and reduced SP for test matches</li>
+            <li>Being active in the UMKL Discord server</li>
+        </ul>
+
+        <hr>
+
+        <h4 id="leaderboards-profiles">What do the leaderboard and profile commands show?</h4>
+        <p class="p-no-spacing">
+            <code translate="no">/leaderboards</code> shows 8 different leaderboards: Season and Lifetime Points,
+            and Season and Lifetime Best Match Score, each for both Teams and Individuals, plus an SP leaderboard.
+        </p>
+        <p>
+            <code translate="no">/user-profile</code> shows an individual's team, wins, matches played, podiums,
+            highest finish, career points and SP. <code translate="no">/team-profile</code> shows a team's
+            location, institution, season position, win/loss record, points, penalties and championships.
+        </p>
+
+        <hr>
+
+        <h4 id="season-rounds">How are matchups decided each round?</h4>
+        <p class="p-no-spacing">
+            At the start of a new round (<code translate="no">/start-next-round</code>), teams are paired up based
+            on the previous round's results - teams with a similar number of points tend to be paired together. The
+            board then sets the actual matchups with <code translate="no">/add-next-round-pairings</code>, and
+            match organisation threads are created automatically for each pairing.
+        </p>
+
+        <hr>
+
+        <h4 id="no-discord">A member on my team doesn't have a Discord account? What should I do about them?</h4>
         <p class="p-no-spacing">
             Please ask them to create an account and join the
-            <a target="_blank" href="https://discord.gg/jz3hKEmDss">Discord server</a>.
+            <a target="_blank" href="https://discord.gg/jz3hKEmDss">UMKL Discord server</a>.
         </p>
         <p>
-            A Discord account is required for <mention translate="no">@Cheep Cheep</mention> and the database to
-            function,
-            as well as setting up matches, so please ask all members of your team to join the
+            A Discord account is required for <mention translate="no">@Cheep Cheep</mention> to
+            function properly, so please ask all members of your team to join the
             <a target="_blank" href="https://discord.gg/jz3hKEmDss">Discord server</a>.
         </p>
-
-        <hr>
-
-        <blockquote class="info">
-            <b translate="no">Note</b><br>
-            The below questions are regarding team management.
-            Please visit the <a href="pages/rules/team/">Team Guidelines</a> page
-            for more information about team management and creating a new team.
-        </blockquote>
-
-        <h4 id="create-team">What does the <code translate="no">/create-team</code> command do? Who can join a team?
-        </h4>
-        <p class="p-no-spacing">
-            If you are a new team wanting to join, you will need to create your team for it to be added to
-            the database. This is done using the <code translate="no">/create-team</code> command, which requires the
-            following data:
-        </p>
-        <ul>
-            <li><b translate="no">team_name</b>: the name of your team, pick something simple and easy for this (like
-                <code translate="no">York</code>)
-            </li>
-            <li><b translate="no">institution_name</b>: the formal name for your university (like <code
-                    translate="no">University of York</code>)</li>
-            <li><b translate="no">team_color</b>: the colour your team receives in scoring graphics and your
-                team's discord role. This is entered as a hex colour code (see the below question).
-                For example: <code translate="no">#1baa8b</code></li>
-        </ul>
-        <p>
-            Anyone in the corresponding university can join their team (<a
-                href="pages/rules/joining/">view the joining guide here</a>). Before a match, the
-            "<span translate="no">Sign Up</span>"
-            process is conducted, where the six players who are going to play in the match can join.
-        </p>
-
-        <hr>
-
-        <div class="discordRolePreviewContainer">
-            <h4 id="hex-code">What is a hex colour code?</h4>
-
-            <div class="discordRolePreview">
-                <iframe id="discordRoleiFrame" src="pages/rules/faq/discordrole.html" frameborder="0"></iframe>
-            </div>
-
-            <p class="p-no-spacing">
-                A hex colour code comprises six (hexadecimal) characters that represent a single colour.
-            </p>
-
-            <p>
-                Please use the colour picker below or use an external one
-                <a target="_blank" href="https://www.google.com/search?q=hex+colour+picker">here</a>.
-            </p>
-
-            <p class="color-picker square">
-                <input value="#1baa8b" id="color-picker" class="coloris" type="text" data-coloris>
-                <span id="colorMessage">Current colour: <code translate="no">#1baa8b</code></span>
-            </p>
-
-            <p class="p-below-title">Below are the team colours of existing teams:</p>
-            <div id="currentTeamColors"></div>
-
-            <p>
-                Please note that Discord doesn't accept pure white or pure black as colours.
-            </p>
-            <p>
-                Your team colour is the role colour your team will receive on Discord,
-                so consider colour contrast with dark and light modes when picking.
-            </p>
-            <canvas id="colorWheel" width="350" height="275"></canvas>
-        </div>
 
         <hr>
 
@@ -206,6 +220,25 @@
             In addition to the above commands, each team should have an emblem. Please submit an emblem to a member of
             the
             board to have it added to your team's profile.
+        </p>
+
+        <hr>
+
+        <h4 id="behind-the-scenes">What does Cheep Cheep actually run on?</h4>
+        <p class="p-no-spacing">
+            Cheep Cheep is a Python Discord bot built with <code translate="no">discord.py</code>, using slash
+            commands, modals, buttons and pagination for all of its interactions.
+        </p>
+        <p>
+            Team, player, match and season data is stored in a SQLite database, alongside a handful of JSON files
+            for things like live scores, SP history and season pairings. All of the graphics you see - results
+            images, winner announcements, team standings, stream overlays and YouTube thumbnails - are generated on
+            the fly using Pillow.
+        </p>
+        <p>
+            This website talks to that same database through a small API (<code
+                translate="no">api.umkl.co.uk</code>), which is what powers the <a href="pages/matches/">matches</a>,
+            <a href="pages/teams/">teams</a> and leaderboard data shown across the site.
         </p>
 
         <div id="hex" class="hidden">
