@@ -157,8 +157,9 @@ a.dot-label {
 .season-toggle-button {
     width: auto;
     padding: 0 10px;
-    font-size: 13px;
-    font-weight: 600;
+    height: 20px!important;
+    width: 85px!important;
+    font-size: 14px!important;
 }
 
 .controls-button {

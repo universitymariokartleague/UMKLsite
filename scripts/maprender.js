@@ -332,7 +332,7 @@ function createZoomControls() {
 }
 
 function seasonFilterLabel(mode) {
-    return mode === 'all' ? 'All' : `S${mode}`;
+    return mode === 'all' ? 'All' : `Season ${mode}`;
 }
 
 function nextSeasonFilterMode(mode) {
@@ -526,6 +526,7 @@ function placeDots() {
     });
 
     // Place labels with collision detection
+    const labelData = [];
     dotPositions.forEach(({ x, y, color, name, isCurrentTeam, colorClass, fadeDelay }, dotIdx) => {
         const label = document.createElement('a');
         label.translate = false;
@@ -552,6 +553,7 @@ function placeDots() {
 
         const labelWidth = name.length * 10;
         const labelHeight = 24;
+        const minGap = 6; // enforced empty space between neighbouring labels/dots
 
         // Generate candidates at all angles for each radius, tag each as ocean or not,
         // then sort ocean-first / closer-first so find() always picks the best available spot.
@@ -567,29 +569,83 @@ function placeDots() {
         candidates.sort((a, b) => (b.ocean - a.ocean) || (a.radius - b.radius));
 
         const isNonColliding = ({ left, top }) => {
-            const cx = left + labelWidth / 2, cy = top + labelHeight / 2;
-            const r = { x: cx - labelWidth * 0.75, y: cy - labelHeight * 0.75, width: labelWidth * 1.5, height: labelHeight * 1.2 };
+            const r = { x: left - minGap, y: top - minGap, width: labelWidth + minGap * 2, height: labelHeight + minGap * 2 };
             return !labels.some(l   => !(r.x > l.x + l.width   || r.x + r.width < l.x   || r.y > l.y + l.height   || r.y + r.height < l.y))
                 && !dotBoxes.some((d, i) => i !== dotIdx && !(r.x > d.x + d.width || r.x + r.width < d.x || r.y > d.y + d.height || r.y + r.height < d.y));
         };
 
         const finalPos = candidates.find(isNonColliding) ?? candidates[0];
 
-        label.style.left = `${finalPos.left}px`;
-        label.style.top = `${finalPos.top}px`;
+        labels.push({ x: finalPos.left, y: finalPos.top, width: labelWidth, height: labelHeight });
+        labelData.push({
+            label, color, colorClass, isCurrentTeam, fadeDelay, dotX: x, dotY: y, dotIdx,
+            width: labelWidth, height: labelHeight, left: finalPos.left, top: finalPos.top
+        });
+    });
+
+    // Relax label positions apart so tightly-packed clusters get real breathing room,
+    // instead of settling for the greedy search's barely-non-overlapping first fit.
+    const relaxGap = 4;
+    for (let iter = 0; iter < 150; iter++) {
+        let moved = false;
+
+        for (let i = 0; i < labelData.length; i++) {
+            for (let j = i + 1; j < labelData.length; j++) {
+                const a = labelData[i], b = labelData[j];
+                const overlapX = Math.min(a.left + a.width, b.left + b.width) + relaxGap - Math.max(a.left, b.left);
+                const overlapY = Math.min(a.top + a.height, b.top + b.height) + relaxGap - Math.max(a.top, b.top);
+                if (overlapX <= 0 || overlapY <= 0) continue;
+
+                moved = true;
+                const aCenterX = a.left + a.width / 2, aCenterY = a.top + a.height / 2;
+                const bCenterX = b.left + b.width / 2, bCenterY = b.top + b.height / 2;
+
+                if (overlapX < overlapY) {
+                    const push = overlapX / 2 + 0.5;
+                    if (aCenterX <= bCenterX) { a.left -= push; b.left += push; } else { a.left += push; b.left -= push; }
+                } else {
+                    const push = overlapY / 2 + 0.5;
+                    if (aCenterY <= bCenterY) { a.top -= push; b.top += push; } else { a.top += push; b.top -= push; }
+                }
+            }
+
+            // Nudge away from any dot marker the label has drifted over
+            const entry = labelData[i];
+            dotBoxes.forEach((d, di) => {
+                if (di === entry.dotIdx) return;
+                const overlapX = Math.min(entry.left + entry.width, d.x + d.width) - Math.max(entry.left, d.x);
+                const overlapY = Math.min(entry.top + entry.height, d.y + d.height) - Math.max(entry.top, d.y);
+                if (overlapX <= 0 || overlapY <= 0) return;
+
+                moved = true;
+                const towardsNegativeX = entry.left + entry.width / 2 < d.x + d.width / 2;
+                if (overlapX < overlapY) entry.left += towardsNegativeX ? -overlapX : overlapX;
+                else entry.top += (entry.top + entry.height / 2 < d.y + d.height / 2) ? -overlapY : overlapY;
+            });
+        }
+
+        if (!moved) break;
+    }
+
+    labelData.forEach(({ label, color, colorClass, isCurrentTeam, fadeDelay, dotX, dotY, width: labelWidth, height: labelHeight, left, top }) => {
+        left = Math.min(Math.max(left, 0), w - labelWidth);
+        top = Math.min(Math.max(top, 0), h - labelHeight);
+
+        label.style.left = `${left}px`;
+        label.style.top = `${top}px`;
 
         // Draw line to label
         const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        const labelCenterX = finalPos.left + labelWidth / 2;
-        const labelCenterY = finalPos.top + labelHeight / 2;
-        line.setAttribute('x1', x);
-        line.setAttribute('y1', y);
+        const labelCenterX = left + labelWidth / 2;
+        const labelCenterY = top + labelHeight / 2;
+        line.setAttribute('x1', dotX);
+        line.setAttribute('y1', dotY);
         line.setAttribute('x2', labelCenterX);
         line.setAttribute('y2', labelCenterY);
         line.setAttribute('stroke', color);
         line.setAttribute('stroke-width', '1');
 
-        const lineLength = Math.hypot(labelCenterX - x, labelCenterY - y);
+        const lineLength = Math.hypot(labelCenterX - dotX, labelCenterY - dotY);
         injectStyle(`lineDrawFadeIn-${colorClass}`, `
             @keyframes lineDrawFadeIn-${colorClass} {
                 0% { stroke-dashoffset: ${lineLength}; opacity: 0; }
@@ -602,11 +658,6 @@ function placeDots() {
         line.style.animation = `lineDrawFadeIn-${colorClass} ${loadedOnce ? 0 : 0.5}s ease-in-out ${loadedOnce ? 0 : fadeDelay - 0.1}s forwards`;
 
         svg.appendChild(line);
-
-        // Store label position for collision detection
-        const padding = 2;
-        labels.push({ x: finalPos.left - padding, y: finalPos.top - padding, width: labelWidth + 2 * padding, height: labelHeight + 2 * padding });
-
         fragment.appendChild(label);
     });
 
