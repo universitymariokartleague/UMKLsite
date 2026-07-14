@@ -19,7 +19,7 @@ const teamBoxFormatHTML = `
         </div>
         <div class="current-season-info">
             <div class="heading-wrapper">
-                <span style="margin-right: 8px">{{seasonHeading}}</span> <h2>Stats</h2>
+                {{seasonHeading}}<h2>Stats</h2>
                 <div class="live-dot"></div>
             </div>
             <div class="team-info-text">
@@ -220,16 +220,21 @@ function generateTeamBox(teamData, showError) {
     latestSeason = teamData.season;
     viewingSeason = latestSeason;
 
-    const minSeason = teamData.first_entry || 1;
-    let seasonHeading;
-    if (latestSeason <= minSeason) {
-        seasonHeading = `<h2>Season ${latestSeason}</h2>`;
-    } else {
-        const options = Array.from(
-            { length: latestSeason - minSeason + 1 },
-            (_, i) => minSeason + i
-        ).map(s => `<option value="${s}"${s === latestSeason ? ' selected' : ''}>Season ${s}</option>`).join('');
-        seasonHeading = `<select id="team-season-select">${options}</select>`;
+    const minSeason = teamData.first_entry;
+    const hasPlayed = !!minSeason;
+    let seasonHeading = ``;
+    if (hasPlayed) {
+        let seasonHeadingInner;
+        if (latestSeason <= minSeason) {
+            seasonHeadingInner = `<h2>Season ${latestSeason}</h2>`;
+        } else {
+            const options = Array.from(
+                { length: latestSeason - minSeason + 1 },
+                (_, i) => minSeason + i
+            ).map(s => `<option value="${s}"${s === latestSeason ? ' selected' : ''}>Season ${s}</option>`).join('');
+            seasonHeadingInner = `<select id="team-season-select">${options}</select>`;
+        }
+        seasonHeading = `<span style="margin-right: 8px">${seasonHeadingInner}</span>`;
     }
 
     const tempTeamBox = teamBoxFormatHTML
@@ -241,7 +246,7 @@ function generateTeamBox(teamData, showError) {
         .replace("{{logoSrcAvif}}", logoUrlAvif)
         .replace("{{highResSrc}}", logoUrl)
         .replace("{{extraFields}}", buildTeamInfoTable(teamData))
-        .replace("{{currentFields}}", buildTeamInfoTable(teamData, true));
+        .replace("{{currentFields}}", hasPlayed ? buildTeamInfoTable(teamData, true) : `<p>No data available.</p>`);
 
     document.documentElement.style.setProperty('--highlight-color', `${teamData.team_color}80`);
     document.documentElement.style.setProperty('--team-color', teamData.team_color);
@@ -250,6 +255,7 @@ function generateTeamBox(teamData, showError) {
 
     const seasonSelect = JSTeamBox.querySelector('#team-season-select');
     const liveDot = JSTeamBox.querySelector('.live-dot');
+    if (liveDot && !hasPlayed) liveDot.style.display = 'none';
     if (seasonSelect) {
         seasonSelect.addEventListener('change', async function () {
             const season = parseInt(this.value);
@@ -335,7 +341,7 @@ function editTeamBox(teamData) {
     if (!currentSeasonInfo || !extraFieldsInfo) return;
 
     extraFieldsInfo.innerHTML = buildTeamInfoTable(teamData);
-    if (viewingSeason === teamData.season) {
+    if (viewingSeason === teamData.season && teamData.first_entry) {
         currentSeasonInfo.innerHTML = buildTeamInfoTable(teamData, true);
     }
 }

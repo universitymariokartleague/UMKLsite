@@ -125,6 +125,10 @@ hr {
     text-decoration: none;
 }
 
+.team-title a::before {
+    content: none;
+}
+
 .team-title a:hover {
     text-decoration: underline;
 }

@@ -99,7 +99,7 @@ function renderTeamPickerGrid() {
         link.innerHTML = `
             <picture>
                 <source srcset="https://api.umkl.co.uk/teamemblems/${nameUpper}" type="image/avif">
-                <img class="team-picker-icon" src="https://api.umkl.co.uk/teamemblems/${nameUpper}?og" alt="${makePossessive(team.team_name)} team emblem" loading="lazy">
+                <img class="team-picker-icon" src="https://api.umkl.co.uk/teamemblems/${nameUpper}?og" alt="${makePossessive(team.team_name)} team emblem" loading="lazy" onload="this.style.opacity=1;">
             </picture>
             <span class="team-picker-name">${team.team_name}</span>
         `;
@@ -107,11 +107,15 @@ function renderTeamPickerGrid() {
     }
 }
 
+let allTeamsFetchPromise = null;
+
 async function populateTeamPicker() {
     if (!teamPickerGrid) return;
 
     if (!allTeamsCache) {
-        allTeamsCache = await fetchAPI('teamcolors', {}).catch(() => []);
+        if (!allTeamsFetchPromise) allTeamsFetchPromise = fetchAPI('teamcolors', {}).catch(() => []);
+        allTeamsCache = await allTeamsFetchPromise;
+        allTeamsFetchPromise = null;
         if (!allTeamsCache.length) {
             teamPickerGrid.innerHTML = '<span class="team-picker-loading">Failed to load teams.</span>';
             return;
@@ -201,7 +205,8 @@ async function generateTeamBoxes(data) {
             <picture>
                 <source srcset="${avif}" type="image/avif">
                 <img class="teamLogo" src="${png}" alt="${makePossessive(name)} team emblem"
-                ${imgAttr} loading="lazy">
+                ${imgAttr} loading="lazy"
+                onload="this.style.opacity=1;">
             </picture>
             <div translate="no" class="teamName" title="${team.team_full_name}">${name}</div>
             <div translate="no" class="teamPointsArea">
@@ -302,6 +307,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     generateSeasonPicker();
     updateSeasonText();
+
+    // pre-load the team picker
+    populateTeamPicker();
 });
 
 document.addEventListener('listViewChange', async () => {

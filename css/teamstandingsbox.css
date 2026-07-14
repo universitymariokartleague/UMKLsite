@@ -179,7 +179,7 @@
     background-color: var(--bg-color);
     color: var(--text-color);
     width: min(500px, 92vw);
-    max-height: 95vh;
+    max-height: 85vh;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
     animation: dialogPopIn 0.2s cubic-bezier(0.2, 0, 0.1, 1);
     will-change: transform;
@@ -271,6 +271,8 @@
 .team-picker-icon {
     width: 48px;
     height: 48px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
 }
 
 .team-picker-name {

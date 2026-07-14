@@ -31,6 +31,11 @@ let teamParam = "";
 let loadedOnce = false;
 let startTime;
 
+let allCoords = [];
+let seasonFilterMode = 'all';
+let maxSeasonNum = 1;
+const firstEntryByName = new Map();
+
 // Wrapper to hold the map and dots for zoom/pan
 const wrapper = document.createElement('div');
 wrapper.style.position = 'relative';
@@ -232,6 +237,44 @@ async function getTeamlocations() {
         });
 }
 
+async function getSeasonInfo() {
+    console.debug(`%cmaprender.js %c> %cFetching seasoninfo from the API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    return fetch('https://api.umkl.co.uk/seasoninfo', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ season: 0 })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+            return response.json();
+        });
+}
+
+async function getTeamFirstEntries(season) {
+    console.debug(`%cmaprender.js %c> %cFetching teamdata from the API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    return fetch('https://api.umkl.co.uk/teamdata', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ team: "", season: `${season}` })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+            return response.json();
+        });
+}
+
 function pixelToLatLon(px, py, width, height) {
     const { minLon, maxLon, minLat, maxLat } = mapBounds;
     const lon = (px / width) * (maxLon - minLon) + minLon;
@@ -285,6 +328,43 @@ function createZoomControls() {
         updateTransform();
     }));
 
+    wrapper.appendChild(controls);
+}
+
+function seasonFilterLabel(mode) {
+    return mode === 'all' ? 'All' : `S${mode}`;
+}
+
+function nextSeasonFilterMode(mode) {
+    if (mode === 'all') return 1;
+    if (mode >= maxSeasonNum) return 'all';
+    return mode + 1;
+}
+
+function getFilteredCoords() {
+    if (seasonFilterMode === 'all') return allCoords;
+    return allCoords.filter(({ name }) => {
+        const firstEntry = firstEntryByName.get(name);
+        return firstEntry != null && Number(firstEntry) <= seasonFilterMode;
+    });
+}
+
+function createSeasonToggle() {
+    const controls = document.createElement('div');
+    controls.className = 'season-toggle-controls';
+
+    const btn = document.createElement('button');
+    btn.className = 'controls-button season-toggle-button';
+    btn.title = 'Toggle which seasons\' teams are shown';
+    btn.textContent = seasonFilterLabel(seasonFilterMode);
+    btn.addEventListener('click', () => {
+        seasonFilterMode = nextSeasonFilterMode(seasonFilterMode);
+        btn.textContent = seasonFilterLabel(seasonFilterMode);
+        coords = getFilteredCoords();
+        placeDots();
+    });
+
+    controls.appendChild(btn);
     wrapper.appendChild(controls);
 }
 
@@ -546,15 +626,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     teamLocations = await getTeamlocations();
 
-    coords = teamLocations
+    allCoords = teamLocations
         .filter(t => t.coords)
         .map(t => ({
             coords: t.coords,
             color: t.team_color,
             name: t.team_name
         }));
+    coords = allCoords;
 
     placeDots();
+
+    try {
+        const [seasonNum] = await getSeasonInfo();
+        maxSeasonNum = parseInt(seasonNum) || 1;
+        const latestTeamData = await getTeamFirstEntries(maxSeasonNum);
+        latestTeamData.forEach(t => firstEntryByName.set(t.team_name, t.first_entry));
+        createSeasonToggle();
+    } catch (error) {
+        console.debug(`%cmaprender.js %c> %cFailed to load season data, season toggle unavailable: ${error.message}`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    }
 
     let resizeTimeout;
     window.addEventListener('resize', () => {
