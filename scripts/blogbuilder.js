@@ -15,11 +15,6 @@ const addImageButton = document.getElementById("add-image");
 const clearElementsList = document.getElementById("clear-elements-list");
 const resetDefaultElementsListButton = document.getElementById("reset-default-elements-list")
 
-window.addEventListener("beforeunload", (e) => {
-    e.preventDefault();
-    e.returnValue = "";
-});
-
 let friendlyTitles = {
     blogInfo: "Blog Information",
     h2: "Sub-Header",
@@ -33,7 +28,7 @@ let friendlyTitles = {
 }
 
 let blogElements = [];
-const images = {}; 
+const images = {};
 
 const defaultBlogElements = [
     {
@@ -138,7 +133,7 @@ const blogFormatHTML = `
 
     <!-- Scripts -->
     <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-    
+
     <script type="module" src="scripts/settings.js" defer></script>
 </head>
 <body id="top">
@@ -158,7 +153,7 @@ const blogFormatHTML = `
 function showBlogBuilder() {
     loadingArea.style.opacity = 0;
     editingArea.style.opacity = 1;
-    
+
     buildBlogButtons();
     let savedBlog = JSON.parse(localStorage.getItem("blogBuilderBackup"));
     if (!savedBlog) savedBlog = defaultBlogElements;
@@ -167,7 +162,7 @@ function showBlogBuilder() {
 
 function buildBlogButtons() {
     blogButtons.innerHTML = 'Add element:<br>' + Object.entries(friendlyTitles)
-        .filter(([type]) => type !== "blogInfo")    
+        .filter(([type]) => type !== "blogInfo")
         .map(([type, label]) => `
             <button class="add-element-btn" data-type="${type}">
                 ${label} (${type})
@@ -329,7 +324,7 @@ function buildBlog(data) {
                         <a href="pages/tools/blogbuilder/#">Back</a>
                         <h1>${element.title}</h1>
                         <div class="p-below-title">
-                            ${element.date} | 
+                            ${element.date} |
                             ${tagsHTML}
                             <div class="news-credits">${writersString}<br>${editorsString}</div>
                         </div>
@@ -401,7 +396,7 @@ function buildBlog(data) {
                 pageAreaHTML += `
                     <div class="iframe-wrapper element${elementCounter}outline">
                         <iframe class="youtube-embed" id="element${elementCounter}" src="https://www.youtube-nocookie.com/embed/${element.youtubeID}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
-                        Click the red border above edit the YouTube link
+                        Click the rainbow border above edit the YouTube link
                     </div>
                 `;
                 break;
@@ -490,7 +485,7 @@ function buildHTML(data) {
                 blogTitle = element.title;
                 blogDescription = "??????????"
                 blogDate = element.date;
-                
+
                 if (element.date && /^\d{2}\/\d{2}\/\d{4}$/.test(element.date)) {
                     const [day, month, year] = element.date.split('/');
                     blogDate = `${year}-${month}-${day}`;
@@ -502,13 +497,13 @@ function buildHTML(data) {
                     <a href="pages/news/">Back</a>
                     <h1>${element.title}</h1>
                     <div class="p-below-title">
-                        ${element.date} | 
+                        ${element.date} |
                         ${tagsHTML}
                         <div class="news-credits">${writersString}<br>${editorsString}</div>
                     </div>
                 `;
                 break;
-            
+
             case "h2":
                 blogHTML += `<h2>${element.content}</h2>`;
                 break;
@@ -667,12 +662,12 @@ function generateEditUIHTML(i) {
                 if (key === "type") {
                     return `
                         <code>${key}: ${element[key]}</code><br>
-                        ${element[key] == "img" && areImagesImported ? 
+                        ${element[key] == "img" && areImagesImported ?
                             `Choose an imported image:
                             <select id="import-image-dropdown" class="edit-ui-field" style="height: unset">
                                 <option value="">Choose an image!</option>
                                 ${Object.keys(images).map(name => `<option value="${name}">${name}</option>`).join("")}
-                            </select>` : 
+                            </select>` :
                             'Use the <code>Import Image</code> button to add images from your device'
                         }
                         <br>
@@ -717,7 +712,7 @@ function generateEditUIHTML(i) {
 
     document.getElementById("apply-edit-button").addEventListener("click", () => {
         const tagStrip = str => str.replace(/<[^>]*>/g, "");
-        
+
         keys.forEach((key, idx) => {
             if (key !== "type") {
                 const field = document.getElementById(`editAttribute${idx}`);

@@ -24,11 +24,13 @@
     width: 80%;
     max-width: 550px;
     padding: 10px;
-    background-color: var(--settings-box-color);
-    border-radius: 10px;
-    box-shadow: var(--settings-shadow);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
     border: 1px solid #ccccccaa;
     overflow-y: auto;
+    outline: none;
     animation: dialogPopIn 0.2s cubic-bezier(0.2, 0, 0.1, 1);
     will-change: transform;
 }

@@ -125,9 +125,39 @@ svg {
 }
 
 .iframe-wrapper iframe {
-    background-color: var(--accent-color);
     border: 1px solid var(--text-color);
     padding: 30px;
+    animation: iframeRainbow 4s linear infinite;
+}
+
+@keyframes iframeRainbow {
+    0% {
+        background-color: rgb(255, 0, 0);
+    }
+
+    16.6% {
+        background-color: rgb(255, 255, 0);
+    }
+
+    33.3% {
+        background-color: rgb(0, 255, 0);
+    }
+
+    50% {
+        background-color: rgb(0, 255, 255);
+    }
+
+    66.6% {
+        background-color: rgb(0, 0, 255);
+    }
+
+    83.3% {
+        background-color: rgb(255, 0, 255);
+    }
+
+    100% {
+        background-color: rgb(255, 0, 0);
+    }
 }
 
 .iframe-wrapper {
@@ -148,6 +178,10 @@ svg {
     color: #fff !important;
     background: var(--accent-color);
     outline: 1px solid #fff;
+}
+
+.youtube-embed {
+    width: unset;
 }
 
 @media screen and (max-width: 1199px) {
