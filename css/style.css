@@ -338,11 +338,37 @@ code {
     font-size: 14px;
     padding: 15px;
     line-height: 1.6;
-    background-color: rgba(15, 15, 15, 0.5);
+    background-color: #1e1e1e;
     outline: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 10px;
-    color: #fff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    color: #d4d4d4;
     overflow-x: auto;
+}
+
+.codeBox .tok-key {
+    color: #9cdcfe;
+}
+
+.codeBox .tok-string {
+    color: #ce9178;
+}
+
+.codeBox .tok-num {
+    color: #b5cea8;
+}
+
+.codeBox .tok-bool {
+    color: #569cd6;
+}
+
+.codeBox .tok-func {
+    color: #dcdcaa;
+}
+
+.codeBox .tok-comment {
+    color: #6a9955;
+    font-style: italic;
 }
 
 .codeBoxTight {

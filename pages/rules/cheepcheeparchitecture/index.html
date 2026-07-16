@@ -37,6 +37,7 @@
     <!-- Scripts -->
     <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();</script>
     <script type="module" src="scripts/settings.js" defer></script>
+    <script type="module" src="scripts/codehighlight.js" defer></script>
 </head>
 
 <body id="top">
@@ -44,17 +45,20 @@
 
     <main>
         <a href="pages/rules/">Back</a>
-        <h1>Cheep Cheep — Architecture & Code Guide</h1>
-        <p class="p-below-title">A technical, developer-facing guide to how the Cheep Cheep codebase is put
-            together: what each module is responsible for, and how the code calls into itself</p>
+        <h1>Cheep Cheep Architecture & Code Guide <span class="doc-version-badge" translate="no">v1.0</span></h1>
+        <p class="p-below-title">
+            A technical, developer-facing guide to how the Cheep Cheep codebase is put
+            together
+        </p>
         <hr class="hr-below-title">
 
         <p class="p-no-spacing">
-            This page is aimed at maintainers of the <mention translate="no">@Cheep Cheep</mention> Discord bot and
-            API codebase, not players. For a general, non-technical explanation of how Cheep Cheep works, see the
-            <a href="pages/rules/faq/#how-it-works">Discord/Cheep Cheep FAQ</a>; for the full slash-command list, see
-            the <a href="pages/rules/cheepcheepcommands/">Commands Documentation</a> page. This document is about the
-            code, not the product.
+            This page is aimed at developers. For a general, non-technical explanation of how Cheep Cheep works, see the
+            <a href="pages/rules/faq/#how-it-works">Discord/Cheep Cheep FAQ</a>.
+        </p>
+
+        <p>
+            For the full command list, see the <a href="pages/rules/cheepcheepcommands/">Commands Documentation</a> page.
         </p>
 
         <h3>Page Contents</h3>
@@ -64,145 +68,344 @@
             <li><a href="pages/rules/cheepcheeparchitecture/#layering-rules">3. Layering rules (how imports actually
                     flow)</a></li>
             <li><a href="pages/rules/cheepcheeparchitecture/#startup-sequence">4. Startup sequence
-                    (<code translate="no">main.py</code>)</a></li>
+                    - <code translate="no">main.py</code></a></li>
             <li><a href="pages/rules/cheepcheeparchitecture/#module-reference">5. Module reference</a></li>
             <li><a href="pages/rules/cheepcheeparchitecture/#cross-cog-import-map">6. Cross-cog import map</a></li>
             <li><a href="pages/rules/cheepcheeparchitecture/#data-storage">7. Data storage</a></li>
-            <li><a href="pages/rules/cheepcheeparchitecture/#tests">8. tests/</a></li>
+            <li><a href="pages/rules/cheepcheeparchitecture/#tests">8. Tests</a></li>
             <li><a href="pages/rules/cheepcheeparchitecture/#worked-example">9. Worked example:
                     <code translate="no">/create-match</code> end to end</a></li>
         </ul>
 
         <hr>
 
-        <h2 id="what-this-project-is"><a href="pages/rules/cheepcheeparchitecture/#what-this-project-is">1. What this
-                project is</a></h2>
-        <p class="p-no-spacing">Cheep Cheep is a single Python process that does two jobs at once:</p>
+        <h2 id="what-this-project-is"><a href="pages/rules/cheepcheeparchitecture/#what-this-project-is">1. What this project is</a></h2>
+
+        <p class="p-no-spacing">
+            Cheep Cheep is a single Python process that does two jobs at once:
+        </p>
+
         <ol>
-            <li>A <b>discord.py bot</b> (slash commands, buttons, modals) that runs the UMKL (University Mario Kart
-                League) Discord server — team management, match scheduling, results verification, leaderboards,
-                live-stream graphics, captcha verification, etc.</li>
-            <li>A <b>Flask + Waitress HTTP API</b> (<code translate="no">services/dbserver.py</code>), running in a
+            <li>
+                A <b>discord.py bot</b> (slash commands, buttons, modals) that runs in the UMKL Discord server,
+                providing team management, match scheduling, results verification, leaderboards,
+                live-stream graphics, captcha verification, etc.
+            </li>
+            <li>
+                A <b>Flask + Waitress HTTP API</b> (<code translate="no">services/dbserver.py</code>), running in a
                 background thread inside the same process, that serves match/team/season data to the
-                <code translate="no">umkl.co.uk</code> website.</li>
+                <code translate="no">umkl.co.uk</code> website.
+            </li>
         </ol>
+
         <p>
             Both halves read and write the same SQLite database and JSON files, via the same
-            <code translate="no">core/logic.py</code> module — there is no separate backend service.
+            <code translate="no">core/logic.py</code> module.
         </p>
 
         <hr>
 
-        <h2 id="directory-layout"><a href="pages/rules/cheepcheeparchitecture/#directory-layout">2. Directory
-                layout</a></h2>
-        <pre class="codeBox" translate="no">main.py                 Entry point: builds the bot, loads cogs, starts background threads
-config.py                All configuration constants, Discord IDs, file paths, .env loading
+        <h2 id="directory-layout"><a href="pages/rules/cheepcheeparchitecture/#directory-layout">2. Directory layout</a></h2>
+        <div class="file-tree" translate="no">
+            <div class="file-tree-row" data-depth="0">
+                <span class="file-tree-name">main.py</span>
+                <span class="file-tree-desc">Entry point - boots the bot, loads cogs, starts background threads</span>
+            </div>
+            <div class="file-tree-row" data-depth="0">
+                <span class="file-tree-name">config.py</span>
+                <span class="file-tree-desc">All configuration constants, Discord IDs, file paths, .env
+                    loading</span>
+            </div>
 
-core/                     Framework-agnostic "model" layer — no cogs import each other's
-  logic.py                internals through here except via this module
-  graphics.py             Image generation (Pillow) — results/versus/standings/overlay PNGs
-  captcha.py               Thin wrapper: generates captcha text + delegates image to graphics
+            <div class="file-tree-row" data-depth="0" data-dir>
+                <span class="file-tree-name">core/</span>
+                <span class="file-tree-desc">Framework-agnostic layer</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">logic.py</span>
+                <span class="file-tree-desc">The data layer - the only module that touches SQLite or JSON files
+                    directly (see <a href="pages/rules/cheepcheeparchitecture/#core-logic-py">§5.2</a>)</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">graphics.py</span>
+                <span class="file-tree-desc">Image generation (Pillow) - results/versus/standings/overlays/captcha images</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">generate_calendar.py</span>
+                <span class="file-tree-desc">Builds <code translate="no">data/matches.ics</code> from <code
+                        translate="no">matchdata.json</code> (see
+                    <a href="pages/rules/cheepcheeparchitecture/#core-generate-calendar-py">§5.4</a>)</span>
+            </div>
 
-bot/                      Discord-presentation helpers shared by every cog
-  embed.py                 Builds every discord.Embed the bot sends
-  pagination.py             Generic + season-aware paginated View for embeds
+            <div class="file-tree-row" data-depth="0" data-dir>
+                <span class="file-tree-name">bot/</span>
+                <span class="file-tree-desc">Discord-presentation helpers shared by every cog</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">embed.py</span>
+                <span class="file-tree-desc">Builds discord embeds that the bot can send</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">pagination.py</span>
+                <span class="file-tree-desc">Embed pagination helper</span>
+            </div>
 
-cogs/                     discord.py extensions, one per feature area (see §5)
-  core_cog.py, dev_cog.py, listeners_cog.py, live_score_cog.py, match_cog.py,
-  results_cog.py, season_cog.py, sql_cog.py, team_cog.py, user_profile_cog.py
+            <div class="file-tree-row" data-depth="0" data-dir>
+                <span class="file-tree-name">cogs/</span>
+                <span class="file-tree-desc">discord.py extensions, feature split across cogs (see
+                    <a href="pages/rules/cheepcheeparchitecture/#module-reference">§5</a>)</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">core_cog.py</span>
+                <span class="file-tree-desc">Bot lifecycle (<code translate="no">/restart</code>), tree sync, gated
+                    board/media account access commands</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">dev_cog.py</span>
+                <span class="file-tree-desc">Dev commands and tools</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">listeners_cog.py</span>
+                <span class="file-tree-desc">Member join (captcha flow) and scheduled DB
+                    backups</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">live_score_cog.py</span>
+                <span class="file-tree-desc">Admin commands to add/edit/clear the livescore data</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">match_cog.py</span>
+                <span class="file-tree-desc">Match creation/editing, the signup flow, room codes,
+                    substitutions</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">results_cog.py</span>
+                <span class="file-tree-desc">Score submission modal, verification/approve/reject/penalty
+                    system</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">season_cog.py</span>
+                <span class="file-tree-desc">Season, round and team pairings management</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">sql_cog.py</span>
+                <span class="file-tree-desc">Admin-only raw SQL execution against the DB</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">team_cog.py</span>
+                <span class="file-tree-desc">Team creation, colour/name changes, season entry, stream keys</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">user_profile_cog.py</span>
+                <span class="file-tree-desc">User and team profiles, leaderboards, data export, stream overlay and YouTube thumbnails fetching</span>
+            </div>
 
-services/                 Background services / integrations, started as daemon threads
-  backup.py, checkrss.py, data_export.py, dbserver.py, generate_calendar.py,
-  gitimport.py, predictionpolls.py
+            <div class="file-tree-row" data-depth="0" data-dir>
+                <span class="file-tree-name">services/</span>
+                <span class="file-tree-desc">Background services/integrations, started as daemon threads</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">backup.py</span>
+                <span class="file-tree-desc">Copies the DB + JSON files to <code
+                        translate="no">7z</code> files for scheduled/pre-mutation backups (see
+                    <a href="pages/rules/cheepcheeparchitecture/#services-backup-py">§5.8</a>)</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">checkrss.py</span>
+                <span class="file-tree-desc">Polls the news RSS feed and triggers new-post notifications (see
+                    <a href="pages/rules/cheepcheeparchitecture/#services-checkrss-py">§5.9</a>)</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">data_export.py</span>
+                <span class="file-tree-desc">Zips a user's personal data, used with <code
+                        translate="no">/export-my-data</code> (see
+                    <a href="pages/rules/cheepcheeparchitecture/#services-data-export-py">§5.13</a>)</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">dbserver.py</span>
+                <span class="file-tree-desc">The public API used on this site (<code
+                        translate="no">api.umkl.co.uk</code>) (see
+                    <a href="pages/rules/cheepcheeparchitecture/#services-dbserver-py">§5.12</a>)</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">gitimport.py</span>
+                <span class="file-tree-desc">Self-update mechanism initiated by <code translate="no">/restart</code>
+                    (see <a href="pages/rules/cheepcheeparchitecture/#services-gitimport-py">§5.11</a>)</span>
+            </div>
+            <div class="file-tree-row" data-depth="1">
+                <span class="file-tree-name">predictionpolls.py</span>
+                <span class="file-tree-desc">Match prediction polls system (currently unfinished)</span>
+            </div>
 
-data/                     Runtime state: SQLite DB + JSON "extra data" files (see §7)
-assets/                   Fonts, background images, team emblems used by core/graphics.py
-output/                   Generated images (results.png, versus.png, overlays, …)
-backups/                  Timestamped .7z archives written by services/backup.py
-tests/                    Mix of real unittest suites and ad-hoc manual scripts (see §8)</pre>
+            <div class="file-tree-row" data-depth="0" data-dir>
+                <span class="file-tree-name">data/</span>
+                <span class="file-tree-desc">Stored data: SQLite DB + JSON 'extra data' files (see
+                    <a href="pages/rules/cheepcheeparchitecture/#data-storage">§7</a>)</span>
+            </div>
+            <div class="file-tree-row" data-depth="0" data-dir>
+                <span class="file-tree-name">assets/</span>
+                <span class="file-tree-desc">Fonts, team emblems and various assets used by
+                    core/graphics.py</span>
+            </div>
+            <div class="file-tree-row" data-depth="0" data-dir>
+                <span class="file-tree-name">output/</span>
+                <span class="file-tree-desc">Where generated images (results.png, versus.png, overlays, …) go, temporary and overwritten often</span>
+            </div>
+            <div class="file-tree-row" data-depth="0" data-dir>
+                <span class="file-tree-name">backups/</span>
+                <span class="file-tree-desc">Timestamped .7z archives created by services/backup.py</span>
+            </div>
+            <div class="file-tree-row" data-depth="0" data-dir>
+                <span class="file-tree-name">tests/</span>
+                <span class="file-tree-desc">Mix of unittests and manual test scripts (see
+                    <a href="pages/rules/cheepcheeparchitecture/#tests">§8</a>)</span>
+            </div>
+        </div>
 
         <hr>
 
         <h2 id="layering-rules"><a href="pages/rules/cheepcheeparchitecture/#layering-rules">3. Layering rules (how
                 imports actually flow)</a></h2>
-        <pre class="codeBox" translate="no">                    ┌───────────┐
-                    │  main.py  │  loads cogs, starts services, owns the discord.Client
-                    └─────┬─────┘
-                          │ imports
-                          ▼
-     ┌───────────────────────────────────────────┐
-     │                  cogs/*                    │  one discord.py Cog per feature
-     │  (also import EACH OTHER — see §6)          │
-     └───────┬───────────────────────┬─────────────┘
-             │ imports                │ imports
-             ▼                        ▼
-        ┌─────────┐             ┌───────────┐
-        │  bot/*  │◄───────────►│  services/*│   (dbserver, backup, data_export, ...)
-        │(embed,  │  imports      └─────┬─────┘
-        │pagination)                    │ imports
-        └────┬────┘                     ▼
-             │ imports              ┌─────────┐
-             └─────────────────────►│  core/*  │  logic.py (DB/JSON), graphics.py (Pillow)
-                                     └────┬─────┘
-                                          │ imports
-                                          ▼
-                                     config.py</pre>
+        <ul class="import-tree" translate="no">
+            <li>
+                <div class="import-tree-row">
+                    <span class="import-tree-name">main.py</span>
+                    <span class="import-tree-desc">loads cogs, starts background services and owns discord.Client</span>
+                </div>
+                <ul>
+                    <li>
+                        <div class="import-tree-row">
+                            <span class="import-tree-name">cogs/*</span>
+                            <span class="import-tree-desc">cogs that contain relevant features (see
+                                <a href="pages/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a>)</span>
+                        </div>
+                        <ul>
+                            <li>
+                                <div class="import-tree-row">
+                                    <span class="import-tree-name">bot/*</span>
+                                    <span class="import-tree-desc">imports pagination.py → embed.py</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="import-tree-row">
+                                    <span class="import-tree-name">services/*</span>
+                                    <span class="import-tree-desc">calls the service synchronously (such as backup.py, data_export.py, gitimport.py)</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="import-tree-row">
+                                    <span class="import-tree-name">core/*</span>
+                                    <span class="import-tree-desc">logic.py (SQLite + JSON), graphics.py
+                                        (Pillow), generate_calendar.py (matches.ics)</span>
+                                </div>
+                                <ul>
+                                    <li>
+                                        <div class="import-tree-row">
+                                            <span class="import-tree-name">config.py</span>
+                                            <span class="import-tree-desc">imported by every module above, contains configuration data</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="import-tree-row">
+                            <span class="import-tree-name">services/*</span>
+                            <span class="import-tree-desc">dbserver.py, checkrss.py, predictionpolls.py,
+                                gitimport.py (started directly by main.py as daemons, not via a cog)</span>
+                        </div>
+                        <ul>
+                            <li>
+                                <div class="import-tree-row">
+                                    <span class="import-tree-name">dbserver.py</span>
+                                    <span class="import-tree-desc">the public Flask + Waitress HTTP API
+                                        (<code translate="no">api.umkl.co.uk</code>) that powers this website —
+                                        see <a href="pages/rules/cheepcheeparchitecture/#services-dbserver-py">§5.12</a></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="import-tree-row">
+                                    <span class="import-tree-name">core/*</span>
+                                    <span class="import-tree-desc">via dbserver.py — same core/* as above</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
 
-        <p class="p-no-spacing">
-            <code translate="no">core/logic.py</code> is the only module that touches SQLite or the JSON data files
-            directly. Every cog, every service, and <code translate="no">bot/embed.py</code> goes through it —
-            nothing else opens <code translate="no">data/umkl_db.db</code> on its own (except
-            <code translate="no">cogs/sql_cog.py</code>, the raw-SQL debug tool, and
-            <code translate="no">services/dbserver.py</code>, which intentionally keeps its own read-only connection
-            for the web API — see §5.11 and §6).
-        </p>
-
-        <blockquote class="info">
-            <b translate="no">Note</b><br>
-            One layering exception worth knowing about: <code translate="no">core/logic.py</code> imports
-            <code translate="no">services/generate_calendar.build_calendar</code> and calls it after every mutation
-            to <code translate="no">matchdata.json</code> (new match, edited match, renamed team, rescheduled
-            match). So the "core" layer reaches down into "services" for that one thing — it's how the public
-            <code translate="no">matches.ics</code> calendar feed stays in sync with the database.
-        </blockquote>
+        <ul>
+            <li>
+                <code translate="no">core/logic.py</code> is the only module that touches SQLite or the JSON data files
+                directly, nothing else writes to the database
+            </li>
+            <li>
+                <code translate="no">services/dbserver.py</code> keeps its own read-only connection to the database
+                for the web API (see <a href="pages/rules/cheepcheeparchitecture/#services-gitimport-py">§5.11</a> and
+                <a href="pages/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a>).
+            </li>
+        </ul>
 
         <hr>
 
         <h2 id="startup-sequence"><a href="pages/rules/cheepcheeparchitecture/#startup-sequence">4. Startup sequence
-                (<code translate="no">main.py</code>)</a></h2>
+                - <code translate="no">main.py</code></a></h2>
         <ol>
-            <li><code translate="no">config.py</code> loads <code translate="no">.env</code> via
+            <li>
+                <code translate="no">config.py</code> loads <code translate="no">.env</code> via
                 <code translate="no">python-dotenv</code> and exposes <code translate="no">TOKEN</code>,
-                <code translate="no">CHANNEL_IDS</code>, file paths, etc.</li>
-            <li><code translate="no">main.check_args()</code> — if <code translate="no">--gitclone</code> is
+                <code translate="no">CHANNEL_IDS</code>, file paths, etc...
+            </li>
+            <li>
+                <code translate="no">main.check_args()</code> - if <code translate="no">--gitclone</code> is
                 passed, calls <code translate="no">services.gitimport.start_git_clone()</code> to pull the latest
-                code from git before boot (used for the self-update/restart flow, see §5.11 and §6).</li>
-            <li><code translate="no">services.generate_calendar.build_calendar()</code> — regenerates
+                code from git before boot (used for the self-update/restart flow, see
+                <a href="pages/rules/cheepcheeparchitecture/#services-gitimport-py">§5.11</a> and
+                <a href="pages/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a>)
+            </li>
+            <li>
+                <code translate="no">core.generate_calendar.build_calendar()</code> - regenerates
                 <code translate="no">data/matches.ics</code> once at boot from
-                <code translate="no">data/matchdata.json</code>.</li>
-            <li><code translate="no">services.dbserver.start_db_server()</code> — spawns two daemon threads: the
+                <code translate="no">data/matchdata.json</code>
+            </li>
+            <li>
+                <code translate="no">services.dbserver.start_db_server()</code> - spawns two daemon threads: the
                 Waitress HTTP server (port 5555, proxied externally as <code translate="no">api.umkl.co.uk</code>)
-                and an avatar-refresh loop.</li>
-            <li>A daemon thread runs <code translate="no">services.checkrss.check_rss_loop</code>, calling back into
+                and an avatar-refresh loop used in said API
+                (see <a href="pages/rules/cheepcheeparchitecture/#services-dbserver-py">§5.12</a>)
+            </li>
+            <li>
+                A daemon thread runs <code translate="no">services.checkrss.check_rss_loop</code>, calling back into<br>
                 <code translate="no">main.on_rss_update</code> → posts new UMKL news links to the
-                <code translate="no">news-articles</code> channel.</li>
-            <li>A daemon thread runs <code translate="no">services.predictionpolls.polling_loop</code> — currently a
-                no-op stub (see §5.10).</li>
-            <li><code translate="no">bot.run(TOKEN)</code> starts the Discord client. In
-                <code translate="no">PersistentViewBot.setup_hook()</code>:
+                <code translate="no">news-articles</code> channel
+            </li>
+            <li>
+                A daemon thread runs <code translate="no">services.predictionpolls.polling_loop</code> - this file is
+                currently unfinished (see <a href="pages/rules/cheepcheeparchitecture/#services-predictionpolls-py">§5.10</a>)
+            </li>
+            <li>
+                <code translate="no">bot.run(TOKEN)</code> starts the Discord client.<br>
+                In <code translate="no">PersistentViewBot.setup_hook()</code>:<br>
                 <ul>
                     <li>Registers <code translate="no">cogs.match_cog.SignupButton</code> as a persistent dynamic
                         item (so signup buttons keep working after a restart, without needing the original message's
-                        view state).</li>
+                        view state)
+                    </li>
                     <li>Loads every cog listed in <code translate="no">main.py</code> (order matters for
-                        <code translate="no">dev_cog</code>, see §6).</li>
+                        <code translate="no">dev_cog</code>, see
+                        <a href="pages/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a>)
+                    </li>
                     <li>Registers <code translate="no">cogs.listeners_cog.CaptchaButton</code> as a persistent
-                        dynamic item.</li>
+                        dynamic item
+                    </li>
                     <li>Injects <code translate="no">update_signup_embed</code> (from
                         <code translate="no">match_cog</code>) and <code translate="no">PredictionPollView</code>
                         (from <code translate="no">listeners_cog</code>) onto the bot object, then loads
                         <code translate="no">dev_cog</code> last so it can read those two attributes in its
-                        constructor.</li>
+                        constructor
+                    </li>
                 </ul>
             </li>
         </ol>
@@ -212,83 +415,137 @@ tests/                    Mix of real unittest suites and ad-hoc manual scripts 
         <h2 id="module-reference"><a href="pages/rules/cheepcheeparchitecture/#module-reference">5. Module
                 reference</a></h2>
 
-        <h3>5.1 <code translate="no">config.py</code></h3>
+        <h3 id="config-py">5.1 <code translate="no">config.py</code></h3>
+        <p class="p-no-spacing">
+            Loads <code translate="no">.env</code> and defines every constant used elsewhere:
+        </p>
+        <ul>
+            <li>Discord token/IDs/map of channel IDs</li>
+            <li>File paths for the DB and all JSON data files</li>
+            <li>Graphics constants (fonts, caching flags)</li>
+            <li>The full MK8DX track name list</li>
+            <li>Captcha/backup tuning values</li>
+        </ul>
         <p>
-            Loads <code translate="no">.env</code> and defines every constant used elsewhere: Discord token/IDs/
-            channel map, file paths for the DB and all JSON data files, graphics constants (fonts, caching flags),
-            the full MK8DX track name list, and captcha/backup tuning values. Every other module imports from here
-            directly; it imports nothing from the rest of the project.
+            Every other module imports from here directly; it imports nothing from the rest of the project.
         </p>
 
-        <h3>5.2 <code translate="no">core/logic.py</code> (2,786 lines — the data layer)</h3>
+        <h3 id="core-logic-py">5.2 <code translate="no">core/logic.py</code> (the data layer)</h3>
         <p class="p-no-spacing">
-            The single point of contact with <code translate="no">data/umkl_db.db</code> (SQLite) and every JSON
-            data file. Organised into sections: current season/match lookup, registration, points/standings (with
-            both single-team and batched multi-team query variants — the batched versions exist specifically so
-            <code translate="no">services/dbserver.py</code>'s <code translate="no">/teamdata</code> endpoint and
-            <code translate="no">core/graphics.py</code>'s standings image don't do one query per team), match
-            lifecycle (create/edit/signup/substitute), SP (season-points-like currency) calculation, live score,
-            polls, captcha sessions, round pairings, profile-unlock items, and the personal data export query. Also
-            defines <code translate="no">TeamData</code> (a <code translate="no">namedtuple</code>) used as the
+            The point of contact with <code translate="no">data/umkl_db.db</code> (SQLite) and every JSON
+            data file. Organised into sections:
+        </p>
+        <ul>
+            <li>Current season/match lookup</li>
+            <li>Registration</li>
+            <li>Points/standings (with both single-team and batched multi-team query variants - batched versions
+                exist for speed and optimisation purposes)</li>
+            <li>Match lifecycle (create/edit/signup/substitute)</li>
+            <li>SP calculation</li>
+            <li>Livescore data</li>
+            <li>Prediction polls</li>
+            <li>Captcha sessions</li>
+            <li>Round pairings</li>
+            <li>Profile-unlock items</li>
+            <li>The personal data export query</li>
+        </ul>
+        <p>
+            Also defines <code translate="no">TeamData</code> (a <code translate="no">namedtuple</code>) used as the
             return type of <code translate="no">get_team_data()</code> throughout the codebase.
         </p>
         <p>
-            Imports <code translate="no">services.generate_calendar.build_calendar</code> (called after any
-            <code translate="no">matchdata.json</code> write) and <code translate="no">config</code> only — no cog
-            or service imports.
+            It only imports <code translate="no">config</code> and
+            <code translate="no">.generate_calendar.build_calendar</code> (which is called after any
+            <code translate="no">matchdata.json</code> write - see
+            <a href="pages/rules/cheepcheeparchitecture/#core-generate-calendar-py">§5.4</a>).
         </p>
 
-        <h3>5.3 <code translate="no">core/graphics.py</code> (1,612 lines)</h3>
+        <h3 id="core-graphics-py">5.3 <code translate="no">core/graphics.py</code></h3>
+        <p class="p-no-spacing">
+            Pillow-based image generation for:
+        </p>
+        <ul>
+            <li>Team standings</li>
+            <li>Versus graphics</li>
+            <li>Results images</li>
+            <li>Winner images</li>
+            <li>Welcome images</li>
+            <li>Stream overlays</li>
+            <li>Room-code images</li>
+            <li>Captcha images</li>
+            <li>YouTube thumbnails</li>
+            <li>Round-schedule images</li>
+        </ul>
         <p>
-            All Pillow-based image generation: team standings, versus graphics, results images, winner images,
-            welcome images, stream overlays, room-code images, captcha images, YouTube thumbnails, and
-            round-schedule images. Maintains in-memory <code translate="no">FONT_CACHE</code>,
-            <code translate="no">IMAGE_CACHE</code>, and <code translate="no">URL_CACHE</code> dicts (toggle via
-            <code translate="no">config.CACHING_ENABLED</code>) so repeated renders don't reload fonts/backgrounds/
-            team emblems from disk every time. Calls into <code translate="no">core.logic</code> for all the data it
+            Maintains in-memory <code translate="no">FONT_CACHE</code>,
+            <code translate="no">IMAGE_CACHE</code>, and <code translate="no">URL_CACHE</code> dicts (toggled via
+            <code translate="no">config.CACHING_ENABLED</code>) so repeated renders don't reload fonts/backgrounds/team
+            emblems from the disk every time. Calls into <code translate="no">core.logic</code> for all the data it
             renders (team names/colours, match results, standings).
             <code translate="no">apply_team_gradient_overlay()</code> recolours the stream-overlay background
             per-team by hue distance matching, used for <code translate="no">/generate-stream-overlay</code>.
         </p>
-
-        <h3>5.4 <code translate="no">core/captcha.py</code></h3>
         <p>
-            17-line wrapper: <code translate="no">generate_captcha_text()</code> picks random characters, and
-            <code translate="no">generate_captcha_image(text)</code> just delegates to
-            <code translate="no">core.graphics.create_captcha_image</code>. Used exclusively by
-            <code translate="no">cogs/listeners_cog.py</code>.
+            The captcha text/image pipeline (<code translate="no">generate_captcha_text()</code>,
+            <code translate="no">create_captcha_image()</code>) also lives here.
+            <code translate="no">cogs/listeners_cog.py</code> initiates the captcha flow (challenging members on join).
         </p>
 
-        <h3>5.5 <code translate="no">bot/embed.py</code> (1,580 lines)</h3>
-        <p>
-            Builds every <code translate="no">discord.Embed</code> sent by the bot, grouped by feature (teams,
-            profile, matches, live score, leaderboards, polls, rules, logs/passwords, captcha). Reads whatever data
-            it needs straight from <code translate="no">core.logic</code> (it is <i>not</i> passed pre-fetched data
-            by the cogs — each <code translate="no">display_*</code> function does its own lookups). Leaderboard
-            functions return <code translate="no">(embed, total_pages)</code> tuples designed to be fed straight
-            into <code translate="no">bot.pagination.Pagination</code>. Imports
-            <code translate="no">Pagination</code> from <code translate="no">.pagination</code> for
-            <code translate="no">display_wrong_interaction_user()</code>'s file attachment — meaning
-            <code translate="no">bot/embed.py</code> and <code translate="no">bot/pagination.py</code> import from
-            each other (embed → pagination for the class, pagination → embed for that one error embed).
-        </p>
+        <h3 id="core-generate-calendar-py">5.4 <code translate="no">core/generate_calendar.py</code></h3>
+        <ul>
+            <li>Reads <code translate="no">data/matchdata.json</code> and writes
+                <code translate="no">data/matches.ics</code> (an RFC 5545 calendar, via the
+                <code translate="no">icalendar</code> package, localised to Europe/London)</li>
+            <li><code translate="no">build_calendar()</code> is called once at boot by
+                <code translate="no">main.py</code> (<code translate="no">from core.generate_calendar import
+                    build_calendar</code>), and again by <code translate="no">core.logic</code> every time match
+                data changes
+                <code translate="no">services/</code> (see
+                <a href="pages/rules/cheepcheeparchitecture/#layering-rules">§3</a>)</li>
+            <li><code translate="no">services/dbserver.py</code> imports its
+                <code translate="no">OUTPUT_PATH</code> constant to serve the
+                <code translate="no">/matches.ics</code> route</li>
+        </ul>
 
-        <h3>5.6 <code translate="no">bot/pagination.py</code></h3>
-        <p>
-            Two Views: <code translate="no">Pagination</code> (generic Back/Next paginator wrapping any
-            <code translate="no">get_page(index)</code> async callable) and
-            <code translate="no">SeasonEmbedPagination</code> (adds a season <code translate="no">Select</code>
-            dropdown on top, used by every season-scoped leaderboard). Used by
-            <code translate="no">cogs/user_profile_cog.py</code>'s <code translate="no">/leaderboards</code>
-            command.
-        </p>
+        <h3 id="bot-embed-py">5.5 <code translate="no">bot/embed.py</code></h3>
+        <ul>
+            <li>
+                Builds every <code translate="no">discord.Embed</code> sent by the bot, grouped by feature (teams,
+                profile, matches, live score, leaderboards, polls, rules, logs/passwords, captcha)
+            </li>
+            <li>
+                Reads whatever data it needs from <code translate="no">core.logic</code>
+            </li>
+            <li>
+                Leaderboard functions return <code translate="no">(embed, total_pages)</code> tuples, with
+                <code translate="no">total_pages</code> worked out via
+                <code translate="no">logic.compute_total_pages(...)</code>
+            </li>
+        </ul>
 
-        <h3>5.7 <code translate="no">cogs/</code> — one discord.py extension per feature</h3>
+        <h3 id="bot-pagination-py">5.6 <code translate="no">bot/pagination.py</code></h3>
+        <ul>
+            <li>Two Views: <code translate="no">Pagination</code> (a paginator wrapping any
+                <code translate="no">get_page(index)</code> async callable) and
+                <code translate="no">SeasonEmbedPagination</code> (adds a season <code translate="no">Select</code>
+                dropdown on top, used by every season-scoped leaderboard)
+            </li>
+            <li>
+                Used by <code translate="no">cogs/user_profile_cog.py</code>'s
+                <code translate="no">/leaderboards</code> command
+            </li>
+            <li>
+                Keeps a normal, module-level <code translate="no">from . import embed</code> to use
+                <code translate="no">embed.display_wrong_interaction_user()</code>
+            </li>
+        </ul>
+
+        <h3 id="cogs-overview">5.7 <code translate="no">cogs/</code></h3>
         <p>
-            All ten cogs are loaded by <code translate="no">main.py</code>. See §6 for exactly which functions/
-            classes each cog imports from another cog — <code translate="no">cogs/match_cog.py</code> in particular
-            acts as a shared library of autocomplete providers and helpers for several other cogs, despite being
-            structured as an ordinary Cog itself.
+            All ten cogs are loaded by <code translate="no">main.py</code>. See
+            <a href="pages/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a> for exactly which functions/classes
+            each cog imports from another cog - <code translate="no">cogs/match_cog.py</code> in particular
+            acts as a shared library of autocomplete providers and helpers for several other cogs.
         </p>
 
         <div class="tag-clan-table after-title">
@@ -305,23 +562,22 @@ tests/                    Mix of real unittest suites and ad-hoc manual scripts 
                 </tr>
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">dev_cog.py</code></td>
-                    <td>Legacy <code translate="no">!</code>-prefix admin/dev tools for exercising
-                        <code translate="no">core.graphics</code>/<code translate="no">core.logic</code> directly,
-                        plus two slash commands</td>
+                    <td>Dev tools for exercising
+                        <code translate="no">core.graphics</code>/<code translate="no">core.logic</code> directly
+                    </td>
                 </tr>
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">listeners_cog.py</code></td>
-                    <td>Member join/leave (captcha flow), per-message SP awards, disconnect-keyword detection,
+                    <td>Member join/leave (captcha flow), SP distribution, disconnect-keyword detection,
                         scheduled DB backups (<code translate="no">@tasks.loop</code>)</td>
                 </tr>
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">live_score_cog.py</code></td>
-                    <td>Admin commands to add/edit/clear the live per-race score graphic data</td>
+                    <td>Commands to add/edit/clear the live per-race livescore graphic data</td>
                 </tr>
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">match_cog.py</code></td>
-                    <td>Match creation/editing, the signup flow (button + modal), room codes, substitutions — the
-                        largest cog, and a dependency of five others</td>
+                    <td>Match creation/editing, the signup flow (button + modal), room codes, substitutions</td>
                 </tr>
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">results_cog.py</code></td>
@@ -329,12 +585,11 @@ tests/                    Mix of real unittest suites and ad-hoc manual scripts 
                 </tr>
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">season_cog.py</code></td>
-                    <td><code translate="no">/start-season</code>, <code translate="no">/start-next-round</code>,
-                        <code translate="no">/add-next-round-pairings</code></td>
+                    <td>Season, round and team pairings management</td>
                 </tr>
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">sql_cog.py</code></td>
-                    <td>Admin-only raw SQL execution against the DB — bypasses
+                    <td>Admin-only raw SQL execution against the DB - bypasses
                         <code translate="no">core.logic</code> entirely</td>
                 </tr>
                 <tr>
@@ -344,85 +599,100 @@ tests/                    Mix of real unittest suites and ad-hoc manual scripts 
                 </tr>
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">user_profile_cog.py</code></td>
-                    <td><code translate="no">/user-profile</code>, <code translate="no">/team-profile</code>,
-                        <code translate="no">/leaderboards</code>, data export, stream overlay & YouTube thumbnail
-                        generation</td>
+                    <td>User and team profiles, leaderboards, data export, stream overlay and YouTube thumbnails fetching</td>
                 </tr>
             </table>
         </div>
 
-        <h3>5.8 <code translate="no">services/backup.py</code></h3>
-        <p>
-            <code translate="no">backup_database()</code> copies the DB plus every JSON data file into a temp dir,
-            then shells out to the external <code translate="no">7z</code> binary to produce
-            <code translate="no">backups/YYYY/MM/DD/{timestamp}_backup.7z</code>. Not a background loop — it's
-            called synchronously, on demand, from <code translate="no">listeners_cog.py</code>'s scheduled task
-            (every <code translate="no">config.BACKUP_INTERVAL</code> minutes, within
-            <code translate="no">config.BACKUP_START_HOUR</code>–<code translate="no">BACKUP_END_HOUR</code>) and
-            from several cogs right before any operation that mutates match/team/season state
-            (<code translate="no">match_cog</code>, <code translate="no">results_cog</code>,
-            <code translate="no">season_cog</code>, <code translate="no">team_cog</code>).
-        </p>
+        <h3 id="services-backup-py">5.8 <code translate="no">services/backup.py</code></h3>
+        <ul>
+            <li>
+                <code translate="no">backup_database()</code> copies the DB plus every JSON data file into a temp
+                dir, then shells out to the external <code translate="no">7z</code> binary to produce
+                <code translate="no">backups/YYYY/MM/DD/{timestamp}_backup.7z</code>
+            </li>
+            <li>
+                Not a background loop - it's called synchronously, on demand
+            </li>
+            <li>
+                From <code translate="no">listeners_cog.py</code>'s scheduled task (every
+                <code translate="no">config.BACKUP_INTERVAL</code> minutes, within
+                <code translate="no">config.BACKUP_START_HOUR</code>–<code translate="no">config.BACKUP_END_HOUR</code>)
+            </li>
+        </ul>
 
-        <h3>5.9 <code translate="no">services/checkrss.py</code></h3>
-        <p>
-            Polls <code translate="no">https://umkl.co.uk/news.xml</code> every 60s (using ETag caching to skip
-            unchanged fetches), diffs new <code translate="no">&lt;item&gt;</code> links against
-            <code translate="no">data/seenrsslinks.json</code>, and invokes a callback with any new items. Started
-            as a daemon thread from <code translate="no">main.py</code>; the callback
-            (<code translate="no">main.on_rss_update</code>) posts each new link to the
-            <code translate="no">news-articles</code> channel.
-        </p>
+        <h3 id="services-checkrss-py">5.9 <code translate="no">services/checkrss.py</code></h3>
+        <ul>
+            <li>
+                Polls <code translate="no">https://umkl.co.uk/news.xml</code> every 60s (using ETag caching to
+                skip unchanged fetches)
+            </li>
+            <li>
+                Diffs new <code translate="no">&lt;item&gt;</code> links against
+                <code translate="no">data/seenrsslinks.json</code>, and invokes a callback with any new items
+            </li>
+            <li>
+                Started as a daemon thread from <code translate="no">main.py</code> - the callback
+                (<code translate="no">main.on_rss_update</code>) posts each new link to the
+                <code translate="no">news-articles</code> channel
+            </li>
+        </ul>
 
-        <h3>5.10 <code translate="no">services/predictionpolls.py</code></h3>
-        <p>
-            A stub. <code translate="no">polling_loop()</code> is just <code translate="no">pass</code> — it
-            returns immediately, so the daemon thread <code translate="no">main.py</code> starts for it exits right
-            away and currently does nothing. The actual poll posting/voting UI
-            (<code translate="no">PredictionPollView</code>) lives in
-            <code translate="no">cogs/listeners_cog.py</code> and is triggered manually today (via
-            <code translate="no">dev_cog.py</code>'s <code translate="no">test_poll</code>), not by this service.
-        </p>
+        <h3 id="services-predictionpolls-py">5.10 <code translate="no">services/predictionpolls.py</code></h3>
+        <ul>
+            <li>
+                A currently unfinished match prediction polling system
+            </li>
+        </ul>
 
-        <h3>5.11 <code translate="no">services/gitimport.py</code></h3>
-        <p>
-            Self-update mechanism: <code translate="no">start_git_clone()</code> clones
-            <code translate="no">config.GITHUB_LINK</code> into a temp folder and recursively moves the files over
-            the project root; <code translate="no">restart_bot()</code> runs that then calls
-            <code translate="no">sys.exit(1)</code>. This only does something useful in combination with
-            <code translate="no">tests/supervisor.py</code> (see §8), which relaunches
-            <code translate="no">main.py</code> whenever it exits — that's what
-            <code translate="no">/restart</code> (in <code translate="no">core_cog.py</code>) actually relies on to
-            pick up new code.
-        </p>
+        <h3 id="services-gitimport-py">5.11 <code translate="no">services/gitimport.py</code></h3>
+        <ul>
+            <li>
+                Self-update mechanism: <code translate="no">start_git_clone()</code> clones
+                <code translate="no">config.GITHUB_LINK</code> into a temp folder and recursively moves the files
+                over the project root
+            </li>
+            <li>
+                <code translate="no">restart_bot()</code> runs that then calls
+                <code translate="no">sys.exit(1)</code>
+            </li>
+            <li>
+                In production the bot runs on Linux, so that relauncher is <b>systemd</b> - the unit file runs
+                with <code translate="no">Restart=always</code>, so when
+                <code translate="no">sys.exit(1)</code> kills the process, systemd just starts it again, now
+                running the freshly git-pulled code. <code translate="no">tests/supervisor.py</code> (see
+                <a href="pages/rules/cheepcheeparchitecture/#tests">§8</a>) only exists to stand in for systemd
+                on Windows, where there's no (easy) service manager to do this
+            </li>
+        </ul>
 
-        <h3>5.12 <code translate="no">services/generate_calendar.py</code></h3>
-        <p>
-            Reads <code translate="no">data/matchdata.json</code> and writes
-            <code translate="no">data/matches.ics</code> (an RFC 5545 calendar, via the
-            <code translate="no">icalendar</code> package, localised to Europe/London).
-            <code translate="no">build_calendar()</code> is called once at boot by
-            <code translate="no">main.py</code> and again by <code translate="no">core.logic</code> every time
-            match data changes — see the layering note in §3.
-        </p>
+        <h3 id="services-dbserver-py">5.12 <code translate="no">services/dbserver.py</code></h3>
+        <ul>
+            <li>
+                The public web API - runs its own Flask app under Waitress on port 5555 (proxied externally as
+                <code translate="no">api.umkl.co.uk</code>), started as a daemon thread by
+                <code translate="no">start_db_server()</code> (called from <code translate="no">main.py</code>)
+            </li>
+            <li>
+                Uses its own <code translate="no">get_db_connection()</code> context manager (separate from
+                <code translate="no">core.logic.get_connection()</code>, though pointed at the same
+                <code translate="no">data/umkl_db.db</code> file) for a couple of routes
+            </li>
+            <li>
+                Delegates almost all actual data assembly to batched <code translate="no">core.logic</code>
+                functions (<code translate="no">get_teams_season_points</code>,
+                <code translate="no">get_teams_wins_losses_season</code>,
+                <code translate="no">get_teams_championships_data</code>, etc.) so a single
+                <code translate="no">/teamdata</code> request doesn't run one query per team
+            </li>
+            <li>
+                Also runs its own avatar-refresh daemon thread (<code translate="no">_avatar_refresh_loop</code>)
+                that re-caches Discord avatars for the <a href="pages/credits">Credits page</a> every 24 hours
+            </li>
+        </ul>
 
-        <h3>5.13 <code translate="no">services/dbserver.py</code></h3>
         <p class="p-no-spacing">
-            The public web API. Runs its own Flask app under Waitress on port 5555 (proxied externally as
-            <code translate="no">api.umkl.co.uk</code>), started as a daemon thread by
-            <code translate="no">start_db_server()</code> (called once from <code translate="no">main.py</code>).
-            Uses its own <code translate="no">get_db_connection()</code> context manager (separate from
-            <code translate="no">core.logic.get_connection()</code>, though pointed at the same
-            <code translate="no">data/umkl_db.db</code> file) for a couple of routes, but delegates almost all
-            actual data assembly to batched <code translate="no">core.logic</code> functions
-            (<code translate="no">get_teams_season_points</code>, <code translate="no">get_teams_wins_losses_season</code>,
-            <code translate="no">get_teams_championships_data</code>, etc.) so a single
-            <code translate="no">/teamdata</code> request doesn't run one query per team. Also runs its own
-            avatar-refresh daemon thread (<code translate="no">_avatar_refresh_loop</code>) that re-caches Discord
-            avatars for a hardcoded credits list every 24h.
-        </p>
-        <p class="p-no-spacing">
-            Routes (full request/response shapes are documented in the bot repo's <code translate="no">README.md</code>):
+            The available routes:
         </p>
 
         <div class="tag-clan-table after-title">
@@ -457,14 +727,15 @@ tests/                    Mix of real unittest suites and ad-hoc manual scripts 
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">/matchdata</code></td>
                     <td>POST</td>
-                    <td><code translate="no">logic.get_matchdata()</code> enriched with live-computed
-                        results/penalties for pending matches</td>
+                    <td><code translate="no">logic.get_matchdata()</code> enriched with computed
+                        results/penalties for matches</td>
                 </tr>
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">/matches.ics</code></td>
                     <td>GET</td>
                     <td>Serves the file written by
-                        <code translate="no">services.generate_calendar.build_calendar()</code></td>
+                        <code translate="no">core.generate_calendar.build_calendar()</code>, from the path in
+                        <code translate="no">core.generate_calendar.OUTPUT_PATH</code></td>
                 </tr>
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">/live</code></td>
@@ -479,12 +750,171 @@ tests/                    Mix of real unittest suites and ad-hoc manual scripts 
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">/teamemblems/&lt;name&gt;</code></td>
                     <td>GET</td>
-                    <td>Serves team emblem assets (falls back to <code translate="no">DEFAULT</code>)</td>
+                    <td>Serves team emblem assets (falls back to <code translate="no">DEFAULT</code> if no team emblem is available)</td>
                 </tr>
             </table>
         </div>
 
-        <h3>5.14 <code translate="no">services/data_export.py</code></h3>
+        <p>
+            All of the <code translate="no">POST</code> routes above accept a JSON body and return JSON. You can
+            make a request like this:
+        </p>
+        <pre class="codeBox" translate="no">return fetch('https://api.umkl.co.uk/teamdata', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        team: "York",
+        season: 2
+    })
+})</pre>
+
+        <h4 id="route-teamdata" translate="no">POST /teamdata</h4>
+        <p class="p-no-spacing">
+            Returns data about all teams in a specific season, or a specific team if a requested team is in the
+            payload. If there isn't a season parameter in the payload, data from the latest season is returned.
+        </p>
+        <p class="p-no-spacing"><b>Example payload:</b></p>
+        <pre class="codeBox" translate="no">{
+  "team": "York",         // Team name - (string) optional
+  "season": 2             // Season (int) - optional
+}</pre>
+        <p class="p-no-spacing"><b>Example response:</b></p>
+        <pre class="codeBox" translate="no">[
+  {
+    "career_wins_losses": [3, 0],
+    "coords": [53.96, -1.08],
+    "first_entry": 1,
+    "place_id": 1826149980,
+    "season_matches_played": 0,
+    "season_penalties": 0,
+    "season_position": 1,
+    "season_wins_losses": [0, 0],
+    "team_career_points": 1781,
+    "team_championships": 1,
+    "team_color": "#1BAA8B",
+    "team_full_name": "University of York",
+    "team_id": 1,
+    "team_name": "York",
+    "team_place": "York, England",
+    "team_season_points": 0
+  },
+  ...
+]</pre>
+
+        <h4 id="route-seasoninfo" translate="no">POST /seasoninfo</h4>
+        <p class="p-no-spacing">
+            Returns data about a season, specifically the status of a season (concluded, recently completed,
+            upcoming or ongoing). If no season is specified in the payload, data about the latest season is
+            returned.
+        </p>
+        <p class="p-no-spacing"><b>Example payload:</b></p>
+        <pre class="codeBox" translate="no">{
+  "season": 2        // Season (int) - optional
+}</pre>
+        <p class="p-no-spacing"><b>Example response:</b></p>
+        <pre class="codeBox" translate="no">[
+  2,
+  "Upcoming"
+]</pre>
+
+        <h4 id="route-teamcolors" translate="no">POST /teamcolors</h4>
+        <p class="p-no-spacing">
+            Returns a list of team colours used in a specified season. If no season is specified in the payload,
+            team colours from the latest season are returned.
+        </p>
+        <p class="p-no-spacing"><b>Example payload:</b></p>
+        <pre class="codeBox" translate="no">{
+  "season": 2        // Season (int) - optional
+}</pre>
+        <p class="p-no-spacing"><b>Example response:</b></p>
+        <pre class="codeBox" translate="no">[
+  [
+    { "team_color": "#1BAA8B", "team_name": "York" },
+    { "team_color": "#A11212", "team_name": "Staffs" },
+    { "team_color": "#287AC8", "team_name": "Edinburgh" },
+    { "team_color": "#61B6CB", "team_name": "Keele" },
+    { "team_color": "#FDD017", "team_name": "Birmingham" },
+    { "team_color": "#616161", "team_name": "Bristol Bob-Ombs" },
+    { "team_color": "#BD4AFF", "team_name": "Glasgow" },
+    { "team_color": "#002147", "team_name": "Oxford" },
+    { "team_color": "#3C1053", "team_name": "Warwick" }
+  ]
+]</pre>
+
+        <h4 id="route-teamlocations" translate="no">POST /teamlocations</h4>
+        <p class="p-no-spacing">
+            Returns locations of all teams in the database.
+        </p>
+        <p class="p-no-spacing"><b>Example payload:</b> none</p>
+        <p class="p-no-spacing"><b>Example response:</b></p>
+        <pre class="codeBox" translate="no">[
+    {
+        "coords": [53.96, -1.08],
+        "team_color": "#1BAA8B",
+        "team_name": "York"
+    },
+    {
+        "coords": [53.0, -2.1833],
+        "team_color": "#A11212",
+        "team_name": "Staffs"
+    },
+    {
+        "coords": [55.9533, -3.1892],
+        "team_color": "#287AC8",
+        "team_name": "Edinburgh"
+    },
+    ...
+]</pre>
+
+        <h4 id="route-matchdata" translate="no">POST /matchdata</h4>
+        <p class="p-no-spacing">
+            Returns match data, being a list of dates, containing matches that will happen on those days.
+        </p>
+        <p class="p-no-spacing"><b>Example payload:</b> none</p>
+        <p class="p-no-spacing"><b>Example response:</b></p>
+        <pre class="codeBox" translate="no">{
+    "2025-04-16": [
+        {
+            "title": "York VS Staffs",
+            "time": "18:00",
+            "description": "A 6v6 test match...",
+            "teamsInvolved": ["York", "Staffs"]
+        }
+    ],
+    "2025-04-21": [
+        {
+            "title": "Staffs VS Birmingham",
+            "time": "18:00",
+            "description": "A 6v6 test match...",
+            "teamsInvolved": ["Staffs", "Birmingham"]
+        }
+    ],
+    ...
+}</pre>
+
+        <h4 id="route-live" translate="no">POST /live</h4>
+        <p class="p-no-spacing">
+            Returns the live match data.
+        </p>
+        <p class="p-no-spacing"><b>Example payload:</b> none</p>
+        <p class="p-no-spacing"><b>Example response:</b></p>
+        <pre class="codeBox" translate="no">[
+    {
+        "1": [2, 3, 6, 8, 10, 12],
+        "2": [1, 4, 5, 7, 9, 11],
+        "track": "GBA Ribbon Road"
+    },
+    {
+        "1": [2, 4, 6, 7, 8, 10],
+        "2": [1, 3, 5, 9, 11, 12],
+        "track": "3DS Piranha Plant Pipeway"
+    },
+    ...
+]</pre>
+
+        <h3 id="services-data-export-py">5.13 <code translate="no">services/data_export.py</code></h3>
         <p>
             <code translate="no">create_user_data_export(user_id, dest_dir)</code> calls
             <code translate="no">core.logic.get_user_data_export</code> (match results, SP, poll votes) and zips it
@@ -499,9 +929,8 @@ tests/                    Mix of real unittest suites and ad-hoc manual scripts 
                 import map</a></h2>
         <p class="p-no-spacing">
             Most cogs only import <code translate="no">config</code>, <code translate="no">bot.embed</code>,
-            <code translate="no">core.logic</code>, <code translate="no">core.graphics</code>, and
-            <code translate="no">services.*</code> — a clean one-way dependency into the shared layers. The
-            exceptions, where cogs import from <b>each other</b>, are:
+            <code translate="no">core.logic</code>, <code translate="no">core.graphics</code>, though some cogs
+            import from <code translate="no">cogs.match_cog</code>.
         </p>
 
         <div class="tag-clan-table after-title">
@@ -515,7 +944,7 @@ tests/                    Mix of real unittest suites and ad-hoc manual scripts 
                     <td class="table-key" translate="no"><code translate="no">main.py</code></td>
                     <td><code translate="no">SignupButton</code>, <code translate="no">update_signup_embed</code>
                     </td>
-                    <td>Registers the button as a global persistent dynamic item; injects the embed-refresh
+                    <td>Registers the button as a global persistent dynamic item, injects the embed-refresh
                         function onto the bot for <code translate="no">dev_cog</code></td>
                 </tr>
                 <tr>
@@ -523,7 +952,7 @@ tests/                    Mix of real unittest suites and ad-hoc manual scripts 
                     <td><code translate="no">live_score_autocomplete</code>,
                         <code translate="no">live_score_edit_autocomplete</code>,
                         <code translate="no">track_name_autocomplete</code></td>
-                    <td>Parameter autocomplete for its three live-score commands</td>
+                    <td>Parameter autocomplete for its three livescore commands</td>
                 </tr>
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">cogs/results_cog.py</code></td>
@@ -533,7 +962,7 @@ tests/                    Mix of real unittest suites and ad-hoc manual scripts 
                         <code translate="no">team_open_match_autocomplete</code>,
                         <code translate="no">update_signup_embed</code></td>
                     <td><code translate="no">get_match_lock</code> guards the Approve button against
-                        double-approval races; the rest are autocompletes; <code translate="no">update_signup_embed</code>
+                        double-approval races, the rest are autocompletes, <code translate="no">update_signup_embed</code>
                         refreshes the roster embed after results affect a match</td>
                 </tr>
                 <tr>
@@ -551,49 +980,176 @@ tests/                    Mix of real unittest suites and ad-hoc manual scripts 
             </table>
         </div>
 
-        <p class="p-no-spacing">
+        <p>
             <code translate="no">cogs/dev_cog.py</code> doesn't import from
-            <code translate="no">match_cog</code>/<code translate="no">listeners_cog</code> directly — instead
+            <code translate="no">match_cog</code>/<code translate="no">listeners_cog</code> - instead
             <code translate="no">main.py</code> passes <code translate="no">update_signup_embed</code> and
             <code translate="no">PredictionPollView</code> into its constructor, which is why
             <code translate="no">dev_cog</code> must be <code translate="no">load_extension</code>'d
             <i>last</i> in <code translate="no">main.py</code>'s <code translate="no">setup_hook</code> (both
             symbols need to already exist on the bot object).
         </p>
+
         <p>
-            This makes <code translate="no">cogs/match_cog.py</code> the de facto shared library for match-related
-            autocompletion and locking, despite being structured as an ordinary Cog like the rest.
+            This makes <code translate="no">cogs/match_cog.py</code> a shared library for match-related
+            autocompletion and locking function.
         </p>
 
         <hr>
 
         <h2 id="data-storage"><a href="pages/rules/cheepcheeparchitecture/#data-storage">7. Data storage</a></h2>
 
-        <h3>SQLite (<code translate="no">data/umkl_db.db</code>)</h3>
-        <pre class="codeBox" translate="no">season(season_id)
-season_entry(season_entry_id, season_id → season, team_id → team)
-team(team_id, team_name, team_full_name, team_color, team_markdown, place_id → uk_places, enabled)
-uk_places(place_id, place_name, place_ascii, latitude, longitude, country, admin_name)
-game(game_id, game_name, console_name, console_code, game_year)
-tournament(tournament_id, season_id → season, tournament_date, game_id → game,
-           start_time, event_id, test_match)
-tournament_entry(tournament_entry_id, tournament_id → tournament, team_id → team,
-                  signup_message_id)
-tournament_result(tournament_entry_id → tournament_entry, user_id → user, points, approved)
-penalty(tournament_entry_id → tournament_entry [PK], penalty_amount)
-user(user_id)</pre>
-        <p>
-            A "match" is a <code translate="no">tournament</code> row; each competing team gets a
-            <code translate="no">tournament_entry</code>; each signed-up player gets a
-            <code translate="no">tournament_result</code> row (initially <code translate="no">points = NULL</code>,
-            <code translate="no">approved = 0</code>) that's filled in by
-            <code translate="no">/add-match-results</code> and flipped to <code translate="no">approved = 1</code>
-            once a board member approves the results embed. Points shown anywhere are always "team total minus that
-            team's <code translate="no">penalty</code> row for that entry" — see the various
-            <code translate="no">get_teams_*_points*</code> functions in <code translate="no">core/logic.py</code>.
+        <h3>SQLite - <code translate="no">data/umkl_db.db</code></h3>
+        <p class="p-no-spacing schema-legend" translate="no">
+            <span class="schema-pk-badge">PK</span> primary key &nbsp;·&nbsp;
+            <span class="schema-fk">→ table</span> foreign key, references that table's primary key &nbsp;·&nbsp;
+            <span class="schema-type">integer</span> the column's declared SQLite type
         </p>
+        <div class="schema-grid" translate="no">
+            <div class="schema-table">
+                <span class="schema-table-name">season</span>
+                <div class="schema-column">
+                    <span>season_id<span class="schema-pk-badge">PK</span><span class="schema-type">integer</span></span>
+                </div>
+            </div>
 
-        <h3>JSON files (<code translate="no">data/</code>)</h3>
+            <div class="schema-table">
+                <span class="schema-table-name">season_entry</span>
+                <div class="schema-column">
+                    <span>season_entry_id<span class="schema-pk-badge">PK</span><span class="schema-type">integer</span></span>
+                </div>
+                <div class="schema-column"><span>season_id<span class="schema-type">integer</span></span><span
+                        class="schema-fk">→ season</span></div>
+                <div class="schema-column"><span>team_id<span class="schema-type">integer</span></span><span
+                        class="schema-fk">→ team</span></div>
+            </div>
+
+            <div class="schema-table">
+                <span class="schema-table-name">team</span>
+                <div class="schema-column">
+                    <span>team_id<span class="schema-pk-badge">PK</span><span class="schema-type">integer</span></span>
+                </div>
+                <div class="schema-column"><span>team_name<span class="schema-type">text</span></span></div>
+                <div class="schema-column"><span>team_full_name<span class="schema-type">text</span></span></div>
+                <div class="schema-column"><span>team_color<span class="schema-type">text</span></span></div>
+                <div class="schema-column"><span>team_markdown<span class="schema-type">text</span></span></div>
+                <div class="schema-column"><span>place_id<span class="schema-type">integer</span></span><span
+                        class="schema-fk">→ uk_places</span></div>
+                <div class="schema-column"><span>enabled<span class="schema-type">bool</span></span></div>
+            </div>
+
+            <div class="schema-table">
+                <span class="schema-table-name">uk_places</span>
+                <div class="schema-column">
+                    <span>place_id<span class="schema-pk-badge">PK</span><span class="schema-type">integer</span></span>
+                </div>
+                <div class="schema-column"><span>place_name<span class="schema-type">text</span></span></div>
+                <div class="schema-column"><span>place_ascii<span class="schema-type">text</span></span></div>
+                <div class="schema-column"><span>latitude<span class="schema-type">real</span></span></div>
+                <div class="schema-column"><span>longitude<span class="schema-type">real</span></span></div>
+                <div class="schema-column"><span>country<span class="schema-type">text</span></span></div>
+                <div class="schema-column"><span>admin_name<span class="schema-type">text</span></span></div>
+            </div>
+
+            <div class="schema-table">
+                <span class="schema-table-name">game</span>
+                <div class="schema-column">
+                    <span>game_id<span class="schema-pk-badge">PK</span><span class="schema-type">integer</span></span>
+                </div>
+                <div class="schema-column"><span>game_name<span class="schema-type">text</span></span></div>
+                <div class="schema-column"><span>console_name<span class="schema-type">text</span></span></div>
+                <div class="schema-column"><span>console_code<span class="schema-type">text</span></span></div>
+                <div class="schema-column"><span>game_year<span class="schema-type">integer</span></span></div>
+            </div>
+
+            <div class="schema-table">
+                <span class="schema-table-name">tournament</span>
+                <div class="schema-column">
+                    <span>tournament_id<span class="schema-pk-badge">PK</span><span class="schema-type">integer</span></span>
+                </div>
+                <div class="schema-column"><span>season_id<span class="schema-type">integer</span></span><span
+                        class="schema-fk">→ season</span></div>
+                <div class="schema-column"><span>tournament_date<span class="schema-type">text</span></span></div>
+                <div class="schema-column"><span>game_id<span class="schema-type">integer</span></span><span
+                        class="schema-fk">→ game</span></div>
+                <div class="schema-column"><span>start_time<span class="schema-type">text</span></span></div>
+                <div class="schema-column"><span>event_id<span class="schema-type">text</span></span></div>
+                <div class="schema-column"><span>test_match<span class="schema-type">bool</span></span></div>
+            </div>
+
+            <div class="schema-table">
+                <span class="schema-table-name">tournament_entry</span>
+                <div class="schema-column">
+                    <span>tournament_entry_id<span class="schema-pk-badge">PK</span><span
+                            class="schema-type">integer</span></span>
+                </div>
+                <div class="schema-column"><span>tournament_id<span class="schema-type">integer</span></span><span
+                        class="schema-fk">→ tournament</span></div>
+                <div class="schema-column"><span>team_id<span class="schema-type">integer</span></span><span
+                        class="schema-fk">→ team</span></div>
+                <div class="schema-column"><span>signup_message_id</span></div>
+            </div>
+
+            <div class="schema-table">
+                <span class="schema-table-name">tournament_result</span>
+                <div class="schema-column"><span>tournament_entry_id<span
+                            class="schema-type">integer</span></span><span class="schema-fk">→
+                        tournament_entry</span></div>
+                <div class="schema-column"><span>user_id<span class="schema-type">integer</span></span><span
+                        class="schema-fk">→ user</span></div>
+                <div class="schema-column"><span>points<span class="schema-type">integer</span></span></div>
+                <div class="schema-column"><span>approved<span class="schema-type">integer</span></span></div>
+            </div>
+
+            <div class="schema-table">
+                <span class="schema-table-name">penalty</span>
+                <div class="schema-column">
+                    <span>tournament_entry_id<span class="schema-pk-badge">PK</span><span
+                            class="schema-type">integer</span></span>
+                    <span class="schema-fk">→ tournament_entry</span>
+                </div>
+                <div class="schema-column"><span>penalty_amount<span class="schema-type">integer</span></span></div>
+            </div>
+
+            <div class="schema-table">
+                <span class="schema-table-name">user</span>
+                <div class="schema-column">
+                    <span>user_id<span class="schema-pk-badge">PK</span><span class="schema-type">integer</span></span>
+                </div>
+            </div>
+        </div>
+
+        <p class="p-no-spacing">
+            A "match" is a <code translate="no">tournament</code> row, each competing team gets a
+            <code translate="no">tournament_entry</code> row, and each signed-up player gets a
+            <code translate="no">tournament_result</code> row:
+        </p>
+        <ul>
+            <li>
+                Initially <code translate="no">points = NULL</code> and <code translate="no">approved = 0</code>
+            </li>
+            <li>
+                Filled in by <code translate="no">/add-match-results</code> and flipped to
+                <code translate="no">approved = 1</code> once a board member approves the results embed
+            </li>
+            <li>
+                <code translate="no">tournament_result</code> has no primary key of its own, so a player's row
+                is only ever looked up by the <code translate="no">tournament_entry_id</code>/<code
+                    translate="no">user_id</code> pair
+            </li>
+            <li>
+                A team can incur at most one <code translate="no">penalty</code> row per entry:
+                <code translate="no">penalty.tournament_entry_id</code> is both the primary key and the foreign
+                key back to <code translate="no">tournament_entry</code>, so the relationship is strictly 1:1
+            </li>
+            <li>
+                Points shown are always "team total minus the team's <code translate="no">penalty</code>
+                row for that entry" - see the various <code translate="no">get_teams_*_points*</code> functions
+                in <code translate="no">core/logic.py</code>
+            </li>
+        </ul>
+
+        <h3>JSON files - <code translate="no">data/</code></h3>
         <div class="tag-clan-table after-title">
             <table>
                 <tr>
@@ -644,12 +1200,12 @@ user(user_id)</pre>
                     <td><code translate="no">CAPTCHA_DATA</code></td>
                     <td><code translate="no">core.logic</code> (<code translate="no">set_captcha_session</code>,
                         <code translate="no">clear_captcha_session</code>)</td>
-                    <td>In-progress captcha challenges per user</td>
+                    <td>Captcha challenges for new users</td>
                 </tr>
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">allowedgameids.json</code></td>
                     <td><code translate="no">ALLOWED_GAME_IDS</code></td>
-                    <td><code translate="no">core.logic.save_allowed_game_ids</code></td>
+                    <td><code translate="no">core.logic.<br>save_allowed_game_ids</code></td>
                     <td>Which <code translate="no">game_id</code>s <code translate="no">/create-match</code> may
                         use</td>
                 </tr>
@@ -662,13 +1218,13 @@ user(user_id)</pre>
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">seenrsslinks.json</code></td>
                     <td>hardcoded in <code translate="no">checkrss.py</code></td>
-                    <td><code translate="no">services.checkrss.save_seen_links</code></td>
+                    <td><code translate="no">services.checkrss.<br>save_seen_links</code></td>
                     <td>Dedup set for the RSS poller</td>
                 </tr>
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">matches.ics</code></td>
                     <td><code translate="no">CALENDAR_OUTPUT_PATH</code></td>
-                    <td><code translate="no">services.generate_calendar.build_calendar</code></td>
+                    <td><code translate="no">core.generate_calendar<br>.build_calendar</code></td>
                     <td>Generated calendar feed, served at <code translate="no">/matches.ics</code></td>
                 </tr>
                 <tr>
@@ -682,34 +1238,31 @@ user(user_id)</pre>
 
         <hr>
 
-        <h2 id="tests"><a href="pages/rules/cheepcheeparchitecture/#tests">8. <code translate="no">tests/</code></a>
+        <h2 id="tests"><a href="pages/rules/cheepcheeparchitecture/#tests">8. Tests</a>
         </h2>
         <p class="p-no-spacing">
-            Not a uniform pytest suite — a mix of real tests and manual scripts:
+            A mix of unittests tests and manual testing scripts:
         </p>
         <ul>
-            <li><b><code translate="no">test_graphics.py</code></b> — a real
+            <li>
+                <b><code translate="no">test_graphics.py</code></b> - a real
                 <code translate="no">unittest.IsolatedAsyncioTestCase</code> suite. Generates every
                 <code translate="no">core.graphics</code> image type and pixel-diffs it (via Pillow + numpy, 0.99
                 similarity threshold) against a checked-in reference image in
-                <code translate="no">tests/output/</code>.</li>
-            <li><b><code translate="no">test_dbserver.py</code></b> (830 lines) — not pytest-discoverable; a
+                <code translate="no">tests/output/</code>
+            </li>
+            <li>
+                <b><code translate="no">test_dbserver.py</code></b> - a
                 standalone benchmarking script that reimplements most of <code translate="no">core.logic</code>'s
                 team/season query functions locally, each wrapped in
                 <code translate="no">time.perf_counter()</code> timing, to profile the SQL behind
-                <code translate="no">/teamdata</code>.</li>
-            <li><b><code translate="no">test_requests.py</code></b> — manual smoke-test script that fires real HTTP
+                <code translate="no">/teamdata</code>
+            </li>
+            <li>
+                <b><code translate="no">test_requests.py</code></b> - manual smoke-test script that fires real HTTP
                 requests at <code translate="no">https://api.umkl.co.uk</code> (every
-                <code translate="no">dbserver.py</code> route) and prints status/timing/JSON.</li>
-            <li><b><code translate="no">test.py</code></b> — a scratch script calling a couple of
-                <code translate="no">core.logic</code> functions directly.</li>
-            <li><b><code translate="no">supervisor.py</code></b> — not a test at all: a process supervisor that
-                loops forever, running <code translate="no">main.py</code> as a subprocess and immediately
-                relaunching it on exit (a systemd-restart-on-exit stand-in for Windows). This is what makes
-                <code translate="no">/restart</code> (<code translate="no">core_cog.py</code> →
-                <code translate="no">services.gitimport.restart_bot()</code> →
-                <code translate="no">sys.exit(1)</code>) actually useful — the exit is caught and the freshly-
-                git-pulled code gets relaunched.</li>
+                <code translate="no">dbserver.py</code> route) and prints status/timing/JSON
+            </li>
         </ul>
 
         <hr>
@@ -717,7 +1270,7 @@ user(user_id)</pre>
         <h2 id="worked-example"><a href="pages/rules/cheepcheeparchitecture/#worked-example">9. Worked example:
                 <code translate="no">/create-match</code> end to end</a></h2>
         <p class="p-no-spacing">
-            To make the module interactions concrete, here's the call path for one command,
+            Here's the call path for one command:
             <code translate="no">cogs/match_cog.py</code>'s <code translate="no">/create-match</code>:
         </p>
         <ol>
@@ -726,34 +1279,38 @@ user(user_id)</pre>
                 <code translate="no">get_teams_in_season</code>, <code translate="no">is_team_in_season</code>).
             </li>
             <li><code translate="no">bot.embed.display_match_creation_progress_update</code> renders a "Creating
-                match..." progress embed (shown multiple times as steps complete).</li>
+                match..." progress embed (updated multiple times as steps complete).</li>
             <li><code translate="no">core.logic.create_match</code> inserts the <code translate="no">tournament</code>
-                row; <code translate="no">create_new_match_entry</code> is called once per team to insert
+                row and <code translate="no">create_new_match_entry</code> is called once per team to insert
                 <code translate="no">tournament_entry</code> rows.</li>
             <li><code translate="no">core.graphics.create_event_versus_image</code> renders
                 <code translate="no">output/versus.png</code> from the two teams' data (fetched again via
                 <code translate="no">core.logic.get_team_data</code>).</li>
-            <li>A Discord Scheduled Event is created directly via the discord.py API; its ID is stored back with
+            <li>A Discord Scheduled Event is created directly via the discord.py API - its ID is stored back with
                 <code translate="no">core.logic.add_event_id_to_match</code>.</li>
             <li><code translate="no">core.logic.add_to_matchdata</code> appends the extended match info to
                 <code translate="no">data/matchdata.json</code>, which internally calls
-                <code translate="no">services.generate_calendar.build_calendar()</code> to keep
+                <code translate="no">core.generate_calendar.build_calendar()</code> to keep
                 <code translate="no">matches.ics</code> in sync.</li>
-            <li><code translate="no">bot.embed.display_team_signup</code> builds the sign-up embed (versus image
-                attached); <code translate="no">match_cog.SignupButton</code> (a persistent
+            <li><code translate="no">bot.embed.display_team_signup</code> builds the sign-up embed (with the
+                versus image attached), <code translate="no">match_cog.SignupButton</code> (a persistent
                 <code translate="no">discord.ui.DynamicItem</code>) is attached as the view and posted to each
                 team's announcements channel plus the schedule channel.</li>
             <li><code translate="no">services.backup.backup_database()</code> is called before all of the above,
                 since match creation mutates both the DB and JSON state.</li>
         </ol>
-        <p>
+        <p class="p-no-spacing">
             Every other multi-step flow in the bot (results verification in
             <code translate="no">results_cog.py</code>, team creation in <code translate="no">team_cog.py</code>,
-            season rollover in <code translate="no">season_cog.py</code>) follows the same shape: validate via
-            <code translate="no">core.logic</code> → mutate via <code translate="no">core.logic</code> → render via
-            <code translate="no">core.graphics</code> → present via <code translate="no">bot.embed</code> → back up
-            via <code translate="no">services.backup</code>.
+            season rollover in <code translate="no">season_cog.py</code>) follows the same shape:
         </p>
+        <ul>
+            <li>Validate via <code translate="no">core.logic</code></li>
+            <li>Mutate via <code translate="no">core.logic</code></li>
+            <li>Render via <code translate="no">core.graphics</code></li>
+            <li>Present via <code translate="no">bot.embed</code></li>
+            <li>Back up via <code translate="no">services.backup</code></li>
+        </ul>
     </main>
 
     <umkl-footer></umkl-footer>
