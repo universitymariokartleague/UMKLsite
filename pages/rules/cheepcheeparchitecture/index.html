@@ -1311,6 +1311,90 @@
             <li>Present via <code translate="no">bot.embed</code></li>
             <li>Back up via <code translate="no">services.backup</code></li>
         </ul>
+
+        <p class="p-no-spacing">
+            The generic shape, as a pipeline:
+        </p>
+        <div class="pipeline" translate="no">
+            <div class="pipeline-step">validate</div>
+            <span class="pipeline-arrow">→</span>
+            <div class="pipeline-step">mutate</div>
+            <span class="pipeline-arrow">→</span>
+            <div class="pipeline-step">render</div>
+            <span class="pipeline-arrow">→</span>
+            <div class="pipeline-step">present</div>
+            <span class="pipeline-arrow">→</span>
+            <div class="pipeline-step">back up</div>
+        </div>
+
+        <p class="p-no-spacing">
+            And the actual <code translate="no">/create-match</code> call path, in the order things really
+            execute (note <code translate="no">backup_database()</code> fires first, even though it's called out
+            last in the list above):
+        </p>
+        <div class="flow-steps" translate="no">
+            <div class="flow-step">
+                <div class="flow-step-num">1</div>
+                <div class="flow-step-body">
+                    <span class="flow-step-title">services.backup.backup_database()</span>
+                    <span class="flow-step-desc">back up the DB + JSON files before anything is mutated</span>
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-num">2</div>
+                <div class="flow-step-body">
+                    <span class="flow-step-title">match_cog</span>
+                    <span class="flow-step-desc">validate date/time and season membership via
+                        <code translate="no">core.logic</code></span>
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-num">3</div>
+                <div class="flow-step-body">
+                    <span class="flow-step-title">bot.embed.display_match_creation_progress_update</span>
+                    <span class="flow-step-desc">"Creating match..." progress embed</span>
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-num">4</div>
+                <div class="flow-step-body">
+                    <span class="flow-step-title">core.logic.create_match</span>
+                    <span class="flow-step-desc">insert the <code translate="no">tournament</code> +
+                        <code translate="no">tournament_entry</code> rows</span>
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-num">5</div>
+                <div class="flow-step-body">
+                    <span class="flow-step-title">core.graphics.create_event_versus_image</span>
+                    <span class="flow-step-desc">render <code translate="no">output/versus.png</code></span>
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-num">6</div>
+                <div class="flow-step-body">
+                    <span class="flow-step-title">discord.py API</span>
+                    <span class="flow-step-desc">create the Scheduled Event, store its ID via
+                        <code translate="no">core.logic.add_event_id_to_match</code></span>
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-num">7</div>
+                <div class="flow-step-body">
+                    <span class="flow-step-title">core.logic.add_to_matchdata</span>
+                    <span class="flow-step-desc">append to <code translate="no">matchdata.json</code>, which
+                        calls <code translate="no">core.generate_calendar.build_calendar()</code></span>
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-num">8</div>
+                <div class="flow-step-body">
+                    <span class="flow-step-title">bot.embed.display_team_signup</span>
+                    <span class="flow-step-desc">post the sign-up embed + <code
+                            translate="no">SignupButton</code> to both teams' channels</span>
+                </div>
+            </div>
+        </div>
     </main>
 
     <umkl-footer></umkl-footer>
