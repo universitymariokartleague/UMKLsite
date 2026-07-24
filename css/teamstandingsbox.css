@@ -56,30 +56,30 @@
 }
 
 .teamStanding picture {
-    height: 80px;
-    width: 80px;
+    height: 4vw;
+    width: 4vw;
     margin-left: auto;
 }
 
 .teamStandingsBox .teamLogo {
-    height: 80px;
-    width: 80px;
+    height: 100%;
+    width: 100%;
     opacity: 0;
     transition: opacity 0.2s ease-in;
 }
 
 .teamStandingsBox .teamName {
-    font-size: 42px;
+    font-size: 30px;
 }
 
-.teamStandingsBox .teamPointsArea {
+/* .teamStandingsBox .teamPointsArea {
     margin-left: auto;
     margin-right: 10px;
     text-align: right;
     line-height: 1;
-}
+} */
 
-.teamStandingsBox .teamPointsArea .teamPoints {
+/* .teamStandingsBox .teamPointsArea .teamPoints {
     font-size: 35px;
 }
 
@@ -87,7 +87,7 @@
 .teamStandings {
     font-size: 14.5px;
     font-weight: 600;
-}
+} */
 
 /* .teamStandingsBox .teamStanding.champion-standing .teamPosition {
     background: linear-gradient(135deg, #b8860b, #ffd700, #b8860b);
@@ -318,8 +318,8 @@
     transition: opacity 0.2s ease-in;
 }
 
-/* @media screen and (max-width: 767px) {
-    .current-season-area {
+@media screen and (max-width: 867px) {
+    /* .current-season-area {
         display: unset;
     }
 
@@ -329,59 +329,50 @@
 
     #listViewButton {
         margin-left: unset;
-    }
+    } */
 
     .teamStandingsBox {
-        padding: 10px;
-        gap: clamp(0.25rem, 1.5vw, 5em);
+        grid-template-columns: 1fr;
     }
 
-    .teamStandingsBox .teamStanding {
-        gap: clamp(0.25rem, 1.0vw, 5em);
-        padding: 5px;
-        border-radius: 5px;
-        height: clamp(0.75rem, 7.5vw, 5em);
-    }
-
-    .teamStandingsBox .teamPosition {
+    /* .teamStandingsBox .teamPosition {
         border-radius: 2.5px;
         font-size: clamp(0.5rem, 5.25vw, 5em);
         height: clamp(1rem, 7.5vw, 5em);
         width: clamp(1rem, 7.5vw, 5em);
-    }
+    } */
 
-    .teamStandingsBox .teamColour {
+    /* .teamStandingsBox .teamColour {
         margin-left: 0;
         width: clamp(0.25rem, 1.875vw, 5em);
         height: clamp(1rem, 7.5vw, 5em);
-    }
+    } */
 
     .teamStandingsBox .teamLogo,
     .teamStanding picture {
-        margin-left: 0;
-        height: clamp(0.25rem, 7.5vw, 5em);
-        width: clamp(0.25rem, 7.5vw, 5em);
+        margin-left: auto;
+        height: 10vw;
+        width: 10vw;
     }
 
     .teamStandingsBox .teamName {
-        margin-left: 0;
-        font-size: clamp(0.25rem, 6.075vw, 5em);
+        font-size: clamp(1rem, 1.5rem, 5rem);
     }
 
-    .teamStandingsBox .teamPointsArea {
+    /* .teamStandingsBox .teamPointsArea {
         margin-right: 5px;
         line-height: 0.8;
-    }
+    } */
 
-    .teamStandingsBox .teamPointsArea .teamPoints {
+    /* .teamStandingsBox .teamPointsArea .teamPoints {
         font-size: clamp(0.5rem, 6vw, 5em);
-    }
+    } */
 
-    .teamStandingsBox .teamPointsArea .teamStandings {
+    /* .teamStandingsBox .teamPointsArea .teamStandings {
         font-size: clamp(0.25rem, 3.0vw, 5em);
-    }
+    } */
 
-    .teamBoxContainer {
+    /* .teamBoxContainer {
         grid-template-columns: 1fr;
-    }
-} */
+    } */
+}
