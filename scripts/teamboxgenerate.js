@@ -54,6 +54,41 @@ const fetchTeamData = async (season) => {
 
 const makePossessive = name => !name ? "" : (name.endsWith("s") || name.endsWith("S") ? `${name}'` : `${name}'s`);
 
+const darkenColor = (color, percent = 20) => {
+  if (!/^#?[0-9A-Fa-f]{6}$/.test(color)) return color;
+
+  const num = parseInt(color.replace('#', ''), 16);
+  let [r, g, b] = [(num >> 16) & 255, (num >> 8) & 255, num & 255].map(v => v / 255);
+
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  const d = max - min;
+  let l = (max + min) / 2;
+  const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
+
+  l = Math.max(0, l * (1 - percent / 100));
+
+  const f = (n) => {
+    const k = (n + (d === 0 ? 0 : (max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4)) * 2) % 12;
+    const a = s * Math.min(l, 1 - l);
+    return Math.round(255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))));
+  };
+
+  return `#${((1 << 24) + (f(0) << 16) + (f(8) << 8) + f(4)).toString(16).slice(1)}`;
+};
+
+const isLightColor = (color) => {
+    if (!color) return false;
+    const hex = color.trim().replace(/^#/, '');
+    if (!/^[0-9A-Fa-f]{6}$/.test(hex)) return false;
+    const num = parseInt(hex, 16);
+    const r = (num >> 16) & 0xFF;
+    const g = (num >> 8) & 0xFF;
+    const b = num & 0xFF;
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    return brightness > 172;
+    };
+    
+
 const showError = (message) => {
     JSTeamBoxLoading.innerHTML = `<blockquote class="fail">${message}</blockquote>`;
 };
@@ -192,27 +227,23 @@ async function generateTeamBoxes(data) {
         const dest = `pages/teams/details/?team=${name}`;
 
         const row = document.createElement('div');
-        row.className = "teamStanding" + (team.championship_seasons?.includes(currentSeason) ? " champion-standing" : "");
+        row.className = "teamStanding";
         row.setAttribute('tabindex', '0');
+        if (team.team_color) row.style.backgroundImage = `linear-gradient(90deg, ${darkenColor(team.team_color)} 0%, ${team.team_color} 100%)`;
+        row.style.color = team.team_color ? (isLightColor(team.team_color) ? 'black' : 'white') : '';
         row.addEventListener('click', () => window.location.href = dest);
         row.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') window.location.href = dest;
         });
 
         row.innerHTML = `
-            <div translate="no" class="teamPosition">${positionMap.get(team) ?? team.season_position}</div>
-            <div class="teamColour" style="background-color:${team.team_color}"></div>
+            <div translate="no" class="teamName" title="${team.team_full_name}">${name}</div>
             <picture>
                 <source srcset="${avif}" type="image/avif">
                 <img class="teamLogo" src="${png}" alt="${makePossessive(name)} team emblem"
                 ${imgAttr} loading="lazy"
                 onload="this.style.opacity=1;">
             </picture>
-            <div translate="no" class="teamName" title="${team.team_full_name}">${name}</div>
-            <div translate="no" class="teamPointsArea">
-                <div class="teamPoints">${team.team_season_points}</div>
-                <div class="teamStandings">${team.season_wins_losses[0]} - ${team.season_wins_losses[1]} (${team.season_matches_played})</div>
-            </div>
         `;
         fragment.appendChild(row);
     }

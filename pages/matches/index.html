@@ -52,18 +52,21 @@
                 page<br></blockquote>
         </noscript>
 
+        <div class="header-wrapper">
         <h1>Matches</h1>
         <p class="p-below-title">
             View upcoming and scheduled matches.
             Please take a look at the <a href="pages/rules/match">match rules</a> before playing!<br>
         </p>
+        <div>
         <button style="margin-top: 5px;" id="listViewButton"><span class="fa-solid fa-bars"></span> Show Match
             List</button>
         <button style="margin-top: 5px;" onclick="location.href='pages/matches/stats'"><span
                 class="fa-solid fa-trophy"></span> View Match Stats</button>
         <button style="margin-top: 5px;" onclick="location.href='webcal://api.umkl.co.uk/matches.ics'"><span
                 class="fa-solid fa-calendar"></span> Import Calendar (.ics)</button>
-        <hr class="hr-below-title">
+        </div>
+        </div>
 
         <div id="calendarError"></div>
 

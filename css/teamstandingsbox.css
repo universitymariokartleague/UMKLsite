@@ -1,34 +1,15 @@
-:root,
-:root.light-theme {
-    --standings-bg-color: #fff;
-    --standings-box-bg-color: #fff;
-    --standings-text-color: #111111;
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --standings-bg-color: #111111;
-        --standings-box-bg-color: #111111;
-        --standings-text-color: #fff;
-    }
-}
-
-:root.dark-theme {
-    --standings-bg-color: #111111;
-    --standings-box-bg-color: #111111;
-    --standings-text-color: #fff;
-}
 
 .teamStandingsBox {
     font-weight: bold;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 15px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: minmax(50px, auto);
+    gap: 20px;
 
-    color: var(--standings-text-color);
-    background-color: var(--standings-bg-color);
-    border: 1px solid #ccccccaa;
+/* 
+    color: var(--standings-text-color); */
+    /* background-color: var(--standings-bg-color); */
+    /* border: var(--box-border); */
     min-height: 100px;
     border-radius: 10px;
 
@@ -36,68 +17,58 @@
 }
 
 .teamStandingsBox .teamStanding {
+    /* color: var(--brand-light); */
     display: flex;
-    gap: 7px;
-    padding: 10px;
+    gap: 20px;
+    padding: 20px 30px;
     cursor: pointer;
-    border: 1px solid #ccccccaa;
-    background-color: var(--standings-box-bg-color);
-    height: 50px;
+    height: 100px;
     align-items: center;
     border-radius: 10px;
     transition: background-color 0.2s ease, outline 0.2s ease, color 0.2s ease;
 }
 
 .teamStandingsBox .teamStanding:hover {
-    color: #fff;
-    background-color: var(--accent-color) !important;
-}
-
-.teamStandingsBox .teamStanding:active {
-    transform: scale(0.95);
-    transition: transform 0.1s;
+    text-decoration: underline;
 }
 
 .teamStandingsBox .teamPosition {
     display: flex;
-    color: #fff;
-    background-color: var(--accent-color);
+    background-color: var(--brand-light);
     border-radius: 5px;
     align-items: center;
     justify-content: center;
     font-size: 35px;
-    height: 50px;
-    width: 50px;
+    height: 100px;
+    width: 100px;
 }
-
+/* 
 .teamStandingsBox .teamStanding:hover .teamPosition {
-    background-color: #fff;
     color: var(--accent-color);
     transition: 0.2s;
-}
+} */
 
 .teamStandingsBox .teamColour {
     border-radius: 5px;
     margin-left: 2px;
     width: 12px;
-    height: 50px;
+    height: 100px;
 }
 
 .teamStanding picture {
-    height: 50px;
-    width: 50px;
+    height: 80px;
+    width: 80px;
+    margin-left: auto;
 }
 
 .teamStandingsBox .teamLogo {
-    margin-left: 5px;
-    height: 50px;
-    width: 50px;
+    height: 80px;
+    width: 80px;
     opacity: 0;
     transition: opacity 0.2s ease-in;
 }
 
 .teamStandingsBox .teamName {
-    margin-left: 12px;
     font-size: 42px;
 }
 
@@ -118,14 +89,14 @@
     font-weight: 600;
 }
 
-.teamStandingsBox .teamStanding.champion-standing .teamPosition {
+/* .teamStandingsBox .teamStanding.champion-standing .teamPosition {
     background: linear-gradient(135deg, #b8860b, #ffd700, #b8860b);
     background-size: 200% 200%;
     animation: champion-shimmer 3s ease-in-out infinite alternate;
     color: #3a2800;
-}
+} */
 
-@keyframes champion-shimmer {
+/* @keyframes champion-shimmer {
     from {
         background-position: 0% 50%;
     }
@@ -133,7 +104,7 @@
     to {
         background-position: 100% 50%;
     }
-}
+} */
 
 .season-selection {
     display: flex;
@@ -338,7 +309,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-left: 8px solid #FFF
 }
 
 .team-logo {
@@ -348,7 +318,7 @@
     transition: opacity 0.2s ease-in;
 }
 
-@media screen and (max-width: 767px) {
+/* @media screen and (max-width: 767px) {
     .current-season-area {
         display: unset;
     }
@@ -414,4 +384,4 @@
     .teamBoxContainer {
         grid-template-columns: 1fr;
     }
-}
+} */

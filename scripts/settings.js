@@ -447,6 +447,6 @@ function checkIfOutsideUK() {
 document.addEventListener("DOMContentLoaded", async () => {
     // if (localStorage.getItem("cookiesAccepted") !== "true") generateCookiesPopup();
     checkEasterEggs();
-    checkIfOutsideUK();
+    // checkIfOutsideUK();
     localizeBlogDates();
 });
