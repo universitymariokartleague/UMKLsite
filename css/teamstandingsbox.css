@@ -1,19 +1,18 @@
-:root,
-:root.light-theme {
+:root {
     --standings-bg-color: #fff;
     --standings-box-bg-color: #fff;
     --standings-text-color: #111111;
 }
 
 @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme="light"]) {
         --standings-bg-color: #111111;
         --standings-box-bg-color: #111111;
         --standings-text-color: #fff;
     }
 }
 
-:root.dark-theme {
+:root[data-theme="dark"] {
     --standings-bg-color: #111111;
     --standings-box-bg-color: #111111;
     --standings-text-color: #fff;

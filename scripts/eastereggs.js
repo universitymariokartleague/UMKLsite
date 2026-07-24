@@ -57,7 +57,7 @@ async function loadFont(name, url) {
 
 function halloweenEasterEgg() {
     meta.content = "dark";
-    root.classList.replace("light-theme", "dark-theme");
+    root.setAttribute("data-theme", "dark");
 
     const themeColors = {
         '--accent-color': '#ff640a',

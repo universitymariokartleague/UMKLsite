@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-:root,
-:root.light-theme {
+:root {
     --text-color: #111111;
     --hr-color: #111111A0;
     --bg-color: #fff;
@@ -26,7 +25,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme="light"]) {
         --text-color: #fff;
         --hr-color: #ffffffA0;
         --bg-color: #111111;
@@ -48,7 +47,7 @@
     }
 }
 
-:root.dark-theme {
+:root[data-theme="dark"] {
     --text-color: #fff;
     --hr-color: #ffffff80;
     --bg-color: #111111;
