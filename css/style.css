@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-/* Brand Colors */
 :root {
     --brand-primary: #bc0839;
     --brand-dark: #04001a;
@@ -134,7 +133,14 @@ h4 {
 }
 
 h1 {
-    font-size: 3em;
+    font-size: 3.5em;
+    font-weight: 1000;
+}
+
+h2 {
+    font-size: 2em;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
 }
 
 li {
@@ -202,7 +208,7 @@ h4:target {
 .header-wrapper {
     display: flex;
     flex-direction: column;
-    margin: 3em 0;
+    margin-top: 3em;
 }
 
 @keyframes anchor-highlight {

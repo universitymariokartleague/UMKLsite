@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
+<!-- IMPORTANT: I've removed the standings from this page as I think it's better kept on a dedicated standings page.
+                That way we can show more specific information about the points and matches played, as I felt it was a bit unclear
+                what the numbers represented on this page. The teams in the season-picker section will be ordered by current championship
+                position, the 'all teams' section will have them ordered by team ID-->
+
 <head>
     <base href="../../">
 
@@ -34,7 +40,7 @@
     <script type="module" src="/components/footer.js" defer></script>
 
     <!-- Scripts -->
-    <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();</script>
+    <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() { let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) } checkTheme();</script>
 
     <script type="module" src="scripts/settings.js" defer></script>
     <script type="module" src="scripts/teamboxgenerate.js" defer></script>
@@ -56,6 +62,13 @@
                 Learn more about the teams and universities participating in the UMKL
             </p>
         </div>
+
+        <h2> 
+            <select id="season-select">
+                <option value="1">2024/25</option>
+                <option value="2" selected="selected">2025/26</option>
+            </select> Teams
+        </h2>
 
         <!-- <hr class="hr-below-title"> -->
 
@@ -96,6 +109,9 @@
         <div id="JSTeamBox" class="teamBoxContainer"></div>
 
         <div id="JSImagegen"></div>
+
+        <h2>All Teams</h2>
+        <!-- some sort of table here, similar to https://www.premierleague.com/en/clubs-->
     </main>
 
     <umkl-footer></umkl-footer>
