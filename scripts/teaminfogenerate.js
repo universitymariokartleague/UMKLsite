@@ -52,7 +52,7 @@ const JSTeamBox = document.getElementById("JSTeamBox")
 const teamNameBox = document.getElementById("teamNameBox")
 const startYear = 2023;
 
-const currentSeason = 2;
+const currentSeason = 3;
 
 const UPDATEINVERVAL = 30000;
 let refreshTimer = null;

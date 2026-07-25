@@ -18,10 +18,9 @@ template.innerHTML = `
                 <ul id="nav-bar">
                     <li><a href="../../../pages/news/">News</a></li>
                     <li><a href="../../../pages/teams/">Teams</a></li>
-                    <li><a href="../../../pages/matches/">Matches</a></li>
+                    <li><a href="../../../pages/schedule/">Schedule</a></li>
                     <li><a href="../../../pages/rules/">Rules/Guides</a></li>
                     <li><a href="../../../pages/tools/">Tools</a></li>
-                    <li><a href="../../../pages/credits/">Credits</a></li>
                     <li>
                         <a class="nav-bar-link" href="https://discord.gg/jz3hKEmDss" target="_blank">
                             ${DISCORDSVG}
@@ -34,7 +33,7 @@ template.innerHTML = `
                 <div id="nav-dropdown-bar">
                     <a href="../../../pages/news/">News</a>
                     <a href="../../../pages/teams/">Teams</a>
-                    <a href="../../../pages/matches/">Matches</a>
+                    <a href="../../../pages/schedule/">Schedule</a>
                     <a href="../../../pages/rules/">Rules & Guides</a>
                     <a href="../../../pages/tools/">Tools</a>
                     <a href="../../../pages/credits/">Credits</a>

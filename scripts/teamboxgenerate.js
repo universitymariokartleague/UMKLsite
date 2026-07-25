@@ -16,7 +16,7 @@ const CACHE_KEY = 'teamDataCache';
 const SEASON_CACHE_KEY = 'seasonInfoCache';
 
 let teamData = [];
-let currentSeason = 2;
+let currentSeason = 3;
 let maxSeason = currentSeason;
 let refreshTimer = null;
 let retryCount = 0;
@@ -221,11 +221,8 @@ async function populateAllTeamsTable() {
             allTeamsTable.innerHTML = 'Failed to load teams.';
             return;
         }
-    
     }
-
     renderAllTeamsTable();
-
 }
 
 function renderAllTeamsTable() {
