@@ -117,6 +117,7 @@ const blogFormatHTML = `
     <meta name="color-scheme" content="dark light">
 
     <meta property="og:title" content="{{blogTitle}} | UMKL" />
+    <meta property="og:site_name" content="UMKL" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://umkl.co.uk/pages/news/{{blogDate}}/{{blogTitleLink}}" />
     <meta property="og:image" content="https://umkl.co.uk/pages/news/{{blogDate}}/{{blogTitleLink}}/{{blogImage}}" />
