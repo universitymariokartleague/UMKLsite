@@ -1,4 +1,3 @@
-
 .teamStandingsBox {
     font-weight: bold;
     display: grid;
@@ -6,7 +5,7 @@
     grid-auto-rows: minmax(50px, auto);
     gap: 20px;
 
-/* 
+    /* 
     color: var(--standings-text-color); */
     /* background-color: var(--standings-bg-color); */
     /* border: var(--box-border); */
@@ -42,6 +41,7 @@
     height: 100px;
     width: 100px;
 }
+
 /* 
 .teamStandingsBox .teamStanding:hover .teamPosition {
     color: var(--accent-color);
@@ -128,7 +128,7 @@
     font-weight: bold;
 }
 
-.team-picker-button {
+/* .team-picker-button {
     white-space: nowrap;
 }
 
@@ -253,6 +253,49 @@
     font-weight: 600;
     line-height: 1.2;
     word-break: break-word;
+} */
+
+.all-teams-table {
+    width: 100%;
+    font-weight: bold;
+    font-size: 20px;
+    border-style: hidden;
+}
+
+.all-teams-table a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.all-teams-table a:hover {
+    text-decoration: underline;
+}
+
+.teams-table-item {
+    padding: 16px 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #bbb5daa9;
+}
+
+.all-teams-table .teams-table-item:last-child,
+.all-teams-table .teams-table-item:last-child {
+border-bottom: none;
+}
+
+.team-table-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+}
+
+.team-table-icon {
+    width: 80%;
+    height: 80%;
 }
 
 .current-season-area {

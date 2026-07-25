@@ -98,10 +98,54 @@ const teamPickerDialog = document.getElementById('teamPickerDialog');
 const teamPickerClose = document.getElementById('teamPickerClose');
 const teamPickerGrid = document.getElementById('teamPickerGrid');
 const pickerSortSelect = document.getElementById('sortSelect');
+const allTeamsTable = document.getElementById('JSAllTeamsTable');
 
 const PICKER_SORT_KEY = 'teamPickerSortMode';
 let pickerSortMode = localStorage.getItem(PICKER_SORT_KEY) || 'joined';
 let allTeamsCache = null;
+// const JSAllTeamsTable = document.getElementById('JSAllTeamsTable');
+
+// function renderAllTeamsTable() {
+//     if (!JSAllTeamsTable || !allTeamsCache) return;
+
+//     const sorted = allTeamsCache.slice().sort((a, b) => a.team_name.localeCompare(b.team_name));
+//     JSAllTeamsTable.innerHTML = '';
+
+//     const table = document.createElement('table');
+//     table.className = 'all-teams-table';
+//     table.innerHTML = `
+//         <thead>
+//             <tr>
+//                 <th>Emblem</th>
+//                 <th>Team</th>
+//             </tr>
+//         </thead>
+//     `;
+
+//     const tbody = document.createElement('tbody');
+//     for (const team of sorted) {
+//         const nameUpper = team.team_name.toUpperCase();
+//         const dest = `pages/teams/details/?team=${encodeURIComponent(team.team_name)}`;
+//         const row = document.createElement('tr');
+//         row.innerHTML = `
+//             <td class="team-table-emblem">
+//                 <a href="${dest}">
+//                     <picture>
+//                         <source srcset="https://api.umkl.co.uk/teamemblems/${nameUpper}" type="image/avif">
+//                         <img src="https://api.umkl.co.uk/teamemblems/${nameUpper}?og" alt="${makePossessive(team.team_name)} team emblem" loading="lazy">
+//                     </picture>
+//                 </a>
+//             </td>
+//             <td class="team-table-name">
+//                 <a href="${dest}">${team.team_name}</a>
+//             </td>
+//         `;
+//         tbody.appendChild(row);
+//     }
+
+//     table.appendChild(tbody);
+//     JSAllTeamsTable.appendChild(table);
+// }
 
 function sortPickerTeams(teams) {
     const sorted = teams.slice();
@@ -167,6 +211,43 @@ if (pickerSortSelect) {
         renderTeamPickerGrid();
     });
 }
+
+async function populateAllTeamsTable() {
+    if (!allTeamsCache) {
+        if (!allTeamsFetchPromise) allTeamsFetchPromise = fetchAPI('teamcolors', {}).catch(() => []);
+        allTeamsCache = await allTeamsFetchPromise;
+        allTeamsFetchPromise = null;
+        if (!allTeamsCache.length) {
+            allTeamsTable.innerHTML = 'Failed to load teams.';
+            return;
+        }
+    
+    }
+
+    renderAllTeamsTable();
+
+}
+
+function renderAllTeamsTable() {
+    if (!allTeamsTable || !allTeamsCache) return;
+
+    allTeamsTable.innerHTML = '';
+    for (const team of sortPickerTeams(allTeamsCache)) {
+        const nameUpper = team.team_name.toUpperCase();
+        const row = document.createElement('a');
+        row.className = 'teams-table-item';
+        row.href = `pages/teams/details/?team=${encodeURIComponent(team.team_name)}`;
+        row.innerHTML = `
+                <picture class="team-table-icon-container" style="background-color: ${team.team_color}">
+                    <source srcset="https://api.umkl.co.uk/teamemblems/${nameUpper}" type="image/avif">
+                    <img class="team-table-icon" src="https://api.umkl.co.uk/teamemblems/${nameUpper}?og" alt="${makePossessive(team.team_name)} team emblem" loading="lazy" onload="this.style.opacity=1;">
+                </picture>
+                <span class="team-table-name">${team.team_name}</span>
+        `;
+        allTeamsTable.appendChild(row);
+    }
+}
+
 
 function closeTeamPickerDialog() {
     if (!teamPickerDialog.open || teamPickerDialog.classList.contains('closing')) return;
@@ -289,6 +370,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 JSTeamBoxLoading.innerHTML = "";
                 console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes (cache)...`, "color:#9452ff", "color:#fff", "color:#c29cff");
                 await generateTeamBoxes(parsedCache);
+                await populateAllTeamsTable();
             } else {
                 localStorage.removeItem(CACHE_KEY);
             }
@@ -363,6 +445,7 @@ function generateSeasonPicker() {
 const handleSeasonChange = async () => {
     await getTeamDataSafe(currentSeason);
     await generateTeamBoxes(teamData);
+    await populateAllTeamsTable();
     await updateSeasonText();
 };
 
@@ -394,3 +477,5 @@ async function updateSeasonText() {
         if (!cachedInfo?.[1]) render("Unknown...", "");
     }
 }
+
+
