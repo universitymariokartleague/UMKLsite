@@ -276,7 +276,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    border-bottom: 1px solid #bbb5daa9;
+    border-bottom: var(--brand-border);
 }
 
 .all-teams-table .teams-table-item:last-child,

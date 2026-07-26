@@ -6,6 +6,7 @@
     --brand-light: #ffffff;
     --brand-positive: #00ce7a;
     --brand-negative: #ff6874;
+    --brand-border: 1px solid #bbb5daa9;
 }
 
 :root,
@@ -77,13 +78,16 @@
     --box-area-bg-color: #ffffff08;
 }
 
+
 /*adjust mobile text inflation*/
 html {
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
     text-size-adjust: 100%;
     background-color: var(--bg-color);
+    scrollbar-width: none;
 }
+
 
 @view-transition {
     navigation: auto;
@@ -770,7 +774,9 @@ umkl-footer {
     background-color: var(--accent-color);
     text-align: center;
     text-decoration: none;
-    padding: 5px;
-    height: 500px;
+    height: 700px;
     z-index: 1;
+
+    display: flex;
+    flex-direction: column;
 }
