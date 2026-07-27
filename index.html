@@ -13,6 +13,7 @@
         name="description" />
     <link href="https://umkl.co.uk/assets/media/brand/favicon.png" rel="icon" type="image/png" />
     <link href="css/style.css" rel="stylesheet" />
+    <link href="css/home.css" rel="stylesheet" />
     <link href="css/eventbox.css" rel="stylesheet" />
     <link href="css/news.css" rel="stylesheet">
     <link href="css/settings.css" rel="stylesheet" />
@@ -38,7 +39,7 @@
     <script defer="" src="/components/footer.js" type="module"></script>
 
     <!-- Scripts -->
-    <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();</script>
+    <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() { let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) } checkTheme();</script>
     <script defer="" src="scripts/settings.js" type="module"></script>
     <script defer="" src="scripts/showupcomingmatches.js" type="module"></script>
     <script defer="" src="scripts/tagnewsposts.js" type="module"></script>
@@ -48,33 +49,69 @@
     <umkl-navbar></umkl-navbar>
 
     <main>
-        <video autoplay="" class="image" loop="" muted="" playsinline=""
-            poster="assets/media/brand/promo/UMKLS2ChampionYork.avif"
-            title="Congratulations to York for winning Season 2 of the UMKL!">
-            <source src="assets/media/brand/promo/UMKLS2ChampionYorkav1.mp4" type='video/mp4; codecs="av01.0.05M.08"' />
-            <source src="assets/media/brand/promo/UMKLS2ChampionYorkh265.mp4"
-                type='video/mp4; codecs="hvc1.1.6.L153.B0"' />
-            <source src="assets/media/brand/promo/UMKLS2ChampionYorkh264.mp4" type='video/mp4; codecs="avc1.42E01E"' />
-        </video>
 
-        <h2 class="after-title">Welcome to the UMKL!</h2>
-        <p class="after-title">
-            The UMKL brings together students from 12
-            universities around the UK to compete as teams of six in Mario Kart 8 Deluxe.
-        </p>
-        <p>
-            Strategy and teamwork are key, as the team with the most
-            points across the season will emerge victorious!
-        </p>
-        <p>
-            Interested in joining with your university? See our <a href="pages/rules/joining/">Joining Guide</a>.
-        </p>
-        <hr>
+        <div class="home-link-wrapper">
+            <a class="bubble-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24" role="presentation" class="IconVector-module_sm__Q8ZiC"><title>News</title><path fill="currentColor" d="M21 17a4 4 0 0 1-3.794 3.995L17 21H3V3h18zM5 19h12a2 2 0 0 0 2-2V5H5zm8-2H7v-2h6zm4-4H7v-2h10zm0-4H7V7h10z"></path></svg>
+            News</a>
+            <a class="bubble-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24" role="presentation" class="IconVector-module_sm__Q8ZiC"><title>Play Outline</title><path fill="currentColor" d="m20.86 10 .02-.01a2 2 0 0 1 1.181 1.825l-.004.147a2 2 0 0 1-1.177 1.678L4 22V2zM6 18.777l13.992-6.93.034-.016.014-.007L6 5.162z"></path></svg>    
+            Videos</a>
+            <a class="bubble-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24" role="presentation" class="IconVector-module_sm__Q8ZiC"><title>Question</title><path fill="currentColor" d="M13.017 14.92V18h-2.7v-3.08zM12.312 7q2.142 0 3.234.821 1.093.822 1.093 2.523 0 1.774-1.093 2.61-1.092.837-3.234.837h-1.995v-2.288h2.274q.719 0 1.004-.25.286-.249.286-.865t-.315-.858-1.122-.242h-3.52V7z"></path><path fill="currentColor" fill-rule="evenodd" d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2m0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16" clip-rule="evenodd"></path></svg>    
+            New to UMKL?</a>
+        </div>
+
+        <div class="news-grid-container">
+
+
+
+            <!-- Main Hero Story (Left Column) -->
+            <article class="hero-card">
+                <img src="https://mario.wiki.gallery/images/4/45/MK8D_All_Yoshi_Colors_Racing.png" alt="Main News Image">
+                <div class="hero-content">
+                    <span class="badge">FEATURED</span>
+                    <h2>The race that sealed Keele's maiden win against Brighton</h2>
+                </div>
+            </article>
+
+            <div class="right-column">
+                <article class="small-card">
+                    <div class="img-wrapper">
+                        <img src="https://mario.wiki.gallery/images/3/38/MK8D_Shy_Guy_Colors_Screenshot.png" alt="News Image">
+                    </div>
+                    <h3>All the key moments from Birmingham VS Sheffield</h3>
+                </article>
+
+                <article class="small-card">
+                    <div class="img-wrapper">
+                        <img src="https://mario.wiki.gallery/images/thumb/5/56/MK8D_Tour_London_Loop.png/1600px-MK8D_Tour_London_Loop.png" alt="News Image">
+                    </div>
+                    <h3>Several universities in London interested in entering UMKL for the 2026/27 season</h3>
+                </article>
+
+                <article class="small-card">
+                    <div class="img-wrapper">
+                        <img src="https://mario.wiki.gallery/images/2/22/MK8D_Dry_Bones_and_Flame_Rider_Screenshot.png" alt="News Image">
+                    </div>
+                    <h3>Relive the intensity of the 2025/26 season finale between York and Staffs</h3>
+                </article>
+
+                <article class="small-card">
+                    <div class="img-wrapper">
+                        <img src="https://mario.wiki.gallery/images/thumb/6/6c/Birdo_MK8DX.jpg/1600px-Birdo_MK8DX.jpg" alt="News Image">
+                    </div>
+                    <h3>How many teams have achieved a top 6 lock-out in a UMKL match?</h3>
+                </article>
+            </div>
+
+        </div>
+
 
         <div id="upcomingMatchesError"></div>
         <div id="upcomingMatchesBox"></div>
 
-        <h2>News</h2>
+        <!-- <h2>News</h2>
         <a href="pages/news/">View all articles</a>
 
         <div class="news-wrapper after-title">
@@ -244,7 +281,7 @@
                         </span></span>
                 </div>
             </div>
-        </div>
+        </div> -->
     </main>
 
     <umkl-footer></umkl-footer>

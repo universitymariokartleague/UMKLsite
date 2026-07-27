@@ -169,9 +169,11 @@ template.innerHTML = `
 <div class="footer-links-column">
     <div class="footer-links">
         <h2>Quick Links</h2>
-        <a href="../../../pages/news/">News</a>
-        <a href="../../../pages/teams/">Teams</a>
         <a href="../../../pages/schedule/">Schedule</a>
+        <a href="../../../pages/results/">Results</a>
+        <a href="../../../pages/standings/">Standings</a>
+        <a href="../../../pages/teams/">Teams</a>
+
         <a href="../../../pages/tools/">Tools</a>
         <a href="../../../pages/sitemap/">Sitemap</a>
     </div>

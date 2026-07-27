@@ -7,6 +7,13 @@ const DISCORDSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 18">
 const sheet = new CSSStyleSheet();
 sheet.replaceSync(`
 
+  .nav-bar {
+    min-height: 90px;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+  }
+
   .nav-bar, .nav-bar ul {
     display: flex;
   }
@@ -27,11 +34,7 @@ sheet.replaceSync(`
     justify-content: space-between;
   }
 
-  .nav-bar {
-    align-items: center;
-    justify-content: center;
-    margin: auto;
-  }
+
 
   .nav-bar-title {
     padding: 10px;
@@ -145,12 +148,7 @@ sheet.replaceSync(`
     }
   }
 
-  /* Dynamic Theme Styles */
-  ${style_colors}
 
-  /* ==========================================
-     6. Global SVG Overrides
-     ========================================== */
   svg {
     height: 15px;
     margin-bottom: -2px !important;

@@ -4,6 +4,8 @@
     --brand-primary: #bc0839;
     --brand-dark: #04001a;
     --brand-light: #ffffff;
+    --brand-dark-translucent: #04001a22;
+    --brand-light-translucent: #ffffff22;
     --brand-positive: #00ce7a;
     --brand-negative: #ff6874;
     --brand-border: 1px solid #bbb5daa9;
@@ -14,12 +16,13 @@
     --text-color: var(--brand-dark);
     --hr-color: var(--brand-dark);
     --bg-color: var(--brand-light);
+    --translucent-color: var(--brand-dark-translucent);
 
     --accent-color: var(--brand-primary);
 
     --link-color: var(--brand-primary);
-    --link-hover-color: var(--brand-negative);
-    --highlight-color: var(--brand-primary);
+    /* --link-hover-color: var(--brand-negative);
+    --highlight-color: var(--brand-primary); */
 
     --code-color: var(--brand-dark);
     --code-bg-color: var(--brand-light);
@@ -39,6 +42,7 @@
         --text-color: var(--brand-light);
         --hr-color: var(--brand-light);
         --bg-color: var(--brand-dark);
+        --translucent-color: var(--brand-light-translucent);
 
         --accent-color: var(--brand-primary);
 
@@ -61,6 +65,7 @@
     --text-color: var(--brand-light);
     --hr-color: var(--brand-light);
     --bg-color: var(--brand-dark);
+    --translucent-color: var(--brand-light-translucent);
 
     --accent-color: var(--brand-primary);
 
@@ -123,8 +128,9 @@ main {
     flex: 1;
     width: calc(80vw - 0px);
     max-width: calc(100% - env(safe-area-inset-left));
-    margin-top: 50px;
-    margin-bottom: 20px;
+    margin-top: 90px;
+    margin-bottom: 50px;
+    padding: 50px 0;
     font-size: 16px;
 }
 
@@ -209,10 +215,28 @@ h4:target {
     border-radius: 4px;
 }
 
+.bubble-link {
+    background-color: var(--translucent-color);
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.bubble-link:hover {
+    opacity: 80%;
+    cursor: pointer;
+}
+
+.bubble-link:active {
+    opacity: 100%;
+}
+
 .header-wrapper {
     display: flex;
     flex-direction: column;
-    margin-top: 3em;
 }
 
 @keyframes anchor-highlight {
