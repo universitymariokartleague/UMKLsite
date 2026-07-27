@@ -11,9 +11,9 @@
 
 :root,
 :root.light-theme {
-    --text-color: #04001a;
-    --hr-color: #04001a;
-    --bg-color: #ffffff;
+    --text-color: var(--brand-dark);
+    --hr-color: var(--brand-dark);
+    --bg-color: var(--brand-light);
 
     --accent-color: var(--brand-primary);
 
@@ -36,9 +36,9 @@
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --text-color: #ffffff;
-        --hr-color: #ffffffA0;
-        --bg-color: #04001a;
+        --text-color: var(--brand-light);
+        --hr-color: var(--brand-light);
+        --bg-color: var(--brand-dark);
 
         --accent-color: var(--brand-primary);
 
@@ -58,9 +58,9 @@
 }
 
 :root.dark-theme {
-    --text-color: #ffffff;
-    --hr-color: #ffffff;
-    --bg-color: #04001a;
+    --text-color: var(--brand-light);
+    --hr-color: var(--brand-light);
+    --bg-color: var(--brand-dark);
 
     --accent-color: var(--brand-primary);
 
@@ -772,9 +772,7 @@ umkl-navbar {
 umkl-footer {
     color: #FFF;
     background-color: var(--accent-color);
-    text-align: center;
     text-decoration: none;
-    height: 700px;
     z-index: 1;
 
     display: flex;

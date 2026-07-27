@@ -4,18 +4,40 @@ const template = document.createElement("template");
 
 const sheet = new CSSStyleSheet();
 sheet.replaceSync(`
-    .no-underline-link-footer { text-decoration: none; }
-    .no-color-link { color: var(--bg-color) !important; }
-    .social-wrapper svg { width: 20px; height: 20px; fill: var(--bg-color); vertical-align: middle; cursor: pointer; padding: 10px; border-radius: 5px;}
-    .social-wrapper a svg:hover { opacity: 0.6;}
-    .social-wrapper a svg:active {opacity: 0.2;}
-    h3 { margin: 0; }
+    .no-underline-link-footer {
+        text-decoration: none;
+    }
+
+    .no-color-link {
+        color: var(--bg-color) !important;
+    }
+    
+    .social-wrapper svg {
+        width: 20px;
+        height: 20px;
+        fill: var(--bg-color);
+        vertical-align: middle;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .social-wrapper a svg:hover {
+        opacity: 0.6;
+    }
+    .social-wrapper a svg:active {
+        opacity: 0.2;
+    }
+
+    h3 {
+        margin: 0;
+    }
 
     #divider-container {
         background-color: var(--bg-color); 
         width: 100%;
-        height: 3vw; 
-        position: relative; /* Changed from fixed so it stays within footer flow */
+        height: 60px; 
+        position: relative;
         display: flex; 
         flex-direction: column; 
         justify-content: center; 
@@ -24,14 +46,14 @@ sheet.replaceSync(`
 
     #chequered-pattern {
         width: 100%;
-        height: 2vw; 
-        background-color: var(--accent-color); 
+        height: 40px; 
+        background-color: none; 
         position: relative;
         background-image: 
-            repeating-linear-gradient(90deg, var(--bg-color) 0 1vw, transparent 1vw 2vw), 
-            repeating-linear-gradient(90deg, transparent 0 1vw, var(--bg-color) 1vw 2vw); 
-        background-size: 100% 1vw, 100% 1vw;
-        background-position: 0 0, 0 1vw; 
+            repeating-linear-gradient(90deg, var(--brand-primary) 0 20px, transparent 20px 40px), 
+            repeating-linear-gradient(90deg, transparent 0 20px, var(--brand-primary) 20px 40px); 
+        background-size: 100% 20px, 100% 20px;
+        background-position: 0 0, 0 20px; 
         background-repeat: repeat-x; 
     }
 
@@ -45,7 +67,7 @@ sheet.replaceSync(`
 
     .footer-links-column {
         margin: 0 auto;
-        min-width: 350px;
+        width: 30%;
     }
 
     .footer-links {
@@ -77,6 +99,7 @@ sheet.replaceSync(`
         align-items: center;
         justify-content: center;
         color: var(--bg-color);
+        padding: 40px 0;
     }
 
     .footer-end-wrapper {
@@ -96,6 +119,44 @@ sheet.replaceSync(`
         gap: 14px;
         font-size: 10px;
     }
+
+    .footer-logo { 
+        width: 200px;
+    }
+
+
+
+
+
+    @media (prefers-color-scheme: dark) {
+        .footer-logo {
+            filter: brightness(0) invert(1);
+        }
+    }
+
+
+
+@media screen and (max-width: 900px) {
+    .footer-links-wrapper {
+        flex-direction: column;
+    }
+
+    .footer-links-column {
+        width: 100%;
+    }
+
+    .footer-end-wrapper {
+        flex-direction: column;
+    }
+
+    .footer-logo-area {
+        margin-top: 30px;
+        margin-left: 0;
+        align-items:center; 
+    }
+
+
+}
 
 `);
 
@@ -135,12 +196,12 @@ template.innerHTML = `
 <div class="footer-links-column">
     <div class="footer-links">
         <h2>Cheep Cheep</h2>
-            <a href="../../../pages/rules/cheepcheepcommands/">Commands Documentation</a>
-            <a href="../../../pages/rules/cheepcheeparchitecture/">Architecture & Code Guide</a>
+            <a href="../../../pages/rules/cheepcheepcommands/">Commands</a>
+            <a href="../../../pages/rules/cheepcheeparchitecture/">Architecture</a>
         </div>
 
     <div class="footer-links">
-        <h2>Legal & Compliance</h2>
+        <h2>Compliance</h2>
         <a href="../../../pages/rules/privacy">Terms of Service</a>
         <a href="../../../pages/rules/universityrelations">University Relations</a>
     </div>
@@ -188,7 +249,7 @@ template.innerHTML = `
         </div>
 
     <div class="footer-logo-area">
-        <img src="assets/media/brand/guidelines/wordmark_standard.png" style="width: 200px;">
+        <img class="footer-logo" src="assets/media/brand/guidelines/wordmark_standard.png" alt="UMKL wordmark">
         <span>© 2024-2026 University Mario Kart League</span>
     </div>
     
