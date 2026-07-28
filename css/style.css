@@ -6,9 +6,10 @@
     --brand-light: #ffffff;
     --brand-dark-translucent: #04001a22;
     --brand-light-translucent: #ffffff22;
+    --brand-dark-opaque: #04001a66;
+    --brand-light-opaque: #ffffff66;
     --brand-positive: #00ce7a;
     --brand-negative: #ff6874;
-    --brand-border: 1px solid #bbb5daa9;
 }
 
 :root,
@@ -17,12 +18,13 @@
     --hr-color: var(--brand-dark);
     --bg-color: var(--brand-light);
     --translucent-color: var(--brand-dark-translucent);
+    --opaque-color: var(--brand-dark-opaque);
 
     --accent-color: var(--brand-primary);
 
     --link-color: var(--brand-primary);
-    /* --link-hover-color: var(--brand-negative);
-    --highlight-color: var(--brand-primary); */
+    --link-hover-color: var(--brand-negative);
+    --highlight-color: var(--brand-primary);
 
     --code-color: var(--brand-dark);
     --code-bg-color: var(--brand-light);
@@ -43,6 +45,7 @@
         --hr-color: var(--brand-light);
         --bg-color: var(--brand-dark);
         --translucent-color: var(--brand-light-translucent);
+        --opaque-color: var(--brand-light-opaque);
 
         --accent-color: var(--brand-primary);
 
@@ -66,6 +69,7 @@
     --hr-color: var(--brand-light);
     --bg-color: var(--brand-dark);
     --translucent-color: var(--brand-light-translucent);
+    --opaque-color: var(--brand-light-opaque);
 
     --accent-color: var(--brand-primary);
 
@@ -98,7 +102,7 @@ html {
     navigation: auto;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 900px) {
     @view-transition {
         navigation: none;
     }
@@ -143,14 +147,25 @@ h4 {
 }
 
 h1 {
-    font-size: 3.5em;
+    font-size: 4.5em;
     font-weight: 1000;
+    text-transform: uppercase;
 }
 
 h2 {
     font-size: 2em;
     margin-top: 1.5em;
     margin-bottom: 0.5em;
+}
+
+@media screen and (max-width: 900px) {
+    h1 {
+        font-size: 2.5em;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
 }
 
 li {
@@ -215,24 +230,7 @@ h4:target {
     border-radius: 4px;
 }
 
-.bubble-link {
-    background-color: var(--translucent-color);
-    padding: 10px 20px;
-    border-radius: 100px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
 
-.bubble-link:hover {
-    opacity: 80%;
-    cursor: pointer;
-}
-
-.bubble-link:active {
-    opacity: 100%;
-}
 
 .header-wrapper {
     display: flex;
@@ -260,7 +258,6 @@ h4:target {
 
 a:link {
     color: var(--link-color);
-    transition: color 0.10s;
 }
 
 a:visited {
@@ -301,7 +298,7 @@ a[target="_blank"]::after {
 }
 
 .no-color-link {
-    color: #FFF !important;
+    color: var(--text-color) !important;
 }
 
 .no-color-link-themed {
@@ -343,6 +340,29 @@ button:focus {
     button:active {
         transform: none;
     }
+}
+
+.bubble-link {
+    background-color: var(--translucent-color);
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    gap: 5px;
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.bubble-link:hover {
+    background-color: var(--opaque-color);
+    cursor: pointer;
+}
+
+.bubble-link:active {
+    background-color: var(--translucent-color);
 }
 
 .close-list-view-button {
@@ -452,7 +472,7 @@ code {
     margin: 0;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 900px) {
     .command {
         flex-direction: column;
         gap: 6px;
@@ -768,7 +788,7 @@ dialog.cookie-popup {
     animation: fadeIn 0.2s ease-in-out forwards;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 900px) {
     dialog.cookie-popup {
         max-width: 100%;
         border-radius: 0;

@@ -1,0 +1,296 @@
+.season-selection {
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 20px 0;
+}
+
+#season-select {
+    font-size: 100%;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    border: 1px solid var(--text-color);
+    outline: none;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#season-select:hover {
+    background-color: var(--translucent-color);
+}
+
+.standings-title {
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+    margin: 10px 0 24px 0;
+}
+
+#JSTeamTable {
+    margin: 0 auto;
+    border-radius: 12px;
+    padding: 24px 0;
+    overflow-x: auto;
+}
+
+#HomeJSTeamTable {
+    overflow-x: auto;
+}
+
+.standings-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.standings-table th {
+    font-weight: 700;
+    padding: 12px 16px;
+    border-bottom: 1.5px solid var(--text-color); /* Dark top accent divider */
+    text-transform: uppercase;
+}
+
+.column-pos {
+    width: 80px;
+    text-align: left;
+}
+
+.column-team {
+    width: auto;
+}
+
+.column-points {
+    width: 150px;
+    text-align: right;
+}
+
+.standings-table th.column-points {
+    text-align: right;
+}
+
+.standings-row {
+    cursor: pointer;
+    border-bottom: 1px solid var(--translucent-color);
+}
+
+.standings-row:last-child {
+    border-bottom: none;
+}
+
+.standings-row:hover {
+    background-color: var(--translucent-color);
+}
+
+.standings-row td {
+    padding: 16px;
+    vertical-align: middle;
+}
+
+.column-position {
+    width: 100px;
+    font-weight: 700;
+}
+
+.column-played, .column-won, .column-drawn, .column-lost {
+    width: 50px;
+    text-align: center;
+
+}
+
+.team-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.team-logo {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    display: block;
+}
+
+.team-name {
+    font-weight: 700;
+}
+
+.column-points strong {
+    font-weight: 800;
+}
+
+.podium-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin: 30px 0;
+    align-items: end;
+}
+
+.podium-card {
+    border-radius: 10px;
+    padding: 30px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    min-height: 200px;
+}
+
+.podium-card:hover .podium-team-name {
+    text-decoration: underline;
+}
+
+.podium-emblem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.podium-emblem img {
+    width: 150px;
+    height: 150px;
+}
+
+.podium-card.pos-1 {
+    min-height: 250px;
+}
+
+.podium-card.pos-1 .podium-emblem img {
+    width: 200px;
+    height: 200px;
+}
+
+.podium-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 2;
+}
+
+.podium-pos {
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.podium-pos sup {
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-left: 2px;
+}
+
+.podium-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.podium-body {
+    margin-top: 20px;
+}
+
+.podium-team-name {
+    font-size: 2rem;
+    font-weight: 1000;
+}
+
+.podium-bg-emblem {
+    position: absolute;
+    right: -20px;
+    bottom: -20px;
+    width: 140px;
+    height: 140px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.12;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.hidden-row {
+    display:none;
+}
+
+.toggle-wrapper {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.show-all-btn {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text-color);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.show-all-btn:hover {
+    text-decoration: underline;
+}
+
+.full-standings-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 24px;
+}
+
+@media screen and (max-width: 1350px) {
+    .podium-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin: 20px 0;
+    }
+
+    .podium-card.pos-1 {
+        order: 1;
+        min-height: auto;
+    }
+
+    .podium-card.pos-2 {
+        order: 2;
+        min-height: auto;
+    }
+
+    .podium-card.pos-3 {
+        order: 3;
+        min-height: auto;
+    }
+
+    .podium-card {
+        padding: 20px;
+        min-height: auto;
+    }
+
+    .podium-team-name {
+        font-size: 1.5rem;
+    }
+
+    .podium-emblem img,
+    .podium-card.pos-1 .podium-emblem img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .podium-pos {
+        font-size: 1.6rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .podium-card {
+        padding: 16px;
+    }
+
+    .podium-team-name {
+        font-size: 1.25rem;
+    }
+
+    .podium-emblem img,
+    .podium-card.pos-1 .podium-emblem img {
+        width: 75px;
+        height: 75px;
+    }
+}

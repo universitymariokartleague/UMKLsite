@@ -16,7 +16,6 @@
 }
 
 .teamStandingsBox .teamStanding {
-    /* color: var(--brand-light); */
     display: flex;
     gap: 20px;
     padding: 20px 30px;
@@ -24,22 +23,11 @@
     height: 100px;
     align-items: center;
     border-radius: 10px;
-    transition: background-color 0.2s ease, outline 0.2s ease, color 0.2s ease;
+    font-weight: 1000;
 }
 
 .teamStandingsBox .teamStanding:hover {
     text-decoration: underline;
-}
-
-.teamStandingsBox .teamPosition {
-    display: flex;
-    background-color: var(--brand-light);
-    border-radius: 5px;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-    height: 100px;
-    width: 100px;
 }
 
 /* 
@@ -109,8 +97,6 @@
 .season-selection {
     display: flex;
     flex-direction: column;
-    background-color: var(--box-area-bg-color);
-    border: 1px solid #ccccccaa;
     border-radius: 10px;
     padding: 10px;
     margin: 20px 0;
@@ -124,8 +110,12 @@
     outline: none;
     padding: 10px;
     border-radius: 10px;
-
     font-weight: bold;
+    cursor: pointer;
+}
+
+#season-select:hover {
+    background-color: var(--translucent-color);
 }
 
 /* .team-picker-button {
@@ -276,7 +266,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    border-bottom: var(--brand-border);
+    border-bottom: 1px solid var(--translucent-color);
 }
 
 .all-teams-table .teams-table-item:last-child,
@@ -362,35 +352,11 @@ border-bottom: none;
     transition: opacity 0.2s ease-in;
 }
 
-@media screen and (max-width: 867px) {
-    /* .current-season-area {
-        display: unset;
-    }
-
-    #shareButton {
-        margin-left: unset;
-    }
-
-    #listViewButton {
-        margin-left: unset;
-    } */
+@media screen and (max-width: 900px) {
 
     .teamStandingsBox {
         grid-template-columns: 1fr;
     }
-
-    /* .teamStandingsBox .teamPosition {
-        border-radius: 2.5px;
-        font-size: clamp(0.5rem, 5.25vw, 5em);
-        height: clamp(1rem, 7.5vw, 5em);
-        width: clamp(1rem, 7.5vw, 5em);
-    } */
-
-    /* .teamStandingsBox .teamColour {
-        margin-left: 0;
-        width: clamp(0.25rem, 1.875vw, 5em);
-        height: clamp(1rem, 7.5vw, 5em);
-    } */
 
     .teamStandingsBox .teamLogo,
     .teamStanding picture {
@@ -402,21 +368,4 @@ border-bottom: none;
     .teamStandingsBox .teamName {
         font-size: clamp(1rem, 1.5rem, 5rem);
     }
-
-    /* .teamStandingsBox .teamPointsArea {
-        margin-right: 5px;
-        line-height: 0.8;
-    } */
-
-    /* .teamStandingsBox .teamPointsArea .teamPoints {
-        font-size: clamp(0.5rem, 6vw, 5em);
-    } */
-
-    /* .teamStandingsBox .teamPointsArea .teamStandings {
-        font-size: clamp(0.25rem, 3.0vw, 5em);
-    } */
-
-    /* .teamBoxContainer {
-        grid-template-columns: 1fr;
-    } */
 }

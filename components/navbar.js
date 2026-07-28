@@ -179,12 +179,11 @@ template.innerHTML = `
             <div class="nav-dropdown">
                 <div id="nav-dropdown-button">☰</div>
                 <div id="nav-dropdown-bar">
-                    <a href="../../../pages/news/">News</a>
-                    <a href="../../../pages/teams/">Teams</a>
                     <a href="../../../pages/schedule/">Schedule</a>
-                    <a href="../../../pages/rules/">Rules & Guides</a>
+                    <a href="../../../pages/results/">Results</a>
+                    <a href="../../../pages/standings/">Standings</a>
+                    <a href="../../../pages/teams/">Teams</a>
                     <a href="../../../pages/tools/">Tools</a>
-                    <a href="../../../pages/credits/">Credits</a>
                     <a class="nav-bar-link" href="https://discord.gg/jz3hKEmDss" target="_blank">
                         ${DISCORDSVG} Discord
                     </a>

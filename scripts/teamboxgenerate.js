@@ -103,49 +103,6 @@ const allTeamsTable = document.getElementById('JSAllTeamsTable');
 const PICKER_SORT_KEY = 'teamPickerSortMode';
 let pickerSortMode = localStorage.getItem(PICKER_SORT_KEY) || 'joined';
 let allTeamsCache = null;
-// const JSAllTeamsTable = document.getElementById('JSAllTeamsTable');
-
-// function renderAllTeamsTable() {
-//     if (!JSAllTeamsTable || !allTeamsCache) return;
-
-//     const sorted = allTeamsCache.slice().sort((a, b) => a.team_name.localeCompare(b.team_name));
-//     JSAllTeamsTable.innerHTML = '';
-
-//     const table = document.createElement('table');
-//     table.className = 'all-teams-table';
-//     table.innerHTML = `
-//         <thead>
-//             <tr>
-//                 <th>Emblem</th>
-//                 <th>Team</th>
-//             </tr>
-//         </thead>
-//     `;
-
-//     const tbody = document.createElement('tbody');
-//     for (const team of sorted) {
-//         const nameUpper = team.team_name.toUpperCase();
-//         const dest = `pages/teams/details/?team=${encodeURIComponent(team.team_name)}`;
-//         const row = document.createElement('tr');
-//         row.innerHTML = `
-//             <td class="team-table-emblem">
-//                 <a href="${dest}">
-//                     <picture>
-//                         <source srcset="https://api.umkl.co.uk/teamemblems/${nameUpper}" type="image/avif">
-//                         <img src="https://api.umkl.co.uk/teamemblems/${nameUpper}?og" alt="${makePossessive(team.team_name)} team emblem" loading="lazy">
-//                     </picture>
-//                 </a>
-//             </td>
-//             <td class="team-table-name">
-//                 <a href="${dest}">${team.team_name}</a>
-//             </td>
-//         `;
-//         tbody.appendChild(row);
-//     }
-
-//     table.appendChild(tbody);
-//     JSAllTeamsTable.appendChild(table);
-// }
 
 function sortPickerTeams(teams) {
     const sorted = teams.slice();
@@ -308,7 +265,7 @@ async function generateTeamBoxes(data) {
         row.className = "teamStanding";
         row.setAttribute('tabindex', '0');
         if (team.team_color) row.style.backgroundImage = `linear-gradient(90deg, ${darkenColor(team.team_color)} 0%, ${team.team_color} 100%)`;
-        row.style.color = team.team_color ? (isLightColor(team.team_color) ? 'black' : 'white') : '';
+        row.style.color = team.team_color ? (isLightColor(team.team_color) ? 'var(--brand-dark' : 'var(--brand-light)') : '';
         row.addEventListener('click', () => window.location.href = dest);
         row.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') window.location.href = dest;
@@ -417,9 +374,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     generateSeasonPicker();
     updateSeasonText();
-
-    // pre-load the team picker
-    populateTeamPicker();
 });
 
 document.addEventListener('listViewChange', async () => {
