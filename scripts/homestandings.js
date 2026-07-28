@@ -1,6 +1,6 @@
 /*
     homestandings.js
-    Generates a condensed team standings widget for the homepage (Top 3 podium + expandable table).
+    Generates a condensed team standings view for the homepage.
 */
 
 const JSTeamTable = document.getElementById("HomeJSTeamTable");
@@ -88,10 +88,8 @@ async function renderHomeStandings(data) {
     SeasonTop3.innerHTML = "";
     if (JSTeamTableLoading) JSTeamTableLoading.innerHTML = "";
 
-    // Sort descending by points
     const sorted = data.slice().sort((a, b) => Number(b.team_season_points) - Number(a.team_season_points));
 
-    // Calculate tie-aware positions
     const positionMap = new Map();
     let lastPoints = null, lastPosition = 0;
     for (let i = 0; i < sorted.length; i++) {
@@ -100,7 +98,6 @@ async function renderHomeStandings(data) {
         positionMap.set(sorted[i], lastPosition);
     }
 
-    // 1. RENDER TOP 3 PODIUM CARDS (2nd, 1st, 3rd visual order)
     const podiumOrder = [sorted[1], sorted[0], sorted[2]].filter(Boolean);
     
     for (const team of podiumOrder) {
@@ -135,7 +132,6 @@ async function renderHomeStandings(data) {
         SeasonTop3.appendChild(card);
     }
 
-    // 2. RENDER TABLE
     const table = document.createElement('table');
     table.className = 'standings-table';
     table.innerHTML = `
@@ -163,7 +159,6 @@ async function renderHomeStandings(data) {
         const row = document.createElement('tr');
         row.className = 'standings-row';
         
-        // Hide rows past index 4 (positions past top 5) unless expanded
         if (index >= 5 && !isExpanded) {
             row.classList.add('hidden-row');
         }
@@ -193,7 +188,6 @@ async function renderHomeStandings(data) {
     updateToggleBtnState(sorted.length);
 }
 
-// Global click event for "Show all / Show less"
 toggleShowAllBtn?.addEventListener("click", (e) => {
     e.preventDefault();
     isExpanded = !isExpanded;
