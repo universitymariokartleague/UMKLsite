@@ -97,6 +97,10 @@ img {
 
 }
 
+article:hover h2, article:hover h3 {
+    text-decoration: underline;
+}
+
 .small-card .img-wrapper {
     aspect-ratio: 16 / 9;
     overflow: hidden;
