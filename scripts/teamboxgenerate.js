@@ -264,6 +264,7 @@ async function generateTeamBoxes(data) {
         const row = document.createElement('div');
         row.className = "teamStanding";
         row.setAttribute('tabindex', '0');
+        row.style.backgroundColor = team.team_color
         if (team.team_color) row.style.backgroundImage = `linear-gradient(90deg, ${darkenColor(team.team_color)} 0%, ${team.team_color} 100%)`;
         row.style.color = team.team_color ? (isLightColor(team.team_color) ? 'var(--brand-dark' : 'var(--brand-light)') : '';
         row.addEventListener('click', () => window.location.href = dest);
@@ -271,15 +272,16 @@ async function generateTeamBoxes(data) {
             if (e.key === 'Enter' || e.key === ' ') window.location.href = dest;
         });
 
-        row.innerHTML = `
-            <div translate="no" class="teamName" title="${team.team_full_name}">${name}</div>
-            <picture>
-                <source srcset="${avif}" type="image/avif">
-                <img class="teamLogo" src="${png}" alt="${makePossessive(name)} team emblem"
-                ${imgAttr} loading="lazy"
-                onload="this.style.opacity=1;">
-            </picture>
-        `;
+row.innerHTML = `
+    <div class="teamStandingPattern" style="background-image: linear-gradient(90deg, ${darkenColor(team.team_color)} 0%, #ffffff00 85%);"></div>
+    <div translate="no" class="teamName" title="${team.team_full_name}">${name}</div>
+    <picture>
+        <source srcset="${avif}" type="image/avif">
+        <img class="teamLogo" src="${png}" alt="${makePossessive(name)} team emblem"
+        ${imgAttr} loading="lazy"
+        onload="this.style.opacity=1;">
+    </picture>
+`;
         fragment.appendChild(row);
     }
 

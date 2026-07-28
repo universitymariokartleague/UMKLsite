@@ -24,6 +24,9 @@
     align-items: center;
     border-radius: 10px;
     font-weight: 1000;
+    position: relative;
+    overflow: hidden; /* Keeps pattern within rounded corners */
+    isolation: isolate; /* Creates a stacking context */
 }
 
 .teamStandingsBox .teamStanding:hover {
@@ -58,6 +61,25 @@
 
 .teamStandingsBox .teamName {
     font-size: 30px;
+}
+
+.teamStandingPattern {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    
+    -webkit-mask-image: url('/assets/pattern/finish_pattern.svg');
+    mask-image: url('/assets/pattern/finish_pattern.svg');
+
+    
+    opacity: 1;
+}
+
+/* Keep text and logo sitting on top of the pattern */
+.teamStanding > :not(.teamStandingPattern) {
+    position: relative;
+    z-index: 1;
 }
 
 /* .teamStandingsBox .teamPointsArea {
@@ -314,7 +336,6 @@ border-bottom: none;
 }
 
 .teamBox {
-    border: 1px solid #cccccc;
     border-radius: 10px;
     padding: 20px;
     min-width: 300px;
@@ -369,3 +390,4 @@ border-bottom: none;
         font-size: clamp(1rem, 1.5rem, 5rem);
     }
 }
+
