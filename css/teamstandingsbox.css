@@ -62,8 +62,6 @@
     inset: 0;
     pointer-events: none;
     z-index: 0;
-
-    left: 50px;
     
     -webkit-mask-image: url('/assets/pattern/finish_pattern.svg');
     mask-image: url('/assets/pattern/finish_pattern.svg');
