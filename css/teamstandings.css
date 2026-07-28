@@ -136,6 +136,9 @@
     display: flex;
     justify-content: space-between;
     min-height: 200px;
+    position: relative;
+    overflow: hidden; /* Contains pattern within rounded card corners */
+    isolation: isolate; /* Creates stacking context for z-index ordering */
 }
 
 .podium-card:hover .podium-team-name {
@@ -235,6 +238,31 @@
     justify-content: center;
     align-items: center;
     margin-top: 24px;
+}
+
+.teamStandingPattern {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+
+    left: -200px;
+    
+    -webkit-mask-image: url('/assets/pattern/finish_pattern.svg');
+    mask-image: url('/assets/pattern/finish_pattern.svg');
+
+    -webkit-mask-repeat: repeat;
+    mask-repeat:no-repeat;
+    -webkit-mask-size: 1200px;
+    mask-size: 1200px;
+
+    
+    opacity: 1;
+}
+
+.podium-card > :not(.teamStandingPattern) {
+    position: relative;
+    z-index: 1;
 }
 
 @media screen and (max-width: 1350px) {

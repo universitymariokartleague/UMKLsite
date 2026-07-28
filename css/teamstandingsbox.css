@@ -25,19 +25,13 @@
     border-radius: 10px;
     font-weight: 1000;
     position: relative;
-    overflow: hidden; /* Keeps pattern within rounded corners */
-    isolation: isolate; /* Creates a stacking context */
+    overflow: hidden;
+    isolation: isolate;
 }
 
 .teamStandingsBox .teamStanding:hover {
     text-decoration: underline;
 }
-
-/* 
-.teamStandingsBox .teamStanding:hover .teamPosition {
-    color: var(--accent-color);
-    transition: 0.2s;
-} */
 
 .teamStandingsBox .teamColour {
     border-radius: 5px;
@@ -68,15 +62,21 @@
     inset: 0;
     pointer-events: none;
     z-index: 0;
+
+    left: 50px;
     
     -webkit-mask-image: url('/assets/pattern/finish_pattern.svg');
     mask-image: url('/assets/pattern/finish_pattern.svg');
+
+    -webkit-mask-repeat: repeat;
+    mask-repeat:no-repeat;
+    -webkit-mask-size: 860px;
+    mask-size: 860px;
 
     
     opacity: 1;
 }
 
-/* Keep text and logo sitting on top of the pattern */
 .teamStanding > :not(.teamStandingPattern) {
     position: relative;
     z-index: 1;

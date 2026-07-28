@@ -265,7 +265,7 @@ async function generateTeamBoxes(data) {
         row.className = "teamStanding";
         row.setAttribute('tabindex', '0');
         row.style.backgroundColor = team.team_color
-        if (team.team_color) row.style.backgroundImage = `linear-gradient(90deg, ${darkenColor(team.team_color)} 0%, ${team.team_color} 100%)`;
+        if (team.team_color) row.style.backgroundImage = `linear-gradient(90deg, ${team.team_color} 0%, ${darkenColor(team.team_color)} 100%)`;
         row.style.color = team.team_color ? (isLightColor(team.team_color) ? 'var(--brand-dark' : 'var(--brand-light)') : '';
         row.addEventListener('click', () => window.location.href = dest);
         row.addEventListener('keydown', (e) => {
@@ -273,7 +273,7 @@ async function generateTeamBoxes(data) {
         });
 
 row.innerHTML = `
-    <div class="teamStandingPattern" style="background-image: linear-gradient(90deg, ${darkenColor(team.team_color)} 0%, #ffffff00 85%);"></div>
+    <div class="teamStandingPattern" style="background-color: ${team.team_color};"></div>
     <div translate="no" class="teamName" title="${team.team_full_name}">${name}</div>
     <picture>
         <source srcset="${avif}" type="image/avif">

@@ -111,11 +111,12 @@ async function renderHomeStandings(data) {
 
         const card = document.createElement('div');
         card.className = `podium-card pos-${pos}`;
-        card.style.backgroundImage = `linear-gradient(90deg, ${darkenColor(team.team_color)} 0%, ${team.team_color} 100%)`;
+        card.style.backgroundImage = `linear-gradient(90deg, ${team.team_color} 0%, ${darkenColor(team.team_color)} 100%)`;
         card.style.color = team.team_color ? (isLightColor(team.team_color) ? 'var(--brand-dark' : 'var(--brand-light)') : '';
         card.onclick = () => window.location.href = dest;
 
         card.innerHTML = `
+        <div class="teamStandingPattern" style="background-color: ${team.team_color};"></div>
         <div class="podium-text">
             <div class="podium-header">
                 <div class="podium-pos">${ordinal}</div>
@@ -126,7 +127,7 @@ async function renderHomeStandings(data) {
             </div>
         </div>
         <div class="podium-emblem">
-                        <img class="podium-emblem" src="${avif}" alt="${name} logo" />
+            <img class="podium-emblem" src="${avif}" alt="${name} logo" />
         </div>
         `;
         SeasonTop3.appendChild(card);
