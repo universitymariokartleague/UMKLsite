@@ -111,7 +111,7 @@ async function renderHomeStandings(data) {
 
         const card = document.createElement('div');
         card.className = `podium-card pos-${pos}`;
-        card.style.backgroundImage = `linear-gradient(90deg, ${team.team_color} 0%, ${darkenColor(team.team_color)} 100%)`;
+        card.style.backgroundImage = `linear-gradient(90deg, ${team.team_color} 0%, ${darkenColor(team.team_color, 10)} 100%)`;
         card.style.color = team.team_color ? (isLightColor(team.team_color) ? 'var(--brand-dark' : 'var(--brand-light)') : '';
         card.onclick = () => window.location.href = dest;
 
