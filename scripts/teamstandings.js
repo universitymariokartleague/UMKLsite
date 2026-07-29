@@ -1,6 +1,5 @@
 /*
     This script generates a simple points standings table for each team in a given season.
-    It includes a season selector, API fetching with caching, and error handling.
 */
 
 const JSTeamTable = document.getElementById("JSTeamTable");
@@ -19,9 +18,6 @@ let maxSeason = currentSeason;
 let refreshTimer = null;
 let retryCount = 0;
 
-/* ==========================================
-   Helper Functions
-   ========================================== */
 
 const fetchAPI = async (endpoint, body) => {
     const response = await fetch(`${API_BASE}/${endpoint}`, {
@@ -146,9 +142,6 @@ async function generateStandingsTable(data) {
     JSTeamTable.appendChild(table);
 }
 
-/* ==========================================
-   Data Fetching & Retry Controls
-   ========================================== */
 
 async function getTeamDataSafe(season) {
     try {
@@ -176,9 +169,6 @@ function scheduleRetry() {
     }, 2000);
 }
 
-/* ==========================================
-   Season Controls
-   ========================================== */
 
 function generateSeasonPicker() {
     if (!seasonPicker) return;
@@ -229,9 +219,6 @@ async function updateSeasonText() {
     }
 }
 
-/* ==========================================
-   Initialization
-   ========================================== */
 
 document.addEventListener("DOMContentLoaded", async () => {
     const startTime = performance.now();
@@ -252,7 +239,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // Set fallback max/current season from cache
+    // Set fallback current season from cache
     const seasonInfoCache = getSeasonInfoCache();
     if (seasonInfoCache[0] != null) {
         const cachedSeasonNum = parseInt(seasonInfoCache[0]);

@@ -173,7 +173,7 @@ function renderTeamSummary(teamData) {
         <div class="summary-row">
             <span class="summary-label">Lifetime Matches</span>
             <span class="summary-value">
-        <a href="/pages/results/details/?team=${encodeURIComponent(teamData.team_name)}" title="View all matches for ${teamData.team_name}">
+        <a href="/pages/standings/details/?team=${encodeURIComponent(teamData.team_name)}" title="View all matches for ${teamData.team_name}">
             ${teamData.lifetime_matches_played ?? 0} (View All)
         </a>
             </span>
@@ -213,7 +213,6 @@ function generateTeamBox(teamData, showError) {
     if (teamNameBox) teamNameBox.textContent = teamData.team_name;
     if (isLightColor(teamData.team_color)) teamNameBox.style.color = 'var(--brand-dark)'
 
-    // Build Season Dropdown Selector
     const minSeason = teamData.first_entry;
     const hasPlayed = !!minSeason;
     const selectWrapper = document.getElementById('teamSeasonSelectWrapper');

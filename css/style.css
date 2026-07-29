@@ -152,12 +152,6 @@ h1 {
     text-transform: uppercase;
 }
 
-h2 {
-    font-size: 2em;
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
-}
-
 @media screen and (max-width: 900px) {
     h1 {
         font-size: 2.5em;
@@ -362,7 +356,7 @@ button:focus {
     font-weight: 600;
     display: flex;
     align-items: center;
-    text-align: center;
+    text-align: left;
     justify-content: center;
     gap: 5px;
     text-decoration: none;
@@ -381,22 +375,30 @@ button:focus {
 
 .bubble-nav {
     background-color: var(--translucent-color);
-    border-radius: 100px;
     border: none;
     outline: none;
     font-weight: 600;
-    overflow: hidden;
     display: flex;
+    border-radius: 100px;
     align-items: center;
     text-align: center;
     justify-content: center;
-
 }
 
 .bubble-nav .bubble-nav-item {
     padding: 10px 20px;
     text-decoration: none;
 }
+
+.bubble-nav-item:first-child {
+    border-radius: 100px 0 0 100px;
+}
+
+.bubble-nav-item:last-child {
+    border-radius: 0 100px 100px 0;
+}
+
+
 
 .bubble-nav .active {
     background-color: var(--translucent-color);

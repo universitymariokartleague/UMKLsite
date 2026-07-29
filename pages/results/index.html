@@ -11,20 +11,17 @@
     <meta content="The University Mario Kart League (UMKL) match results across all teams." name="description" />
     <link href="https://umkl.co.uk/assets/media/brand/favicon.png" rel="icon" type="image/png" />
     
-    <!-- Absolute paths starting from root -->
     <link href="/css/style.css" rel="stylesheet" />
     <link href="/css/teamstandings.css" rel="stylesheet" />
     <link href="/css/settings.css" rel="stylesheet" />
     <link href="/css/results.css" rel="stylesheet" />
     <link href="/css/ext/fontawesome.min.css" rel="stylesheet" />
 
-    <!-- Components -->
     <link rel="modulepreload" href="/components/navbar.js">
     <link rel="modulepreload" href="/components/footer.js">
     <script defer src="/components/navbar.js" type="module"></script>
     <script defer src="/components/footer.js" type="module"></script>
 
-    <!-- Theme check & Scripts -->
     <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() { let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme")) } checkTheme();</script>
     <script defer src="/scripts/settings.js" type="module"></script>
     <script defer src="/scripts/matchresultsall.js" type="module"></script>
@@ -47,7 +44,6 @@
                     <a class="bubble-nav-item no-color-link active" href="/pages/results/">Matches</a>
                     <a class="bubble-nav-item no-color-link" href="/pages/standings/">Standings</a>
             </nav>
-
 
         </div>
 

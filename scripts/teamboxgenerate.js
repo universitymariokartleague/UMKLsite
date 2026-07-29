@@ -110,7 +110,6 @@ function sortPickerTeams(teams) {
     if (pickerSortMode === 'alpha') {
         sorted.sort((a, b) => a.team_name.localeCompare(b.team_name));
     } else if (pickerSortMode === 'joined') {
-        // The API already returns teams in join order, so no sorting is needed.
     } else {
         const dataByName = new Map(teamData.map(t => [t.team_name, t]));
         sorted.sort((a, b) => {
