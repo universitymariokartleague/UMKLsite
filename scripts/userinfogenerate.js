@@ -159,7 +159,7 @@ function generateProfileCardContent(data) {
         .replace("{{teamWins}}", data.team_wins || "0")
         .replace("{{firstPlaces}}", data.first_places || "0")
         .replace("{{highestFinish}}", data.highest_finish || "N/A")
-        .replace("{{cardExtraText}}", "Use /profile to see your own card!")
+        .replace("{{cardExtraText}}", "Use /user-profile to see your own card!")
         .replace("{{profileCustomisationButton}}", areProfileItems ? `<button class="customise-button" id="showCardProfileItemsButton"><span class="fa-solid fa-paintbrush"></span> Customise design</button>` : '');
 }
 
