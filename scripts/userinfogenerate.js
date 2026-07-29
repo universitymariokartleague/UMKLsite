@@ -72,6 +72,7 @@ let data, matchData, teamData;
 const currentSeason = 2;
 const shareResScale = 3;
 let cardImageBlob;
+let cardCaptureId = 0;
 let graphResScale = shareResScale;
 let fetchedCurrentSeason = currentSeason;
 let takingCardScreenshot = false;
@@ -93,6 +94,22 @@ const colourMap = {
     "Rainbow": `linear-gradient(135deg, ${rainbowColours.join(", ")})`
 };
 const eventIcons = { match: '', testmatch: '' }; // fa-flag-checkered, fa-gear
+const backgroundOverlayOpacity = {
+    "cheep_cheep": 0.2,
+    "cheep_cheep_wrap": 0.2,
+    "mario_kart_8": 0.5,
+    "mario_kart_8_deluxe": 0.4,
+    "mario_kart_8_deluxe_booster_course_pass": 0.3,
+    "mario_kart_world": 0.25,
+    "super_mario_maker_2": 0.5,
+    "super_mario_maker_2_gameplay": 0.6,
+    "mario_luigi_dream_team": 0.4,
+    "mario_luigi_partners_in_time": 0.4,
+};
+
+function getItemFileName(name) {
+    return name.replace(/[&:]/g, "").replace(/\s+/g, "_").toLowerCase();
+}
 
 function getEquippedColourItem(data) {
     if (currentEquippedItems.colour == null) return null;
@@ -100,13 +117,9 @@ function getEquippedColourItem(data) {
     return item?.type === "colour" ? item : null;
 }
 
-function findMatchEntryByEventID(eventID) {
-    if (!matchData || !eventID) return null;
-    for (const date in matchData) {
-        const found = matchData[date]?.find(entry => entry.eventID === eventID);
-        if (found) return found;
-    }
-    return null;
+function findTeamMatchOnDate(date, teamName) {
+    if (!matchData || !teamName) return null;
+    return matchData[date]?.find(entry => entry.teamsInvolved?.includes(teamName)) || null;
 }
 
 let refreshTimer = null;
@@ -147,7 +160,7 @@ function generateProfileCardContent(data) {
         .replace("{{firstPlaces}}", data.first_places || "0")
         .replace("{{highestFinish}}", data.highest_finish || "N/A")
         .replace("{{cardExtraText}}", "Use /profile to see your own card!")
-        .replace("{{profileCustomisationButton}}", areProfileItems ? `<button class="customise-button" id="showCardProfileItemsButton"><span class="fa-solid fa-paintbrush"></span> Customise profile</button>` : '');
+        .replace("{{profileCustomisationButton}}", areProfileItems ? `<button class="customise-button" id="showCardProfileItemsButton"><span class="fa-solid fa-paintbrush"></span> Customise design</button>` : '');
 }
 
 function generateProfileCardHTML(data) {
@@ -386,14 +399,6 @@ async function createSPGraph(data) {
     const history = spData.history;
     const dates = Object.keys(history).sort();
 
-    // data.match_data lists real matches (not test matches) in chronological order with no date
-    // attached, so pair it up positionally with the chronological "match" entries in history
-    const matchDates = dates.filter(d => history[d]?.[0]?.event === 'match');
-    const matchDateToEntry = {};
-    matchDates.forEach((d, i) => {
-        if (data.match_data?.[i]) matchDateToEntry[d] = data.match_data[i];
-    });
-
     const firstDate = new Date(dates[0]);
     const fakeStartDate = new Date(firstDate.getTime() - (60 * 24 * 60 * 60 * 1000)); // 2 months before
     const fakeDateStr = fakeStartDate.toISOString().split('T')[0];
@@ -568,12 +573,9 @@ async function createSPGraph(data) {
 
             const eventType = history[date]?.[0]?.event;
             let matchInfo = null;
-            const matchDataEntry = matchDateToEntry[date];
-            if (eventType === 'match' && matchDataEntry?.eventID) {
-                const fullMatch = findMatchEntryByEventID(matchDataEntry.eventID);
-                if (fullMatch?.teamsInvolved) {
-                    matchInfo = { eventID: matchDataEntry.eventID, teamsInvolved: fullMatch.teamsInvolved };
-                }
+            const teamMatch = findTeamMatchOnDate(date, data.team);
+            if (teamMatch?.eventID && teamMatch?.teamsInvolved) {
+                matchInfo = { eventID: teamMatch.eventID, teamsInvolved: teamMatch.teamsInvolved };
             }
 
             pointDetails.push({
@@ -620,10 +622,6 @@ async function createSPGraph(data) {
 
     const eventLabels = { match: 'Match', testmatch: 'Test Match' };
 
-    // The tooltip is a child of the container (not the canvas) and stays clamped inside the
-    // container's own box (flipping below the point when there isn't room above), so hovering
-    // onto it from the point is a normal parent->child move that never fires the container's
-    // mouseleave. A short hide delay covers any remaining gap during fast mouse movement.
     let hideTimeout = null;
     const cancelHide = () => {
         if (hideTimeout) {
@@ -676,13 +674,13 @@ async function createSPGraph(data) {
             const dateObj = new Date(closest.date);
             const formattedDate = `${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${dateObj.getFullYear()}`;
             const label = eventLabels[closest.eventType] || 'SP update';
-            const changeText = closest.change >= 0 ? `+${closest.change}` : closest.change;
 
             const titleLine = closest.matchInfo
                 ? `<a href="pages/matches/?graphEventID=${closest.matchInfo.eventID}">${closest.matchInfo.teamsInvolved.join(' VS ')}</a>`
                 : `<strong>${label}</strong>`;
+            const testMatchLine = (closest.matchInfo && closest.eventType === 'testmatch') ? '<br>Test Match' : '';
 
-            tooltip.innerHTML = `${titleLine}<br>${formattedDate}<br>${changeText} SP &middot; ${closest.cumulative} total`;
+            tooltip.innerHTML = `${titleLine}${testMatchLine}<br>${formattedDate}`;
             tooltip.style.opacity = '1';
 
             const pointContainerX = (rect.left - containerRect.left) + closest.x / scaleX;
@@ -731,6 +729,7 @@ document.addEventListener('keydown', async (event) => {
 });
 
 async function preloadCardImage() {
+    const captureId = ++cardCaptureId;
     const node = document.getElementById("userCardBox");
     const profileCard = document.querySelector(".profile-card");
 
@@ -742,38 +741,66 @@ async function preloadCardImage() {
     takingCardScreenshot = true;
     createSPGraph(data);
 
+    let wrapper;
     try {
+        await new Promise(resolve => setTimeout(resolve, 50));
+
+        const nodeRect = node.getBoundingClientRect();
         const rect = profileCard.getBoundingClientRect();
 
-        const showCardProfileItemsButton = document.getElementById("showCardProfileItemsButton");
-        if (showCardProfileItemsButton) showCardProfileItemsButton.style.display = 'none';
+        // capture from a detached clone instead of the live card
+        const clone = node.cloneNode(true);
 
-        let cardHelpDiv = document.querySelector('.card-help');
-        cardHelpDiv.style.display = 'block';
-        if (!isMobile) cardHelpDiv.style.width = '100%';
+        clone.style.width = `${nodeRect.width}px`;
+        const clonedCanvas = clone.querySelector('canvas');
+        const clonedProfileCard = clone.querySelector('.profile-card');
+        const clonedButton = clone.querySelector('.customise-button');
+        const clonedCardHelp = clone.querySelector('.card-help');
 
-        let dataURL;
+        const originalCanvas = document.getElementById('spGraph');
+        if (clonedCanvas && originalCanvas) {
+            const canvasSize = getComputedStyle(originalCanvas);
+            clonedCanvas.style.width = canvasSize.width;
+            clonedCanvas.style.height = canvasSize.height;
+            clonedCanvas.getContext('2d').drawImage(originalCanvas, 0, 0);
+        }
 
-        setTimeout(async () => {
-            dataURL = await htmlToImage.toPng(node, {
-                pixelRatio: shareResScale,
-                width: Math.round(isMobile ? rect.width : rect.width + 40),
-                height: Math.round(node.scrollHeight + 40),
-                style: {
-                    transform: isMobile ? 'none' : `translateX(-150px)`
-                }
-            });
+        clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
 
-            if (showCardProfileItemsButton) showCardProfileItemsButton.style.display = '';
-            cardHelpDiv.style.display = '';
+        clonedProfileCard?.classList.add('capturing-screenshot');
+        if (clonedButton) clonedButton.style.display = 'none';
+        if (clonedCardHelp) {
+            clonedCardHelp.style.display = 'block';
+            if (!isMobile) clonedCardHelp.style.width = '100%';
+        }
 
-            const response = await fetch(dataURL);
-            cardImageBlob = await response.blob();
-        }, 5)
+        wrapper = document.createElement('div');
+        Object.assign(wrapper.style, {
+            height: '0',
+            overflow: 'hidden',
+            pointerEvents: 'none'
+        });
+        wrapper.appendChild(clone);
+        document.body.appendChild(wrapper);
+
+        const dataURL = await htmlToImage.toPng(clone, {
+            pixelRatio: shareResScale,
+            width: Math.round(isMobile ? rect.width : rect.width + 40),
+            height: Math.round(node.scrollHeight + 40),
+            style: {
+                transform: isMobile ? 'none' : `translateX(-150px)`
+            }
+        });
+
+        const response = await fetch(dataURL);
+        const blob = await response.blob();
+        // A newer capture may have started while this one was occuring
+        if (captureId === cardCaptureId) cardImageBlob = blob;
     } catch (err) {
         console.error("Capture failed:", err);
     }
 
+    wrapper?.remove();
     cardChanged = false;
     profileCard.style.transition = originalTransition;
     takingCardScreenshot = false;
@@ -946,7 +973,7 @@ function createItemElement(item, index, isEquipped) {
     div.onclick = () => toggleItemEquip(item.type, index);
 
     div.innerHTML = `
-        <img class="item-preview" src="assets/media/profile/${item.name.replace(/ /g, '_').toLowerCase()}.avif"
+        <img class="item-preview" src="assets/media/profile/${getItemFileName(item.name)}.avif"
             onload="this.style.opacity=1" onerror="this.onerror=null; this.style.display='none';"/>
         <div class="item-info">
             <h4 class="item-name">${item.name}</h4>
@@ -1040,8 +1067,9 @@ function applyEquippedItemsToCard() {
     if (currentEquippedItems.background != null) {
         const item = data.profile_items[currentEquippedItems.background];
         if (item?.type === "background") {
-            const bgFileName = item.name.replace(/ /g, "_").toLowerCase();
-            profileCard.style.backgroundImage = `url('assets/media/profile/bg/${bgFileName}.avif')`;
+            const bgFileName = getItemFileName(item.name);
+            const overlayOpacity = backgroundOverlayOpacity[bgFileName] ?? 0.3;
+            profileCard.style.backgroundImage = `linear-gradient(rgba(255, 255, 255, ${overlayOpacity}), rgba(255, 255, 255, ${overlayOpacity})), url('assets/media/profile/${bgFileName}.avif')`;
             profileCard.style.backgroundSize = "cover";
             profileCard.style.backgroundPosition = "center";
         }
@@ -1050,7 +1078,7 @@ function applyEquippedItemsToCard() {
     if (currentEquippedItems.overlay != null) {
         const item = data.profile_items[currentEquippedItems.overlay];
         if (item?.type === "overlay") {
-            const overlayFileName = item.name.replace(/ /g, "_").toLowerCase();
+            const overlayFileName = getItemFileName(item.name);
             let existingOverlay = profileCard.querySelector(".profile-card-overlay");
             if (!existingOverlay) {
                 existingOverlay = document.createElement("div");

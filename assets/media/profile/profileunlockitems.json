@@ -10,14 +10,14 @@
     "type": "colour"
   },
   {
-    "name": "Rainbow",
-    "sp_cost": 1050,
-    "type": "colour"
-  },
-  {
     "name": "Sparkly",
     "sp_cost": 980,
     "type": "overlay"
+  },
+  {
+    "name": "Rainbow",
+    "sp_cost": 1050,
+    "type": "colour"
   },
   {
     "name": "Cheep Cheep",
@@ -57,6 +57,16 @@
   {
     "name": "Super Mario Maker 2 Gameplay",
     "sp_cost": 575,
+    "type": "background"
+  },
+  {
+    "name": "Mario & Luigi: Dream Team",
+    "sp_cost": 2013,
+    "type": "background"
+  },
+  {
+    "name": "Mario & Luigi: Partners in Time",
+    "sp_cost": 2005,
     "type": "background"
   }
 ]
