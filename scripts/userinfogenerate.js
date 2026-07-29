@@ -2,6 +2,7 @@
     This script generates a user's info page card, along with allowing customisations.
 */
 import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareImage, showImagePreview, setOriginalMessage } from './shareAPIhelper.js';
+import { createDebugLogger } from './debuglogger.js';
 
 const profileCardContentHTML = `
     <div class="profile-card-header">
@@ -78,7 +79,6 @@ let isFlipping = false;
 let currentlyShowingItems = false;
 
 let areProfileItems = false;
-let availableItems = [];
 let currentEquippedItems = {
     colour: null,
     overlay: null,
@@ -86,8 +86,33 @@ let currentEquippedItems = {
 };
 let cardChanged = false;
 
+const rainbowColours = ["#ff9eb5", "#ffcc99", "#fff5a5", "#c5e8d0", "#c9daff"];
+const colourMap = {
+    "UMKL Red": "#ff0000",
+    "Blue": "#0066ff",
+    "Rainbow": `linear-gradient(135deg, ${rainbowColours.join(", ")})`
+};
+const eventIcons = { match: '', testmatch: '' }; // fa-flag-checkered, fa-gear
+
+function getEquippedColourItem(data) {
+    if (currentEquippedItems.colour == null) return null;
+    const item = data.profile_items?.[currentEquippedItems.colour];
+    return item?.type === "colour" ? item : null;
+}
+
+function findMatchEntryByEventID(eventID) {
+    if (!matchData || !eventID) return null;
+    for (const date in matchData) {
+        const found = matchData[date]?.find(entry => entry.eventID === eventID);
+        if (found) return found;
+    }
+    return null;
+}
+
 let refreshTimer = null;
 let startTime;
+
+const debugLog = createDebugLogger('userinfogenerate.js', '#ff52dc', '#ffa3ed');
 
 async function umklFetch(url, body = null) {
     const options = {
@@ -102,19 +127,6 @@ async function umklFetch(url, body = null) {
     const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
     localStorage.setItem("apiReqsSent", apiReqsSent + 1);
     return response.json();
-}
-
-function findMatchByEventID(eventID) {
-    for (const date in matchData) {
-        const matches = matchData[date];
-        if (!Array.isArray(matches)) continue;
-
-        const found = matches.find(match => match.eventID === eventID);
-        if (found) {
-            return { date, match: found };
-        }
-    }
-    return null;
 }
 
 function fillInPageTitle(data) {
@@ -178,6 +190,9 @@ let card3DAnimationId = null;
 let card3DMouseMoveHandler = null;
 let card3DMouseLeaveHandler = null;
 let card3DGlareMouseMoveHandler = null;
+
+let spGraphMouseMoveHandler = null;
+let spGraphMouseLeaveHandler = null;
 
 function cleanupCard3DEffect() {
     const handlers = [card3DMouseMoveHandler, card3DMouseLeaveHandler, card3DGlareMouseMoveHandler];
@@ -278,7 +293,7 @@ async function generateProfileBox(data, showError) {
     try {
         teamData = (await getTeamdata(data.team, fetchedCurrentSeason))[0]
     } catch (error) {
-        console.debug(`%cuserinfogenerate.js %c> %c${data.username} does not belong to a team`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
+        debugLog(`${data.username} does not belong to a team`);
     }
 
     cleanupCard3DEffect();
@@ -294,7 +309,7 @@ async function generateProfileBox(data, showError) {
 
     attachProfileEventListeners();
 
-    createSPGraph(data, `#${data.color}`);
+    createSPGraph(data);
     addCard3DEffect();
 
     (function injectLiveDotStyle() {
@@ -347,29 +362,16 @@ function showErrorBox(showError) {
     }
 }
 
-function toOrdinal(n) {
-    const v = n % 100;
-    if (v >= 11 && v <= 13) return n + "th";
-    switch (v % 10) {
-        case 1: return n + "st";
-        case 2: return n + "nd";
-        case 3: return n + "rd";
-        default: return n + "th";
-    }
-}
-
 async function getCurrentSeason() {
     return umklFetch('https://api.umkl.co.uk/seasoninfo', { season: 0 });
 }
 
-function createSPGraph(data, teamColor) {
+async function createSPGraph(data) {
     const canvas = document.getElementById('spGraph');
     if (!canvas) return;
 
     canvas.width = canvas.clientWidth * graphResScale;
     canvas.height = canvas.clientHeight * graphResScale;
-
-    console.log(graphResScale)
 
     const ctx = canvas.getContext('2d');
     const spData = data.sp_detailed;
@@ -384,11 +386,20 @@ function createSPGraph(data, teamColor) {
     const history = spData.history;
     const dates = Object.keys(history).sort();
 
+    // data.match_data lists real matches (not test matches) in chronological order with no date
+    // attached, so pair it up positionally with the chronological "match" entries in history
+    const matchDates = dates.filter(d => history[d]?.[0]?.event === 'match');
+    const matchDateToEntry = {};
+    matchDates.forEach((d, i) => {
+        if (data.match_data?.[i]) matchDateToEntry[d] = data.match_data[i];
+    });
+
     const firstDate = new Date(dates[0]);
     const fakeStartDate = new Date(firstDate.getTime() - (60 * 24 * 60 * 60 * 1000)); // 2 months before
     const fakeDateStr = fakeStartDate.toISOString().split('T')[0];
     const extendedDates = [fakeDateStr, ...dates];
     const extendedValues = [0];
+    const extendedChanges = [0];
 
     const dateTimestamps = extendedDates.map(date => new Date(date).getTime());
     const fakeStartTime = dateTimestamps[0];
@@ -403,8 +414,10 @@ function createSPGraph(data, teamColor) {
         }
         const timeRatio = (dateTimestamps[index] - dateTimestamps[index - 1]) / timeRange;
         const chatSpForPeriod = Math.round(spData.chat_sp * timeRatio);
-        cumulative += history[date].change + chatSpForPeriod;
+        const dailyChange = history[date].reduce((sum, event) => sum + event.change, 0);
+        cumulative += dailyChange + chatSpForPeriod;
         extendedValues.push(index === extendedDates.length - 1 ? data.sp : Math.round(cumulative));
+        extendedChanges.push(dailyChange + chatSpForPeriod);
     });
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -465,8 +478,20 @@ function createSPGraph(data, teamColor) {
     }
     ctx.setLineDash([]);
 
+    let lineColour = `#${data.color}`;
+    const equippedColour = getEquippedColourItem(data);
+    if (equippedColour) {
+        if (equippedColour.name === "Rainbow") {
+            const gradient = ctx.createLinearGradient(padding, 0, canvas.width - padding, 0);
+            rainbowColours.forEach((colour, i) => gradient.addColorStop(i / (rainbowColours.length - 1), colour));
+            lineColour = gradient;
+        } else {
+            lineColour = colourMap[equippedColour.name] || equippedColour.name;
+        }
+    }
+
     // Draw graph line
-    ctx.strokeStyle = teamColor;
+    ctx.strokeStyle = lineColour;
     ctx.lineWidth = 1.5 * graphResScale;
     ctx.beginPath();
 
@@ -513,7 +538,7 @@ function createSPGraph(data, teamColor) {
 
     // Draw values
     if (extendedDates.length > 0) {
-        ctx.fillStyle = teamColor;
+        ctx.fillStyle = lineColour;
         ctx.font = `${11 * graphResScale}px Montserrat`;
         ctx.textAlign = 'center';
 
@@ -529,8 +554,9 @@ function createSPGraph(data, teamColor) {
     }
 
     // Draw points
-    ctx.fillStyle = teamColor;
-    extendedDates.forEach((_, index) => {
+    const pointDetails = [];
+    ctx.fillStyle = lineColour;
+    extendedDates.forEach((date, index) => {
         const timeRatio = (dateTimestamps[index] - fakeStartTime) / timeRange;
         const x = padding + timeRatio * graphWidth;
         const y = canvas.height - padding - (extendedValues[index] / gridMax) * graphHeight;
@@ -539,8 +565,144 @@ function createSPGraph(data, teamColor) {
             ctx.beginPath();
             ctx.arc(x, y, 3 * graphResScale, 0, 2 * Math.PI);
             ctx.fill();
+
+            const eventType = history[date]?.[0]?.event;
+            let matchInfo = null;
+            const matchDataEntry = matchDateToEntry[date];
+            if (eventType === 'match' && matchDataEntry?.eventID) {
+                const fullMatch = findMatchEntryByEventID(matchDataEntry.eventID);
+                if (fullMatch?.teamsInvolved) {
+                    matchInfo = { eventID: matchDataEntry.eventID, teamsInvolved: fullMatch.teamsInvolved };
+                }
+            }
+
+            pointDetails.push({
+                x, y, date,
+                change: extendedChanges[index],
+                cumulative: extendedValues[index],
+                eventType,
+                matchInfo
+            });
         }
     });
+
+    const iconY = 10 * graphResScale;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = `900 ${9 * graphResScale}px "Font Awesome 6 Free"`;
+
+    const minIconSpacing = 12 * graphResScale;
+    let lastIconX = -Infinity;
+
+    extendedDates.forEach((date, index) => {
+        if (index === 0) return;
+        const icon = eventIcons[history[date]?.[0]?.event];
+        if (!icon) return;
+
+        const timeRatio = (dateTimestamps[index] - fakeStartTime) / timeRange;
+        const x = padding + timeRatio * graphWidth;
+
+        if (x - lastIconX < minIconSpacing) return;
+        lastIconX = x;
+
+        ctx.fillStyle = '#666';
+        ctx.fillText(icon, x, iconY);
+    });
+
+    // Hover tooltips on the points
+    const container = canvas.parentElement;
+    let tooltip = container.querySelector('.sp-graph-tooltip');
+    if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.className = 'sp-graph-tooltip';
+        container.appendChild(tooltip);
+    }
+
+    const eventLabels = { match: 'Match', testmatch: 'Test Match' };
+
+    // The tooltip is a child of the container (not the canvas) and stays clamped inside the
+    // container's own box (flipping below the point when there isn't room above), so hovering
+    // onto it from the point is a normal parent->child move that never fires the container's
+    // mouseleave. A short hide delay covers any remaining gap during fast mouse movement.
+    let hideTimeout = null;
+    const cancelHide = () => {
+        if (hideTimeout) {
+            clearTimeout(hideTimeout);
+            hideTimeout = null;
+        }
+    };
+    const scheduleHide = () => {
+        cancelHide();
+        hideTimeout = setTimeout(() => {
+            tooltip.style.opacity = '0';
+            canvas.style.cursor = 'default';
+        }, 150);
+    };
+    const isOverTooltip = (e) => {
+        const tooltipRect = tooltip.getBoundingClientRect();
+        return e.clientX >= tooltipRect.left && e.clientX <= tooltipRect.right &&
+            e.clientY >= tooltipRect.top && e.clientY <= tooltipRect.bottom;
+    };
+
+    if (spGraphMouseMoveHandler) container.removeEventListener('mousemove', spGraphMouseMoveHandler);
+    if (spGraphMouseLeaveHandler) container.removeEventListener('mouseleave', spGraphMouseLeaveHandler);
+
+    spGraphMouseMoveHandler = (e) => {
+        if (isOverTooltip(e)) {
+            cancelHide();
+            return;
+        }
+
+        const rect = canvas.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const mouseX = (e.clientX - rect.left) * scaleX;
+        const mouseY = (e.clientY - rect.top) * scaleY;
+
+        let closest = null;
+        let closestDist = Infinity;
+        pointDetails.forEach(point => {
+            const dist = Math.hypot(point.x - mouseX, point.y - mouseY);
+            if (dist < closestDist) {
+                closestDist = dist;
+                closest = point;
+            }
+        });
+
+        if (closest && closestDist <= 14 * graphResScale) {
+            cancelHide();
+
+            const dateObj = new Date(closest.date);
+            const formattedDate = `${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${dateObj.getFullYear()}`;
+            const label = eventLabels[closest.eventType] || 'SP update';
+            const changeText = closest.change >= 0 ? `+${closest.change}` : closest.change;
+
+            const titleLine = closest.matchInfo
+                ? `<a href="pages/matches/?graphEventID=${closest.matchInfo.eventID}">${closest.matchInfo.teamsInvolved.join(' VS ')}</a>`
+                : `<strong>${label}</strong>`;
+
+            tooltip.innerHTML = `${titleLine}<br>${formattedDate}<br>${changeText} SP &middot; ${closest.cumulative} total`;
+            tooltip.style.opacity = '1';
+
+            const pointContainerX = (rect.left - containerRect.left) + closest.x / scaleX;
+            const pointContainerY = (rect.top - containerRect.top) + closest.y / scaleY;
+            tooltip.classList.toggle('sp-graph-tooltip-below', pointContainerY < 90);
+            tooltip.style.left = `${pointContainerX}px`;
+            tooltip.style.top = `${pointContainerY}px`;
+            canvas.style.cursor = 'pointer';
+        } else {
+            scheduleHide();
+        }
+    };
+
+    spGraphMouseLeaveHandler = (e) => {
+        if (isOverTooltip(e)) return;
+        scheduleHide();
+    };
+
+    container.addEventListener('mousemove', spGraphMouseMoveHandler);
+    container.addEventListener('mouseleave', spGraphMouseLeaveHandler);
 }
 
 async function getMatchData() {
@@ -548,13 +710,12 @@ async function getMatchData() {
 }
 
 async function getTeamdata(team, season) {
-    console.debug(`%cuserinfogenerate.js %c> %cFetching playerdata from the API...`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
     return umklFetch('https://api.umkl.co.uk/teamdata', { team: `${team}`, season: `${season}` });
 }
 
-window.addEventListener("resize", async () => {
+window.addEventListener("resize", () => {
     if (data) {
-        createSPGraph(data, `#${data.color}`);
+        createSPGraph(data);
     }
 });
 
@@ -579,13 +740,13 @@ async function preloadCardImage() {
     const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
     takingCardScreenshot = true;
-    createSPGraph(data, `#${data.color}`);
+    createSPGraph(data);
 
     try {
         const rect = profileCard.getBoundingClientRect();
 
-        let showCardProfileItemsButton = document.getElementById("showCardProfileItemsButton");
-        showCardProfileItemsButton.style.display = 'none';
+        const showCardProfileItemsButton = document.getElementById("showCardProfileItemsButton");
+        if (showCardProfileItemsButton) showCardProfileItemsButton.style.display = 'none';
 
         let cardHelpDiv = document.querySelector('.card-help');
         cardHelpDiv.style.display = 'block';
@@ -596,14 +757,14 @@ async function preloadCardImage() {
         setTimeout(async () => {
             dataURL = await htmlToImage.toPng(node, {
                 pixelRatio: shareResScale,
-                width: isMobile ? rect.width : rect.width + 40,
-                height: node.scrollHeight + 40,
+                width: Math.round(isMobile ? rect.width : rect.width + 40),
+                height: Math.round(node.scrollHeight + 40),
                 style: {
                     transform: isMobile ? 'none' : `translateX(-150px)`
                 }
             });
 
-            showCardProfileItemsButton.style.display = '';
+            if (showCardProfileItemsButton) showCardProfileItemsButton.style.display = '';
             cardHelpDiv.style.display = '';
 
             const response = await fetch(dataURL);
@@ -618,7 +779,7 @@ async function preloadCardImage() {
     takingCardScreenshot = false;
     setTimeout(() => {
         graphResScale = 2;
-        createSPGraph(data, `#${data.color}`);
+        createSPGraph(data);
         graphResScale = shareResScale;
     }, 100);
 }
@@ -647,7 +808,7 @@ async function generateCardImage() {
         if (useClipboard) {
             const success = await copyTextToClipboard(message);
             shareButton.innerText = success ? "Copied to clipboard!" : "Failed to copy!";
-            showImagePreview(blob, blob.url, message)
+            showImagePreview(blob, undefined, message)
         } else {
             await shareImage(
                 `${data.username} UMKL Profile`,
@@ -657,7 +818,7 @@ async function generateCardImage() {
             )
         }
 
-        console.debug(`%cuserinfogenerate.js %c> %cCopied image to clipboard!`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
+        debugLog('Copied image to clipboard!');
     } catch (err) {
         console.error("Failed to copy to clipboard!:", err);
     }
@@ -747,7 +908,7 @@ async function goBackToProfile() {
 
             profileCard.style.transform = 'rotateY(0deg)';
 
-            createSPGraph(data, `#${data.color}`);
+            createSPGraph(data);
             attachProfileEventListeners();
             addCard3DEffect();
             applyEquippedItemsToCard();
@@ -769,7 +930,6 @@ function populateItemsGrid(category) {
 
     grid.innerHTML = "";
 
-    availableItems = data.profile_items
     filteredItems.forEach((item, index) => {
         const isEquipped = isItemEquipped(item);
         const itemElement = createItemElement(item, index, isEquipped);
@@ -787,7 +947,7 @@ function createItemElement(item, index, isEquipped) {
 
     div.innerHTML = `
         <img class="item-preview" src="assets/media/profile/${item.name.replace(/ /g, '_').toLowerCase()}.avif"
-            onload="this.style.opacity=1" onerror="this.onerror=null;>
+            onload="this.style.opacity=1" onerror="this.onerror=null; this.style.display='none';"/>
         <div class="item-info">
             <h4 class="item-name">${item.name}</h4>
             <span class="item-type"><span class="fa-solid fa-${item.type}"></span> ${item.type}</span>
@@ -815,7 +975,7 @@ function toggleItemEquip(type, itemIndex) {
 }
 
 function isItemEquipped(item) {
-    return currentEquippedItems[item.type] === availableItems.indexOf(item);
+    return currentEquippedItems[item.type] === data.profile_items.indexOf(item);
 }
 
 function attachCategoryListeners() {
@@ -835,13 +995,13 @@ function saveItemEquips() {
     const equippedItemsData = {};
     Object.keys(currentEquippedItems).forEach(type => {
         if (currentEquippedItems[type] !== null) {
-            equippedItemsData[type] = availableItems[currentEquippedItems[type]];
+            equippedItemsData[type] = data.profile_items[currentEquippedItems[type]];
         }
     });
 
     equippedItemsData["username"] = data.username;
     cardChanged = true;
-    console.debug(`%cuserinfogenerate.js %c> %cSaving equipped items: ${JSON.stringify(equippedItemsData)}`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
+    debugLog(`Saving equipped items: ${JSON.stringify(equippedItemsData)}`);
 
     localStorage.setItem("userProfileSettings", JSON.stringify(equippedItemsData));
 
@@ -876,12 +1036,6 @@ function applyEquippedItemsToCard() {
 
     profileCard.style.backgroundImage = "";
     profileCard.querySelector(".profile-card-overlay")?.remove();
-
-    const colourMap = {
-        "UMKL Red": "#ff0000",
-        "Blue": "#0066ff",
-        "Rainbow": "linear-gradient(135deg, #ff9eb5, #ffcc99, #fff5a5, #c5e8d0, #c9daff)"
-    };
 
     if (currentEquippedItems.background != null) {
         const item = data.profile_items[currentEquippedItems.background];
@@ -932,7 +1086,7 @@ function applyEquippedItemsToCard() {
 
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
-    console.debug(`%cuserinfogenerate.js %c> %cGenerating player info box`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
+    debugLog('Generating player info box');
 
     let showError = 0;
     const urlParams = new URLSearchParams(window.location.search);
@@ -961,13 +1115,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     data.profile_items = mappedProfileItems;
-    data.profile_items_readable = mappedProfileItems.map(item =>
-        typeof item === 'object' ? item.name || JSON.stringify(item) : item
-    ).join(', ');
+    console.log(data);
 
     loadEquippedItems();
 
-    console.log(data);
     fillInPageTitle(data);
 
     try {
@@ -1015,5 +1166,5 @@ document.addEventListener("DOMContentLoaded", async () => {
         await generateCardImage();
     });
 
-    console.debug(`%cuserinfogenerate.js %c> %cGenerated user info box in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
+    debugLog(`Generated user info box in ${(performance.now() - startTime).toFixed(2)}ms`);
 });

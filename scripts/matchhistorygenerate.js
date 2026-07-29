@@ -4,7 +4,9 @@
 */
 
 import { generate6v6ScoreCalculatorLink } from './matchhelper.js';
+import { createDebugLogger } from './debuglogger.js';
 
+const debugLog = createDebugLogger('matchhistorygenerate.js', '#9b87ff', '#c8bdff');
 const matchHistoryBox = document.getElementById("JSMatchHistory");
 const MATCH_LENGTH_MINS = 90;
 
@@ -244,13 +246,13 @@ async function showTeamMatches() {
         matchData = fresh;
         generateTeamMatches(teamNameFromURL);
     } catch (error) {
-        console.debug(`%cmatchhistorygenerate.js %c> %cFailed to fetch match data: ${error.message}`, "color:#9b87ff", "color:#fff", "color:#c8bdff");
+        debugLog(`Failed to fetch match data: ${error.message}`);
         if (!cached) {
             matchHistoryBox.innerHTML = `<p>Failed to load match history.</p>`;
         }
     }
 
-    console.debug(`%cmatchhistorygenerate.js %c> %cGenerated match history in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9b87ff", "color:#fff", "color:#c8bdff");
+    debugLog(`Generated match history in ${(performance.now() - startTime).toFixed(2)}ms`);
 }
 
 document.addEventListener('startDayChange', () => {

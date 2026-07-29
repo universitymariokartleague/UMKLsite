@@ -3,6 +3,9 @@
     positions of all team locations on the map.
 */
 
+import { createDebugLogger } from './debuglogger.js';
+
+const debugLog = createDebugLogger('maprender.js', '#9452ff', '#c29cff');
 const mapImg = document.getElementById('UKMap');
 const container = mapImg.parentElement;
 
@@ -208,7 +211,7 @@ function onTouchEnd() {
 }
 
 async function getWeather(lat, long) {
-    console.debug(`%cmaprender.js %c> %cFetching location weather from the open-meteo API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    debugLog(`Fetching location weather from the open-meteo API...`);
     return fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,weather_code,is_day`)
         .then(response => {
             if (!response.ok) {
@@ -219,7 +222,7 @@ async function getWeather(lat, long) {
 }
 
 async function getTeamlocations() {
-    console.debug(`%cmaprender.js %c> %cFetching teamlocations from the API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    debugLog(`Fetching teamlocations from the API...`);
     return fetch('https://api.umkl.co.uk/teamlocations', {
         method: 'POST',
         headers: {
@@ -238,7 +241,7 @@ async function getTeamlocations() {
 }
 
 async function getSeasonInfo() {
-    console.debug(`%cmaprender.js %c> %cFetching seasoninfo from the API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    debugLog(`Fetching seasoninfo from the API...`);
     return fetch('https://api.umkl.co.uk/seasoninfo', {
         method: 'POST',
         headers: {
@@ -257,7 +260,7 @@ async function getSeasonInfo() {
 }
 
 async function getTeamFirstEntries(season) {
-    console.debug(`%cmaprender.js %c> %cFetching teamdata from the API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    debugLog(`Fetching teamdata from the API...`);
     return fetch('https://api.umkl.co.uk/teamdata', {
         method: 'POST',
         headers: {
@@ -695,7 +698,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         latestTeamData.forEach(t => firstEntryByName.set(t.team_name, t.first_entry));
         createSeasonToggle();
     } catch (error) {
-        console.debug(`%cmaprender.js %c> %cFailed to load season data, season toggle unavailable: ${error.message}`, "color:#9452ff", "color:#fff", "color:#c29cff");
+        debugLog(`Failed to load season data, season toggle unavailable: ${error.message}`);
     }
 
     let resizeTimeout;

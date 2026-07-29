@@ -3,6 +3,9 @@
     other scripts.
 */
 
+import { createDebugLogger } from './debuglogger.js';
+
+const debugLog = createDebugLogger('shareAPIhelper.js', '#525eff', '#969dff');
 export { isWindowsOrLinux, copyTextToClipboard, copyImageToClipboard, shareText, shareImage, showTextPopup, showImagePreview, setOriginalMessage, getOriginalMessage, getIsPopupShowing };
 
 let previewTimeout = null;
@@ -31,21 +34,21 @@ function getIsPopupShowing() {
 
 async function copyTextToClipboard(text) {
     if (!navigator.clipboard) {
-        console.debug(`%cshareAPIhelper.js %c> %cClipboard API not supported`, "color:#525eff", "color:#fff", "color:#969dff");
+        debugLog(`Clipboard API not supported`);
         return false;
     }
     try {
         await navigator.clipboard.writeText(text);
         return true;
     } catch (err) {
-        console.debug(`%cshareAPIhelper.js %c> %cFailed to copy text to clipboard ${err}`, "color:#525eff", "color:#fff", "color:#969dff");
+        debugLog(`Failed to copy text to clipboard ${err}`);
         return false;
     }
 }
 
 async function copyImageToClipboard(blob) {
     if (!navigator.clipboard || !window.ClipboardItem) {
-        console.debug(`%cshareAPIhelper.js %c> %cClipboard API not supported`, "color:#525eff", "color:#fff", "color:#969dff");
+        debugLog(`Clipboard API not supported`);
         return false;
     }
     try {
@@ -55,7 +58,7 @@ async function copyImageToClipboard(blob) {
         await navigator.clipboard.write([clipboardItem]);
         return true;
     } catch (err) {
-        console.debug(`%cshareAPIhelper.js %c> %cFailed to copy image to clipboard ${err}`, "color:#525eff", "color:#fff", "color:#969dff");
+        debugLog(`Failed to copy image to clipboard ${err}`);
         return false;
     }
 }
@@ -68,9 +71,9 @@ async function shareText(title, text) {
 
     try {
         await navigator.share(shareData);
-        console.debug(`%cshareAPIhelper.js %c> %cShared successfully`, "color:#525eff", "color:#fff", "color:#969dff");
+        debugLog(`Shared successfully`);
     } catch (error) {
-        console.debug(`%cshareAPIhelper.js %c> %cError: ${error}`, "color:#525eff", "color:#fff", "color:#969dff");
+        debugLog(`Error: ${error}`);
     };
 };
 
@@ -87,9 +90,9 @@ async function shareImage(title, text, blob, filename) {
 
     try {
         await navigator.share(shareData);
-        console.debug(`%cshareAPIhelper.js %c> %cShared successfully`, "color:#525eff", "color:#fff", "color:#969dff");
+        debugLog(`Shared successfully`);
     } catch (error) {
-        console.debug(`%cshareAPIhelper.js %c> %cError: ${error}`, "color:#525eff", "color:#fff", "color:#969dff");
+        debugLog(`Error: ${error}`);
     };
 };
 

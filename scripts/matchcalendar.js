@@ -6,6 +6,9 @@
 
 import { generate6v6ScoreCalculatorLink } from './matchhelper.js';
 import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareText, shareImage, showTextPopup, showImagePreview, setOriginalMessage } from './shareAPIhelper.js';
+import { createDebugLogger } from './debuglogger.js';
+
+const debugLog = createDebugLogger('matchcalendar.js', '#fffc45', '#fcfb9a');
 
 const WEEKDAY_NAMES = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -48,14 +51,14 @@ const YTSVGPATH = `<img class="ytsvg" alt="YouTube logo" src="assets/media/calen
 
 document.addEventListener("DOMContentLoaded", async () => {
     const startTime = performance.now();
-    console.debug(`%cmatchcalendar.js %c> %cFetching calendar...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+    debugLog(`Fetching calendar...`);
     generateListViewButton();
     checkIfOutsideUK();
 
     if (localStorage.matchDataCache && localStorage.teamColorsCache) {
         try {
             cached = true;
-            console.debug(`%cmatchcalendar.js %c> %cRendering calendar (cache)...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+            debugLog(`Rendering calendar (cache)...`);
             matchData = JSON.parse(localStorage.matchDataCache);
             teamColors = JSON.parse(localStorage.teamColorsCache);
             makeTeamsColorStyles();
@@ -100,7 +103,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     discardLogOnChange = false;
     makeTeamsColorStyles();
     loadCalendarView();
-    console.debug(`%cmatchcalendar.js %c> %cMatch data loaded in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+    debugLog(`Match data loaded in ${(performance.now() - startTime).toFixed(2)}ms`);
 });
 
 const fetchAPI = async (endpoint, body = {}) => {
@@ -881,7 +884,7 @@ window.addEventListener('popstate', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const dateParam = urlParams.get('date');
     if (dateParam && matchData[dateParam]) {
-        console.debug(`%cmatchcalendar.js %c> %cURL parameter changed`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+        debugLog(`URL parameter changed`);
         showDailyLog(dateParam);
     } else {
         expandedLog.innerHTML = 'No logs for this day';
@@ -917,7 +920,7 @@ async function displayCalendar() {
         }
     }
     if (dateParam && matchData[dateParam]) {
-        console.debug(`%cmatchcalendar.js %c> %cURL parameter detected`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+        debugLog(`URL parameter detected`);
         const dateObj = new Date(dateParam);
         generateCalendar(dateObj.getMonth(), dateObj.getFullYear(), dateParam);
         showDailyLog(dateParam);

@@ -321,8 +321,8 @@ function newYearCountDown() {
         script.onload = resolve;
         document.body.appendChild(script);
     }).then(() => {
-    const style = document.createElement('style');
-    style.textContent = `
+        const style = document.createElement('style');
+        style.textContent = `
         .new-year-countdown {
             position: fixed;
             bottom: 30px;
@@ -381,43 +381,43 @@ function newYearCountDown() {
             }
         }
     `;
-    document.head.appendChild(style);
+        document.head.appendChild(style);
 
-    loadFont('digital', 'assets/font/DS-DIGII.woff2');
+        loadFont('digital', 'assets/font/DS-DIGII.woff2');
 
-    const countdown = document.createElement('div');
-    countdown.id = 'countdown';
-    countdown.classList.add('new-year-countdown');
-    document.body.appendChild(countdown);
+        const countdown = document.createElement('div');
+        countdown.id = 'countdown';
+        countdown.classList.add('new-year-countdown');
+        document.body.appendChild(countdown);
 
-    const nextYear = new Date(new Date().getFullYear() + 1, 0, 1);
+        const nextYear = new Date(new Date().getFullYear() + 1, 0, 1);
 
-    function getTimeRemaining() {
-        let diff = nextYear - new Date();
-        if (diff <= 0) diff = 0;
-        return {
-            hours: Math.floor(diff / 3600000).toString().padStart(2, '0'),
-            minutes: Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0'),
-            seconds: Math.floor((diff % 60000) / 1000).toString().padStart(2, '0')
-        };
-    }
-
-    let countdownInterval;
-
-    function updateCountdown() {
-        const { hours, minutes, seconds } = getTimeRemaining();
-        countdown.innerHTML = `<table><tr><td>${hours[0]}</td><td>${hours[1]}</td><td class="separator">:</td><td>${minutes[0]}</td><td>${minutes[1]}</td><td class="separator">:</td><td>${seconds[0]}</td><td>${seconds[1]}</td></tr></table>`;
-
-        if (hours === "00" && minutes === "00" && seconds === "00") {
-            countdown.innerHTML = `<div style="letter-spacing: 0;">HAPPY NEW YEAR ${nextYear.getFullYear()}</div>`;
-            clearInterval(countdownInterval);
-            console.log("Happy New Year!");
-            newYearFireworks();
+        function getTimeRemaining() {
+            let diff = nextYear - new Date();
+            if (diff <= 0) diff = 0;
+            return {
+                hours: Math.floor(diff / 3600000).toString().padStart(2, '0'),
+                minutes: Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0'),
+                seconds: Math.floor((diff % 60000) / 1000).toString().padStart(2, '0')
+            };
         }
-    }
 
-    countdownInterval = setInterval(updateCountdown, 1000);
-    updateCountdown();
+        let countdownInterval;
+
+        function updateCountdown() {
+            const { hours, minutes, seconds } = getTimeRemaining();
+            countdown.innerHTML = `<table><tr><td>${hours[0]}</td><td>${hours[1]}</td><td class="separator">:</td><td>${minutes[0]}</td><td>${minutes[1]}</td><td class="separator">:</td><td>${seconds[0]}</td><td>${seconds[1]}</td></tr></table>`;
+
+            if (hours === "00" && minutes === "00" && seconds === "00") {
+                countdown.innerHTML = `<div style="letter-spacing: 0;">HAPPY NEW YEAR ${nextYear.getFullYear()}</div>`;
+                clearInterval(countdownInterval);
+                console.log("Happy New Year!");
+                newYearFireworks();
+            }
+        }
+
+        countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
     });
 }
 

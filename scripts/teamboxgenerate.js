@@ -5,6 +5,9 @@
     HTML elements dynamically. It also handles caching of the data to improve performance.
 */
 
+import { createDebugLogger } from './debuglogger.js';
+
+const debugLog = createDebugLogger('teamboxgenerate.js', '#9452ff', '#c29cff');
 const JSTeamBox = document.getElementById("JSTeamBox");
 const JSTeamBoxLoading = document.getElementById("JSTeamBoxLoading");
 const seasonPicker = document.getElementById("season-select");
@@ -43,12 +46,12 @@ const setSeasonInfoCache = (season, data) => {
 };
 
 const fetchSeasonInfo = async (season = 0) => {
-    console.debug(`%cteamboxgenerate.js %c> %cFetching seasoninfo from the API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    debugLog(`Fetching seasoninfo from the API...`);
     return fetchAPI('seasoninfo', { season });
 };
 
 const fetchTeamData = async (season) => {
-    console.debug(`%cteamboxgenerate.js %c> %cFetching teamdata from the API...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    debugLog(`Fetching teamdata from the API...`);
     return fetchAPI('teamdata', { team: "", season: `${season}` });
 };
 
@@ -256,7 +259,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const parsedCache = JSON.parse(cached);
             if (parsedCache?.length > 0) {
                 JSTeamBoxLoading.innerHTML = "";
-                console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes (cache)...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+                debugLog(`Generating team boxes (cache)...`);
                 await generateTeamBoxes(parsedCache);
             } else {
                 localStorage.removeItem(CACHE_KEY);
@@ -284,7 +287,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         teamData = teamResult.value;
         JSTeamBoxLoading.innerHTML = "";
         await generateTeamBoxes(teamData);
-        console.debug(`%cteamboxgenerate.js %c> %cGenerated updated team data in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9452ff", "color:#fff", "color:#c29cff");
+        debugLog(`Generated updated team data in ${(performance.now() - startTime).toFixed(2)}ms`);
         localStorage.setItem(CACHE_KEY, JSON.stringify(teamData));
     } else {
         const msg = teamResult.reason?.message;
@@ -302,7 +305,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         currentSeason = parseInt(seasonResult.value);
         maxSeason = currentSeason;
     } else {
-        console.debug(`%cteamboxgenerate.js %c> %cAPI failed - using fallback information...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+        debugLog(`API failed - using fallback information...`);
     }
 
     generateSeasonPicker();
@@ -314,7 +317,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 document.addEventListener('listViewChange', async () => {
     await getTeamDataSafe(currentSeason);
-    console.debug(`%cteamboxgenerate.js %c> %cGenerating team boxes...`, "color:#9452ff", "color:#fff", "color:#c29cff");
+    debugLog(`Generating team boxes...`);
     await generateTeamBoxes(teamData);
 });
 

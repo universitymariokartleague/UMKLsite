@@ -2,6 +2,9 @@
     A script that fetches from live match data from api.umkl.co.uk/live.
 */
 
+import { createDebugLogger } from './debuglogger.js';
+
+const debugLog = createDebugLogger('liveresultsdisplay.js', '#fc52ff', '#fda6ff');
 let matchData = [];
 let raceresults = [];
 const firstTeamScore = document.getElementById("firstteamscore");
@@ -198,7 +201,7 @@ function setScores() {
 
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
-    console.debug(`%cgetlivedata.js %c> %cGetting live match data...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
+    debugLog(`Getting live match data...`);
 
     try {
         matchData = await getMatchData();
@@ -210,13 +213,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
         console.error(error);
         errorMessage.innerHTML = `Connection lost...`;
-        console.debug(`%cgetlivedata.js %c> %cAPI failed...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
+        debugLog(`API failed...`);
         if (error && error.message && error.message.includes('429')) {
             errorMessage.innerHTML = `Rate limited...`;
         }
     }
 
-    console.debug(`%cgetlivedata.js %c> %cFetched live data in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
+    debugLog(`Fetched live data in ${(performance.now() - startTime).toFixed(2)}ms`);
 
     if (refreshTimer) clearTimeout(refreshTimer);
 
@@ -227,7 +230,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             } else {
                 window.retryCount++;
             }
-            console.debug(`%cgetlivedata.js %c> %cRefreshing live data...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
+            debugLog(`Refreshing live data...`);
 
             if (!window.lastMatchUpdate || Date.now() - window.lastMatchUpdate >= 60000) {
                 matchData = await getMatchData();

@@ -119,12 +119,42 @@
 }
 
 .sp-graph-container {
+    position: relative;
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-radius: 12px;
     padding: 10px;
     border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.sp-graph-tooltip {
+    position: absolute;
+    transform: translate(-50%, calc(-100% - 10px));
+    pointer-events: auto;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+    background: rgba(20, 20, 20, 0.9);
+    color: #fff;
+    padding: 6px 9px;
+    border-radius: 6px;
+    font-size: 11px;
+    line-height: 1.4;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+.sp-graph-tooltip.sp-graph-tooltip-below {
+    transform: translate(-50%, 10px);
+}
+
+.sp-graph-tooltip a {
+    color: #8ecfff;
+    text-decoration: underline;
+}
+
+.sp-graph-tooltip a:hover {
+    color: #b7e0ff;
 }
 
 #spGraph {

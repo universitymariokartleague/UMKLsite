@@ -3,6 +3,9 @@
     on the home page of the site.
 */
 
+import { createDebugLogger } from './debuglogger.js';
+
+const debugLog = createDebugLogger('showupcomingmatches.js', '#fffc45', '#fcfb9a');
 const upcomingMatchesBox = document.getElementById("upcomingMatchesBox");
 const upcomingMatchesError = document.getElementById("upcomingMatchesError");
 const MATCH_LENGTH_MINS = 90;
@@ -435,7 +438,7 @@ document.addEventListener('startDayChange', () => {
 
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
-    console.debug(`%cshowupcomingmatches.js %c> %cFetching calendar...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+    debugLog(`Fetching calendar...`);
 
     try {
         matchData = await getMatchData();
@@ -471,5 +474,5 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     makeTeamsColorStyles();
     showUpcomingMatches();
-    console.debug(`%cshowupcomingmatches.js %c> %cMatch data loaded in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
+    debugLog(`Match data loaded in ${(performance.now() - startTime).toFixed(2)}ms`);
 });
