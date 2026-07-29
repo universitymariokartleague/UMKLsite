@@ -1,18 +1,9 @@
-.home-link-wrapper {
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-}
+
 
 
 
 .news-grid-container {
     margin: 0 auto;
-    margin-top: 30px;
     display: grid;
     grid-template-columns: 2fr 2fr;
     gap: 20px;

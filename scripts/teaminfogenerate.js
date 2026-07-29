@@ -1,59 +1,10 @@
 /*
-    This script generates the team info page for each team's individual page.
-    It is similar to teamboxgenerate.js, but it focuses on displaying detailed information
-    about a specific team, including their logo, location, institution,
-    championships, wins-losses, and lifetime points. HTML elements are created dynamically.
+    This script generates the F1-styled team page for each team's individual page.
+    It formats data into a Hero banner, Current Season stats grid, and All-Time Team Summary card.
 */
 
-const teamBoxFormatHTML = `
-    <div class="team-info-wrapper">
-        <a href="{{highResSrc}}">
-            <picture>
-                <source srcset="{{logoSrcAvif}}" type="image/avif">
-                <img width=200 height=200 src="{{logoSrc}}" alt="{{teamNamePossessive}} team logo" title="{{teamNamePossessive}} team logo\nClick to view a high-res version of this logo" class="team-info-logo" loading="lazy"
-                onload="this.style.opacity=1"/>
-            </picture>
-        </a>
-        <div class="team-info-text">
-            {{extraFields}}
-        </div>
-        <div class="current-season-info">
-            <div class="heading-wrapper">
-                {{seasonHeading}}<h2>Stats</h2>
-                <div class="live-dot"></div>
-            </div>
-            <div class="team-info-text">
-                {{currentFields}}
-            </div>
-        </div>
-    </div>
-
-    {{mapHTML}}
-`;
-
-const mapDefaultHTML = `
-    <div class="map">
-        <iframe id="teamMapIFrame" title="A map of the UK showing the location of all the UMKL teams" src="pages/map/index.html?team={{teamName}}" frameborder="0"></iframe>
-    </div>
-`
-
-const mapMobileHTML = `
-    <details class="details-box">
-        <summary>
-            Open map
-        </summary>
-        <div class="map">
-            <iframe id="teamMapIFrame" title="A map of the UK showing the location of all the UMKL teams" src="pages/map/index.html?team={{teamName}}" frameborder="0"></iframe>
-        </div>
-    </details>
-`
-
-const JSTeamBox = document.getElementById("JSTeamBox")
-const teamNameBox = document.getElementById("teamNameBox")
 const startYear = 2023;
-
 const currentSeason = 3;
-
 const UPDATEINVERVAL = 30000;
 let refreshTimer = null;
 
@@ -62,6 +13,42 @@ let latestSeason = null;
 
 const CACHE_KEY = 'teamInfoCache';
 
+/* --- COLOR UTILITIES --- */
+const darkenColor = (color, percent = 20) => {
+  if (!/^#?[0-9A-Fa-f]{6}$/.test(color)) return color;
+
+  const num = parseInt(color.replace('#', ''), 16);
+  let [r, g, b] = [(num >> 16) & 255, (num >> 8) & 255, num & 255].map(v => v / 255);
+
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  const d = max - min;
+  let l = (max + min) / 2;
+  const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
+
+  l = Math.max(0, l * (1 - percent / 100));
+
+  const f = (n) => {
+    const k = (n + (d === 0 ? 0 : (max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4)) * 2) % 12;
+    const a = s * Math.min(l, 1 - l);
+    return Math.round(255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))));
+  };
+
+  return `#${((1 << 24) + (f(0) << 16) + (f(8) << 8) + f(4)).toString(16).slice(1)}`;
+};
+
+const isLightColor = (color) => {
+    if (!color) return false;
+    const hex = color.trim().replace(/^#/, '');
+    if (!/^[0-9A-Fa-f]{6}$/.test(hex)) return false;
+    const num = parseInt(hex, 16);
+    const r = (num >> 16) & 0xFF;
+    const g = (num >> 8) & 0xFF;
+    const b = num & 0xFF;
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    return brightness > 172;
+    };
+
+/* --- CACHE UTILITIES --- */
 const getTeamCache = (team) => {
     try {
         const cached = (JSON.parse(localStorage.getItem(CACHE_KEY)) || {})[team];
@@ -93,43 +80,237 @@ const setSeasonCache = (team, season, data) => {
     } catch { }
 };
 
+/* --- FORMATTERS --- */
 const makePossessive = name =>
     !name ? "" : (name.endsWith("s") || name.endsWith("S") ? `${name}'` : `${name}'s`);
+
+function toOrdinal(n) {
+    if (!n) return 'N/A';
+    const v = n % 100;
+    if (v >= 11 && v <= 13) return n + "th";
+    switch (v % 10) {
+        case 1: return n + "st";
+        case 2: return n + "nd";
+        case 3: return n + "rd";
+        default: return n + "th";
+    }
+}
 
 function formatChampionshipSeasons(championshipYears) {
     if (!Array.isArray(championshipYears) || championshipYears.length === 0) {
         return '';
     }
-
     const seasons = championshipYears.map(year => `${startYear + year}-${String(startYear + year + 1).slice(-2)}`);
-    return `(${seasons.join(',<br>')})`;
+    return `(${seasons.join(', ')})`;
 }
 
-function buildTeamInfoTable(teamData, isCurrent = false) {
-    if (isCurrent) {
-        return `
-            <table class="team-info-table">
-                <tr><td class="table-key">Matches Played</td><td>${teamData.season_matches_played}</td></tr>
-                <tr><td class="table-key">Wins/Losses</td><td>${teamData.season_wins_losses[0]} - ${teamData.season_wins_losses[1]} ${teamData.team_season_points > 0 ? `(${toOrdinal(teamData.season_position)})` : ''}</td></tr>
-                <tr><td class="table-key">Points</td><td>${teamData.team_season_points}</td></tr>
-                <tr><td class="table-key">Penalties</td><td>${teamData.season_penalties || 'None'}</td></tr>
-            </table>
-        `;
+/* --- RENDERERS --- */
+function renderSeasonStats(seasonData) {
+    const grid = document.getElementById('seasonStatsGrid');
+    if (!grid) return;
+
+    if (!seasonData) {
+        grid.innerHTML = `<p style="grid-column: span 2; opacity: 0.6;">No season statistics available.</p>`;
+        return;
     }
 
-    return `
-        <table class="team-info-table">
-            ${teamData.team_place ? `<tr><td class="table-key">Location</td><td><a href="https://www.google.com/maps/search/?q=${encodeURIComponent(teamData.team_place)}" target="_blank" rel="noopener noreferrer" style="color:${teamData.team_color}">${teamData.team_place}</a></td></tr>` : ''}
-            <tr><td class="table-key">Institution</td><td>${teamData.team_full_name}</td></tr>
-            <tr><td class="table-key">First Entry</td><td>${teamData.first_entry ? `Season ${teamData.first_entry}` : `N/A`} <span class="settings-extra-info">${teamData.first_entry ? `(${startYear + teamData.first_entry}-${String(startYear + 1 + teamData.first_entry).slice(-2)})` : ''}</span></td></tr>
-            <tr><td class="table-key">Season Wins</td><td>${teamData.team_championships} <span class="settings-extra-info">${formatChampionshipSeasons(teamData.championship_seasons)}</span></td></tr>
-            <tr><td class="table-key">Lifetime<br>Matches Played</td><td>${teamData.lifetime_matches_played}</td></tr>
-            <tr><td class="table-key">Lifetime<br>Wins/Losses</td><td>${teamData.career_wins_losses[0]} - ${teamData.career_wins_losses[1]}</td></tr>
-            <tr><td class="table-key">Lifetime Points</td><td>${teamData.team_career_points}</td></tr>
-        </table>
+    const winsLosses = seasonData.season_wins_losses ? `${seasonData.season_wins_losses[0]} - ${seasonData.season_wins_losses[1]}` : 'N/A';
+    const posFormatted = seasonData.season_position ? toOrdinal(seasonData.season_position) : 'N/A';
+
+    grid.innerHTML = `
+        <div class="stat-item">
+            <span class="stat-label">Season Position</span>
+            <span class="stat-value">${posFormatted}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Season Points</span>
+            <span class="stat-value">${seasonData.team_season_points ?? 0}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Matches Played</span>
+            <span class="stat-value">${seasonData.season_matches_played ?? 0}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Record (W - L)</span>
+            <span class="stat-value">${winsLosses}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Penalties</span>
+            <span class="stat-value">${seasonData.season_penalties || 'None'}</span>
+        </div>
     `;
 }
 
+function renderTeamSummary(teamData) {
+    const summaryList = document.getElementById('teamSummaryList');
+    if (!summaryList) return;
+
+    const locationHTML = teamData.team_place 
+        ? `<a href="https://www.google.com/maps/search/?q=${encodeURIComponent(teamData.team_place)}" target="_blank" rel="noopener noreferrer" style="color:${teamData.team_color}">${teamData.team_place}</a>` 
+        : 'N/A';
+
+    const entryYearStr = teamData.first_entry ? `Season ${teamData.first_entry} (${startYear + teamData.first_entry}-${String(startYear + 1 + teamData.first_entry).slice(-2)})` : 'N/A';
+    const championshipsStr = `${teamData.team_championships || 0} ${formatChampionshipSeasons(teamData.championship_seasons)}`;
+    const careerWL = teamData.career_wins_losses ? `${teamData.career_wins_losses[0]} - ${teamData.career_wins_losses[1]}` : 'N/A';
+
+    summaryList.innerHTML = `
+        <div class="summary-row">
+            <span class="summary-label">Institution</span>
+            <span class="summary-value">${teamData.team_full_name || teamData.team_name}</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">Location</span>
+            <span class="summary-value">${locationHTML}</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">First Entry</span>
+            <span class="summary-value">${entryYearStr}</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">Championships</span>
+            <span class="summary-value">${championshipsStr}</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">Lifetime Matches</span>
+            <span class="summary-value">
+        <a href="/pages/results/details/?team=${encodeURIComponent(teamData.team_name)}" title="View all matches for ${teamData.team_name}">
+            ${teamData.lifetime_matches_played ?? 0} (View All)
+        </a>
+            </span>
+        </div>  
+        <div class="summary-row">
+            <span class="summary-label">Lifetime Record</span>
+            <span class="summary-value">${careerWL}</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">Lifetime Points</span>
+            <span class="summary-value">${teamData.team_career_points ?? 0}</span>
+        </div>
+    `;
+}
+
+function generateTeamBox(teamData, showError) {
+    const teamNameUpper = teamData.team_name.toUpperCase();
+    const logoUrl = `https://api.umkl.co.uk/teamemblems/${teamNameUpper}?og`;
+
+    latestSeason = teamData.season;
+    viewingSeason = latestSeason;
+    
+    const teamHero = document.getElementById('teamHero');
+    const heroPattern = document.getElementById('heroPattern')
+    if (teamHero) {
+        teamHero.style.backgroundImage = `linear-gradient(0deg, ${teamData.team_color} 0%, ${darkenColor(teamData.team_color)} 100%)`;
+        heroPattern.style.backgroundColor = teamData.team_color;
+    }
+
+    const heroLogo = document.getElementById('teamHeroLogo');
+    if (heroLogo) {
+        heroLogo.src = logoUrl;
+        heroLogo.alt = `${makePossessive(teamData.team_name)} team logo`;
+    }
+
+    const teamNameBox = document.getElementById('teamNameBox');
+    if (teamNameBox) teamNameBox.textContent = teamData.team_name;
+    if (isLightColor(teamData.team_color)) teamNameBox.style.color = 'var(--brand-dark)'
+
+    // Build Season Dropdown Selector
+    const minSeason = teamData.first_entry;
+    const hasPlayed = !!minSeason;
+    const selectWrapper = document.getElementById('teamSeasonSelectWrapper');
+    const seasonHeading = document.getElementById('currentSeasonHeading');
+
+    if (selectWrapper && hasPlayed) {
+        if (latestSeason <= minSeason) {
+            selectWrapper.innerHTML = `<span class="season-badge">Season ${latestSeason}</span>`;
+        } else {
+            const options = Array.from(
+                { length: latestSeason - minSeason + 1 },
+                (_, i) => minSeason + i
+            ).map(s => `<option value="${s}"${s === latestSeason ? ' selected' : ''}>Season ${s}</option>`).join('');
+            selectWrapper.innerHTML = `<select id="team-season-select">${options}</select>`;
+        }
+    }
+
+    // Render Stats Grids
+    renderSeasonStats(hasPlayed ? teamData : null);
+    renderTeamSummary(teamData);
+
+    // Event Listener for Season Switch
+    const seasonSelect = document.getElementById('team-season-select');
+    if (seasonSelect) {
+        seasonSelect.addEventListener('change', async function () {
+            const season = parseInt(this.value);
+            viewingSeason = season;
+
+            if (seasonHeading) seasonHeading.textContent = `SEASON ${season}`;
+
+            if (season === latestSeason) {
+                renderSeasonStats(teamData);
+                return;
+            }
+
+            const teamName = new URLSearchParams(window.location.search).get('team');
+            const cached = getSeasonCache(teamName, season);
+            if (cached) renderSeasonStats(cached);
+
+            try {
+                const data = await getPlayerdata(teamName, `${season}`);
+                setSeasonCache(teamName, season, data[0]);
+                if (viewingSeason === season) {
+                    renderSeasonStats(data[0]);
+                }
+            } catch (error) {
+                console.debug(`%cteaminfogenerate.js %c> %cFailed to fetch season ${season} data: ${error.message}`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
+                if (!cached) renderSeasonStats(null);
+            }
+        });
+    }
+
+    // Championship Banner / Confetti
+    if (teamData.championship_seasons?.includes(currentSeason)) {
+        if (!document.getElementById('champion-banner')) {
+            const banner = document.createElement('blockquote');
+            banner.id = 'champion-banner';
+            banner.className = 'champion';
+            banner.innerHTML = `<b>Season ${currentSeason} Champions!</b><br>Congratulations to ${teamData.team_name} on winning Season ${currentSeason} of the UMKL!`;
+            document.querySelector('main')?.insertBefore(banner, document.querySelector('.stats-section'));
+            spawnConfetti();
+        }
+    }
+
+    showErrorBox(showError);
+}
+
+function editTeamBox(teamData) {
+    renderTeamSummary(teamData);
+    if (viewingSeason === teamData.season && teamData.first_entry) {
+        renderSeasonStats(teamData);
+    }
+}
+
+function showErrorBox(showError) {
+    let errorBlock = document.getElementById("team-api-error");
+    const mainElem = document.querySelector("main");
+
+    if (showError === 1 || showError === 2) {
+        if (!errorBlock) {
+            errorBlock = document.createElement("blockquote");
+            errorBlock.className = "fail";
+            errorBlock.id = "team-api-error";
+            mainElem?.prepend(errorBlock);
+        }
+        if (showError === 1) {
+            const retryMsg = window.retryCount ? `<b>API error - Retrying: attempt ${window.retryCount}</b><br>` : "<b>API error</b><br>";
+            errorBlock.innerHTML = `${retryMsg}Failed to fetch team data from the API, the below information may not be up to date!`;
+        } else {
+            errorBlock.innerHTML = "<b>API error</b><br>Your device or network is sending too many requests, so you have been rate-limited. Please try again later.";
+        }
+    } else if (errorBlock) {
+        errorBlock.remove();
+    }
+}
+
+/* --- CONFETTI ANIMATION --- */
 function spawnConfetti() {
     const canvas = document.createElement('canvas');
     canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999';
@@ -209,184 +390,11 @@ function spawnConfetti() {
     requestAnimationFrame(draw);
 }
 
-function generateTeamBox(teamData, showError) {
-    JSTeamBox.innerHTML = "";
-    JSTeamBox.classList.remove('fade-in');
-
-    const teamNameUpper = teamData.team_name.toUpperCase();
-    const logoUrl = `https://api.umkl.co.uk/teamemblems/${teamNameUpper}?og`;
-    const logoUrlAvif = `https://api.umkl.co.uk/teamemblems/${teamNameUpper}`;
-
-    latestSeason = teamData.season;
-    viewingSeason = latestSeason;
-
-    const minSeason = teamData.first_entry;
-    const hasPlayed = !!minSeason;
-    let seasonHeading = ``;
-    if (hasPlayed) {
-        let seasonHeadingInner;
-        if (latestSeason <= minSeason) {
-            seasonHeadingInner = `<h2>Season ${latestSeason}</h2>`;
-        } else {
-            const options = Array.from(
-                { length: latestSeason - minSeason + 1 },
-                (_, i) => minSeason + i
-            ).map(s => `<option value="${s}"${s === latestSeason ? ' selected' : ''}>Season ${s}</option>`).join('');
-            seasonHeadingInner = `<select id="team-season-select">${options}</select>`;
-        }
-        seasonHeading = `<span style="margin-right: 8px">${seasonHeadingInner}</span>`;
-    }
-
-    const tempTeamBox = teamBoxFormatHTML
-        .replace("{{mapHTML}}", window.innerWidth > 767 ? mapDefaultHTML : mapMobileHTML)
-        .replace("{{seasonHeading}}", seasonHeading)
-        .replaceAll("{{teamName}}", teamData.team_name)
-        .replaceAll("{{teamNamePossessive}}", makePossessive(teamData.team_name))
-        .replace("{{logoSrc}}", logoUrl)
-        .replace("{{logoSrcAvif}}", logoUrlAvif)
-        .replace("{{highResSrc}}", logoUrl)
-        .replace("{{extraFields}}", buildTeamInfoTable(teamData))
-        .replace("{{currentFields}}", hasPlayed ? buildTeamInfoTable(teamData, true) : `<p>No data available.</p>`);
-
-    document.documentElement.style.setProperty('--highlight-color', `${teamData.team_color}80`);
-    document.documentElement.style.setProperty('--team-color', teamData.team_color);
-    JSTeamBox.innerHTML = tempTeamBox;
-    JSTeamBox.classList.add('fade-in');
-
-    const seasonSelect = JSTeamBox.querySelector('#team-season-select');
-    const liveDot = JSTeamBox.querySelector('.live-dot');
-    if (liveDot && !hasPlayed) liveDot.style.display = 'none';
-    if (seasonSelect) {
-        seasonSelect.addEventListener('change', async function () {
-            const season = parseInt(this.value);
-            viewingSeason = season;
-            if (liveDot) liveDot.style.display = season === latestSeason ? '' : 'none';
-
-            const currentSeasonInfo = JSTeamBox.querySelector('.current-season-info .team-info-text');
-            if (!currentSeasonInfo) return;
-
-            if (season === latestSeason) {
-                currentSeasonInfo.innerHTML = buildTeamInfoTable(teamData, true);
-                return;
-            }
-
-            const teamName = new URLSearchParams(window.location.search).get('team');
-            const cached = getSeasonCache(teamName, season);
-            if (cached) currentSeasonInfo.innerHTML = buildTeamInfoTable(cached, true);
-
-            try {
-                const data = await getPlayerdata(teamName, `${season}`);
-                setSeasonCache(teamName, season, data[0]);
-                if (viewingSeason === season) {
-                    currentSeasonInfo.innerHTML = buildTeamInfoTable(data[0], true);
-                }
-            } catch (error) {
-                console.debug(`%cteaminfogenerate.js %c> %cFailed to fetch season ${season} data: ${error.message}`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
-                if (!cached) currentSeasonInfo.innerHTML = `<p>Failed to load Season ${season} data.</p>`;
-            }
-        });
-    }
-
-    JSTeamBox.querySelector('details')?.addEventListener('toggle', function () {
-        if (this.open) {
-            const iframe = this.querySelector('iframe');
-            if (iframe) {
-                iframe.style.width = '50%';
-                requestAnimationFrame(() => { iframe.style.width = '100%'; });
-            }
-        }
-    });
-
-    if (teamData.championship_seasons?.includes(currentSeason)) {
-        if (!document.getElementById('champion-banner')) {
-            const banner = document.createElement('blockquote');
-            banner.id = 'champion-banner';
-            banner.className = 'champion';
-            banner.innerHTML = `<b>Season ${currentSeason} Champions!</b><br>Congratulations to ${teamData.team_name} on winning Season ${currentSeason} of the UMKL!`;
-            document.querySelector('main')?.insertBefore(banner, JSTeamBox);
-            spawnConfetti();
-        }
-    }
-
-    let liveDotStyle = document.getElementById('live-dot-style');
-    if (!liveDotStyle) {
-        liveDotStyle = document.createElement('style');
-        liveDotStyle.id = 'live-dot-style';
-        document.head.appendChild(liveDotStyle);
-    }
-    liveDotStyle.textContent = `
-        .live-dot {
-            background-color: ${teamData.team_color};
-            box-shadow: 0 0 0 0 ${teamData.team_color}80;
-        }
-        @keyframes live-dot-pulse {
-            0% {
-                box-shadow: 0 0 0 0 ${teamData.team_color}80;
-            }
-            70% {
-                box-shadow: 0 0 0 8px ${teamData.team_color}00;
-            }
-            100% {
-                box-shadow: 0 0 0 0 ${teamData.team_color}00;
-            }
-        }
-    `;
-
-    showErrorBox(showError);
-}
-
-function editTeamBox(teamData) {
-    const currentSeasonInfo = JSTeamBox.querySelector('.current-season-info .team-info-text');
-    const extraFieldsInfo = JSTeamBox.querySelector('.team-info-text');
-    if (!currentSeasonInfo || !extraFieldsInfo) return;
-
-    extraFieldsInfo.innerHTML = buildTeamInfoTable(teamData);
-    if (viewingSeason === teamData.season && teamData.first_entry) {
-        currentSeasonInfo.innerHTML = buildTeamInfoTable(teamData, true);
-    }
-}
-
-function showErrorBox(showError) {
-    let errorBlock = document.getElementById("team-api-error");
-    const mainElem = document.querySelector("main");
-
-    if (showError === 1 || showError === 2) {
-        if (!errorBlock) {
-            errorBlock = document.createElement("blockquote");
-            errorBlock.className = "fail";
-            errorBlock.id = "team-api-error";
-            const hr = mainElem?.querySelector('hr');
-            if (hr) hr.after(errorBlock);
-            else mainElem?.prepend(errorBlock);
-        }
-        if (showError === 1) {
-            const retryMsg = window.retryCount ? `<b>API error - Retrying: attempt ${window.retryCount}</b><br>` : "<b>API error</b><br>";
-            errorBlock.innerHTML = `${retryMsg}Failed to fetch team data from the API, the below information may not be up to date!`;
-        } else {
-            errorBlock.innerHTML = "<b>API error</b><br>Your device or network is sending too many requests, so you have been rate-limited. Please try again later.";
-        }
-    } else if (errorBlock) {
-        errorBlock.remove();
-    }
-}
-
-function toOrdinal(n) {
-    const v = n % 100;
-    if (v >= 11 && v <= 13) return n + "th";
-    switch (v % 10) {
-        case 1: return n + "st";
-        case 2: return n + "nd";
-        case 3: return n + "rd";
-        default: return n + "th";
-    }
-}
-
+/* --- API FETCH --- */
 async function getPlayerdata(team = "", season = "") {
     const response = await fetch('https://api.umkl.co.uk/teamdata', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ team, season })
     });
 
@@ -403,27 +411,20 @@ async function getPlayerdata(team = "", season = "") {
     return response.json();
 }
 
+/* --- INITIALIZATION --- */
 document.addEventListener("DOMContentLoaded", async () => {
     const startTime = performance.now();
-    console.debug(`%cteaminfogenerate.js %c> %cGenerating team info box`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
+    console.debug(`%cteaminfogenerate.js %c> %cGenerating team info page`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
 
     const urlParams = new URLSearchParams(window.location.search);
     const currentTeam = urlParams.get('team');
-    document.title = `${currentTeam} | UMKL`;
-    teamNameBox.innerText = currentTeam;
-
-    const backButton = document.getElementById("backButton");
-    if (backButton) {
-        const referrer = document.referrer;
-        if (referrer.includes("/teams/") || referrer.includes("/matches/")) {
-            backButton.href = "javascript:history.back()";
-        }
-    }
 
     if (!currentTeam) {
         window.location.href = "/pages/teams";
         return;
     }
+
+    document.title = `${currentTeam} | UMKL`;
 
     let showError = 0;
     let playerData = [];
@@ -432,8 +433,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (cachedData) {
         console.debug(`%cteaminfogenerate.js %c> %cGenerating team info box (cache)...`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
         generateTeamBox(cachedData, 0);
-    } else {
-        JSTeamBox.innerHTML = "Loading team information...";
     }
 
     try {
@@ -491,5 +490,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
     refreshTimer = setTimeout(updateFetch, UPDATEINVERVAL);
 
-    console.debug(`%cteaminfogenerate.js %c> %cGenerated team info box in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
+    console.debug(`%cteaminfogenerate.js %c> %cGenerated team page in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
 });

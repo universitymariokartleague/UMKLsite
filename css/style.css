@@ -6,8 +6,8 @@
     --brand-light: #ffffff;
     --brand-dark-translucent: #04001a22;
     --brand-light-translucent: #ffffff22;
-    --brand-dark-opaque: #04001a66;
-    --brand-light-opaque: #ffffff66;
+    --brand-dark-opaque: #04001a44;
+    --brand-light-opaque: #ffffff44;
     --brand-positive: #00ce7a;
     --brand-negative: #ff6874;
 }
@@ -232,9 +232,9 @@ h4:target {
 
 
 
-.header-wrapper {
-    display: flex;
-    flex-direction: column;
+/* For IE/Edge (old) */
+.custom-select::-ms-expand {
+    display: none; /* Hide default arrow */
 }
 
 @keyframes anchor-highlight {
@@ -342,10 +342,23 @@ button:focus {
     }
 }
 
+.bubble-link-wrapper {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-bottom: 30px;
+}
+
 .bubble-link {
     background-color: var(--translucent-color);
     padding: 10px 20px;
     border-radius: 100px;
+    border: none;
+    outline: none;
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -354,6 +367,7 @@ button:focus {
     gap: 5px;
     text-decoration: none;
     color: var(--text-color);
+    font-size: 16px;
 }
 
 .bubble-link:hover {
@@ -362,6 +376,29 @@ button:focus {
 }
 
 .bubble-link:active {
+    background-color: var(--translucent-color);
+}
+
+.bubble-nav {
+    background-color: var(--translucent-color);
+    border-radius: 100px;
+    border: none;
+    outline: none;
+    font-weight: 600;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+
+}
+
+.bubble-nav .bubble-nav-item {
+    padding: 10px 20px;
+    text-decoration: none;
+}
+
+.bubble-nav .active {
     background-color: var(--translucent-color);
 }
 

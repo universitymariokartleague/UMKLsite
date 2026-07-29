@@ -1,4 +1,5 @@
 .teamStandingsBox {
+    padding-top: 20px;
     font-weight: bold;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -41,8 +42,8 @@
 }
 
 .teamStanding picture {
-    height: 4vw;
-    width: 4vw;
+    height: 5vw;
+    width: 5vw;
     margin-left: auto;
 }
 
@@ -65,14 +66,11 @@
     
     -webkit-mask-image: url('/assets/pattern/finish_pattern.svg');
     mask-image: url('/assets/pattern/finish_pattern.svg');
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
 
-    -webkit-mask-repeat: repeat;
-    mask-repeat:no-repeat;
-    -webkit-mask-size: 860px;
-    mask-size: 860px;
-
-    
-    opacity: 1;
+    -webkit-mask-size: 850px;
+    mask-size: 850px;
 }
 
 .teamStanding > :not(.teamStandingPattern) {
@@ -114,7 +112,7 @@
     }
 } */
 
-.season-selection {
+/* .season-selection {
     display: flex;
     flex-direction: column;
     border-radius: 10px;
@@ -132,7 +130,7 @@
     border-radius: 10px;
     font-weight: bold;
     cursor: pointer;
-}
+} */
 
 #season-select:hover {
     background-color: var(--translucent-color);
@@ -387,5 +385,15 @@ border-bottom: none;
     .teamStandingsBox .teamName {
         font-size: clamp(1rem, 1.5rem, 5rem);
     }
+}
+
+
+@media screen and (max-width: 480px) {
+
+    .teamStandingPattern {
+        -webkit-mask-size: 500px;
+        mask-size: 500px;
+    }
+
 }
 

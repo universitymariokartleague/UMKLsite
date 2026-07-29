@@ -1,146 +1,175 @@
-/* .team-info-table td {
-    padding: 2px;
-    width: 50%;
-    vertical-align: middle;
+
+.team-page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px 40px 16px;
 }
 
-.team-info-table .table-key {
-    font-weight: bold;
-    vertical-align: middle;
+.team-hero {
+    position: relative;
+    width: 100%;
+    min-height: 500px;
+    border-radius: 12px;
+    overflow: hidden;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
-.team-info-wrapper {
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 30px;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.hero-logo-wrapper {
+    max-width: 250px;
+}
+
+.hero-logo {
     width: 100%;
+    height: auto;
+    object-fit: contain;
 }
 
-.team-info-wrapper img {
-    padding: 10px 0 10px 0;
+.hero-team-name {
+    font-weight: 1000;
+    letter-spacing: 2px;
+    color: #ffffff;
+    margin: 0;
+    text-transform: none;
 }
 
-.team-info-wrapper a {
-    display: block;
-}
-
-.user-info-wrapper a {
-    width: fit-content;
-}
-
-.team-info .map {
-    width: 100%;
-    display: flex;
-    border-radius: 10px;
-    border: 1px solid #ccccccaa;
-}
-
-.team-info-logo {
-    margin: 0 auto;
-    width: 200px;
-    opacity: 0;
-    transition: opacity 0.2s ease-in;
-    display: block;
-}
-
-.current-season-info {
-    margin-top: 10px;
-    border: 1px solid #ccccccaa;
-    border-radius: 10px;
-    padding: 12px;
-}
-
-.team-info {
-    border: 1px solid #ccccccaa;
-    border-radius: 10px;
-    display: flex;
-    gap: 20px;
-    padding: 20px;
-}
-
-.team-info-table {
-    border-collapse: separate;
-    width: 100%;
-}
-
-.heading-wrapper {
-    display: flex;
-    margin-left: 3px;
-}
-
-#team-season-select {
-    padding: 2px 4px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 2px solid var(--team-color, #ccccccaa);
+.season-select-wrapper select {
+    padding: 6px 16px;
+    font-size: 14px;
     font-weight: bold;
-    outline: none;
-    background-color: var(--bg-color);
-}
-
-#teamMapIFrame {
-    height: 100%;
-    width: 100%;
-    border-radius: 10px;
-    outline: 1px solid #ccccccaa;
-}
-
-.user-image {
-    border-radius: 10px;
-    opacity: 0;
-    transition: opacity 0.2s ease-in;
-    width: 150px;
-    height: 150px;
-}
-
-.details-box summary {
-    font-weight: bold;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.4);
+    color: #ffffff;
     cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease;
 }
 
-.details-box summary:hover {
-    text-decoration: underline;
+.team-hero #heroPattern {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    top: -200px;
+
+    z-index: 1;
+    -webkit-mask-image: url('/assets/pattern/finish_pattern_down.svg');
+    mask-image: url('/assets/pattern/finish_pattern_down.svg');
+    mask-repeat: no-repeat;
+
+    -webkit-mask-size: 1600px;
+    mask-size: 1600px;
 }
 
-.sp-bullet-points {
-    margin-block-start: 5px;
-    margin-block-end: 5px;
-}
-
-.champion {
-    border: 2px solid rgba(255, 200, 0, 0.7);
-    background: linear-gradient(135deg, rgba(255, 185, 0, 0.25), rgba(255, 215, 0, 0.15));
-    color: #ffe87a;
-    text-shadow: 0 0 8px rgba(255, 210, 0, 0.5);
-}
-
-:root.light-theme .champion {
-    color: #7a5a00;
-    text-shadow: none;
-    border-color: rgba(180, 130, 0, 0.7);
-    background: linear-gradient(135deg, rgba(255, 200, 0, 0.2), rgba(255, 220, 50, 0.12));
-}
-
-#JSTeamBox,
-#JSMatchHistory {
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: 1.5px;
     margin-bottom: 20px;
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
 }
 
-#JSTeamBox.fade-in,
-#JSMatchHistory.fade-in {
-    opacity: 1;
+.subsection-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
 }
 
-@media screen and (max-width: 767px) {
-    .team-info {
-        flex-direction: column;
-    }
+/* 2-Column Main Layout Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
 
-    .team-info .map {
-        aspect-ratio: 1 / 1.9;
-        width: 100%;
-        height: auto;
-    }
 
-} */
+
+/* LEFT COLUMN: Season Stats Matrix */
+.season-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 15px;
+    padding-top: 10px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border-bottom: 1px solid var(--translucent-color);
+    padding-bottom: 10px;
+}
+
+:root.light-theme .stat-item {
+    border-bottom-color: var(--translucent-color);
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 900;
+}
+
+.team-summary-card {
+    background: var(--translucent-color);
+    border-radius: 12px;
+    padding: 24px;
+}
+
+:root.light-theme .team-summary-card {
+    background: #f8f9fa;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.summary-card-title {
+    font-size: 1.2rem;
+    font-weight: 900;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+:root.light-theme .summary-row {
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+.summary-row:last-child {
+    border-bottom: none;
+}
+
+.summary-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0.75;
+}
+
+.summary-value {
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+@media (min-width: 900px) {
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}

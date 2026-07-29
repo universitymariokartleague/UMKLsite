@@ -1,0 +1,30 @@
+.fixed-width-column {
+    width: 150px;
+}
+
+.match-team {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.team-a {
+    justify-content: right;
+}
+
+.team-b {
+    justify-content: left;
+}
+
+.column-vs {
+    text-align: center;
+    width: 0;
+}
+
+.column-score {
+    text-align: center;
+}
+
+.column-result {
+    text-align: center;
+}

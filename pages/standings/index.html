@@ -47,19 +47,27 @@
 <body id="top">
     <umkl-navbar></umkl-navbar>
 
+
+
         <main> 
+        <div class="bubble-link-wrapper">
+            <select id="season-select" class="bubble-link">
+                <option value="1">2024/25</option>
+                <option value="2" selected="selected">2025/26</option>
+            </select>
+
+
+            <nav class="bubble-nav">             
+                    <a class="bubble-nav-item no-color-link" href="/pages/results/">Matches</a>
+                    <a class="bubble-nav-item no-color-link active" href="/pages/standings/">Standings</a>
+            </nav>
+
+        </div>
+
         <h1>Standings</h1>
         <p class="p-below-title">
                 View the points table for each team in every season
         </p>
-
-
-        <h2>
-            <select id="season-select">
-                <option value="1">2024/25</option>
-                <option value="2" selected="selected">2025/26</option>
-            </select> Team Standings
-        </h2>
 
         <div id="JSTeamTableLoading"></div>
         <div id="JSTeamTable"></div>

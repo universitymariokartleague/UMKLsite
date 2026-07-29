@@ -1,27 +1,15 @@
-/*
-    This script displays a team's match history,
-    and shows their next match if they have one.
-*/
-
 import { generate6v6ScoreCalculatorLink } from './matchhelper.js';
 
 const matchHistoryBox = document.getElementById("JSMatchHistory");
-const MATCH_LENGTH_MINS = 90;
-
+const teamEmblemBox = document.getElementById("teamEmblemBox");
 let matchData = [];
-let showTestMatches = 0;
 let teamNameFromURL;
-let startTime;
 
 const CACHE_KEY = 'matchDataCache';
 const getMatchCache = () => { try { return JSON.parse(localStorage.getItem(CACHE_KEY)) || null; } catch { return null; } };
 const setMatchCache = (data) => { try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch {} };
 
-const makePossessive = name =>
-    !name ? "" : (name.endsWith("s") || name.endsWith("S") ? `${name}'` : `${name}'s`);
-
-const getTeamFromURL = () =>
-    new URLSearchParams(window.location.search).get("team");
+const getTeamFromURL = () => new URLSearchParams(window.location.search).get("team");
 
 const getEmblem = teamName => ({
     avif: `https://api.umkl.co.uk/teamemblems/${teamName.toUpperCase()}`,
@@ -45,60 +33,66 @@ function getScoreForTeam(match, teamName) {
     };
 }
 
-const getResultClass = (t, o) =>
-    t > o ? "win" : t < o ? "loss" : "draw";
-
 async function getMatchData() {
     return fetch('https://api.umkl.co.uk/matchdata', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: "{}"
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-            return response.json();
-        });
+    }).then(response => {
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        return response.json();
+    });
 }
 
 function normalizeMatchData(matchData) {
     const flat = [];
-
     Object.keys(matchData).forEach(dateKey => {
         matchData[dateKey].forEach(entry => {
-            flat.push({
-                ...entry,
-                matchDate: dateKey
-            });
+            flat.push({ ...entry, matchDate: dateKey });
         });
     });
-
     return flat;
 }
 
 function formatDate(dateStr, locale) {
     const d = new Date(dateStr);
-    return d.toLocaleDateString(locale, {
-        day: "numeric",
-        month: "long",
-        year: "numeric"
-    });
+    return d.toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" });
 }
 
-function generateTeamMatches(teamName) {
+function populateTeamDropdown(currentTeam) {
+    const teamSelect = document.getElementById("team-select");
+    if (!teamSelect) return;
+
+    const allMatches = normalizeMatchData(matchData);
+    const teamsSet = new Set();
+
+    allMatches.forEach(match => {
+        if (Array.isArray(match.teamsInvolved)) {
+            match.teamsInvolved.forEach(team => teamsSet.add(team));
+        }
+    });
+
+    const sortedTeams = Array.from(teamsSet).sort((a, b) => a.localeCompare(b));
+
+    teamSelect.innerHTML = 
+    `<option value="All">All</option>` +
+    sortedTeams.map(team => `
+        <option value="${team}" ${team.toLowerCase() === currentTeam?.toLowerCase() ? 'selected' : ''}>
+            ${team}
+        </option>
+    `).join('');
+}
+
+function generateTeamMatches(teamName, selectedSeason) {
     const allMatches = normalizeMatchData(matchData);
 
-    const teamMatches = allMatches.filter(match =>
-        match.teamsInvolved?.includes(teamName)
-    );
+    let teamMatches = allMatches.filter(match => match.teamsInvolved?.includes(teamName));
+    if (selectedSeason) {
+        teamMatches = teamMatches.filter(match => String(match.season) === String(selectedSeason));
+    }
 
     if (teamMatches.length === 0) {
-        matchHistoryBox.innerHTML = `<p>No matches found for ${teamName}.</p>`;
+        matchHistoryBox.innerHTML = `<p>No matches found for ${teamName}${selectedSeason ? ` in Season ${selectedSeason}` : ''}.</p>`;
         return;
     }
 
@@ -108,153 +102,136 @@ function generateTeamMatches(teamName) {
         return bDate - aDate;
     });
 
-    const now = new Date();
     const locale = localStorage.getItem("locale") || "en-GB";
-    const textColor = getComputedStyle(document.body).getPropertyValue('--highlight-color').slice(0, -2);
 
-    const style = document.createElement('style');
-    style.innerHTML = `
-        a.team-link-color:link { color: ${textColor}!important }
-        a.team-link-color:visited { color: ${textColor}!important }
-        a.team-link-color:hover { color: ${textColor}!important }
-    `
-    document.head.appendChild(style);
+    const rowsHTML = teamMatches.map(match => {
+        const otherTeam = match.teamsInvolved.find(t => t !== teamName) || "TBC";
+        const scoreData = getScoreForTeam(match, teamName);
+        
+        let scoreDisplay = "Upcoming";
+        let winStatus = "-";
 
-    let upcomingBlocks = [];
-    let completedBlocks = [];
-
-    teamMatches.forEach(match => {
-        if (showTestMatches === 0 && !match.testMatch || showTestMatches === 1) {
-            const matchDateTime = new Date(`${match.matchDate}T${match.time || "00:00:00"}`);
-            const isCompleted = matchDateTime < now || match.endTime;
-
-            const otherTeam = match.teamsInvolved.find(t => t !== teamName) || "TBC";
-
-            const scoreData = getScoreForTeam(match, teamName);
-
-            let scoreHTML = "Upcoming";
-            let resultClass = "draw";
-            let matchDetailsLink = '';
-
-            if (scoreData) {
-                scoreHTML = `${scoreData.teamScore} - ${scoreData.otherScore}`;
-                resultClass = getResultClass(scoreData.teamScore, scoreData.otherScore);
-                matchDetailsLink = generate6v6ScoreCalculatorLink(match);
-            }
-
-            if (match.time) {
-                const [hours, minutes] = match.time.split(':');
-                const dateObj = new Date(match.matchDate);
-                dateObj.setHours(Number(hours), Number(minutes), 0, 0);
-
-                const matchStart = dateObj;
-                const matchEnd = new Date(matchStart.getTime() + MATCH_LENGTH_MINS * 60 * 1000);
-                if (now >= matchStart && now <= matchEnd && !match.endTime) {
-                    scoreHTML = `<span style="display:flex; color:${textColor}"><div class="live-dot live-dot-adjusted"></div>Live</span>`;
-                    resultClass = "live";
-                }
-            }
-
-            const otherTeamLink = `pages/teams/details/?team=${otherTeam}`;
-
-            const ytLinksHTML = (() => {
-                const links = match.ytLinks;
-                if (!links?.length) return '';
-                const ytImg = `<img class="yt-btn-logo" src="assets/media/calendar/youtubelogo.svg" alt="YouTube logo">`;
-                if (links.length === 1) {
-                    return `<div class="yt-links"><a class="yt-btn" href="${links[0]}" target="_blank" rel="noopener" title="Watch the livestream on YouTube">${ytImg}</a></div>`;
-                }
-                const teams = match.teamsInvolved ?? [];
-                const orderedLinks = [...links];
-                const currentIdx = teams.indexOf(teamName);
-                if (currentIdx === 1) orderedLinks.reverse();
-                const labels = orderedLinks.length === 2 && teams.length === 2
-                    ? (currentIdx === 1 ? [...teams].reverse() : teams)
-                    : orderedLinks.map((_, i) => i + 1);
-                return `<div class="yt-links">${orderedLinks.map((url, i) => `<a class="yt-btn" href="${url}" target="_blank" rel="noopener" title="Watch the livestream on YouTube (${labels[i]})">${ytImg}</a>`).join('')}</div>`;
-            })();
-
-            const block = `
-                <div class="team-match-card ${match.testMatch ? "test-match" : ""}" href="">
-                    <div class="match-card-wrapper">
-                        <a href="${otherTeamLink}">
-                            <picture>
-                                <source srcset="${getEmblem(otherTeam).avif}" type="image/avif">
-                                <img src="${getEmblem(otherTeam).png}"
-                                    alt="${makePossessive(otherTeam)} emblem"
-                                    class="team-match-emblem" width="40" height="40">
-                            </picture>
-                        </a>
-                        <h2 class="team-title"><a href="${otherTeamLink}">${otherTeam}</a></h2>
-                        <div class="match-score ${resultClass}">
-                            ${matchDetailsLink ? `<a href="${matchDetailsLink}" title="View detailed results">${scoreHTML}</a>` : scoreHTML}
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="match-details-wrapper">
-                        <span id="match-season">${match.testMatch ? 'Test match' : `Season ${match.season}`}</span>
-                        ${ytLinksHTML}
-                        <span id="match-date"><a class="team-link-color" href="pages/matches/?date=${match.matchDate}">${formatDate(match.matchDate, locale)}</a></span>
-                    </div>
-                </div>
-            `;
-
-            if (isCompleted) {
-                completedBlocks.push(block);
+        if (scoreData) {
+            scoreDisplay = `${scoreData.teamScore} - ${scoreData.otherScore}`;
+            if (scoreData.teamScore > scoreData.otherScore) {
+                winStatus = "W";
+            } else if (scoreData.teamScore < scoreData.otherScore) {
+                winStatus = "L";
             } else {
-                upcomingBlocks.push(block);
+                winStatus = "D";
             }
         }
-    });
+
+        const matchCalculatorLink = generate6v6ScoreCalculatorLink(match);
+        const rowClickAttr = matchCalculatorLink ? `onclick="window.location.href='${matchCalculatorLink}'"` : '';
+
+        return `
+            <tr class="standings-row" ${rowClickAttr}>
+                <td class="column-team">
+                    <div class="match-team">
+                        <picture>
+                            <source srcset="${getEmblem(otherTeam).avif}" type="image/avif">
+                            <img src="${getEmblem(otherTeam).png}" class="team-logo" alt="${otherTeam} logo">
+                        </picture>
+                        <span class="team-name">${otherTeam}</span>
+                    </div>
+                </td>
+                <td class="column-date">${formatDate(match.matchDate, locale)}</td>
+                <td class="column-result">
+                    ${winStatus}
+                </td>
+                <td class="column-points">
+                    <strong>${scoreData.teamScore}</strong>
+                </td>
+
+            </tr>
+        `;
+    }).join("");
 
     matchHistoryBox.innerHTML = `
-        <div class="team-match-history">
-            ${upcomingBlocks.length ? `<div><h2>Next Match</h2><button id="toggleTestMatches">${showTestMatches ? "Hide test matches" : "Show test matches"}</button></div>${upcomingBlocks.join("")}<hr>` : ''}
-            <h2>Match History</h2>
-            ${completedBlocks.length ? completedBlocks.join("") : "<p class='p-below-title'>No previous matches.</p>"}
-        </div>`;
-
-    matchHistoryBox.classList.add('fade-in');
-
-    const toggleTestMatches = document.getElementById("toggleTestMatches");
-    toggleTestMatches?.addEventListener('click', () => {
-        showTestMatches ^= 1;
-        generateTeamMatches(teamNameFromURL);
-    });
+        <table class="standings-table">
+            <thead>
+                <tr>
+                    <th class="column-team">Opponent</th>
+                    <th class="column-opponent">Date</th>
+                    <th class="column-result">Result</th>
+                    <th class="column-points">Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${rowsHTML}
+            </tbody>
+        </table>
+    `;
 }
 
+
+
 async function showTeamMatches() {
-    startTime = performance.now();
     teamNameFromURL = getTeamFromURL();
 
     if (!teamNameFromURL) {
-        matchHistoryBox.innerHTML = "<b>Error:</b> No team specified.";
+        window.location.href = "/pages/results/";
         return;
     }
+
+    document.title = `${teamNameFromURL} Results | UMKL`;
+    
+    const headingElem = document.getElementById("results-heading-team");
+    if (headingElem) {
+        headingElem.textContent = `${teamNameFromURL} Results`;
+    }
+
+    const seasonSelect = document.getElementById("season-select");
+    const getSelectedSeason = () => seasonSelect ? seasonSelect.value : null;
+
+    const teamSelect = document.getElementById("team-select");
+
+    // Fill emblem box with team colour and emblem
+    if (teamEmblemBox && teamNameFromURL) {
+
+        const em = getEmblem(teamNameFromURL);
+        teamEmblemBox.innerHTML = `
+            <picture>
+                <source srcset="${em.avif}" type="image/avif">
+                <img src="${em.png}" alt="${teamNameFromURL} emblem" />
+            </picture>
+        `;
+    }
+
+    seasonSelect?.addEventListener("change", () => {
+        generateTeamMatches(teamNameFromURL, getSelectedSeason());
+    });
+
+    teamSelect?.addEventListener("change", (e) => {
+        const selectedTeam = e.target.value;
+        if (selectedTeam == "All") {
+            window.location.href = `/pages/standings/`;
+        }
+        else if (selectedTeam && selectedTeam !== teamNameFromURL) {
+            window.location.href = `/pages/standings/details/?team=${encodeURIComponent(selectedTeam)}`;
+        }
+
+    });
 
     const cached = getMatchCache();
     if (cached) {
         matchData = cached;
-        generateTeamMatches(teamNameFromURL);
+        populateTeamDropdown(teamNameFromURL);
+        generateTeamMatches(teamNameFromURL, getSelectedSeason());
     }
 
     try {
         const fresh = await getMatchData();
         setMatchCache(fresh);
         matchData = fresh;
-        generateTeamMatches(teamNameFromURL);
+        populateTeamDropdown(teamNameFromURL);
+        generateTeamMatches(teamNameFromURL, getSelectedSeason());
     } catch (error) {
-        console.debug(`%cmatchhistorygenerate.js %c> %cFailed to fetch match data: ${error.message}`, "color:#9b87ff", "color:#fff", "color:#c8bdff");
         if (!cached) {
             matchHistoryBox.innerHTML = `<p>Failed to load match history.</p>`;
         }
     }
-
-    console.debug(`%cmatchhistorygenerate.js %c> %cGenerated match history in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9b87ff", "color:#fff", "color:#c8bdff");
 }
-
-document.addEventListener('startDayChange', () => {
-    generateTeamMatches(teamNameFromURL);
-});
 
 document.addEventListener("DOMContentLoaded", showTeamMatches);

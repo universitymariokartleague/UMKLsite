@@ -1,43 +1,29 @@
-.season-selection {
-    display: flex;
-    flex-direction: column;
-    border-radius: 10px;
-    padding: 10px;
-    margin: 20px 0;
-}
-
-#season-select {
-    font-size: 100%;
-    color: var(--text-color);
-    background-color: var(--bg-color);
-    border: 1px solid var(--text-color);
-    outline: none;
-    padding: 10px;
-    border-radius: 10px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-#season-select:hover {
-    background-color: var(--translucent-color);
-}
-
-.standings-title {
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: -0.5px;
-    margin: 10px 0 24px 0;
-}
 
 #JSTeamTable {
     margin: 0 auto;
     border-radius: 12px;
-    padding: 24px 0;
+    padding: 20px 0;
     overflow-x: auto;
 }
 
 #HomeJSTeamTable {
     overflow-x: auto;
+}
+
+.team-standings-header-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.team-standings-emblem-wrapper, picture {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+picture img {
+    width: 150px;
+    height: 150px;
 }
 
 .standings-table {
@@ -246,7 +232,7 @@
     pointer-events: none;
     z-index: 0;
 
-    left: -200px;
+    left: -300px;
     
     -webkit-mask-image: url('/assets/pattern/finish_pattern.svg');
     mask-image: url('/assets/pattern/finish_pattern.svg');
@@ -305,6 +291,20 @@
     .podium-pos {
         font-size: 1.6rem;
     }
+
+    .teamStandingPattern {
+        left: 0;
+        -webkit-mask-size: 500px;
+        mask-size: 800px;
+    }
+
+
+}
+
+@media screen and (max-width: 900px) {
+        .team-standings-emblem-wrapper {
+        display: none;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -320,5 +320,11 @@
     .podium-card.pos-1 .podium-emblem img {
         width: 75px;
         height: 75px;
+    }
+    
+
+    .teamStandingPattern {
+        -webkit-mask-size: 500px;
+        mask-size: 500px;
     }
 }

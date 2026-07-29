@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <base href="../../../">
+
+    <meta charset="utf-8" />
+    <meta name="color-scheme" content="dark light">
+    <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport" />
+    <title>Team Results | UMKL</title>
+    <meta content="View match results for a specific team in UMKL." name="description" />
+    <link href="https://umkl.co.uk/assets/media/brand/favicon.png" rel="icon" type="image/png" />
+    
+    <!-- Absolute paths starting from root -->
+    <link href="/css/style.css" rel="stylesheet" />
+    <link href="/css/teamstandings.css" rel="stylesheet" />
+    <link href="/css/settings.css" rel="stylesheet" />
+    <link href="/css/results.css" rel="stylesheet" />
+    <link href="/css/ext/fontawesome.min.css" rel="stylesheet" />
+
+    <!-- Components -->
+    <link rel="modulepreload" href="/components/navbar.js">
+    <link rel="modulepreload" href="/components/footer.js">
+    <script defer src="/components/navbar.js" type="module"></script>
+    <script defer src="/components/footer.js" type="module"></script>
+
+    <!-- Theme check & Scripts -->
+    <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() { let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme")) } checkTheme();</script>
+    <script defer src="/scripts/settings.js" type="module"></script>
+    <script defer src="/scripts/matchhistorygenerate.js" type="module"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
+</head>
+
+<body id="top">
+    <umkl-navbar></umkl-navbar>
+
+    <main> 
+        <div class="team-standings-header-wrapper">
+            <div>
+        <div class="bubble-link-wrapper">
+            <select id="season-select" class="bubble-link">
+                <option value="1">2024/25</option>
+                <option value="2" selected="selected">2025/26</option>
+            </select>
+
+            <select id="team-select" class="bubble-link">
+            </select>
+        </div>
+
+        <h1>Team Standings</h1>
+        <p class="p-below-title">
+            View the points scored in every match a team has competed in
+        </p>
+
+        </div>
+        <div id="teamEmblemBox" class="team-standings-emblem-wrapper">
+
+        </div>
+        </div>
+
+        <div id="JSTeamTable">
+            <div id="JSMatchHistory"></div>
+        </div>
+    </main>
+
+    <umkl-footer></umkl-footer>
+</body>
+</html>
