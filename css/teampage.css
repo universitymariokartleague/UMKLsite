@@ -2,6 +2,7 @@
 .team-page-container {
     max-width: 1200px;
     margin: 0 auto;
+
     padding: 0 16px 40px 16px;
 }
 
@@ -16,6 +17,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+    margin-top: 20px;
 }
 
 .hero-content {
@@ -89,16 +91,12 @@
     margin-bottom: 15px;
 }
 
-/* 2-Column Main Layout Grid */
 .stats-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 30px;
 }
 
-
-
-/* LEFT COLUMN: Season Stats Matrix */
 .season-stats-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

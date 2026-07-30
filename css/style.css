@@ -168,6 +168,7 @@ li {
 
 .p-below-title {
     margin: 0;
+    margin-bottom: 50px;
 }
 
 .p-no-spacing {
@@ -344,7 +345,6 @@ button:focus {
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    margin-bottom: 30px;
 }
 
 .bubble-link {

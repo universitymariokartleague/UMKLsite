@@ -1,0 +1,33 @@
+.videos-header {
+    margin-bottom: 24px;
+}
+
+.videos-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px 16px;
+}
+
+.videos-grid .video-card {
+    flex: unset;
+    min-width: 0;
+    width: 100%;
+}
+
+@media (max-width: 1200px) {
+    .videos-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .videos-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .videos-grid {
+        grid-template-columns: 1fr;
+    }
+}

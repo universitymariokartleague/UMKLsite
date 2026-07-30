@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <base href="../../" />
+
+    <meta charset="utf-8" />
+    <meta name="color-scheme" content="dark light" />
+    <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport" />
+    <title>Videos | UMKL</title>
+    <meta
+        content="Watch all match replays and videos from the UMKL"
+        name="description" />
+    <link href="https://umkl.co.uk/assets/media/brand/favicon.png" rel="icon" type="image/png" />
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/home.css" rel="stylesheet" />
+    <link href="css/videos.css" rel="stylesheet" />
+    <link href="css/settings.css" rel="stylesheet" />
+    <link href="css/ext/fontawesome.min.css" rel="stylesheet" />
+
+    <meta content="UMKL - Videos" property="og:title" />
+    <meta content="https://umkl.co.uk/pages/videos/" property="og:url" />
+    <meta content="https://umkl.co.uk/assets/media/brand/promo/oganimated.avif" property="og:image" />
+    <meta content="#bc0839" name="theme-color" />
+
+    <link rel="modulepreload" href="/components/navbar.js" />
+    <link rel="modulepreload" href="/components/footer.js" />
+    <script defer src="/components/navbar.js" type="module"></script>
+    <script defer src="/components/footer.js" type="module"></script>
+
+    <script>
+        const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() { let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) } checkTheme();
+    </script>
+    <script defer src="scripts/settings.js" type="module"></script>
+    <script defer src="scripts/loadvideosgrid.js" type="module"></script>
+</head>
+
+<body id="top">
+    <umkl-navbar></umkl-navbar>
+
+    <main>
+        <div class="section">
+            <div class="videos-header">
+                <h1>Videos</h1>
+            </div>
+
+            <div class="videos-grid" id="videosGridContainer">
+                <div class="carousel-loading">Loading videos...</div>
+            </div>
+        </div>
+    </main>
+
+    <umkl-footer></umkl-footer>
+</body>
+
+</html>
