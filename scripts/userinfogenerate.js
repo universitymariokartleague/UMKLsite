@@ -87,13 +87,54 @@ let currentEquippedItems = {
 };
 let cardChanged = false;
 
-const rainbowColours = ["#ff9eb5", "#ffcc99", "#fff5a5", "#c5e8d0", "#c9daff"];
+// --- colour ---
+// Gradient-style colours need a list of stops (for the card's border-image trick and the SP
+// graph's canvas gradient), rather than the single hex value plain colours use.
+const gradientColourStops = {
+    "Rainbow": ["#ff9eb5", "#ffcc99", "#fff5a5", "#c5e8d0", "#c9daff"],
+    "Gold": ["#fff6d5", "#ffe27a", "#ffb700", "#ffe27a", "#fff6d5"]
+};
 const colourMap = {
     "UMKL Red": "#ff0000",
     "Blue": "#0066ff",
-    "Rainbow": `linear-gradient(135deg, ${rainbowColours.join(", ")})`
+    "Green": "#1fa855",
+    "Purple": "#8b5cf6",
+    "Black": "#1a1a1a",
+    "Rainbow": `linear-gradient(135deg, ${gradientColourStops.Rainbow.join(", ")})`,
+    "Gold": `linear-gradient(135deg, ${gradientColourStops.Gold.join(", ")})`
 };
-const eventIcons = { match: '', testmatch: '' }; // fa-flag-checkered, fa-gear
+
+// --- overlay ---
+// Overlays not listed here fall back to an image at assets/media/profile/<file-name>.avif -
+// these are drawn purely with CSS instead, so they don't need an image asset.
+const overlayStyles = {
+    "Scanlines": {
+        backgroundImage: "repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0px, rgba(0, 0, 0, 0.4) 1px, transparent 1px, transparent 3px)",
+        opacity: "0.15"
+    },
+    "Confetti": {
+        backgroundImage: `
+            radial-gradient(circle at 20% 30%, #ff6b6b 3px, transparent 4px),
+            radial-gradient(circle at 65% 65%, #4dd4ff 3px, transparent 4px),
+            radial-gradient(circle at 80% 15%, #ffe066 3px, transparent 4px),
+            radial-gradient(circle at 35% 85%, #a685e2 3px, transparent 4px),
+            radial-gradient(circle at 90% 90%, #6bffab 3px, transparent 4px)
+        `,
+        backgroundSize: "70px 70px",
+        opacity: "0.45"
+    },
+    "Snow": {
+        backgroundImage: `
+            radial-gradient(circle, white 1.5px, transparent 2.5px),
+            radial-gradient(circle, white 1px, transparent 2px)
+        `,
+        backgroundSize: "50px 50px, 80px 80px",
+        opacity: "0.6",
+        animation: "profile-snow-fall 12s linear infinite"
+    }
+};
+
+// --- background ---
 const backgroundOverlayOpacity = {
     "cheep_cheep": 0.2,
     "cheep_cheep_wrap": 0.2,
@@ -379,6 +420,9 @@ async function getCurrentSeason() {
     return umklFetch('https://api.umkl.co.uk/seasoninfo', { season: 0 });
 }
 
+// fa-flag-checkered, fa-gear - SP graph match/testmatch markers, unrelated to item customisation
+const eventIcons = { match: '', testmatch: '' };
+
 async function createSPGraph(data) {
     const canvas = document.getElementById('spGraph');
     if (!canvas) return;
@@ -486,9 +530,10 @@ async function createSPGraph(data) {
     let lineColour = `#${data.color}`;
     const equippedColour = getEquippedColourItem(data);
     if (equippedColour) {
-        if (equippedColour.name === "Rainbow") {
+        const stops = gradientColourStops[equippedColour.name];
+        if (stops) {
             const gradient = ctx.createLinearGradient(padding, 0, canvas.width - padding, 0);
-            rainbowColours.forEach((colour, i) => gradient.addColorStop(i / (rainbowColours.length - 1), colour));
+            stops.forEach((colour, i) => gradient.addColorStop(i / (stops.length - 1), colour));
             lineColour = gradient;
         } else {
             lineColour = colourMap[equippedColour.name] || equippedColour.name;
@@ -972,14 +1017,35 @@ function createItemElement(item, index, isEquipped) {
     div.style.cursor = "pointer";
     div.onclick = () => toggleItemEquip(item.type, index);
 
-    div.innerHTML = `
-        <img class="item-preview" src="assets/media/profile/${getItemFileName(item.name)}.avif"
-            onload="this.style.opacity=1" onerror="this.onerror=null; this.style.display='none';"/>
-        <div class="item-info">
-            <h4 class="item-name">${item.name}</h4>
-            <span class="item-type"><span class="fa-solid fa-${item.type}"></span> ${item.type}</span>
-        </div>
+    // Colours and CSS-generated overlays have no preview image asset - render the actual
+    // colour/pattern as the swatch instead of pointing an <img> at a file that doesn't exist.
+    let preview;
+    if (item.type === "colour") {
+        preview = document.createElement("div");
+        preview.style.background = colourMap[item.name] || item.name;
+    } else if (item.type === "overlay" && overlayStyles[item.name]) {
+        preview = document.createElement("div");
+        preview.style.background = "#2b2b2b";
+        preview.style.backgroundImage = overlayStyles[item.name].backgroundImage;
+        if (overlayStyles[item.name].backgroundSize) preview.style.backgroundSize = overlayStyles[item.name].backgroundSize;
+    } else {
+        preview = document.createElement("img");
+        preview.src = `assets/media/profile/${getItemFileName(item.name)}.avif`;
+        preview.onload = () => { preview.style.opacity = "1"; };
+        preview.onerror = () => { preview.style.display = "none"; };
+    }
+    preview.className = "item-preview";
+    if (preview.tagName === "DIV") preview.style.opacity = "1";
+
+    const info = document.createElement("div");
+    info.className = "item-info";
+    info.innerHTML = `
+        <h4 class="item-name">${item.name}</h4>
+        <span class="item-type"><span class="fa-solid fa-${item.type}"></span> ${item.type}</span>
     `;
+
+    div.appendChild(preview);
+    div.appendChild(info);
 
     return div;
 }
@@ -1064,6 +1130,62 @@ function applyEquippedItemsToCard() {
     profileCard.style.backgroundImage = "";
     profileCard.querySelector(".profile-card-overlay")?.remove();
 
+    // --- colour ---
+    profileCard.style.setProperty('--team-color', `#${data.color}`);
+    // Reset before re-applying - otherwise switching away from a gradient colour (Rainbow, Gold)
+    // to a plain one leaves its border override stuck on the card. Uses background-origin/-clip
+    // (not the `background` shorthand) so this can't clobber an equipped background photo, which
+    // is set via the backgroundImage longhand below - whichever of the two runs last wins if both
+    // are equipped, and background intentionally runs after colour here.
+    profileCard.style.border = "";
+    profileCard.style.backgroundOrigin = "";
+    profileCard.style.backgroundClip = "";
+    if (currentEquippedItems.colour != null) {
+        const item = data.profile_items[currentEquippedItems.colour];
+        if (item?.type === "colour") {
+            const stops = gradientColourStops[item.name];
+            if (stops) {
+                profileCard.style.border = "3px solid transparent";
+                profileCard.style.backgroundImage = `linear-gradient(145deg, rgba(255,255,255,0.85), rgba(255,255,255,0.7)), ${colourMap[item.name]}`;
+                profileCard.style.backgroundOrigin = "padding-box, border-box";
+                profileCard.style.backgroundClip = "padding-box, border-box";
+            } else {
+                profileCard.style.setProperty('--team-color', colourMap[item.name] || item.name);
+            }
+        }
+    }
+
+    // --- overlay ---
+    if (currentEquippedItems.overlay != null) {
+        const item = data.profile_items[currentEquippedItems.overlay];
+        if (item?.type === "overlay") {
+            const existingOverlay = document.createElement("div");
+            existingOverlay.className = "profile-card-overlay";
+            profileCard.appendChild(existingOverlay);
+
+            const baseStyle = {
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                position: "absolute",
+                inset: "0",
+                pointerEvents: "none",
+                zIndex: "1",
+                opacity: "0.1"
+            };
+
+            const generated = overlayStyles[item.name];
+            if (generated) {
+                Object.assign(existingOverlay.style, baseStyle, generated);
+            } else {
+                const overlayFileName = getItemFileName(item.name);
+                Object.assign(existingOverlay.style, baseStyle, {
+                    backgroundImage: `url('assets/media/profile/${overlayFileName}.avif')`
+                });
+            }
+        }
+    }
+
+    // --- background ---
     if (currentEquippedItems.background != null) {
         const item = data.profile_items[currentEquippedItems.background];
         if (item?.type === "background") {
@@ -1072,42 +1194,6 @@ function applyEquippedItemsToCard() {
             profileCard.style.backgroundImage = `linear-gradient(rgba(255, 255, 255, ${overlayOpacity}), rgba(255, 255, 255, ${overlayOpacity})), url('assets/media/profile/${bgFileName}.avif')`;
             profileCard.style.backgroundSize = "cover";
             profileCard.style.backgroundPosition = "center";
-        }
-    }
-
-    if (currentEquippedItems.overlay != null) {
-        const item = data.profile_items[currentEquippedItems.overlay];
-        if (item?.type === "overlay") {
-            const overlayFileName = getItemFileName(item.name);
-            let existingOverlay = profileCard.querySelector(".profile-card-overlay");
-            if (!existingOverlay) {
-                existingOverlay = document.createElement("div");
-                existingOverlay.className = "profile-card-overlay";
-                profileCard.appendChild(existingOverlay);
-            }
-            Object.assign(existingOverlay.style, {
-                backgroundImage: `url('assets/media/profile/${overlayFileName}.avif')`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                position: "absolute",
-                inset: "0",
-                pointerEvents: "none",
-                zIndex: "1",
-                opacity: "0.1"
-            });
-        }
-    }
-
-    profileCard.style.setProperty('--team-color', `#${data.color}`);
-    if (currentEquippedItems.colour != null) {
-        const item = data.profile_items[currentEquippedItems.colour];
-        if (item?.type === "colour") {
-            if (item.name === "Rainbow") {
-                profileCard.style.border = "3px solid transparent";
-                profileCard.style.background = `linear-gradient(145deg, rgba(255,255,255,0.85), rgba(255,255,255,0.7)) padding-box, ${colourMap["Rainbow"]} border-box`;
-            } else {
-                profileCard.style.setProperty('--team-color', colourMap[item.name] || item.name);
-            }
         }
     }
 }
@@ -1123,23 +1209,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     const json = LZString.decompressFromEncodedURIComponent(compressed);
     data = JSON.parse(json);
 
+    // TODO: implemented item unlocked via profile_items, right now every item is unlocked.
     let mappedProfileItems = [];
-    if (urlParams.has('u')) {
-        areProfileItems = true;
-        const uParam = urlParams.get('u');
-        try {
-            const response = await fetch('assets/media/profile/profileunlockitems.json');
-            const unlockItems = await response.json();
-
-            mappedProfileItems = uParam.split('').map((char, index) => {
-                if (char === '1' && index < unlockItems.length) {
-                    return unlockItems[index];
-                }
-                return null;
-            }).filter(item => item !== null);
-        } catch (error) {
-            console.error('Error fetching profile unlock items:', error);
-        }
+    areProfileItems = true;
+    try {
+        const response = await fetch('assets/media/profile/profileunlockitems.json');
+        mappedProfileItems = await response.json();
+    } catch (error) {
+        console.error('Error fetching profile unlock items:', error);
     }
 
     data.profile_items = mappedProfileItems;

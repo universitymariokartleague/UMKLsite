@@ -100,7 +100,7 @@
 .stat-item {
     text-align: center;
     padding: 10px;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-radius: 12px;
@@ -136,7 +136,7 @@
 
 .sp-graph-container {
     position: relative;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-radius: 12px;
@@ -150,7 +150,7 @@
     pointer-events: auto;
     opacity: 0;
     transition: opacity 0.1s ease;
-    background: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.6);
@@ -408,6 +408,16 @@
 
     to {
         opacity: 1;
+    }
+}
+
+@keyframes profile-snow-fall {
+    from {
+        background-position: 0 0, 0 0;
+    }
+
+    to {
+        background-position: 0 400px, 0 700px;
     }
 }
 

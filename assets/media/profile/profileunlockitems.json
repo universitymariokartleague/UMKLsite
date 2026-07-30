@@ -10,14 +10,49 @@
     "type": "colour"
   },
   {
+    "name": "Rainbow",
+    "sp_cost": 1050,
+    "type": "colour"
+  },
+  {
+    "name": "Green",
+    "sp_cost": 60,
+    "type": "colour"
+  },
+  {
+    "name": "Purple",
+    "sp_cost": 70,
+    "type": "colour"
+  },
+  {
+    "name": "Black",
+    "sp_cost": 85,
+    "type": "colour"
+  },
+  {
+    "name": "Gold",
+    "sp_cost": 1100,
+    "type": "colour"
+  },
+  {
     "name": "Sparkly",
     "sp_cost": 980,
     "type": "overlay"
   },
   {
-    "name": "Rainbow",
-    "sp_cost": 1050,
-    "type": "colour"
+    "name": "Scanlines",
+    "sp_cost": 250,
+    "type": "overlay"
+  },
+  {
+    "name": "Confetti",
+    "sp_cost": 550,
+    "type": "overlay"
+  },
+  {
+    "name": "Snow",
+    "sp_cost": 400,
+    "type": "overlay"
   },
   {
     "name": "Cheep Cheep",
@@ -42,6 +77,11 @@
   {
     "name": "Mario Kart 8 Deluxe Booster Course Pass",
     "sp_cost": 300,
+    "type": "background"
+  },
+  {
+    "name": "Mario Kart Wii",
+    "sp_cost": 512,
     "type": "background"
   },
   {
