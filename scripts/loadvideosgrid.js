@@ -1,7 +1,4 @@
-const CHANNEL_ID = "UCp_1NN3jc7pawWcaVJ1OX3w";
-const RSS_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
-
-const API_URL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}`;
+const API_URL = `https://api.umkl.co.uk/videos`;
 
 async function loadVideosGrid() {
     const container = document.getElementById("videosGridContainer");
@@ -11,34 +8,31 @@ async function loadVideosGrid() {
         const response = await fetch(API_URL);
         const data = await response.json();
 
-        if (data.status !== "ok" || !data.items || data.items.length === 0) {
+        if (!Array.isArray(data) || data.length === 0) {
             container.innerHTML = `<p class="carousel-loading">No videos found.</p>`;
             return;
         }
 
         container.innerHTML = "";
 
-        data.items.forEach(item => {
-
-            const videoId = item.link.split("v=")[1]?.split("&")[0];
-            const thumbnailUrl = videoId 
-                ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` 
-                : item.thumbnail;
+        data.forEach(item => {
+            const thumbnailUrl = item.thumbnail || `https://i.ytimg.com/vi/${item.video_id}/hqdefault.jpg`;
+            const title = item.title || item.match?.title || "UMKL Video";
 
             const card = document.createElement("a");
             card.className = "video-card";
-            card.href = item.link;
+            card.href = item.url;
             card.target = "_blank";
             card.rel = "noopener noreferrer";
 
             card.innerHTML = `
                 <div class="video-thumb-wrapper">
-                    <img src="${thumbnailUrl}" alt="${item.title}" loading="lazy" />
+                    <img src="${thumbnailUrl}" alt="${title}" loading="lazy" />
                     <div class="play-icon-overlay">
                         <i class="fa-solid fa-play"></i>
                     </div>
                 </div>
-                <h3 class="video-title">${item.title}</h3>
+                <h3 class="video-title">${title}</h3>
             `;
 
             container.appendChild(card);
