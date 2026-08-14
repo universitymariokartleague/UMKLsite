@@ -1,8 +1,23 @@
 const API_URL = `https://api.umkl.co.uk/videos`;
+const SKELETON_CARD_COUNT = 12;
+
+function renderVideosGridSkeleton(container) {
+    const skeletonCard = `
+        <div class="video-card video-card-skeleton" aria-hidden="true">
+            <div class="video-thumb-wrapper skeleton"></div>
+            <div class="skeleton skeleton-line" style="width:90%;"></div>
+            <div class="skeleton skeleton-line" style="width:55%; margin-top:6px;"></div>
+            <div class="skeleton skeleton-line" style="width:35%; height:10px; margin-top:8px;"></div>
+        </div>
+    `;
+    container.innerHTML = skeletonCard.repeat(SKELETON_CARD_COUNT);
+}
 
 async function loadVideosGrid() {
     const container = document.getElementById("videosGridContainer");
     if (!container) return;
+
+    renderVideosGridSkeleton(container);
 
     try {
         const response = await fetch(API_URL);
@@ -15,9 +30,13 @@ async function loadVideosGrid() {
 
         const fragment = document.createDocumentFragment();
 
+        const locale = localStorage.getItem("locale") || "en-GB";
+
         data.forEach(item => {
             const thumbnailUrl = item.thumbnail || `https://i.ytimg.com/vi/${item.video_id}/hqdefault.jpg`;
             const title = item.title || item.match?.title || "UMKL Video";
+            const date = item.published ? new Date(item.published) : null;
+            const dateStr = date ? date.toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" }) : "";
 
             const card = document.createElement("a");
             card.className = "video-card";
@@ -32,7 +51,8 @@ async function loadVideosGrid() {
                         <i class="fa-solid fa-play"></i>
                     </div>
                 </div>
-                <h3 class="video-title">${title}</h3>
+                <h3 class="video-title no-color-link">${title}</h3>
+                ${dateStr ? `<p class="video-date">${dateStr}</p>` : ""}
             `;
 
             fragment.appendChild(card);
