@@ -99,24 +99,29 @@
 }
 
 .news-card-image {
+    position: relative;
     aspect-ratio: 16 / 9;
     border-radius: 10px;
-    overflow: hidden;
     margin-bottom: 10px;
     background-color: var(--box-area-bg-color);
+    clip-path: inset(0 round 10px);
 }
 
 .news-card-image img {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
     object-fit: cover;
     opacity: 0;
     transition: opacity 0.2s ease-in, transform 0.3s ease;
     will-change: transform;
+    transform: translateZ(0);
 }
 
 .news-card:hover .news-card-image img {
-    transform: scale(1.04);
+    transform: scale(1.04) translateZ(0);
 }
 
 .news-card-body {
