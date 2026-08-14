@@ -76,16 +76,6 @@ html {
     background-color: var(--bg-color);
 }
 
-@view-transition {
-    navigation: auto;
-}
-
-@media screen and (max-width: 767px) {
-    @view-transition {
-        navigation: none;
-    }
-}
-
 body,
 button,
 input,
