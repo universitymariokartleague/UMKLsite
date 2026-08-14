@@ -202,6 +202,47 @@ picture img {
     display:none;
 }
 
+.podium-card-skeleton {
+    background-color: var(--translucent-color);
+    cursor: default;
+}
+
+.podium-pos-skeleton {
+    width: 50px;
+    height: 26px;
+}
+
+.podium-team-name-skeleton {
+    width: 65%;
+    height: 22px;
+    margin-bottom: 10px;
+}
+
+.podium-pts-skeleton {
+    width: 40%;
+    height: 16px;
+}
+
+.podium-emblem-skeleton {
+    width: 150px;
+    height: 150px;
+}
+
+.podium-card-skeleton.pos-1 .podium-emblem-skeleton {
+    width: 200px;
+    height: 200px;
+}
+
+.standings-row-skeleton {
+    cursor: default;
+    border-bottom: 1px solid var(--translucent-color);
+}
+
+.standings-row-skeleton td {
+    padding: 16px;
+    vertical-align: middle;
+}
+
 .toggle-wrapper {
     text-align: center;
     margin-top: 30px;
@@ -283,7 +324,9 @@ picture img {
     }
 
     .podium-emblem img,
-    .podium-card.pos-1 .podium-emblem img {
+    .podium-card.pos-1 .podium-emblem img,
+    .podium-emblem-skeleton,
+    .podium-card-skeleton.pos-1 .podium-emblem-skeleton {
         width: 100px;
         height: 100px;
     }
@@ -317,11 +360,13 @@ picture img {
     }
 
     .podium-emblem img,
-    .podium-card.pos-1 .podium-emblem img {
+    .podium-card.pos-1 .podium-emblem img,
+    .podium-emblem-skeleton,
+    .podium-card-skeleton.pos-1 .podium-emblem-skeleton {
         width: 75px;
         height: 75px;
     }
-    
+
 
     .teamStandingPattern {
         -webkit-mask-size: 500px;

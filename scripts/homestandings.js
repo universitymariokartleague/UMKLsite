@@ -14,6 +14,57 @@ const SEASON_CACHE_KEY = 'seasonInfoCache';
 
 let allTeamsData = [];
 let isExpanded = false;
+let hasRenderedStandings = false;
+
+function renderStandingsSkeleton() {
+    if (!JSTeamTable || !SeasonTop3) return;
+
+    const podiumSkeleton = (pos) => `
+        <div class="podium-card pos-${pos} podium-card-skeleton" aria-hidden="true">
+            <div class="podium-text">
+                <div class="podium-header">
+                    <div class="skeleton skeleton-line podium-pos-skeleton"></div>
+                </div>
+                <div class="podium-body">
+                    <div class="skeleton skeleton-line podium-team-name-skeleton"></div>
+                    <div class="skeleton skeleton-line podium-pts-skeleton"></div>
+                </div>
+            </div>
+            <div class="podium-emblem">
+                <div class="skeleton skeleton-circle podium-emblem-skeleton"></div>
+            </div>
+        </div>
+    `;
+    SeasonTop3.innerHTML = [2, 1, 3].map(podiumSkeleton).join("");
+
+    const rowSkeleton = `
+        <tr class="standings-row-skeleton" aria-hidden="true">
+            <td class="column-position"><div class="skeleton skeleton-line" style="width:20px;"></div></td>
+            <td class="column-team">
+                <div class="team-info">
+                    <div class="skeleton skeleton-circle" style="width:24px; height:24px; flex-shrink:0;"></div>
+                    <div class="skeleton skeleton-line" style="width:120px;"></div>
+                </div>
+            </td>
+            <td class="column-played"><div class="skeleton skeleton-line" style="width:20px; margin:0 auto;"></div></td>
+            <td class="column-points"><div class="skeleton skeleton-line" style="width:30px; margin-left:auto;"></div></td>
+        </tr>
+    `;
+
+    JSTeamTable.innerHTML = `
+        <table class="standings-table">
+            <thead>
+                <tr>
+                    <th class="column-position">Pos</th>
+                    <th class="column-team">Team</th>
+                    <th class="column-played">Played</th>
+                    <th class="column-points">Points</th>
+                </tr>
+            </thead>
+            <tbody>${rowSkeleton.repeat(5)}</tbody>
+        </table>
+    `;
+}
 
 const fetchAPI = async (endpoint, body) => {
     const response = await fetch(`${API_BASE}/${endpoint}`, {
@@ -93,6 +144,7 @@ const isLightColor = (color) => {
 async function renderHomeStandings(data) {
     if (!JSTeamTable || !SeasonTop3) return;
 
+    hasRenderedStandings = true;
     allTeamsData = data;
     if (JSTeamTableLoading) JSTeamTableLoading.innerHTML = "";
 
@@ -190,7 +242,7 @@ SeasonTop3?.addEventListener("click", (e) => {
 
 JSTeamTable?.addEventListener("click", (e) => {
     const row = e.target.closest(".standings-row");
-    if (row) window.location.href = row.dataset.href;
+    if (row?.dataset.href) window.location.href = row.dataset.href;
 });
 
 toggleShowAllBtn?.addEventListener("click", (e) => {
@@ -208,6 +260,8 @@ toggleShowAllBtn?.addEventListener("click", (e) => {
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
+    renderStandingsSkeleton();
+
     let currentSeason = 3;
     const seasonCache = getSeasonInfoCache();
     if (seasonCache[0] != null) currentSeason = parseInt(seasonCache[0]) || 3;
@@ -237,6 +291,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         renderHomeStandings(teamData);
         localStorage.setItem(CACHE_KEY, JSON.stringify(teamData));
     } catch (e) {
+        if (!hasRenderedStandings) {
+            SeasonTop3.innerHTML = "";
+            JSTeamTable.innerHTML = "";
+        }
         if (JSTeamTableLoading) {
             JSTeamTableLoading.innerHTML = `<blockquote class="fail">Failed to load standings preview.</blockquote>`;
         }

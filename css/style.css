@@ -859,3 +859,43 @@ umkl-footer {
     display: flex;
     flex-direction: column;
 }
+
+.skeleton {
+    position: relative;
+    background-color: var(--translucent-color);
+    border-radius: 6px;
+    overflow: hidden;
+    color: transparent !important;
+    pointer-events: none;
+    user-select: none;
+}
+
+.skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, var(--opaque-color), transparent);
+    animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@media (prefers-reduced-motion) {
+    .skeleton::after {
+        animation: none;
+    }
+}
+
+.skeleton-line {
+    height: 12px;
+    width: 100%;
+}
+
+.skeleton-circle {
+    border-radius: 50%;
+}

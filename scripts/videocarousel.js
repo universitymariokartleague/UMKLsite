@@ -1,4 +1,16 @@
 const API_URL = `https://api.umkl.co.uk/videos`;
+const SKELETON_CARD_COUNT = 6;
+
+function renderVideoCarouselSkeleton(container) {
+    const skeletonCard = `
+        <div class="video-card video-card-skeleton" aria-hidden="true">
+            <div class="video-thumb-wrapper skeleton"></div>
+            <div class="skeleton skeleton-line" style="width:90%;"></div>
+            <div class="skeleton skeleton-line" style="width:55%; margin-top:6px;"></div>
+        </div>
+    `;
+    container.innerHTML = skeletonCard.repeat(SKELETON_CARD_COUNT);
+}
 
 async function loadVideoCarousel() {
     const container = document.getElementById("videoCarousel");
@@ -6,6 +18,8 @@ async function loadVideoCarousel() {
     const nextBtn = document.getElementById("carouselNext");
 
     if (!container) return;
+
+    renderVideoCarouselSkeleton(container);
 
     try {
         const response = await fetch(API_URL);
