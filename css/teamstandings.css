@@ -121,11 +121,11 @@ picture img {
 
 .podium-card {
     border-radius: 10px;
-    padding: 30px;
+    padding: 22px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
-    min-height: 200px;
+    min-height: 150px;
     position: relative;
     overflow: hidden;
     /* Contains pattern within rounded card corners */
@@ -144,17 +144,17 @@ picture img {
 }
 
 .podium-emblem img {
-    width: 150px;
-    height: 150px;
+    width: 115px;
+    height: 115px;
 }
 
 .podium-card.pos-1 {
-    min-height: 250px;
+    min-height: 190px;
 }
 
 .podium-card.pos-1 .podium-emblem img {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
 }
 
 .podium-header {
@@ -165,7 +165,7 @@ picture img {
 }
 
 .podium-pos {
-    font-size: 2rem;
+    font-size: 1.6rem;
     font-weight: 900;
     line-height: 1;
 }
@@ -183,11 +183,11 @@ picture img {
 }
 
 .podium-body {
-    margin-top: 20px;
+    margin-top: 14px;
 }
 
 .podium-team-name {
-    font-size: 2rem;
+    font-size: 1.6rem;
     font-weight: 1000;
 }
 
@@ -230,13 +230,13 @@ picture img {
 }
 
 .podium-emblem-skeleton {
-    width: 150px;
-    height: 150px;
+    width: 115px;
+    height: 115px;
 }
 
 .podium-card-skeleton.pos-1 .podium-emblem-skeleton {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
 }
 
 .standings-row-skeleton {
@@ -321,24 +321,24 @@ picture img {
     }
 
     .podium-card {
-        padding: 20px;
+        padding: 16px;
         min-height: auto;
     }
 
     .podium-team-name {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
 
     .podium-emblem img,
     .podium-card.pos-1 .podium-emblem img,
     .podium-emblem-skeleton,
     .podium-card-skeleton.pos-1 .podium-emblem-skeleton {
-        width: 100px;
-        height: 100px;
+        width: 85px;
+        height: 85px;
     }
 
     .podium-pos {
-        font-size: 1.6rem;
+        font-size: 1.4rem;
     }
 
     .teamStandingPattern {
@@ -358,19 +358,19 @@ picture img {
 
 @media screen and (max-width: 480px) {
     .podium-card {
-        padding: 16px;
+        padding: 14px;
     }
 
     .podium-team-name {
-        font-size: 1.25rem;
+        font-size: 1.1rem;
     }
 
     .podium-emblem img,
     .podium-card.pos-1 .podium-emblem img,
     .podium-emblem-skeleton,
     .podium-card-skeleton.pos-1 .podium-emblem-skeleton {
-        width: 75px;
-        height: 75px;
+        width: 65px;
+        height: 65px;
     }
 
 
