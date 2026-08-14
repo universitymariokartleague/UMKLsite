@@ -1,10 +1,5 @@
 
-.team-page-container {
-    max-width: 1200px;
-    margin: 0 auto;
-
-    padding: 0 16px 40px 16px;
-}
+@import url("/css/components/patternoverlay.css");
 
 .team-hero {
     position: relative;
@@ -62,26 +57,14 @@
 }
 
 .team-hero #heroPattern {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-
     top: -200px;
-
     z-index: 1;
+
     -webkit-mask-image: url('/assets/pattern/finish_pattern_down.svg');
     mask-image: url('/assets/pattern/finish_pattern_down.svg');
-    mask-repeat: no-repeat;
 
     -webkit-mask-size: 1600px;
     mask-size: 1600px;
-}
-
-.section-title {
-    font-size: 1.8rem;
-    font-weight: 900;
-    letter-spacing: 1.5px;
-    margin-bottom: 20px;
 }
 
 .subsection-title {

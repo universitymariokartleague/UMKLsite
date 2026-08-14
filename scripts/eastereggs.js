@@ -38,7 +38,7 @@ function injectMusic(path) {
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = '/css/audioplayer.css';
+    link.href = '/css/components/audioplayer.css';
     document.head.appendChild(link);
 }
 

@@ -1,3 +1,5 @@
+@import url("/css/components/patternoverlay.css");
+
 #JSTeamTable {
     margin: 0 auto;
     border-radius: 12px;
@@ -38,11 +40,6 @@ picture img {
     border-bottom: 1.5px solid var(--text-color);
     /* Dark top accent divider */
     text-transform: uppercase;
-}
-
-.column-pos {
-    width: 80px;
-    text-align: left;
 }
 
 .column-team {
@@ -191,17 +188,15 @@ picture img {
     font-weight: 1000;
 }
 
-.podium-bg-emblem {
-    position: absolute;
-    right: -20px;
-    bottom: -20px;
-    width: 140px;
-    height: 140px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    opacity: 0.12;
-    z-index: 1;
-    pointer-events: none;
+.podium-pts {
+    margin-top: 2px;
+    font-size: 1rem;
+}
+
+.podium-pts span {
+    font-size: 0.85em;
+    font-weight: 600;
+    opacity: 0.7;
 }
 
 .hidden-row {
@@ -274,21 +269,14 @@ picture img {
 }
 
 .teamStandingPattern {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
     z-index: 0;
-
     left: -300px;
 
     -webkit-mask-image: url('/assets/pattern/finish_pattern.svg');
     mask-image: url('/assets/pattern/finish_pattern.svg');
 
-    -webkit-mask-repeat: repeat;
-    mask-repeat: no-repeat;
     -webkit-mask-size: 1200px;
     mask-size: 1200px;
-
 
     opacity: 1;
 }

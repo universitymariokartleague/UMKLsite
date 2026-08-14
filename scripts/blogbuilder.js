@@ -109,8 +109,8 @@ const blogFormatHTML = `
     <title>{{blogTitle}} | UMKL</title>
     <meta name="description" content="{{blogDescription}}">
     <link rel="icon" href="/assets/media/brand/favicon.png" type="image/png">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/settings.css">
+    <link rel="stylesheet" href="/css/base/style.css">
+    <link rel="stylesheet" href="/css/base/settings.css">
     <link rel="stylesheet" href="/css/ext/fontawesome.min.css">
     <meta name="color-scheme" content="dark light">
 

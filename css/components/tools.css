@@ -39,15 +39,6 @@
 }
 
 .tool-icon i,
-.tool-icon-char {
-    font-size: 1.75rem;
-    color: var(--accent-color);
-}
-
-.tool-icon-char {
-    font-weight: 600;
-}
-
 .tool-info {
     display: flex;
     flex-direction: column;

@@ -1,69 +1,15 @@
-@font-face {
-    font-family: "gg-sans";
-    font-weight: normal;
-    src: url("../assets/font/gg-sans.woff2");
-}
+@import url("/css/components/discordmessage.css");
 
 @font-face {
     font-family: "gg-sans";
     font-weight: bold;
-    src: url("../assets/font/gg-sans-bold.woff2");
+    src: url("/assets/font/gg-sans-bold.woff2");
 }
 
 body {
-    background-color: #0d0c0f;
-    color: #dcddde;
-    font-family: "gg-sans", 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    margin: 0;
     padding-right: 10px;
     min-width: 500px;
     overflow: hidden;
-    -webkit-user-select: none;
-    user-select: none;
-    animation: fade-in 0.2s ease-in-out;
-}
-
-@keyframes fade-in {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-.message {
-    display: flex;
-    padding: 15px;
-}
-
-/* Discord Theme Colors */
-.theme-light {
-    background-color: #fcfcfc;
-    color: #2e3338;
-}
-.theme-dark {
-    background-color: #333239;
-    color: #dcddde;
-}
-.theme-darker {
-    background-color: #212025;
-    color: #dcddde;
-}
-.theme-darkest {
-    background-color: #0d0c0f;
-    color: #dcddde;
-}
-
-.avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 16px;
-}
-
-.message-content {
-    flex: 1;
 }
 
 .username {
@@ -96,17 +42,6 @@ body {
     padding: 7.5px 15px;
     background-color: #00863a;
     border-radius: 8px;
-}
-
-.timestamp {
-    color: #72767d;
-    font-size: 0.75em;
-    font-weight: 400;
-}
-
-.message-text {
-    margin-bottom: 4px;
-    line-height: 1.375;
 }
 
 .embed-container {
@@ -156,43 +91,10 @@ body {
     margin-bottom: 2px;
 }
 
-.embed-fields {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 8px;
-}
-
-.embed-field {
-    font-size: 0.875em;
-}
-
-.embed-field.inline {
-    display: inline-block;
-    width: calc(50% - 4px);
-    vertical-align: top;
-}
-
-.embed-field-name {
-    font-weight: 600;
-    color: #ffffff;
-}
-
 .embed-footer {
     display: flex;
     align-items: center;
     font-size: 0.75em;
-}
-
-.embed-footer-icon {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    margin-right: 8px;
-}
-
-.embed-timestamp {
-    margin-left: auto;
 }
 
 a:link {

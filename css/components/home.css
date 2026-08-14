@@ -130,12 +130,6 @@ article:hover h3 {
     margin-bottom: 16px;
 }
 
-.carousel-nav {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
 .carousel-container {
     display: flex;
     gap: 16px;

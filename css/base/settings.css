@@ -143,11 +143,6 @@
     margin-right: auto;
 }
 
-.setting-selectable {
-    -webkit-user-select: all;
-    user-select: all;
-}
-
 .snowflake {
     position: fixed;
     width: 2px;

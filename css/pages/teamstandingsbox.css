@@ -1,3 +1,5 @@
+@import url("/css/components/patternoverlay.css");
+
 .teamStandingsBox {
     padding-top: 20px;
     font-weight: bold;
@@ -36,13 +38,6 @@
     text-decoration: underline;
 }
 
-.teamStandingsBox .teamColour {
-    border-radius: 5px;
-    margin-left: 2px;
-    width: 12px;
-    height: 100px;
-}
-
 .teamStanding picture {
     height: 5vw;
     width: 5vw;
@@ -61,15 +56,10 @@
 }
 
 .teamStandingPattern {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
     z-index: 0;
-    
+
     -webkit-mask-image: url('/assets/pattern/finish_pattern.svg');
     mask-image: url('/assets/pattern/finish_pattern.svg');
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
 
     -webkit-mask-size: 850px;
     mask-size: 850px;
@@ -331,28 +321,6 @@ border-bottom: none;
     grid-template-columns: repeat(2, 1fr);
     column-gap: 15px;
     row-gap: 15px;
-}
-
-.teamBox {
-    border-radius: 10px;
-    padding: 20px;
-    min-width: 300px;
-    width: 100%;
-    color: inherit;
-    -webkit-user-select: none;
-    user-select: none;
-}
-
-.teamBox:active {
-    transform: scale(0.95);
-    transition: transform 0.1s;
-}
-
-.positionBox {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    font-size: 25px;
 }
 
 .team {

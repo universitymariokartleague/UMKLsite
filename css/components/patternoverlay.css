@@ -1,0 +1,9 @@
+/* Shared base for the decorative finish-pattern mask overlays used on team-branded cards */
+.teamStandingPattern,
+#heroPattern {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+}

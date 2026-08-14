@@ -42,7 +42,7 @@ body {
     filter: var(--map-shadow);
 }
 
-.map-container, #worldMap {
+.map-container {
     -webkit-user-drag: none;
     touch-action: none;
     cursor: move;

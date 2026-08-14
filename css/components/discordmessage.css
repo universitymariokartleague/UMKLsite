@@ -1,7 +1,7 @@
 @font-face {
     font-family: "gg-sans";
     font-weight: normal;
-    src: url("../assets/font/gg-sans.woff2");
+    src: url("/assets/font/gg-sans.woff2");
 }
 
 body {
@@ -29,6 +29,7 @@ body {
     padding: 15px;
 }
 
+/* Discord Theme Colors */
 .theme-light {
     background-color: #fcfcfc;
     color: #2e3338;
@@ -58,12 +59,6 @@ body {
 
 .message-content {
     flex: 1;
-}
-
-.username {
-    font-weight: 500;
-    margin-right: 8px;
-    color: #1BAA8B;
 }
 
 .timestamp {

@@ -1,0 +1,7 @@
+@import url("/css/components/discordmessage.css");
+
+.username {
+    font-weight: 500;
+    margin-right: 8px;
+    color: #1BAA8B;
+}
