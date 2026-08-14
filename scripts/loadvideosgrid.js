@@ -13,7 +13,7 @@ async function loadVideosGrid() {
             return;
         }
 
-        container.innerHTML = "";
+        const fragment = document.createDocumentFragment();
 
         data.forEach(item => {
             const thumbnailUrl = item.thumbnail || `https://i.ytimg.com/vi/${item.video_id}/hqdefault.jpg`;
@@ -35,8 +35,11 @@ async function loadVideosGrid() {
                 <h3 class="video-title">${title}</h3>
             `;
 
-            container.appendChild(card);
+            fragment.appendChild(card);
         });
+
+        container.innerHTML = "";
+        container.appendChild(fragment);
 
     } catch (error) {
         console.error("Error loading UMKL YouTube videos grid:", error);

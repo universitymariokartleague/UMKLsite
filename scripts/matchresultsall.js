@@ -1,7 +1,7 @@
 import { generate6v6ScoreCalculatorLink } from './matchhelper.js';
 
 const allMatchesBox = document.getElementById("JSAllMatches");
-let matchData = [];
+let normalizedMatches = [];
 
 const CACHE_KEY = 'matchDataCache';
 const getMatchCache = () => { try { return JSON.parse(localStorage.getItem(CACHE_KEY)) || null; } catch { return null; } };
@@ -39,11 +39,9 @@ function formatDate(dateStr, locale) {
 }
 
 function generateAllMatches(selectedSeason) {
-    const allMatches = normalizeMatchData(matchData);
-
-    let filteredMatches = allMatches;
+    let filteredMatches = normalizedMatches;
     if (selectedSeason) {
-        filteredMatches = allMatches.filter(match => String(match.season) === String(selectedSeason));
+        filteredMatches = normalizedMatches.filter(match => String(match.season) === String(selectedSeason));
     }
 
     if (filteredMatches.length === 0) {
@@ -51,7 +49,7 @@ function generateAllMatches(selectedSeason) {
         return;
     }
 
-    filteredMatches.sort((a, b) => {
+    filteredMatches = filteredMatches.slice().sort((a, b) => {
         const aDate = new Date(`${a.matchDate}T${a.time || "00:00:00"}`);
         const bDate = new Date(`${b.matchDate}T${b.time || "00:00:00"}`);
         return bDate - aDate;
@@ -81,17 +79,20 @@ function generateAllMatches(selectedSeason) {
             }
         }
 
+        const emblemA = getEmblem(teamA);
+        const emblemB = getEmblem(teamB);
+        const emblemWinner = getEmblem(winningTeam);
         const matchCalculatorLink = generate6v6ScoreCalculatorLink(match);
-        const rowClickAttr = matchCalculatorLink ? `onclick="window.location.href='${matchCalculatorLink}'"` : '';
+        const hrefAttr = matchCalculatorLink ? ` data-href="${matchCalculatorLink}"` : '';
 
         return `
-            <tr class="standings-row" ${rowClickAttr}>
+            <tr class="standings-row"${hrefAttr}>
                 <td class="column-team fixed-width-column">
                     <div class="match-team team-a">
                         <span class="team-name">${teamA}</span>
                         <picture>
-                            <source srcset="${getEmblem(teamA).avif}" type="image/avif">
-                            <img src="${getEmblem(teamA).png}" class="team-logo" alt="${teamA} logo">
+                            <source srcset="${emblemA.avif}" type="image/avif">
+                            <img src="${emblemA.png}" class="team-logo" alt="${teamA} logo">
                         </picture>
                     </div>
                 </td>
@@ -99,8 +100,8 @@ function generateAllMatches(selectedSeason) {
                 <td class="column-team">
                     <div class="match-team team-b">
                         <picture>
-                            <source srcset="${getEmblem(teamB).avif}" type="image/avif">
-                            <img src="${getEmblem(teamB).png}" class="team-logo" alt="${teamB} logo">
+                            <source srcset="${emblemB.avif}" type="image/avif">
+                            <img src="${emblemB.png}" class="team-logo" alt="${teamB} logo">
                         </picture>
                         <span class="team-name">${teamB}</span>
                     </div>
@@ -113,8 +114,8 @@ function generateAllMatches(selectedSeason) {
                 <td class="column-winner">
                     <div class="match-team">
                         <picture>
-                            <source srcset="${getEmblem(winningTeam).avif}" type="image/avif">
-                            <img src="${getEmblem(winningTeam).png}" class="team-logo" alt="${teamB} logo">
+                            <source srcset="${emblemWinner.avif}" type="image/avif">
+                            <img src="${emblemWinner.png}" class="team-logo" alt="${teamB} logo">
                         </picture>
                         <span class="team-name">${winningTeam}</span>
                     </div>
@@ -142,6 +143,11 @@ function generateAllMatches(selectedSeason) {
     `;
 }
 
+allMatchesBox?.addEventListener("click", (e) => {
+    const row = e.target.closest("tr[data-href]");
+    if (row) window.location.href = row.dataset.href;
+});
+
 async function renderAllMatches() {
     const seasonSelect = document.getElementById("season-select");
     const getSelectedSeason = () => seasonSelect ? seasonSelect.value : null;
@@ -152,14 +158,14 @@ async function renderAllMatches() {
 
     const cached = getMatchCache();
     if (cached) {
-        matchData = cached;
+        normalizedMatches = normalizeMatchData(cached);
         generateAllMatches(getSelectedSeason());
     }
 
     try {
         const fresh = await getMatchData();
         setMatchCache(fresh);
-        matchData = fresh;
+        normalizedMatches = normalizeMatchData(fresh);
         generateAllMatches(getSelectedSeason());
     } catch (error) {
         if (!cached) {

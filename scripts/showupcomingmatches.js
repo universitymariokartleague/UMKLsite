@@ -80,6 +80,8 @@ function parseLocalDate(dateStr) {
 };
 
 async function showUpcomingMatches() {
+    if (!upcomingMatchesBox) return;
+
     const pad = n => String(n).padStart(2, '0');
     const formatDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
@@ -434,6 +436,8 @@ document.addEventListener('startDayChange', () => {
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
+    if (!upcomingMatchesBox) return;
+
     startTime = performance.now();
     console.debug(`%cshowupcomingmatches.js %c> %cFetching calendar...`, "color:#fffc45", "color:#fff", "color:#fcfb9a");
 

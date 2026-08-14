@@ -29,6 +29,16 @@ const getSeasonInfoCache = () => {
     try { return JSON.parse(localStorage.getItem(SEASON_CACHE_KEY)) || {}; } catch { return {}; }
 };
 
+const setSeasonInfoCache = (season, data) => {
+    const cache = getSeasonInfoCache();
+    cache[season] = data;
+    localStorage.setItem(SEASON_CACHE_KEY, JSON.stringify(cache));
+};
+
+const fetchSeasonInfo = async (season = 0) => {
+    return fetchAPI('seasoninfo', { season });
+};
+
 const fetchTeamData = async (season) => {
     return fetchAPI('teamdata', { team: "", season: `${season}` });
 };
@@ -84,8 +94,6 @@ async function renderHomeStandings(data) {
     if (!JSTeamTable || !SeasonTop3) return;
 
     allTeamsData = data;
-    JSTeamTable.innerHTML = "";
-    SeasonTop3.innerHTML = "";
     if (JSTeamTableLoading) JSTeamTableLoading.innerHTML = "";
 
     const sorted = data.slice().sort((a, b) => Number(b.team_season_points) - Number(a.team_season_points));
@@ -99,8 +107,8 @@ async function renderHomeStandings(data) {
     }
 
     const podiumOrder = [sorted[1], sorted[0], sorted[2]].filter(Boolean);
-    
-    for (const team of podiumOrder) {
+
+    SeasonTop3.innerHTML = podiumOrder.map(team => {
         const pos = positionMap.get(team);
         const name = team.team_name;
         const nameUpper = name.toUpperCase();
@@ -108,14 +116,11 @@ async function renderHomeStandings(data) {
         const avif = `https://api.umkl.co.uk/teamemblems/${nameUpper}?og`;
         const dest = `/pages/teams/details/?team=${encodeURIComponent(name)}`;
         const ordinal = pos === 1 ? '1<sup>ST</sup>' : pos === 2 ? '2<sup>ND</sup>' : '3<sup>RD</sup>';
+        const backgroundImage = `linear-gradient(90deg, ${team.team_color} 0%, ${darkenColor(team.team_color, 10)} 100%)`;
+        const color = team.team_color ? (isLightColor(team.team_color) ? 'var(--brand-dark)' : 'var(--brand-light)') : '';
 
-        const card = document.createElement('div');
-        card.className = `podium-card pos-${pos}`;
-        card.style.backgroundImage = `linear-gradient(90deg, ${team.team_color} 0%, ${darkenColor(team.team_color, 10)} 100%)`;
-        card.style.color = team.team_color ? (isLightColor(team.team_color) ? 'var(--brand-dark' : 'var(--brand-light)') : '';
-        card.onclick = () => window.location.href = dest;
-
-        card.innerHTML = `
+        return `
+        <div class="podium-card pos-${pos}" data-href="${dest}" style="background-image: ${backgroundImage}; color: ${color};">
         <div class="teamStandingPattern" style="background-color: ${team.team_color};"></div>
         <div class="podium-text">
             <div class="podium-header">
@@ -129,26 +134,11 @@ async function renderHomeStandings(data) {
         <div class="podium-emblem">
             <img class="podium-emblem" src="${avif}" alt="${name} logo" />
         </div>
+        </div>
         `;
-        SeasonTop3.appendChild(card);
-    }
+    }).join("");
 
-    const table = document.createElement('table');
-    table.className = 'standings-table';
-    table.innerHTML = `
-        <thead>
-            <tr>
-                <th class="column-position">Pos</th>
-                <th class="column-team">Team</th>
-                <th class="column-played">Played</th>
-                <th class="column-points">Points</th>
-            </tr>
-        </thead>
-    `;
-
-    const tbody = document.createElement('tbody');
-
-    sorted.forEach((team, index) => {
+    const rowsHTML = sorted.map((team, index) => {
         const pos = positionMap.get(team);
         const name = team.team_name;
         const nameUpper = name.toUpperCase();
@@ -156,38 +146,52 @@ async function renderHomeStandings(data) {
         const avif = `https://api.umkl.co.uk/teamemblems/${nameUpper}`;
         const png = `https://api.umkl.co.uk/teamemblems/${nameUpper}?og`;
         const dest = `/pages/teams/details/?team=${encodeURIComponent(name)}`;
+        const hiddenClass = (index >= 5 && !isExpanded) ? ' hidden-row' : '';
 
-        const row = document.createElement('tr');
-        row.className = 'standings-row';
-        
-        if (index >= 5 && !isExpanded) {
-            row.classList.add('hidden-row');
-        }
-
-        row.onclick = () => window.location.href = dest;
-
-        row.innerHTML = `
-            <td class="column-position">${pos}</td>
-            <td class="column-team">
-                <div class="team-info">
-                    <picture>
-                        <source srcset="${avif}" type="image/avif">
-                        <img class="team-logo" src="${png}" alt="${name} emblem" loading="lazy">
-                    </picture>
-                    <span class="team-name">${name}</span>
-                </div>
-            </td>
-            <td class="column-played">${team.season_matches_played}</td>
-            <td class="column-points"><strong>${points}</strong></td>
+        return `
+            <tr class="standings-row${hiddenClass}" data-href="${dest}">
+                <td class="column-position">${pos}</td>
+                <td class="column-team">
+                    <div class="team-info">
+                        <picture>
+                            <source srcset="${avif}" type="image/avif">
+                            <img class="team-logo" src="${png}" alt="${name} emblem" loading="lazy">
+                        </picture>
+                        <span class="team-name">${name}</span>
+                    </div>
+                </td>
+                <td class="column-played">${team.season_matches_played}</td>
+                <td class="column-points"><strong>${points}</strong></td>
+            </tr>
         `;
-        tbody.appendChild(row);
-    });
+    }).join("");
 
-    table.appendChild(tbody);
-    JSTeamTable.appendChild(table);
+    JSTeamTable.innerHTML = `
+        <table class="standings-table">
+            <thead>
+                <tr>
+                    <th class="column-position">Pos</th>
+                    <th class="column-team">Team</th>
+                    <th class="column-played">Played</th>
+                    <th class="column-points">Points</th>
+                </tr>
+            </thead>
+            <tbody>${rowsHTML}</tbody>
+        </table>
+    `;
 
     updateToggleBtnState(sorted.length);
 }
+
+SeasonTop3?.addEventListener("click", (e) => {
+    const card = e.target.closest("[data-href]");
+    if (card) window.location.href = card.dataset.href;
+});
+
+JSTeamTable?.addEventListener("click", (e) => {
+    const row = e.target.closest(".standings-row");
+    if (row) window.location.href = row.dataset.href;
+});
 
 toggleShowAllBtn?.addEventListener("click", (e) => {
     e.preventDefault();
@@ -215,6 +219,18 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (parsed?.length > 0) renderHomeStandings(parsed);
         } catch {}
     }
+
+    // Resolve the actual live season before fetching team data - the cache above
+    // may be stale or empty (e.g. a visitor's first-ever page is the homepage),
+    // and the hardcoded fallback above can point at a season with no data yet.
+    try {
+        const seasonInfo = await fetchSeasonInfo(0);
+        const liveSeason = parseInt(seasonInfo);
+        if (!isNaN(liveSeason)) {
+            currentSeason = liveSeason;
+            setSeasonInfoCache(0, seasonInfo);
+        }
+    } catch {}
 
     try {
         const teamData = await fetchTeamData(currentSeason);

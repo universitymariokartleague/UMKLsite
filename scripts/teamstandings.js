@@ -61,7 +61,6 @@ const showError = (message) => {
 async function generateStandingsTable(data) {
     if (!JSTeamTable) return;
 
-    JSTeamTable.innerHTML = "";
     JSTeamTable.classList.add('fade-in');
 
     // Sort teams descending by points
@@ -72,34 +71,14 @@ async function generateStandingsTable(data) {
     let lastPoints = null, lastPosition = 0;
     for (let i = 0; i < sortedData.length; i++) {
         const pts = Number(sortedData[i].team_season_points);
-        if (pts !== lastPoints) { 
-            lastPosition = i + 1; 
-            lastPoints = pts; 
+        if (pts !== lastPoints) {
+            lastPosition = i + 1;
+            lastPoints = pts;
         }
         positionMap.set(sortedData[i], lastPosition);
     }
 
-    const table = document.createElement('table');
-    table.className = 'standings-table';
-
-    // Header
-    table.innerHTML = `
-        <thead>
-            <tr>
-                <th class="column-position">Pos</th>
-                <th class="column-team">Team</th>
-                <th class="column-played">Played</th>
-                <th class="column-won">Won</th>
-                <th class="column-drawn">Drawn</td>
-                <th class="column-lost">Lost</th>
-                <th class="column-points">Points</th>
-            </tr>
-        </thead>
-    `;
-
-    const tbody = document.createElement('tbody');
-
-    for (const team of sortedData) {
+    const rowsHTML = sortedData.map(team => {
         const name = team.team_name;
         const nameUpper = name.toUpperCase();
         const position = positionMap.get(team);
@@ -108,39 +87,58 @@ async function generateStandingsTable(data) {
         const png = `https://api.umkl.co.uk/teamemblems/${nameUpper}?og`;
         const dest = `/pages/standings/details/?team=${encodeURIComponent(name)}`;
 
-        const row = document.createElement('tr');
-        row.className = 'standings-row';
-        row.tabIndex = 0;
-        
-        row.addEventListener('click', () => window.location.href = dest);
-        row.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') window.location.href = dest;
-        });
-
-        row.innerHTML = `
-            <td class="column-position">${position}</td>
-            <td class="column-team">
-                <div class="team-info">
-                    <picture>
-                        <source srcset="${avif}" type="image/avif">
-                        <img class="team-logo" src="${png}" alt="${makePossessive(name)} emblem" loading="lazy">
-                    </picture>
-                    <span class="team-name" title="${team.team_full_name || name}">${name}</span>
-                </div>
-            </td>
-            <td class="column-played">${team.season_matches_played}</td>
-            <td class="column-won">${team.season_wins_losses[0]}</td>
-            <td class="column-drawn">0</td>
-            <td class="column-lost">${team.season_wins_losses[1]}</td>
-            <td class="column-points"><strong>${points}</strong></td>
+        return `
+            <tr class="standings-row" tabindex="0" data-href="${dest}">
+                <td class="column-position">${position}</td>
+                <td class="column-team">
+                    <div class="team-info">
+                        <picture>
+                            <source srcset="${avif}" type="image/avif">
+                            <img class="team-logo" src="${png}" alt="${makePossessive(name)} emblem" loading="lazy">
+                        </picture>
+                        <span class="team-name" title="${team.team_full_name || name}">${name}</span>
+                    </div>
+                </td>
+                <td class="column-played">${team.season_matches_played}</td>
+                <td class="column-won">${team.season_wins_losses[0]}</td>
+                <td class="column-drawn">0</td>
+                <td class="column-lost">${team.season_wins_losses[1]}</td>
+                <td class="column-points"><strong>${points}</strong></td>
+            </tr>
         `;
+    }).join("");
 
-        tbody.appendChild(row);
-    }
-
-    table.appendChild(tbody);
-    JSTeamTable.appendChild(table);
+    JSTeamTable.innerHTML = `
+        <table class="standings-table">
+            <thead>
+                <tr>
+                    <th class="column-position">Pos</th>
+                    <th class="column-team">Team</th>
+                    <th class="column-played">Played</th>
+                    <th class="column-won">Won</th>
+                    <th class="column-drawn">Drawn</th>
+                    <th class="column-lost">Lost</th>
+                    <th class="column-points">Points</th>
+                </tr>
+            </thead>
+            <tbody>${rowsHTML}</tbody>
+        </table>
+    `;
 }
+
+const navigateToStandingsRow = (row) => { if (row?.dataset.href) window.location.href = row.dataset.href; };
+
+JSTeamTable?.addEventListener('click', (e) => {
+    navigateToStandingsRow(e.target.closest('.standings-row'));
+});
+
+JSTeamTable?.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const row = e.target.closest('.standings-row');
+    if (!row) return;
+    e.preventDefault();
+    navigateToStandingsRow(row);
+});
 
 
 async function getTeamDataSafe(season) {

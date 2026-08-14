@@ -16,7 +16,7 @@ async function loadVideoCarousel() {
             return;
         }
 
-        container.innerHTML = "";
+        const fragment = document.createDocumentFragment();
 
         data.forEach(item => {
             const thumbnailUrl = item.thumbnail || `https://i.ytimg.com/vi/${item.video_id}/hqdefault.jpg`;
@@ -38,8 +38,11 @@ async function loadVideoCarousel() {
                 <p class="video-title no-color-link">${title}</p>
             `;
 
-            container.appendChild(card);
+            fragment.appendChild(card);
         });
+
+        container.innerHTML = "";
+        container.appendChild(fragment);
 
         if (prevBtn && nextBtn) {
             prevBtn.addEventListener("click", () => {
