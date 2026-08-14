@@ -83,9 +83,26 @@ function renderVideos(container, list, searchTerm = "") {
     const fragment = document.createDocumentFragment();
     let lastSeason;
     let pendingDivider = null; // divider to insert before the next item, carried over from the previous one
+    // Set once we pass a season's Round 1 reveal: everything below it predates competitive
+    // play for that season, so it's grouped under the prior season label regardless of
+    // whatever season value the API tagged those (test-match/off-season) videos with.
+    let forcedSeason = null;
+
+    // The newest section (top of the list) has no earlier reveal card to trigger a divider
+    // for it, so label it directly using the round its own reveal card announces.
+    const currentRoundReveal = list.find(isRoundReveal);
+    if (currentRoundReveal) {
+        const currentRound = getRoundNumber(currentRoundReveal);
+        const currentSeason = getVideoSeason(currentRoundReveal);
+        if (currentRound != null) {
+            fragment.appendChild(createDivider(currentSeason != null ? `Season ${currentSeason} Round ${currentRound}` : `Round ${currentRound}`));
+        }
+    }
 
     list.forEach((item, index) => {
-        const season = getVideoSeason(item);
+        const reveal = isRoundReveal(item);
+        const season = (forcedSeason != null && !reveal) ? forcedSeason : getVideoSeason(item);
+        if (reveal) forcedSeason = null;
 
         if (index > 0) {
             if (season != null && season !== lastSeason) {
@@ -101,10 +118,16 @@ function renderVideos(container, list, searchTerm = "") {
         // A "Round X Matches Revealed" video is published before round X is played, so it
         // belongs with round X's own matches (published later, above it in this newest-first
         // list) - the boundary into the next, older round only starts after this card.
-        if (isRoundReveal(item)) {
+        if (reveal) {
             const roundNumber = getRoundNumber(item);
-            const label = roundNumber != null && roundNumber > 1 ? `Round ${roundNumber - 1}` : undefined;
-            pendingDivider = { label };
+            if (roundNumber != null && roundNumber > 1) {
+                pendingDivider = { label: season != null ? `Season ${season} Round ${roundNumber - 1}` : `Round ${roundNumber - 1}` };
+            } else if (roundNumber === 1 && season != null) {
+                forcedSeason = season - 1;
+                pendingDivider = { label: `Season ${forcedSeason}` };
+            } else {
+                pendingDivider = { label: undefined };
+            }
         }
 
         fragment.appendChild(buildVideoCard(item, locale, searchTerm));
