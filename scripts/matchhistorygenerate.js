@@ -131,7 +131,7 @@ function generateTeamMatches(teamName, selectedSeason) {
                     <div class="match-team">
                         <picture>
                             <source srcset="${getEmblem(otherTeam).avif}" type="image/avif">
-                            <img src="${getEmblem(otherTeam).png}" class="team-logo" alt="${otherTeam} logo">
+                            <img loading="lazy" src="${getEmblem(otherTeam).png}" class="team-logo" alt="${otherTeam} logo">
                         </picture>
                         <span class="team-name">${otherTeam}</span>
                     </div>
@@ -194,7 +194,7 @@ async function showTeamMatches() {
         teamEmblemBox.innerHTML = `
             <picture>
                 <source srcset="${em.avif}" type="image/avif">
-                <img src="${em.png}" alt="${teamNameFromURL} emblem" />
+                <img loading="lazy" src="${em.png}" alt="${teamNameFromURL} emblem" />
             </picture>
         `;
     }

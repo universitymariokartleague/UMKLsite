@@ -138,7 +138,7 @@ function setBGMText() {
             let imagesrc = audioName.replaceAll('#', '%23') + ".png" // fallback
             if (playlistOriginal[playlistNumPlaying].includes("|")) imagesrc = playlistOriginal[playlistNumPlaying].split("|")[1]; // if a custom album image is listed use it
             playlistText.innerHTML = ""
-            if (containsAlbumArt) playlistText.innerHTML = `<img class="albumArt" src="${path}${imagesrc}">`;
+            if (containsAlbumArt) playlistText.innerHTML = `<img loading="lazy" class="albumArt" src="${path}${imagesrc}">`;
             playlistText.innerHTML += `<button onclick="prevBGM()"><<< Previous</button> <button class="blankButton" onclick="pickRandomTrack()"> ${playlistNumPlaying + 1} / ${playlistLength} </button> <button onclick="nextBGM()">Next >>></button> ${downloadingAllEnabled ? ' | <button onclick="downloadAllTracks()" id="downloadAllButton">Download All</button>' : ''}`;
         }
     }

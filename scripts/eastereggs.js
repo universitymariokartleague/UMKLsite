@@ -15,7 +15,7 @@ function injectMusic(path) {
             <span id="BGMName">Music</span><br>
             <div class="audioControls">
                 <span class="playContainer">
-                    <img src="" id="playIcon" />
+                    <img loading="lazy" src="" id="playIcon" />
                 </span>
                 <div id="audioProgressBar">
                     <div id="audioBufferBar"></div>

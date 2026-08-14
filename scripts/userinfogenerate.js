@@ -5,7 +5,7 @@ import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareImage, s
 
 const profileCardContentHTML = `
     <div class="profile-card-header">
-        <img src="{{PFP}}" alt="{{username}} profile picture" class="profile-card-avatar"
+        <img loading="lazy" src="{{PFP}}" alt="{{username}} profile picture" class="profile-card-avatar"
             onload="this.style.opacity=1" onerror="this.onerror=null; this.src='/assets/media/faq/defaultavatar.avif';"/>
         <div class="profile-card-user-info">
             <h3 class="profile-card-username">{{username}}</h3>
@@ -56,7 +56,7 @@ const profileCardContentHTML = `
 const profileCardFormatHTML = `
     <div class="profile-card-wrapper">
         <div class="profile-card" style="--team-color: #{{color}};">
-            <img src="/assets/media/profile/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />
+            <img loading="lazy" src="/assets/media/profile/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />
             <div class="profile-card-content">
                 {{profileCardContent}}
             </div>
@@ -741,7 +741,7 @@ async function goBackToProfile() {
 
             profileCardContent.innerHTML = generateProfileCardContent(data);
 
-            const logoHTML = `<img src="/assets/media/profile/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />`;
+            const logoHTML = `<img loading="lazy" src="/assets/media/profile/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />`;
 
             profileCard.insertAdjacentHTML('afterbegin', logoHTML);
 
@@ -786,7 +786,7 @@ function createItemElement(item, index, isEquipped) {
     div.onclick = () => toggleItemEquip(item.type, index);
 
     div.innerHTML = `
-        <img class="item-preview" src="assets/media/profile/${item.name.replace(/ /g, '_').toLowerCase()}.avif"
+        <img loading="lazy" class="item-preview" src="assets/media/profile/${item.name.replace(/ /g, '_').toLowerCase()}.avif"
             onload="this.style.opacity=1" onerror="this.onerror=null;>
         <div class="item-info">
             <h4 class="item-name">${item.name}</h4>

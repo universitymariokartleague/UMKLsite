@@ -371,7 +371,7 @@ function buildBlog(data) {
             case "img":
                 pageAreaHTML += `
                     <p id="element${elementCounter}" class="element${elementCounter}outline">
-                        <img class="image" src="${element.src}" alt="${element.alt}">
+                        <img loading="lazy" class="image" src="${element.src}" alt="${element.alt}">
                         <span class="settings-extra-info">${element.description}</span>
                     </p>
                 `;
@@ -542,7 +542,7 @@ function buildHTML(data) {
             case "img":
                 blogHTML += `
                     <p>
-                        <img class="image" src="${element.src}" alt="${element.alt}">
+                        <img loading="lazy" class="image" src="${element.src}" alt="${element.alt}">
                         <span class="settings-extra-info">${element.description}</span>
                     </p>
                 `;

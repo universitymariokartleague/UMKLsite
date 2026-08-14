@@ -184,7 +184,7 @@ async function renderHomeStandings(data) {
             </div>
         </div>
         <div class="podium-emblem">
-            <img class="podium-emblem" src="${avif}" alt="${name} logo" />
+            <img loading="lazy" class="podium-emblem" src="${avif}" alt="${name} logo" />
         </div>
         </div>
         `;

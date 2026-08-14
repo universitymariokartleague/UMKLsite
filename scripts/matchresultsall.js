@@ -92,7 +92,7 @@ function generateAllMatches(selectedSeason) {
                         <span class="team-name">${teamA}</span>
                         <picture>
                             <source srcset="${emblemA.avif}" type="image/avif">
-                            <img src="${emblemA.png}" class="team-logo" alt="${teamA} logo">
+                            <img loading="lazy" src="${emblemA.png}" class="team-logo" alt="${teamA} logo">
                         </picture>
                     </div>
                 </td>
@@ -101,7 +101,7 @@ function generateAllMatches(selectedSeason) {
                     <div class="match-team team-b">
                         <picture>
                             <source srcset="${emblemB.avif}" type="image/avif">
-                            <img src="${emblemB.png}" class="team-logo" alt="${teamB} logo">
+                            <img loading="lazy" src="${emblemB.png}" class="team-logo" alt="${teamB} logo">
                         </picture>
                         <span class="team-name">${teamB}</span>
                     </div>
@@ -115,7 +115,7 @@ function generateAllMatches(selectedSeason) {
                     <div class="match-team">
                         <picture>
                             <source srcset="${emblemWinner.avif}" type="image/avif">
-                            <img src="${emblemWinner.png}" class="team-logo" alt="${teamB} logo">
+                            <img loading="lazy" src="${emblemWinner.png}" class="team-logo" alt="${teamB} logo">
                         </picture>
                         <span class="team-name">${winningTeam}</span>
                     </div>

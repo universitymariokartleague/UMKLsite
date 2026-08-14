@@ -44,7 +44,7 @@ let refreshTimer = null;
 let listViewOverlay = null;
 let retryCount = 0;
 
-const YTSVGPATH = `<img class="ytsvg" alt="YouTube logo" src="/assets/media/calendar/youtubelogo.svg">`;
+const YTSVGPATH = `<img loading="lazy" class="ytsvg" alt="YouTube logo" src="/assets/media/calendar/youtubelogo.svg">`;
 
 document.addEventListener("DOMContentLoaded", async () => {
     const startTime = performance.now();
