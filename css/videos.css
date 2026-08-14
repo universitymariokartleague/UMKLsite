@@ -2,10 +2,20 @@
     margin-bottom: 24px;
 }
 
+.videos-search-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
 #videos-search-wrapper {
     display: flex;
     align-items: center;
-    margin-bottom: 24px;
+    flex: 1;
+    min-width: 200px;
+    margin-bottom: 0;
     border: 1.5px solid #ccccccaa;
     border-radius: 10px;
     padding: 0 4px 0 12px;
@@ -48,6 +58,115 @@
     text-align: center;
     padding: 20px;
     color: #666;
+}
+
+#videos-no-results button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.videos-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-color);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.videos-toggle input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.videos-toggle-track {
+    position: relative;
+    width: 34px;
+    height: 20px;
+    border-radius: 100px;
+    background-color: var(--translucent-color);
+    flex-shrink: 0;
+    transition: background-color 0.15s;
+}
+
+.videos-toggle-track::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--text-color);
+    opacity: 0.6;
+    transition: transform 0.15s, background-color 0.15s, opacity 0.15s;
+}
+
+.videos-toggle input:checked+.videos-toggle-track {
+    background-color: var(--accent-color);
+}
+
+.videos-toggle input:checked+.videos-toggle-track::before {
+    transform: translateX(14px);
+    background-color: #fff;
+    opacity: 1;
+}
+
+.videos-toggle input:focus-visible+.videos-toggle-track {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+#videos-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.videos-tag {
+    background-color: var(--translucent-color);
+    color: var(--text-color);
+    border: none;
+    outline: none;
+    border-radius: 100px;
+    padding: 5px 14px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Overriding style.css's global `button:hover, button:focus` rule, which sets
+   color/background/outline with !important - matching specificity is not enough here. */
+.videos-tag:hover,
+.videos-tag:focus {
+    background: var(--opaque-color) !important;
+    color: var(--text-color) !important;
+    outline: none !important;
+}
+
+.videos-tag:focus-visible {
+    outline: 2px solid var(--accent-color) !important;
+    outline-offset: 2px;
+}
+
+.videos-tag.active,
+.videos-tag.active:hover,
+.videos-tag.active:focus {
+    background: var(--accent-color) !important;
+    color: #fff !important;
 }
 
 .videos-grid {

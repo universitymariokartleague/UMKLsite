@@ -1,6 +1,9 @@
 const API_URL = `https://api.umkl.co.uk/videos`;
 const SKELETON_CARD_COUNT = 12;
 
+const MAX_TAGS = 12;
+const TEST_MATCH_TAG = "Test Match";
+
 let allVideos = [];
 
 function renderVideosGridSkeleton(container) {
@@ -25,9 +28,69 @@ function isRoundReveal(item) {
     return !item.match && /Round\s*\d+/i.test(item.title || "");
 }
 
+function isTestMatch(item) {
+    return /\(Test Match\)/i.test(item.title || "");
+}
+
 function getRoundNumber(item) {
     const roundMatch = item.title?.match(/Round\s*(\d+)/i);
     return roundMatch ? parseInt(roundMatch[1], 10) : null;
+}
+
+// sort videos by seasons and rounds
+function computeEffectiveSeasons(list) {
+    let forcedSeason = null;
+    list.forEach(item => {
+        const reveal = isRoundReveal(item);
+        const season = (forcedSeason != null && !reveal) ? forcedSeason : getVideoSeason(item);
+        if (reveal) forcedSeason = null;
+
+        item._effectiveSeason = season;
+
+        if (reveal) {
+            const roundNumber = getRoundNumber(item);
+            if (roundNumber === 1 && season != null) forcedSeason = season - 1;
+        }
+    });
+}
+
+// builds date search terms
+function getDateSearchText(item) {
+    if (!item.published) return "";
+    const date = new Date(item.published);
+    if (isNaN(date.getTime())) return "";
+
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const dayPad = String(day).padStart(2, '0');
+    const monthPad = String(month).padStart(2, '0');
+    const monthLong = date.toLocaleDateString('en-GB', { month: 'long' }).toLowerCase();
+    const monthShort = date.toLocaleDateString('en-GB', { month: 'short' }).toLowerCase();
+
+    return [
+        `${year}-${monthPad}-${dayPad}`,   // 2026-04-23
+        `${dayPad}/${monthPad}/${year}`,   // 23/04/2026
+        `${dayPad}-${monthPad}-${year}`,   // 23-04-2026
+        `${monthPad}/${dayPad}`,           // 04/23
+        `${monthPad}-${dayPad}`,           // 04-23
+        `${dayPad}/${monthPad}`,           // 23/04
+        `${dayPad}-${monthPad}`,           // 23-04
+        `${day}/${month}`,                 // 23/4
+        `${day}-${month}`,                 // 23-4
+        `${day} ${monthLong} ${year}`,     // 23 april 2026
+        `${day} ${monthShort} ${year}`,    // 23 apr 2026
+        `${monthLong} ${day}`,             // april 23
+        `${monthShort} ${day}`,            // apr 23
+        monthLong,                         // april
+        monthShort,                        // apr
+        String(year),                      // 2026
+    ].join(' ');
+}
+
+function precomputeSearchData(list) {
+    computeEffectiveSeasons(list);
+    list.forEach(item => { item._dateSearchText = getDateSearchText(item); });
 }
 
 function createDivider(label) {
@@ -83,26 +146,18 @@ function renderVideos(container, list, searchTerm = "") {
     const fragment = document.createDocumentFragment();
     let lastSeason;
     let pendingDivider = null; // divider to insert before the next item, carried over from the previous one
-    // Set once we pass a season's Round 1 reveal: everything below it predates competitive
-    // play for that season, so it's grouped under the prior season label regardless of
-    // whatever season value the API tagged those (test-match/off-season) videos with.
-    let forcedSeason = null;
 
-    // The newest section (top of the list) has no earlier reveal card to trigger a divider
-    // for it, so label it directly using the round its own reveal card announces.
     const currentRoundReveal = list.find(isRoundReveal);
     if (currentRoundReveal) {
         const currentRound = getRoundNumber(currentRoundReveal);
-        const currentSeason = getVideoSeason(currentRoundReveal);
+        const currentSeason = currentRoundReveal._effectiveSeason;
         if (currentRound != null) {
             fragment.appendChild(createDivider(currentSeason != null ? `Season ${currentSeason} Round ${currentRound}` : `Round ${currentRound}`));
         }
     }
 
     list.forEach((item, index) => {
-        const reveal = isRoundReveal(item);
-        const season = (forcedSeason != null && !reveal) ? forcedSeason : getVideoSeason(item);
-        if (reveal) forcedSeason = null;
+        const season = item._effectiveSeason;
 
         if (index > 0) {
             if (season != null && season !== lastSeason) {
@@ -115,16 +170,12 @@ function renderVideos(container, list, searchTerm = "") {
 
         if (season != null) lastSeason = season;
 
-        // A "Round X Matches Revealed" video is published before round X is played, so it
-        // belongs with round X's own matches (published later, above it in this newest-first
-        // list) - the boundary into the next, older round only starts after this card.
-        if (reveal) {
+        if (isRoundReveal(item)) {
             const roundNumber = getRoundNumber(item);
             if (roundNumber != null && roundNumber > 1) {
                 pendingDivider = { label: season != null ? `Season ${season} Round ${roundNumber - 1}` : `Round ${roundNumber - 1}` };
             } else if (roundNumber === 1 && season != null) {
-                forcedSeason = season - 1;
-                pendingDivider = { label: `Season ${forcedSeason}` };
+                pendingDivider = { label: `Season ${season - 1}` };
             } else {
                 pendingDivider = { label: undefined };
             }
@@ -139,27 +190,110 @@ function renderVideos(container, list, searchTerm = "") {
 
 function matchesSearch(item, term) {
     if (!term) return true;
+
+    const seasonQuery = term.match(/^season\s*(\d+)$/i);
+    if (seasonQuery) return item._effectiveSeason === parseInt(seasonQuery[1], 10);
+
+    if (term === TEST_MATCH_TAG.toLowerCase()) return isTestMatch(item);
+
     const title = (item.title || item.match?.title || "").toLowerCase();
     const teams = (item.match?.teams_involved || []).join(" ").toLowerCase();
-    return title.includes(term) || teams.includes(term);
+    if (title.includes(term) || teams.includes(term)) return true;
+
+    return item._dateSearchText != null && item._dateSearchText.includes(term);
+}
+
+function getAvailableTags(list, limit = MAX_TAGS) {
+    const counts = new Map();
+    const addCount = (tag) => counts.set(tag, (counts.get(tag) || 0) + 1);
+
+    list.forEach(item => {
+        if (item._effectiveSeason != null) addCount(`Season ${item._effectiveSeason}`);
+        if (isTestMatch(item)) addCount(TEST_MATCH_TAG);
+        (item.match?.teams_involved || []).forEach(team => addCount(team));
+    });
+
+    return Array.from(counts.entries())
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .slice(0, limit)
+        .map(([tag]) => tag);
+}
+
+function renderTags(tagsContainer, tags) {
+    tagsContainer.innerHTML = "";
+    tags.forEach(tag => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "videos-tag";
+        btn.textContent = tag;
+        btn.dataset.tag = tag;
+        tagsContainer.appendChild(btn);
+    });
+}
+
+function updateActiveTag(tagsContainer, term) {
+    tagsContainer.querySelectorAll(".videos-tag").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tag.toLowerCase() === term);
+    });
 }
 
 function setupVideoSearch(container) {
     const searchInput = document.getElementById("videos-search");
     const noResultsMsg = document.getElementById("videos-no-results");
-    if (!searchInput) return;
+    const clearSearchBtn = document.getElementById("videos-clear-search");
+    const tagsContainer = document.getElementById("videos-tags");
+    const testMatchToggle = document.getElementById("videos-test-match-toggle");
+    if (!searchInput) return null;
+
+    let showTestMatches = testMatchToggle ? testMatchToggle.checked : true;
+
+    const runSearch = (term) => {
+        const filtered = allVideos.filter(item => {
+            if (!showTestMatches && isTestMatch(item)) return false;
+            return matchesSearch(item, term);
+        });
+        renderVideos(container, filtered, term);
+        if (noResultsMsg) noResultsMsg.style.display = filtered.length === 0 ? "block" : "none";
+        if (tagsContainer) updateActiveTag(tagsContainer, term);
+    };
 
     let debounceTimer;
     searchInput.addEventListener("input", (e) => {
         clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
-            const term = e.target.value.trim().toLowerCase();
-            const filtered = allVideos.filter(item => matchesSearch(item, term));
-
-            renderVideos(container, filtered, term);
-            if (noResultsMsg) noResultsMsg.style.display = filtered.length === 0 ? "block" : "none";
-        }, 50);
+        debounceTimer = setTimeout(() => runSearch(e.target.value.trim().toLowerCase()), 50);
     });
+
+    clearSearchBtn?.addEventListener("click", () => {
+        searchInput.value = "";
+        runSearch("");
+        searchInput.focus();
+    });
+
+    tagsContainer?.addEventListener("click", (e) => {
+        const btn = e.target.closest(".videos-tag");
+        if (!btn) return;
+
+        const alreadyActive = btn.classList.contains("active");
+        const term = alreadyActive ? "" : btn.dataset.tag;
+        searchInput.value = term;
+        runSearch(term.toLowerCase());
+        btn.blur();
+    });
+
+    testMatchToggle?.addEventListener("change", () => {
+        showTestMatches = testMatchToggle.checked;
+
+        // Hiding test matches while the "Test Match" tag/search is active would otherwise
+        // wipe the grid to zero results, which reads as the toggle being broken rather than
+        // working as intended - clear the now-contradictory filter instead.
+        if (!showTestMatches && searchInput.value.trim().toLowerCase() === TEST_MATCH_TAG.toLowerCase()) {
+            searchInput.value = "";
+        }
+
+        runSearch(searchInput.value.trim().toLowerCase());
+    });
+
+    return runSearch;
 }
 
 async function loadVideosGrid() {
@@ -167,7 +301,7 @@ async function loadVideosGrid() {
     if (!container) return;
 
     renderVideosGridSkeleton(container);
-    setupVideoSearch(container);
+    const runSearch = setupVideoSearch(container);
 
     try {
         const response = await fetch(API_URL);
@@ -179,7 +313,11 @@ async function loadVideosGrid() {
         }
 
         allVideos = data;
-        renderVideos(container, allVideos);
+        precomputeSearchData(allVideos);
+        runSearch ? runSearch("") : renderVideos(container, allVideos);
+
+        const tagsContainer = document.getElementById("videos-tags");
+        if (tagsContainer) renderTags(tagsContainer, getAvailableTags(allVideos));
 
     } catch (error) {
         console.error("Error loading UMKL YouTube videos grid:", error);

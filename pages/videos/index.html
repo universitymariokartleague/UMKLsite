@@ -6,9 +6,7 @@
     <meta name="color-scheme" content="dark light" />
     <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport" />
     <title>Videos | UMKL</title>
-    <meta
-        content="Watch all match replays and videos from the UMKL"
-        name="description" />
+    <meta content="Watch all match replays and videos from the UMKL" name="description" />
     <link href="https://umkl.co.uk/assets/media/brand/favicon.png" rel="icon" type="image/png" />
     <link href="/css/style.css" rel="stylesheet" />
     <link href="/css/home.css" rel="stylesheet" />
@@ -27,7 +25,7 @@
     <script defer src="/components/footer.js" type="module"></script>
 
     <script>
-        const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() { let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) } checkTheme();
+        const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();
     </script>
     <script defer src="/scripts/settings.js" type="module"></script>
     <script defer src="/scripts/loadvideosgrid.js" type="module"></script>
@@ -42,12 +40,25 @@
                 <h1>Videos</h1>
             </div>
 
-            <div id="videos-search-wrapper">
-                <input id="videos-search" placeholder="Search videos..." type="text" />
+            <div class="videos-search-row">
+                <div id="videos-search-wrapper">
+                    <input id="videos-search" placeholder="Search videos..." type="text" />
+                </div>
+
+                <label class="videos-toggle">
+                    <input type="checkbox" id="videos-test-match-toggle" checked />
+                    <span class="videos-toggle-track"></span>
+                    Show test matches
+                </label>
             </div>
 
+            <div id="videos-tags"></div>
+
             <div class="videos-grid" id="videosGridContainer"></div>
-            <p id="videos-no-results" style="display:none;">No videos found.</p>
+            <div id="videos-no-results" style="display:none;">
+                <p>No videos found</p>
+                <button id="videos-clear-search" type="button">Clear search</button>
+            </div>
         </div>
     </main>
 
