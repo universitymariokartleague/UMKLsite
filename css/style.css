@@ -360,6 +360,7 @@ button:focus {
     text-decoration: none;
     color: var(--text-color);
     font-size: 16px;
+    transition: transform 0.1s, color 0.1s, background-color 0.1s;
 }
 
 .bubble-link:hover {
@@ -369,6 +370,13 @@ button:focus {
 
 .bubble-link:active {
     background-color: var(--translucent-color);
+    transform: scale(0.95);
+}
+
+@media (prefers-reduced-motion) {
+    .bubble-link:active {
+        transform: none;
+    }
 }
 
 .bubble-nav {
