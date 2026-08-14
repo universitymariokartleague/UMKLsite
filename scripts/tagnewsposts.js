@@ -3,8 +3,6 @@
     page with the tag as a query parameter (to be used as a filter).
 */
 
-const newsReel = document.getElementById("news-reel");
-const sliderInterval = 6500;
 const params = new URLSearchParams(window.location.search);
 const selectedTag = params.get('tag');
 const existingSearch = params.get('search') || '';
@@ -67,160 +65,6 @@ function addLinksToTags() {
         });
     }
 }
-
-function addNewsReelArea() {
-    const items = document.querySelectorAll('#news-container > *');
-    if (!items.length) return;
-
-    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-    const data = [];
-    const firstThree = Math.min(3, items.length);
-
-    for (let i = 0; i < items.length; i++) {
-        const el = items[i];
-        if (i < firstThree || !el.querySelector('.news-date')) {
-            const linkEl = el.querySelector('a[href]');
-            const imgEl = el.querySelector('img');
-            const bgImg = (imgEl && imgEl.src) || el.dataset.image || 
-                (el.style.backgroundImage && el.style.backgroundImage.replace(/^url\(["']?(.+?)["']?\)$/, '$1')) || '';
-
-            const titleEl = el.querySelector('.news-title');
-            const dateEl = el.querySelector('.news-date');
-            const descEl = el.querySelector('.news-desc');
-
-            const tagsHTML = Array.from(el.querySelectorAll('.news-date tag, .news-date .tag-link'))
-                .map(tag => tag.outerHTML).join('');
-
-            let date = '';
-            if (dateEl) {
-                // dataset.rawText (set by settings.js) holds the unlocalized DD/MM/YYYY
-                // date, since dateEl's own text may have already been localized for display.
-                const rawDate = (dateEl.dataset.rawText || dateEl.textContent).trim();
-                const [day, month, year] = rawDate.split('/');
-                const itemDate = new Date(`${year}-${month}-${day}`);
-                if (i >= firstThree && itemDate < sevenDaysAgo) continue;
-                date = dateEl.firstChild?.nodeType === Node.TEXT_NODE ? dateEl.firstChild.textContent.trim() : rawDate;
-            }
-
-            data.push({
-                href: linkEl ? linkEl.href : '#',
-                img: bgImg,
-                title: titleEl ? titleEl.textContent.trim() : (linkEl ? linkEl.textContent.trim() : 'Untitled'),
-                date: date,
-                description: descEl ? descEl.textContent.trim() : '',
-                tagsHTML
-            });
-        }
-    }
-
-    if (!data.length) return;
-
-    const reelBox = document.createElement('div');
-    reelBox.id = 'news-reel-box';
-    const showArrows = data.length > 1;
-    reelBox.innerHTML = `
-        <div class="news-reel-viewport">
-            <div class="news-reel-track"></div>
-            ${showArrows ? `<button class="news-reel-prev" aria-label="Previous slide"></button>
-            <button class="news-reel-next" aria-label="Next slide"></button>` : ''}
-            <div class="news-reel-indicators"></div>
-            <div class="news-reel-progress-bar">
-                <div class="news-reel-progress"></div>
-            </div>
-        </div>
-    `;
-
-    const track = reelBox.querySelector('.news-reel-track');
-    const indicatorsContainer = reelBox.querySelector('.news-reel-indicators');
-    const fragment = document.createDocumentFragment();
-
-    data.forEach((item, i) => {
-        const slide = document.createElement('div');
-        slide.className = 'news-reel-slide';
-        slide.innerHTML = `
-            <img class="news-reel-bg" src="${item.img}" alt="" onload="this.style.opacity=1" loading="lazy">
-            <div class="news-reel-gradient"></div>
-            <a class="news-reel-card" href="${item.href}">
-                <div class="news-reel-meta">
-                    ${item.date ? `<span class="news-reel-date">${item.date}</span>` : ''}
-                    <span class="news-reel-tags">${item.tagsHTML}</span>
-                </div>
-                <h3 class="news-reel-title">${item.title}</h3>
-                <p class="news-reel-desc">${item.description}</p>
-            </a>
-        `;
-        fragment.appendChild(slide);
-
-        const dot = document.createElement('span');
-        dot.className = 'news-reel-dot';
-        dot.dataset.index = i;
-        indicatorsContainer.appendChild(dot);
-    });
-
-    track.appendChild(fragment);
-    newsReel.innerHTML = '';
-    newsReel.appendChild(reelBox);
-
-    let currentIndex = 0;
-    const total = data.length;
-    const dots = indicatorsContainer.querySelectorAll('.news-reel-dot');
-    const progressBar = reelBox.querySelector('.news-reel-progress');
-
-    function updateIndicators() {
-        dots.forEach(dot => dot.classList.remove('active'));
-        dots[currentIndex]?.classList.add('active');
-    }
-
-    function goToSlide(index) {
-        currentIndex = (index + total) % total;
-        track.style.transform = `translateX(-${currentIndex * 100}%)`;
-        updateIndicators();
-        resetTimer();
-    }
-
-    function startProgressBar() {
-        progressBar.style.transition = 'none';
-        progressBar.style.width = '0%';
-        progressBar.offsetWidth;
-        progressBar.style.transition = `width ${sliderInterval}ms ease-in-out`;
-        progressBar.style.width = '100%';
-    }
-
-    let timer;
-    function resetTimer() {
-        clearInterval(timer);
-        startProgressBar();
-        timer = setInterval(() => {
-            goToSlide(currentIndex + 1);
-            startProgressBar();
-        }, sliderInterval);
-    }
-
-    dots.forEach(dot => {
-        dot.addEventListener('click', e => {
-            clearInterval(timer);
-            goToSlide(parseInt(e.target.dataset.index, 10));
-        });
-    });
-
-    reelBox.querySelector('.news-reel-prev')?.addEventListener('click', () => goToSlide(currentIndex - 1));
-    reelBox.querySelector('.news-reel-next')?.addEventListener('click', () => goToSlide(currentIndex + 1));
-
-    reelBox.addEventListener('mouseenter', () => {
-        clearInterval(timer);
-        progressBar.style.transition = 'none';
-        progressBar.style.width = '0%';
-    });
-
-    reelBox.addEventListener('mouseleave', resetTimer);
-
-    window.addEventListener('resize', () => {
-        track.style.transform = `translateX(-${currentIndex * 100}%)`;
-    });
-
-    startProgressBar();
-    updateIndicators();
-};
 
 function addSearchBar() {
     const newsContainer = document.getElementById('news-container');
@@ -328,9 +172,6 @@ function addSearchBar() {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-    if (newsReel) {
-        addNewsReelArea();
-        addSearchBar();
-    }
+    addSearchBar();
     addLinksToTags();
 });

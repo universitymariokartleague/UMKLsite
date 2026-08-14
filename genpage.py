@@ -143,23 +143,23 @@ def create_new_blog():
     image_jpg = image.rsplit(".", 1)[0] + ".jpg" if "." in image else image + ".jpg"
 
     new_blog = f"""
-                <div class="news-box">
-                    <article class="news-text">
-                        <a href="/pages/news/{url_date}/{link}/"><span class="news-title">{title}</span></a><br>
-                        <span class="news-desc">{description}</span>
-                    </article>
-                    <div class="news-image">
-                        <picture>
-                            <source srcset="{image}" type="image/avif">
-                            <img src="{image_jpg}" alt="{alt}" onload="this.style.opacity=1" loading="lazy">
-                        </picture>
-                    </div>
+                <article class="news-card">
+                    <a href="/pages/news/{url_date}/{link}/" class="news-card-link">
+                        <div class="news-card-image">
+                            <picture>
+                                <source srcset="{image}" type="image/avif">
+                                <img src="{image_jpg}" alt="{alt}" onload="this.style.opacity=1" loading="lazy">
+                            </picture>
+                        </div>
+                        <div class="news-card-body">
+                            <span class="news-title">{title}</span>
+                            <span class="news-desc">{description}</span>
+                        </div>
+                    </a>
                     <span class="news-date">{date}
-                        <span class="tags">
-                            <tag>{tags}</tag>
-                        </span>
+                        <span class="tags">{tags}</span>
                     </span>
-                </div>
+                </article>
     """
 
     update_news_container("pages/news/index.html", new_blog)

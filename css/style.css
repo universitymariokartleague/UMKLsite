@@ -136,7 +136,7 @@ main {
     margin: 0 auto;
     flex: 1;
     width: calc(100vw - 60px);
-    max-width: calc(1600px - env(safe-area-inset-left));
+    max-width: calc(1400px - env(safe-area-inset-left));
     margin-top: 90px;
     margin-bottom: 50px;
     padding: 50px 0;
@@ -574,7 +574,7 @@ new {
 
 hr {
     margin: 20px 0;
-    height: 2px;
+    height: 1px;
     border-width: 0;
     background-color: var(--hr-color);
     color: var(--hr-color);

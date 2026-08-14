@@ -34,7 +34,6 @@
     <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();</script>
     <script defer="" src="/scripts/settings.js" type="module"></script>
     <script defer="" src="/scripts/tagnewsposts.js" type="module"></script>
-    </link>
 </head>
 
 <body id="top">
@@ -46,183 +45,194 @@
         <p class="p-below-title">View our news stories | <a href="/news.xml" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" style="vertical-align:middle;margin-right:3px" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1" fill="currentColor"></circle></svg>RSS Feed</a></p>
         </div>
 
-        <div class="news-reel" id="news-reel">
-            <div id="news-reel-box">
-                <div class="news-reel-viewport"></div>
-            </div>
-        </div>
-
         <div id="news-search-wrapper">
             <input id="news-search" placeholder="Search news..." type="text" />
         </div>
 
-        <div class="news-wrapper news-wrapper-full-page">
-            <div class="news-container after-title news-container-full-page" id="news-container">
-                <div class="news-box">
-                    <article class="news-text">
-                        <a href="/pages/news/2026-03-31/season-2-round-4-fixtures-revealed/"><span
-                                class="news-title">Season 2
-                                Round 4 Fixtures Revealed!</span></a><br>
+        <div class="news-grid" id="news-container">
+            <article class="news-card">
+                <a href="/pages/news/2026-03-31/season-2-round-4-fixtures-revealed/" class="news-card-link">
+                    <div class="news-card-image">
+                        <img alt="Matches Season 2 - Round 4" loading="lazy" onload="this.style.opacity=1"
+                            src="/assets/media/news/season2fixtures4.avif" />
+                    </div>
+                    <div class="news-card-body">
+                        <span class="news-title">Season 2 Round 4 Fixtures Revealed!</span>
                         <span class="news-desc">The matches for Round 4 of Season 2 have been revealed! Find out who
                             will be facing each other here!</span>
-                    </article>
-                    <div class="news-image">
-                        <img alt="Matches Season 2 - Round 4" loading="lazy" onload="this.style.opacity=1"
-                                src="/assets/media/news/season2fixtures4.avif" />
                     </div>
-                    <span class="news-date">31/03/2026
-                        <span class="tags">
-                            <tag>Season 2</tag>
-                        </span>
+                </a>
+                <span class="news-date">31/03/2026
+                    <span class="tags">
+                        <tag>Season 2</tag>
                     </span>
-                </div>
-                <div class="news-box">
-                    <article class="news-text">
-                        <a href="/pages/news/2026-01-01/season-2-round-3-fixtures-revealed/"><span
-                                class="news-title">Season 2 Round 3 Fixtures Revealed!</span></a><br>
+                </span>
+            </article>
+            <article class="news-card">
+                <a href="/pages/news/2026-01-01/season-2-round-3-fixtures-revealed/" class="news-card-link">
+                    <div class="news-card-image">
+                        <img alt="Matches Season 2 - Round 3" loading="lazy" onload="this.style.opacity=1"
+                            src="/assets/media/news/season2fixtures3.avif" />
+                    </div>
+                    <div class="news-card-body">
+                        <span class="news-title">Season 2 Round 3 Fixtures Revealed!</span>
                         <span class="news-desc">The matches for Round 3 of Season 2 have been revealed! Find out who
                             will be facing each other here!</span>
-                    </article>
-                    <div class="news-image">
-                        <img alt="Matches Season 2 - Round 3" loading="lazy" onload="this.style.opacity=1"
-                                src="/assets/media/news/season2fixtures3.avif" />
                     </div>
-                    <span class="news-date">01/01/2026
-                        <span class="tags">
-                            <tag>Season 2</tag>
-                        </span>
+                </a>
+                <span class="news-date">01/01/2026
+                    <span class="tags">
+                        <tag>Season 2</tag>
                     </span>
-                </div>
-                <div class="news-box">
-                    <article class="news-text">
-                        <a href="/pages/news/2025-11-06/season-2-round-2-fixtures-revealed/"><span
-                                class="news-title">Season 2 Round 2 Fixtures Revealed!</span></a><br>
+                </span>
+            </article>
+            <article class="news-card">
+                <a href="/pages/news/2025-11-06/season-2-round-2-fixtures-revealed/" class="news-card-link">
+                    <div class="news-card-image">
+                        <img alt="Matches Season 2 - Round 2" loading="lazy" onload="this.style.opacity=1"
+                            src="/assets/media/news/season2fixtures2.avif" />
+                    </div>
+                    <div class="news-card-body">
+                        <span class="news-title">Season 2 Round 2 Fixtures Revealed!</span>
                         <span class="news-desc">The second round of Season 2 fixtures has been revealed! Find out who
                             will be facing each other here!</span>
-                    </article>
-                    <div class="news-image">
-                        <img alt="Matches Season 2 - Round 2" loading="lazy" onload="this.style.opacity=1"
-                                src="/assets/media/news/season2fixtures2.avif" />
                     </div>
-                    <span class="news-date">06/11/2025
-                        <span class="tags">
-                            <tag>Season 2</tag>
-                        </span>
+                </a>
+                <span class="news-date">06/11/2025
+                    <span class="tags">
+                        <tag>Season 2</tag>
                     </span>
-                </div>
-                <div class="news-box">
-                    <article class="news-text">
-                        <a href="/pages/news/2025-10-01/season-2-round-1-fixtures-revealed/"><span
-                                class="news-title">Season 2 Round 1 Fixtures Revealed!</span></a><br>
+                </span>
+            </article>
+            <article class="news-card">
+                <a href="/pages/news/2025-10-01/season-2-round-1-fixtures-revealed/" class="news-card-link">
+                    <div class="news-card-image">
+                        <img alt="Matches Season 2 - Round 1" loading="lazy" onload="this.style.opacity=1"
+                            src="/assets/media/news/season2fixtures.avif" />
+                    </div>
+                    <div class="news-card-body">
+                        <span class="news-title">Season 2 Round 1 Fixtures Revealed!</span>
                         <span class="news-desc">The first round of Season 2 fixtures has been revealed! Find out who
                             will be facing each other here!</span>
-                    </article>
-                    <div class="news-image">
-                        <img alt="Matches Season 2 - Round 1" loading="lazy" onload="this.style.opacity=1"
-                                src="/assets/media/news/season2fixtures.avif" />
                     </div>
-                    <span class="news-date">01/10/2025
-                        <span class="tags">
-                            <tag>Season 2</tag>
-                        </span>
+                </a>
+                <span class="news-date">01/10/2025
+                    <span class="tags">
+                        <tag>Season 2</tag>
                     </span>
-                </div>
-                <div class="news-box">
-                    <article class="news-text">
-                        <a href="/pages/news/2025-09-29/the-structure-for-season-2/"><span class="news-title">The
-                                Structure for Season 2</span></a><br>
-                        <span class="news-desc">Season 2 of the UMKL will be using a Swiss Style system, here's how it
-                            will work!</span>
-                    </article>
-                    <div class="news-image">
+                </span>
+            </article>
+            <article class="news-card">
+                <a href="/pages/news/2025-09-29/the-structure-for-season-2/" class="news-card-link">
+                    <div class="news-card-image">
                         <img alt="How will Season 2 work?" loading="lazy" onload="this.style.opacity=1"
-                                src="/assets/media/news/season2structure.avif" />
+                            src="/assets/media/news/season2structure.avif" />
                     </div>
-                    <span class="news-date">29/09/2025 <span class="tags">
-                            <tag>Season 2</tag>
-                        </span></span>
-                </div>
-                <div class="news-box">
-                    <article class="news-text">
-                        <a href="/pages/news/2025-07-17/cheep-cheep-updates/"><span class="news-title">Cheep Cheep
-                                Updates</span></a><br>
-                        <span class="news-desc">Some updates about the Cheep Cheep Discord app and
-                            upcoming test matches.</span>
-                    </article>
-                    <div class="news-image">
+                    <div class="news-card-body">
+                        <span class="news-title">The Structure for Season 2</span>
+                        <span class="news-desc">Season 2 of the UMKL will be using a Swiss Style system, here's how
+                            it will work!</span>
+                    </div>
+                </a>
+                <span class="news-date">29/09/2025
+                    <span class="tags">
+                        <tag>Season 2</tag>
+                    </span>
+                </span>
+            </article>
+            <article class="news-card">
+                <a href="/pages/news/2025-07-17/cheep-cheep-updates/" class="news-card-link">
+                    <div class="news-card-image">
                         <img alt="An image showing new commands that can be used with the Cheep Cheep app"
-                                loading="lazy" onload="this.style.opacity=1" src="/assets/media/news/newcommands.avif" />
+                            loading="lazy" onload="this.style.opacity=1" src="/assets/media/news/newcommands.avif" />
                     </div>
-                    <span class="news-date">17/07/2025 <span class="tags">
-                            <tag>Discord</tag>
-                            <tag>Test Matches</tag>
-                        </span></span>
-                </div>
-                <div class="news-box">
-                    <article class="news-text">
-                        <a href="/pages/news/2025-06-13/upcoming-summer-test-matches/"><span class="news-title">Upcoming
-                                summer test matches!</span></a><br>
-                        <span class="news-desc">More test matches between teams are being planned as exams finish and
-                            summer
-                            approaches.</span>
-                    </article>
-                    <div class="news-image">
+                    <div class="news-card-body">
+                        <span class="news-title">Cheep Cheep Updates</span>
+                        <span class="news-desc">Some updates about the Cheep Cheep Discord app and upcoming test
+                            matches.</span>
+                    </div>
+                </a>
+                <span class="news-date">17/07/2025
+                    <span class="tags">
+                        <tag>Discord</tag>
+                        <tag>Test Matches</tag>
+                    </span>
+                </span>
+            </article>
+            <article class="news-card">
+                <a href="/pages/news/2025-06-13/upcoming-summer-test-matches/" class="news-card-link">
+                    <div class="news-card-image">
                         <img alt="An image showing new commands that can be used with the Cheep Cheep app"
-                                loading="lazy" onload="this.style.opacity=1"
-                                src="/assets/media/news/summertestmatches.avif" />
+                            loading="lazy" onload="this.style.opacity=1"
+                            src="/assets/media/news/summertestmatches.avif" />
                     </div>
-                    <span class="news-date">13/06/2025 <span class="tags">
-                            <tag>Test Matches</tag>
-                        </span></span>
-                </div>
-                <div class="news-box">
-                    <article class="news-text">
-                        <a href="/pages/news/2025-04-22/umkl-test-matches-are-being-conducted/"><span class="news-title">
-                                Test matches are being conducted!</span></a><br>
-                        <span class="news-desc">Test matches are planned in the upcoming week, more will follow in the
-                            upcoming month...</span>
-                    </article>
-                    <div class="news-image">
+                    <div class="news-card-body">
+                        <span class="news-title">Upcoming summer test matches!</span>
+                        <span class="news-desc">More test matches between teams are being planned as exams finish
+                            and summer approaches.</span>
+                    </div>
+                </a>
+                <span class="news-date">13/06/2025
+                    <span class="tags">
+                        <tag>Test Matches</tag>
+                    </span>
+                </span>
+            </article>
+            <article class="news-card">
+                <a href="/pages/news/2025-04-22/umkl-test-matches-are-being-conducted/" class="news-card-link">
+                    <div class="news-card-image">
                         <img alt="An image depicting Cheep Cheep in the ocean" loading="lazy"
-                                onload="this.style.opacity=1" src="/assets/media/news/testmatches.avif" />
+                            onload="this.style.opacity=1" src="/assets/media/news/testmatches.avif" />
                     </div>
-                    <span class="news-date">22/04/2025 <span class="tags">
-                            <tag>Test Matches</tag>
-                        </span></span>
-                </div>
-                <div class="news-box">
-                    <article class="news-text">
-                        <a href="/pages/news/2025-04-19/umkl-discord/"><span class="news-title">Join the UMKL Discord
-                                server!</span></a><br>
-                        <span class="news-desc">All matches are organised through our Discord server. Please join it to
-                            take part in a match!</span>
-                    </article>
-                    <div class="news-image">
+                    <div class="news-card-body">
+                        <span class="news-title">Test matches are being conducted!</span>
+                        <span class="news-desc">Test matches are planned in the upcoming week, more will follow in
+                            the upcoming month...</span>
+                    </div>
+                </a>
+                <span class="news-date">22/04/2025
+                    <span class="tags">
+                        <tag>Test Matches</tag>
+                    </span>
+                </span>
+            </article>
+            <article class="news-card">
+                <a href="/pages/news/2025-04-19/umkl-discord/" class="news-card-link">
+                    <div class="news-card-image">
                         <img alt="A piece of Discord promotional artwork" loading="lazy"
-                                onload="this.style.opacity=1" src="/assets/media/news/discordinspire.avif" />
+                            onload="this.style.opacity=1" src="/assets/media/news/discordinspire.avif" />
                     </div>
-                    <span class="news-date">19/04/2025 <span class="tags">
-                            <tag>Intro</tag>
-                            <tag>Discord</tag>
-                        </span></span>
-                </div>
-                <div class="news-box">
-                    <article class="news-text">
-                        <a href="/pages/news/2025-04-19/umkl-intro"><span class="news-title">Welcome to the
-                                UMKL!</span></a><br>
-                        <span class="news-desc">We are a Mario Kart 8 Deluxe championship featuring teams from
-                            universities
-                            across the UK!</span>
-                    </article>
-                    <div class="news-image">
+                    <div class="news-card-body">
+                        <span class="news-title">Join the UMKL Discord server!</span>
+                        <span class="news-desc">All matches are organised through our Discord server. Please join it
+                            to take part in a match!</span>
+                    </div>
+                </a>
+                <span class="news-date">19/04/2025
+                    <span class="tags">
+                        <tag>Intro</tag>
+                        <tag>Discord</tag>
+                    </span>
+                </span>
+            </article>
+            <article class="news-card">
+                <a href="/pages/news/2025-04-19/umkl-intro" class="news-card-link">
+                    <div class="news-card-image">
                         <img alt="An image showing the UMKL logo" loading="lazy" onload="this.style.opacity=1"
-                                src="/assets/media/news/umklbanner.avif" />
+                            src="/assets/media/news/umklbanner.avif" />
                     </div>
-                    <span class="news-date">19/04/2025 <span class="tags">
-                            <tag>Intro</tag>
-                        </span></span>
-                </div>
-            </div>
+                    <div class="news-card-body">
+                        <span class="news-title">Welcome to the UMKL!</span>
+                        <span class="news-desc">We are a Mario Kart 8 Deluxe championship featuring teams from
+                            universities across the UK!</span>
+                    </div>
+                </a>
+                <span class="news-date">19/04/2025
+                    <span class="tags">
+                        <tag>Intro</tag>
+                    </span>
+                </span>
+            </article>
         </div>
     </main>
 
