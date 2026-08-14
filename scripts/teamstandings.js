@@ -106,7 +106,7 @@ async function generateStandingsTable(data) {
         const points = team.team_season_points ?? 0;
         const avif = `https://api.umkl.co.uk/teamemblems/${nameUpper}`;
         const png = `https://api.umkl.co.uk/teamemblems/${nameUpper}?og`;
-        const dest = `pages/standings/details/?team=${encodeURIComponent(name)}`;
+        const dest = `/pages/standings/details/?team=${encodeURIComponent(name)}`;
 
         const row = document.createElement('tr');
         row.className = 'standings-row';

@@ -2,8 +2,6 @@
 <html lang="en">
 
 <head>
-    <base href="../../" />
-
     <meta charset="utf-8" />
     <meta name="color-scheme" content="dark light">
     <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport" />
@@ -12,10 +10,10 @@
         content="View the live team standings in the UMKL"
         name="description" />
     <link href="https://umkl.co.uk/assets/media/brand/favicon.png" rel="icon" type="image/png" />
-    <link href="css/style.css" rel="stylesheet" />
-    <link href="css/teamstandings.css" rel="stylesheet" />
-    <link href="css/settings.css" rel="stylesheet" />
-    <link href="css/ext/fontawesome.min.css" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <link href="/css/teamstandings.css" rel="stylesheet" />
+    <link href="/css/settings.css" rel="stylesheet" />
+    <link href="/css/ext/fontawesome.min.css" rel="stylesheet" />
     <meta content="dark light" name="color-scheme" />
 
     <meta content="UMKL" property="og:title" />
@@ -35,10 +33,10 @@
     <script defer="" src="/components/footer.js" type="module"></script>
 
     <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() { let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) } checkTheme();</script>
-    <script defer="" src="scripts/settings.js" type="module"></script>
-    <script defer="" src="scripts/showupcomingmatches.js" type="module"></script>
-    <script type="module" src="scripts/teamstandings.js" defer></script>
-    <script defer="" src="scripts/tagnewsposts.js" type="module"></script>
+    <script defer="" src="/scripts/settings.js" type="module"></script>
+    <script defer="" src="/scripts/showupcomingmatches.js" type="module"></script>
+    <script type="module" src="/scripts/teamstandings.js" defer></script>
+    <script defer="" src="/scripts/tagnewsposts.js" type="module"></script>
 </head>
 
 <body id="top">

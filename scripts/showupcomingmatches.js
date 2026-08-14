@@ -6,7 +6,7 @@
 const upcomingMatchesBox = document.getElementById("upcomingMatchesBox");
 const upcomingMatchesError = document.getElementById("upcomingMatchesError");
 const MATCH_LENGTH_MINS = 90;
-const YTSVGPATH = `<img class="ytsvg" alt="YouTube logo" src="assets/media/calendar/youtubelogo.svg">`
+const YTSVGPATH = `<img class="ytsvg" alt="YouTube logo" src="/assets/media/calendar/youtubelogo.svg">`
 let matchData = [];
 let matchDataToUse = [];
 let teamColors = [];
@@ -118,7 +118,7 @@ async function showUpcomingMatches() {
         const locale = localStorage.getItem("locale") || "en-GB";
 
         let html = `<h2>Upcoming Matches</h2>
-        <a href="pages/matches/">View all matches</a>
+        <a href="/pages/matches/">View all matches</a>
         <div class="after-title match-container-list">`;
 
         const sortedMatches = [...matches].sort((a, b) => {
@@ -139,7 +139,7 @@ async function showUpcomingMatches() {
                 return {
                     team_name: teamName,
                     class_name: teamName.replace(/\s+/g, ''),
-                    link: `pages/teams/details/?team=${teamName}`
+                    link: `/pages/teams/details/?team=${teamName}`
                 };
             }
 
@@ -220,7 +220,7 @@ async function showUpcomingMatches() {
                 <div class="team-box-container">
                     <div class="team-background left ${team1.class_name}"></div>
                     <div class="team-background right ${team2.class_name}"></div>
-                    ${!entry.testMatch ? `<img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.avif"
+                    ${!entry.testMatch ? `<img class="team-background-overlay" src="/assets/media/calendar/event_box_overlay.avif"
                     alt="Team background overlay"
                     onload="this.style.opacity=1" loading="lazy"/>` : ''}
 

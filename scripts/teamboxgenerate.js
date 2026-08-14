@@ -129,7 +129,7 @@ function renderTeamPickerGrid() {
         const nameUpper = team.team_name.toUpperCase();
         const link = document.createElement('a');
         link.className = 'team-picker-item';
-        link.href = `pages/teams/details/?team=${encodeURIComponent(team.team_name)}`;
+        link.href = `/pages/teams/details/?team=${encodeURIComponent(team.team_name)}`;
         link.style.setProperty('--team-color', team.team_color);
         link.innerHTML = `
             <picture>
@@ -189,7 +189,7 @@ function renderAllTeamsTable() {
         const nameUpper = team.team_name.toUpperCase();
         const row = document.createElement('a');
         row.className = 'teams-table-item';
-        row.href = `pages/teams/details/?team=${encodeURIComponent(team.team_name)}`;
+        row.href = `/pages/teams/details/?team=${encodeURIComponent(team.team_name)}`;
         row.innerHTML = `
                 <picture class="team-table-icon-container" style="background-color: ${team.team_color}">
                     <source srcset="https://api.umkl.co.uk/teamemblems/${nameUpper}" type="image/avif">
@@ -258,7 +258,7 @@ async function generateTeamBoxes(data) {
         const nameUpper = name.toUpperCase();
         const avif = `https://api.umkl.co.uk/teamemblems/${nameUpper}`;
         const png = `https://api.umkl.co.uk/teamemblems/${nameUpper}?og`;
-        const dest = `pages/teams/details/?team=${name}`;
+        const dest = `/pages/teams/details/?team=${name}`;
 
         const row = document.createElement('div');
         row.className = "teamStanding";

@@ -22,7 +22,7 @@ const cookiesBox = `
         <p style="margin: 0 0 5px 0;">
             This site uses cookies to store your preferences. Cloudflare is also used for site analytics.
             By using this site, you agree to these uses.<br>
-            You can read our privacy policy <a href="pages/rules/privacy/">here</a>.
+            You can read our privacy policy <a href="/pages/rules/privacy/">here</a>.
         </p>
         <form method="dialog">
             <button id="cookieAccept">OK</button>
@@ -346,7 +346,7 @@ function mikuEasterEgg() {
             content: "";
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-image: url("../assets/media/calendar/mikuheadshake.avif");
+            background-image: url("/assets/media/calendar/mikuheadshake.avif");
             background-size: cover;
             background-position: center;
             opacity: 1;
@@ -369,10 +369,7 @@ function mkwEasterEgg() {
 
     const style = document.createElement('style');
 
-    let fontPath = "assets/font/RacersDelight.woff2"
-    if (document.baseURI.includes("pages/rules/match/")) {
-        fontPath = "../../../assets/font/RacersDelight.woff2"
-    }
+    const fontPath = "/assets/font/RacersDelight.woff2"
 
     style.textContent = `
         @font-face {

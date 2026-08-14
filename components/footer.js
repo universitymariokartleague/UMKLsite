@@ -1,4 +1,4 @@
-import { toggleSettingsPanel } from '../scripts/settings.js';
+import { toggleSettingsPanel } from '/scripts/settings.js';
 
 const template = document.createElement("template");
 
@@ -169,13 +169,13 @@ template.innerHTML = `
 <div class="footer-links-column">
     <div class="footer-links">
         <h2>Quick Links</h2>
-        <a href="../../../pages/schedule/">Schedule</a>
-        <a href="../../../pages/results/">Results</a>
-        <a href="../../../pages/standings/">Standings</a>
-        <a href="../../../pages/teams/">Teams</a>
+        <a href="/pages/schedule/">Schedule</a>
+        <a href="/pages/results/">Results</a>
+        <a href="/pages/standings/">Standings</a>
+        <a href="/pages/teams/">Teams</a>
 
-        <a href="../../../pages/tools/">Tools</a>
-        <a href="../../../pages/sitemap/">Sitemap</a>
+        <a href="/pages/tools/">Tools</a>
+        <a href="/pages/sitemap/">Sitemap</a>
     </div>
     </div>
 
@@ -185,11 +185,11 @@ template.innerHTML = `
 <div class="footer-links-column">
     <div class="footer-links">
         <h2>Rules & Guides</h2>
-        <a href="../../../pages/rules/match">Match Rules</a>
-        <a href="../../../pages/rules/team/">Creating a Team</a>
-        <a href="../../../pages/rules/stream/">Livestreaming</a>
-        <a href="../../../pages/rules/brand/">Our Brand Guidelines</a>
-        <a href="../../../pages/rules/faq/">FAQs</a>
+        <a href="/pages/rules/match">Match Rules</a>
+        <a href="/pages/rules/team/">Creating a Team</a>
+        <a href="/pages/rules/stream/">Livestreaming</a>
+        <a href="/pages/rules/brand/">Our Brand Guidelines</a>
+        <a href="/pages/rules/faq/">FAQs</a>
     </div>
 
 
@@ -198,14 +198,14 @@ template.innerHTML = `
 <div class="footer-links-column">
     <div class="footer-links">
         <h2>Cheep Cheep</h2>
-            <a href="../../../pages/rules/cheepcheepcommands/">Commands</a>
-            <a href="../../../pages/rules/cheepcheeparchitecture/">Architecture</a>
+            <a href="/pages/rules/cheepcheepcommands/">Commands</a>
+            <a href="/pages/rules/cheepcheeparchitecture/">Architecture</a>
         </div>
 
     <div class="footer-links">
         <h2>Compliance</h2>
-        <a href="../../../pages/rules/privacy">Terms of Service</a>
-        <a href="../../../pages/rules/universityrelations">University Relations</a>
+        <a href="/pages/rules/privacy">Terms of Service</a>
+        <a href="/pages/rules/universityrelations">University Relations</a>
     </div>
 
 </div>
@@ -251,7 +251,7 @@ template.innerHTML = `
         </div>
 
     <div class="footer-logo-area">
-        <img class="footer-logo" src="assets/media/brand/guidelines/wordmark_standard.png" alt="UMKL wordmark">
+        <img class="footer-logo" src="/assets/media/brand/guidelines/wordmark_standard.png" alt="UMKL wordmark">
         <span>© 2024-2026 University Mario Kart League</span>
     </div>
     

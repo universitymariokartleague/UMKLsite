@@ -2,19 +2,17 @@
 <html lang="en">
 
 <head>
-    <base href="../../../">
-
     <meta charset="utf-8">
     <meta name="color-scheme" content="dark light">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Cheep Cheep Architecture & Code Guide | UMKL</title>
     <meta name="description"
         content="Technical documentation explaining how the Cheep Cheep Discord bot and API codebase is structured, module by module.">
-    <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/settings.css">
-    <link rel="stylesheet" href="css/rules.css">
-    <link rel="stylesheet" href="css/ext/fontawesome.min.css">
+    <link rel="icon" href="/assets/media/brand/favicon.png" type="image/png">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/settings.css">
+    <link rel="stylesheet" href="/css/rules.css">
+    <link rel="stylesheet" href="/css/ext/fontawesome.min.css">
 
     <meta property="og:title" content="UMKL | Cheep Cheep Architecture & Code Guide" />
     <meta property="og:type" content="website" />
@@ -36,15 +34,15 @@
 
     <!-- Scripts -->
     <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();</script>
-    <script type="module" src="scripts/settings.js" defer></script>
-    <script type="module" src="scripts/codehighlight.js" defer></script>
+    <script type="module" src="/scripts/settings.js" defer></script>
+    <script type="module" src="/scripts/codehighlight.js" defer></script>
 </head>
 
 <body id="top">
     <umkl-navbar></umkl-navbar>
 
     <main>
-        <a href="pages/rules/">Back</a>
+        <a href="/pages/rules/">Back</a>
         <h1>Cheep Cheep Architecture & Code Guide <span class="doc-version-badge" translate="no">v1.0</span></h1>
         <p class="p-below-title">
             A technical, developer-facing guide to how the Cheep Cheep codebase is put
@@ -54,32 +52,32 @@
 
         <p class="p-no-spacing">
             This page is aimed at developers. For a general, non-technical explanation of how Cheep Cheep works, see the
-            <a href="pages/rules/faq/#how-it-works">Discord/Cheep Cheep FAQ</a>.
+            <a href="/pages/rules/faq/#how-it-works">Discord/Cheep Cheep FAQ</a>.
         </p>
 
         <p>
-            For the full command list, see the <a href="pages/rules/cheepcheepcommands/">Commands Documentation</a> page.
+            For the full command list, see the <a href="/pages/rules/cheepcheepcommands/">Commands Documentation</a> page.
         </p>
 
         <h3>Page Contents</h3>
         <ul class="after-title">
-            <li><a href="pages/rules/cheepcheeparchitecture/#what-this-project-is">1. What this project is</a></li>
-            <li><a href="pages/rules/cheepcheeparchitecture/#directory-layout">2. Directory layout</a></li>
-            <li><a href="pages/rules/cheepcheeparchitecture/#layering-rules">3. Layering rules (how imports actually
+            <li><a href="/pages/rules/cheepcheeparchitecture/#what-this-project-is">1. What this project is</a></li>
+            <li><a href="/pages/rules/cheepcheeparchitecture/#directory-layout">2. Directory layout</a></li>
+            <li><a href="/pages/rules/cheepcheeparchitecture/#layering-rules">3. Layering rules (how imports actually
                     flow)</a></li>
-            <li><a href="pages/rules/cheepcheeparchitecture/#startup-sequence">4. Startup sequence
+            <li><a href="/pages/rules/cheepcheeparchitecture/#startup-sequence">4. Startup sequence
                     - <code translate="no">main.py</code></a></li>
-            <li><a href="pages/rules/cheepcheeparchitecture/#module-reference">5. Module reference</a></li>
-            <li><a href="pages/rules/cheepcheeparchitecture/#cross-cog-import-map">6. Cross-cog import map</a></li>
-            <li><a href="pages/rules/cheepcheeparchitecture/#data-storage">7. Data storage</a></li>
-            <li><a href="pages/rules/cheepcheeparchitecture/#tests">8. Tests</a></li>
-            <li><a href="pages/rules/cheepcheeparchitecture/#worked-example">9. Worked example:
+            <li><a href="/pages/rules/cheepcheeparchitecture/#module-reference">5. Module reference</a></li>
+            <li><a href="/pages/rules/cheepcheeparchitecture/#cross-cog-import-map">6. Cross-cog import map</a></li>
+            <li><a href="/pages/rules/cheepcheeparchitecture/#data-storage">7. Data storage</a></li>
+            <li><a href="/pages/rules/cheepcheeparchitecture/#tests">8. Tests</a></li>
+            <li><a href="/pages/rules/cheepcheeparchitecture/#worked-example">9. Worked example:
                     <code translate="no">/create-match</code> end to end</a></li>
         </ul>
 
         <hr>
 
-        <h2 id="what-this-project-is"><a href="pages/rules/cheepcheeparchitecture/#what-this-project-is">1. What this project is</a></h2>
+        <h2 id="what-this-project-is"><a href="/pages/rules/cheepcheeparchitecture/#what-this-project-is">1. What this project is</a></h2>
 
         <p class="p-no-spacing">
             Cheep Cheep is a single Python process that does two jobs at once:
@@ -105,7 +103,7 @@
 
         <hr>
 
-        <h2 id="directory-layout"><a href="pages/rules/cheepcheeparchitecture/#directory-layout">2. Directory layout</a></h2>
+        <h2 id="directory-layout"><a href="/pages/rules/cheepcheeparchitecture/#directory-layout">2. Directory layout</a></h2>
         <div class="file-tree" translate="no">
             <div class="file-tree-row" data-depth="0">
                 <span class="file-tree-name">main.py</span>
@@ -124,7 +122,7 @@
             <div class="file-tree-row" data-depth="1">
                 <span class="file-tree-name">logic.py</span>
                 <span class="file-tree-desc">The data layer - the only module that touches SQLite or JSON files
-                    directly (see <a href="pages/rules/cheepcheeparchitecture/#core-logic-py">§5.2</a>)</span>
+                    directly (see <a href="/pages/rules/cheepcheeparchitecture/#core-logic-py">§5.2</a>)</span>
             </div>
             <div class="file-tree-row" data-depth="1">
                 <span class="file-tree-name">graphics.py</span>
@@ -134,7 +132,7 @@
                 <span class="file-tree-name">generate_calendar.py</span>
                 <span class="file-tree-desc">Builds <code translate="no">data/matches.ics</code> from <code
                         translate="no">matchdata.json</code> (see
-                    <a href="pages/rules/cheepcheeparchitecture/#core-generate-calendar-py">§5.4</a>)</span>
+                    <a href="/pages/rules/cheepcheeparchitecture/#core-generate-calendar-py">§5.4</a>)</span>
             </div>
 
             <div class="file-tree-row" data-depth="0" data-dir>
@@ -153,7 +151,7 @@
             <div class="file-tree-row" data-depth="0" data-dir>
                 <span class="file-tree-name">cogs/</span>
                 <span class="file-tree-desc">discord.py extensions, feature split across cogs (see
-                    <a href="pages/rules/cheepcheeparchitecture/#module-reference">§5</a>)</span>
+                    <a href="/pages/rules/cheepcheeparchitecture/#module-reference">§5</a>)</span>
             </div>
             <div class="file-tree-row" data-depth="1">
                 <span class="file-tree-name">core_cog.py</span>
@@ -208,29 +206,29 @@
                 <span class="file-tree-name">backup.py</span>
                 <span class="file-tree-desc">Copies the DB + JSON files to <code
                         translate="no">7z</code> files for scheduled/pre-mutation backups (see
-                    <a href="pages/rules/cheepcheeparchitecture/#services-backup-py">§5.8</a>)</span>
+                    <a href="/pages/rules/cheepcheeparchitecture/#services-backup-py">§5.8</a>)</span>
             </div>
             <div class="file-tree-row" data-depth="1">
                 <span class="file-tree-name">checkrss.py</span>
                 <span class="file-tree-desc">Polls the news RSS feed and triggers new-post notifications (see
-                    <a href="pages/rules/cheepcheeparchitecture/#services-checkrss-py">§5.9</a>)</span>
+                    <a href="/pages/rules/cheepcheeparchitecture/#services-checkrss-py">§5.9</a>)</span>
             </div>
             <div class="file-tree-row" data-depth="1">
                 <span class="file-tree-name">data_export.py</span>
                 <span class="file-tree-desc">Zips a user's personal data, used with <code
                         translate="no">/export-my-data</code> (see
-                    <a href="pages/rules/cheepcheeparchitecture/#services-data-export-py">§5.13</a>)</span>
+                    <a href="/pages/rules/cheepcheeparchitecture/#services-data-export-py">§5.13</a>)</span>
             </div>
             <div class="file-tree-row" data-depth="1">
                 <span class="file-tree-name">dbserver.py</span>
                 <span class="file-tree-desc">The public API used on this site (<code
                         translate="no">api.umkl.co.uk</code>) (see
-                    <a href="pages/rules/cheepcheeparchitecture/#services-dbserver-py">§5.12</a>)</span>
+                    <a href="/pages/rules/cheepcheeparchitecture/#services-dbserver-py">§5.12</a>)</span>
             </div>
             <div class="file-tree-row" data-depth="1">
                 <span class="file-tree-name">gitimport.py</span>
                 <span class="file-tree-desc">Self-update mechanism initiated by <code translate="no">/restart</code>
-                    (see <a href="pages/rules/cheepcheeparchitecture/#services-gitimport-py">§5.11</a>)</span>
+                    (see <a href="/pages/rules/cheepcheeparchitecture/#services-gitimport-py">§5.11</a>)</span>
             </div>
             <div class="file-tree-row" data-depth="1">
                 <span class="file-tree-name">predictionpolls.py</span>
@@ -240,7 +238,7 @@
             <div class="file-tree-row" data-depth="0" data-dir>
                 <span class="file-tree-name">data/</span>
                 <span class="file-tree-desc">Stored data: SQLite DB + JSON 'extra data' files (see
-                    <a href="pages/rules/cheepcheeparchitecture/#data-storage">§7</a>)</span>
+                    <a href="/pages/rules/cheepcheeparchitecture/#data-storage">§7</a>)</span>
             </div>
             <div class="file-tree-row" data-depth="0" data-dir>
                 <span class="file-tree-name">assets/</span>
@@ -258,13 +256,13 @@
             <div class="file-tree-row" data-depth="0" data-dir>
                 <span class="file-tree-name">tests/</span>
                 <span class="file-tree-desc">Mix of unittests and manual test scripts (see
-                    <a href="pages/rules/cheepcheeparchitecture/#tests">§8</a>)</span>
+                    <a href="/pages/rules/cheepcheeparchitecture/#tests">§8</a>)</span>
             </div>
         </div>
 
         <hr>
 
-        <h2 id="layering-rules"><a href="pages/rules/cheepcheeparchitecture/#layering-rules">3. Layering rules (how
+        <h2 id="layering-rules"><a href="/pages/rules/cheepcheeparchitecture/#layering-rules">3. Layering rules (how
                 imports actually flow)</a></h2>
         <ul class="import-tree" translate="no">
             <li>
@@ -277,7 +275,7 @@
                         <div class="import-tree-row">
                             <span class="import-tree-name">cogs/*</span>
                             <span class="import-tree-desc">cogs that contain relevant features (see
-                                <a href="pages/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a>)</span>
+                                <a href="/pages/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a>)</span>
                         </div>
                         <ul>
                             <li>
@@ -321,7 +319,7 @@
                                     <span class="import-tree-name">dbserver.py</span>
                                     <span class="import-tree-desc">the public Flask + Waitress HTTP API
                                         (<code translate="no">api.umkl.co.uk</code>) that powers this website —
-                                        see <a href="pages/rules/cheepcheeparchitecture/#services-dbserver-py">§5.12</a></span>
+                                        see <a href="/pages/rules/cheepcheeparchitecture/#services-dbserver-py">§5.12</a></span>
                                 </div>
                             </li>
                             <li>
@@ -343,14 +341,14 @@
             </li>
             <li>
                 <code translate="no">services/dbserver.py</code> keeps its own read-only connection to the database
-                for the web API (see <a href="pages/rules/cheepcheeparchitecture/#services-gitimport-py">§5.11</a> and
-                <a href="pages/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a>).
+                for the web API (see <a href="/pages/rules/cheepcheeparchitecture/#services-gitimport-py">§5.11</a> and
+                <a href="/pages/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a>).
             </li>
         </ul>
 
         <hr>
 
-        <h2 id="startup-sequence"><a href="pages/rules/cheepcheeparchitecture/#startup-sequence">4. Startup sequence
+        <h2 id="startup-sequence"><a href="/pages/rules/cheepcheeparchitecture/#startup-sequence">4. Startup sequence
                 - <code translate="no">main.py</code></a></h2>
         <ol>
             <li>
@@ -362,8 +360,8 @@
                 <code translate="no">main.check_args()</code> - if <code translate="no">--gitclone</code> is
                 passed, calls <code translate="no">services.gitimport.start_git_clone()</code> to pull the latest
                 code from git before boot (used for the self-update/restart flow, see
-                <a href="pages/rules/cheepcheeparchitecture/#services-gitimport-py">§5.11</a> and
-                <a href="pages/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a>)
+                <a href="/pages/rules/cheepcheeparchitecture/#services-gitimport-py">§5.11</a> and
+                <a href="/pages/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a>)
             </li>
             <li>
                 <code translate="no">core.generate_calendar.build_calendar()</code> - regenerates
@@ -374,7 +372,7 @@
                 <code translate="no">services.dbserver.start_db_server()</code> - spawns two daemon threads: the
                 Waitress HTTP server (port 5555, proxied externally as <code translate="no">api.umkl.co.uk</code>)
                 and an avatar-refresh loop used in said API
-                (see <a href="pages/rules/cheepcheeparchitecture/#services-dbserver-py">§5.12</a>)
+                (see <a href="/pages/rules/cheepcheeparchitecture/#services-dbserver-py">§5.12</a>)
             </li>
             <li>
                 A daemon thread runs <code translate="no">services.checkrss.check_rss_loop</code>, calling back into<br>
@@ -383,7 +381,7 @@
             </li>
             <li>
                 A daemon thread runs <code translate="no">services.predictionpolls.polling_loop</code> - this file is
-                currently unfinished (see <a href="pages/rules/cheepcheeparchitecture/#services-predictionpolls-py">§5.10</a>)
+                currently unfinished (see <a href="/pages/rules/cheepcheeparchitecture/#services-predictionpolls-py">§5.10</a>)
             </li>
             <li>
                 <code translate="no">bot.run(TOKEN)</code> starts the Discord client.<br>
@@ -395,7 +393,7 @@
                     </li>
                     <li>Loads every cog listed in <code translate="no">main.py</code> (order matters for
                         <code translate="no">dev_cog</code>, see
-                        <a href="pages/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a>)
+                        <a href="/pages/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a>)
                     </li>
                     <li>Registers <code translate="no">cogs.listeners_cog.CaptchaButton</code> as a persistent
                         dynamic item
@@ -412,7 +410,7 @@
 
         <hr>
 
-        <h2 id="module-reference"><a href="pages/rules/cheepcheeparchitecture/#module-reference">5. Module
+        <h2 id="module-reference"><a href="/pages/rules/cheepcheeparchitecture/#module-reference">5. Module
                 reference</a></h2>
 
         <h3 id="config-py">5.1 <code translate="no">config.py</code></h3>
@@ -457,7 +455,7 @@
             It only imports <code translate="no">config</code> and
             <code translate="no">.generate_calendar.build_calendar</code> (which is called after any
             <code translate="no">matchdata.json</code> write - see
-            <a href="pages/rules/cheepcheeparchitecture/#core-generate-calendar-py">§5.4</a>).
+            <a href="/pages/rules/cheepcheeparchitecture/#core-generate-calendar-py">§5.4</a>).
         </p>
 
         <h3 id="core-graphics-py">5.3 <code translate="no">core/graphics.py</code></h3>
@@ -501,7 +499,7 @@
                     build_calendar</code>), and again by <code translate="no">core.logic</code> every time match
                 data changes
                 <code translate="no">services/</code> (see
-                <a href="pages/rules/cheepcheeparchitecture/#layering-rules">§3</a>)</li>
+                <a href="/pages/rules/cheepcheeparchitecture/#layering-rules">§3</a>)</li>
             <li><code translate="no">services/dbserver.py</code> imports its
                 <code translate="no">OUTPUT_PATH</code> constant to serve the
                 <code translate="no">/matches.ics</code> route</li>
@@ -543,7 +541,7 @@
         <h3 id="cogs-overview">5.7 <code translate="no">cogs/</code></h3>
         <p>
             All ten cogs are loaded by <code translate="no">main.py</code>. See
-            <a href="pages/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a> for exactly which functions/classes
+            <a href="/pages/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a> for exactly which functions/classes
             each cog imports from another cog - <code translate="no">cogs/match_cog.py</code> in particular
             acts as a shared library of autocomplete providers and helpers for several other cogs.
         </p>
@@ -661,7 +659,7 @@
                 with <code translate="no">Restart=always</code>, so when
                 <code translate="no">sys.exit(1)</code> kills the process, systemd just starts it again, now
                 running the freshly git-pulled code. <code translate="no">tests/supervisor.py</code> (see
-                <a href="pages/rules/cheepcheeparchitecture/#tests">§8</a>) only exists to stand in for systemd
+                <a href="/pages/rules/cheepcheeparchitecture/#tests">§8</a>) only exists to stand in for systemd
                 on Windows, where there's no (easy) service manager to do this
             </li>
         </ul>
@@ -687,7 +685,7 @@
             </li>
             <li>
                 Also runs its own avatar-refresh daemon thread (<code translate="no">_avatar_refresh_loop</code>)
-                that re-caches Discord avatars for the <a href="pages/credits">Credits page</a> every 24 hours
+                that re-caches Discord avatars for the <a href="/pages/credits">Credits page</a> every 24 hours
             </li>
         </ul>
 
@@ -925,7 +923,7 @@
 
         <hr>
 
-        <h2 id="cross-cog-import-map"><a href="pages/rules/cheepcheeparchitecture/#cross-cog-import-map">6. Cross-cog
+        <h2 id="cross-cog-import-map"><a href="/pages/rules/cheepcheeparchitecture/#cross-cog-import-map">6. Cross-cog
                 import map</a></h2>
         <p class="p-no-spacing">
             Most cogs only import <code translate="no">config</code>, <code translate="no">bot.embed</code>,
@@ -997,7 +995,7 @@
 
         <hr>
 
-        <h2 id="data-storage"><a href="pages/rules/cheepcheeparchitecture/#data-storage">7. Data storage</a></h2>
+        <h2 id="data-storage"><a href="/pages/rules/cheepcheeparchitecture/#data-storage">7. Data storage</a></h2>
 
         <h3>SQLite - <code translate="no">data/umkl_db.db</code></h3>
         <p class="p-no-spacing schema-legend" translate="no">
@@ -1238,7 +1236,7 @@
 
         <hr>
 
-        <h2 id="tests"><a href="pages/rules/cheepcheeparchitecture/#tests">8. Tests</a>
+        <h2 id="tests"><a href="/pages/rules/cheepcheeparchitecture/#tests">8. Tests</a>
         </h2>
         <p class="p-no-spacing">
             A mix of unittests tests and manual testing scripts:
@@ -1267,7 +1265,7 @@
 
         <hr>
 
-        <h2 id="worked-example"><a href="pages/rules/cheepcheeparchitecture/#worked-example">9. Worked example:
+        <h2 id="worked-example"><a href="/pages/rules/cheepcheeparchitecture/#worked-example">9. Worked example:
                 <code translate="no">/create-match</code> end to end</a></h2>
         <p class="p-no-spacing">
             Here's the call path for one command:

@@ -1,7 +1,7 @@
 export { generate6v6ScoreCalculatorLink };
 
 function generate6v6ScoreCalculatorLink(entry) {
-    const url = new URL("pages/tools/6v6scorecalculator/", window.location.origin);
+    const url = new URL("/pages/tools/6v6scorecalculator/", window.location.origin);
 
     if (!entry.detailedResults) return '';
 

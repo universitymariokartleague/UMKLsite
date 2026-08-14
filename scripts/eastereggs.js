@@ -10,7 +10,7 @@ function injectMusic(path) {
     const audioContainer = document.createElement('div');
     audioContainer.innerHTML = `
         <audio id="audio" src="${path}" preload="auto"></audio>
-        <script type="text/javascript" src="scripts/audioplayer.js" id="audioPlayerScript" defer></script>
+        <script type="text/javascript" src="/scripts/audioplayer.js" id="audioPlayerScript" defer></script>
         <div id="audioStatus" data-playlist="bgm.txt" class="hidden">
             <span id="BGMName">Music</span><br>
             <div class="audioControls">
@@ -32,13 +32,13 @@ function injectMusic(path) {
 
     const script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = 'scripts/audioplayer.js';
+    script.src = '/scripts/audioplayer.js';
     script.defer = true;
     document.body.appendChild(script);
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'css/audioplayer.css';
+    link.href = '/css/audioplayer.css';
     document.head.appendChild(link);
 }
 
@@ -103,7 +103,7 @@ function halloweenEasterEgg() {
                 [side]: `${Math.random() * 50}px`,
                 width: `${size}px`,
                 height: `${size}px`,
-                background: `url("assets/media/eastereggs/halloween/${img}") no-repeat center/contain`,
+                background: `url("/assets/media/eastereggs/halloween/${img}") no-repeat center/contain`,
                 zIndex: '100',
                 pointerEvents: 'none'
             })
@@ -115,7 +115,7 @@ function halloweenEasterEgg() {
             position: 'fixed',
             width: '50px',
             height: '50px',
-            background: 'url("assets/media/eastereggs/halloween/ghost.avif") no-repeat center/contain',
+            background: 'url("/assets/media/eastereggs/halloween/ghost.avif") no-repeat center/contain',
             zIndex: '1000',
             pointerEvents: 'none',
             opacity: '0'
@@ -126,7 +126,7 @@ function halloweenEasterEgg() {
         const endX = Math.random() * window.innerWidth;
         const endY = Math.random() * window.innerHeight;
 
-        if (endX < startX) ghost.style.backgroundImage = 'url("assets/media/eastereggs/halloween/ghost2.avif")';
+        if (endX < startX) ghost.style.backgroundImage = 'url("/assets/media/eastereggs/halloween/ghost2.avif")';
 
         ghost.style.left = `${startX}px`;
         ghost.style.top = `${startY}px`;
@@ -150,7 +150,7 @@ function halloweenEasterEgg() {
     for (let i = 0; i < 5; i++) {
         setTimeout(createFlyingGhost, Math.random() * 1000);
     }
-    injectMusic("assets/media/bgm/halloween/loading playlist.opus");
+    injectMusic("/assets/media/bgm/halloween/loading playlist.opus");
 }
 
 function winterEasterEgg() {
@@ -210,7 +210,7 @@ function winterEasterEgg() {
     document.head.appendChild(style);
 
     setupSnowflakes();
-    injectMusic("assets/media/bgm/xmas/loading playlist.opus");
+    injectMusic("/assets/media/bgm/xmas/loading playlist.opus");
 
     setTimeout(() => {
         const style = document.createElement('style');
@@ -383,7 +383,7 @@ function newYearCountDown() {
     `;
     document.head.appendChild(style);
 
-    loadFont('digital', 'assets/font/DS-DIGII.woff2');
+    loadFont('digital', '/assets/font/DS-DIGII.woff2');
 
     const countdown = document.createElement('div');
     countdown.id = 'countdown';
@@ -454,9 +454,9 @@ function createFireworksCanvas() {
         sound: {
             enabled: true,
             files: [
-                '../../../assets/media/eastereggs/newyears/explosion0.opus',
-                '../../../assets/media/eastereggs/newyears/explosion1.opus',
-                '../../../assets/media/eastereggs/newyears/explosion2.opus'
+                '/assets/media/eastereggs/newyears/explosion0.opus',
+                '/assets/media/eastereggs/newyears/explosion1.opus',
+                '/assets/media/eastereggs/newyears/explosion2.opus'
             ],
             volume: {
                 min: 1,

@@ -2,17 +2,15 @@
 <html lang="en">
 
 <head>
-    <base href="../../../">
-
     <meta charset="utf-8">
     <meta name="color-scheme" content="dark light">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Streaming Guidelines | UMKL</title>
     <meta name="description" content="Streaming Guidelines for the UMKL">
-    <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/settings.css">
-    <link rel="stylesheet" href="css/ext/fontawesome.min.css">
+    <link rel="icon" href="/assets/media/brand/favicon.png" type="image/png">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/settings.css">
+    <link rel="stylesheet" href="/css/ext/fontawesome.min.css">
 
     <meta property="og:title" content="UMKL | Brand Guidelines" />
     <meta property="og:type" content="website" />
@@ -34,14 +32,14 @@
     <!-- Scripts -->
     <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();</script>
 
-    <script type="module" src="scripts/settings.js" defer></script>
+    <script type="module" src="/scripts/settings.js" defer></script>
 </head>
 
 <body id="top">
     <umkl-navbar></umkl-navbar>
 
     <main>
-        <a href="pages/rules/">Back</a>
+        <a href="/pages/rules/">Back</a>
         <h1>Streaming Guidelines</h1>
         <p class="p-below-title">Guidelines for streamers and
             instructions on how to set up OBS</p>
@@ -59,16 +57,16 @@
             intermission screen, for example) if you're entering it on stream.
         </blockquote>
 
-        <h2 id="obs-setup"><a href="pages/rules/stream/#obs-setup">OBS Setup</a></h2>
+        <h2 id="obs-setup"><a href="/pages/rules/stream/#obs-setup">OBS Setup</a></h2>
 
-        <h3 id="setting-up-resolution-frame-rate-and-codecs"><a href="pages/rules/stream/#setting-up-resolution-frame-rate-and-codecs">Setting Up Resolution, Frame Rate and Codecs</a></h3>
+        <h3 id="setting-up-resolution-frame-rate-and-codecs"><a href="/pages/rules/stream/#setting-up-resolution-frame-rate-and-codecs">Setting Up Resolution, Frame Rate and Codecs</a></h3>
         <p class="p-below-title">
             First, we want to make sure your OBS settings are configured correctly.
             You can set your resolution, frame rate and codecs in the <code>Video</code> and <code>Output</code>
             sections of the settings menu.
         </p>
         <p>
-            <img class="image" src="assets/media/streaming/resolutionsettings.avif"
+            <img class="image" src="/assets/media/streaming/resolutionsettings.avif"
                     alt="The resolution settings menu in OBS">
         </p>
         <p>
@@ -77,7 +75,7 @@
             you would usually set your resolution to match your monitor's native resolution.
         </p>
         <p>
-            <img class="image" src="assets/media/streaming/resolutioncanvassettings.avif"
+            <img class="image" src="/assets/media/streaming/resolutioncanvassettings.avif"
                     alt="The resolution settings menu in OBS, with a dropdown showing available resolutions">
         </p>
         <p>
@@ -94,7 +92,7 @@
             can resolve performance issues, especially on weaker devices.
         </p>
         <p>
-            <img class="image" src="assets/media/streaming/codecsettings.avif"
+            <img class="image" src="/assets/media/streaming/codecsettings.avif"
                     alt="The codec settings menu in OBS, with a dropdown showing available codecs">
         </p>
         <p>
@@ -111,7 +109,7 @@
             Run an <a target="_blank" href="https://www.google.com/search?q=speedtest">internet speedtest</a> to check your upload speed for streaming.
         </p>
 
-        <h3 id="generating-your-stream-overlay"><a href="pages/rules/stream/#generating-your-stream-overlay">Generating Your Stream Overlay</a></h3>
+        <h3 id="generating-your-stream-overlay"><a href="/pages/rules/stream/#generating-your-stream-overlay">Generating Your Stream Overlay</a></h3>
         <p class="p-below-title">
             Before opening OBS, generate a personalised stream overlay from the UMKL Discord server using this app
             command:
@@ -123,11 +121,11 @@
             It displays your Discord username to identify which team's perspective is being shown.
         </p>
         <p>
-            <img class="image" src="assets/media/streaming/generatestreamoverlaycommand.avif"
+            <img class="image" src="/assets/media/streaming/generatestreamoverlaycommand.avif"
                     alt="The /generate-stream-overlay Discord command">
         </p>
 
-        <h3 id="adding-sources-in-obs"><a href="pages/rules/stream/#adding-sources-in-obs">Adding Sources in OBS</a></h3>
+        <h3 id="adding-sources-in-obs"><a href="/pages/rules/stream/#adding-sources-in-obs">Adding Sources in OBS</a></h3>
         <p class="p-below-title">
             Sources are the building blocks of what viewers see on stream. Add them in the order below - sources higher
             in the list appear on top of those beneath them.
@@ -181,18 +179,18 @@
 
         <p>
             <video controls playsinline loop class="image">
-                <source src="assets/media/streaming/OBSsourcespickAV1.mp4" type='video/mp4; codecs="av01.0.05M.08"'>
-                <source src="assets/media/streaming/OBSsourcespickh265.mp4" type='video/mp4; codecs="hvc1.1.6.L153.B0"'>
-                <source src="assets/media/streaming/OBSsourcespickh264.mp4" type='video/mp4; codecs="avc1.42E01E"'>
+                <source src="/assets/media/streaming/OBSsourcespickAV1.mp4" type='video/mp4; codecs="av01.0.05M.08"'>
+                <source src="/assets/media/streaming/OBSsourcespickh265.mp4" type='video/mp4; codecs="hvc1.1.6.L153.B0"'>
+                <source src="/assets/media/streaming/OBSsourcespickh264.mp4" type='video/mp4; codecs="avc1.42E01E"'>
             </video>
         </p>
 
-        <h3 id="arranging-your-stream-layout"><a href="pages/rules/stream/#arranging-your-stream-layout">Arranging Your Stream Layout</a></h3>
+        <h3 id="arranging-your-stream-layout"><a href="/pages/rules/stream/#arranging-your-stream-layout">Arranging Your Stream Layout</a></h3>
         <p class="p-below-title">
             Once your sources are added, arrange them into a clean layout so viewers can follow the match easily.
         </p>
         <p>
-            <img class="image" src="assets/media/streaming/OBSlayout.avif"
+            <img class="image" src="/assets/media/streaming/OBSlayout.avif"
                     alt="An example OBS stream layout with the score overlay, stream overlay and gameplay capture arranged on screen">
         </p>
         <ul>
@@ -205,7 +203,7 @@
                 switch to between races or if the room ID needs to be shown.</li>
         </ul>
 
-        <h3 id="entering-the-stream-key"><a href="pages/rules/stream/#entering-the-stream-key">Entering The Stream Key</a></h3>
+        <h3 id="entering-the-stream-key"><a href="/pages/rules/stream/#entering-the-stream-key">Entering The Stream Key</a></h3>
         <p class="p-below-title">
             To connect OBS to your team's YouTube channel:
         </p>
@@ -222,23 +220,23 @@
         </blockquote>
         <p>
             <video controls playsinline loop class="image">
-                <source src="assets/media/streaming/streamkeyAV1.mp4" type='video/mp4; codecs="av01.0.05M.08"'>
-                <source src="assets/media/streaming/streamkeyh265.mp4" type='video/mp4; codecs="hvc1.1.6.L153.B0"'>
-                <source src="assets/media/streaming/streamkeyh264.mp4" type='video/mp4; codecs="avc1.42E01E"'>
+                <source src="/assets/media/streaming/streamkeyAV1.mp4" type='video/mp4; codecs="av01.0.05M.08"'>
+                <source src="/assets/media/streaming/streamkeyh265.mp4" type='video/mp4; codecs="hvc1.1.6.L153.B0"'>
+                <source src="/assets/media/streaming/streamkeyh264.mp4" type='video/mp4; codecs="avc1.42E01E"'>
             </video>
         </p>
 
-        <h3 id="multiple-profiles"><a href="pages/rules/stream/#multiple-profiles">Multiple Profiles <em>(Optional)</em></a></h3>
+        <h3 id="multiple-profiles"><a href="/pages/rules/stream/#multiple-profiles">Multiple Profiles <em>(Optional)</em></a></h3>
         <p class="p-below-title">
             OBS profiles let you save separate stream configurations. If you stream to both a personal account and the
             UMKL channel, create a profile for each and switch between them using the <strong>Profile</strong> dropdown
             menu.
         </p>
         <p>
-            <img class="image" src="assets/media/streaming/switchprofile.avif" alt="The OBS Profile dropdown menu">
+            <img class="image" src="/assets/media/streaming/switchprofile.avif" alt="The OBS Profile dropdown menu">
         </p>
 
-        <h3 id="audio-mixing"><a href="pages/rules/stream/#audio-mixing">Audio Mixing</a></h3>
+        <h3 id="audio-mixing"><a href="/pages/rules/stream/#audio-mixing">Audio Mixing</a></h3>
         <p class="p-below-title">
             Before going live, check that your audio levels are well balanced. Use the image below as a guide. As a
             general rule:
@@ -249,11 +247,11 @@
             <li>Mute any sources not in active use</li>
         </ul>
         <p>
-            <img style="max-width: 380px;" class="image" src="assets/media/streaming/OBSaudioguide.avif"
+            <img style="max-width: 380px;" class="image" src="/assets/media/streaming/OBSaudioguide.avif"
                     alt="Recommended OBS audio levels">
         </p>
 
-        <h3 id="testing-your-stream-before-a-match"><a href="pages/rules/stream/#testing-your-stream-before-a-match">Testing Your Stream Before a Match</a></h3>
+        <h3 id="testing-your-stream-before-a-match"><a href="/pages/rules/stream/#testing-your-stream-before-a-match">Testing Your Stream Before a Match</a></h3>
         <p class="p-below-title">
             Always do a test run before a match starts, rather than discovering an issue once it's live. A few minutes
             of testing beforehand can save a lot of trouble during the match itself.
@@ -267,7 +265,7 @@
             </li>
             <li>
                 <strong>Test on your personal YouTube account first</strong> - You can switch to a personal OBS profile (see
-                <a href="pages/rules/stream/#multiple-profiles">Multiple Profiles</a> above) and go live privately or unlisted there for a few minutes before the
+                <a href="/pages/rules/stream/#multiple-profiles">Multiple Profiles</a> above) and go live privately or unlisted there for a few minutes before the
                 match. This lets you confirm video, audio and overlays are all working without anyone else seeing it,
                 and without risking an accidental public test on the UMKL channel.
             </li>
@@ -293,7 +291,7 @@
             </li>
         </ol>
 
-        <h2 id="additional-notes"><a href="pages/rules/stream/#additional-notes">Additional Notes</a></h2>
+        <h2 id="additional-notes"><a href="/pages/rules/stream/#additional-notes">Additional Notes</a></h2>
         <ul class="p-below-title">
             <li>
                 <strong>Stream overlay username:</strong> Your overlay will show your Discord username to identify your

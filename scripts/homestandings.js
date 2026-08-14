@@ -106,7 +106,7 @@ async function renderHomeStandings(data) {
         const nameUpper = name.toUpperCase();
         const points = team.team_season_points ?? 0;
         const avif = `https://api.umkl.co.uk/teamemblems/${nameUpper}?og`;
-        const dest = `pages/teams/details/?team=${encodeURIComponent(name)}`;
+        const dest = `/pages/teams/details/?team=${encodeURIComponent(name)}`;
         const ordinal = pos === 1 ? '1<sup>ST</sup>' : pos === 2 ? '2<sup>ND</sup>' : '3<sup>RD</sup>';
 
         const card = document.createElement('div');
@@ -155,7 +155,7 @@ async function renderHomeStandings(data) {
         const points = team.team_season_points ?? 0;
         const avif = `https://api.umkl.co.uk/teamemblems/${nameUpper}`;
         const png = `https://api.umkl.co.uk/teamemblems/${nameUpper}?og`;
-        const dest = `pages/teams/details/?team=${encodeURIComponent(name)}`;
+        const dest = `/pages/teams/details/?team=${encodeURIComponent(name)}`;
 
         const row = document.createElement('tr');
         row.className = 'standings-row';

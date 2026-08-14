@@ -104,16 +104,14 @@ const blogFormatHTML = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <base href="../../../../">
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>{{blogTitle}} | UMKL</title>
     <meta name="description" content="{{blogDescription}}">
-    <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/settings.css">
-    <link rel="stylesheet" href="css/ext/fontawesome.min.css">
+    <link rel="icon" href="/assets/media/brand/favicon.png" type="image/png">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/settings.css">
+    <link rel="stylesheet" href="/css/ext/fontawesome.min.css">
     <meta name="color-scheme" content="dark light">
 
     <meta property="og:title" content="{{blogTitle}} | UMKL" />
@@ -128,13 +126,13 @@ const blogFormatHTML = `
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Components -->
-    <script type="module" src="components/navbar.js" defer></script>
-    <script type="module" src="components/footer.js" defer></script>
+    <script type="module" src="/components/navbar.js" defer></script>
+    <script type="module" src="/components/footer.js" defer></script>
 
     <!-- Scripts -->
     <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
 
-    <script type="module" src="scripts/settings.js" defer></script>
+    <script type="module" src="/scripts/settings.js" defer></script>
 </head>
 <body id="top">
     <umkl-navbar></umkl-navbar>
@@ -321,7 +319,7 @@ function buildBlog(data) {
 
                 pageAreaHTML += `
                     <div id="element${elementCounter}" class="element${elementCounter}outline">
-                        <a href="pages/tools/blogbuilder/#">Back</a>
+                        <a href="/pages/tools/blogbuilder/#">Back</a>
                         <h1>${element.title}</h1>
                         <div class="p-below-title">
                             ${element.date} |
@@ -494,7 +492,7 @@ function buildHTML(data) {
                 }
 
                 blogInfo = `
-                    <a href="pages/news/">Back</a>
+                    <a href="/pages/news/">Back</a>
                     <h1>${element.title}</h1>
                     <div class="p-below-title">
                         ${element.date} |

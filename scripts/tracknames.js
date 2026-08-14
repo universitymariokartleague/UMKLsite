@@ -1126,7 +1126,7 @@ function resolveTrackName(name) {
     return usePal ? pair.pal : pair.us;
 }
 
-const ICON_BASE_PATH = 'assets/media/courses/mk8dxicons';
+const ICON_BASE_PATH = '/assets/media/courses/mk8dxicons';
 
 function slugify(name) {
     return name.replaceAll(' ', '_').replaceAll("'", '').toLowerCase();

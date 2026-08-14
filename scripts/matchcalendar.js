@@ -44,7 +44,7 @@ let refreshTimer = null;
 let listViewOverlay = null;
 let retryCount = 0;
 
-const YTSVGPATH = `<img class="ytsvg" alt="YouTube logo" src="assets/media/calendar/youtubelogo.svg">`;
+const YTSVGPATH = `<img class="ytsvg" alt="YouTube logo" src="/assets/media/calendar/youtubelogo.svg">`;
 
 document.addEventListener("DOMContentLoaded", async () => {
     const startTime = performance.now();
@@ -262,7 +262,7 @@ const formatResults = (results) => {
 const createTeamObject = (teamName) => ({
     team_name: teamName,
     class_name: teamName.replace(/\s+/g, ''),
-    link: `pages/teams/details/?team=${teamName}`
+    link: `/pages/teams/details/?team=${teamName}`
 });
 
 function createEmptyCells(count) {
@@ -590,7 +590,7 @@ function createMatchHTML(entry, index, date, locale, is12Hour, liveResults) {
                 <div class="team-box-container">
                     <div class="team-background left ${team1.class_name}"></div>
                     <div class="team-background right ${team2.class_name}"></div>
-                    ${!entry.testMatch ? `<img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.avif" alt="Team background overlay" ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>` : ''}
+                    ${!entry.testMatch ? `<img class="team-background-overlay" src="/assets/media/calendar/event_box_overlay.avif" alt="Team background overlay" ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>` : ''}
                     ${entry.testMatch ? `<div class="test-match-indicator"><i class="fa-solid fa-test"></i> Test match</div>` : ''}
                     ${entry.endTime ? '' : `${isLive ? `<div class="test-match-indicator ${entry.testMatch ? 'push-lower' : ''}" id='liveIndicator${entry.eventID}'><span style="display:flex"><div class="live-dot"></div>Live ${devMode && !entry.endTime ? `${liveResults.length + 1 > 12 ? '(Finishing up...)' : `(${liveResults.length + 1}/12)`}` : ''}</span></div>` : `<div class="test-match-indicator timer-indicator ${entry.testMatch ? 'push-lower' : ''}" id="matchCountdown${entry.eventID}"><i class="fa-solid fa-clock"></i> ${timeUntilMatch}</div>`}`}
                     ${devMode && !entry.endTime ? `<div class="test-match-indicator signed-up-count">Players signed up: ${team1.team_name}: ${entry.signedUpPlayerCounts[0]} | ${team2.team_name}: ${entry.signedUpPlayerCounts[1]}</div>` : ''}
@@ -767,7 +767,7 @@ function generateCalendarListView() {
                     <div class="team-box-container">
                         <div class="team-background left ${team1.class_name}"></div>
                         <div class="team-background right ${team2.class_name}"></div>
-                        ${!entry.testMatch ? `<img class="team-background-overlay" src="assets/media/calendar/event_box_overlay.avif" alt="Team background overlay" ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>` : ''}
+                        ${!entry.testMatch ? `<img class="team-background-overlay" src="/assets/media/calendar/event_box_overlay.avif" alt="Team background overlay" ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>` : ''}
                         ${entry.testMatch ? `<div class="test-match-indicator"><i class="fa-solid fa-test"></i> Test match</div>` : ''}
                         <div class="event-overlay">
                             <div class="event-box-team">

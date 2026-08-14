@@ -186,7 +186,7 @@ function togglePause() {
 };
 
 function setPlayIcon() {
-    playIcon.src = `assets/media/audioplayer/play${playState}.avif`; // set the svg play icon
+    playIcon.src = `/assets/media/audioplayer/play${playState}.avif`; // set the svg play icon
     if (audioStatus.className == "hidden") audioStatus.className = ""; // show the whole audio player if a pause happened (space pressed)
 }
 

@@ -6,10 +6,10 @@ import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareImage, s
 const profileCardContentHTML = `
     <div class="profile-card-header">
         <img src="{{PFP}}" alt="{{username}} profile picture" class="profile-card-avatar"
-            onload="this.style.opacity=1" onerror="this.onerror=null; this.src='assets/media/faq/defaultavatar.avif';"/>
+            onload="this.style.opacity=1" onerror="this.onerror=null; this.src='/assets/media/faq/defaultavatar.avif';"/>
         <div class="profile-card-user-info">
             <h3 class="profile-card-username">{{username}}</h3>
-            <p class="profile-card-team"><a href="pages/teams/details/?team={{team}}">{{team}}</a></p>
+            <p class="profile-card-team"><a href="/pages/teams/details/?team={{team}}">{{team}}</a></p>
         </div>
     </div>
     <div class="profile-card-stats">
@@ -56,7 +56,7 @@ const profileCardContentHTML = `
 const profileCardFormatHTML = `
     <div class="profile-card-wrapper">
         <div class="profile-card" style="--team-color: #{{color}};">
-            <img src="assets/media/profile/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />
+            <img src="/assets/media/profile/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />
             <div class="profile-card-content">
                 {{profileCardContent}}
             </div>
@@ -741,7 +741,7 @@ async function goBackToProfile() {
 
             profileCardContent.innerHTML = generateProfileCardContent(data);
 
-            const logoHTML = `<img src="assets/media/profile/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />`;
+            const logoHTML = `<img src="/assets/media/profile/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />`;
 
             profileCard.insertAdjacentHTML('afterbegin', logoHTML);
 
@@ -887,7 +887,7 @@ function applyEquippedItemsToCard() {
         const item = data.profile_items[currentEquippedItems.background];
         if (item?.type === "background") {
             const bgFileName = item.name.replace(/ /g, "_").toLowerCase();
-            profileCard.style.backgroundImage = `url('assets/media/profile/bg/${bgFileName}.avif')`;
+            profileCard.style.backgroundImage = `url('/assets/media/profile/bg/${bgFileName}.avif')`;
             profileCard.style.backgroundSize = "cover";
             profileCard.style.backgroundPosition = "center";
         }
@@ -904,7 +904,7 @@ function applyEquippedItemsToCard() {
                 profileCard.appendChild(existingOverlay);
             }
             Object.assign(existingOverlay.style, {
-                backgroundImage: `url('assets/media/profile/${overlayFileName}.avif')`,
+                backgroundImage: `url('/assets/media/profile/${overlayFileName}.avif')`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 position: "absolute",
@@ -946,7 +946,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         areProfileItems = true;
         const uParam = urlParams.get('u');
         try {
-            const response = await fetch('assets/media/profile/profileunlockitems.json');
+            const response = await fetch('/assets/media/profile/profileunlockitems.json');
             const unlockItems = await response.json();
 
             mappedProfileItems = uParam.split('').map((char, index) => {

@@ -10,18 +10,16 @@ from bs4 import BeautifulSoup
 BLANK_NEWS_PAGE = """<!DOCTYPE html>
 <html lang="en">
 <head>
-    <base href="../../../../">
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>{TITLE} | UMKL</title>
     <meta name="description" content="{DESC}">
-    <link rel="icon" href="assets/media/brand/favicon.png" type="image/png">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/settings.css">
-    <link rel="stylesheet" href="css/ext/fontawesome.min.css">
-    <link rel="modulepreload" href="components/navbar.js">
-    <link rel="modulepreload" href="components/footer.js">
+    <link rel="icon" href="/assets/media/brand/favicon.png" type="image/png">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/settings.css">
+    <link rel="stylesheet" href="/css/ext/fontawesome.min.css">
+    <link rel="modulepreload" href="/components/navbar.js">
+    <link rel="modulepreload" href="/components/footer.js">
     <meta name="color-scheme" content="dark light">
 
     <meta property="og:title" content="{TITLE} | UMKL" />
@@ -36,18 +34,18 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Components -->
-    <script type="module" src="components/navbar.js" defer></script>
-    <script type="module" src="components/footer.js" defer></script>
+    <script type="module" src="/components/navbar.js" defer></script>
+    <script type="module" src="/components/footer.js" defer></script>
 
     <!-- Scripts -->
     <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-    <script type="module" src="scripts/settings.js" defer></script>
+    <script type="module" src="/scripts/settings.js" defer></script>
 </head>
 <body id="top">
     <umkl-navbar></umkl-navbar>
 
     <main>
-        <a href="pages/news/">Back</a>
+        <a href="/pages/news/">Back</a>
         <h1>{TITLE}</h1>
         <div class="p-below-title">
             {DATE} |
@@ -139,12 +137,15 @@ def create_new_blog():
     link = create_slug(title)
     url_date = "-".join(reversed(date.split("/")))
 
+    if not image.startswith(("http://", "https://", "/")):
+        image = f"/{image}"
+
     image_jpg = image.rsplit(".", 1)[0] + ".jpg" if "." in image else image + ".jpg"
 
     new_blog = f"""
                 <div class="news-box">
                     <article class="news-text">
-                        <a href="pages/news/{url_date}/{link}/"><span class="news-title">{title}</span></a><br>
+                        <a href="/pages/news/{url_date}/{link}/"><span class="news-title">{title}</span></a><br>
                         <span class="news-desc">{description}</span>
                     </article>
                     <div class="news-image">

@@ -167,7 +167,7 @@ async function createTeamStandingsImage(season, seasonOngoing, teamStandingsData
 
     // Load and draw background
     try {
-        const bgImg = await loadImage('assets/media/graphics/teamstandingbgtall.avif');
+        const bgImg = await loadImage('/assets/media/graphics/teamstandingbgtall.avif');
         ctx.drawImage(bgImg, 0, 0);
     } catch (error) {
         console.error('Background image failed to load:', error);
