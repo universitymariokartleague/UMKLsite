@@ -25,6 +25,11 @@ function isRoundReveal(item) {
     return !item.match && /Round\s*\d+/i.test(item.title || "");
 }
 
+function getRoundNumber(item) {
+    const roundMatch = item.title?.match(/Round\s*(\d+)/i);
+    return roundMatch ? parseInt(roundMatch[1], 10) : null;
+}
+
 function createDivider(label) {
     const div = document.createElement("div");
     div.className = "videos-divider";
@@ -32,7 +37,22 @@ function createDivider(label) {
     return div;
 }
 
-function buildVideoCard(item, locale) {
+function escapeHTML(str) {
+    return str.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function escapeRegExp(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function highlightMatch(text, term) {
+    const escaped = escapeHTML(text);
+    if (!term) return escaped;
+    const regex = new RegExp(`(${escapeRegExp(term)})`, 'gi');
+    return escaped.replace(regex, '<mark class="search-highlight">$1</mark>');
+}
+
+function buildVideoCard(item, locale, searchTerm) {
     const thumbnailUrl = item.thumbnail || `https://i.ytimg.com/vi/${item.video_id}/hqdefault.jpg`;
     const title = item.title || item.match?.title || "UMKL Video";
     const date = item.published ? new Date(item.published) : null;
@@ -46,22 +66,23 @@ function buildVideoCard(item, locale) {
 
     card.innerHTML = `
         <div class="video-thumb-wrapper">
-            <img src="${thumbnailUrl}" alt="${title}" loading="lazy" />
+            <img src="${thumbnailUrl}" alt="${escapeHTML(title)}" loading="lazy" />
             <div class="play-icon-overlay">
                 <i class="fa-solid fa-play"></i>
             </div>
         </div>
-        <h3 class="video-title no-color-link">${title}</h3>
+        <h3 class="video-title no-color-link">${highlightMatch(title, searchTerm)}</h3>
         ${dateStr ? `<p class="video-date">${dateStr}</p>` : ""}
     `;
 
     return card;
 }
 
-function renderVideos(container, list) {
+function renderVideos(container, list, searchTerm = "") {
     const locale = localStorage.getItem("locale") || "en-GB";
     const fragment = document.createDocumentFragment();
     let lastSeason;
+    let pendingDivider = null; // divider to insert before the next item, carried over from the previous one
 
     list.forEach((item, index) => {
         const season = getVideoSeason(item);
@@ -69,13 +90,24 @@ function renderVideos(container, list) {
         if (index > 0) {
             if (season != null && season !== lastSeason) {
                 fragment.appendChild(createDivider(`Season ${season}`));
-            } else if (isRoundReveal(item)) {
-                fragment.appendChild(createDivider());
+            } else if (pendingDivider) {
+                fragment.appendChild(createDivider(pendingDivider.label));
             }
         }
+        pendingDivider = null;
 
         if (season != null) lastSeason = season;
-        fragment.appendChild(buildVideoCard(item, locale));
+
+        // A "Round X Matches Revealed" video is published before round X is played, so it
+        // belongs with round X's own matches (published later, above it in this newest-first
+        // list) - the boundary into the next, older round only starts after this card.
+        if (isRoundReveal(item)) {
+            const roundNumber = getRoundNumber(item);
+            const label = roundNumber != null && roundNumber > 1 ? `Round ${roundNumber - 1}` : undefined;
+            pendingDivider = { label };
+        }
+
+        fragment.appendChild(buildVideoCard(item, locale, searchTerm));
     });
 
     container.innerHTML = "";
@@ -101,9 +133,9 @@ function setupVideoSearch(container) {
             const term = e.target.value.trim().toLowerCase();
             const filtered = allVideos.filter(item => matchesSearch(item, term));
 
-            renderVideos(container, filtered);
+            renderVideos(container, filtered, term);
             if (noResultsMsg) noResultsMsg.style.display = filtered.length === 0 ? "block" : "none";
-        }, 150);
+        }, 50);
     });
 }
 
