@@ -19,8 +19,8 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
     <link rel="stylesheet" href="/assets/css/base/settings.css">
     <link rel="stylesheet" href="/assets/css/pages/newsarticle.css">
     <link rel="stylesheet" href="/assets/css/ext/fontawesome.min.css">
-    <link rel="modulepreload" href="/components/navbar.js">
-    <link rel="modulepreload" href="/components/footer.js">
+    <link rel="modulepreload" href="/assets/components/navbar.js">
+    <link rel="modulepreload" href="/assets/components/footer.js">
     <meta name="color-scheme" content="dark light">
 
     <meta property="og:title" content="{TITLE} | UMKL" />
@@ -35,8 +35,8 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Components -->
-    <script type="module" src="/components/navbar.js" defer></script>
-    <script type="module" src="/components/footer.js" defer></script>
+    <script type="module" src="/assets/components/navbar.js" defer></script>
+    <script type="module" src="/assets/components/footer.js" defer></script>
 
     <!-- Scripts -->
     <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>

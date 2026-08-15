@@ -126,8 +126,8 @@ const blogFormatHTML = `
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Components -->
-    <script type="module" src="/components/navbar.js" defer></script>
-    <script type="module" src="/components/footer.js" defer></script>
+    <script type="module" src="/assets/components/navbar.js" defer></script>
+    <script type="module" src="/assets/components/footer.js" defer></script>
 
     <!-- Scripts -->
     <script src="/assets/scripts/base/theme.js"></script>
