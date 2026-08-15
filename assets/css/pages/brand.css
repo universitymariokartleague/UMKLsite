@@ -28,7 +28,7 @@
 }
 
 .brand-standard ::selection {
-    background-color: white;
+    background-color: var(--light-highlight-color);
     color: #BC0839;
 }
 

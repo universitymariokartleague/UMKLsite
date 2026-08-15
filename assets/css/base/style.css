@@ -16,6 +16,7 @@
     /* Same in every theme - not overridden below */
     --accent-color: var(--brand-primary);
     --highlight-color: var(--brand-primary);
+    --light-highlight-color: #ffffff80;
 }
 
 :root,
@@ -833,6 +834,10 @@ umkl-footer {
 
     display: flex;
     flex-direction: column;
+}
+
+umkl-footer::selection {
+    background-color: var(--light-highlight-color);
 }
 
 .skeleton {
