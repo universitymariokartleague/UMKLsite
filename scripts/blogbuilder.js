@@ -116,8 +116,8 @@ const blogFormatHTML = `
 
     <meta property="og:title" content="{{blogTitle}} | UMKL" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://umkl.co.uk/pages/news/{{blogDate}}/{{blogTitleLink}}" />
-    <meta property="og:image" content="https://umkl.co.uk/pages/news/{{blogDate}}/{{blogTitleLink}}/{{blogImage}}" />
+    <meta property="og:url" content="https://umkl.co.uk/news/{{blogDate}}/{{blogTitleLink}}" />
+    <meta property="og:image" content="https://umkl.co.uk/news/{{blogDate}}/{{blogTitleLink}}/{{blogImage}}" />
     <meta property="og:description" content="{{blogDescription}}" />
     <meta content="#bc0839" name="theme-color" />
     <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
@@ -319,7 +319,7 @@ function buildBlog(data) {
 
                 pageAreaHTML += `
                     <div id="element${elementCounter}" class="element${elementCounter}outline">
-                        <a href="/pages/tools/blogbuilder/#">Back</a>
+                        <a href="/tools/blogbuilder/#">Back</a>
                         <h1>${element.title}</h1>
                         <div class="p-below-title">
                             ${element.date} |
@@ -492,7 +492,7 @@ function buildHTML(data) {
                 }
 
                 blogInfo = `
-                    <a href="/pages/news/">Back</a>
+                    <a href="/news/">Back</a>
                     <h1>${element.title}</h1>
                     <div class="p-below-title">
                         ${element.date} |

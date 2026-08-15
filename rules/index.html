@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="color-scheme" content="dark light">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Rules & Guides | UMKL</title>
+    <meta name="description" content="View rules and guidelines for various aspects of the UMKL">
+    <link rel="icon" href="/assets/media/brand/favicon.png" type="image/png">
+    <link rel="stylesheet" href="/css/base/style.css">
+    <link rel="stylesheet" href="/css/base/settings.css">
+    <link rel="stylesheet" href="/css/components/tools.css">
+    <link rel="stylesheet" href="/css/ext/fontawesome.min.css">
+
+    <meta property="og:title" content="UMKL | Rules/Guides" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://umkl.co.uk/rules/" />
+    <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
+    <meta property="og:description" content="View rules and guidelines for various aspects of the UMKL" />
+    <meta content="#bc0839" name="theme-color" />
+    <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
+
+    <!-- Include this to make the og:image larger -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Components -->
+    <link rel="modulepreload" href="/components/navbar.js">
+    <link rel="modulepreload" href="/components/footer.js">
+    <script type="module" src="/components/navbar.js" defer></script>
+    <script type="module" src="/components/footer.js" defer></script>
+
+    <!-- Scripts -->
+    <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();</script>
+
+    <script type="module" src="/scripts/settings.js" defer></script>
+</head>
+
+<body id="top">
+    <umkl-navbar></umkl-navbar>
+
+    <main>
+        <div class="header-wrapper">
+        <h1>Rules and Guides</h1>
+        <p class="p-below-title">View rules and guidelines for various aspects of the UMKL</p>
+</div>
+
+        <div class="tool-section">
+            <h2>Rules & Guidelines</h2>
+            <div class="tool-grid">
+                <a href="/rules/match/" class="tool-button">
+                    <div class="tool-icon">
+                        <i class="fa-solid fa-flag"></i>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label">Match Rules</div>
+                        <div class="tool-desc">Rules and regulations for
+                            matches</div>
+                    </div>
+                </a>
+
+                <a href="/rules/joining/" class="tool-button">
+                    <div class="tool-icon">
+                        <i class="fa-solid fa-earth"></i>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label">Joining Guide</div>
+                        <div class="tool-desc">Information for
+                            universities wanting to join the UMKL</div>
+                    </div>
+                </a>
+
+                <a href="/rules/team/" class="tool-button">
+                    <div class="tool-icon">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label">Team Guidelines</div>
+                        <div class="tool-desc">Rules and guidelines
+                            for new teams wanting to join the UMKL</div>
+                    </div>
+                </a>
+
+                <a href="/rules/brand/" class="tool-button">
+                    <div class="tool-icon">
+                        <i class="fa-solid fa-paintbrush"></i>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label">Brand Guidelines</div>
+                        <div class="tool-desc">Guidelines for the
+                            use of intellectual property belonging to the UMKL</div>
+                    </div>
+                </a>
+
+                <a href="/rules/stream/" class="tool-button">
+                    <div class="tool-icon">
+                        <i class="fa-solid fa-play"></i>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label">Streaming Guidelines
+                        </div>
+                        <div class="tool-desc">Guidelines for
+                            streamers and instructions on how to set up OBS</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="tool-section">
+            <h2>Discord & Cheep Cheep</h2>
+            <div class="tool-grid">
+                <a href="/rules/cheepcheepcommands/" class="tool-button">
+                    <div class="tool-icon">
+                        <i class="fa-solid fa-overlay"></i>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label">Cheep Cheep Commands
+                            Documentation</div>
+                        <div class="tool-desc">Documentation
+                            for all Cheep Cheep commands on the Discord server</div>
+                    </div>
+                </a>
+
+                <a href="/rules/faq/" class="tool-button">
+                    <div class="tool-icon">
+                        <i class="fa-solid fa-filter"></i>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label">FAQ</div>
+                        <div class="tool-desc">Frequently asked questions
+                            concerning using the Cheep Cheep app and the UMKL Discord server</div>
+                    </div>
+                </a>
+
+                <a href="/rules/cheepcheeparchitecture/" class="tool-button">
+                    <div class="tool-icon">
+                        <i class="fa-solid fa-share"></i>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label">Cheep Cheep Architecture & Code Guide</div>
+                        <div class="tool-desc">Technical documentation on how the
+                            Cheep Cheep codebase is structured</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="disclaimers-section">
+            <h2>Disclaimers</h2>
+            <div class="tool-grid">
+                <a href="/rules/privacy/" class="tool-button">
+                    <div class="tool-icon">
+                        <i class="fa-solid fa-gear"></i>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label">Terms of Service</div>
+                        <div class="tool-desc">The privacy policy for the UMKL site and the Cheep Cheep app</div>
+                    </div>
+                </a>
+
+                <a href="/rules/universityrelations/" class="tool-button">
+                    <div class="tool-icon">
+                        <i class="fa-solid fa-test"></i>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-label">University Relations</div>
+                        <div class="tool-desc">Read about how teams are independent and not affiliated with any university, union or brand</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <umkl-footer></umkl-footer>
+</body>
+
+</html>

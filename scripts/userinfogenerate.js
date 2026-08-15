@@ -9,7 +9,7 @@ const profileCardContentHTML = `
             onload="this.style.opacity=1" onerror="this.onerror=null; this.src='/assets/media/faq/defaultavatar.avif';"/>
         <div class="profile-card-user-info">
             <h3 class="profile-card-username">{{username}}</h3>
-            <p class="profile-card-team"><a href="/pages/teams/details/?team={{team}}">{{team}}</a></p>
+            <p class="profile-card-team"><a href="/teams/details/?team={{team}}">{{team}}</a></p>
         </div>
     </div>
     <div class="profile-card-stats">

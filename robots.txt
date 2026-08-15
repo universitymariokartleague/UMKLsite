@@ -35,4 +35,4 @@ Disallow: /
 
 User-agent: *
 Disallow: /database/
-Disallow: /pages/test/
+Disallow: /test/

@@ -171,7 +171,7 @@ async function showTeamMatches() {
     teamNameFromURL = getTeamFromURL();
 
     if (!teamNameFromURL) {
-        window.location.href = "/pages/results/";
+        window.location.href = "/results/";
         return;
     }
 
@@ -206,10 +206,10 @@ async function showTeamMatches() {
     teamSelect?.addEventListener("change", (e) => {
         const selectedTeam = e.target.value;
         if (selectedTeam == "All") {
-            window.location.href = `/pages/standings/`;
+            window.location.href = `/standings/`;
         }
         else if (selectedTeam && selectedTeam !== teamNameFromURL) {
-            window.location.href = `/pages/standings/details/?team=${encodeURIComponent(selectedTeam)}`;
+            window.location.href = `/standings/details/?team=${encodeURIComponent(selectedTeam)}`;
         }
 
     });

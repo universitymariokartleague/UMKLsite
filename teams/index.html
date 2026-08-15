@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- IMPORTANT: I've removed the standings from this page as I think it's better kept on a dedicated standings page.
+                That way we can show more specific information about the points and matches played, as I felt it was a bit unclear
+                what the numbers represented on this page. The teams in the season-picker section will be ordered by current championship
+                position, the 'all teams' section will have them ordered by team ID-->
+
+<head>
+    <meta charset="utf-8">
+    <meta name="color-scheme" content="dark light">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Teams | UMKL</title>
+    <meta name="description" content="See the teams participating in the UMKL">
+    <link rel="icon" href="/assets/media/brand/favicon.png" type="image/png">
+    <link rel="stylesheet" href="/css/base/style.css">
+    <link rel="stylesheet" href="/css/base/settings.css">
+    <link rel="stylesheet" href="/css/components/copypopup.css">
+    <link rel="stylesheet" href="/css/pages/teamstandingsbox.css">
+    <link rel="stylesheet" href="/css/ext/fontawesome.min.css">
+
+    <meta property="og:title" content="UMKL | Teams" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://umkl.co.uk/teams/" />
+    <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
+    <meta property="og:description" content="See the teams participating in the UMKL" />
+    <meta content="#bc0839" name="theme-color" />
+    <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
+
+    <!-- Include this to make the og:image larger -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Components -->
+    <link rel="modulepreload" href="/components/navbar.js">
+    <link rel="modulepreload" href="/components/footer.js">
+    <script type="module" src="/components/navbar.js" defer></script>
+    <script type="module" src="/components/footer.js" defer></script>
+
+    <!-- Scripts -->
+    <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() { let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) } checkTheme();</script>
+
+    <script type="module" src="/scripts/settings.js" defer></script>
+    <script type="module" src="/scripts/teamboxgenerate.js" defer></script>
+    <script type="module" src="/scripts/copystandingsimage.js" defer></script>
+</head>
+
+<body id="top">
+    <umkl-navbar></umkl-navbar>
+
+    <main>
+        <noscript>
+            <blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as is it used on this
+                page<br></blockquote>
+        </noscript>
+
+        <div class="header-wrapper">
+            <h1>Teams</h1>
+            <p class="p-below-title">
+                Learn more about the teams and universities participating in the UMKL
+            </p>
+        </div>
+
+        <!-- <hr class="hr-below-title"> -->
+
+        <!-- <div class="season-selection">
+            <select id="season-select">
+                <option value="1">Season 1</option>
+                <option value="2" selected="selected">Season 2</option>
+            </select>
+            <div class="current-season-area">
+                <div id="current-season">Upcoming (2025-2026)</div>
+                <button id="shareButton"><span class="fa-solid fa-share"></span> Share Standings</button>
+                <button type="button" id="teamPickerButton" class="team-picker-button">
+                    <i class="fa-solid fa-th-large"></i> View a team's page
+                </button>
+            </div>
+        </div> -->
+
+        <!-- <dialog id="teamPickerDialog" class="team-picker-dialog" tabindex="-1">
+            <div class="team-picker-header">
+                <div class="team-picker-title-row">
+                    <h2>View a team's page</h2>
+                    <select id="sortSelect" class="team-sort-select" title="Sort teams by">
+                        <option value="joined" selected>Sort by join date</option>
+                        <option value="alpha">Sort alphabetically</option>
+                        <option value="position">Sort by position</option>
+                    </select>
+                </div>
+                <button type="button" id="teamPickerClose" class="close-list-view-button" aria-label="Close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div id="teamPickerGrid" class="team-picker-grid">
+                <span class="team-picker-loading">Loading teams...</span>
+            </div>
+        </dialog> -->
+
+        <span id="JSTeamBoxLoading">Fetching from the API...</span>
+        <div id="JSTeamBox" class="teamBoxContainer"></div>
+
+        <div id="JSImagegen"></div>
+
+        <h2>All Teams</h2>
+
+        <div id="JSAllTeamsTable" class="all-teams-table">
+            <!-- <span id="JSAllTeamsTableLoading">Fetching from the API...</span> -->
+        </div>
+    </main>
+
+
+    <umkl-footer></umkl-footer>
+</body>
+
+</html>

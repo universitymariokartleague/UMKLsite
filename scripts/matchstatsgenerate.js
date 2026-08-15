@@ -51,7 +51,7 @@ function buildTrackCountDiv(data) {
             if (daysPlayedCheckbox.checked) {
                 datesPlayedString = '<b>Dates played on</b><br>' + 
                     stats.matchDates
-                        .map(date => `<a target="_blank" href="/pages/matches?date=${date}">${date}</a>`)
+                        .map(date => `<a target="_blank" href="/matches?date=${date}">${date}</a>`)
                         .join("<br>");
             }
             

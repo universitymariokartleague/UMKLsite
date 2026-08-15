@@ -173,7 +173,7 @@ function renderTeamSummary(teamData) {
         <div class="summary-row">
             <span class="summary-label">Lifetime Matches</span>
             <span class="summary-value">
-        <a href="/pages/standings/details/?team=${encodeURIComponent(teamData.team_name)}" title="View all matches for ${teamData.team_name}">
+        <a href="/standings/details/?team=${encodeURIComponent(teamData.team_name)}" title="View all matches for ${teamData.team_name}">
             ${teamData.lifetime_matches_played ?? 0} (View All)
         </a>
             </span>
@@ -419,7 +419,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const currentTeam = urlParams.get('team');
 
     if (!currentTeam) {
-        window.location.href = "/pages/teams";
+        window.location.href = "/teams";
         return;
     }
 
@@ -444,7 +444,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     } catch (error) {
         if (error?.error === "Team not found" || error?.error === "Team not enabled") {
-            window.location.href = "/pages/teams";
+            window.location.href = "/teams";
             return;
         }
         console.debug(`%cteaminfogenerate.js %c> %cFailed to fetch team data: ${error.message}`, "color:#d152ff", "color:#fff", "color:#e6a1ff");

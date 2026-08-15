@@ -166,7 +166,7 @@ async function renderHomeStandings(data) {
         const nameUpper = name.toUpperCase();
         const points = team.team_season_points ?? 0;
         const avif = `https://api.umkl.co.uk/teamemblems/${nameUpper}?og`;
-        const dest = `/pages/teams/details/?team=${encodeURIComponent(name)}`;
+        const dest = `/teams/details/?team=${encodeURIComponent(name)}`;
         const ordinal = pos === 1 ? '1<sup>ST</sup>' : pos === 2 ? '2<sup>ND</sup>' : '3<sup>RD</sup>';
         const backgroundImage = `linear-gradient(90deg, ${team.team_color} 0%, ${darkenColor(team.team_color, 10)} 100%)`;
         const color = team.team_color ? (isLightColor(team.team_color) ? 'var(--brand-dark)' : 'var(--brand-light)') : '';
@@ -197,7 +197,7 @@ async function renderHomeStandings(data) {
         const points = team.team_season_points ?? 0;
         const avif = `https://api.umkl.co.uk/teamemblems/${nameUpper}`;
         const png = `https://api.umkl.co.uk/teamemblems/${nameUpper}?og`;
-        const dest = `/pages/teams/details/?team=${encodeURIComponent(name)}`;
+        const dest = `/teams/details/?team=${encodeURIComponent(name)}`;
         const hiddenClass = (index >= 5 && !isExpanded) ? ' hidden-row' : '';
 
         return `

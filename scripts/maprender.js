@@ -493,7 +493,7 @@ function placeDots() {
 
         // Dot
         const dot = document.createElement('a');
-        dot.href = `/pages/teams/details/?team=${encodeURIComponent(name)}`;
+        dot.href = `/teams/details/?team=${encodeURIComponent(name)}`;
         dot.target = '_parent';
         dot.className = `dot pulse ${colorClass}`;
         Object.assign(dot.style, {
@@ -532,7 +532,7 @@ function placeDots() {
         label.translate = false;
         label.className = 'dot-label';
         label.textContent = name;
-        label.href = `/pages/teams/details/?team=${encodeURIComponent(name)}`;
+        label.href = `/teams/details/?team=${encodeURIComponent(name)}`;
         label.target = '_parent';
         label.addEventListener('pointerdown', e => e.stopPropagation());
         label.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });

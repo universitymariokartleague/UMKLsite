@@ -22,7 +22,7 @@ function addLinksToTags() {
         tags.forEach(tag => {
             const tagText = tag.textContent.trim();
             const isSelected = tagLower && tagText.toLowerCase() === tagLower;
-            const href = isSelected ? '/pages/news/' : `/pages/news/?tag=${encodeURIComponent(tagText.toLowerCase())}`;
+            const href = isSelected ? '/news/' : `/news/?tag=${encodeURIComponent(tagText.toLowerCase())}`;
 
             const anchor = document.createElement('a');
             anchor.href = href;

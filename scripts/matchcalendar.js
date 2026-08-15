@@ -262,7 +262,7 @@ const formatResults = (results) => {
 const createTeamObject = (teamName) => ({
     team_name: teamName,
     class_name: teamName.replace(/\s+/g, ''),
-    link: `/pages/teams/details/?team=${teamName}`
+    link: `/teams/details/?team=${teamName}`
 });
 
 function createEmptyCells(count) {

@@ -122,7 +122,7 @@ picture img {
     cursor: pointer;
     display: flex;
     justify-content: space-between;
-    min-height: 150px;
+    min-height: 140px;
     position: relative;
     overflow: hidden;
     /* Contains pattern within rounded card corners */
@@ -146,7 +146,7 @@ picture img {
 }
 
 .podium-card.pos-1 {
-    min-height: 190px;
+    min-height: 180px;
 }
 
 .podium-card.pos-1 .podium-emblem img {
@@ -286,7 +286,7 @@ picture img {
     z-index: 1;
 }
 
-@media screen and (max-width: 1350px) {
+@media screen and (max-width: 1200px) {
     .podium-grid {
         grid-template-columns: 1fr;
         gap: 16px;
@@ -331,8 +331,8 @@ picture img {
 
     .teamStandingPattern {
         left: 0;
-        -webkit-mask-size: 500px;
-        mask-size: 800px;
+        -webkit-mask-size: 1200px;
+        mask-size: 1200px;
     }
 
 

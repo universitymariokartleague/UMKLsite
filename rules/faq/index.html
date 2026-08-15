@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="color-scheme" content="dark light">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Discord/Cheep Cheep FAQ | UMKL</title>
+    <meta name="description"
+        content="Frequently asked questions concerning the Discord server and Cheep Cheep app on the University Mario Kart League site">
+    <link rel="icon" href="/assets/media/brand/favicon.png" type="image/png">
+    <link rel="stylesheet" href="/css/base/style.css">
+    <link rel="stylesheet" href="/css/base/settings.css">
+    <link rel="stylesheet" href="/css/components/discordrolepreview.css">
+    <link rel="stylesheet" href="/css/ext/fontawesome.min.css">
+
+    <meta property="og:title" content="UMKL | Discord/Cheep Cheep FAQ" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://umkl.co.uk/rules/faq/" />
+    <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
+    <meta property="og:description"
+        content="Frequently asked questions concerning the Discord server and Cheep Cheep app on the UMKL site" />
+    <meta content="#bc0839" name="theme-color" />
+    <meta content="https://umkl.co.uk/assets/media/brand/favicon.png" property="og:logo" />
+
+    <!-- Include this to make the og:image larger -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Components -->
+    <link rel="modulepreload" href="/components/navbar.js">
+    <link rel="modulepreload" href="/components/footer.js">
+    <script type="module" src="/components/navbar.js" defer></script>
+    <script type="module" src="/components/footer.js" defer></script>
+
+    <!-- Scripts -->
+    <script>const meta = document.querySelector('meta[name="color-scheme"]'), root = document.querySelector(":root"); let darkThemeEnabled; function checkTheme() {let e = parseInt(localStorage.getItem("darktheme")); isNaN(e) && (e = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? 1 : 0), 1 === e ? (meta.setAttribute("content", "dark"), root.classList.add("dark-theme"), console.debug("%csettings.js %c> %cSetting dark theme", "color:#ff4576", "color:#fff", "color:#ff9eb8")) : (meta.setAttribute("content", "light"), root.classList.add("light-theme"), console.debug("%csettings.js %c> %cSetting light theme", "color:#ff4576", "color:#fff", "color:#ff9eb8"))} checkTheme();</script>
+    <script type="module" src="/scripts/settings.js" defer></script>
+    <script type="module" src="/scripts/lostworldeasteregg.js" defer></script>
+    <script type="module" src="/scripts/spmystery.js" defer></script>
+</head>
+
+<body id="top">
+    <umkl-navbar></umkl-navbar>
+
+    <main>
+        <noscript>
+            <blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as is it used on this
+                page<br></blockquote>
+        </noscript>
+
+        <a href="/rules/">Back</a>
+        <h1>Discord/Cheep Cheep FAQ</h1>
+        <p class="p-below-title">Frequently asked questions concerning using the Cheep Cheep app and the UMKL Discord server</p>
+        <img loading="lazy" src="/assets/media/brand/cheep_cheep_banner_crop.avif" class="image after-title"
+            alt="An image of Cheep Cheep in the ocean" />
+        <hr class="hr-below-title">
+
+        <h2 id="how-it-works"><a href="/rules/faq/#how-it-works">How Cheep Cheep Works</a></h2>
+        <p class="p-no-spacing">
+            <mention translate="no">@Cheep Cheep</mention> is the custom Discord bot that runs the UMKL. It manages
+            everything from team creation and player sign-ups, to running matches, verifying results and tracking
+            stats, all through Discord slash commands.
+        </p>
+        <p>
+            In short, Cheep Cheep:
+        </p>
+        <ul>
+            <li>Creates and manages team channels, roles and categories</li>
+            <li>Handles player sign-ups and substitutions for matches</li>
+            <li>Verifies match results and calculates points, SP and standings</li>
+            <li>Powers live score overlays and stream graphics</li>
+            <li>Feeds the <a href="/matches/">matches</a>, <a href="/teams/">teams</a> and leaderboard
+                data shown across this website via its API</li>
+        </ul>
+        <p>
+            See the <a href="/rules/cheepcheepcommands/">Discord/Cheep Cheep Commands Documentation</a> page for
+            a full list of commands. The rest of this page answers common questions about how everything fits
+            together.
+        </p>
+
+        <hr>
+
+        <h3>Page Contents</h3>
+        <ul class="after-title">
+            <li><a href="/rules/faq/#missing-channel">Why can't I see my team's channel? What should I do?</a></li>
+            <li><a href="/rules/faq/#wrong-team">I joined the wrong team! What should I do?</a></li>
+            <li><a href="/rules/faq/#before-match">What should I do before a match starts?</a></li>
+            <li><a href="/rules/faq/#results-verified">How are match results verified once they're submitted?</a>
+            </li>
+            <li><a href="/rules/faq/#sp-points">What is SP and how do I earn it?</a></li>
+            <li><a href="/rules/faq/#leaderboards-profiles">What do the leaderboard and profile commands
+                    show?</a></li>
+            <li><a href="/rules/faq/#season-rounds">How are matchups decided each round?</a></li>
+            <li><a href="/rules/faq/#no-discord">A member on my team doesn't have a Discord account? What should I do
+                    about them?</a></li>
+            <li><a href="/rules/faq/#profile-questionmark">Why is there a <img loading="lazy" class="question-mark-icon"
+                        src="/assets/media/faq/questionmark.avif" alt="A question mark placeholder icon"> on my team's
+                    profile?</a></li>
+            <li><a href="/rules/faq/#behind-the-scenes">What does Cheep Cheep actually run on?</a></li>
+        </ul>
+
+        <hr>
+
+        <h4 id="missing-channel">Why can't I see my team's channel? What should I do?</h4>
+        <p class="p-no-spacing">
+            Members of your team need to use the <code translate="no">/join</code> command
+            to join, this will give them the correct role and allow them to view their team's channel.
+        </p>
+        <p>
+            Each team's channels (announcements, chat and voice channel) are only visible to members with that
+            team's Discord role - everyone else, including other teams, can't see them at all. Picking your team
+            with <code translate="no">/join</code> is what gives you this role and makes the channels appear.
+        </p>
+
+        <hr>
+
+        <h4 id="wrong-team">I joined the wrong team! What should I do?</h4>
+        <p class="p-no-spacing">
+            Please contact a board member and they will place you in the right team.
+        </p>
+
+        <hr>
+
+        <h4 id="before-match">What should I do before a match starts?</h4>
+        <p class="p-no-spacing">
+            <mention translate="no">@Cheep Cheep</mention> will send a button saying "<span translate="no">Sign
+                Up</span>" to your team's announcements channel:
+        </p>
+
+        <div class="cheepCheepRolePreview">
+            <iframe id="cheepCheepRoleiFrame" src="/rules/faq/cheepcheepsignup.html" frameborder="0"></iframe>
+        </div>
+
+        <p>
+            Here, the six team members who are playing the match should
+            click the "<span translate="no">Sign Up</span>" button and enter the requested information:
+        </p>
+
+        <ul>
+            <li>The display name they will use on their Nintendo Switch <b>(required)</b></li>
+            <li>Their Nintendo Switch friend code <b>(optional)</b></li>
+        </ul>
+
+        <hr>
+
+        <h4 id="results-verified">How are match results verified once they're submitted?</h4>
+        <p class="p-no-spacing">
+            After a match, a board members will submit both teams' scores using
+            <code translate="no">/add-match-results</code>. This posts a verification embed in the board's results
+            channel, which will then be approved or rejected, penalties can also be added if applicable.
+        </p>
+        <p>
+            Once approved, Cheep Cheep automatically generates the results and winner graphics, updates the team
+            standings, distributes SP to players, closes out the match's Discord event, and posts an
+            announcement to the results channel:
+        </p>
+
+        <div class="cheepCheepRolePreview">
+            <iframe id="cheepCheepResultsIframe" src="/rules/faq/cheepcheepresults.html" frameborder="0"></iframe>
+        </div>
+
+        <hr>
+
+        <h4 id="sp-points">What is SP and how do I earn it?</h4>
+        <p class="p-no-spacing">
+            SP stands for <span id="sp-mystery" class="garbled-text" translate="no">????? ??????</span>, and is
+            something you can accumulate.
+        </p>
+        <p>You earn SP by:</p>
+        <ul>
+            <li>Playing in matches, with a bonus for winning and reduced SP for test matches</li>
+            <li>Being active in the UMKL Discord server</li>
+        </ul>
+
+        <hr>
+
+        <h4 id="leaderboards-profiles">What do the leaderboard and profile commands show?</h4>
+        <p class="p-no-spacing">
+            <code translate="no">/leaderboards</code> shows 8 different leaderboards: Season and Lifetime Points,
+            and Season and Lifetime Best Match Score, each for both Teams and Individuals, plus an SP leaderboard.
+        </p>
+        <p>
+            <code translate="no">/user-profile</code> shows an individual's team, wins, matches played, podiums,
+            highest finish, career points and SP. <code translate="no">/team-profile</code> shows a team's
+            location, institution, season position, win/loss record, points, penalties and championships.
+        </p>
+
+        <hr>
+
+        <h4 id="season-rounds">How are matchups decided each round?</h4>
+        <p class="p-no-spacing">
+            At the start of a new round (<code translate="no">/start-next-round</code>), teams are paired up based
+            on the previous round's results - teams with a similar number of points tend to be paired together. The
+            board then sets the actual matchups with <code translate="no">/add-next-round-pairings</code>, and
+            match organisation threads are created automatically for each pairing.
+        </p>
+
+        <hr>
+
+        <h4 id="no-discord">A member on my team doesn't have a Discord account? What should I do about them?</h4>
+        <p class="p-no-spacing">
+            Please ask them to create an account and join the
+            <a target="_blank" href="https://discord.gg/jz3hKEmDss">UMKL Discord server</a>.
+        </p>
+        <p>
+            A Discord account is required for <mention translate="no">@Cheep Cheep</mention> to
+            function properly, so please ask all members of your team to join the
+            <a target="_blank" href="https://discord.gg/jz3hKEmDss">Discord server</a>.
+        </p>
+
+        <hr>
+
+        <h4 id="profile-questionmark">Why is there a <img loading="lazy" class="question-mark-icon"
+                src="/assets/media/faq/questionmark.avif" alt="A question mark placeholder icon"> on my team's profile?
+        </h4>
+        <p class="p-no-spacing">
+            In addition to the above commands, each team should have an emblem. Please submit an emblem to a member of
+            the
+            board to have it added to your team's profile.
+        </p>
+
+        <hr>
+
+        <h4 id="behind-the-scenes">What does Cheep Cheep actually run on?</h4>
+        <p class="p-no-spacing">
+            Cheep Cheep is a Python Discord bot built with <code translate="no">discord.py</code>, using slash
+            commands, modals, buttons and pagination for all of its interactions.
+        </p>
+        <p>
+            Team, player, match and season data is stored in a SQLite database, alongside a handful of JSON files
+            for things like live scores, SP history and season pairings. All of the graphics you see - results
+            images, winner announcements, team standings, stream overlays and YouTube thumbnails - are generated on
+            the fly using Pillow.
+        </p>
+        <p>
+            This website talks to that same database through a small API (<code
+                translate="no">api.umkl.co.uk</code>), which is what powers the <a href="/matches/">matches</a>,
+            <a href="/teams/">teams</a> and leaderboard data shown across the site.
+        </p>
+        <p>
+            For a full technical breakdown of how the codebase itself is structured, see the
+            <a href="/rules/cheepcheeparchitecture/">Cheep Cheep Architecture & Code Guide</a>.
+        </p>
+
+        <div id="hex" class="hidden">
+            <hr>
+
+            <h4>What the hell is a "hex"? Like… the "Lost Hex" from Sonic Lost World?</h4>
+            <br><a href="/assets/media/faq/losthex.avif"><img loading="lazy" class="image" src="/assets/media/faq/losthex.avif"
+                    alt="An image of the Lost Hex from Sonic Lost World"></a>
+            <p>
+                No. Shut up. Stop it. Well you know how our decimal system has 10 possible numbers (0-9), this is called
+                a
+                base-10
+                numbering system. Hexadecimal (hex) is a base-16 numbering system, meaning its possible values are from
+                0-9
+                and
+                A-F (A-F essentially representing 10-15).
+            </p>
+            <p>
+                Software developers and system designers widely use hexadecimal numbers because they provide a
+                convenient
+                representation
+                of binary-coded values. Each hexadecimal digit represents four bits (binary digits), also known as a
+                nibble.
+                For example,
+                an 8-bit byte is two hexadecimal digits and its value can be written as <code translate="no">00</code>
+                to <code translate="no">FF</code>
+                in hexadecimal.
+                <sup><a href="https://en.wikipedia.org/wiki/Hexadecimal">[I stole this paragraph from Wikipedia - The
+                        Free
+                        Encyclopedia]</a></sup>
+            </p>
+            <p>
+                A hex code is split into three parts, Let's say we have the hex colour code <code
+                    translate="no">#1BAA8B</code>.
+                Ignore the # and split the string into three parts of two.
+            </p>
+            <p>
+                We get <code translate="no">1B</code>, <code translate="no">AA</code> and <code
+                    translate="no">8B</code>. Since these are hexadecimal values, this means
+                that two hexadecimal numbers cover 16² values,
+                so 0-255 as denary. If we convert each group into denary, we get <code translate="no">27</code>, <code
+                    translate="no">170</code> and
+                <code translate="no">139</code>.
+            </p>
+            <p>
+                Each of these numbers we got represent the <code translate="no">RGB</code> values of a colour - red,
+                green and blue. AKA
+                <code translate="no">RGB(27, 170, 139)</code>. This is another colour format also used,
+                so essentially, a hex colour code is a compact version of RGB.
+            </p>
+        </div>
+    </main>
+
+    <umkl-footer></umkl-footer>
+</body>
+
+</html>

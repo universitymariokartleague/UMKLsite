@@ -120,7 +120,7 @@ async function showUpcomingMatches() {
         const locale = localStorage.getItem("locale") || "en-GB";
 
         let html = `<h2>Upcoming Matches</h2>
-        <a href="/pages/matches/">View all matches</a>
+        <a href="/matches/">View all matches</a>
         <div class="after-title match-container-list">`;
 
         const sortedMatches = [...matches].sort((a, b) => {
@@ -141,7 +141,7 @@ async function showUpcomingMatches() {
                 return {
                     team_name: teamName,
                     class_name: teamName.replace(/\s+/g, ''),
-                    link: `/pages/teams/details/?team=${teamName}`
+                    link: `/teams/details/?team=${teamName}`
                 };
             }
 
