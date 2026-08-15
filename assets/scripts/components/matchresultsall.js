@@ -5,11 +5,11 @@ let normalizedMatches = [];
 
 const CACHE_KEY = 'matchDataCache';
 const getMatchCache = () => { try { return JSON.parse(localStorage.getItem(CACHE_KEY)) || null; } catch { return null; } };
-const setMatchCache = (data) => { try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch {} };
+const setMatchCache = (data) => { try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch { } };
 
 const getEmblem = teamName => ({
     avif: `https://api.umkl.co.uk/teamemblems/${teamName.toUpperCase()}`,
-    png: `https://api.umkl.co.uk/teamemblems/${teamName.toUpperCase()}?og`
+    png: `https://api.umkl.co.uk/teamemblems/${teamName.toUpperCase()}`
 });
 
 async function getMatchData() {

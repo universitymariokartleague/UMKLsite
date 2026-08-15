@@ -108,25 +108,25 @@ function updateToggleBtnState(totalTeams) {
 
 
 const darkenColor = (color, percent = 20) => {
-  if (!/^#?[0-9A-Fa-f]{6}$/.test(color)) return color;
+    if (!/^#?[0-9A-Fa-f]{6}$/.test(color)) return color;
 
-  const num = parseInt(color.replace('#', ''), 16);
-  let [r, g, b] = [(num >> 16) & 255, (num >> 8) & 255, num & 255].map(v => v / 255);
+    const num = parseInt(color.replace('#', ''), 16);
+    let [r, g, b] = [(num >> 16) & 255, (num >> 8) & 255, num & 255].map(v => v / 255);
 
-  const max = Math.max(r, g, b), min = Math.min(r, g, b);
-  const d = max - min;
-  let l = (max + min) / 2;
-  const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    const d = max - min;
+    let l = (max + min) / 2;
+    const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
 
-  l = Math.max(0, l * (1 - percent / 100));
+    l = Math.max(0, l * (1 - percent / 100));
 
-  const f = (n) => {
-    const k = (n + (d === 0 ? 0 : (max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4)) * 2) % 12;
-    const a = s * Math.min(l, 1 - l);
-    return Math.round(255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))));
-  };
+    const f = (n) => {
+        const k = (n + (d === 0 ? 0 : (max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4)) * 2) % 12;
+        const a = s * Math.min(l, 1 - l);
+        return Math.round(255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))));
+    };
 
-  return `#${((1 << 24) + (f(0) << 16) + (f(8) << 8) + f(4)).toString(16).slice(1)}`;
+    return `#${((1 << 24) + (f(0) << 16) + (f(8) << 8) + f(4)).toString(16).slice(1)}`;
 };
 
 const isLightColor = (color) => {
@@ -139,7 +139,7 @@ const isLightColor = (color) => {
     const b = num & 0xFF;
     const brightness = (r * 299 + g * 587 + b * 114) / 1000;
     return brightness > 172;
-    };
+};
 
 async function renderHomeStandings(data) {
     if (!JSTeamTable || !SeasonTop3) return;
@@ -165,7 +165,7 @@ async function renderHomeStandings(data) {
         const name = team.team_name;
         const nameUpper = name.toUpperCase();
         const points = team.team_season_points ?? 0;
-        const avif = `https://api.umkl.co.uk/teamemblems/${nameUpper}?og`;
+        const avif = `https://api.umkl.co.uk/teamemblems/${nameUpper}`;
         const dest = `/teams/details/?team=${encodeURIComponent(name)}`;
         const ordinal = pos === 1 ? '1<sup>ST</sup>' : pos === 2 ? '2<sup>ND</sup>' : '3<sup>RD</sup>';
         const backgroundImage = `linear-gradient(90deg, ${team.team_color} 0%, ${darkenColor(team.team_color, 10)} 100%)`;
@@ -196,7 +196,7 @@ async function renderHomeStandings(data) {
         const nameUpper = name.toUpperCase();
         const points = team.team_season_points ?? 0;
         const avif = `https://api.umkl.co.uk/teamemblems/${nameUpper}`;
-        const png = `https://api.umkl.co.uk/teamemblems/${nameUpper}?og`;
+        const png = `https://api.umkl.co.uk/teamemblems/${nameUpper}`;
         const dest = `/teams/details/?team=${encodeURIComponent(name)}`;
         const hiddenClass = (index >= 5 && !isExpanded) ? ' hidden-row' : '';
 
@@ -271,7 +271,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             const parsed = JSON.parse(cached);
             if (parsed?.length > 0) renderHomeStandings(parsed);
-        } catch {}
+        } catch { }
     }
 
     // Resolve the actual live season before fetching team data - the cache above
@@ -284,7 +284,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             currentSeason = liveSeason;
             setSeasonInfoCache(0, seasonInfo);
         }
-    } catch {}
+    } catch { }
 
     try {
         const teamData = await fetchTeamData(currentSeason);

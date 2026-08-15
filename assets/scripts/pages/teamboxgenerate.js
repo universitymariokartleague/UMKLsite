@@ -55,25 +55,25 @@ const fetchTeamData = async (season) => {
 const makePossessive = name => !name ? "" : (name.endsWith("s") || name.endsWith("S") ? `${name}'` : `${name}'s`);
 
 const darkenColor = (color, percent = 20) => {
-  if (!/^#?[0-9A-Fa-f]{6}$/.test(color)) return color;
+    if (!/^#?[0-9A-Fa-f]{6}$/.test(color)) return color;
 
-  const num = parseInt(color.replace('#', ''), 16);
-  let [r, g, b] = [(num >> 16) & 255, (num >> 8) & 255, num & 255].map(v => v / 255);
+    const num = parseInt(color.replace('#', ''), 16);
+    let [r, g, b] = [(num >> 16) & 255, (num >> 8) & 255, num & 255].map(v => v / 255);
 
-  const max = Math.max(r, g, b), min = Math.min(r, g, b);
-  const d = max - min;
-  let l = (max + min) / 2;
-  const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    const d = max - min;
+    let l = (max + min) / 2;
+    const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
 
-  l = Math.max(0, l * (1 - percent / 100));
+    l = Math.max(0, l * (1 - percent / 100));
 
-  const f = (n) => {
-    const k = (n + (d === 0 ? 0 : (max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4)) * 2) % 12;
-    const a = s * Math.min(l, 1 - l);
-    return Math.round(255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))));
-  };
+    const f = (n) => {
+        const k = (n + (d === 0 ? 0 : (max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4)) * 2) % 12;
+        const a = s * Math.min(l, 1 - l);
+        return Math.round(255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))));
+    };
 
-  return `#${((1 << 24) + (f(0) << 16) + (f(8) << 8) + f(4)).toString(16).slice(1)}`;
+    return `#${((1 << 24) + (f(0) << 16) + (f(8) << 8) + f(4)).toString(16).slice(1)}`;
 };
 
 const isLightColor = (color) => {
@@ -86,8 +86,8 @@ const isLightColor = (color) => {
     const b = num & 0xFF;
     const brightness = (r * 299 + g * 587 + b * 114) / 1000;
     return brightness > 172;
-    };
-    
+};
+
 
 const showError = (message) => {
     JSTeamBoxLoading.innerHTML = `<blockquote class="fail">${message}</blockquote>`;
@@ -134,7 +134,7 @@ function renderTeamPickerGrid() {
         link.innerHTML = `
             <picture>
                 <source srcset="https://api.umkl.co.uk/teamemblems/${nameUpper}" type="image/avif">
-                <img class="team-picker-icon" src="https://api.umkl.co.uk/teamemblems/${nameUpper}?og" alt="${makePossessive(team.team_name)} team emblem" loading="lazy" onload="this.style.opacity=1;">
+                <img class="team-picker-icon" src="https://api.umkl.co.uk/teamemblems/${nameUpper}" alt="${makePossessive(team.team_name)} team emblem" loading="lazy" onload="this.style.opacity=1;">
             </picture>
             <span class="team-picker-name">${team.team_name}</span>
         `;
@@ -193,7 +193,7 @@ function renderAllTeamsTable() {
         row.innerHTML = `
                 <picture class="team-table-icon-container" style="background-color: ${team.team_color}">
                     <source srcset="https://api.umkl.co.uk/teamemblems/${nameUpper}" type="image/avif">
-                    <img class="team-table-icon" src="https://api.umkl.co.uk/teamemblems/${nameUpper}?og" alt="${makePossessive(team.team_name)} team emblem" loading="lazy" onload="this.style.opacity=1;">
+                    <img class="team-table-icon" src="https://api.umkl.co.uk/teamemblems/${nameUpper}" alt="${makePossessive(team.team_name)} team emblem" loading="lazy" onload="this.style.opacity=1;">
                 </picture>
                 <span class="team-table-name">${team.team_name}</span>
         `;
@@ -271,7 +271,7 @@ async function generateTeamBoxes(data) {
             if (e.key === 'Enter' || e.key === ' ') window.location.href = dest;
         });
 
-row.innerHTML = `
+        row.innerHTML = `
     <div class="teamStandingPattern" style="background-color: ${team.team_color};"></div>
     <div translate="no" class="teamName" title="${team.team_full_name}">${name}</div>
     <picture>
@@ -429,5 +429,3 @@ async function updateSeasonText() {
         if (!cachedInfo?.[1]) render("Unknown...", "");
     }
 }
-
-

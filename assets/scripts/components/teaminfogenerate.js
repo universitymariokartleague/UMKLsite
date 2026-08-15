@@ -15,25 +15,25 @@ const CACHE_KEY = 'teamInfoCache';
 
 /* --- COLOR UTILITIES --- */
 const darkenColor = (color, percent = 20) => {
-  if (!/^#?[0-9A-Fa-f]{6}$/.test(color)) return color;
+    if (!/^#?[0-9A-Fa-f]{6}$/.test(color)) return color;
 
-  const num = parseInt(color.replace('#', ''), 16);
-  let [r, g, b] = [(num >> 16) & 255, (num >> 8) & 255, num & 255].map(v => v / 255);
+    const num = parseInt(color.replace('#', ''), 16);
+    let [r, g, b] = [(num >> 16) & 255, (num >> 8) & 255, num & 255].map(v => v / 255);
 
-  const max = Math.max(r, g, b), min = Math.min(r, g, b);
-  const d = max - min;
-  let l = (max + min) / 2;
-  const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    const d = max - min;
+    let l = (max + min) / 2;
+    const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
 
-  l = Math.max(0, l * (1 - percent / 100));
+    l = Math.max(0, l * (1 - percent / 100));
 
-  const f = (n) => {
-    const k = (n + (d === 0 ? 0 : (max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4)) * 2) % 12;
-    const a = s * Math.min(l, 1 - l);
-    return Math.round(255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))));
-  };
+    const f = (n) => {
+        const k = (n + (d === 0 ? 0 : (max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4)) * 2) % 12;
+        const a = s * Math.min(l, 1 - l);
+        return Math.round(255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))));
+    };
 
-  return `#${((1 << 24) + (f(0) << 16) + (f(8) << 8) + f(4)).toString(16).slice(1)}`;
+    return `#${((1 << 24) + (f(0) << 16) + (f(8) << 8) + f(4)).toString(16).slice(1)}`;
 };
 
 const isLightColor = (color) => {
@@ -46,7 +46,7 @@ const isLightColor = (color) => {
     const b = num & 0xFF;
     const brightness = (r * 299 + g * 587 + b * 114) / 1000;
     return brightness > 172;
-    };
+};
 
 /* --- CACHE UTILITIES --- */
 const getTeamCache = (team) => {
@@ -145,8 +145,8 @@ function renderTeamSummary(teamData) {
     const summaryList = document.getElementById('teamSummaryList');
     if (!summaryList) return;
 
-    const locationHTML = teamData.team_place 
-        ? `<a href="https://www.google.com/maps/search/?q=${encodeURIComponent(teamData.team_place)}" target="_blank" rel="noopener noreferrer" style="color:${teamData.team_color}">${teamData.team_place}</a>` 
+    const locationHTML = teamData.team_place
+        ? `<a href="https://www.google.com/maps/search/?q=${encodeURIComponent(teamData.team_place)}" target="_blank" rel="noopener noreferrer" style="color:${teamData.team_color}">${teamData.team_place}</a>`
         : 'N/A';
 
     const entryYearStr = teamData.first_entry ? `Season ${teamData.first_entry} (${startYear + teamData.first_entry}-${String(startYear + 1 + teamData.first_entry).slice(-2)})` : 'N/A';
@@ -177,7 +177,7 @@ function renderTeamSummary(teamData) {
             ${teamData.lifetime_matches_played ?? 0} (View All)
         </a>
             </span>
-        </div>  
+        </div>
         <div class="summary-row">
             <span class="summary-label">Lifetime Record</span>
             <span class="summary-value">${careerWL}</span>
@@ -195,7 +195,7 @@ function generateTeamBox(teamData, showError) {
 
     latestSeason = teamData.season;
     viewingSeason = latestSeason;
-    
+
     const teamHero = document.getElementById('teamHero');
     const heroPattern = document.getElementById('heroPattern')
     if (teamHero) {

@@ -597,7 +597,7 @@ function createMatchHTML(entry, index, date, locale, is12Hour, liveResults) {
                     <div class="event-overlay" translate="no">
                         <div class="event-box-team">
                             <a class="no-underline-link no-color-link team-box-underline-hover" href="${team1.link}">
-                                <img height="100px" class="team-box-image" src="https://api.umkl.co.uk/teamemblems/${team1.team_name.toUpperCase()}?og" alt="${makePossessive(team1.team_name)} team logo" loading="lazy" ${cached ? `` : 'onload="this.style.opacity=1"'}>
+                                <img height="100px" class="team-box-image" src="https://api.umkl.co.uk/teamemblems/${team1.team_name.toUpperCase()}" alt="${makePossessive(team1.team_name)} team logo" loading="lazy" ${cached ? `` : 'onload="this.style.opacity=1"'}>
                                 <h2>${team1.team_name}</h2>
                             </a>
                             <div class="youtube-box left-team">
@@ -607,7 +607,7 @@ function createMatchHTML(entry, index, date, locale, is12Hour, liveResults) {
                         <div class="score-box">${matchDetailsLink ? `<a class="no-underline-link" href="${matchDetailsLink}" title="View detailed results">${resultsHTML || "VS"}</a>` : `${resultsHTML || "VS"}`}</div>
                         <div class="event-box-team">
                             <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">
-                                <img height="100px" class="team-box-image" src="https://api.umkl.co.uk/teamemblems/${team2.team_name.toUpperCase()}?og" alt="${makePossessive(team2.team_name)} team logo" loading="lazy" ${cached ? `` : 'onload="this.style.opacity=1"'}>
+                                <img height="100px" class="team-box-image" src="https://api.umkl.co.uk/teamemblems/${team2.team_name.toUpperCase()}" alt="${makePossessive(team2.team_name)} team logo" loading="lazy" ${cached ? `` : 'onload="this.style.opacity=1"'}>
                                 <h2>${team2.team_name}</h2>
                             </a>
                             <div class="youtube-box right-team">
@@ -772,7 +772,7 @@ function generateCalendarListView() {
                         <div class="event-overlay">
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link team-box-underline-hover" href="${team1.link}">
-                                    <img height="100px" class="team-box-image" src="https://api.umkl.co.uk/teamemblems/${team1.team_name.toUpperCase()}?og" alt="${makePossessive(team1.team_name)} team logo" loading="lazy" ${cached ? `` : 'onload="this.style.opacity=1"'}>
+                                    <img height="100px" class="team-box-image" src="https://api.umkl.co.uk/teamemblems/${team1.team_name.toUpperCase()}" alt="${makePossessive(team1.team_name)} team logo" loading="lazy" ${cached ? `` : 'onload="this.style.opacity=1"'}>
                                     <h2>${team1.team_name}</h2>
                                 </a>
                                 <div class="youtube-box left-team">
@@ -782,7 +782,7 @@ function generateCalendarListView() {
                             <div class="score-box">${matchDetailsLink ? `<a class="no-underline-link" href="${matchDetailsLink}" title="View detailed results">${resultsHTML || "VS"}</a>` : `${resultsHTML || "VS"}`}</div>
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">
-                                    <img height="100px" class="team-box-image" src="https://api.umkl.co.uk/teamemblems/${team2.team_name.toUpperCase()}?og" alt="${makePossessive(team2.team_name)} team logo" loading="lazy" ${cached ? `` : 'onload="this.style.opacity=1"'}>
+                                    <img height="100px" class="team-box-image" src="https://api.umkl.co.uk/teamemblems/${team2.team_name.toUpperCase()}" alt="${makePossessive(team2.team_name)} team logo" loading="lazy" ${cached ? `` : 'onload="this.style.opacity=1"'}>
                                     <h2>${team2.team_name}</h2>
                                 </a>
                                 <div class="youtube-box right-team">

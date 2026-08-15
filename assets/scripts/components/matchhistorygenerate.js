@@ -7,13 +7,13 @@ let teamNameFromURL;
 
 const CACHE_KEY = 'matchDataCache';
 const getMatchCache = () => { try { return JSON.parse(localStorage.getItem(CACHE_KEY)) || null; } catch { return null; } };
-const setMatchCache = (data) => { try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch {} };
+const setMatchCache = (data) => { try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch { } };
 
 const getTeamFromURL = () => new URLSearchParams(window.location.search).get("team");
 
 const getEmblem = teamName => ({
     avif: `https://api.umkl.co.uk/teamemblems/${teamName.toUpperCase()}`,
-    png: `https://api.umkl.co.uk/teamemblems/${teamName.toUpperCase()}?og`
+    png: `https://api.umkl.co.uk/teamemblems/${teamName.toUpperCase()}`
 });
 
 function getScoreForTeam(match, teamName) {
@@ -74,9 +74,9 @@ function populateTeamDropdown(currentTeam) {
 
     const sortedTeams = Array.from(teamsSet).sort((a, b) => a.localeCompare(b));
 
-    teamSelect.innerHTML = 
-    `<option value="All">All</option>` +
-    sortedTeams.map(team => `
+    teamSelect.innerHTML =
+        `<option value="All">All</option>` +
+        sortedTeams.map(team => `
         <option value="${team}" ${team.toLowerCase() === currentTeam?.toLowerCase() ? 'selected' : ''}>
             ${team}
         </option>
@@ -107,7 +107,7 @@ function generateTeamMatches(teamName, selectedSeason) {
     const rowsHTML = teamMatches.map(match => {
         const otherTeam = match.teamsInvolved.find(t => t !== teamName) || "TBC";
         const scoreData = getScoreForTeam(match, teamName);
-        
+
         let scoreDisplay = "Upcoming";
         let winStatus = "-";
 
@@ -176,7 +176,7 @@ async function showTeamMatches() {
     }
 
     document.title = `${teamNameFromURL} Results | UMKL`;
-    
+
     const headingElem = document.getElementById("results-heading-team");
     if (headingElem) {
         headingElem.textContent = `${teamNameFromURL} Results`;
