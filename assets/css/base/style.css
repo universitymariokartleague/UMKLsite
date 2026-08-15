@@ -98,7 +98,6 @@ html {
     -webkit-tap-highlight-color: transparent;
     text-size-adjust: 100%;
     background-color: var(--bg-color);
-    scrollbar-width: none;
 }
 
 @view-transition {

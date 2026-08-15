@@ -8,7 +8,7 @@
     grid-auto-rows: minmax(50px, auto);
     gap: 20px;
 
-    /* 
+    /*
     color: var(--standings-text-color); */
     /* background-color: var(--standings-bg-color); */
     /* border: var(--box-border); */
@@ -65,7 +65,7 @@
     mask-size: 850px;
 }
 
-.teamStanding > :not(.teamStandingPattern) {
+.teamStanding> :not(.teamStandingPattern) {
     position: relative;
     z-index: 1;
 }
@@ -281,7 +281,7 @@
 
 .all-teams-table .teams-table-item:last-child,
 .all-teams-table .teams-table-item:last-child {
-border-bottom: none;
+    border-bottom: none;
 }
 
 .team-table-icon-container {
@@ -366,4 +366,3 @@ border-bottom: none;
     }
 
 }
-
