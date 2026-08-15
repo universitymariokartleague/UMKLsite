@@ -359,6 +359,9 @@ button:focus {
 
 .bubble-link:active {
     background-color: var(--translucent-color);
+}
+
+.bubble-link:not(select):active {
     transform: scale(0.95);
 }
 
