@@ -2,10 +2,10 @@
 #
 # This script generates new blog pages from a template for the UMKL site
 
+import datetime
+import json
 import os
 import re
-
-from bs4 import BeautifulSoup
 
 BLANK_NEWS_PAGE = """<!DOCTYPE html>
 <html lang="en">
@@ -17,6 +17,7 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
     <link rel="icon" href="/assets/media/brand/favicon.png" type="image/png">
     <link rel="stylesheet" href="/assets/css/base/style.css">
     <link rel="stylesheet" href="/assets/css/base/settings.css">
+    <link rel="stylesheet" href="/assets/css/pages/newsarticle.css">
     <link rel="stylesheet" href="/assets/css/ext/fontawesome.min.css">
     <link rel="modulepreload" href="/components/navbar.js">
     <link rel="modulepreload" href="/components/footer.js">
@@ -44,14 +45,20 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
 <body id="top">
     <umkl-navbar></umkl-navbar>
 
-    <main>
-        <a href="/news/">Back</a>
-        <h1>{TITLE}</h1>
-        <div class="p-below-title">
-            {DATE} |
-            <tag translate="no">Intro</tag>
-            <div class="news-credits">Written by {AUTHOR1}, {AUTHOR2}.<br>Edited by {EDITOR}</div>
+    <main class="article-main">
+        <div class="bubble-link-wrapper">
+            <a href="/news/" class="bubble-link no-color-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24" role="presentation">
+                    <path fill="currentColor" d="M22 13H4.94l5.18 5.29-1.38 1.42-6.17-6.3a2 2 0 0 1 0-2.82l6.17-6.3 1.38 1.42L4.94 11H22z"></path>
+                </svg>
+                Back</a>
         </div>
+        <h1>{TITLE}</h1>
+        <div class="article-meta">
+            <span class="article-date">{DATE}</span>
+            {TAGS}
+        </div>
+        <p class="news-credits">Written by {AUTHOR1}, {AUTHOR2}.<br>Edited by {EDITOR}</p>
         <hr class="hr-below-title">
 
         <p>{DESC}</p>
@@ -61,6 +68,8 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
 </body>
 </html>
 """
+
+NEWS_JSON_PATH = "news/news.json"
 
 
 def main():
@@ -75,64 +84,58 @@ def create_slug(title):
     return slug.strip("-")
 
 
-def update_news_container(filepath, blog_html):
-    soup = BeautifulSoup(
-        open(filepath, "r", encoding="utf-8"),
-        "html.parser",
-        preserve_whitespace_tags={"html"},
-    )
+def update_news_json(entry):
+    """
+    Adds a news entry to news/news.json (creating the file if it doesn't
+    exist yet) and keeps the list sorted newest-first.
+    """
+    if os.path.exists(NEWS_JSON_PATH):
+        with open(NEWS_JSON_PATH, encoding="utf-8") as f:
+            news = json.load(f)
+    else:
+        news = []
 
-    news_container = soup.find("div", id="news-container")
-    news_container.insert(0, BeautifulSoup(blog_html, "html.parser"))
+    news = [item for item in news if item["link"] != entry["link"]]
+    news.append(entry)
+    news.sort(key=lambda item: item["date"], reverse=True)
 
-    new_container_soup = BeautifulSoup(str(news_container), "html.parser")
-
-    # Find and replace the container
-    old_container = soup.find("div", id="news-container")
-    new_container = new_container_soup.find("div", id="news-container")
-
-    if old_container and new_container:
-        old_container.replace_with(new_container)
-
-    with open(filepath, "w", encoding="utf-8") as f:
-        f.write(soup.prettify())
+    with open(NEWS_JSON_PATH, "w", encoding="utf-8") as f:
+        json.dump(news, f, indent=4)
+        f.write("\n")
 
 
 def create_new_blog():
     """
-    Creates a new blog entry and updates the website's news and home pages.
+    Creates a new blog entry and updates the website's news data.
     This function prompts the user for blog details such as title, description,
-    image link, and date. It generates a new blog entry, updates the news
-    container on both the news page and the home page, and creates a dedicated
-    page for the new blog entry.
+    image link, and date. It adds a new entry to news/news.json (which the
+    homepage and news page render their previews from) and creates a
+    dedicated page for the new blog entry.
 
     Raises:
-        FileNotFoundError: If the required HTML files (`index.html` or `news/index.html`)
-                           are not found.
-        Exception: If there are issues with parsing or modifying the HTML files.
+        Exception: If there are issues reading or writing news/news.json.
 
     Inputs:
         - Blog title (str): The title of the blog.
         - Blog description (str): A short description of the blog.
         - Blog image link (str): A URL to the blog's image.
+        - Blog alt text (str): Alt text for the blog's image.
         - Blog date (str): The date of the blog in `dd/mm/yyyy` format.
+        - Tags (str): Comma-separated tags for the blog.
 
     Outputs:
-        - Updates the `news/index.html` file with the new blog entry.
-        - Updates the `index.html` file (home page) with the new blog entry.
+        - Adds an entry to `news/news.json`.
         - Creates a new HTML file for the blog entry in the appropriate directory.
     """
     title = input("Enter blog title > ")
     description = input("Enter blog description > ")
     image = input("Enter blog image link > ")
     alt = input("Enter an alt description for the image > ")
-    date = input("Enter blog date (DD/MM/YYYY) (leave blank to use the current date)> ")
+    date = input("Enter blog date (DD/MM/YYYY) (leave blank to use the current date) > ").strip()
+    if not date:
+        date = datetime.date.today().strftime("%d/%m/%Y")
     tags_input = input("Enter tags (comma separated) > ")
-    tags = (
-        "".join(f"<tag>{tag.strip()}</tag>" for tag in tags_input.split(","))
-        if tags_input
-        else ""
-    )
+    tags = [tag.strip() for tag in tags_input.split(",") if tag.strip()]
 
     link = create_slug(title)
     url_date = "-".join(reversed(date.split("/")))
@@ -140,40 +143,29 @@ def create_new_blog():
     if not image.startswith(("http://", "https://", "/")):
         image = f"/{image}"
 
-    image_jpg = image.rsplit(".", 1)[0] + ".jpg" if "." in image else image + ".jpg"
+    update_news_json(
+        {
+            "title": title,
+            "link": f"/news/{url_date}/{link}/",
+            "date": url_date,
+            "image": image,
+            "alt": alt,
+            "description": description,
+            "tags": tags,
+        }
+    )
 
-    new_blog = f"""
-                <article class="news-card">
-                    <a href="/news/{url_date}/{link}/" class="news-card-link">
-                        <div class="news-card-image">
-                            <picture>
-                                <source srcset="{image}" type="image/avif">
-                                <img src="{image_jpg}" alt="{alt}" onload="this.style.opacity=1" loading="lazy">
-                            </picture>
-                        </div>
-                        <div class="news-card-body">
-                            <span class="news-title">{title}</span>
-                            <span class="news-desc">{description}</span>
-                        </div>
-                    </a>
-                    <span class="news-date">{date}
-                        <span class="tags">{tags}</span>
-                    </span>
-                </article>
-    """
-
-    update_news_container("news/index.html", new_blog)
-    update_news_container("index.html", new_blog)
-
-    print("News articles added to front page and sites/news/")
+    print("news/news.json updated")
 
     os.makedirs(f"news/{url_date}/{link}", exist_ok=True)
     with open(f"news/{url_date}/{link}/index.html", "a+", encoding="utf-8") as f:
+        tags_html = "".join(f'<tag translate="no">{tag}</tag>' for tag in tags)
         content = (
             BLANK_NEWS_PAGE.replace("{TITLE}", title)
             .replace("{DESC}", description)
             .replace("{IMAGE}", image)
             .replace("{DATE}", date)
+            .replace("{TAGS}", tags_html)
             .replace("{LINK}", f"news/{url_date}/{link}")
         )
         f.write(content)

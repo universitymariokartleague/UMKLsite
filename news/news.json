@@ -1,0 +1,92 @@
+[
+    {
+        "title": "Season 2 Round 4 Fixtures Revealed!",
+        "link": "/news/2026-03-31/season-2-round-4-fixtures-revealed/",
+        "date": "2026-03-31",
+        "image": "/assets/media/news/season2fixtures4.avif",
+        "alt": "Matches Season 2 - Round 4",
+        "description": "The matches for Round 4 of Season 2 have been revealed! Find out who will be facing each other here!",
+        "tags": ["Season 2"]
+    },
+    {
+        "title": "Season 2 Round 3 Fixtures Revealed!",
+        "link": "/news/2026-01-01/season-2-round-3-fixtures-revealed/",
+        "date": "2026-01-01",
+        "image": "/assets/media/news/season2fixtures3.avif",
+        "alt": "Matches Season 2 - Round 3",
+        "description": "The matches for Round 3 of Season 2 have been revealed! Find out who will be facing each other here!",
+        "tags": ["Season 2"]
+    },
+    {
+        "title": "Season 2 Round 2 Fixtures Revealed!",
+        "link": "/news/2025-11-06/season-2-round-2-fixtures-revealed/",
+        "date": "2025-11-06",
+        "image": "/assets/media/news/season2fixtures2.avif",
+        "alt": "Matches Season 2 - Round 2",
+        "description": "The second round of Season 2 fixtures has been revealed! Find out who will be facing each other here!",
+        "tags": ["Season 2"]
+    },
+    {
+        "title": "Season 2 Round 1 Fixtures Revealed!",
+        "link": "/news/2025-10-01/season-2-round-1-fixtures-revealed/",
+        "date": "2025-10-01",
+        "image": "/assets/media/news/season2fixtures.avif",
+        "alt": "Matches Season 2 - Round 1",
+        "description": "The first round of Season 2 fixtures has been revealed! Find out who will be facing each other here!",
+        "tags": ["Season 2"]
+    },
+    {
+        "title": "The Structure for Season 2",
+        "link": "/news/2025-09-29/the-structure-for-season-2/",
+        "date": "2025-09-29",
+        "image": "/assets/media/news/season2structure.avif",
+        "alt": "How will Season 2 work?",
+        "description": "Season 2 of the UMKL will be using a Swiss Style system, here's how it will work!",
+        "tags": ["Season 2"]
+    },
+    {
+        "title": "Cheep Cheep Updates",
+        "link": "/news/2025-07-17/cheep-cheep-updates/",
+        "date": "2025-07-17",
+        "image": "/assets/media/news/newcommands.avif",
+        "alt": "An image showing new commands that can be used with the Cheep Cheep app",
+        "description": "Some updates about the Cheep Cheep Discord app and upcoming test matches.",
+        "tags": ["Discord", "Test Matches"]
+    },
+    {
+        "title": "Upcoming summer test matches!",
+        "link": "/news/2025-06-13/upcoming-summer-test-matches/",
+        "date": "2025-06-13",
+        "image": "/assets/media/news/summertestmatches.avif",
+        "alt": "An image showing new commands that can be used with the Cheep Cheep app",
+        "description": "More test matches between teams are being planned as exams finish and summer approaches.",
+        "tags": ["Test Matches"]
+    },
+    {
+        "title": "Test matches are being conducted!",
+        "link": "/news/2025-04-22/umkl-test-matches-are-being-conducted/",
+        "date": "2025-04-22",
+        "image": "/assets/media/news/testmatches.avif",
+        "alt": "An image depicting Cheep Cheep in the ocean",
+        "description": "Test matches are planned in the upcoming week, more will follow in the upcoming month...",
+        "tags": ["Test Matches"]
+    },
+    {
+        "title": "Join the UMKL Discord server!",
+        "link": "/news/2025-04-19/umkl-discord/",
+        "date": "2025-04-19",
+        "image": "/assets/media/news/discordinspire.avif",
+        "alt": "A piece of Discord promotional artwork",
+        "description": "All matches are organised through our Discord server. Please join it to take part in a match!",
+        "tags": ["Intro", "Discord"]
+    },
+    {
+        "title": "Welcome to the UMKL!",
+        "link": "/news/2025-04-19/umkl-intro/",
+        "date": "2025-04-19",
+        "image": "/assets/media/brand/UMKL_banner.avif",
+        "alt": "An image showing the UMKL logo",
+        "description": "We are a Mario Kart 8 Deluxe championship featuring teams from universities across the UK!",
+        "tags": ["Intro"]
+    }
+]

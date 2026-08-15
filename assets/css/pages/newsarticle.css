@@ -1,0 +1,42 @@
+main.article-main {
+    max-width: calc(var(--article-max-width) - env(safe-area-inset-left));
+}
+
+.article-main .bubble-link-wrapper {
+    margin-bottom: 24px;
+}
+
+.article-main h1 {
+    font-size: 2.4em;
+    line-height: 1.15;
+}
+
+.article-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.article-date {
+    font-weight: 600;
+    opacity: 0.7;
+    font-size: 0.95em;
+}
+
+.article-meta tag {
+    border-radius: 100px;
+    padding: 3px 12px;
+    font-size: 0.78em;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.article-main .news-credits {
+    margin-top: 6px;
+    margin-bottom: 24px;
+    font-size: 0.85em;
+    font-style: italic;
+    opacity: 0.7;
+}
