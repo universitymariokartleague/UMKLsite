@@ -826,6 +826,10 @@ umkl-navbar {
     z-index: 8;
 }
 
+umkl-navbar::selection {
+    background-color: var(--light-highlight-color);
+}
+
 umkl-footer {
     color: #FFF;
     background-color: var(--accent-color);
