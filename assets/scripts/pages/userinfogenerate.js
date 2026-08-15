@@ -2,10 +2,11 @@
     This script generates a user's info page card, along with allowing customisations.
 */
 import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareImage, showImagePreview, setOriginalMessage } from '/assets/scripts/utils/shareAPIhelper.js';
+import { createDebugLogger } from '/assets/scripts/utils/debuglogger.js';
 
 const profileCardContentHTML = `
     <div class="profile-card-header">
-        <img loading="lazy" src="{{PFP}}" alt="{{username}} profile picture" class="profile-card-avatar"
+        <img src="{{PFP}}" alt="{{username}} profile picture" class="profile-card-avatar"
             onload="this.style.opacity=1" onerror="this.onerror=null; this.src='/assets/media/faq/defaultavatar.avif';"/>
         <div class="profile-card-user-info">
             <h3 class="profile-card-username">{{username}}</h3>
@@ -56,7 +57,7 @@ const profileCardContentHTML = `
 const profileCardFormatHTML = `
     <div class="profile-card-wrapper">
         <div class="profile-card" style="--team-color: #{{color}};">
-            <img loading="lazy" src="/assets/media/profile/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />
+            <img src="/assets/media/profile/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />
             <div class="profile-card-content">
                 {{profileCardContent}}
             </div>
@@ -71,14 +72,15 @@ let data, matchData, teamData;
 const currentSeason = 2;
 const shareResScale = 3;
 let cardImageBlob;
+let cardCaptureId = 0;
 let graphResScale = shareResScale;
 let fetchedCurrentSeason = currentSeason;
 let takingCardScreenshot = false;
 let isFlipping = false;
 let currentlyShowingItems = false;
+let shareButton;
 
 let areProfileItems = false;
-let availableItems = [];
 let currentEquippedItems = {
     colour: null,
     overlay: null,
@@ -86,8 +88,86 @@ let currentEquippedItems = {
 };
 let cardChanged = false;
 
+// --- colour ---
+// Gradient-style colours need a list of stops (for the card's border-image trick and the SP
+// graph's canvas gradient), rather than the single hex value plain colours use.
+const gradientColourStops = {
+    "Rainbow": ["#ff9eb5", "#ffcc99", "#fff5a5", "#c5e8d0", "#c9daff"],
+    "Gold": ["#fff6d5", "#ffe27a", "#ffb700", "#ffe27a", "#fff6d5"]
+};
+const colourMap = {
+    "UMKL Red": "#ff0000",
+    "Blue": "#0066ff",
+    "Green": "#1fa855",
+    "Purple": "#8b5cf6",
+    "Black": "#1a1a1a",
+    "Rainbow": `linear-gradient(135deg, ${gradientColourStops.Rainbow.join(", ")})`,
+    "Gold": `linear-gradient(135deg, ${gradientColourStops.Gold.join(", ")})`
+};
+
+// --- overlay ---
+// Overlays not listed here fall back to an image at /assets/media/profile/<file-name>.avif -
+// these are drawn purely with CSS instead, so they don't need an image asset.
+const overlayStyles = {
+    "Scanlines": {
+        backgroundImage: "repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0px, rgba(0, 0, 0, 0.4) 1px, transparent 1px, transparent 3px)",
+        opacity: "0.15"
+    },
+    "Confetti": {
+        backgroundImage: `
+            radial-gradient(circle at 20% 30%, #ff6b6b 3px, transparent 4px),
+            radial-gradient(circle at 65% 65%, #4dd4ff 3px, transparent 4px),
+            radial-gradient(circle at 80% 15%, #ffe066 3px, transparent 4px),
+            radial-gradient(circle at 35% 85%, #a685e2 3px, transparent 4px),
+            radial-gradient(circle at 90% 90%, #6bffab 3px, transparent 4px)
+        `,
+        backgroundSize: "70px 70px",
+        opacity: "0.45"
+    },
+    "Snow": {
+        backgroundImage: `
+            radial-gradient(circle, white 1.5px, transparent 2.5px),
+            radial-gradient(circle, white 1px, transparent 2px)
+        `,
+        backgroundSize: "50px 50px, 80px 80px",
+        opacity: "0.6",
+        animation: "profile-snow-fall 12s linear infinite"
+    }
+};
+
+// --- background ---
+const backgroundOverlayOpacity = {
+    "cheep_cheep": 0.2,
+    "cheep_cheep_wrap": 0.2,
+    "mario_kart_8": 0.5,
+    "mario_kart_8_deluxe": 0.4,
+    "mario_kart_8_deluxe_booster_course_pass": 0.3,
+    "mario_kart_world": 0.25,
+    "super_mario_maker_2": 0.5,
+    "super_mario_maker_2_gameplay": 0.6,
+    "mario_luigi_dream_team": 0.4,
+    "mario_luigi_partners_in_time": 0.4,
+};
+
+function getItemFileName(name) {
+    return name.replace(/[&:]/g, "").replace(/\s+/g, "_").toLowerCase();
+}
+
+function getEquippedColourItem(data) {
+    if (currentEquippedItems.colour == null) return null;
+    const item = data.profile_items?.[currentEquippedItems.colour];
+    return item?.type === "colour" ? item : null;
+}
+
+function findTeamMatchOnDate(date, teamName) {
+    if (!matchData || !teamName) return null;
+    return matchData[date]?.find(entry => entry.teamsInvolved?.includes(teamName)) || null;
+}
+
 let refreshTimer = null;
 let startTime;
+
+const debugLog = createDebugLogger('userinfogenerate.js', '#ff52dc', '#ffa3ed');
 
 async function umklFetch(url, body = null) {
     const options = {
@@ -102,19 +182,6 @@ async function umklFetch(url, body = null) {
     const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
     localStorage.setItem("apiReqsSent", apiReqsSent + 1);
     return response.json();
-}
-
-function findMatchByEventID(eventID) {
-    for (const date in matchData) {
-        const matches = matchData[date];
-        if (!Array.isArray(matches)) continue;
-
-        const found = matches.find(match => match.eventID === eventID);
-        if (found) {
-            return { date, match: found };
-        }
-    }
-    return null;
 }
 
 function fillInPageTitle(data) {
@@ -134,8 +201,8 @@ function generateProfileCardContent(data) {
         .replace("{{teamWins}}", data.team_wins || "0")
         .replace("{{firstPlaces}}", data.first_places || "0")
         .replace("{{highestFinish}}", data.highest_finish || "N/A")
-        .replace("{{cardExtraText}}", "Use /profile to see your own card!")
-        .replace("{{profileCustomisationButton}}", areProfileItems ? `<button class="customise-button" id="showCardProfileItemsButton"><span class="fa-solid fa-paintbrush"></span> Customise profile</button>` : '');
+        .replace("{{cardExtraText}}", "Use /user-profile to see your own card!")
+        .replace("{{profileCustomisationButton}}", areProfileItems ? `<button class="customise-button" id="showCardProfileItemsButton"><span class="fa-solid fa-paintbrush"></span> Customise design</button>` : '');
 }
 
 function generateProfileCardHTML(data) {
@@ -178,6 +245,9 @@ let card3DAnimationId = null;
 let card3DMouseMoveHandler = null;
 let card3DMouseLeaveHandler = null;
 let card3DGlareMouseMoveHandler = null;
+
+let spGraphMouseMoveHandler = null;
+let spGraphMouseLeaveHandler = null;
 
 function cleanupCard3DEffect() {
     const handlers = [card3DMouseMoveHandler, card3DMouseLeaveHandler, card3DGlareMouseMoveHandler];
@@ -278,7 +348,7 @@ async function generateProfileBox(data, showError) {
     try {
         teamData = (await getTeamdata(data.team, fetchedCurrentSeason))[0]
     } catch (error) {
-        console.debug(`%cuserinfogenerate.js %c> %c${data.username} does not belong to a team`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
+        debugLog(`${data.username} does not belong to a team`);
     }
 
     cleanupCard3DEffect();
@@ -294,7 +364,7 @@ async function generateProfileBox(data, showError) {
 
     attachProfileEventListeners();
 
-    createSPGraph(data, `#${data.color}`);
+    createSPGraph(data);
     addCard3DEffect();
 
     (function injectLiveDotStyle() {
@@ -347,29 +417,19 @@ function showErrorBox(showError) {
     }
 }
 
-function toOrdinal(n) {
-    const v = n % 100;
-    if (v >= 11 && v <= 13) return n + "th";
-    switch (v % 10) {
-        case 1: return n + "st";
-        case 2: return n + "nd";
-        case 3: return n + "rd";
-        default: return n + "th";
-    }
-}
-
 async function getCurrentSeason() {
     return umklFetch('https://api.umkl.co.uk/seasoninfo', { season: 0 });
 }
 
-function createSPGraph(data, teamColor) {
+// fa-flag-checkered, fa-gear - SP graph match/testmatch markers, unrelated to item customisation
+const eventIcons = { match: '', testmatch: '' };
+
+async function createSPGraph(data) {
     const canvas = document.getElementById('spGraph');
     if (!canvas) return;
 
     canvas.width = canvas.clientWidth * graphResScale;
     canvas.height = canvas.clientHeight * graphResScale;
-
-    console.log(graphResScale)
 
     const ctx = canvas.getContext('2d');
     const spData = data.sp_detailed;
@@ -389,6 +449,7 @@ function createSPGraph(data, teamColor) {
     const fakeDateStr = fakeStartDate.toISOString().split('T')[0];
     const extendedDates = [fakeDateStr, ...dates];
     const extendedValues = [0];
+    const extendedChanges = [0];
 
     const dateTimestamps = extendedDates.map(date => new Date(date).getTime());
     const fakeStartTime = dateTimestamps[0];
@@ -403,8 +464,10 @@ function createSPGraph(data, teamColor) {
         }
         const timeRatio = (dateTimestamps[index] - dateTimestamps[index - 1]) / timeRange;
         const chatSpForPeriod = Math.round(spData.chat_sp * timeRatio);
-        cumulative += history[date].change + chatSpForPeriod;
+        const dailyChange = history[date].reduce((sum, event) => sum + event.change, 0);
+        cumulative += dailyChange + chatSpForPeriod;
         extendedValues.push(index === extendedDates.length - 1 ? data.sp : Math.round(cumulative));
+        extendedChanges.push(dailyChange + chatSpForPeriod);
     });
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -465,8 +528,21 @@ function createSPGraph(data, teamColor) {
     }
     ctx.setLineDash([]);
 
+    let lineColour = `#${data.color}`;
+    const equippedColour = getEquippedColourItem(data);
+    if (equippedColour) {
+        const stops = gradientColourStops[equippedColour.name];
+        if (stops) {
+            const gradient = ctx.createLinearGradient(padding, 0, canvas.width - padding, 0);
+            stops.forEach((colour, i) => gradient.addColorStop(i / (stops.length - 1), colour));
+            lineColour = gradient;
+        } else {
+            lineColour = colourMap[equippedColour.name] || equippedColour.name;
+        }
+    }
+
     // Draw graph line
-    ctx.strokeStyle = teamColor;
+    ctx.strokeStyle = lineColour;
     ctx.lineWidth = 1.5 * graphResScale;
     ctx.beginPath();
 
@@ -513,7 +589,7 @@ function createSPGraph(data, teamColor) {
 
     // Draw values
     if (extendedDates.length > 0) {
-        ctx.fillStyle = teamColor;
+        ctx.fillStyle = lineColour;
         ctx.font = `${11 * graphResScale}px Montserrat`;
         ctx.textAlign = 'center';
 
@@ -529,8 +605,9 @@ function createSPGraph(data, teamColor) {
     }
 
     // Draw points
-    ctx.fillStyle = teamColor;
-    extendedDates.forEach((_, index) => {
+    const pointDetails = [];
+    ctx.fillStyle = lineColour;
+    extendedDates.forEach((date, index) => {
         const timeRatio = (dateTimestamps[index] - fakeStartTime) / timeRange;
         const x = padding + timeRatio * graphWidth;
         const y = canvas.height - padding - (extendedValues[index] / gridMax) * graphHeight;
@@ -539,8 +616,137 @@ function createSPGraph(data, teamColor) {
             ctx.beginPath();
             ctx.arc(x, y, 3 * graphResScale, 0, 2 * Math.PI);
             ctx.fill();
+
+            const eventType = history[date]?.[0]?.event;
+            let matchInfo = null;
+            const teamMatch = findTeamMatchOnDate(date, data.team);
+            if (teamMatch?.eventID && teamMatch?.teamsInvolved) {
+                matchInfo = { eventID: teamMatch.eventID, teamsInvolved: teamMatch.teamsInvolved };
+            }
+
+            pointDetails.push({
+                x, y, date,
+                change: extendedChanges[index],
+                cumulative: extendedValues[index],
+                eventType,
+                matchInfo
+            });
         }
     });
+
+    const iconY = 10 * graphResScale;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = `900 ${9 * graphResScale}px "Font Awesome 6 Free"`;
+
+    const minIconSpacing = 12 * graphResScale;
+    let lastIconX = -Infinity;
+
+    extendedDates.forEach((date, index) => {
+        if (index === 0) return;
+        const icon = eventIcons[history[date]?.[0]?.event];
+        if (!icon) return;
+
+        const timeRatio = (dateTimestamps[index] - fakeStartTime) / timeRange;
+        const x = padding + timeRatio * graphWidth;
+
+        if (x - lastIconX < minIconSpacing) return;
+        lastIconX = x;
+
+        ctx.fillStyle = '#666';
+        ctx.fillText(icon, x, iconY);
+    });
+
+    // Hover tooltips on the points
+    const container = canvas.parentElement;
+    let tooltip = container.querySelector('.sp-graph-tooltip');
+    if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.className = 'sp-graph-tooltip';
+        container.appendChild(tooltip);
+    }
+
+    const eventLabels = { match: 'Match', testmatch: 'Test Match' };
+
+    let hideTimeout = null;
+    const cancelHide = () => {
+        if (hideTimeout) {
+            clearTimeout(hideTimeout);
+            hideTimeout = null;
+        }
+    };
+    const scheduleHide = () => {
+        cancelHide();
+        hideTimeout = setTimeout(() => {
+            tooltip.style.opacity = '0';
+            canvas.style.cursor = 'default';
+        }, 150);
+    };
+    const isOverTooltip = (e) => {
+        const tooltipRect = tooltip.getBoundingClientRect();
+        return e.clientX >= tooltipRect.left && e.clientX <= tooltipRect.right &&
+            e.clientY >= tooltipRect.top && e.clientY <= tooltipRect.bottom;
+    };
+
+    if (spGraphMouseMoveHandler) container.removeEventListener('mousemove', spGraphMouseMoveHandler);
+    if (spGraphMouseLeaveHandler) container.removeEventListener('mouseleave', spGraphMouseLeaveHandler);
+
+    spGraphMouseMoveHandler = (e) => {
+        if (isOverTooltip(e)) {
+            cancelHide();
+            return;
+        }
+
+        const rect = canvas.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const mouseX = (e.clientX - rect.left) * scaleX;
+        const mouseY = (e.clientY - rect.top) * scaleY;
+
+        let closest = null;
+        let closestDist = Infinity;
+        pointDetails.forEach(point => {
+            const dist = Math.hypot(point.x - mouseX, point.y - mouseY);
+            if (dist < closestDist) {
+                closestDist = dist;
+                closest = point;
+            }
+        });
+
+        if (closest && closestDist <= 14 * graphResScale) {
+            cancelHide();
+
+            const dateObj = new Date(closest.date);
+            const formattedDate = `${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${dateObj.getFullYear()}`;
+            const label = eventLabels[closest.eventType] || 'SP update';
+
+            const titleLine = closest.matchInfo
+                ? `<a href="/schedule/?graphEventID=${closest.matchInfo.eventID}">${closest.matchInfo.teamsInvolved.join(' VS ')}</a>`
+                : `<strong>${label}</strong>`;
+            const testMatchLine = (closest.matchInfo && closest.eventType === 'testmatch') ? '<br>Test Match' : '';
+
+            tooltip.innerHTML = `${titleLine}${testMatchLine}<br>${formattedDate}`;
+            tooltip.style.opacity = '1';
+
+            const pointContainerX = (rect.left - containerRect.left) + closest.x / scaleX;
+            const pointContainerY = (rect.top - containerRect.top) + closest.y / scaleY;
+            tooltip.classList.toggle('sp-graph-tooltip-below', pointContainerY < 90);
+            tooltip.style.left = `${pointContainerX}px`;
+            tooltip.style.top = `${pointContainerY}px`;
+            canvas.style.cursor = 'pointer';
+        } else {
+            scheduleHide();
+        }
+    };
+
+    spGraphMouseLeaveHandler = (e) => {
+        if (isOverTooltip(e)) return;
+        scheduleHide();
+    };
+
+    container.addEventListener('mousemove', spGraphMouseMoveHandler);
+    container.addEventListener('mouseleave', spGraphMouseLeaveHandler);
 }
 
 async function getMatchData() {
@@ -548,13 +754,12 @@ async function getMatchData() {
 }
 
 async function getTeamdata(team, season) {
-    console.debug(`%cuserinfogenerate.js %c> %cFetching playerdata from the API...`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
     return umklFetch('https://api.umkl.co.uk/teamdata', { team: `${team}`, season: `${season}` });
 }
 
-window.addEventListener("resize", async () => {
+window.addEventListener("resize", () => {
     if (data) {
-        createSPGraph(data, `#${data.color}`);
+        createSPGraph(data);
     }
 });
 
@@ -570,6 +775,7 @@ document.addEventListener('keydown', async (event) => {
 });
 
 async function preloadCardImage() {
+    const captureId = ++cardCaptureId;
     const node = document.getElementById("userCardBox");
     const profileCard = document.querySelector(".profile-card");
 
@@ -579,46 +785,74 @@ async function preloadCardImage() {
     const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
     takingCardScreenshot = true;
-    createSPGraph(data, `#${data.color}`);
+    createSPGraph(data);
 
+    let wrapper;
     try {
+        await new Promise(resolve => setTimeout(resolve, 50));
+
+        const nodeRect = node.getBoundingClientRect();
         const rect = profileCard.getBoundingClientRect();
 
-        let showCardProfileItemsButton = document.getElementById("showCardProfileItemsButton");
-        showCardProfileItemsButton.style.display = 'none';
+        // capture from a detached clone instead of the live card
+        const clone = node.cloneNode(true);
 
-        let cardHelpDiv = document.querySelector('.card-help');
-        cardHelpDiv.style.display = 'block';
-        if (!isMobile) cardHelpDiv.style.width = '100%';
+        clone.style.width = `${nodeRect.width}px`;
+        const clonedCanvas = clone.querySelector('canvas');
+        const clonedProfileCard = clone.querySelector('.profile-card');
+        const clonedButton = clone.querySelector('.customise-button');
+        const clonedCardHelp = clone.querySelector('.card-help');
 
-        let dataURL;
+        const originalCanvas = document.getElementById('spGraph');
+        if (clonedCanvas && originalCanvas) {
+            const canvasSize = getComputedStyle(originalCanvas);
+            clonedCanvas.style.width = canvasSize.width;
+            clonedCanvas.style.height = canvasSize.height;
+            clonedCanvas.getContext('2d').drawImage(originalCanvas, 0, 0);
+        }
 
-        setTimeout(async () => {
-            dataURL = await htmlToImage.toPng(node, {
-                pixelRatio: shareResScale,
-                width: isMobile ? rect.width : rect.width + 40,
-                height: node.scrollHeight + 40,
-                style: {
-                    transform: isMobile ? 'none' : `translateX(-150px)`
-                }
-            });
+        clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
 
-            showCardProfileItemsButton.style.display = '';
-            cardHelpDiv.style.display = '';
+        clonedProfileCard?.classList.add('capturing-screenshot');
+        if (clonedButton) clonedButton.style.display = 'none';
+        if (clonedCardHelp) {
+            clonedCardHelp.style.display = 'block';
+            if (!isMobile) clonedCardHelp.style.width = '100%';
+        }
 
-            const response = await fetch(dataURL);
-            cardImageBlob = await response.blob();
-        }, 5)
+        wrapper = document.createElement('div');
+        Object.assign(wrapper.style, {
+            height: '0',
+            overflow: 'hidden',
+            pointerEvents: 'none'
+        });
+        wrapper.appendChild(clone);
+        document.body.appendChild(wrapper);
+
+        const dataURL = await htmlToImage.toPng(clone, {
+            pixelRatio: shareResScale,
+            width: Math.round(isMobile ? rect.width : rect.width + 40),
+            height: Math.round(node.scrollHeight + 40),
+            style: {
+                transform: isMobile ? 'none' : `translateX(-150px)`
+            }
+        });
+
+        const response = await fetch(dataURL);
+        const blob = await response.blob();
+        // A newer capture may have started while this one was occuring
+        if (captureId === cardCaptureId) cardImageBlob = blob;
     } catch (err) {
         console.error("Capture failed:", err);
     }
 
+    wrapper?.remove();
     cardChanged = false;
     profileCard.style.transition = originalTransition;
     takingCardScreenshot = false;
     setTimeout(() => {
         graphResScale = 2;
-        createSPGraph(data, `#${data.color}`);
+        createSPGraph(data);
         graphResScale = shareResScale;
     }, 100);
 }
@@ -647,7 +881,7 @@ async function generateCardImage() {
         if (useClipboard) {
             const success = await copyTextToClipboard(message);
             shareButton.innerText = success ? "Copied to clipboard!" : "Failed to copy!";
-            showImagePreview(blob, blob.url, message)
+            showImagePreview(blob, undefined, message)
         } else {
             await shareImage(
                 `${data.username} UMKL Profile`,
@@ -657,7 +891,7 @@ async function generateCardImage() {
             )
         }
 
-        console.debug(`%cuserinfogenerate.js %c> %cCopied image to clipboard!`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
+        debugLog('Copied image to clipboard!');
     } catch (err) {
         console.error("Failed to copy to clipboard!:", err);
     }
@@ -741,13 +975,13 @@ async function goBackToProfile() {
 
             profileCardContent.innerHTML = generateProfileCardContent(data);
 
-            const logoHTML = `<img loading="lazy" src="/assets/media/profile/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />`;
+            const logoHTML = `<img src="/assets/media/profile/wordmark_standard.avif" alt="UMKL logo" class="profile-umkl-logo" onload="this.style.opacity=0.9" />`;
 
             profileCard.insertAdjacentHTML('afterbegin', logoHTML);
 
             profileCard.style.transform = 'rotateY(0deg)';
 
-            createSPGraph(data, `#${data.color}`);
+            createSPGraph(data);
             attachProfileEventListeners();
             addCard3DEffect();
             applyEquippedItemsToCard();
@@ -769,7 +1003,6 @@ function populateItemsGrid(category) {
 
     grid.innerHTML = "";
 
-    availableItems = data.profile_items
     filteredItems.forEach((item, index) => {
         const isEquipped = isItemEquipped(item);
         const itemElement = createItemElement(item, index, isEquipped);
@@ -785,14 +1018,35 @@ function createItemElement(item, index, isEquipped) {
     div.style.cursor = "pointer";
     div.onclick = () => toggleItemEquip(item.type, index);
 
-    div.innerHTML = `
-        <img loading="lazy" class="item-preview" src="assets/media/profile/${item.name.replace(/ /g, '_').toLowerCase()}.avif"
-            onload="this.style.opacity=1" onerror="this.onerror=null;>
-        <div class="item-info">
-            <h4 class="item-name">${item.name}</h4>
-            <span class="item-type"><span class="fa-solid fa-${item.type}"></span> ${item.type}</span>
-        </div>
+    // Colours and CSS-generated overlays have no preview image asset - render the actual
+    // colour/pattern as the swatch instead of pointing an <img> at a file that doesn't exist.
+    let preview;
+    if (item.type === "colour") {
+        preview = document.createElement("div");
+        preview.style.background = colourMap[item.name] || item.name;
+    } else if (item.type === "overlay" && overlayStyles[item.name]) {
+        preview = document.createElement("div");
+        preview.style.background = "#2b2b2b";
+        preview.style.backgroundImage = overlayStyles[item.name].backgroundImage;
+        if (overlayStyles[item.name].backgroundSize) preview.style.backgroundSize = overlayStyles[item.name].backgroundSize;
+    } else {
+        preview = document.createElement("img");
+        preview.src = `/assets/media/profile/${getItemFileName(item.name)}.avif`;
+        preview.onload = () => { preview.style.opacity = "1"; };
+        preview.onerror = () => { preview.style.display = "none"; };
+    }
+    preview.className = "item-preview";
+    if (preview.tagName === "DIV") preview.style.opacity = "1";
+
+    const info = document.createElement("div");
+    info.className = "item-info";
+    info.innerHTML = `
+        <h4 class="item-name">${item.name}</h4>
+        <span class="item-type"><span class="fa-solid fa-${item.type}"></span> ${item.type}</span>
     `;
+
+    div.appendChild(preview);
+    div.appendChild(info);
 
     return div;
 }
@@ -815,7 +1069,7 @@ function toggleItemEquip(type, itemIndex) {
 }
 
 function isItemEquipped(item) {
-    return currentEquippedItems[item.type] === availableItems.indexOf(item);
+    return currentEquippedItems[item.type] === data.profile_items.indexOf(item);
 }
 
 function attachCategoryListeners() {
@@ -835,13 +1089,13 @@ function saveItemEquips() {
     const equippedItemsData = {};
     Object.keys(currentEquippedItems).forEach(type => {
         if (currentEquippedItems[type] !== null) {
-            equippedItemsData[type] = availableItems[currentEquippedItems[type]];
+            equippedItemsData[type] = data.profile_items[currentEquippedItems[type]];
         }
     });
 
     equippedItemsData["username"] = data.username;
     cardChanged = true;
-    console.debug(`%cuserinfogenerate.js %c> %cSaving equipped items: ${JSON.stringify(equippedItemsData)}`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
+    debugLog(`Saving equipped items: ${JSON.stringify(equippedItemsData)}`);
 
     localStorage.setItem("userProfileSettings", JSON.stringify(equippedItemsData));
 
@@ -877,34 +1131,40 @@ function applyEquippedItemsToCard() {
     profileCard.style.backgroundImage = "";
     profileCard.querySelector(".profile-card-overlay")?.remove();
 
-    const colourMap = {
-        "UMKL Red": "#ff0000",
-        "Blue": "#0066ff",
-        "Rainbow": "linear-gradient(135deg, #ff9eb5, #ffcc99, #fff5a5, #c5e8d0, #c9daff)"
-    };
-
-    if (currentEquippedItems.background != null) {
-        const item = data.profile_items[currentEquippedItems.background];
-        if (item?.type === "background") {
-            const bgFileName = item.name.replace(/ /g, "_").toLowerCase();
-            profileCard.style.backgroundImage = `url('/assets/media/profile/bg/${bgFileName}.avif')`;
-            profileCard.style.backgroundSize = "cover";
-            profileCard.style.backgroundPosition = "center";
+    // --- colour ---
+    profileCard.style.setProperty('--team-color', `#${data.color}`);
+    // Reset before re-applying - otherwise switching away from a gradient colour (Rainbow, Gold)
+    // to a plain one leaves its border override stuck on the card. Uses background-origin/-clip
+    // (not the `background` shorthand) so this can't clobber an equipped background photo, which
+    // is set via the backgroundImage longhand below - whichever of the two runs last wins if both
+    // are equipped, and background intentionally runs after colour here.
+    profileCard.style.border = "";
+    profileCard.style.backgroundOrigin = "";
+    profileCard.style.backgroundClip = "";
+    if (currentEquippedItems.colour != null) {
+        const item = data.profile_items[currentEquippedItems.colour];
+        if (item?.type === "colour") {
+            const stops = gradientColourStops[item.name];
+            if (stops) {
+                profileCard.style.border = "3px solid transparent";
+                profileCard.style.backgroundImage = `linear-gradient(145deg, rgba(255,255,255,0.85), rgba(255,255,255,0.7)), ${colourMap[item.name]}`;
+                profileCard.style.backgroundOrigin = "padding-box, border-box";
+                profileCard.style.backgroundClip = "padding-box, border-box";
+            } else {
+                profileCard.style.setProperty('--team-color', colourMap[item.name] || item.name);
+            }
         }
     }
 
+    // --- overlay ---
     if (currentEquippedItems.overlay != null) {
         const item = data.profile_items[currentEquippedItems.overlay];
         if (item?.type === "overlay") {
-            const overlayFileName = item.name.replace(/ /g, "_").toLowerCase();
-            let existingOverlay = profileCard.querySelector(".profile-card-overlay");
-            if (!existingOverlay) {
-                existingOverlay = document.createElement("div");
-                existingOverlay.className = "profile-card-overlay";
-                profileCard.appendChild(existingOverlay);
-            }
-            Object.assign(existingOverlay.style, {
-                backgroundImage: `url('/assets/media/profile/${overlayFileName}.avif')`,
+            const existingOverlay = document.createElement("div");
+            existingOverlay.className = "profile-card-overlay";
+            profileCard.appendChild(existingOverlay);
+
+            const baseStyle = {
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 position: "absolute",
@@ -912,27 +1172,36 @@ function applyEquippedItemsToCard() {
                 pointerEvents: "none",
                 zIndex: "1",
                 opacity: "0.1"
-            });
+            };
+
+            const generated = overlayStyles[item.name];
+            if (generated) {
+                Object.assign(existingOverlay.style, baseStyle, generated);
+            } else {
+                const overlayFileName = getItemFileName(item.name);
+                Object.assign(existingOverlay.style, baseStyle, {
+                    backgroundImage: `url('/assets/media/profile/${overlayFileName}.avif')`
+                });
+            }
         }
     }
 
-    profileCard.style.setProperty('--team-color', `#${data.color}`);
-    if (currentEquippedItems.colour != null) {
-        const item = data.profile_items[currentEquippedItems.colour];
-        if (item?.type === "colour") {
-            if (item.name === "Rainbow") {
-                profileCard.style.border = "3px solid transparent";
-                profileCard.style.background = `linear-gradient(145deg, rgba(255,255,255,0.85), rgba(255,255,255,0.7)) padding-box, ${colourMap["Rainbow"]} border-box`;
-            } else {
-                profileCard.style.setProperty('--team-color', colourMap[item.name] || item.name);
-            }
+    // --- background ---
+    if (currentEquippedItems.background != null) {
+        const item = data.profile_items[currentEquippedItems.background];
+        if (item?.type === "background") {
+            const bgFileName = getItemFileName(item.name);
+            const overlayOpacity = backgroundOverlayOpacity[bgFileName] ?? 0.3;
+            profileCard.style.backgroundImage = `linear-gradient(rgba(255, 255, 255, ${overlayOpacity}), rgba(255, 255, 255, ${overlayOpacity})), url('/assets/media/profile/${bgFileName}.avif')`;
+            profileCard.style.backgroundSize = "cover";
+            profileCard.style.backgroundPosition = "center";
         }
     }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
-    console.debug(`%cuserinfogenerate.js %c> %cGenerating player info box`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
+    debugLog('Generating player info box');
 
     let showError = 0;
     const urlParams = new URLSearchParams(window.location.search);
@@ -941,33 +1210,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     const json = LZString.decompressFromEncodedURIComponent(compressed);
     data = JSON.parse(json);
 
+    // TODO: implemented item unlocked via profile_items, right now every item is unlocked.
     let mappedProfileItems = [];
-    if (urlParams.has('u')) {
-        areProfileItems = true;
-        const uParam = urlParams.get('u');
-        try {
-            const response = await fetch('/assets/media/profile/profileunlockitems.json');
-            const unlockItems = await response.json();
-
-            mappedProfileItems = uParam.split('').map((char, index) => {
-                if (char === '1' && index < unlockItems.length) {
-                    return unlockItems[index];
-                }
-                return null;
-            }).filter(item => item !== null);
-        } catch (error) {
-            console.error('Error fetching profile unlock items:', error);
-        }
+    areProfileItems = true;
+    try {
+        const response = await fetch('/assets/media/profile/profileunlockitems.json');
+        mappedProfileItems = await response.json();
+    } catch (error) {
+        console.error('Error fetching profile unlock items:', error);
     }
 
     data.profile_items = mappedProfileItems;
-    data.profile_items_readable = mappedProfileItems.map(item =>
-        typeof item === 'object' ? item.name || JSON.stringify(item) : item
-    ).join(', ');
 
     loadEquippedItems();
 
-    console.log(data);
     fillInPageTitle(data);
 
     try {
@@ -1004,7 +1260,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     applyEquippedItemsToCard();
 
-    const shareButton = document.getElementById("shareButton");
+    shareButton = document.getElementById("shareButton");
 
     setOriginalMessage(shareButton.innerHTML);
     preloadCardImage();
@@ -1015,5 +1271,5 @@ document.addEventListener("DOMContentLoaded", async () => {
         await generateCardImage();
     });
 
-    console.debug(`%cuserinfogenerate.js %c> %cGenerated user info box in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
+    debugLog(`Generated user info box in ${(performance.now() - startTime).toFixed(2)}ms`);
 });

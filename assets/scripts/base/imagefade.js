@@ -6,6 +6,7 @@
 */
 
 function fadeInOnLoad(img) {
+    if (window.location.href.includes("/profile")) return;
     if (img.hasAttribute("onload") || img.dataset.noFade !== undefined) return;
     if (img.complete && img.naturalWidth !== 0) return;
 

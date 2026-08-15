@@ -5,7 +5,9 @@
 
 import { getMatchData, normalizeMatchData, getMatchCache } from '/assets/scripts/utils/matchdata.js';
 import { bestTrack, worstTrack } from '/assets/scripts/utils/trackrecord.js';
+import { createDebugLogger } from '/assets/scripts/utils/debuglogger.js';
 
+const debugLog = createDebugLogger('teaminfogenerate.js', '#d152ff', '#e6a1ff');
 const UPDATEINVERVAL = 30000;
 let refreshTimer = null;
 
@@ -339,7 +341,7 @@ function generateTeamBox(teamData, showError) {
                     renderSeasonStats(data[0]);
                 }
             } catch (error) {
-                console.debug(`%cteaminfogenerate.js %c> %cFailed to fetch season ${season} data: ${error.message}`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
+                debugLog(`Failed to fetch season ${season} data: ${error.message}`);
                 if (!cached) renderSeasonStats(null);
             }
         });
@@ -487,7 +489,7 @@ async function getPlayerdata(team = "", season = "") {
 
 document.addEventListener("DOMContentLoaded", async () => {
     const startTime = performance.now();
-    console.debug(`%cteaminfogenerate.js %c> %cGenerating team info page`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
+    debugLog(`Generating team info page`);
 
     const urlParams = new URLSearchParams(window.location.search);
     const currentTeam = urlParams.get('team');
@@ -506,7 +508,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const cachedData = getTeamCache(currentTeam);
 
     if (cachedData) {
-        console.debug(`%cteaminfogenerate.js %c> %cGenerating team info box (cache)...`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
+        debugLog(`Generating team info box (cache)...`);
         generateTeamBox(cachedData, 0);
     }
 
@@ -523,7 +525,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             window.location.href = "/teams";
             return;
         }
-        console.debug(`%cteaminfogenerate.js %c> %cFailed to fetch team data: ${error.message}`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
+        debugLog(`Failed to fetch team data: ${error.message}`);
 
         showError = error?.message?.includes('429') ? 2 : 1;
 
@@ -550,7 +552,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (refreshTimer) clearTimeout(refreshTimer);
     const updateFetch = async () => {
         try {
-            console.debug(`%cteaminfogenerate.js %c> %cRefreshing live data...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
+            debugLog(`Refreshing live data...`);
             playerData = await getPlayerdata(currentTeam);
             setTeamCache(currentTeam, playerData[0]);
             showError = 0;
@@ -565,5 +567,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
     refreshTimer = setTimeout(updateFetch, UPDATEINVERVAL);
 
-    console.debug(`%cteaminfogenerate.js %c> %cGenerated team page in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
+    debugLog(`Generated team page in ${(performance.now() - startTime).toFixed(2)}ms`);
 });

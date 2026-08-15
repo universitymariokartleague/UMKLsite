@@ -3,7 +3,9 @@
 */
 
 import { getMatchData } from '/assets/scripts/utils/matchdata.js';
+import { createDebugLogger } from '/assets/scripts/utils/debuglogger.js';
 
+const debugLog = createDebugLogger('matchstatsgenerate.js', '#ff52dc', '#ffa3ed');
 const teamBoxFormatHTML = `
     <div class="team-info-wrapper">
         {{trackCounts}}
@@ -210,7 +212,7 @@ async function getCurrentSeason() {
 
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
-    console.debug(`%cmatchstatsgenerate.js %c> %cGenerating match stats box`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
+    debugLog(`Generating match stats box`);
     JSTeamBox.innerHTML = "Loading match information...";
 
     let showError = 0;
@@ -247,7 +249,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     await generateMatchStatsBox(showError);
 
-    console.debug(`%cmatchstatsgenerate.js %c> %cGenerated match stats box in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#ff52dc", "color:#fff", "color:#ffa3ed");
+    debugLog(`Generated match stats box in ${(performance.now() - startTime).toFixed(2)}ms`);
 });
 
 testMatchesCheckbox.addEventListener("click", async function () {

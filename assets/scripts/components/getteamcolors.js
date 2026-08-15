@@ -3,6 +3,9 @@
     this is used on the team creation guidelines page to show the current team colors.
 */
 
+import { createDebugLogger } from '/assets/scripts/utils/debuglogger.js';
+
+const debugLog = createDebugLogger('getteamcolors.js', '#fc52ff', '#fda6ff');
 const currentTeamColors = document.getElementById("currentTeamColors");
 let teamColors = [];
 let startTime;
@@ -39,7 +42,7 @@ function createColorBox(name, color) {
 
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
-    console.debug(`%cgetteamcolors.js %c> %cGetting team colors...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
+    debugLog(`Getting team colors...`);
     
     teamColors = await getTeamcolors();
 
@@ -47,5 +50,5 @@ document.addEventListener("DOMContentLoaded", async () => {
         createColorBox(name, color);
     });
 
-    console.debug(`%cgetteamcolors.js %c> %cGenerated team colors in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
+    debugLog(`Generated team colors in ${(performance.now() - startTime).toFixed(2)}ms`);
 });

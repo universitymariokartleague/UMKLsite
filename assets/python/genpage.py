@@ -24,6 +24,7 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
     <meta name="color-scheme" content="dark light">
 
     <meta property="og:title" content="{TITLE} | UMKL" />
+    <meta property="og:site_name" content="UMKL" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://umkl.co.uk/{LINK}" />
     <meta property="og:image" content="https://umkl.co.uk/{IMAGE}" />

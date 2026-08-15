@@ -5,6 +5,9 @@
 */
 
 import { halloweenEasterEgg, winterEasterEgg, newYearCountDown, newYearFireworks } from '/assets/scripts/base/eastereggs.js';
+import { createDebugLogger } from '/assets/scripts/utils/debuglogger.js';
+
+const debugLog = createDebugLogger('settings.js', '#ff4576', '#ff9eb8');
 export { toggleSettingsPanel, disableThemeShortcut, disableSettingsShortcut }
 
 const settingsBoxHTML = `
@@ -125,7 +128,7 @@ function toggleTheme() {
     }
 
     meta.content = darkThemeEnabled ? "dark" : "light";
-    console.debug(`%csettings.js %c> %c${next === null ? "Clearing theme" : `Set theme to ${meta.content}`}`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
+    debugLog(`${next === null ? "Clearing theme" : `Set theme to ${meta.content}`}`);
     sendThemeChangeEvent();
     generateSettingsPanel();
 }
@@ -137,7 +140,7 @@ function toggleThemeLightDarkOnly() {
 
     root.setAttribute("data-theme", next ? "dark" : "light");
     meta.content = darkThemeEnabled ? "dark" : "light";
-    console.debug(`%csettings.js %c> %cSet theme to ${meta.content}`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
+    debugLog(`Set theme to ${meta.content}`);
     sendThemeChangeEvent();
 }
 
@@ -145,7 +148,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (ev
     if (!localStorage.getItem("darktheme")) {
         darkThemeEnabled = event.matches ? 1 : 0;
         meta.content = darkThemeEnabled ? "dark" : "light";
-        console.debug(`%csettings.js %c> %cDevice theme changed to ${meta.content}`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
+        debugLog(`Device theme changed to ${meta.content}`);
         sendThemeChangeEvent();
         generateSettingsPanel();
     }
@@ -162,7 +165,7 @@ document.addEventListener('scrollbarToCalendarListView', (event) => {
 function toggleStartDay() {
     const newStartDay = localStorage.getItem("startDay") == 0 ? 1 : 0;
     localStorage.setItem("startDay", newStartDay);
-    console.debug(`%csettings.js %c> %cset startDay to ${newStartDay} (${weekdayNamesFull[newStartDay]})`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
+    debugLog(`set startDay to ${newStartDay} (${weekdayNamesFull[newStartDay]})`);
     document.dispatchEvent(new CustomEvent('startDayChange'));
     generateSettingsPanel();
 }
@@ -172,7 +175,7 @@ function toggleLocale() {
     const currentLocale = localStorage.getItem("locale") || "en-GB";
     const newLocale = locales[(locales.indexOf(currentLocale) + 1) % locales.length];
     localStorage.setItem("locale", newLocale);
-    console.debug(`%csettings.js %c> %cset locale to ${newLocale}`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
+    debugLog(`set locale to ${newLocale}`);
     document.dispatchEvent(new CustomEvent('startDayChange'));
     generateSettingsPanel();
 }
@@ -180,7 +183,7 @@ function toggleLocale() {
 function toggleOverseasDateDisplayButton() {
     const newOverseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1 ? 0 : 1;
     localStorage.setItem("overseasDateDisplay", newOverseasDateDisplay);
-    console.debug(`%csettings.js %c> %cset overseasDateDisplay to ${newOverseasDateDisplay}`, "color:#ff4576", "color:#fff", "color:#ff9eb8")
+    debugLog(`set overseasDateDisplay to ${newOverseasDateDisplay}`);
     document.dispatchEvent(new CustomEvent('startDayChange'));
     generateSettingsPanel();
 }

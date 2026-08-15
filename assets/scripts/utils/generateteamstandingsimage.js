@@ -2,6 +2,10 @@
     This script is used to generate standing images for the share button
     on the teams page.
 */
+
+import { createDebugLogger } from '/assets/scripts/utils/debuglogger.js';
+
+const debugLog = createDebugLogger('generateteamstandingsimage.js', '#fc52ff', '#fda6ff');
 export { generateTeamStandingsImage };
 
 let startTime;
@@ -30,7 +34,7 @@ async function getCurrentSeason() {
 }
 
 async function getTeamdata(team = "", season) {
-    console.debug(`%cgenerateteamstandingsimage.js %c> %cFetching teamdata from the API...`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
+    debugLog(`Fetching teamdata from the API...`);
     return fetch('https://api.umkl.co.uk/teamdata', {
         method: 'POST',
         headers: {
@@ -295,6 +299,6 @@ async function generateTeamStandingsImage(season) {
         }
     }
 
-    console.debug(`%cgenerateteamstandingsimage.js %c> %cGenerated team standings image in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#fc52ff", "color:#fff", "color:#fda6ff");
+    debugLog(`Generated team standings image in ${(performance.now() - startTime).toFixed(2)}ms`);
     return createTeamStandingsImage(season, seasonStatus === "Ongoing", teamStandings);
 }

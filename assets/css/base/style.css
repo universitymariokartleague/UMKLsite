@@ -146,6 +146,10 @@ main {
     font-size: 16px;
 }
 
+main.article-main {
+    max-width: calc(var(--article-max-width) - env(safe-area-inset-left));
+}
+
 h1,
 h2,
 h3,
@@ -387,6 +391,7 @@ select.bubble-link option {
 }
 
 @media screen and (max-width: 900px) {
+
     #carouselPrev,
     #carouselNext {
         display: none;

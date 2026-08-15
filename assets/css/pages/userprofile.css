@@ -26,6 +26,22 @@
     perspective: 1000px;
 }
 
+/* html-to-image can't render backdrop-filter (it needs live compositing of what's behind the
+   element) - it comes out as a blotchy mess that bleeds past the rounded corners. Just drop the
+   blur for the duration of the capture (don't touch `background` - equipped background images
+   are set inline on this same element, and a `background` shorthand override would wipe them). */
+.profile-card.capturing-screenshot {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+.profile-card.capturing-screenshot .stat-item,
+.profile-card.capturing-screenshot .sp-graph-container {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
 .profile-card::before {
     content: "";
     position: absolute;
@@ -84,7 +100,7 @@
 .stat-item {
     text-align: center;
     padding: 10px;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-radius: 12px;
@@ -119,12 +135,47 @@
 }
 
 .sp-graph-container {
-    background: rgba(255, 255, 255, 0.7);
+    position: relative;
+    background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-radius: 12px;
     padding: 10px;
     border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.sp-graph-tooltip {
+    position: absolute;
+    transform: translate(-50%, calc(-100% - 10px));
+    pointer-events: auto;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    color: #222;
+    padding: 6px 9px;
+    border-radius: 10px;
+    font-size: 11px;
+    line-height: 1.4;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+.sp-graph-tooltip.sp-graph-tooltip-below {
+    transform: translate(-50%, 10px);
+}
+
+.sp-graph-tooltip a {
+    color: var(--team-color, #1baa8b);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.sp-graph-tooltip a:hover {
+    opacity: 0.8;
 }
 
 #spGraph {
@@ -155,7 +206,7 @@
     font-weight: bold;
     text-align: center;
     background: var(--team-color, #111111);
-    border-radius: 15px;
+    border-radius: 10px;
     font-size: 0.7em;
     color: #FFF;
     display: none;
@@ -164,7 +215,7 @@
 .customise-button {
     border: 2px solid var(--team-color, #ccc);
     background: #FFF;
-    border-radius: 15px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 0.9em;
     color: #333;
@@ -237,7 +288,7 @@
     padding: 6px 12px;
     border: 2px solid var(--team-color, #ccc);
     background: #FFF;
-    border-radius: 20px;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 0.9em;
@@ -323,7 +374,7 @@
 .button-cancel,
 .button-save {
     padding: 4px 10px;
-    border-radius: 15px;
+    border-radius: 12px;
     border: 2px solid var(--accent-color) !important;
     color: var(--accent-color) !important;
     background: #FFF;
@@ -357,6 +408,16 @@
 
     to {
         opacity: 1;
+    }
+}
+
+@keyframes profile-snow-fall {
+    from {
+        background-position: 0 0, 0 0;
+    }
+
+    to {
+        background-position: 0 400px, 0 700px;
     }
 }
 
