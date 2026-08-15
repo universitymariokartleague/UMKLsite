@@ -74,9 +74,8 @@ settingsBox.addEventListener('cancel', (e) => {
 
 document.getElementById('settings-box-close-button').addEventListener('click', closeSettingsPanel);
 
-const meta = document.querySelector('meta[name="color-scheme"]');
-const root = document.querySelector(":root");
-let darkThemeEnabled = meta.content == "dark" ? 1 : 0;
+// `meta`, `root` and `darkThemeEnabled` are declared globally by assets/scripts/theme.js,
+// which runs synchronously before this module to apply the theme without a flash.
 
 function generateSettingsPanel() {
     try {
@@ -118,41 +117,34 @@ function toggleTheme() {
     if (next === null) {
         localStorage.removeItem("darktheme");
         darkThemeEnabled = window.matchMedia('(prefers-color-scheme: dark)').matches ? 1 : 0;
+        root.removeAttribute("data-theme");
     } else {
         localStorage.setItem("darktheme", next);
         darkThemeEnabled = next;
+        root.setAttribute("data-theme", next ? "dark" : "light");
     }
 
     meta.content = darkThemeEnabled ? "dark" : "light";
-    root.classList.toggle("dark-theme", !!darkThemeEnabled);
-    root.classList.toggle("light-theme", !darkThemeEnabled);
     console.debug(`%csettings.js %c> %c${next === null ? "Clearing theme" : `Set theme to ${meta.content}`}`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
     sendThemeChangeEvent();
     generateSettingsPanel();
 }
 
 function toggleThemeLightDarkOnly() {
-    const meta = document.querySelector('meta[name="color-scheme"]');
-    const root = document.querySelector(":root");
-
-    let next = meta.content === "dark" ? 0 : 1;
+    let next = darkThemeEnabled ? 0 : 1;
     localStorage.setItem("darktheme", next);
     darkThemeEnabled = next;
 
+    root.setAttribute("data-theme", next ? "dark" : "light");
     meta.content = darkThemeEnabled ? "dark" : "light";
-    root.classList.toggle("dark-theme", !!darkThemeEnabled);
-    root.classList.toggle("light-theme", !darkThemeEnabled);
     console.debug(`%csettings.js %c> %cSet theme to ${meta.content}`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
     sendThemeChangeEvent();
-    generateSettingsPanel();
 }
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
     if (!localStorage.getItem("darktheme")) {
         darkThemeEnabled = event.matches ? 1 : 0;
         meta.content = darkThemeEnabled ? "dark" : "light";
-        root.classList.toggle("dark-theme", darkThemeEnabled);
-        root.classList.toggle("light-theme", !darkThemeEnabled);
         console.debug(`%csettings.js %c> %cDevice theme changed to ${meta.content}`, "color:#ff4576", "color:#fff", "color:#ff9eb8");
         sendThemeChangeEvent();
         generateSettingsPanel();

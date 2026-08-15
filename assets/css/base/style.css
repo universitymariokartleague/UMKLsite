@@ -20,8 +20,7 @@
     --light-highlight-color: #ffffff80;
 }
 
-:root,
-:root.light-theme {
+:root {
     --text-color: var(--brand-dark);
     --hr-color: var(--brand-dark);
     --bg-color: var(--brand-light);
@@ -47,7 +46,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme="light"]) {
         --text-color: var(--brand-light);
         --hr-color: var(--brand-light);
         --bg-color: var(--brand-dark);
@@ -70,7 +69,7 @@
     }
 }
 
-:root.dark-theme {
+:root[data-theme="dark"] {
     --text-color: var(--brand-light);
     --hr-color: var(--brand-light);
     --bg-color: var(--brand-dark);
@@ -845,7 +844,7 @@ umkl-footer::selection {
     background-color: var(--light-highlight-color);
 }
 
-:root.dark-theme umkl-footer::selection {
+:root[data-theme="dark"] umkl-footer::selection {
     background-color: unset;
 }
 

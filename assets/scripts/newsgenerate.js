@@ -96,7 +96,6 @@ function renderHomeNews(news) {
             <a href="${hero.link}" class="hero-card-link">
                 <img loading="lazy" src="${hero.image}" alt="${hero.alt}">
                 <div class="hero-content">
-                    <span class="badge">FEATURED</span>
                     <h2>${hero.title}</h2>
                     <p>${hero.description}</p>
                     <div class="hero-meta">
