@@ -4,7 +4,7 @@
     It saves the settings in local storage and applies them to the page.
 */
 
-import { halloweenEasterEgg, winterEasterEgg, newYearCountDown, newYearFireworks } from './eastereggs.js';
+import { halloweenEasterEgg, winterEasterEgg, newYearCountDown, newYearFireworks } from '/assets/scripts/base/eastereggs.js';
 export { toggleSettingsPanel, disableThemeShortcut, disableSettingsShortcut }
 
 const settingsBoxHTML = `

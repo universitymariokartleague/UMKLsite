@@ -4,8 +4,8 @@
     for tracks that have different names in PAL regions.
 */
 
-import { disableThemeShortcut, disableSettingsShortcut } from './settings.js';
-import { TRACKS as tracks } from './tracknames.js';
+import { disableThemeShortcut, disableSettingsShortcut } from '/assets/scripts/base/settings.js';
+import { TRACKS as tracks } from '/assets/scripts/utils/tracknames.js';
 
 const gameSelect = document.getElementById("game-select");
 const tracksContainer = document.getElementById("results");

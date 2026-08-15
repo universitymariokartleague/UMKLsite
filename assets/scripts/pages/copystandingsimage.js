@@ -7,8 +7,8 @@
     The preview is a small popup that shows the image and a message indicating 
     that it has been copied.
 */
-import { isWindowsOrLinux, copyImageToClipboard, shareImage, showImagePreview, setOriginalMessage, getOriginalMessage, getIsPopupShowing } from "./shareAPIhelper.js";
-import { generateTeamStandingsImage } from './generateteamstandingsimage.js';
+import { isWindowsOrLinux, copyImageToClipboard, shareImage, showImagePreview, setOriginalMessage, getOriginalMessage, getIsPopupShowing } from "/assets/scripts/utils/shareAPIhelper.js";
+import { generateTeamStandingsImage } from '/assets/scripts/utils/generateteamstandingsimage.js';
 
 const shareButton = document.getElementById("shareButton");
 const seasonPicker = document.getElementById("season-select")

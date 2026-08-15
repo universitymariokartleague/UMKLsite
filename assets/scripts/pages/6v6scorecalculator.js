@@ -2,8 +2,8 @@
     This script calculates the points difference in 6v6. It dynamically updates
     the results for both teams and the points difference as the user inputs data. 
 */
-import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareImage, showImagePreview, setOriginalMessage } from './shareAPIhelper.js';
-import { resolveTrackName, getTrackIconPath } from './tracknames.js';
+import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareImage, showImagePreview, setOriginalMessage } from '/assets/scripts/utils/shareAPIhelper.js';
+import { resolveTrackName, getTrackIconPath } from '/assets/scripts/utils/tracknames.js';
 
 const inputArea = document.getElementById("inputArea");
 const positionsInput = document.getElementById("positions-input");

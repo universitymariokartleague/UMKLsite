@@ -1,4 +1,4 @@
-import { toggleSettingsPanel } from './settings.js';
+import { toggleSettingsPanel } from '/assets/scripts/base/settings.js';
 
 const loadingArea = document.getElementById("loading-area");
 const loadingBar = document.getElementById("loading-bar");
@@ -130,9 +130,10 @@ const blogFormatHTML = `
     <script type="module" src="/components/footer.js" defer></script>
 
     <!-- Scripts -->
-    <script src="/assets/scripts/theme.js"></script>
+    <script src="/assets/scripts/base/theme.js"></script>
 
-    <script type="module" src="/assets/scripts/settings.js" defer></script>
+    <script type="module" src="/assets/scripts/base/settings.js" defer></script>
+    <script defer src="/assets/scripts/base/imagefade.js" type="module"></script>
 </head>
 <body id="top">
     <umkl-navbar></umkl-navbar>

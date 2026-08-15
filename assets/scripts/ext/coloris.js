@@ -1,4 +1,4 @@
-import './coloris.min.js';
+import '/assets/scripts/ext/coloris.min.js';
 
 const iframe = document.getElementById("discordRoleiFrame");
 const colorPicker = document.getElementById("color-picker");

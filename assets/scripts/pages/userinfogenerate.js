@@ -1,7 +1,7 @@
 /*
     This script generates a user's info page card, along with allowing customisations.
 */
-import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareImage, showImagePreview, setOriginalMessage } from './shareAPIhelper.js';
+import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareImage, showImagePreview, setOriginalMessage } from '/assets/scripts/utils/shareAPIhelper.js';
 
 const profileCardContentHTML = `
     <div class="profile-card-header">

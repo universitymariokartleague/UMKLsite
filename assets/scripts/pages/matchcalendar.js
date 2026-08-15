@@ -4,8 +4,8 @@
     The calendar allows users to click on a date to view the matches scheduled for that day.
 */
 
-import { generate6v6ScoreCalculatorLink } from './matchhelper.js';
-import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareText, shareImage, showTextPopup, showImagePreview, setOriginalMessage } from './shareAPIhelper.js';
+import { generate6v6ScoreCalculatorLink } from '/assets/scripts/utils/matchhelper.js';
+import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareText, shareImage, showTextPopup, showImagePreview, setOriginalMessage } from '/assets/scripts/utils/shareAPIhelper.js';
 
 const WEEKDAY_NAMES = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];

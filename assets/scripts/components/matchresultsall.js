@@ -1,4 +1,4 @@
-import { generate6v6ScoreCalculatorLink } from './matchhelper.js';
+import { generate6v6ScoreCalculatorLink } from '/assets/scripts/utils/matchhelper.js';
 
 const allMatchesBox = document.getElementById("JSAllMatches");
 let normalizedMatches = [];
