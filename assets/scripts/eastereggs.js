@@ -10,7 +10,7 @@ function injectMusic(path) {
     const audioContainer = document.createElement('div');
     audioContainer.innerHTML = `
         <audio id="audio" src="${path}" preload="auto"></audio>
-        <script type="text/javascript" src="/scripts/audioplayer.js" id="audioPlayerScript" defer></script>
+        <script type="text/javascript" src="/assets/scripts/audioplayer.js" id="audioPlayerScript" defer></script>
         <div id="audioStatus" data-playlist="bgm.txt" class="hidden">
             <span id="BGMName">Music</span><br>
             <div class="audioControls">
@@ -32,13 +32,13 @@ function injectMusic(path) {
 
     const script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = '/scripts/audioplayer.js';
+    script.src = '/assets/scripts/audioplayer.js';
     script.defer = true;
     document.body.appendChild(script);
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = '/css/components/audioplayer.css';
+    link.href = '/assets/css/components/audioplayer.css';
     document.head.appendChild(link);
 }
 

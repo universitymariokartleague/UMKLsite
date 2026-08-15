@@ -15,9 +15,9 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
     <title>{TITLE} | UMKL</title>
     <meta name="description" content="{DESC}">
     <link rel="icon" href="/assets/media/brand/favicon.png" type="image/png">
-    <link rel="stylesheet" href="/css/base/style.css">
-    <link rel="stylesheet" href="/css/base/settings.css">
-    <link rel="stylesheet" href="/css/ext/fontawesome.min.css">
+    <link rel="stylesheet" href="/assets/css/base/style.css">
+    <link rel="stylesheet" href="/assets/css/base/settings.css">
+    <link rel="stylesheet" href="/assets/css/ext/fontawesome.min.css">
     <link rel="modulepreload" href="/components/navbar.js">
     <link rel="modulepreload" href="/components/footer.js">
     <meta name="color-scheme" content="dark light">
@@ -39,7 +39,7 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
 
     <!-- Scripts -->
     <script>const meta=document.querySelector('meta[name="color-scheme"]'),root=document.querySelector(":root");let darkThemeEnabled;function checkTheme(){let e=parseInt(localStorage.getItem("darktheme"));isNaN(e)&&(e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?1:0),1===e?(meta.setAttribute("content","dark"),root.classList.add("dark-theme"),console.debug("%csettings.js %c> %cSetting dark theme","color:#ff4576","color:#fff","color:#ff9eb8")):(meta.setAttribute("content","light"),root.classList.add("light-theme"),console.debug("%csettings.js %c> %cSetting light theme","color:#ff4576","color:#fff","color:#ff9eb8"))}checkTheme();</script>
-    <script type="module" src="/scripts/settings.js" defer></script>
+    <script type="module" src="/assets/scripts/settings.js" defer></script>
 </head>
 <body id="top">
     <umkl-navbar></umkl-navbar>

@@ -44,7 +44,8 @@ img {
     z-index: 2;
     padding: 24px;
     background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.9) 100%);
-    width: 100%;
+    width: calc(100% + 2px);
+    margin: 0 -1px -1px;
     box-sizing: border-box;
     overflow: hidden;
 }
