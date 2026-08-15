@@ -21,6 +21,8 @@
 }
 
 :root {
+    color-scheme: light;
+
     --text-color: var(--brand-dark);
     --hr-color: var(--brand-dark);
     --bg-color: var(--brand-light);
@@ -47,6 +49,8 @@
 
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
+        color-scheme: dark;
+
         --text-color: var(--brand-light);
         --hr-color: var(--brand-light);
         --bg-color: var(--brand-dark);
@@ -70,6 +74,8 @@
 }
 
 :root[data-theme="dark"] {
+    color-scheme: dark;
+
     --text-color: var(--brand-light);
     --hr-color: var(--brand-light);
     --bg-color: var(--brand-dark);
@@ -363,6 +369,15 @@ button:focus {
 
 .bubble-link:not(select):active {
     transform: scale(0.95);
+}
+
+/* Options popups can't use a translucent background, so give them an
+   opaque one - otherwise Chromium ignores color-scheme and renders the
+   dropdown with default (light) system colors, which is unreadable in
+   dark mode. */
+select.bubble-link option {
+    background-color: var(--bg-color);
+    color: var(--text-color);
 }
 
 @media (prefers-reduced-motion) {
