@@ -34,7 +34,7 @@ async function loadVideoCarousel() {
 
         const locale = localStorage.getItem("locale") || "en-GB";
 
-        data.forEach(item => {
+        data.slice(0, 10).forEach(item => {
             const thumbnailUrl = item.thumbnail || `https://i.ytimg.com/vi/${item.video_id}/hqdefault.jpg`;
             const title = item.title || item.match?.title || "UMKL Video";
             const date = item.published ? new Date(item.published) : null;
