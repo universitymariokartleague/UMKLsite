@@ -12,7 +12,14 @@ function fadeInOnLoad(img) {
     img.style.opacity = "0";
     img.style.transition = "opacity 0.25s ease-in";
 
-    const reveal = () => { img.style.opacity = "1"; };
+    // Clear the inline styles once the fade finishes
+    const reveal = () => {
+        img.style.opacity = "1";
+        img.addEventListener("transitionend", () => {
+            img.style.opacity = "";
+            img.style.transition = "";
+        }, { once: true });
+    };
     img.addEventListener("load", reveal, { once: true });
     img.addEventListener("error", reveal, { once: true });
 }

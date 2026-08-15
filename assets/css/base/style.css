@@ -368,6 +368,13 @@ button:focus {
     }
 }
 
+@media screen and (max-width: 900px) {
+    #carouselPrev,
+    #carouselNext {
+        display: none;
+    }
+}
+
 .bubble-nav {
     background-color: var(--translucent-color);
     border: none;

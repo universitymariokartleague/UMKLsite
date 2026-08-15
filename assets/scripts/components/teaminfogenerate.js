@@ -13,7 +13,7 @@ let latestSeason = null;
 
 const CACHE_KEY = 'teamInfoCache';
 
-/* --- COLOR UTILITIES --- */
+// Helpers
 const darkenColor = (color, percent = 20) => {
     if (!/^#?[0-9A-Fa-f]{6}$/.test(color)) return color;
 
@@ -48,7 +48,7 @@ const isLightColor = (color) => {
     return brightness > 172;
 };
 
-/* --- CACHE UTILITIES --- */
+// Caching
 const getTeamCache = (team) => {
     try {
         const cached = (JSON.parse(localStorage.getItem(CACHE_KEY)) || {})[team];
@@ -80,7 +80,7 @@ const setSeasonCache = (team, season, data) => {
     } catch { }
 };
 
-/* --- FORMATTERS --- */
+// Formatting
 const makePossessive = name =>
     !name ? "" : (name.endsWith("s") || name.endsWith("S") ? `${name}'` : `${name}'s`);
 
@@ -104,7 +104,7 @@ function formatChampionshipSeasons(championshipYears) {
     return `(${seasons.join(', ')})`;
 }
 
-/* --- RENDERERS --- */
+// Rendering
 function renderSeasonStats(seasonData) {
     const grid = document.getElementById('seasonStatsGrid');
     if (!grid) return;

@@ -1,15 +1,36 @@
 const API_URL = `https://api.umkl.co.uk/videos`;
 const SKELETON_CARD_COUNT = 6;
+const RETRY_DELAY_MS = 5000;
+const RETRY_MAX_DELAY_MS = 30000;
 
 function renderVideoCarouselSkeleton(container) {
     const skeletonCard = `
         <div class="video-card video-card-skeleton" aria-hidden="true">
             <div class="video-thumb-wrapper skeleton"></div>
-            <div class="skeleton skeleton-line" style="width:90%;"></div>
-            <div class="skeleton skeleton-line" style="width:35%; height:10px; margin-top:8px;"></div>
+            <p class="video-title skeleton"></p>
+            <p class="video-date skeleton"></p>
         </div>
     `;
     container.innerHTML = skeletonCard.repeat(SKELETON_CARD_COUNT);
+}
+
+async function fetchVideos() {
+    const response = await fetch(API_URL);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return response.json();
+}
+
+async function fetchVideosWithRetry() {
+    let delay = RETRY_DELAY_MS;
+    for (; ;) {
+        try {
+            return await fetchVideos();
+        } catch (error) {
+            console.error("Error fetching YouTube playlist, retrying:", error);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            delay = Math.min(delay * 2, RETRY_MAX_DELAY_MS);
+        }
+    }
 }
 
 async function loadVideoCarousel() {
@@ -22,8 +43,7 @@ async function loadVideoCarousel() {
     renderVideoCarouselSkeleton(container);
 
     try {
-        const response = await fetch(API_URL);
-        const data = await response.json();
+        const data = await fetchVideosWithRetry();
 
         if (!Array.isArray(data) || data.length === 0) {
             container.innerHTML = `<p class="carousel-loading">No videos available.</p>`;
@@ -48,7 +68,7 @@ async function loadVideoCarousel() {
 
             card.innerHTML = `
                 <div class="video-thumb-wrapper">
-                    <img src="${thumbnailUrl}" alt="${title}" loading="lazy" />
+                    <img src="https://wsrv.nl/?height=300&q=50&url=${thumbnailUrl}" alt="${title}" loading="lazy" />
                     <div class="play-icon-overlay">
                         <i class="fa-solid fa-play"></i>
                     </div>
@@ -64,13 +84,17 @@ async function loadVideoCarousel() {
         container.appendChild(fragment);
 
         if (prevBtn && nextBtn) {
-            prevBtn.addEventListener("click", () => {
-                container.scrollBy({ left: -container.clientWidth * 0.75, behavior: "smooth" });
-            });
+            const scrollByCards = (direction) => {
+                const card = container.querySelector(".video-card");
+                if (!card) return;
+                const gap = parseFloat(getComputedStyle(container).columnGap) || 0;
+                const cardWidth = card.getBoundingClientRect().width + gap;
+                const visibleCount = Math.max(1, Math.floor(container.clientWidth / cardWidth));
+                container.scrollBy({ left: direction * cardWidth * visibleCount, behavior: "smooth" });
+            };
 
-            nextBtn.addEventListener("click", () => {
-                container.scrollBy({ left: container.clientWidth * 0.75, behavior: "smooth" });
-            });
+            prevBtn.addEventListener("click", () => scrollByCards(-1));
+            nextBtn.addEventListener("click", () => scrollByCards(1));
         }
 
     } catch (error) {

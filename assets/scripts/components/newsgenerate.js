@@ -28,8 +28,9 @@ function renderHomeNewsSkeleton() {
             <div class="img-wrapper">
                 <div class="skeleton" style="position:absolute;inset:0;border-radius:10px;"></div>
             </div>
-            <div class="skeleton skeleton-line" style="width:90%;"></div>
-            <div class="skeleton skeleton-line" style="width:60%;margin-top:4px;"></div>
+            <h3 class="skeleton"></h3>
+            <p class="skeleton"></p>
+            <div class="small-card-meta skeleton"></div>
         </article>
     `;
 
