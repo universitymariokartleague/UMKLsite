@@ -80,7 +80,6 @@ picture img {
 
 .column-played,
 .column-won,
-.column-drawn,
 .column-lost {
     width: 50px;
     text-align: center;

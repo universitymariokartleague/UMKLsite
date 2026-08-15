@@ -85,7 +85,7 @@ async function generateStandingsTable(data) {
         const points = team.team_season_points ?? 0;
         const avif = `https://api.umkl.co.uk/teamemblems/${nameUpper}`;
         const png = `https://api.umkl.co.uk/teamemblems/${nameUpper}`;
-        const dest = `/standings/details/?team=${encodeURIComponent(name)}`;
+        const dest = `/teams/details/?team=${encodeURIComponent(name)}`;
 
         return `
             <tr class="standings-row" tabindex="0" data-href="${dest}">
@@ -101,7 +101,6 @@ async function generateStandingsTable(data) {
                 </td>
                 <td class="column-played">${team.season_matches_played}</td>
                 <td class="column-won">${team.season_wins_losses[0]}</td>
-                <td class="column-drawn">0</td>
                 <td class="column-lost">${team.season_wins_losses[1]}</td>
                 <td class="column-points"><strong>${points}</strong></td>
             </tr>
@@ -116,7 +115,6 @@ async function generateStandingsTable(data) {
                     <th class="column-team">Team</th>
                     <th class="column-played">Played</th>
                     <th class="column-won">Won</th>
-                    <th class="column-drawn">Drawn</th>
                     <th class="column-lost">Lost</th>
                     <th class="column-points">Points</th>
                 </tr>

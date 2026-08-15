@@ -8,8 +8,8 @@
 const NEWS_JSON_URL = "/news/news.json";
 
 function formatDate(isoDate) {
-    const [y, m, d] = isoDate.split("-");
-    return `${d}/${m}/${y}`;
+    const locale = localStorage.getItem("locale") || "en-GB";
+    return new Date(isoDate).toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" });
 }
 
 async function fetchNews() {

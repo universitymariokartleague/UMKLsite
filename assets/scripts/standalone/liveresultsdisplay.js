@@ -2,6 +2,8 @@
     A script that fetches from live match data from api.umkl.co.uk/live.
 */
 
+import { getMatchData } from '/assets/scripts/utils/matchdata.js';
+
 let matchData = [];
 let raceresults = [];
 const firstTeamScore = document.getElementById("firstteamscore");
@@ -26,24 +28,6 @@ let startTime;
 
 async function getLiveResults() {
     return fetch('https://api.umkl.co.uk/live', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: "{}"
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-            return response.json();
-        });
-}
-
-async function getMatchData() {
-    return fetch('https://api.umkl.co.uk/matchdata', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

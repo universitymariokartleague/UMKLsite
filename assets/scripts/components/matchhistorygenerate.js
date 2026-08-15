@@ -1,13 +1,8 @@
 import { generate6v6ScoreCalculatorLink } from '/assets/scripts/utils/matchhelper.js';
+import { getMatchData, normalizeMatchData, getMatchCache, setMatchCache } from '/assets/scripts/utils/matchdata.js';
 
 const matchHistoryBox = document.getElementById("JSMatchHistory");
-const teamEmblemBox = document.getElementById("teamEmblemBox");
 let matchData = [];
-let teamNameFromURL;
-
-const CACHE_KEY = 'matchDataCache';
-const getMatchCache = () => { try { return JSON.parse(localStorage.getItem(CACHE_KEY)) || null; } catch { return null; } };
-const setMatchCache = (data) => { try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch { } };
 
 const getTeamFromURL = () => new URLSearchParams(window.location.search).get("team");
 
@@ -33,66 +28,17 @@ function getScoreForTeam(match, teamName) {
     };
 }
 
-async function getMatchData() {
-    return fetch('https://api.umkl.co.uk/matchdata', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: "{}"
-    }).then(response => {
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return response.json();
-    });
-}
-
-function normalizeMatchData(matchData) {
-    const flat = [];
-    Object.keys(matchData).forEach(dateKey => {
-        matchData[dateKey].forEach(entry => {
-            flat.push({ ...entry, matchDate: dateKey });
-        });
-    });
-    return flat;
-}
-
 function formatDate(dateStr, locale) {
     const d = new Date(dateStr);
     return d.toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" });
 }
 
-function populateTeamDropdown(currentTeam) {
-    const teamSelect = document.getElementById("team-select");
-    if (!teamSelect) return;
-
+function generateTeamMatches(teamName) {
     const allMatches = normalizeMatchData(matchData);
-    const teamsSet = new Set();
-
-    allMatches.forEach(match => {
-        if (Array.isArray(match.teamsInvolved)) {
-            match.teamsInvolved.forEach(team => teamsSet.add(team));
-        }
-    });
-
-    const sortedTeams = Array.from(teamsSet).sort((a, b) => a.localeCompare(b));
-
-    teamSelect.innerHTML =
-        `<option value="All">All</option>` +
-        sortedTeams.map(team => `
-        <option value="${team}" ${team.toLowerCase() === currentTeam?.toLowerCase() ? 'selected' : ''}>
-            ${team}
-        </option>
-    `).join('');
-}
-
-function generateTeamMatches(teamName, selectedSeason) {
-    const allMatches = normalizeMatchData(matchData);
-
-    let teamMatches = allMatches.filter(match => match.teamsInvolved?.includes(teamName));
-    if (selectedSeason) {
-        teamMatches = teamMatches.filter(match => String(match.season) === String(selectedSeason));
-    }
+    const teamMatches = allMatches.filter(match => match.teamsInvolved?.includes(teamName));
 
     if (teamMatches.length === 0) {
-        matchHistoryBox.innerHTML = `<p>No matches found for ${teamName}${selectedSeason ? ` in Season ${selectedSeason}` : ''}.</p>`;
+        matchHistoryBox.innerHTML = `<p style="margin-top: 0px;">No matches found for ${teamName}.</p>`;
         return;
     }
 
@@ -108,11 +54,9 @@ function generateTeamMatches(teamName, selectedSeason) {
         const otherTeam = match.teamsInvolved.find(t => t !== teamName) || "TBC";
         const scoreData = getScoreForTeam(match, teamName);
 
-        let scoreDisplay = "Upcoming";
         let winStatus = "-";
 
         if (scoreData) {
-            scoreDisplay = `${scoreData.teamScore} - ${scoreData.otherScore}`;
             if (scoreData.teamScore > scoreData.otherScore) {
                 winStatus = "W";
             } else if (scoreData.teamScore < scoreData.otherScore) {
@@ -137,11 +81,12 @@ function generateTeamMatches(teamName, selectedSeason) {
                     </div>
                 </td>
                 <td class="column-date">${formatDate(match.matchDate, locale)}</td>
+                <td class="column-season">${match.testMatch ? "Test match" : `Season ${match.season}`}</td>
                 <td class="column-result">
                     ${winStatus}
                 </td>
                 <td class="column-points">
-                    <strong>${scoreData.teamScore}</strong>
+                    <strong>${scoreData ? scoreData.teamScore : "-"}</strong>
                 </td>
 
             </tr>
@@ -154,6 +99,7 @@ function generateTeamMatches(teamName, selectedSeason) {
                 <tr>
                     <th class="column-team">Opponent</th>
                     <th class="column-opponent">Date</th>
+                    <th class="column-season">Season</th>
                     <th class="column-result">Result</th>
                     <th class="column-points">Points</th>
                 </tr>
@@ -165,68 +111,23 @@ function generateTeamMatches(teamName, selectedSeason) {
     `;
 }
 
-
-
 async function showTeamMatches() {
-    teamNameFromURL = getTeamFromURL();
+    if (!matchHistoryBox) return;
 
-    if (!teamNameFromURL) {
-        window.location.href = "/results/";
-        return;
-    }
-
-    document.title = `${teamNameFromURL} Results | UMKL`;
-
-    const headingElem = document.getElementById("results-heading-team");
-    if (headingElem) {
-        headingElem.textContent = `${teamNameFromURL} Results`;
-    }
-
-    const seasonSelect = document.getElementById("season-select");
-    const getSelectedSeason = () => seasonSelect ? seasonSelect.value : null;
-
-    const teamSelect = document.getElementById("team-select");
-
-    // Fill emblem box with team colour and emblem
-    if (teamEmblemBox && teamNameFromURL) {
-
-        const em = getEmblem(teamNameFromURL);
-        teamEmblemBox.innerHTML = `
-            <picture>
-                <source srcset="${em.avif}" type="image/avif">
-                <img loading="lazy" src="${em.png}" alt="${teamNameFromURL} emblem" />
-            </picture>
-        `;
-    }
-
-    seasonSelect?.addEventListener("change", () => {
-        generateTeamMatches(teamNameFromURL, getSelectedSeason());
-    });
-
-    teamSelect?.addEventListener("change", (e) => {
-        const selectedTeam = e.target.value;
-        if (selectedTeam == "All") {
-            window.location.href = `/standings/`;
-        }
-        else if (selectedTeam && selectedTeam !== teamNameFromURL) {
-            window.location.href = `/standings/details/?team=${encodeURIComponent(selectedTeam)}`;
-        }
-
-    });
+    const teamNameFromURL = getTeamFromURL();
+    if (!teamNameFromURL) return;
 
     const cached = getMatchCache();
     if (cached) {
         matchData = cached;
-        populateTeamDropdown(teamNameFromURL);
-        generateTeamMatches(teamNameFromURL, getSelectedSeason());
+        generateTeamMatches(teamNameFromURL);
     }
 
     try {
         const fresh = await getMatchData();
         setMatchCache(fresh);
         matchData = fresh;
-        populateTeamDropdown(teamNameFromURL);
-        generateTeamMatches(teamNameFromURL, getSelectedSeason());
+        generateTeamMatches(teamNameFromURL);
     } catch (error) {
         if (!cached) {
             matchHistoryBox.innerHTML = `<p>Failed to load match history.</p>`;

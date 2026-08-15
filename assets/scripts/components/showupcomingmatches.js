@@ -3,6 +3,8 @@
     on the home page of the site.
 */
 
+import { getMatchData } from '/assets/scripts/utils/matchdata.js';
+
 const upcomingMatchesBox = document.getElementById("upcomingMatchesBox");
 const upcomingMatchesError = document.getElementById("upcomingMatchesError");
 const MATCH_LENGTH_MINS = 90;
@@ -14,24 +16,6 @@ let teamColors = [];
 let overseasDateDisplay = true; // forced on this page since I can't get it working otherwise
 let refreshTimer = null;
 let startTime;
-
-async function getMatchData() {
-    return fetch('https://api.umkl.co.uk/matchdata', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: "{}"
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-            return response.json();
-        });
-}
 
 async function getTeamColors() {
     return fetch('https://api.umkl.co.uk/teamcolors', {

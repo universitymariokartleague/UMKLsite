@@ -208,7 +208,7 @@ def build_rss(items):
 def generate_rss_feed():
     news_items = get_news_items()
     rss_xml = build_rss(news_items)
-    with open("news.xml", "wb") as f:
+    with open("news/feed.xml", "wb") as f:
         f.write(rss_xml)
 
 

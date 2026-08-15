@@ -3,13 +3,20 @@
     It formats data into a Hero banner, Current Season stats grid, and All-Time Team Summary card.
 */
 
-const startYear = 2023;
-const currentSeason = 3;
+import { getMatchData, normalizeMatchData, getMatchCache } from '/assets/scripts/utils/matchdata.js';
+import { bestTrack, worstTrack } from '/assets/scripts/utils/trackrecord.js';
+
 const UPDATEINVERVAL = 30000;
 let refreshTimer = null;
 
 let viewingSeason = null;
 let latestSeason = null;
+
+let bestTrackString = null;
+let worstTrackString = null;
+let lastRenderedTeamData = null;
+let lastRenderedSeasonData = null;
+let allMatches = [];
 
 const CACHE_KEY = 'teamInfoCache';
 
@@ -100,8 +107,55 @@ function formatChampionshipSeasons(championshipYears) {
     if (!Array.isArray(championshipYears) || championshipYears.length === 0) {
         return '';
     }
-    const seasons = championshipYears.map(year => `${startYear + year}-${String(startYear + year + 1).slice(-2)}`);
+    const seasons = championshipYears.map(year => `Season ${year}`);
     return `(${seasons.join(', ')})`;
+}
+
+function computeAverageMargin(matches, teamName, season) {
+    const relevant = matches.filter(match =>
+        !match.testMatch &&
+        String(match.season) === String(season) &&
+        match.teamsInvolved?.includes(teamName) &&
+        Array.isArray(match.results)
+    );
+
+    let total = 0, counted = 0;
+    relevant.forEach(match => {
+        const idx = match.teamsInvolved.indexOf(teamName);
+        const opp = idx === 0 ? 1 : 0;
+        const teamScore = match.results[idx]?.[1];
+        const oppScore = match.results[opp]?.[1];
+        if (typeof teamScore === 'number' && typeof oppScore === 'number') {
+            total += teamScore - oppScore;
+            counted++;
+        }
+    });
+
+    return counted ? total / counted : null;
+}
+
+async function loadMatchStats(teamName) {
+    const applyMatches = (raw) => {
+        allMatches = normalizeMatchData(raw);
+
+        const track = bestTrack(raw, teamName);
+        if (track) bestTrackString = track;
+
+        const worstTrackPick = worstTrack(raw, teamName);
+        if (worstTrackPick) worstTrackString = worstTrackPick;
+
+        if (lastRenderedTeamData) renderTeamSummary(lastRenderedTeamData);
+        if (lastRenderedSeasonData) renderSeasonStats(lastRenderedSeasonData);
+    };
+
+    const cached = getMatchCache();
+    if (cached) applyMatches(cached);
+
+    try {
+        applyMatches(await getMatchData());
+    } catch {
+        // Cache T_T
+    }
 }
 
 // Rendering
@@ -110,12 +164,21 @@ function renderSeasonStats(seasonData) {
     if (!grid) return;
 
     if (!seasonData) {
-        grid.innerHTML = `<p style="grid-column: span 2; opacity: 0.6;">No season statistics available.</p>`;
+        grid.innerHTML = `<p style="margin-top: 0px;">No season statistics available.</p>`;
         return;
     }
 
-    const winsLosses = seasonData.season_wins_losses ? `${seasonData.season_wins_losses[0]} - ${seasonData.season_wins_losses[1]}` : 'N/A';
+    lastRenderedSeasonData = seasonData;
+
+    const wins = seasonData.season_wins_losses?.[0] ?? 0;
+    const losses = seasonData.season_wins_losses?.[1] ?? 0;
+    const winsLosses = seasonData.season_wins_losses ? `${wins} - ${losses}` : 'N/A';
     const posFormatted = seasonData.season_position ? toOrdinal(seasonData.season_position) : 'N/A';
+    const winRate = (wins + losses) ? `${Math.round((wins / (wins + losses)) * 100)}%` : 'N/A';
+    const avgPoints = seasonData.season_matches_played ? Math.round((seasonData.team_season_points ?? 0) / seasonData.season_matches_played) : 'N/A';
+
+    const avgMargin = computeAverageMargin(allMatches, seasonData.team_name, seasonData.season);
+    const avgMarginStr = avgMargin === null ? 'N/A' : `${avgMargin > 0 ? '+' : ''}${Math.round(avgMargin)}`;
 
     grid.innerHTML = `
         <div class="stat-item">
@@ -127,12 +190,24 @@ function renderSeasonStats(seasonData) {
             <span class="stat-value">${seasonData.team_season_points ?? 0}</span>
         </div>
         <div class="stat-item">
+            <span class="stat-label">Average Points per Match</span>
+            <span class="stat-value">${avgPoints}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Average Margin</span>
+            <span class="stat-value">${avgMarginStr}</span>
+        </div>
+        <div class="stat-item">
             <span class="stat-label">Matches Played</span>
             <span class="stat-value">${seasonData.season_matches_played ?? 0}</span>
         </div>
         <div class="stat-item">
-            <span class="stat-label">Record (W - L)</span>
+            <span class="stat-label">Record</span>
             <span class="stat-value">${winsLosses}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Win Rate</span>
+            <span class="stat-value">${winRate}</span>
         </div>
         <div class="stat-item">
             <span class="stat-label">Penalties</span>
@@ -145,11 +220,13 @@ function renderTeamSummary(teamData) {
     const summaryList = document.getElementById('teamSummaryList');
     if (!summaryList) return;
 
+    lastRenderedTeamData = teamData;
+
     const locationHTML = teamData.team_place
         ? `<a href="https://www.google.com/maps/search/?q=${encodeURIComponent(teamData.team_place)}" target="_blank" rel="noopener noreferrer" style="color:${teamData.team_color}">${teamData.team_place}</a>`
         : 'N/A';
 
-    const entryYearStr = teamData.first_entry ? `Season ${teamData.first_entry} (${startYear + teamData.first_entry}-${String(startYear + 1 + teamData.first_entry).slice(-2)})` : 'N/A';
+    const entryYearStr = teamData.first_entry ? `Season ${teamData.first_entry}` : 'N/A';
     const championshipsStr = `${teamData.team_championships || 0} ${formatChampionshipSeasons(teamData.championship_seasons)}`;
     const careerWL = teamData.career_wins_losses ? `${teamData.career_wins_losses[0]} - ${teamData.career_wins_losses[1]}` : 'N/A';
 
@@ -172,11 +249,7 @@ function renderTeamSummary(teamData) {
         </div>
         <div class="summary-row">
             <span class="summary-label">Lifetime Matches</span>
-            <span class="summary-value">
-        <a href="/standings/details/?team=${encodeURIComponent(teamData.team_name)}" title="View all matches for ${teamData.team_name}">
-            ${teamData.lifetime_matches_played ?? 0} (View All)
-        </a>
-            </span>
+            <span class="summary-value">${teamData.lifetime_matches_played ?? 0}</span>
         </div>
         <div class="summary-row">
             <span class="summary-label">Lifetime Record</span>
@@ -185,6 +258,10 @@ function renderTeamSummary(teamData) {
         <div class="summary-row">
             <span class="summary-label">Lifetime Points</span>
             <span class="summary-value">${teamData.team_career_points ?? 0}</span>
+        </div>
+        <div class="summary-row" title="${worstTrackString ? `And their worst track is ${worstTrackString.track}...` : ''}">
+            <span class="summary-label">Best Track</span>
+            <span class="summary-value">${bestTrackString ? `<a href="/schedule/stats/" style="color:${teamData.team_color}">${bestTrackString.track}</a>` : 'N/A'}</span>
         </div>
     `;
 }
@@ -203,6 +280,8 @@ function generateTeamBox(teamData, showError) {
         heroPattern.style.backgroundColor = teamData.team_color;
     }
 
+    document.documentElement.style.setProperty('--highlight-color', teamData.team_color);
+
     const heroLogo = document.getElementById('teamHeroLogo');
     if (heroLogo) {
         heroLogo.src = logoUrl;
@@ -217,6 +296,7 @@ function generateTeamBox(teamData, showError) {
     const hasPlayed = !!minSeason;
     const selectWrapper = document.getElementById('teamSeasonSelectWrapper');
     const seasonHeading = document.getElementById('currentSeasonHeading');
+    if (seasonHeading) seasonHeading.textContent = `SEASON ${latestSeason}`;
 
     if (selectWrapper && hasPlayed) {
         if (latestSeason <= minSeason) {
@@ -266,13 +346,8 @@ function generateTeamBox(teamData, showError) {
     }
 
     // Championship Banner / Confetti
-    if (teamData.championship_seasons?.includes(currentSeason)) {
+    if (teamData.championship_seasons?.includes(latestSeason)) {
         if (!document.getElementById('champion-banner')) {
-            const banner = document.createElement('blockquote');
-            banner.id = 'champion-banner';
-            banner.className = 'champion';
-            banner.innerHTML = `<b>Season ${currentSeason} Champions!</b><br>Congratulations to ${teamData.team_name} on winning Season ${currentSeason} of the UMKL!`;
-            document.querySelector('main')?.insertBefore(banner, document.querySelector('.stats-section'));
             spawnConfetti();
         }
     }
@@ -309,7 +384,7 @@ function showErrorBox(showError) {
     }
 }
 
-/* --- CONFETTI ANIMATION --- */
+// Confetti animation
 function spawnConfetti() {
     const canvas = document.createElement('canvas');
     canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999';
@@ -410,7 +485,6 @@ async function getPlayerdata(team = "", season = "") {
     return response.json();
 }
 
-/* --- INITIALIZATION --- */
 document.addEventListener("DOMContentLoaded", async () => {
     const startTime = performance.now();
     console.debug(`%cteaminfogenerate.js %c> %cGenerating team info page`, "color:#d152ff", "color:#fff", "color:#e6a1ff");
@@ -424,6 +498,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     document.title = `${currentTeam} | UMKL`;
+
+    loadMatchStats(currentTeam);
 
     let showError = 0;
     let playerData = [];

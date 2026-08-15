@@ -2,6 +2,8 @@
     This script generates stats about matches.
 */
 
+import { getMatchData } from '/assets/scripts/utils/matchdata.js';
+
 const teamBoxFormatHTML = `
     <div class="team-info-wrapper">
         {{trackCounts}}
@@ -166,24 +168,6 @@ function showErrorBox(showError) {
 
 function calculateScore(position) {
     return scoreMap[position - 1] || 1; // Default to 1 if position is out of range
-}
-
-async function getMatchData() {
-    return fetch('https://api.umkl.co.uk/matchdata', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: "{}"
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
 }
 
 async function getTeamcolors() {

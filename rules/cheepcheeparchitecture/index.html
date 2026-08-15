@@ -78,7 +78,8 @@
 
         <hr>
 
-        <h2 id="what-this-project-is"><a href="/rules/cheepcheeparchitecture/#what-this-project-is">1. What this project is</a></h2>
+        <h2 id="what-this-project-is"><a href="/rules/cheepcheeparchitecture/#what-this-project-is">1. What this project
+                is</a></h2>
 
         <p class="p-no-spacing">
             Cheep Cheep is a single Python process that does two jobs at once:
@@ -127,7 +128,8 @@
             </div>
             <div class="file-tree-row" data-depth="1">
                 <span class="file-tree-name">graphics.py</span>
-                <span class="file-tree-desc">Image generation (Pillow) - results/versus/standings/overlays/captcha images</span>
+                <span class="file-tree-desc">Image generation (Pillow) - results/versus/standings/overlays/captcha
+                    images</span>
             </div>
             <div class="file-tree-row" data-depth="1">
                 <span class="file-tree-name">generate_calendar.py</span>
@@ -196,7 +198,8 @@
             </div>
             <div class="file-tree-row" data-depth="1">
                 <span class="file-tree-name">user_profile_cog.py</span>
-                <span class="file-tree-desc">User and team profiles, leaderboards, data export, stream overlay and YouTube thumbnails fetching</span>
+                <span class="file-tree-desc">User and team profiles, leaderboards, data export, stream overlay and
+                    YouTube thumbnails fetching</span>
             </div>
 
             <div class="file-tree-row" data-depth="0" data-dir>
@@ -205,8 +208,8 @@
             </div>
             <div class="file-tree-row" data-depth="1">
                 <span class="file-tree-name">backup.py</span>
-                <span class="file-tree-desc">Copies the DB + JSON files to <code
-                        translate="no">7z</code> files for scheduled/pre-mutation backups (see
+                <span class="file-tree-desc">Copies the DB + JSON files to <code translate="no">7z</code> files for
+                    scheduled/pre-mutation backups (see
                     <a href="/rules/cheepcheeparchitecture/#services-backup-py">§5.8</a>)</span>
             </div>
             <div class="file-tree-row" data-depth="1">
@@ -248,7 +251,8 @@
             </div>
             <div class="file-tree-row" data-depth="0" data-dir>
                 <span class="file-tree-name">output/</span>
-                <span class="file-tree-desc">Where generated images (results.png, versus.png, overlays, …) go, temporary and overwritten often</span>
+                <span class="file-tree-desc">Where generated images (results.png, versus.png, overlays, …) go, temporary
+                    and overwritten often</span>
             </div>
             <div class="file-tree-row" data-depth="0" data-dir>
                 <span class="file-tree-name">backups/</span>
@@ -288,7 +292,8 @@
                             <li>
                                 <div class="import-tree-row">
                                     <span class="import-tree-name">services/*</span>
-                                    <span class="import-tree-desc">calls the service synchronously (such as backup.py, data_export.py, gitimport.py)</span>
+                                    <span class="import-tree-desc">calls the service synchronously (such as backup.py,
+                                        data_export.py, gitimport.py)</span>
                                 </div>
                             </li>
                             <li>
@@ -301,7 +306,8 @@
                                     <li>
                                         <div class="import-tree-row">
                                             <span class="import-tree-name">config.py</span>
-                                            <span class="import-tree-desc">imported by every module above, contains configuration data</span>
+                                            <span class="import-tree-desc">imported by every module above, contains
+                                                configuration data</span>
                                         </div>
                                     </li>
                                 </ul>
@@ -320,7 +326,8 @@
                                     <span class="import-tree-name">dbserver.py</span>
                                     <span class="import-tree-desc">the public Flask + Waitress HTTP API
                                         (<code translate="no">api.umkl.co.uk</code>) that powers this website —
-                                        see <a href="/rules/cheepcheeparchitecture/#services-dbserver-py">§5.12</a></span>
+                                        see <a
+                                            href="/rules/cheepcheeparchitecture/#services-dbserver-py">§5.12</a></span>
                                 </div>
                             </li>
                             <li>
@@ -382,7 +389,8 @@
             </li>
             <li>
                 A daemon thread runs <code translate="no">services.predictionpolls.polling_loop</code> - this file is
-                currently unfinished (see <a href="/rules/cheepcheeparchitecture/#services-predictionpolls-py">§5.10</a>)
+                currently unfinished (see <a
+                    href="/rules/cheepcheeparchitecture/#services-predictionpolls-py">§5.10</a>)
             </li>
             <li>
                 <code translate="no">bot.run(TOKEN)</code> starts the Discord client.<br>
@@ -494,16 +502,19 @@
         <ul>
             <li>Reads <code translate="no">data/matchdata.json</code> and writes
                 <code translate="no">data/matches.ics</code> (an RFC 5545 calendar, via the
-                <code translate="no">icalendar</code> package, localised to Europe/London)</li>
+                <code translate="no">icalendar</code> package, localised to Europe/London)
+            </li>
             <li><code translate="no">build_calendar()</code> is called once at boot by
                 <code translate="no">main.py</code> (<code translate="no">from core.generate_calendar import
                     build_calendar</code>), and again by <code translate="no">core.logic</code> every time match
                 data changes
                 <code translate="no">services/</code> (see
-                <a href="/rules/cheepcheeparchitecture/#layering-rules">§3</a>)</li>
+                <a href="/rules/cheepcheeparchitecture/#layering-rules">§3</a>)
+            </li>
             <li><code translate="no">services/dbserver.py</code> imports its
                 <code translate="no">OUTPUT_PATH</code> constant to serve the
-                <code translate="no">/matches.ics</code> route</li>
+                <code translate="no">/matches.ics</code> route
+            </li>
         </ul>
 
         <h3 id="bot-embed-py">5.5 <code translate="no">bot/embed.py</code></h3>
@@ -557,7 +568,8 @@
                     <td class="table-key" translate="no"><code translate="no">core_cog.py</code></td>
                     <td>Bot lifecycle (<code translate="no">/restart</code> →
                         <code translate="no">services.gitimport.restart_bot()</code>), tree sync, gated
-                        board/media password commands</td>
+                        board/media password commands
+                    </td>
                 </tr>
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">dev_cog.py</code></td>
@@ -589,7 +601,8 @@
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">sql_cog.py</code></td>
                     <td>Admin-only raw SQL execution against the DB - bypasses
-                        <code translate="no">core.logic</code> entirely</td>
+                        <code translate="no">core.logic</code> entirely
+                    </td>
                 </tr>
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">team_cog.py</code></td>
@@ -598,7 +611,8 @@
                 </tr>
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">user_profile_cog.py</code></td>
-                    <td>User and team profiles, leaderboards, data export, stream overlay and YouTube thumbnails fetching</td>
+                    <td>User and team profiles, leaderboards, data export, stream overlay and YouTube thumbnails
+                        fetching</td>
                 </tr>
             </table>
         </div>
@@ -623,7 +637,7 @@
         <h3 id="services-checkrss-py">5.9 <code translate="no">services/checkrss.py</code></h3>
         <ul>
             <li>
-                Polls <code translate="no">https://umkl.co.uk/news.xml</code> every 60s (using ETag caching to
+                Polls <code translate="no">https://umkl.co.uk/news/feed.xml</code> every 60s (using ETag caching to
                 skip unchanged fetches)
             </li>
             <li>
@@ -710,7 +724,8 @@
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">/seasoninfo</code></td>
                     <td>POST</td>
-                    <td><code translate="no">logic.get_season_status</code> + <code translate="no">logic.get_season_match_progress</code>
+                    <td><code translate="no">logic.get_season_status</code> + <code
+                            translate="no">logic.get_season_match_progress</code>
                     </td>
                 </tr>
                 <tr>
@@ -734,7 +749,8 @@
                     <td>GET</td>
                     <td>Serves the file written by
                         <code translate="no">core.generate_calendar.build_calendar()</code>, from the path in
-                        <code translate="no">core.generate_calendar.OUTPUT_PATH</code></td>
+                        <code translate="no">core.generate_calendar.OUTPUT_PATH</code>
+                    </td>
                 </tr>
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">/live</code></td>
@@ -749,7 +765,8 @@
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">/teamemblems/&lt;name&gt;</code></td>
                     <td>GET</td>
-                    <td>Serves team emblem assets (falls back to <code translate="no">DEFAULT</code> if no team emblem is available)</td>
+                    <td>Serves team emblem assets (falls back to <code translate="no">DEFAULT</code> if no team emblem
+                        is available)</td>
                 </tr>
             </table>
         </div>
@@ -759,15 +776,15 @@
             make a request like this:
         </p>
         <pre class="codeBox" translate="no">return fetch('https://api.umkl.co.uk/teamdata', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-        team: "York",
-        season: 2
-    })
-})</pre>
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+            team: "York",
+            season: 2
+            })
+            })</pre>
 
         <h4 id="route-teamdata" translate="no">POST /teamdata</h4>
         <p class="p-no-spacing">
@@ -776,31 +793,31 @@
         </p>
         <p class="p-no-spacing"><b>Example payload:</b></p>
         <pre class="codeBox" translate="no">{
-  "team": "York",         // Team name - (string) optional
-  "season": 2             // Season (int) - optional
-}</pre>
+            "team": "York", // Team name - (string) optional
+            "season": 2 // Season (int) - optional
+            }</pre>
         <p class="p-no-spacing"><b>Example response:</b></p>
         <pre class="codeBox" translate="no">[
-  {
-    "career_wins_losses": [3, 0],
-    "coords": [53.96, -1.08],
-    "first_entry": 1,
-    "place_id": 1826149980,
-    "season_matches_played": 0,
-    "season_penalties": 0,
-    "season_position": 1,
-    "season_wins_losses": [0, 0],
-    "team_career_points": 1781,
-    "team_championships": 1,
-    "team_color": "#1BAA8B",
-    "team_full_name": "University of York",
-    "team_id": 1,
-    "team_name": "York",
-    "team_place": "York, England",
-    "team_season_points": 0
-  },
-  ...
-]</pre>
+            {
+            "career_wins_losses": [3, 0],
+            "coords": [53.96, -1.08],
+            "first_entry": 1,
+            "place_id": 1826149980,
+            "season_matches_played": 0,
+            "season_penalties": 0,
+            "season_position": 1,
+            "season_wins_losses": [0, 0],
+            "team_career_points": 1781,
+            "team_championships": 1,
+            "team_color": "#1BAA8B",
+            "team_full_name": "University of York",
+            "team_id": 1,
+            "team_name": "York",
+            "team_place": "York, England",
+            "team_season_points": 0
+            },
+            ...
+            ]</pre>
 
         <h4 id="route-seasoninfo" translate="no">POST /seasoninfo</h4>
         <p class="p-no-spacing">
@@ -810,13 +827,13 @@
         </p>
         <p class="p-no-spacing"><b>Example payload:</b></p>
         <pre class="codeBox" translate="no">{
-  "season": 2        // Season (int) - optional
-}</pre>
+            "season": 2 // Season (int) - optional
+            }</pre>
         <p class="p-no-spacing"><b>Example response:</b></p>
         <pre class="codeBox" translate="no">[
-  2,
-  "Upcoming"
-]</pre>
+            2,
+            "Upcoming"
+            ]</pre>
 
         <h4 id="route-teamcolors" translate="no">POST /teamcolors</h4>
         <p class="p-no-spacing">
@@ -825,22 +842,22 @@
         </p>
         <p class="p-no-spacing"><b>Example payload:</b></p>
         <pre class="codeBox" translate="no">{
-  "season": 2        // Season (int) - optional
-}</pre>
+            "season": 2 // Season (int) - optional
+            }</pre>
         <p class="p-no-spacing"><b>Example response:</b></p>
         <pre class="codeBox" translate="no">[
-  [
-    { "team_color": "#1BAA8B", "team_name": "York" },
-    { "team_color": "#A11212", "team_name": "Staffs" },
-    { "team_color": "#287AC8", "team_name": "Edinburgh" },
-    { "team_color": "#61B6CB", "team_name": "Keele" },
-    { "team_color": "#FDD017", "team_name": "Birmingham" },
-    { "team_color": "#616161", "team_name": "Bristol Bob-Ombs" },
-    { "team_color": "#BD4AFF", "team_name": "Glasgow" },
-    { "team_color": "#002147", "team_name": "Oxford" },
-    { "team_color": "#3C1053", "team_name": "Warwick" }
-  ]
-]</pre>
+            [
+            { "team_color": "#1BAA8B", "team_name": "York" },
+            { "team_color": "#A11212", "team_name": "Staffs" },
+            { "team_color": "#287AC8", "team_name": "Edinburgh" },
+            { "team_color": "#61B6CB", "team_name": "Keele" },
+            { "team_color": "#FDD017", "team_name": "Birmingham" },
+            { "team_color": "#616161", "team_name": "Bristol Bob-Ombs" },
+            { "team_color": "#BD4AFF", "team_name": "Glasgow" },
+            { "team_color": "#002147", "team_name": "Oxford" },
+            { "team_color": "#3C1053", "team_name": "Warwick" }
+            ]
+            ]</pre>
 
         <h4 id="route-teamlocations" translate="no">POST /teamlocations</h4>
         <p class="p-no-spacing">
@@ -849,23 +866,23 @@
         <p class="p-no-spacing"><b>Example payload:</b> none</p>
         <p class="p-no-spacing"><b>Example response:</b></p>
         <pre class="codeBox" translate="no">[
-    {
-        "coords": [53.96, -1.08],
-        "team_color": "#1BAA8B",
-        "team_name": "York"
-    },
-    {
-        "coords": [53.0, -2.1833],
-        "team_color": "#A11212",
-        "team_name": "Staffs"
-    },
-    {
-        "coords": [55.9533, -3.1892],
-        "team_color": "#287AC8",
-        "team_name": "Edinburgh"
-    },
-    ...
-]</pre>
+            {
+            "coords": [53.96, -1.08],
+            "team_color": "#1BAA8B",
+            "team_name": "York"
+            },
+            {
+            "coords": [53.0, -2.1833],
+            "team_color": "#A11212",
+            "team_name": "Staffs"
+            },
+            {
+            "coords": [55.9533, -3.1892],
+            "team_color": "#287AC8",
+            "team_name": "Edinburgh"
+            },
+            ...
+            ]</pre>
 
         <h4 id="route-matchdata" translate="no">POST /matchdata</h4>
         <p class="p-no-spacing">
@@ -874,24 +891,24 @@
         <p class="p-no-spacing"><b>Example payload:</b> none</p>
         <p class="p-no-spacing"><b>Example response:</b></p>
         <pre class="codeBox" translate="no">{
-    "2025-04-16": [
-        {
+            "2025-04-16": [
+            {
             "title": "York VS Staffs",
             "time": "18:00",
             "description": "A 6v6 test match...",
             "teamsInvolved": ["York", "Staffs"]
-        }
-    ],
-    "2025-04-21": [
-        {
+            }
+            ],
+            "2025-04-21": [
+            {
             "title": "Staffs VS Birmingham",
             "time": "18:00",
             "description": "A 6v6 test match...",
             "teamsInvolved": ["Staffs", "Birmingham"]
-        }
-    ],
-    ...
-}</pre>
+            }
+            ],
+            ...
+            }</pre>
 
         <h4 id="route-live" translate="no">POST /live</h4>
         <p class="p-no-spacing">
@@ -900,18 +917,18 @@
         <p class="p-no-spacing"><b>Example payload:</b> none</p>
         <p class="p-no-spacing"><b>Example response:</b></p>
         <pre class="codeBox" translate="no">[
-    {
-        "1": [2, 3, 6, 8, 10, 12],
-        "2": [1, 4, 5, 7, 9, 11],
-        "track": "GBA Ribbon Road"
-    },
-    {
-        "1": [2, 4, 6, 7, 8, 10],
-        "2": [1, 3, 5, 9, 11, 12],
-        "track": "3DS Piranha Plant Pipeway"
-    },
-    ...
-]</pre>
+            {
+            "1": [2, 3, 6, 8, 10, 12],
+            "2": [1, 4, 5, 7, 9, 11],
+            "track": "GBA Ribbon Road"
+            },
+            {
+            "1": [2, 4, 6, 7, 8, 10],
+            "2": [1, 3, 5, 9, 11, 12],
+            "track": "3DS Piranha Plant Pipeway"
+            },
+            ...
+            ]</pre>
 
         <h3 id="services-data-export-py">5.13 <code translate="no">services/data_export.py</code></h3>
         <p>
@@ -950,7 +967,8 @@
                     <td class="table-key" translate="no"><code translate="no">cogs/live_score_cog.py</code></td>
                     <td><code translate="no">live_score_autocomplete</code>,
                         <code translate="no">live_score_edit_autocomplete</code>,
-                        <code translate="no">track_name_autocomplete</code></td>
+                        <code translate="no">track_name_autocomplete</code>
+                    </td>
                     <td>Parameter autocomplete for its three livescore commands</td>
                 </tr>
                 <tr>
@@ -959,9 +977,11 @@
                         <code translate="no">match_conditional_team_autocomplete</code>,
                         <code translate="no">open_match_autocomplete</code>,
                         <code translate="no">team_open_match_autocomplete</code>,
-                        <code translate="no">update_signup_embed</code></td>
+                        <code translate="no">update_signup_embed</code>
+                    </td>
                     <td><code translate="no">get_match_lock</code> guards the Approve button against
-                        double-approval races, the rest are autocompletes, <code translate="no">update_signup_embed</code>
+                        double-approval races, the rest are autocompletes, <code
+                            translate="no">update_signup_embed</code>
                         refreshes the roster embed after results affect a match</td>
                 </tr>
                 <tr>
@@ -972,9 +992,11 @@
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">cogs/user_profile_cog.py</code></td>
                     <td><code translate="no">during_matches_autocomplete</code>,
-                        <code translate="no">enabled_teams_autocomplete</code></td>
+                        <code translate="no">enabled_teams_autocomplete</code>
+                    </td>
                     <td>Autocomplete for <code translate="no">/generate-yt-thumbnails</code> and
-                        <code translate="no">/team-profile</code></td>
+                        <code translate="no">/team-profile</code>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -1008,14 +1030,16 @@
             <div class="schema-table">
                 <span class="schema-table-name">season</span>
                 <div class="schema-column">
-                    <span>season_id<span class="schema-pk-badge">PK</span><span class="schema-type">integer</span></span>
+                    <span>season_id<span class="schema-pk-badge">PK</span><span
+                            class="schema-type">integer</span></span>
                 </div>
             </div>
 
             <div class="schema-table">
                 <span class="schema-table-name">season_entry</span>
                 <div class="schema-column">
-                    <span>season_entry_id<span class="schema-pk-badge">PK</span><span class="schema-type">integer</span></span>
+                    <span>season_entry_id<span class="schema-pk-badge">PK</span><span
+                            class="schema-type">integer</span></span>
                 </div>
                 <div class="schema-column"><span>season_id<span class="schema-type">integer</span></span><span
                         class="schema-fk">→ season</span></div>
@@ -1064,7 +1088,8 @@
             <div class="schema-table">
                 <span class="schema-table-name">tournament</span>
                 <div class="schema-column">
-                    <span>tournament_id<span class="schema-pk-badge">PK</span><span class="schema-type">integer</span></span>
+                    <span>tournament_id<span class="schema-pk-badge">PK</span><span
+                            class="schema-type">integer</span></span>
                 </div>
                 <div class="schema-column"><span>season_id<span class="schema-type">integer</span></span><span
                         class="schema-fk">→ season</span></div>
@@ -1091,8 +1116,8 @@
 
             <div class="schema-table">
                 <span class="schema-table-name">tournament_result</span>
-                <div class="schema-column"><span>tournament_entry_id<span
-                            class="schema-type">integer</span></span><span class="schema-fk">→
+                <div class="schema-column"><span>tournament_entry_id<span class="schema-type">integer</span></span><span
+                        class="schema-fk">→
                         tournament_entry</span></div>
                 <div class="schema-column"><span>user_id<span class="schema-type">integer</span></span><span
                         class="schema-fk">→ user</span></div>
@@ -1162,7 +1187,8 @@
                     <td><code translate="no">MATCHDATA_PATH</code></td>
                     <td><code translate="no">core.logic</code> (<code translate="no">add_to_matchdata</code>,
                         <code translate="no">update_matchdata</code>, <code translate="no">reschedule_match</code>,
-                        <code translate="no">update_team_name</code>)</td>
+                        <code translate="no">update_team_name</code>)
+                    </td>
                     <td>Extended match info not in SQLite: title, description, YouTube links, Discord event ID/URL,
                         live-computed results snapshot</td>
                 </tr>
@@ -1171,7 +1197,8 @@
                     <td><code translate="no">PLAYERSP</code></td>
                     <td><code translate="no">core.logic.update_player_sp</code></td>
                     <td>Per-player SP totals (<code translate="no">matches_sp</code> +
-                        <code translate="no">chat_sp</code>) and history</td>
+                        <code translate="no">chat_sp</code>) and history
+                    </td>
                 </tr>
                 <tr>
                     <td class="table-key" translate="no"><code translate="no">liveresults.json</code></td>
@@ -1185,7 +1212,8 @@
                     <td class="table-key" translate="no"><code translate="no">rounddata.json</code></td>
                     <td><code translate="no">ROUND_DATA</code></td>
                     <td><code translate="no">core.logic.save_round_data</code> (via
-                        <code translate="no">season_cog.py</code>)</td>
+                        <code translate="no">season_cog.py</code>)
+                    </td>
                     <td>Current round number + team pairings</td>
                 </tr>
                 <tr>
@@ -1198,7 +1226,8 @@
                     <td class="table-key" translate="no"><code translate="no">captchadata.json</code></td>
                     <td><code translate="no">CAPTCHA_DATA</code></td>
                     <td><code translate="no">core.logic</code> (<code translate="no">set_captcha_session</code>,
-                        <code translate="no">clear_captcha_session</code>)</td>
+                        <code translate="no">clear_captcha_session</code>)
+                    </td>
                     <td>Captcha challenges for new users</td>
                 </tr>
                 <tr>
@@ -1281,20 +1310,25 @@
                 match..." progress embed (updated multiple times as steps complete).</li>
             <li><code translate="no">core.logic.create_match</code> inserts the <code translate="no">tournament</code>
                 row and <code translate="no">create_new_match_entry</code> is called once per team to insert
-                <code translate="no">tournament_entry</code> rows.</li>
+                <code translate="no">tournament_entry</code> rows.
+            </li>
             <li><code translate="no">core.graphics.create_event_versus_image</code> renders
                 <code translate="no">output/versus.png</code> from the two teams' data (fetched again via
-                <code translate="no">core.logic.get_team_data</code>).</li>
+                <code translate="no">core.logic.get_team_data</code>).
+            </li>
             <li>A Discord Scheduled Event is created directly via the discord.py API - its ID is stored back with
-                <code translate="no">core.logic.add_event_id_to_match</code>.</li>
+                <code translate="no">core.logic.add_event_id_to_match</code>.
+            </li>
             <li><code translate="no">core.logic.add_to_matchdata</code> appends the extended match info to
                 <code translate="no">data/matchdata.json</code>, which internally calls
                 <code translate="no">core.generate_calendar.build_calendar()</code> to keep
-                <code translate="no">matches.ics</code> in sync.</li>
+                <code translate="no">matches.ics</code> in sync.
+            </li>
             <li><code translate="no">bot.embed.display_team_signup</code> builds the sign-up embed (with the
                 versus image attached), <code translate="no">match_cog.SignupButton</code> (a persistent
                 <code translate="no">discord.ui.DynamicItem</code>) is attached as the view and posted to each
-                team's announcements channel plus the schedule channel.</li>
+                team's announcements channel plus the schedule channel.
+            </li>
             <li><code translate="no">services.backup.backup_database()</code> is called before all of the above,
                 since match creation mutates both the DB and JSON state.</li>
         </ol>
@@ -1389,8 +1423,8 @@
                 <div class="flow-step-num">8</div>
                 <div class="flow-step-body">
                     <span class="flow-step-title">bot.embed.display_team_signup</span>
-                    <span class="flow-step-desc">post the sign-up embed + <code
-                            translate="no">SignupButton</code> to both teams' channels</span>
+                    <span class="flow-step-desc">post the sign-up embed + <code translate="no">SignupButton</code> to
+                        both teams' channels</span>
                 </div>
             </div>
         </div>

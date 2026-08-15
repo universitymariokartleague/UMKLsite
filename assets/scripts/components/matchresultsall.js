@@ -1,37 +1,13 @@
 import { generate6v6ScoreCalculatorLink } from '/assets/scripts/utils/matchhelper.js';
+import { getMatchData, normalizeMatchData, getMatchCache, setMatchCache } from '/assets/scripts/utils/matchdata.js';
 
 const allMatchesBox = document.getElementById("JSAllMatches");
 let normalizedMatches = [];
-
-const CACHE_KEY = 'matchDataCache';
-const getMatchCache = () => { try { return JSON.parse(localStorage.getItem(CACHE_KEY)) || null; } catch { return null; } };
-const setMatchCache = (data) => { try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch { } };
 
 const getEmblem = teamName => ({
     avif: `https://api.umkl.co.uk/teamemblems/${teamName.toUpperCase()}`,
     png: `https://api.umkl.co.uk/teamemblems/${teamName.toUpperCase()}`
 });
-
-async function getMatchData() {
-    return fetch('https://api.umkl.co.uk/matchdata', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: "{}"
-    }).then(response => {
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return response.json();
-    });
-}
-
-function normalizeMatchData(matchData) {
-    const flat = [];
-    Object.keys(matchData).forEach(dateKey => {
-        matchData[dateKey].forEach(entry => {
-            flat.push({ ...entry, matchDate: dateKey });
-        });
-    });
-    return flat;
-}
 
 function formatDate(dateStr, locale) {
     const d = new Date(dateStr);
