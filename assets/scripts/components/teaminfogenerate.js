@@ -218,6 +218,19 @@ function renderSeasonStats(seasonData) {
     `;
 }
 
+function isAppleMobile() {
+    const ua = navigator.userAgent || navigator.vendor || '';
+    const isIOS = /iPad|iPhone|iPod/.test(ua);
+    return isIOS;
+}
+
+function getMapsUrl(place) {
+    const query = encodeURIComponent(place);
+    return isAppleMobile()
+        ? `https://maps.apple.com/?q=${query}`
+        : `https://www.google.com/maps/search/?api=1&query=${query}`;
+}
+
 function renderTeamSummary(teamData) {
     const summaryList = document.getElementById('teamSummaryList');
     if (!summaryList) return;
@@ -225,7 +238,7 @@ function renderTeamSummary(teamData) {
     lastRenderedTeamData = teamData;
 
     const locationHTML = teamData.team_place
-        ? `<a href="https://www.google.com/maps/search/?q=${encodeURIComponent(teamData.team_place)}" target="_blank" rel="noopener noreferrer" style="color:${teamData.team_color}">${teamData.team_place}</a>`
+        ? `<a href="${getMapsUrl(teamData.team_place)}" target="_blank" rel="noopener noreferrer" style="color:${teamData.team_color}">${teamData.team_place}</a>`
         : 'N/A';
 
     const entryYearStr = teamData.first_entry ? `Season ${teamData.first_entry}` : 'N/A';

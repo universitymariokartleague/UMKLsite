@@ -42,7 +42,7 @@ function buildTrackCountDiv(data) {
     const resultString = sorted
         .map(([track, stats]) => {
             const avgDiff = (stats.totalDiff / stats.count).toFixed(1);
-            
+
             if (teamFrequencyCheckbox.checked) {
                 const sortedTeams = Object.entries(stats.teamCounts)
                     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
@@ -53,15 +53,15 @@ function buildTrackCountDiv(data) {
             }
 
             if (daysPlayedCheckbox.checked) {
-                datesPlayedString = '<b>Dates played on</b><br>' + 
+                datesPlayedString = '<b>Dates played on</b><br>' +
                     stats.matchDates
                         .map(date => `<a target="_blank" href="/matches?date=${date}">${date}</a>`)
                         .join("<br>");
             }
-            
+
             return `
                 <div class="track-item">
-                    <img class="track-icon" width="135px" style="aspect-ratio:45/31" onload="this.style.opacity=1" loading="lazy" src="assets/media/courses/mk8dxicons/${track.replaceAll(' ', '_').replaceAll("'", '').toLowerCase()}.avif" alt="The icon for ${track}">
+                    <img class="track-icon" width="135px" style="aspect-ratio:45/31" onload="this.style.opacity=1" loading="lazy" src="/assets/media/courses/mk8dxicons/${track.replaceAll(' ', '_').replaceAll("'", '').toLowerCase()}.avif" alt="The icon for ${track}">
                     <span class="track-label">
                         ${stats.count === maxCount ? "☆ " : ""}<b>${track}</b><br>
                         Played ${stats.count} ${stats.count === 1 ? "time" : "times"}<br>
@@ -180,14 +180,14 @@ async function getTeamcolors() {
         },
         body: "{}"
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+            return response.json();
+        });
 }
 
 async function getCurrentSeason() {
@@ -200,14 +200,14 @@ async function getCurrentSeason() {
             season: 0
         })
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+            return response.json();
+        });
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
