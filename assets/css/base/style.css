@@ -23,7 +23,7 @@
 
 @media screen and (max-width: 900px) {
     :root {
-        --navbar-height: 60px;
+        --navbar-height: 50px;
     }
 }
 

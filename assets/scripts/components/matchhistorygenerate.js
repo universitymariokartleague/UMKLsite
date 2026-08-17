@@ -66,27 +66,32 @@ function generateTeamMatches(teamName) {
             }
         }
 
+        const resultClass = { W: "result-win", L: "result-loss", D: "result-draw" }[winStatus] || "";
+
         const matchCalculatorLink = generate6v6ScoreCalculatorLink(match);
         const rowClickAttr = matchCalculatorLink ? `onclick="window.location.href='${matchCalculatorLink}'"` : '';
 
         return `
-            <tr class="standings-row" ${rowClickAttr}>
+            <tr class="standings-row${match.testMatch ? " test-match-row" : ""}" ${rowClickAttr}>
                 <td class="column-team">
                     <div class="match-team">
                         <picture>
                             <source srcset="${getEmblem(otherTeam).avif}" type="image/avif">
                             <img loading="lazy" src="${getEmblem(otherTeam).png}" class="team-logo" alt="${otherTeam} logo">
                         </picture>
-                        <span class="team-name">${otherTeam}</span>
+                        <div class="match-team-info">
+                            <span class="team-name">${otherTeam}</span>
+                            <span class="team-date">${formatDate(match.matchDate, locale)}</span>
+                            <span class="team-season-mobile">${match.testMatch ? "Test match" : `Season ${match.season}`}</span>
+                        </div>
                     </div>
                 </td>
-                <td class="column-date">${formatDate(match.matchDate, locale)}</td>
                 <td class="column-season">${match.testMatch ? "Test match" : `Season ${match.season}`}</td>
                 <td class="column-result">
                     ${winStatus}
                 </td>
                 <td class="column-points">
-                    <strong>${scoreData ? scoreData.teamScore : "-"}</strong>
+                    <strong class="result-badge ${resultClass}">${scoreData ? scoreData.teamScore : "-"}</strong>
                 </td>
 
             </tr>
@@ -94,20 +99,21 @@ function generateTeamMatches(teamName) {
     }).join("");
 
     matchHistoryBox.innerHTML = `
-        <table class="standings-table">
-            <thead>
-                <tr>
-                    <th class="column-team">Opponent</th>
-                    <th class="column-opponent">Date</th>
-                    <th class="column-season">Season</th>
-                    <th class="column-result">Result</th>
-                    <th class="column-points">Points</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${rowsHTML}
-            </tbody>
-        </table>
+        <div class="match-history-table-wrapper">
+            <table class="standings-table match-history-table">
+                <thead>
+                    <tr>
+                        <th class="column-team">Team</th>
+                        <th class="column-season">Season</th>
+                        <th class="column-result"><span class="th-full">Result</span><span class="th-short">W/L</span></th>
+                        <th class="column-points"><span class="th-full">Points</span><span class="th-short">Pts</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rowsHTML}
+                </tbody>
+            </table>
+        </div>
     `;
 }
 

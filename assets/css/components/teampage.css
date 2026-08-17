@@ -42,6 +42,21 @@
     text-transform: none;
 }
 
+@media screen and (max-width: 900px) {
+    .team-hero {
+        min-height: 100px;
+    }
+
+    .hero-content {
+        padding: 25px;
+        gap: 8px;
+    }
+
+    .hero-logo-wrapper {
+        max-width: 150px;
+    }
+}
+
 .stats-header-row {
     display: flex;
     align-items: center;
@@ -171,6 +186,7 @@
 .summary-value {
     font-size: 1.2rem;
     font-weight: 800;
+    text-align: right;
 }
 
 .match-history-section {
@@ -181,8 +197,91 @@
     margin-bottom: 10px;
 }
 
+.match-history-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.match-history-table .th-short {
+    display: none;
+}
+
+.match-history-table .match-team-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.match-history-table .team-date,
+.match-history-table .team-season-mobile {
+    font-size: 0.75rem;
+    font-weight: 500;
+    opacity: 0.65;
+}
+
+.match-history-table .team-season-mobile {
+    display: none;
+}
+
+.result-badge {
+    font-weight: 800;
+}
+
+.result-badge.result-win {
+    color: var(--brand-positive);
+}
+
+.result-badge.result-loss {
+    color: var(--brand-negative);
+}
+
+.match-history-table .test-match-row {
+    opacity: 0.6;
+}
+
+.result-badge.result-draw {
+    color: var(--text-color);
+    opacity: 0.6;
+}
+
 @media (min-width: 900px) {
     .stats-grid {
         grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .match-history-table .column-season {
+        display: none;
+    }
+
+    .match-history-table .team-season-mobile {
+        display: block;
+    }
+
+    .match-history-table .th-full {
+        display: none;
+    }
+
+    .match-history-table .th-short {
+        display: inline;
+    }
+
+    .match-history-table th,
+    .match-history-table .standings-row td {
+        padding: 10px 8px;
+        font-size: 0.85rem;
+    }
+
+    .match-history-table .team-logo {
+        width: 18px;
+        height: 18px;
+    }
+
+    .match-history-table .team-name {
+        white-space: nowrap;
+    }
+
+    .match-history-table .column-points {
+        width: auto;
     }
 }

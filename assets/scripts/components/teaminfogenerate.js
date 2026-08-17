@@ -441,6 +441,10 @@ function spawnConfetti() {
         }
     }, 1000);
 
+    setTimeout(() => {
+        particles.forEach(p => p.dying = true);
+    }, 10000);
+
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
