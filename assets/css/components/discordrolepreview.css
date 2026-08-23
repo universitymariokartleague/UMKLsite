@@ -1,7 +1,7 @@
 #discordRoleiFrame {
     height: 315px;
     width: 250px;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     outline: 1px solid #ccccccaa;
 }
 
@@ -17,14 +17,14 @@
 #cheepCheepRoleiFrame {
     height: 485px;
     width: 500px;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     outline: 1px solid #ccccccaa;
 }
 
 #cheepCheepResultsIframe {
     height: 525px;
     width: 500px;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     outline: 1px solid #ccccccaa;
 }
 

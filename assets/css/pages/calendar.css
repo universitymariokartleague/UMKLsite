@@ -1,7 +1,7 @@
 .calendar {
     flex: 0 0 375px;
     height: fit-content;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     overflow: hidden;
     padding: 20px;
     border: 1px solid #cccccccc;
@@ -51,7 +51,7 @@
     display: flex;
     padding: 5px;
     margin: 2px;
-    border-radius: 5px;
+    border-radius: calc(var(--border-radius) * 0.5);
     align-items: center;
     justify-content: center;
 }
@@ -66,7 +66,7 @@
     flex-direction: column;
     border: 1px solid #ccccccaa;
     background-color: #cccccc10;
-    border-radius: 5px;
+    border-radius: calc(var(--border-radius) * 0.5);
     font-weight: bold;
     user-select: none;
     padding: 10px;

@@ -43,7 +43,7 @@
     position: relative;
     width: 34px;
     height: 20px;
-    border-radius: 100px;
+    border-radius: var(--border-radius-pill);
     background-color: var(--translucent-color);
     flex-shrink: 0;
     transition: background-color 0.15s;
@@ -89,7 +89,7 @@
     color: var(--text-color);
     border: none;
     outline: none;
-    border-radius: 100px;
+    border-radius: var(--border-radius-pill);
     padding: 5px 14px;
     font-size: 0.8rem;
     font-weight: 600;
@@ -128,25 +128,23 @@
 
 .videos-divider {
     grid-column: 1 / -1;
-    text-align: center;
+    margin: 10px 0 0 0;
 }
 
 .videos-divider hr {
-    margin: 0 0 8px;
+    margin: 10px 0 0 0;
 }
 
 .videos-divider-label {
-    font-size: 0.8rem;
+    font-size: 1.4rem;
     font-weight: 700;
-    text-transform: uppercase;
     letter-spacing: 0.5px;
-    opacity: 0.6;
 }
 
 .search-highlight {
     background-color: rgba(188, 8, 57, 0.3);
     color: inherit;
-    border-radius: 3px;
+    border-radius: calc(var(--border-radius) * 0.3);
     padding: 0 1px;
 }
 

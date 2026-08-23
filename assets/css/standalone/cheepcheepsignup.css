@@ -25,13 +25,13 @@ body {
     font-size: 0.75em;
     padding: 0px 5px;
     background-color: #5865f2;
-    border-radius: 5px;
+    border-radius: calc(var(--border-radius) * 0.5);
 }
 
 .discord-timestamp {
     padding: 0px 2px;
     background-color: #28292c;
-    border-radius: 4px;
+    border-radius: calc(var(--border-radius) * 0.4);
 }
 
 .modal-button {
@@ -41,13 +41,13 @@ body {
     margin: 5px 0 0 0;
     padding: 7.5px 15px;
     background-color: #00863a;
-    border-radius: 8px;
+    border-radius: calc(var(--border-radius) * 0.8);
 }
 
 .embed-container {
     background-color: #131416;
     outline: 1px solid #ffffff25;
-    border-radius: 4px;
+    border-radius: calc(var(--border-radius) * 0.4);
     border-left: 4px solid #bb0939;
     padding: 12px 16px 16px 12px;
     margin-top: 8px;
@@ -87,7 +87,7 @@ body {
 .embed-image img {
     width: 100%;
     object-fit: cover;
-    border-radius: 5px;
+    border-radius: calc(var(--border-radius) * 0.5);
     margin-bottom: 2px;
 }
 

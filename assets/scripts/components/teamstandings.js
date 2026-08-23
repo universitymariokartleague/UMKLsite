@@ -172,7 +172,7 @@ function generateSeasonPicker() {
     for (let season = 1; season <= maxSeason; season++) {
         const option = document.createElement("option");
         option.value = season;
-        option.textContent = `20${String(START_YEAR + season).slice(-2)}/${String(START_YEAR + 1 + season).slice(-2)}`;
+        option.textContent = `Season ${season}`;
         option.selected = season === currentSeason;
         seasonPicker.appendChild(option);
     }

@@ -13,7 +13,7 @@
     /* background-color: var(--standings-bg-color); */
     /* border: var(--box-border); */
     min-height: 100px;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
 
     margin-bottom: 50px;
 
@@ -27,7 +27,7 @@
     cursor: pointer;
     height: 100px;
     align-items: center;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     font-weight: 1000;
     position: relative;
     overflow: hidden;
@@ -107,7 +107,7 @@
 /* .season-selection {
     display: flex;
     flex-direction: column;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     padding: 10px;
     margin: 20px 0;
 }
@@ -119,7 +119,7 @@
     border: 1px solid var(--text-color);
     outline: none;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     font-weight: bold;
     cursor: pointer;
 } */
@@ -135,7 +135,7 @@
 .team-sort-select {
     padding: 4px 6px;
     font-size: 13px;
-    border-radius: 5px;
+    border-radius: calc(var(--border-radius) * 0.5);
     background-color: var(--bg-color);
     color: var(--text-color);
     border: 1px solid #ccccccaa;
@@ -147,7 +147,7 @@
 .team-picker-dialog {
     padding: 0;
     border: 1px solid #ccccccaa;
-    border-radius: 12px;
+    border-radius: calc(var(--border-radius) * 1.2);
     background-color: var(--bg-color);
     color: var(--text-color);
     width: min(500px, 92vw);
@@ -218,7 +218,7 @@
     align-items: center;
     gap: 8px;
     padding: 10px 6px;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     border: 1px solid #ccccccaa;
     color: inherit;
     text-decoration: none;
@@ -290,7 +290,7 @@
     justify-content: center;
     width: 60px;
     height: 60px;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
 }
 
 .team-table-icon {

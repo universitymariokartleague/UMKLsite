@@ -12,14 +12,14 @@
     padding: 5px;
     max-width: 135px;
     border: 1px solid #cccccccc;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
 }
 
 .track-icon {
     max-width: 100%;
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
 }
 
 .track-label {

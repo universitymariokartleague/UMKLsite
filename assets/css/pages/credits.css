@@ -20,7 +20,7 @@
 
 .credit-container {
     border: 1px solid #ccccccaa;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     padding: 10px;
     display: flex;
     gap: 10px;
@@ -31,7 +31,7 @@
 }
 
 .credit-image {
-    border-radius: 5px;
+    border-radius: calc(var(--border-radius) * 0.5);
     opacity: 0;
     transition: opacity 0.2s ease-in;
     width: 50px;

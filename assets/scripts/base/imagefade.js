@@ -36,7 +36,7 @@ function fadeInShadowImages(selector) {
 }
 
 fadeInImagesWithin(document);
-fadeInShadowImages("umkl-navbar, umkl-footer");
+fadeInShadowImages("umkl-footer");
 
 new MutationObserver((mutations) => {
     for (const { addedNodes } of mutations) {

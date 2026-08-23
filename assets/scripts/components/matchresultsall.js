@@ -2,7 +2,29 @@ import { generate6v6ScoreCalculatorLink } from '/assets/scripts/utils/matchhelpe
 import { getMatchData, normalizeMatchData, getMatchCache, setMatchCache } from '/assets/scripts/utils/matchdata.js';
 
 const allMatchesBox = document.getElementById("JSAllMatches");
+const seasonSelect = document.getElementById("season-select");
 let normalizedMatches = [];
+
+function getSeasonsFromMatches() {
+    const seasons = [...new Set(normalizedMatches.map(match => Number(match.season)).filter(n => !Number.isNaN(n)))];
+    return seasons.sort((a, b) => a - b);
+}
+
+function generateSeasonPicker() {
+    if (!seasonSelect) return;
+
+    const seasons = getSeasonsFromMatches();
+    if (seasons.length === 0) return;
+
+    const previousValue = seasonSelect.value;
+    const hasPrevious = seasons.some(season => String(season) === previousValue);
+
+    seasonSelect.innerHTML = seasons.map(season =>
+        `<option value="${season}">Season ${season}</option>`
+    ).join("");
+
+    seasonSelect.value = hasPrevious ? previousValue : String(seasons[seasons.length - 1]);
+}
 
 const getEmblem = teamName => ({
     avif: `https://api.umkl.co.uk/teamemblems/${teamName.toUpperCase()}`,
@@ -125,7 +147,6 @@ allMatchesBox?.addEventListener("click", (e) => {
 });
 
 async function renderAllMatches() {
-    const seasonSelect = document.getElementById("season-select");
     const getSelectedSeason = () => seasonSelect ? seasonSelect.value : null;
 
     seasonSelect?.addEventListener("change", () => {
@@ -135,6 +156,7 @@ async function renderAllMatches() {
     const cached = getMatchCache();
     if (cached) {
         normalizedMatches = normalizeMatchData(cached);
+        generateSeasonPicker();
         generateAllMatches(getSelectedSeason());
     }
 
@@ -142,6 +164,7 @@ async function renderAllMatches() {
         const fresh = await getMatchData();
         setMatchCache(fresh);
         normalizedMatches = normalizeMatchData(fresh);
+        generateSeasonPicker();
         generateAllMatches(getSelectedSeason());
     } catch (error) {
         if (!cached) {

@@ -16,7 +16,7 @@
     gap: 14px;
     text-decoration: none;
     border: var(--box-border);
-    border-radius: 5px;
+    border-radius: calc(var(--border-radius) * 0.5);
     padding: 12px 14px;
 }
 

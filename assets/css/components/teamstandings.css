@@ -2,7 +2,7 @@
 
 #JSTeamTable {
     margin: 0 auto;
-    border-radius: 12px;
+    border-radius: calc(var(--border-radius) * 1.2);
     padding: 20px 0;
     overflow-x: auto;
 }
@@ -116,7 +116,7 @@ picture img {
 }
 
 .podium-card {
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     padding: 22px;
     cursor: pointer;
     display: flex;

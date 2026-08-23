@@ -13,7 +13,7 @@
 	width: 450px;
 	padding: 10px;
 	padding-right: calc(env(safe-area-inset-right) - 10px);
-	border-radius: 15px 0 0 15px;
+	border-radius: calc(var(--border-radius) * 1.5) 0 0 calc(var(--border-radius) * 1.5);
 	border: 1px solid #ccccccaa;
 	background-color: var(--news-box-bg-color);
 	z-index: 100;
@@ -80,7 +80,7 @@
 	width: 200px;
 	height: 10px;
 	background-color: rgba(255, 91, 91, 0.2);
-	border-radius: 2.5px;
+	border-radius: calc(var(--border-radius) * 0.25);
 	cursor: pointer;
 }
 
@@ -95,7 +95,7 @@
 	width: 0;
 	height: 1px;
 	background-color: #ffffff20;
-	border-radius: 1px;
+	border-radius: calc(var(--border-radius) * 0.1);
 }
 
 #currentTime,
@@ -126,7 +126,7 @@
 	bottom: 0;
 	margin: auto;
 	height: 95%;
-	border-radius: 10px;
+	border-radius: var(--border-radius);
 	filter: drop-shadow(0 0 0.5rem white);
 	opacity: 0.6;
 	z-index: -1;
@@ -134,7 +134,7 @@
 
 @media screen and (max-width: 1000px) {
 	.albumArt {
-		border-radius: 5px;
+		border-radius: calc(var(--border-radius) * 0.5);
 	}
 }
 

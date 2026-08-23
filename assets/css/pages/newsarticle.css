@@ -22,7 +22,7 @@
 }
 
 .article-meta tag {
-    border-radius: 100px;
+    border-radius: var(--border-radius-pill);
     padding: 3px 12px;
     font-size: 0.78em;
     font-weight: 700;

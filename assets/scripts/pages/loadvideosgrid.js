@@ -96,7 +96,7 @@ function precomputeSearchData(list) {
 function createDivider(label) {
     const div = document.createElement("div");
     div.className = "videos-divider";
-    div.innerHTML = label ? `<hr><span class="videos-divider-label">${label}</span>` : `<hr>`;
+    div.innerHTML = label ? `<span class="videos-divider-label">${label}</span><hr>` : `<hr>`;
     return div;
 }
 
@@ -116,7 +116,7 @@ function highlightMatch(text, term) {
 }
 
 function buildVideoCard(item, locale, searchTerm) {
-    const thumbnailUrl = item.thumbnail || `https://i.ytimg.com/vi/${item.video_id}/hqdefault.jpg`;
+    const thumbnailUrl = `https://wsrv.nl/?height=300&q=50&url=${item.thumbnail}`;
     const title = item.title || item.match?.title || "UMKL Video";
     const date = item.published ? new Date(item.published) : null;
     const dateStr = date ? date.toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" }) : "";
