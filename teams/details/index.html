@@ -39,6 +39,7 @@
     <script defer src="/assets/scripts/base/imagefade.js" type="module"></script>
     <script type="module" src="/assets/scripts/components/teaminfogenerate.js" defer></script>
     <script type="module" src="/assets/scripts/components/matchhistorygenerate.js" defer></script>
+    <script defer src="/assets/scripts/components/videocarousel.js" type="module"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js" defer></script>
 </head>
@@ -68,13 +69,13 @@
             </div>
         </div>
 
-        <div class="stats-section">
+        <div class="stats-section section">
+            <h2>Statistics</h2>
             <div class="stats-grid">
                 <!-- Season Stats -->
                 <div class="stats-left">
                     <div class="stats-header-row">
-                        <h2>Statistics</h2>
-                        <div id="teamSeasonSelectWrapper" class="season-select-wrapper"></div>
+                        <h3>Season 2</h3>
                     </div>
                     <div id="seasonStatsGrid" class="season-stats-grid"></div>
                 </div>
@@ -82,7 +83,7 @@
                 <!-- Team Summary -->
                 <div class="stats-right">
                     <div class="team-summary-card">
-                        <h3 class="summary-card-title">Team Summary</h3>
+                        <h3>Team Summary</h3>
                         <div id="teamSummaryList" class="summary-list"></div>
                     </div>
                 </div>
@@ -92,9 +93,37 @@
         <!--<iframe id="teamMapIFrame" title="A map of the UK showing the location of all the UMKL teams"
             src="/teams/details/map/index.html?team=York" frameborder="0"></iframe>-->
 
-        <div class="match-history-section">
+        <div class="match-history-section section">
             <h2>Past Matches</h2>
             <div id="JSMatchHistory"></div>
+        </div>
+
+
+
+        <!-- I will make this only contain videos relevant to the current team's page -->
+        <div class="carousel-section section">
+            <div class="carousel-header">
+                <h2>Related Videos</h2>
+                <div class="bubble-link-wrapper">
+                    <a href="/videos/" class="bubble-link no-color-link">View All</a>
+                    <a id="carouselPrev" class="bubble-link no-color-link" aria-label="Previous videos">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24"
+                            role="img" class="IconVector-module_xl__AtyCA">
+                            <title>Previous</title>
+                            <path fill="currentColor" d="m14 18-6-6 6-6 1.4 1.4-4.6 4.6 4.6 4.6z"></path>
+                        </svg>
+                    </a>
+                    <a id="carouselNext" class="bubble-link no-color-link" aria-label="Next videos">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24"
+                            role="img" class="IconVector-module_xl__AtyCA">
+                            <title>Next</title>
+                            <path fill="currentColor" d="m13.2 12.123-4.6-4.6 1.4-1.4 6 6-6 6-1.4-1.4z"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="carousel-container" id="videoCarousel"></div>
         </div>
     </main>
 

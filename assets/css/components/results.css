@@ -8,6 +8,14 @@
     gap: 10px;
 }
 
+.standings-row:hover {
+    background-color: var(--translucent-color);
+}
+
+.standings-row:hover .column-team {
+    text-decoration: none;
+}
+
 .team-a {
     justify-content: right;
 }

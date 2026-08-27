@@ -238,7 +238,7 @@ function renderTeamSummary(teamData) {
     lastRenderedTeamData = teamData;
 
     const locationHTML = teamData.team_place
-        ? `<a href="${getMapsUrl(teamData.team_place)}" target="_blank" rel="noopener noreferrer" style="color:${teamData.team_color}">${teamData.team_place}</a>`
+        ? `<a href="${getMapsUrl(teamData.team_place)}" target="_blank" rel="noopener noreferrer">${teamData.team_place}</a>`
         : 'N/A';
 
     const entryYearStr = teamData.first_entry ? `Season ${teamData.first_entry}` : 'N/A';
@@ -276,7 +276,7 @@ function renderTeamSummary(teamData) {
         </div>
         <div class="summary-row" title="${worstTrackString ? `And their worst track is ${worstTrackString.track}...` : ''}">
             <span class="summary-label">Best Track</span>
-            <span class="summary-value">${bestTrackString ? `<a href="/schedule/stats/" style="color:${teamData.team_color}">${bestTrackString.track}</a>` : 'N/A'}</span>
+            <span class="summary-value">${bestTrackString ? `<a href="/schedule/stats/">${bestTrackString.track}</a>` : 'N/A'}</span>
         </div>
     `;
 }
@@ -295,7 +295,7 @@ function generateTeamBox(teamData, showError) {
         heroPattern.style.backgroundColor = teamData.team_color;
     }
 
-    document.documentElement.style.setProperty('--highlight-color', teamData.team_color);
+    // document.documentElement.style.setProperty('--highlight-color', teamData.team_color);
 
     const heroLogo = document.getElementById('teamHeroLogo');
     if (heroLogo) {
