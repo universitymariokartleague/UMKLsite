@@ -74,9 +74,13 @@
 
 .stats-grid {
     display: grid;
-    margin-top: 20px;
+    margin-top: 30px;
     grid-template-columns: 1fr;
     gap: 50px;
+}
+
+.stats-grid h3 {
+    margin-bottom: 10px;
 }
 
 .season-stats-grid {
@@ -90,8 +94,9 @@
     display: flex;
     flex-direction: column;
     gap: 5px;
-    padding: 5px ;
+    padding: 5px 0;
 }
+
 
 .stat-value {
     font-size: 1.8rem;
@@ -104,6 +109,10 @@
     align-items: center;
     padding: 12px 0;
     border-bottom: 1px solid var(--translucent-color);
+}
+
+.summary-row:first-child {
+    padding-top: 5px;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -134,7 +134,7 @@ function buildVideoCard(item, locale, searchTerm) {
                 <i class="fa-solid fa-play"></i>
             </div>
         </div>
-        <h3 class="video-title no-color-link">${highlightMatch(title, searchTerm)}</h3>
+        <h4 class="video-title no-color-link">${highlightMatch(title, searchTerm)}</h4>
         ${dateStr ? `<p class="video-date">${dateStr}</p>` : ""}
     `;
 

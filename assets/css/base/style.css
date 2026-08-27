@@ -182,7 +182,7 @@ h2 {
 }
 
 h3 {
-    font-size: 1.5em;
+    font-size: 1.75em;
 }
 
 @media screen and (max-width: 900px) {
@@ -327,7 +327,7 @@ a[target="_blank"]::after {
     text-decoration: none;
 }
 
-button {
+/* button {
     background-color: var(--accent-color);
     font-weight: 600;
     border-radius: var(--border-radius-pill);
@@ -347,7 +347,7 @@ button:focus {
     color: var(--accent-color) !important;
     background: #fff;
     outline: 1px solid var(--accent-color);
-}
+} */
 
 @media (prefers-reduced-motion) {
     button:active {

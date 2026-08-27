@@ -12,10 +12,16 @@ export { toggleSettingsPanel, disableThemeShortcut, disableSettingsShortcut }
 
 const settingsBoxHTML = `
     <dialog translate="no" id="settingsBox" tabindex="-1">
-        <div class="settings-box-close-button">
-            <button id="settings-box-close-button">Close</button>
+        <div class="settings-header">
+            <h2 translate="yes">Settings</h2>
+            <button id="settings-box-close-button" class="settings-close-btn" aria-label="Close settings">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" role="img">
+                    <title>Close menu</title>
+                    <path fill="currentColor" d="M13.48 12 19 17.52 17.52 19 12 13.48 6.48 19 5 17.52 10.52 12 5 6.48 6.48 5 12 10.52 17.52 5 19 6.48z"></path>
+                </svg>
+            </button>
         </div>
-        <div translate="yes" class="settings-title">Settings</div>
+        <hr>
         <div class="setting-options" id="settingsBoxJS"></div>
     </dialog>
 `;
@@ -82,7 +88,7 @@ document.getElementById('settings-box-close-button').addEventListener('click', c
 
 function generateSettingsPanel() {
     try {
-        const tempTheme = localStorage.getItem("darktheme") == 1 ? "Dark" : (localStorage.getItem("darktheme") == 0 ? "Light" : "Automatic");
+        const tempTheme = localStorage.getItem("darktheme") == 1 ? "Dark" : (localStorage.getItem("darktheme") == 0 ? "Light" : "System");
 
         const tempLocale = localStorage.getItem("locale") || "en-GB";
         const tempLocaleDisplay = tempLocale === "en-GB" ? "English (UK)" : "English (US)";
@@ -92,26 +98,65 @@ function generateSettingsPanel() {
         const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
 
         settingsBoxJS.innerHTML = `
-            <div translate="yes" class="setting-sub-heading">Appearance</div><hr>
-            <span translate="yes" class="settings-hover-info" data-info="Light, dark or automatic">Page theme</span><button id="toggleTheme" class="settings-option">${tempTheme}</button><br>
+            <section class="settings-group">
+                <div translate="yes" class="setting-sub-heading">Appearance</div>
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <span translate="yes" class="setting-label">Page Theme</span>
+                        <span translate="yes" class="setting-desc">Switch between light, dark, or system themes</span>
+                    </div>
+                    <button id="toggleTheme" class="settings-btn">${tempTheme}</button>
+                </div>
+            </section>
 
-            <div translate="yes" class="setting-sub-heading">${tempLocale == "en-GB" ? "Localisation" : "Localization"}</div><hr class="settings-hr">
-            <span translate="yes" class="settings-hover-info" data-info="UK or US date/time format">Locale</span><button id="toggleLocaleTypeButton" class="settings-option">${tempLocaleDisplay}</button><br>
-            <span translate="yes" class="settings-hover-info" data-info="Monday or Sunday">First day of week</span><button id="toggleStartDayButton" class="settings-option">${weekdayNamesFull[tempStartDay]}</button><br>
-            <span translate="yes" class="settings-hover-info" data-info="Use UK or local dates when overseas">Overseas date type</span><button id="toggleOverseasDateDisplayButton" class="settings-option">${tempOverseasDateDisplay ? 'Overseas' : 'UK'}</button><br>
+            <section class="settings-group">
+                <div translate="yes" class="setting-sub-heading">${tempLocale == "en-GB" ? "Localisation" : "Localization"}</div>
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <span translate="yes" class="setting-label">Locale</span>
+                        <span translate="yes" class="setting-desc">UK or US date and time formatting</span>
+                    </div>
+                    <button id="toggleLocaleTypeButton" class="settings-btn">${tempLocaleDisplay}</button>
+                </div>
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <span translate="yes" class="setting-label">First Day of Week</span>
+                        <span translate="yes" class="setting-desc">Sets the start of the week on the match calendar</span>
+                    </div>
+                    <button id="toggleStartDayButton" class="settings-btn">${weekdayNamesFull[tempStartDay]}</button>
+                </div>
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <span translate="yes" class="setting-label">Overseas Date Display</span>
+                        <span translate="yes" class="setting-desc">Use UK or local dates when travelling</span>
+                    </div>
+                    <button id="toggleOverseasDateDisplayButton" class="settings-btn">${tempOverseasDateDisplay ? 'Overseas' : 'UK'}</button>
+                </div>
+            </section>
 
-            <div translate="yes" class="setting-sub-heading">Website Data</div><hr>
-            <span translate="yes">API requests sent: <span class="settings-option">${apiReqsSent}</span></span><br>
-            <span translate="yes" class="settings-hover-info" data-info="Reloads the page">Reset settings to default</span><button id="clearLocalStorage" class="settings-option">Reset</button>
-
-            <div translate="yes" class="settings-instructions">Hover/tap the options to see more information</div>
+            <section class="settings-group">
+                <div translate="yes" class="setting-sub-heading">Website Data</div>
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <span translate="yes" class="setting-label">API Requests Sent</span>
+                        <span translate="yes" class="setting-desc">Total requests made during your active session</span>
+                    </div>
+                    <span class="settings-badge">${apiReqsSent}</span>
+                </div>
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <span translate="yes" class="setting-label">Reset Settings</span>
+                        <span translate="yes" class="setting-desc">Restore all defaults and refresh page</span>
+                    </div>
+                    <button id="clearLocalStorage" class="settings-btn btn-danger">Reset</button>
+                </div>
+            </section>
         `;
     } catch (error) {
-        settingsBoxJS.innerHTML = `<br>Failed to load settings<br><code translate="no">${error.stack}</code>`;
+        settingsBoxJS.innerHTML = `<div class="settings-error">Failed to load settings<br><code translate="no">${error.stack}</code></div>`;
     }
     generateEventListeners();
-};
-generateSettingsPanel();
+}
 
 function toggleTheme() {
     let current = localStorage.getItem("darktheme");
