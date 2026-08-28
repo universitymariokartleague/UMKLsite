@@ -173,6 +173,7 @@ article:hover h3 {
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    min-height: 2.34em;
 }
 
 .small-card p {
@@ -295,6 +296,7 @@ article:hover h3 {
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    min-height: 2.4em;
 }
 
 .video-card[target="_blank"]::after {

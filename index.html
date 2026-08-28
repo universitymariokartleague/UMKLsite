@@ -30,15 +30,15 @@
 
     <link rel="modulepreload" href="/assets/components/navbar.js">
     <link rel="modulepreload" href="/assets/components/footer.js">
-    <script defer="" src="/assets/components/navbar.js" type="module"></script>
-    <script defer="" src="/assets/components/footer.js" type="module"></script>
+    <script defer src="/assets/components/navbar.js" type="module"></script>
+    <script defer src="/assets/components/footer.js" type="module"></script>
 
     <script src="/assets/scripts/base/theme.js"></script>
-    <script defer="" src="/assets/scripts/base/settings.js" type="module"></script>
+    <script defer src="/assets/scripts/base/settings.js" type="module"></script>
     <script defer src="/assets/scripts/base/imagefade.js" type="module"></script>
-    <script defer="" src="/assets/scripts/components/showupcomingmatches.js" type="module"></script>
-    <script defer="" src="/assets/scripts/components/homestandings.js" type="module"></script>
-    <script defer="" src="/assets/scripts/components/newsgenerate.js" type="module"></script>
+    <script defer src="/assets/scripts/components/showupcomingmatches.js" type="module"></script>
+    <script defer src="/assets/scripts/components/homestandings.js" type="module"></script>
+    <script defer src="/assets/scripts/components/newsgenerate.js" type="module"></script>
     <script defer src="/assets/scripts/components/videocarousel.js" type="module"></script>
 </head>
 
@@ -81,17 +81,167 @@
             </div>
 
             <div class="news-grid-container">
+                <!-- Static skeleton so the layout has content on first paint, before newsgenerate.js runs. Keep in sync with renderHomeNewsSkeleton() in newsgenerate.js -->
+                <article class="hero-card" aria-hidden="true">
+                    <div class="skeleton" style="position:absolute;inset:0;"></div>
+                </article>
+                <div class="right-column">
+                    <article class="small-card" aria-hidden="true">
+                        <div class="img-wrapper">
+                            <div class="skeleton" style="position:absolute;inset:0;border-radius:10px;"></div>
+                        </div>
+                        <h3 class="skeleton"></h3>
+                        <p class="skeleton"></p>
+                        <div class="small-card-meta skeleton"></div>
+                    </article>
+                    <article class="small-card" aria-hidden="true">
+                        <div class="img-wrapper">
+                            <div class="skeleton" style="position:absolute;inset:0;border-radius:10px;"></div>
+                        </div>
+                        <h3 class="skeleton"></h3>
+                        <p class="skeleton"></p>
+                        <div class="small-card-meta skeleton"></div>
+                    </article>
+                    <article class="small-card" aria-hidden="true">
+                        <div class="img-wrapper">
+                            <div class="skeleton" style="position:absolute;inset:0;border-radius:10px;"></div>
+                        </div>
+                        <h3 class="skeleton"></h3>
+                        <p class="skeleton"></p>
+                        <div class="small-card-meta skeleton"></div>
+                    </article>
+                    <article class="small-card" aria-hidden="true">
+                        <div class="img-wrapper">
+                            <div class="skeleton" style="position:absolute;inset:0;border-radius:10px;"></div>
+                        </div>
+                        <h3 class="skeleton"></h3>
+                        <p class="skeleton"></p>
+                        <div class="small-card-meta skeleton"></div>
+                    </article>
+                </div>
             </div>
         </div>
 
         <div class="section">
             <h1>Season 2</h1>
             <div class="standings-container">
-                <div id="HomeSeasonTop3" class="podium-grid"></div>
+                <!-- Static skeleton so the layout has content on first paint, before homestandings.js runs. Keep in sync with renderStandingsSkeleton() in homestandings.js -->
+                <div id="HomeSeasonTop3" class="podium-grid">
+                    <div class="podium-card pos-2 podium-card-skeleton" aria-hidden="true">
+                        <div class="podium-text">
+                            <div class="podium-header">
+                                <div class="skeleton skeleton-line podium-pos-skeleton"></div>
+                            </div>
+                            <div class="podium-body">
+                                <div class="skeleton skeleton-line podium-team-name-skeleton"></div>
+                                <div class="skeleton skeleton-line podium-pts-skeleton"></div>
+                            </div>
+                        </div>
+                        <div class="podium-emblem">
+                            <div class="skeleton skeleton-circle podium-emblem-skeleton"></div>
+                        </div>
+                    </div>
+                    <div class="podium-card pos-1 podium-card-skeleton" aria-hidden="true">
+                        <div class="podium-text">
+                            <div class="podium-header">
+                                <div class="skeleton skeleton-line podium-pos-skeleton"></div>
+                            </div>
+                            <div class="podium-body">
+                                <div class="skeleton skeleton-line podium-team-name-skeleton"></div>
+                                <div class="skeleton skeleton-line podium-pts-skeleton"></div>
+                            </div>
+                        </div>
+                        <div class="podium-emblem">
+                            <div class="skeleton skeleton-circle podium-emblem-skeleton"></div>
+                        </div>
+                    </div>
+                    <div class="podium-card pos-3 podium-card-skeleton" aria-hidden="true">
+                        <div class="podium-text">
+                            <div class="podium-header">
+                                <div class="skeleton skeleton-line podium-pos-skeleton"></div>
+                            </div>
+                            <div class="podium-body">
+                                <div class="skeleton skeleton-line podium-team-name-skeleton"></div>
+                                <div class="skeleton skeleton-line podium-pts-skeleton"></div>
+                            </div>
+                        </div>
+                        <div class="podium-emblem">
+                            <div class="skeleton skeleton-circle podium-emblem-skeleton"></div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="standings-card-wrapper">
                     <div id="HomeTeamTableLoading"></div>
-                    <div id="HomeJSTeamTable"></div>
+                    <div id="HomeJSTeamTable">
+                        <table class="standings-table">
+                            <thead>
+                                <tr>
+                                    <th class="column-position">Pos</th>
+                                    <th class="column-team">Team</th>
+                                    <th class="column-played">Played</th>
+                                    <th class="column-points">Points</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="standings-row-skeleton" aria-hidden="true">
+                                    <td class="column-position"><div class="skeleton skeleton-line" style="width:20px;"></div></td>
+                                    <td class="column-team">
+                                        <div class="team-info">
+                                            <div class="skeleton skeleton-circle" style="width:24px; height:24px; flex-shrink:0;"></div>
+                                            <div class="skeleton skeleton-line" style="width:120px;"></div>
+                                        </div>
+                                    </td>
+                                    <td class="column-played"><div class="skeleton skeleton-line" style="width:20px; margin:0 auto;"></div></td>
+                                    <td class="column-points"><div class="skeleton skeleton-line" style="width:30px; margin-left:auto;"></div></td>
+                                </tr>
+                                <tr class="standings-row-skeleton" aria-hidden="true">
+                                    <td class="column-position"><div class="skeleton skeleton-line" style="width:20px;"></div></td>
+                                    <td class="column-team">
+                                        <div class="team-info">
+                                            <div class="skeleton skeleton-circle" style="width:24px; height:24px; flex-shrink:0;"></div>
+                                            <div class="skeleton skeleton-line" style="width:120px;"></div>
+                                        </div>
+                                    </td>
+                                    <td class="column-played"><div class="skeleton skeleton-line" style="width:20px; margin:0 auto;"></div></td>
+                                    <td class="column-points"><div class="skeleton skeleton-line" style="width:30px; margin-left:auto;"></div></td>
+                                </tr>
+                                <tr class="standings-row-skeleton" aria-hidden="true">
+                                    <td class="column-position"><div class="skeleton skeleton-line" style="width:20px;"></div></td>
+                                    <td class="column-team">
+                                        <div class="team-info">
+                                            <div class="skeleton skeleton-circle" style="width:24px; height:24px; flex-shrink:0;"></div>
+                                            <div class="skeleton skeleton-line" style="width:120px;"></div>
+                                        </div>
+                                    </td>
+                                    <td class="column-played"><div class="skeleton skeleton-line" style="width:20px; margin:0 auto;"></div></td>
+                                    <td class="column-points"><div class="skeleton skeleton-line" style="width:30px; margin-left:auto;"></div></td>
+                                </tr>
+                                <tr class="standings-row-skeleton" aria-hidden="true">
+                                    <td class="column-position"><div class="skeleton skeleton-line" style="width:20px;"></div></td>
+                                    <td class="column-team">
+                                        <div class="team-info">
+                                            <div class="skeleton skeleton-circle" style="width:24px; height:24px; flex-shrink:0;"></div>
+                                            <div class="skeleton skeleton-line" style="width:120px;"></div>
+                                        </div>
+                                    </td>
+                                    <td class="column-played"><div class="skeleton skeleton-line" style="width:20px; margin:0 auto;"></div></td>
+                                    <td class="column-points"><div class="skeleton skeleton-line" style="width:30px; margin-left:auto;"></div></td>
+                                </tr>
+                                <tr class="standings-row-skeleton" aria-hidden="true">
+                                    <td class="column-position"><div class="skeleton skeleton-line" style="width:20px;"></div></td>
+                                    <td class="column-team">
+                                        <div class="team-info">
+                                            <div class="skeleton skeleton-circle" style="width:24px; height:24px; flex-shrink:0;"></div>
+                                            <div class="skeleton skeleton-line" style="width:120px;"></div>
+                                        </div>
+                                    </td>
+                                    <td class="column-played"><div class="skeleton skeleton-line" style="width:20px; margin:0 auto;"></div></td>
+                                    <td class="column-points"><div class="skeleton skeleton-line" style="width:30px; margin-left:auto;"></div></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
                     <div class="toggle-wrapper">
                         <a href="#" id="toggleShowAll" class="show-all-btn no-color-link">Show all &#9660;</a>
@@ -126,7 +276,39 @@
                 </div>
             </div>
 
-            <div class="carousel-container" id="videoCarousel"></div>
+            <!-- Static skeleton so the layout has content on first paint, before videocarousel.js runs. Keep in sync with renderVideoCarouselSkeleton() in videocarousel.js -->
+            <div class="carousel-container" id="videoCarousel">
+                <div class="video-card video-card-skeleton" aria-hidden="true">
+                    <div class="video-thumb-wrapper skeleton"></div>
+                    <p class="video-title skeleton"></p>
+                    <p class="video-date skeleton"></p>
+                </div>
+                <div class="video-card video-card-skeleton" aria-hidden="true">
+                    <div class="video-thumb-wrapper skeleton"></div>
+                    <p class="video-title skeleton"></p>
+                    <p class="video-date skeleton"></p>
+                </div>
+                <div class="video-card video-card-skeleton" aria-hidden="true">
+                    <div class="video-thumb-wrapper skeleton"></div>
+                    <p class="video-title skeleton"></p>
+                    <p class="video-date skeleton"></p>
+                </div>
+                <div class="video-card video-card-skeleton" aria-hidden="true">
+                    <div class="video-thumb-wrapper skeleton"></div>
+                    <p class="video-title skeleton"></p>
+                    <p class="video-date skeleton"></p>
+                </div>
+                <div class="video-card video-card-skeleton" aria-hidden="true">
+                    <div class="video-thumb-wrapper skeleton"></div>
+                    <p class="video-title skeleton"></p>
+                    <p class="video-date skeleton"></p>
+                </div>
+                <div class="video-card video-card-skeleton" aria-hidden="true">
+                    <div class="video-thumb-wrapper skeleton"></div>
+                    <p class="video-title skeleton"></p>
+                    <p class="video-date skeleton"></p>
+                </div>
+            </div>
         </div>
 
     </main>

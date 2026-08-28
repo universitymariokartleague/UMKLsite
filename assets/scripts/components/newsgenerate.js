@@ -21,7 +21,7 @@ async function fetchNews() {
 
 function renderHomeNewsSkeleton() {
     const container = document.querySelector(".news-grid-container");
-    if (!container) return;
+    if (!container || container.querySelector(".hero-card[aria-hidden]")) return;
 
     const smallCardSkeleton = `
         <article class="small-card" aria-hidden="true">

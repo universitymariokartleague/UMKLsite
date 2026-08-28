@@ -18,6 +18,7 @@ let hasRenderedStandings = false;
 
 function renderStandingsSkeleton() {
     if (!JSTeamTable || !SeasonTop3) return;
+    if (SeasonTop3.querySelector(".podium-card-skeleton")) return;
 
     const podiumSkeleton = (pos) => `
         <div class="podium-card pos-${pos} podium-card-skeleton" aria-hidden="true">

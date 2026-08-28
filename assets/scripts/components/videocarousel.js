@@ -4,6 +4,8 @@ const RETRY_DELAY_MS = 5000;
 const RETRY_MAX_DELAY_MS = 30000;
 
 function renderVideoCarouselSkeleton(container) {
+    if (container.querySelector(".video-card-skeleton")) return;
+
     const skeletonCard = `
         <div class="video-card video-card-skeleton" aria-hidden="true">
             <div class="video-thumb-wrapper skeleton"></div>
