@@ -98,6 +98,11 @@
 }
 
 
+.stat-label {
+    font-weight: 600;
+    opacity: 0.75;
+}
+
 .stat-value {
     font-size: 1.8rem;
     font-weight: 1000;
