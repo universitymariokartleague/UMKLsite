@@ -6,15 +6,28 @@
 const JSTeamTable = document.getElementById("HomeJSTeamTable");
 const JSTeamTableLoading = document.getElementById("HomeTeamTableLoading");
 const SeasonTop3 = document.getElementById("HomeSeasonTop3");
+const SeasonFlavourText = document.getElementById("HomeSeasonFlavourText");
 const toggleShowAllBtn = document.getElementById("toggleShowAll");
 
 const API_BASE = 'https://api.umkl.co.uk';
 const CACHE_KEY = 'teamDataCache';
 const SEASON_CACHE_KEY = 'seasonInfoCache';
 
+const SEASON_FLAVOUR_TEXT = {
+    ongoing: "Check out the current standings below!",
+    completed: "Check out the final results from this season below!",
+    concluded: "No messages.[English]",
+    upcoming: "This season hasn't started yet, check back soon for the standings!",
+};
+
 let allTeamsData = [];
 let isExpanded = false;
 let hasRenderedStandings = false;
+
+function renderSeasonFlavourText(status) {
+    if (!SeasonFlavourText || !status) return;
+    SeasonFlavourText.textContent = SEASON_FLAVOUR_TEXT[status.toLowerCase()] || "Check out the standings";
+}
 
 function renderStandingsSkeleton() {
     if (!JSTeamTable || !SeasonTop3) return;
@@ -265,7 +278,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     let currentSeason = 3;
     const seasonCache = getSeasonInfoCache();
-    if (seasonCache[0] != null) currentSeason = parseInt(seasonCache[0]) || 3;
+    if (seasonCache[0] != null) {
+        currentSeason = parseInt(seasonCache[0]) || 3;
+        renderSeasonFlavourText(seasonCache[0]?.[1]);
+    }
 
     const cached = localStorage.getItem(CACHE_KEY);
     if (cached) {
@@ -284,6 +300,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!isNaN(liveSeason)) {
             currentSeason = liveSeason;
             setSeasonInfoCache(0, seasonInfo);
+            renderSeasonFlavourText(seasonInfo[1]);
         }
     } catch { }
 
