@@ -16,7 +16,7 @@ const SEASON_CACHE_KEY = 'seasonInfoCache';
 const SEASON_FLAVOUR_TEXT = {
     ongoing: "Check out the current standings below!",
     completed: "Check out the final results from this season below!",
-    concluded: "No messages.[English]",
+    concluded: "Check out the final results from this season below!",
     upcoming: "This season hasn't started yet, check back soon for the standings!",
 };
 
