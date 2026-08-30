@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const metaAuthor = document.getElementById('metaAuthor');
     const metaTags = document.getElementById('metaTags');
 
-    // fallback in case the user doesn't add a main image (will have figure out how to make the main image a required input)
     let mainImageUrl = "https://mario.wiki.gallery/images/thumb/4/48/MK8DX_Nintendo_Wallpaper_1.jpg/1600px-MK8DX_Nintendo_Wallpaper_1.jpg";
 
     // Set current datetime on startup (UTC)
@@ -29,9 +28,126 @@ document.addEventListener('DOMContentLoaded', () => {
     const formattedDate = `${now.getUTCDate()} ${now.toLocaleString('en-GB', { month: 'long', timeZone: 'UTC' })}, ${now.getUTCFullYear()} ${String(now.getUTCHours()).padStart(2, '0')}:${String(now.getUTCMinutes()).padStart(2, '0')} UTC`;
     metaDate.innerText = formattedDate;
 
+    // Helper: Prompts for File Upload OR Web URL
+// Modal Target Elements
+    const imageModal = document.getElementById('imageModal');
+    const modalUploadBtn = document.getElementById('modalUploadBtn');
+    const modalUrlBtn = document.getElementById('modalUrlBtn');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    
+    let activeImageCallback = null;
+    let activeFileInput = null;
+
+    // Open Custom Image Selection Modal
+    function openImageModal(fileInput, callback) {
+        activeFileInput = fileInput;
+        activeImageCallback = callback;
+        imageModal.classList.remove('hidden');
+    }
+
+    // Close Modal
+    function closeImageModal() {
+        imageModal.classList.add('hidden');
+        activeImageCallback = null;
+        activeFileInput = null;
+    }
+
+    // Option 1: File Upload Selected
+    modalUploadBtn.addEventListener('click', () => {
+        if (activeFileInput) {
+            activeFileInput.click();
+        }
+        closeImageModal();
+    });
+
+    // Option 2: Web URL Selected
+    modalUrlBtn.addEventListener('click', () => {
+        const url = prompt("Enter the direct Web URL for the image:");
+        if (url && url.trim().length > 0 && activeImageCallback) {
+            activeImageCallback(url.trim());
+        }
+        closeImageModal();
+    });
+
+    modalCloseBtn.addEventListener('click', closeImageModal);
+
+    // Click triggers updated to use Modal
+    mainImageContainer.addEventListener('click', () => {
+        openImageModal(mainFileInput, (url) => {
+            mainImageUrl = url;
+            mainImagePreview.src = mainImageUrl;
+            mainImagePreview.classList.remove('hidden');
+            mainPlus.classList.add('hidden');
+            mainLabel.classList.add('hidden');
+        });
+    });
+
+    insertImageBtn.addEventListener('click', () => {
+        if (!insertImageBtn.disabled) {
+            openImageModal(bodyFileInput, (url) => {
+                insertImageToBody(url);
+            });
+        }
+    });
+
+    // --- TOOLBAR STATE & SELECTION DETECTION ---
+    function updateToolbarState() {
+        const activeElement = document.activeElement;
+        const sel = window.getSelection();
+        
+        // Determine if selection or cursor is inside body editor
+        let isBodyActive = bodyEditor.contains(activeElement);
+        if (sel && sel.rangeCount > 0) {
+            const anchorNode = sel.anchorNode;
+            if (anchorNode && bodyEditor.contains(anchorNode.nodeType === 3 ? anchorNode.parentNode : anchorNode)) {
+                isBodyActive = true;
+            }
+        }
+
+        // Auto-select heading if editor is blank/empty
+        const cleanText = bodyEditor.innerText.replace(/\s/g, '');
+        if (cleanText === '') {
+            blockTypeSelect.value = 'h3';
+        } else if (isBodyActive && sel && sel.rangeCount > 0) {
+            // Detect block element under cursor inside body editor
+            let parentBlock = sel.anchorNode;
+            if (parentBlock.nodeType === 3) parentBlock = parentBlock.parentNode;
+            
+            while (parentBlock && parentBlock !== bodyEditor && !['P', 'H3'].includes(parentBlock.tagName)) {
+                parentBlock = parentBlock.parentNode;
+            }
+
+            if (parentBlock && parentBlock !== bodyEditor) {
+                const tag = parentBlock.tagName.toLowerCase();
+                if (['p', 'h3'].includes(tag)) {
+                    blockTypeSelect.value = tag;
+                }
+            }
+        }
+
+        // Disable toolbar controls when focused outside bodyEditor
+        const controls = [blockTypeSelect, boldBtn, linkBtn, insertImageBtn];
+        controls.forEach(ctrl => {
+            ctrl.disabled = !isBodyActive;
+            ctrl.style.opacity = isBodyActive ? '1' : '0.4';
+            ctrl.style.cursor = isBodyActive ? 'pointer' : 'not-allowed';
+        });
+    }
+
+    // Monitor changes across selection and focus
+    document.addEventListener('selectionchange', updateToolbarState);
+    document.addEventListener('focusin', updateToolbarState);
+    updateToolbarState();
+
     // --- MAIN IMAGE ---
     mainImageContainer.addEventListener('click', () => {
-        mainFileInput.click();
+        getImageUrl(mainFileInput, (url) => {
+            mainImageUrl = url;
+            mainImagePreview.src = mainImageUrl;
+            mainImagePreview.classList.remove('hidden');
+            mainPlus.classList.add('hidden');
+            mainLabel.classList.add('hidden');
+        });
     });
 
     mainFileInput.addEventListener('change', (e) => {
@@ -51,24 +167,75 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- RICH TEXT ---
     boldBtn.addEventListener('click', () => {
-        document.execCommand('bold', false, null);
+        if (!boldBtn.disabled) {
+            document.execCommand('bold', false, null);
+        }
     });
 
     linkBtn.addEventListener('click', () => {
-        const url = prompt('Enter the link URL:', 'https://');
-        if (url) {
-            document.execCommand('createLink', false, url);
+        if (!linkBtn.disabled) {
+            const url = prompt('Enter the link URL:', 'https://');
+            if (url) {
+                document.execCommand('createLink', false, url);
+            }
         }
     });
 
     blockTypeSelect.addEventListener('change', (e) => {
-        const tag = e.target.value;
-        document.execCommand('formatBlock', false, `<${tag}>`);
+        if (!blockTypeSelect.disabled) {
+            const tag = e.target.value;
+            document.execCommand('formatBlock', false, `<${tag}>`);
+        }
     });
 
     // --- BODY IMAGES ---
+    function insertImageToBody(imgUrl) {
+        const imageBlock = document.createElement('div');
+        imageBlock.className = 'article-image-container';
+        imageBlock.setAttribute('contenteditable', 'false');
+        imageBlock.innerHTML = `
+            <div class="article-image-wrapper">
+                <button type="button" class="btn-remove-image" title="Remove image">&times;</button>
+                <img loading="lazy" class="image article-content-image" src="${imgUrl}" />
+                <span class="article-image-caption" contenteditable="true">Lorem ipsum dolor sit amet</span>
+            </div>
+        `;
+
+        bodyEditor.focus();
+        const sel = window.getSelection();
+        if (sel.rangeCount > 0) {
+            let range = sel.getRangeAt(0);
+
+            // Find block element under selection
+            let currentBlock = range.startContainer;
+            if (currentBlock.nodeType === 3) currentBlock = currentBlock.parentNode;
+
+            // Ensure placement is inside bodyEditor
+            while (currentBlock && currentBlock.parentNode !== bodyEditor && currentBlock !== bodyEditor) {
+                currentBlock = currentBlock.parentNode;
+            }
+
+            // Create new line if inserting mid-text line
+            if (currentBlock && currentBlock !== bodyEditor) {
+                const p = document.createElement('p');
+                p.innerHTML = '<br>';
+                currentBlock.after(imageBlock);
+                imageBlock.after(p);
+            } else {
+                bodyEditor.appendChild(imageBlock);
+                const p = document.createElement('p');
+                p.innerHTML = '<br>';
+                bodyEditor.appendChild(p);
+            }
+        }
+    }
+
     insertImageBtn.addEventListener('click', () => {
-        bodyFileInput.click();
+        if (!insertImageBtn.disabled) {
+            getImageUrl(bodyFileInput, (url) => {
+                insertImageToBody(url);
+            });
+        }
     });
 
     bodyFileInput.addEventListener('change', (e) => {
@@ -76,38 +243,27 @@ document.addEventListener('DOMContentLoaded', () => {
         if (file) {
             const reader = new FileReader();
             reader.onload = (event) => {
-                const imgUrl = event.target.result;
-
-                const imageBlock = document.createElement('div');
-                imageBlock.className = 'article-image-container';
-                imageBlock.setAttribute('contenteditable', 'false');
-                imageBlock.innerHTML = `
-                    <div class="article-image-wrapper">
-                        <img loading="lazy" class="image article-content-image" src="${imgUrl}" />
-                        <span class="article-image-caption" contenteditable="true">Lorem ipsum dolor sit amet</span>
-                    </div>
-                `;
-
-                // insert at cursor location
-                bodyEditor.focus();
-                const sel = window.getSelection();
-                if (sel.rangeCount > 0) {
-                    const range = sel.getRangeAt(0);
-                    range.insertNode(imageBlock);
-
-                    // Add an empty paragraph after a body image
-                    const p = document.createElement('p');
-                    p.innerHTML = '<br>';
-                    imageBlock.after(p);
-                }
+                insertImageToBody(event.target.result);
             };
             reader.readAsDataURL(file);
         }
     });
 
+    // Delegated delete handler for body images
+    bodyEditor.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-remove-image')) {
+            const container = e.target.closest('.article-image-container');
+            if (container) {
+                container.remove();
+            }
+        }
+    });
+
+    // --- ACTIONS ---
     clearBtn.addEventListener('click', () => {
         if (confirm('Are you sure you want to clear all article content?')) {
             bodyEditor.innerHTML = '<p><br></p>';
+            updateToolbarState();
         }
     });
 
@@ -125,13 +281,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const author = metaAuthor.value.trim() || 'Anonymous';
         const date = metaDate.innerText;
 
-        // Convert comma separated tags into tag elements
         const rawTags = metaTags.value.split(',').map(t => t.trim()).filter(t => t.length > 0);
         const tagsMarkup = rawTags.length > 0
             ? rawTags.map(tag => `                        <tag translate="no">${tag}</tag>`).join('\n')
             : '                        <tag translate="no">News</tag>';
 
-        const bodyContent = bodyEditor.innerHTML.trim();
+        // Clone editor content to strip out builder-only remove buttons before exporting
+        const clone = bodyEditor.cloneNode(true);
+        clone.querySelectorAll('.btn-remove-image').forEach(btn => btn.remove());
+        const bodyContent = clone.innerHTML.trim();
 
         const outputDocument = `<!DOCTYPE html>
 <html lang="en">
@@ -234,7 +392,6 @@ ${tagsMarkup}
 
 </html>`;
 
-        // Export
         const blob = new Blob([outputDocument], { type: 'text/html' });
         const downloadLink = document.createElement('a');
         downloadLink.href = URL.createObjectURL(blob);

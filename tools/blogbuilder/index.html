@@ -26,6 +26,9 @@
 
     <!-- Scripts -->
     <script src="/assets/scripts/base/theme.js"></script>
+    <link rel="modulepreload" href="/assets/components/footer.js">
+    <script type="module" src="/assets/components/footer.js" defer></script>
+
 
     <script type="module" src="/assets/scripts/pages/blogbuilder.js" defer></script>
     <script type="module" src="/assets/scripts/base/settings.js" defer></script>
@@ -37,10 +40,19 @@
     <div class="builder-top-bar">
         <header class="builder-bar">
             <a class="nav-bar-title no-color-link no-underline-link-footer" href="/" title="Go home">
-                <img loading="lazy" class="builder-bar-logo" alt="UMKL logo" src="/assets/media/brand/guidelines/logo_transparent_white.avif" style="width: 32px;"/>
+                <img loading="lazy" class="builder-bar-logo" alt="UMKL logo"
+                    src="/assets/media/brand/guidelines/logo_transparent_white.avif" style="width: 32px;" />
             </a>
             <span class="builder-title">Article Builder - UMKL</span>
-            <button id="exitBtn" class="btn-exit">← Exit</button>
+            <button id="exitBtn" class="btn-exit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24"
+                    role="presentation">
+                    <path fill="currentColor"
+                        d="M22 13H4.94l5.18 5.29-1.38 1.42-6.17-6.3a2 2 0 0 1 0-2.82l6.17-6.3 1.38 1.42L4.94 11H22z">
+                    </path>
+                </svg>
+                Exit
+            </button>
         </header>
 
         <div class="toolbar">
@@ -49,23 +61,61 @@
                     <option value="h3">Heading</option>
                     <option value="p" selected>Paragraph</option>
                 </select>
-                <button id="boldBtn" class="btn-tool"><b>B</b></button>
-                <button id="linkBtn" class="btn-tool">Link</button>
-            </div>
+                <button id="boldBtn" class="btn-tool">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 5h4.5a3.5 3.5 0 1 1 0 7H8m0-7v7m0-7H6m2 7h6.5a3.5 3.5 0 1 1 0 7H8m0-7v7m0 0H6" />
+                    </svg>
 
-            <div class="toolbar-divider"></div>
-
-            <div class="toolbar-group">
-                <button id="insertImageBtn" class="btn-tool">Image
+                </button>
+                <button id="linkBtn" class="btn-tool">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13.213 9.787a3.391 3.391 0 0 0-4.795 0l-3.425 3.426a3.39 3.39 0 0 0 4.795 4.794l.321-.304m-.321-4.49a3.39 3.39 0 0 0 4.795 0l3.424-3.426a3.39 3.39 0 0 0-4.794-4.795l-1.028.961" />
+                    </svg>
                 </button>
             </div>
 
             <div class="toolbar-divider"></div>
 
             <div class="toolbar-group">
-                <button id="clearBtn" class="btn-tool">Clear All
+                <button id="insertImageBtn" class="btn-tool">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M13 10a1 1 0 0 1 1-1h.01a1 1 0 1 1 0 2H14a1 1 0 0 1-1-1Z"
+                            clip-rule="evenodd" />
+                        <path fill-rule="evenodd"
+                            d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12c0 .556-.227 1.06-.593 1.422A.999.999 0 0 1 20.5 20H4a2.002 2.002 0 0 1-2-2V6Zm6.892 12 3.833-5.356-3.99-4.322a1 1 0 0 0-1.549.097L4 12.879V6h16v9.95l-3.257-3.619a1 1 0 0 0-1.557.088L11.2 18H8.892Z"
+                            clip-rule="evenodd" />
+                    </svg>
+
                 </button>
-                <button id="saveBtn" class="btn-tool">Save
+            </div>
+
+            <div class="toolbar-divider"></div>
+
+            <div class="toolbar-group">
+                <button id="clearBtn" class="btn-tool"><svg class="w-6 h-6 text-gray-800 dark:text-white"
+                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        viewBox="0 0 24 24">
+                        <path fill-rule="evenodd"
+                            d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
+                            clip-rule="evenodd" />
+                    </svg>
+
+                </button>
+                <button id="saveBtn" class="btn-tool">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        viewBox="0 0 24 24">
+                        <path fill-rule="evenodd"
+                            d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7.414A2 2 0 0 0 20.414 6L18 3.586A2 2 0 0 0 16.586 3H5Zm10 11a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7V5h8v2a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1Z"
+                            clip-rule="evenodd" />
+                    </svg>
+
                 </button>
             </div>
         </div>
@@ -75,11 +125,12 @@
         <div class="article-layout">
 
             <div class="article-main-content">
-                <h1 id="articleTitle" class="editable-title" contenteditable="true" data-placeholder="Click to edit title">Click to edit title</h1>
+                <h1 id="articleTitle" class="editable-title" contenteditable="true"
+                    data-placeholder="Click to edit title">Click to edit title</h1>
 
                 <div id="articleSubtitle" class="editable-subtitle" contenteditable="true"
                     data-placeholder="Click to edit subtitle">
-                        Click to edit subtitle
+                    Click to edit subtitle
                 </div>
 
                 <div id="mainImageContainer" class="main-image-placeholder">
@@ -113,9 +164,33 @@
             </aside>
 
         </div>
+
     </main>
 
+    <umkl-footer></umkl-footer>
+
+
     <input type="file" id="bodyFileInput" accept="image/*" class="hidden">
+
+    <div id="imageModal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h3>Insert Image</h3>
+            <span class="modal-subtitle">Choose how you would like to add your image</span>
+            
+            <div class="modal-actions">
+                <button id="modalUploadBtn" class="btn-modal-option">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M11 16V7.85l-2.6 2.6L7 9l5-5 5 5-1.4 1.45-2.6-2.6V16h-2Zm-5 4q-.825 0-1.412-.587Q4 18.825 4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413Q18.825 20 18 20H6Z"/></svg>
+                    Upload from Computer
+                </button>
+                <button id="modalUrlBtn" class="btn-modal-option">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M10.59 13.41c.41.39.41 1.03 0 1.42-.39.39-1.03.39-1.42 0a5.003 5.003 0 0 1 0-7.07l3.54-3.54a5.003 5.003 0 0 1 7.07 0 5.003 5.003 0 0 1 0 7.07l-1.49 1.49c.01-.82-.12-1.64-.4-2.42l.47-.48a3.00 3.00 0 0 0 0-4.24 3.00 3.00 0 0 0-4.24 0L10.59 9.17a3.00 3.00 0 0 0 0 4.24zm2.83-2.83c-.41-.39-.41-1.03 0-1.42.39-.39 1.03-.39 1.42 0a5.003 5.003 0 0 1 0 7.07l-3.54 3.54a5.003 5.003 0 0 1-7.07 0 5.003 5.003 0 0 1 0-7.07l1.49-1.49c-.01.82.12 1.64.4 2.42l-.47.48a3.00 3.00 0 0 0 0 4.24 3.00 3.00 0 0 0 4.24 0l3.54-3.54a3.00 3.00 0 0 0 0-4.24z"/></svg>
+                    Insert from URL
+                </button>
+            </div>
+
+            <button id="modalCloseBtn" class="btn-modal-close">Cancel</button>
+        </div>
+    </div>
 </body>
 
 </html>
