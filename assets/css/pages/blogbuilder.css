@@ -57,6 +57,7 @@
 }
 
 .toolbar select, .btn-tool {
+    background: none;
     padding: 6px 12px;
     border: 1px solid #00000000;
     border-radius: 8px;
@@ -116,15 +117,17 @@
 /* Inline Editable Controls */
 [contenteditable="true"] {
     outline: none;
+    border-radius: 4px;
+    padding: 0 2px;
 }
 
 [contenteditable="true"]:hover {
-    outline: 1px dashed #bc0839;
+    outline: 1px solid var(--translucent-color);
 }
 
 [contenteditable="true"]:focus {
-    outline: 2px solid #bc0839;
-    background-color: #fafafa;
+    outline: 1px solid var(--opaque-color);
+    background-color: var(--translucent-color);
 }
 
 .editable-title {
@@ -215,7 +218,7 @@
 
 .meta-group {
     padding: 20px;
-    border-bottom: 1px solid #111;
+    border-bottom: 1px solid var(--text-color);
     display: flex;
     flex-direction: column;
     gap: 5px;
