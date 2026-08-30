@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearBtn = document.getElementById('clearBtn');
     const saveBtn = document.getElementById('saveBtn');
     const exitBtn = document.getElementById('exitBtn');
+    const homeLink = document.getElementById('homeLink');
 
     const metaDate = document.getElementById('metaDate');
     const metaAuthor = document.getElementById('metaAuthor');
@@ -270,6 +271,13 @@ document.addEventListener('DOMContentLoaded', () => {
     exitBtn.addEventListener('click', () => {
         if (confirm('Discard changes and leave the article builder?')) {
             window.location.href = '/news/';
+        }
+    });
+
+    homeLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (confirm('Discard changes and leave the article builder?')) {
+            window.location.href = homeLink.href;
         }
     });
 
