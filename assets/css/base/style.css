@@ -2,7 +2,7 @@
 
 :root {
     --content-max-width: 1400px;
-    --article-max-width: 850px;
+    --article-max-width: 1400px;
     --navbar-height: 80px;
     --border-radius: 10px;
     --border-radius-pill: 99px;
@@ -580,25 +580,22 @@ mention {
 }
 
 tag {
-    color: #FFF;
-    background-color: var(--accent-color);
-    border: 1px solid var(--accent-color);
-    font-size: 15px;
-    padding: 0px 5px;
-    border-radius: calc(var(--border-radius) * 0.5);
-    transition: transform 0.1s, color 0.1s, background-color 0.1s;
-    -webkit-user-select: all;
-    user-select: all;
+    border-radius: var(--border-radius-pill);
+    padding: 3px 12px;
+    font-size: 0.78em;
+    font-weight: 700;
+    background-color: var(--translucent-color);
+    -webkit-user-select: none;
+    user-select: none;
+    white-space: nowrap;
 }
 
-tag:hover {
-    color: var(--accent-color);
-    background: #fff;
-    outline: 1px solid var(--accent-color);
-}
 
-.tag-link {
-    text-decoration: none;
+.tag-container {
+    display: flex;
+    gap: 5px;
+    white-space: wrap;
+
 }
 
 mention::selection {
