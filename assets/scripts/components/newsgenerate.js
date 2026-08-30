@@ -154,7 +154,6 @@ const existingSearch = params.get("search") || "";
 function addLinksToTags() {
     const newsDates = document.querySelectorAll(".news-date");
     const tagLower = selectedTag ? selectedTag.toLowerCase() : null;
-    let hasAnimatedTags = false;
 
     const style = document.createElement("style");
     style.textContent = `@keyframes news-tag-scroll { 0% { transform: translateX(0); } 50% { transform: translateX(var(--scroll-amount)); } 100% { transform: translateX(0); } }`;
@@ -171,9 +170,12 @@ function addLinksToTags() {
             const anchor = document.createElement("a");
             anchor.href = href;
             anchor.className = "tag-link";
+            anchor.style.textDecoration = "none";
 
             tag.translate = false;
             tag.className = "tag-link-text";
+            tag.style.textDecoration = "none";
+            
             tag.parentNode.replaceChild(anchor, tag);
             anchor.appendChild(tag);
         });
@@ -181,14 +183,8 @@ function addLinksToTags() {
         const rect = element.getBoundingClientRect();
         const width = rect.width;
 
-        if (width > 205) {
-            element.style.setProperty("--scroll-amount", `-${width - 200}px`);
-            element.style.animation = "news-tag-scroll 5s ease-in-out infinite";
-            hasAnimatedTags = true;
-        }
     });
 
-    if (!hasAnimatedTags) style.remove();
 
     if (tagLower) {
         document.querySelectorAll(".news-date tag").forEach(tag => {

@@ -42,6 +42,7 @@
 .news-card {
     display: flex;
     flex-direction: column;
+        cursor: pointer;
 }
 
 .news-card-link {
@@ -121,6 +122,18 @@
     padding: 2px 10px;
     font-size: 0.9em;
     font-weight: 700;
+}
+
+.news-card:has(.tags tag:hover) .news-title {
+    text-decoration: none;
+}
+
+tag:hover {
+    background-color: var(--opaque-color);
+}
+
+tag:active {
+    background-color: var(--translucent-color);
 }
 
 .news-credits {

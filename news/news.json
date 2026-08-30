@@ -1,5 +1,14 @@
 [
     {
+        "title": "Lorem ipsum dolor sit amet consectetur",
+        "link": "/news/2026-08-30/lorem-ipsum/",
+        "date": "2026-08-30",
+        "image": "https://mario.wiki.gallery/images/thumb/a/aa/MK8D_Tokyo_Blur_Racing.png/1600px-MK8D_Tokyo_Blur_Racing.png",
+        "alt": "Lorem ipsum dolor sit amet consectetur",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et quam est. Proin ipsum nulla, placerat sed sodales eu, dictum sit amet ipsum. Nullam accumsan sapien risus, sit amet euismod lorem vehicula vitae.",
+        "tags": ["Lorem", "Ipsum", "Dolor"]
+    },
+    {
         "title": "Season 2 Round 4 Fixtures Revealed!",
         "link": "/news/2026-03-31/season-2-round-4-fixtures-revealed/",
         "date": "2026-03-31",

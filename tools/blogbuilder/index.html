@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="color-scheme" content="dark light">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Blog Builder | UMKL</title>
+    <title>Article Builder | UMKL</title>
     <meta name="description" content="Build a blog here for the UMKL site!">
     <link rel="icon" href="https://umkl.co.uk/assets/media/brand/favicon.png" type="image/png">
     <link rel="stylesheet" href="/assets/css/base/style.css">
@@ -33,57 +33,87 @@
 </head>
 
 <body>
-    <div id="loading-area">
-        <div class="loading-text">
-            Starting UMKL Blog Builder...<br>
-            Please wait...
-            <div id="loading-bar"></div>
-        </div>
-        <div class="loading-tip">
-            <b>TIP</b>: A computer is recommended for use with the Blog Builder.
+
+    <div class="builder-top-bar">
+        <header class="builder-bar">
+            <img loading="lazy" class="builder-bar-logo" alt="UMKL logo" src="/assets/media/brand/guidelines/logo_transparent_white.avif" style="width: 32px;"/>
+            <span class="builder-title">Article Builder - UMKL</span>
+            <button id="exitBtn" class="btn-exit">← Exit</button>
+        </header>
+
+        <div class="toolbar">
+            <div class="toolbar-group">
+                <select id="blockTypeSelect">
+                    <option value="p">Paragraph</option>
+                    <option value="h3">Heading</option>
+                </select>
+                <button id="boldBtn" class="btn-tool"><b>B</b></button>
+                <button id="linkBtn" class="btn-tool">Link</button>
+            </div>
+
+            <div class="toolbar-divider"></div>
+
+            <div class="toolbar-group">
+                <button id="insertImageBtn" class="btn-tool">Image
+                </button>
+            </div>
+
+            <div class="toolbar-divider"></div>
+
+            <div class="toolbar-group">
+                <button id="clearBtn" class="btn-tool">Clear All
+                </button>
+                <button id="saveBtn" class="btn-tool">Save
+                </button>
+            </div>
         </div>
     </div>
 
-    <div id="editing-area">
-        <div class="page-area-container">
-            <div id="page-area"></div>
-        </div>
-        <div id="editing-tools">
-            <p class="p-no-spacing">
-                <a class="no-color-link" href="/tools/">Exit blog builder</a>
-                <a class="no-color-link" title="Settings" id="settings-icon"><svg viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg" fill="none">
-                        <path
-                            d="m22.311 6.557-.55-.954c-.415-.722-.623-1.083-.977-1.227s-.754-.03-1.555.196l-1.36.383a2.2 2.2 0 0 1-1.513-.19l-.375-.215a2.23 2.23 0 0 1-.878-1.078L14.73 2.36c-.245-.735-.368-1.103-.659-1.312-.29-.212-.678-.212-1.452-.212h-1.242c-.774 0-1.16 0-1.452.212-.291.209-.412.577-.658 1.312l-.372 1.112a2.23 2.23 0 0 1-.879 1.078l-.375.217a2.23 2.23 0 0 1-1.514.19l-1.36-.385c-.8-.226-1.2-.34-1.554-.196s-.562.505-.978 1.226l-.55.955c-.39.677-.584 1.015-.546 1.375s.298.65.82 1.23l1.149 1.286c.28.355.48.975.48 1.532s-.2 1.177-.48 1.532l-1.15 1.284c-.52.58-.781.871-.82 1.231-.037.36.157.699.547 1.375l.55.955c.416.72.624 1.082.978 1.226.354.145.754.03 1.555-.196l1.36-.384a2.23 2.23 0 0 1 1.514.19l.374.216c.401.256.709.635.878 1.078l.372 1.111c.245.736.368 1.104.659 1.315s.678.21 1.452.21h1.242c.774 0 1.161 0 1.452-.21.291-.211.414-.58.658-1.315l.373-1.11c.17-.445.477-.823.878-1.08l.374-.215a2.23 2.23 0 0 1 1.516-.19l1.36.384c.8.227 1.2.34 1.553.197.354-.145.562-.506.978-1.227l.55-.955c.39-.676.584-1.014.546-1.375-.038-.36-.298-.65-.82-1.231l-1.149-1.284c-.28-.357-.48-.975-.48-1.532s.2-1.177.48-1.532l1.15-1.285c.52-.58.781-.87.82-1.231.037-.36-.157-.698-.547-1.375Z"
-                            stroke="#141B34" stroke-width="1.671" style="fill:none;stroke:#fff;stroke-opacity:1"
-                            stroke-linecap="round"></path>
-                        <path d="M15.852 11.97a3.9 3.9 0 1 1-7.8 0 3.9 3.9 0 0 1 7.8 0z" stroke="#141B34"
-                            stroke-width="1.671" style="fill:none;stroke:#fff;stroke-opacity:1"></path>
-                    </svg></a><br><br>
-                <button id="import-elements-list">Import JSON</button><br>
-                <button id="export-elements-list">Export as JSON</button><br>
-                <button id="export-html">Export as HTML</button><br>
-            </p>
-            <div id="blog-buttons"></div><br>
-            Add images from your device:<br>
-            <button id="add-image">Import image</button><br><br>
-            <div class="codeBox" id="elements-list">
-                <b>Blog Elements</b>
-            </div><br>
-            <div class="codeBox">
-                Storage used: <span id="storage-used">0</span>
+    <main class="editor-container">
+        <div class="article-layout">
+
+            <div class="article-main-content">
+                <h1 id="articleTitle" class="editable-title" contenteditable="true" data-placeholder="Click to edit title">Click to edit title</h1>
+
+                <div id="articleSubtitle" class="editable-subtitle" contenteditable="true"
+                    data-placeholder="Click to edit subtitle">
+                        Click to edit subtitle
+                </div>
+
+                <div id="mainImageContainer" class="main-image-placeholder">
+                    <span id="mainPlus" class="plus-icon">+</span>
+                    <span id="mainLabel">Click to add image</span>
+                    <img id="mainImagePreview" class="main-image-preview hidden" src="" alt="Main Preview">
+                </div>
+                <input type="file" id="mainFileInput" accept="image/*" class="hidden">
+                <div id="mainCaption" class="editable-caption" contenteditable="true">Click to edit caption</div>
+
+                <div id="bodyEditor" class="body-editor" contenteditable="true">
+                    <h3>Start the body with a heading</h3>
+                    <p>Start writing the body of the article</p>
+                </div>
             </div>
-            <p>
-                Click an element to edit its properties
-            </p>
-            <p>
-                - Press T to toggle between light and dark mode<br>
-                - Press the settings icon or O to open the settings menu
-            </p>
-            <button id="clear-elements-list">Clear everything!</button>
-            <button id="reset-default-elements-list">Reset to default</button>
+
+            <aside class="article-sidebar">
+                <div class="meta-group">
+                    <label class="meta-label">Date</label>
+                    <div id="metaDate" class="meta-value-date"></div>
+                </div>
+                <div class="meta-group">
+                    <label for="metaAuthor" class="meta-label">Author</label>
+                    <input type="text" id="metaAuthor" class="meta-input" placeholder="Click to add author">
+                </div>
+                <div class="meta-group">
+                    <label for="metaTags" class="meta-label">Tags</label>
+                    <input type="text" id="metaTags" class="meta-input"
+                        placeholder="Click to add tags (comma separated)">
+                </div>
+            </aside>
+
         </div>
-    </div>
+    </main>
+
+    <input type="file" id="bodyFileInput" accept="image/*" class="hidden">
 </body>
 
 </html>

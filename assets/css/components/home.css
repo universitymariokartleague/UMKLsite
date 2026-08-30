@@ -57,6 +57,7 @@ img {
     right: -1px;
     bottom: -1px;
     padding: 24px;
+    padding-top: 200px;
     background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.9) 100%);
     box-sizing: border-box;
     overflow: hidden;
@@ -118,6 +119,7 @@ img {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
+
 }
 
 .hero-tags tag {
@@ -125,6 +127,8 @@ img {
     padding: 2px 10px;
     font-size: 0.68rem;
     font-weight: 700;
+    color: var(--brand-light);
+    background-color: var(--brand-light-translucent);
 }
 
 .right-column {

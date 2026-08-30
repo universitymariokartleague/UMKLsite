@@ -580,6 +580,7 @@ mention {
 }
 
 tag {
+    color: var(--text-color);
     border-radius: var(--border-radius-pill);
     padding: 3px 12px;
     font-size: 0.78em;
