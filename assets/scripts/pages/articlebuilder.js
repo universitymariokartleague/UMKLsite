@@ -22,9 +22,103 @@ const metaAuthor = document.getElementById('metaAuthor');
 const metaTags = document.getElementById('metaTags');
 
 const imageModal = document.getElementById('imageModal');
+const modalCard = document.getElementById('modalCard')
 const modalUploadBtn = document.getElementById('modalUploadBtn');
 const modalUrlBtn = document.getElementById('modalUrlBtn');
 const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+const reqTitle = document.getElementById('reqTitle');
+const reqSubtitle = document.getElementById('reqSubtitle');
+const reqMainImage = document.getElementById('reqMainImage');
+const reqCaption = document.getElementById('reqCaption');
+const reqAuthor = document.getElementById('reqAuthor');
+const reqTags = document.getElementById('reqTags');
+const reqWords = document.getElementById('reqWords');
+
+const checklistScore = document.getElementById('checklistScore');
+const checklistProgressBar = document.getElementById('checklistProgressBar');
+const widgetWordCount = document.getElementById('widgetWordCount');
+
+const articleTitle = document.getElementById('articleTitle');
+const articleSubtitle = document.getElementById('articleSubtitle');
+const mainCaption = document.getElementById('mainCaption');
+
+const MIN_WORDS = 500;
+
+const STORAGE_KEY = 'umkl_article_builder_draft';
+document.addEventListener('DOMContentLoaded', () => {
+    const splashScreen = document.getElementById('splashScreen');
+    const splashProgressBar = document.getElementById('splashProgressBar');
+    const splashTip = document.getElementById('splashTip');
+
+    let progress = 0;
+    const progressInterval = setInterval(() => {
+        progress += Math.floor(Math.random() * 20) + 10;
+
+        if (progress >= 90) {
+            clearInterval(progressInterval);
+        } else {
+            splashProgressBar.style.width = `${progress}%`;
+        }
+    }, 80);
+
+    // Complete loading after restoring draft state & resources
+    window.addEventListener('load', () => {
+        clearInterval(progressInterval);
+        splashProgressBar.style.width = '100%';
+
+        // Smooth transition out
+        setTimeout(() => {
+            splashScreen.classList.add('fade-out');
+        }, 300);
+    });
+});
+
+
+// Save all form and editor data to localStorage
+function saveDraft() {
+    const draftData = {
+        title: articleTitle.innerHTML,
+        subtitle: articleSubtitle.innerHTML,
+        mainCaption: mainCaption.innerHTML,
+        mainImageUrl: mainImageUrl,
+        isMainImageVisible: !mainImagePreview.classList.contains('hidden'),
+        bodyHtml: bodyEditor.innerHTML,
+        author: metaAuthor.value,
+        tags: metaTags.value
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(draftData));
+}
+
+
+function loadDraft() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return;
+
+    try {
+        const draft = JSON.parse(saved);
+
+        if (draft.title) articleTitle.innerHTML = draft.title;
+        if (draft.subtitle) articleSubtitle.innerHTML = draft.subtitle;
+        if (draft.mainCaption) mainCaption.innerHTML = draft.mainCaption;
+
+        if (draft.mainImageUrl && draft.isMainImageVisible) {
+            setMainImage(draft.mainImageUrl);
+        }
+
+        if (draft.bodyHtml) bodyEditor.innerHTML = draft.bodyHtml;
+        if (draft.author !== undefined) metaAuthor.value = draft.author;
+        if (draft.tags !== undefined) metaTags.value = draft.tags;
+
+    } catch (e) {
+        console.error("Failed to restore article draft:", e);
+    }
+}
+
+
+function clearDraft() {
+    localStorage.removeItem(STORAGE_KEY);
+}
 
 // State
 let mainImageUrl = "https://mario.wiki.gallery/images/thumb/4/48/MK8DX_Nintendo_Wallpaper_1.jpg/1600px-MK8DX_Nintendo_Wallpaper_1.jpg";
@@ -143,12 +237,27 @@ function openImageModal(fileInput, callback) {
     activeFileInput = fileInput;
     activeImageCallback = callback;
     imageModal.classList.remove('hidden');
+    imageModal.classList.remove('closing');
+    imageModal.style.display = 'flex';
 }
 
 function closeImageModal() {
-    imageModal.classList.add('hidden');
-    activeImageCallback = null;
-    activeFileInput = null;
+    if (imageModal.classList.contains('hidden') || imageModal.classList.contains('closing')) return;
+
+    imageModal.classList.add('closing');
+    modalCard.classList.add('closing');
+
+    const onAnimationEnd = () => {
+        imageModal.classList.add('hidden');
+        imageModal.classList.remove('closing');
+        modalCard.classList.remove('closing');
+
+        imageModal.removeEventListener('animationend', onAnimationEnd);
+        activeImageCallback = null;
+        activeFileInput = null;
+    };
+
+    imageModal.addEventListener('animationend', onAnimationEnd, { once: true });
 }
 
 modalUploadBtn.addEventListener('click', () => {
@@ -167,6 +276,7 @@ modalUrlBtn.addEventListener('click', () => {
 });
 
 modalCloseBtn.addEventListener('click', closeImageModal);
+imageModal.addEventListener('click', closeImageModal);
 
 // Main image
 function setMainImage(url) {
@@ -175,6 +285,8 @@ function setMainImage(url) {
     mainImagePreview.classList.remove('hidden');
     mainPlus.classList.add('hidden');
     mainLabel.classList.add('hidden');
+    validateArticleRequirements();
+    saveDraft();
 }
 
 mainImageContainer.addEventListener('click', () => {
@@ -189,6 +301,97 @@ mainFileInput.addEventListener('change', (e) => {
         reader.readAsDataURL(file);
     }
 });
+
+function setItemState(element, isPassed) {
+    if (!element) return;
+    const icon = element.querySelector('.check-icon');
+    if (isPassed) {
+        element.classList.add('passed');
+        if (icon) icon.innerText = '✓';
+    } else {
+        element.classList.remove('passed');
+        if (icon) icon.innerText = '✕';
+    }
+}
+
+function getBodyWordCount() {
+    const clone = bodyEditor.cloneNode(true);
+    clone.querySelectorAll('.article-image-caption, .btn-remove-image').forEach(el => el.remove());
+    const text = clone.innerText || clone.textContent || '';
+    return text.trim().split(/\s+/).filter(word => word.length > 0).length;
+}
+
+function validateArticleRequirements() {
+    const wordCount = getBodyWordCount();
+
+    const titleText = articleTitle.innerText.trim();
+    const titlePlaceholder = 'CLICK TO EDIT TITLE';
+    const hasTitle = titleText.length > 0 && titleText !== titlePlaceholder;
+
+    const subtitleText = articleSubtitle.innerText.trim();
+    const subtitlePlaceholder = articleSubtitle.getAttribute('data-placeholder') || 'Click to edit subtitle';
+    const hasSubtitle = subtitleText.length > 0 && subtitleText !== subtitlePlaceholder;
+
+    const hasMainImage = !mainImagePreview.classList.contains('hidden') && mainImagePreview.getAttribute('src') !== '';
+
+    const captionText = mainCaption.innerText.trim();
+    const hasCaption = captionText.length > 0 && captionText !== 'Click to edit caption';
+
+    const hasAuthor = metaAuthor.value.trim().length > 0;
+    const rawTags = metaTags.value.split(',').map(t => t.trim()).filter(t => t.length > 0);
+    const hasTags = rawTags.length > 0;
+    const hasWords = wordCount >= MIN_WORDS;
+
+    setItemState(reqTitle, hasTitle);
+    setItemState(reqSubtitle, hasSubtitle);
+    setItemState(reqMainImage, hasMainImage);
+    setItemState(reqCaption, hasCaption);
+    setItemState(reqAuthor, hasAuthor);
+    setItemState(reqTags, hasTags);
+    setItemState(reqWords, hasWords);
+
+    if (widgetWordCount) widgetWordCount.innerText = `${wordCount}/${MIN_WORDS}`;
+
+    const checks = [hasTitle, hasSubtitle, hasMainImage, hasCaption, hasAuthor, hasTags, hasWords];
+    const passedCount = checks.filter(Boolean).length;
+    const totalChecks = checks.length;
+    const percentage = (passedCount / totalChecks) * 100;
+
+    if (checklistScore) checklistScore.innerText = `${passedCount} / ${totalChecks}`;
+    if (checklistProgressBar) {
+        checklistProgressBar.style.width = `${percentage}%`;
+        if (passedCount === totalChecks) {
+            checklistProgressBar.classList.add('progress-complete');
+        } else {
+            checklistProgressBar.classList.remove('progress-complete');
+        }
+    }
+
+    return { isValid: passedCount === totalChecks, passedCount, totalChecks };
+}
+
+// Auto-save on any edit
+[articleTitle, articleSubtitle, mainCaption, bodyEditor].forEach(el => {
+    if (el) {
+        el.addEventListener('input', () => {
+            validateArticleRequirements();
+            saveDraft();
+        });
+    }
+});
+
+[metaAuthor, metaTags].forEach(el => {
+    if (el) {
+        el.addEventListener('input', () => {
+            validateArticleRequirements();
+            saveDraft();
+        });
+    }
+});
+
+// Load draft on startup
+loadDraft();
+validateArticleRequirements();
 
 // Toolbar state & selection detection
 function updateToolbarState() {
@@ -208,7 +411,7 @@ function updateToolbarState() {
     if (cleanText === '') {
         blockTypeSelect.value = 'h3';
     } else if (isBodyActive && sel && sel.rangeCount > 0) {
-        // Detect block element under cursor inside body editor
+
         let parentBlock = sel.anchorNode;
         if (parentBlock.nodeType === 3) parentBlock = parentBlock.parentNode;
 
@@ -300,6 +503,7 @@ function insertImageToBody(imgUrl) {
             bodyEditor.appendChild(p);
         }
     }
+    saveDraft();
 }
 
 insertImageBtn.addEventListener('click', () => {
@@ -314,10 +518,10 @@ bodyFileInput.addEventListener('change', (e) => {
         const reader = new FileReader();
         reader.onload = (event) => insertImageToBody(event.target.result);
         reader.readAsDataURL(file);
+
     }
 });
 
-// Delegated so it still works for images inserted after this listener was added
 bodyEditor.addEventListener('click', (e) => {
     if (e.target.classList.contains('btn-remove-image')) {
         const container = e.target.closest('.article-image-container');
@@ -330,22 +534,35 @@ bodyEditor.addEventListener('click', (e) => {
 // Actions
 clearBtn.addEventListener('click', () => {
     if (confirm('Are you sure you want to clear all article content?')) {
-        bodyEditor.innerHTML = '<p><br></p>';
+        articleTitle.textContent = 'Click to edit title';
+        articleSubtitle.textContent = 'Click to edit subtitle';
+        mainCaption.textContent = 'Click to edit caption';
+
+        mainImageUrl = "https://mario.wiki.gallery/images/thumb/4/48/MK8DX_Nintendo_Wallpaper_1.jpg/1600px-MK8DX_Nintendo_Wallpaper_1.jpg";
+        mainImagePreview.src = '';
+        mainImagePreview.classList.add('hidden');
+        mainPlus.classList.remove('hidden');
+        mainLabel.classList.remove('hidden');
+        mainFileInput.value = '';
+
+        metaAuthor.value = '';
+        metaTags.value = '';
+        bodyEditor.innerHTML = '<h3>Start the body with a heading</h3><p>Start writing the body of the article</p>';
+
         updateToolbarState();
+        validateArticleRequirements();
+        saveDraft();
     }
 });
 
 exitBtn.addEventListener('click', () => {
-    if (confirm('Discard changes and leave the article builder?')) {
-        window.location.href = '/news/';
-    }
+    window.location.href = '/tools/';
+
 });
 
 homeLink.addEventListener('click', (e) => {
     e.preventDefault();
-    if (confirm('Discard changes and leave the article builder?')) {
-        window.location.href = homeLink.href;
-    }
+    window.location.href = homeLink.href;
 });
 
 // Export to HTML file
@@ -361,7 +578,6 @@ saveBtn.addEventListener('click', () => {
         ? rawTags.map(tag => `                        <tag translate="no">${tag}</tag>`).join('\n')
         : '                        <tag translate="no">News</tag>';
 
-    // Strip builder-only remove buttons before exporting
     const clone = bodyEditor.cloneNode(true);
     clone.querySelectorAll('.btn-remove-image').forEach(btn => btn.remove());
     const bodyContent = clone.innerHTML.trim();

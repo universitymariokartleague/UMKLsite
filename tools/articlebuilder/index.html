@@ -6,17 +6,17 @@
     <meta name="color-scheme" content="dark light">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Article Builder | UMKL</title>
-    <meta name="description" content="Build a blog here for the UMKL site!">
+    <meta name="description" content="Build a news article for the UMKL website">
     <link rel="icon" href="https://umkl.co.uk/assets/media/brand/favicon.png" type="image/png">
     <link rel="stylesheet" href="/assets/css/base/style.css">
     <link rel="stylesheet" href="/assets/css/base/settings.css">
-    <link rel="stylesheet" href="/assets/css/pages/blogbuilder.css">
+    <link rel="stylesheet" href="/assets/css/pages/articlebuilder.css">
 
-    <meta property="og:title" content="Blog Builder | University Mario Kart League" />
+    <meta property="og:title" content="Article Builder | University Mario Kart League" />
     <meta property="og:site_name" content="UMKL" />
-    <meta property="og:url" content="https://umkl.co.uk/tools/blogbuilder" />
+    <meta property="og:url" content="https://umkl.co.uk/tools/articlebuilder" />
     <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
-    <meta property="og:description" content="Build a blog here for the UMKL site!" />
+    <meta property="og:description" content="Build a news article for the UMKL website" />
     <meta content="#bc0839" name="theme-color" />
 
     <!-- Include this to make the og:image larger -->
@@ -28,16 +28,29 @@
     <script type="module" src="/assets/components/footer.js" defer></script>
 
 
-    <script type="module" src="/assets/scripts/pages/blogbuilder.js" defer></script>
+    <script type="module" src="/assets/scripts/pages/articlebuilder.js" defer></script>
     <script type="module" src="/assets/scripts/base/settings.js" defer></script>
     <script defer src="/assets/scripts/base/imagefade.js" type="module"></script>
 </head>
 
 <body>
 
+    <div id="splashScreen" class="splash-overlay">
+        <div class="splash-card">
+            <div class="splash-spinner"></div>
+            <h2 class="splash-title">Loading Article Builder...</h2>
+
+            <div class="splash-progress-container">
+                <div id="splashProgressBar" class="splash-progress-bar"></div>
+            </div>
+
+        </div>
+    </div>
+
     <div class="builder-top-bar">
         <header class="builder-bar">
-            <a id="homeLink" class="nav-bar-title no-color-link no-underline-link-footer" href="/" title="Go home" style="display: flex; align-items: center; justify-content: center;">
+            <a id="homeLink" class="nav-bar-title no-color-link no-underline-link-footer" href="/" title="Go home"
+                style="display: flex; align-items: center; justify-content: center;">
                 <img loading="lazy" class="builder-bar-logo" alt="UMKL logo"
                     src="/assets/media/brand/guidelines/logo_transparent_white.avif" style="width: 32px;" />
             </a>
@@ -110,9 +123,10 @@
                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                         viewBox="0 0 24 24">
                         <path fill-rule="evenodd"
-                            d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7.414A2 2 0 0 0 20.414 6L18 3.586A2 2 0 0 0 16.586 3H5Zm10 11a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7V5h8v2a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1Z"
+                            d="M9 7V2.221a2 2 0 0 0-.5.365L4.586 6.5a2 2 0 0 0-.365.5H9Zm2 0V2h7a2 2 0 0 1 2 2v9.293l-2-2a1 1 0 0 0-1.414 1.414l.293.293h-6.586a1 1 0 1 0 0 2h6.586l-.293.293A1 1 0 0 0 18 16.707l2-2V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9h5a2 2 0 0 0 2-2Z"
                             clip-rule="evenodd" />
                     </svg>
+
 
                 </button>
             </div>
@@ -161,17 +175,15 @@
                 </div>
             </aside>
 
+
         </div>
 
     </main>
 
-    <umkl-footer></umkl-footer>
-
-
     <input type="file" id="bodyFileInput" accept="image/*" class="hidden">
 
     <div id="imageModal" class="modal-overlay hidden">
-        <div class="modal-card">
+        <div id="modalCard" class="modal-card">
             <h3>Insert Image</h3>
             <span class="modal-subtitle">Choose how you would like to add your image</span>
 
@@ -181,7 +193,7 @@
                         <path
                             d="M11 16V7.85l-2.6 2.6L7 9l5-5 5 5-1.4 1.45-2.6-2.6V16h-2Zm-5 4q-.825 0-1.412-.587Q4 18.825 4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413Q18.825 20 18 20H6Z" />
                     </svg>
-                    Upload from Computer
+                    Upload from device
                 </button>
                 <button id="modalUrlBtn" class="btn-modal-option">
                     <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
@@ -194,6 +206,43 @@
 
             <button id="modalCloseBtn" class="btn-modal-close">Cancel</button>
         </div>
+    </div>
+
+
+    <div id="checklistWidget" class="floating-checklist-widget">
+        <div class="checklist-header">
+            <span class="widget-label">Export Requirements</span>
+            <span id="checklistScore" class="checklist-score">0 / 7</span>
+        </div>
+
+        <div class="progress-bar-container">
+            <div id="checklistProgressBar" class="progress-bar-fill"></div>
+        </div>
+
+        <ul class="checklist-items">
+            <li id="reqTitle" class="checklist-item">
+                <span class="check-icon">✕</span> Title added
+            </li>
+            <li id="reqSubtitle" class="checklist-item">
+                <span class="check-icon">✕</span> Subtitle added
+            </li>
+            <li id="reqMainImage" class="checklist-item">
+                <span class="check-icon">✕</span> Main image uploaded
+            </li>
+            <li id="reqCaption" class="checklist-item">
+                <span class="check-icon">✕</span> Main image caption added
+            </li>
+            <li id="reqAuthor" class="checklist-item">
+                <span class="check-icon">✕</span> Author name specified
+            </li>
+            <li id="reqTags" class="checklist-item">
+                <span class="check-icon">✕</span> At least 1 tag added
+            </li>
+            <li id="reqWords" class="checklist-item">
+                <span class="check-icon">✕</span> Body text (500+ words)
+                <span id="widgetWordCount" class="word-count-badge">0/500</span>
+            </li>
+        </ul>
     </div>
 </body>
 

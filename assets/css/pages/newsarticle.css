@@ -40,6 +40,11 @@
     margin-bottom: 24px;
 }
 
+img {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
 .article-image-wrapper {
     display: flex;
     flex-direction: column;

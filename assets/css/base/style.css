@@ -11,7 +11,7 @@
     --brand-secondary: #ff6874;
     --brand-dark: oklch(10.858% 0.06411 283.505);
     --brand-light: oklch(100% 0.00011 271.152);
-    --brand-dark-translucent: color-mix(in oklch, var(--brand-dark) 20%, transparent);
+    --brand-dark-translucent: color-mix(in oklch, var(--brand-dark) 25%, transparent);
     --brand-light-translucent: color-mix(in oklch, var(--brand-light) 20%, transparent);
     --brand-dark-opaque: color-mix(in oklch, var(--brand-dark) 50%, transparent);
     --brand-light-opaque: color-mix(in oklch, var(--brand-light) 50%, transparent);
