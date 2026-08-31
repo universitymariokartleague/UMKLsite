@@ -1,4 +1,15 @@
-[
+[{
+    "title": "Treatment of miscarriages",
+    "link": "/news/2026-08-31/intralipid-therapy/",
+    "date": "2026-08-31",
+    "image": "https://images.squarespace-cdn.com/content/v1/5bb7a582fd67933734c064e5/376c684a-4ff4-4932-b490-f7081a87b6a5/IV+Intralipid+therapy.jpg",
+    "alt": "Intralipids are a potential cure for miscarriage",
+    "description": "New potential therapies are currently being investigated, like intralipid therapy.",
+    "tags": [
+        "Intralipid",
+        "Miscarriage"
+    ]
+},
     {
         "title": "New app, Lakitu, now available on the UMKL Discord Server",
         "link": "/news/2026-07-08/lakitu-release/",
@@ -6,7 +17,10 @@
         "image": "/assets/media/news/lakitu_banner.png",
         "alt": "Lakitu app released on UMKL Discord server",
         "description": "Lakitu is a new custom app for Discord that stores a user's time trial records across all games in the Mario Kart series.",
-        "tags": ["Discord", "Time Trials"]
+        "tags": [
+            "Discord",
+            "Time Trials"
+        ]
     },
     {
         "title": "New team 'Herts' joins the UMKL to represent the University of Hertfordshire",
@@ -15,7 +29,11 @@
         "image": "/assets/media/news/herts_emblem_hero.png",
         "alt": "Herts team joins the UMKL",
         "description": "Herts is the first new team to join the UMKL since the conclusion of Season 2, representing the University of Hertfordshire.",
-        "tags": ["Herts", "Teams", "Season 3"]
+        "tags": [
+            "Herts",
+            "Teams",
+            "Season 3"
+        ]
     },
     {
         "title": "Season 2 Round 4 Fixtures Revealed!",
@@ -24,7 +42,9 @@
         "image": "/assets/media/news/season2fixtures4.avif",
         "alt": "Matches Season 2 - Round 4",
         "description": "The matches for Round 4 of Season 2 have been revealed! Find out who will be facing each other here!",
-        "tags": ["Season 2"]
+        "tags": [
+            "Season 2"
+        ]
     },
     {
         "title": "Season 2 Round 3 Fixtures Revealed!",
@@ -33,7 +53,9 @@
         "image": "/assets/media/news/season2fixtures3.avif",
         "alt": "Matches Season 2 - Round 3",
         "description": "The matches for Round 3 of Season 2 have been revealed! Find out who will be facing each other here!",
-        "tags": ["Season 2"]
+        "tags": [
+            "Season 2"
+        ]
     },
     {
         "title": "Season 2 Round 2 Fixtures Revealed!",
@@ -42,7 +64,9 @@
         "image": "/assets/media/news/season2fixtures2.avif",
         "alt": "Matches Season 2 - Round 2",
         "description": "The second round of Season 2 fixtures has been revealed! Find out who will be facing each other here!",
-        "tags": ["Season 2"]
+        "tags": [
+            "Season 2"
+        ]
     },
     {
         "title": "Season 2 Round 1 Fixtures Revealed!",
@@ -51,7 +75,9 @@
         "image": "/assets/media/news/season2fixtures.avif",
         "alt": "Matches Season 2 - Round 1",
         "description": "The first round of Season 2 fixtures has been revealed! Find out who will be facing each other here!",
-        "tags": ["Season 2"]
+        "tags": [
+            "Season 2"
+        ]
     },
     {
         "title": "The Structure for Season 2",
@@ -60,7 +86,9 @@
         "image": "/assets/media/news/season2structure.avif",
         "alt": "How will Season 2 work?",
         "description": "Season 2 of the UMKL will be using a Swiss Style system, here's how it will work!",
-        "tags": ["Season 2"]
+        "tags": [
+            "Season 2"
+        ]
     },
     {
         "title": "Cheep Cheep Updates",
@@ -69,7 +97,10 @@
         "image": "/assets/media/news/newcommands.avif",
         "alt": "An image showing new commands that can be used with the Cheep Cheep app",
         "description": "Some updates about the Cheep Cheep Discord app and upcoming test matches.",
-        "tags": ["Discord", "Test Matches"]
+        "tags": [
+            "Discord",
+            "Test Matches"
+        ]
     },
     {
         "title": "Upcoming summer test matches!",
@@ -78,7 +109,9 @@
         "image": "/assets/media/news/summertestmatches.avif",
         "alt": "An image showing new commands that can be used with the Cheep Cheep app",
         "description": "More test matches between teams are being planned as exams finish and summer approaches.",
-        "tags": ["Test Matches"]
+        "tags": [
+            "Test Matches"
+        ]
     },
     {
         "title": "Test matches are being conducted!",
@@ -87,7 +120,9 @@
         "image": "/assets/media/news/testmatches.avif",
         "alt": "An image depicting Cheep Cheep in the ocean",
         "description": "Test matches are planned in the upcoming week, more will follow in the upcoming month...",
-        "tags": ["Test Matches"]
+        "tags": [
+            "Test Matches"
+        ]
     },
     {
         "title": "Join the UMKL Discord server!",
@@ -96,7 +131,10 @@
         "image": "/assets/media/news/discordinspire.avif",
         "alt": "A piece of Discord promotional artwork",
         "description": "All matches are organised through our Discord server. Please join it to take part in a match!",
-        "tags": ["Intro", "Discord"]
+        "tags": [
+            "Intro",
+            "Discord"
+        ]
     },
     {
         "title": "Welcome to the UMKL!",
@@ -105,6 +143,8 @@
         "image": "/assets/media/brand/UMKL_banner.avif",
         "alt": "An image showing the UMKL logo",
         "description": "We are a Mario Kart 8 Deluxe championship featuring teams from universities across the UK!",
-        "tags": ["Intro"]
+        "tags": [
+            "Intro"
+        ]
     }
 ]

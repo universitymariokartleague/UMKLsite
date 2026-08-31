@@ -12,8 +12,8 @@
     text-transform: capitalize;
     align-items: center;
     padding: 3px 8px;
-    background-color: #bc0839;
-    color: white;
+    background-color: var(--brand-primary);
+    color: var(--brand-light);
     margin: 4px 0;
     border-radius: calc(var(--border-radius) * 0.6);
     font-size: 13px;
@@ -24,7 +24,7 @@
 .news-search-tag-remove {
     background: none;
     border: none;
-    color: white;
+    color: var(--brand-light);
     font-size: 16px;
     margin-left: 5px;
     width: 15px;
@@ -118,7 +118,7 @@
 
 .news-card .tags {
     display: flex;
-    gap: 6px;
+    gap: 4px;
     min-width: 0;
     max-width: 100%;
     flex: 1 1 0;

@@ -55,6 +55,15 @@ const STORAGE_KEY = 'umkl_article_builder_draft';
 function toggleChecklist() {
     const isCollapsed = checklistWidget.classList.toggle('collapsed');
     localStorage.setItem('umkl_checklist_collapsed', isCollapsed);
+
+    if (!isCollapsed && window.innerWidth <= 600) {
+        requestAnimationFrame(() => {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: 'smooth'
+            });
+        });
+    }
 }
 
 if (checklistHeader) {
@@ -69,10 +78,10 @@ if (savedState === 'true' || (savedState === null && window.innerWidth <= 600)) 
 // Forces all paste operations to not have formatting
 function handlePlainTextPaste(e) {
     e.preventDefault();
-    
+
     // Get plain text from clipboard
     const text = (e.clipboardData || window.clipboardData).getData('text/plain');
-    
+
     // Insert text at cursor position
     if (document.queryCommandSupported('insertText')) {
         document.execCommand('insertText', false, text);
@@ -466,14 +475,14 @@ function updateToolbarState() {
         let parentBlock = sel.anchorNode;
         if (parentBlock.nodeType === 3) parentBlock = parentBlock.parentNode;
 
-        while (parentBlock && parentBlock !== bodyEditor && !['P', 'H3'].includes(parentBlock.tagName)) {
+        while (parentBlock && parentBlock !== bodyEditor && !['P', 'H3', 'DIV'].includes(parentBlock.tagName)) {
             parentBlock = parentBlock.parentNode;
         }
 
         if (parentBlock && parentBlock !== bodyEditor) {
             const tag = parentBlock.tagName.toLowerCase();
-            if (['p', 'h3'].includes(tag)) {
-                blockTypeSelect.value = tag;
+            if (['p', 'h3', 'div'].includes(tag)) {
+                blockTypeSelect.value = tag === 'div' ? 'p' : tag;
             }
         }
     }
@@ -510,7 +519,16 @@ linkBtn.addEventListener('click', () => {
 blockTypeSelect.addEventListener('change', (e) => {
     if (!blockTypeSelect.disabled) {
         const tag = e.target.value;
+        if (document.queryCommandSupported('defaultParagraphSeparator')) {
+            document.execCommand('defaultParagraphSeparator', false, 'p');
+        }
         document.execCommand('formatBlock', false, `<${tag}>`);
+    }
+});
+
+bodyEditor.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey && document.queryCommandSupported('defaultParagraphSeparator')) {
+        document.execCommand('defaultParagraphSeparator', false, 'p');
     }
 });
 
@@ -616,27 +634,118 @@ homeLink.addEventListener('click', (e) => {
     window.location.href = homeLink.href;
 });
 
-// Export to HTML file
-saveBtn.addEventListener('click', () => {
-    const title = document.getElementById('articleTitle').textContent.trim() || 'Untitled Article';
-    const subtitle = document.getElementById('articleSubtitle').textContent.trim();
-    const mainCaption = document.getElementById('mainCaption').textContent.trim();
+
+function dataURLtoBlob(dataurl) {
+    const arr = dataurl.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
+}
+
+saveBtn.addEventListener('click', async () => {
+    // Ask the user for a folder name
+    let folderName = prompt("Enter a folder name for the article:");
+    if (!folderName) return;
+
+    folderName = folderName.trim().toLowerCase();
+    const folderRegex = /^[a-z0-9-]+$/;
+    if (!folderRegex.test(folderName)) {
+        alert("Invalid folder name! Only lowercase letters, numbers, and hyphens are allowed (no spaces or capital letters).");
+        return;
+    }
+
+    const zip = new JSZip();
+
+    // Format date for folder name and json date (YYYY-MM-DD)
+    const now = new Date();
+    const year = now.getUTCFullYear();
+    const month = String(now.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(now.getUTCDate()).padStart(2, '0');
+    const dateFormattedString = `${year}-${month}-${day}`;
+
+    // Path format: news/YYYY-MM-DD/folder-name/
+    const targetFolder = zip.folder(`news/${dateFormattedString}/${folderName}`);
+
+    let imageCounter = 1;
+    let finalMainImageUrl = mainImageUrl;
+
+    // Main image
+    if (mainImageUrl.startsWith('data:image')) {
+        const extension = mainImageUrl.substring("data:image/".length, mainImageUrl.indexOf(";base64"));
+        const fileName = `main-image.${extension}`;
+        const blob = dataURLtoBlob(mainImageUrl);
+        targetFolder.file(fileName, blob);
+        finalMainImageUrl = `/news/${dateFormattedString}/${folderName}/${fileName}`;
+    }
+
+    // Body and body images
+    const bodyClone = bodyEditor.cloneNode(true);
+    bodyClone.querySelectorAll('.btn-remove-image').forEach(btn => btn.remove());
+
+    const bodyImages = bodyClone.querySelectorAll('img');
+    bodyImages.forEach(img => {
+        const src = img.getAttribute('src');
+        if (src && src.startsWith('data:image')) {
+            const extension = src.substring("data:image/".length, src.indexOf(";base64"));
+            const fileName = `image-${imageCounter++}.${extension}`;
+            const blob = dataURLtoBlob(src);
+            targetFolder.file(fileName, blob);
+            img.setAttribute('src', `/news/${dateFormattedString}/${folderName}/${fileName}`);
+        }
+    });
+
+    // Metadata
+    const title = articleTitle.textContent.trim() || 'Untitled Article';
+    const subtitle = articleSubtitle.textContent.trim();
+    const mainCapText = mainCaption.textContent.trim();
     const author = metaAuthor.value.trim() || 'Anonymous';
-    const date = metaDate.innerText;
+    const dateStr = metaDate.innerText;
+    const bodyContent = bodyClone.innerHTML.trim();
 
     const rawTags = metaTags.value.split(',').map(t => t.trim()).filter(t => t.length > 0);
     const tagsMarkup = rawTags.length > 0
         ? rawTags.map(tag => `                        <tag translate="no">${tag}</tag>`).join('\n')
         : '                        <tag translate="no">News</tag>';
 
-    const clone = bodyEditor.cloneNode(true);
-    clone.querySelectorAll('.btn-remove-image').forEach(btn => btn.remove());
-    const bodyContent = clone.innerHTML.trim();
+    // index.html file inside the .zip folder
+    const htmlContent = outputDocument({
+        title,
+        subtitle,
+        mainImageUrl: finalMainImageUrl,
+        mainCaption: mainCapText,
+        bodyContent,
+        date: dateStr,
+        author,
+        tagsMarkup
+    });
+    targetFolder.file("index.html", htmlContent);
 
-    const blob = new Blob([outputDocument({ title, subtitle, mainImageUrl, mainCaption, bodyContent, date, author, tagsMarkup })], { type: 'text/html' });
+    // Create a json entry
+    // This is stored in a separate file but can be pasted into news.json
+    const articleLink = `/news/${dateFormattedString}/${folderName}/`;
+    const newsJsonEntry = {
+        title: title,
+        link: articleLink,
+        date: dateFormattedString,
+        image: finalMainImageUrl,
+        alt: mainCapText,
+        description: subtitle,
+        tags: rawTags.length > 0 ? rawTags : ["News"]
+    };
+
+    zip.file("news_entry.json", JSON.stringify(newsJsonEntry, null, 4));
+
+    // Compile a .zip to be downloaded
+    const zipBlob = await zip.generateAsync({ type: "blob" });
     const downloadLink = document.createElement('a');
-    downloadLink.href = URL.createObjectURL(blob);
-    downloadLink.download = `${title.toLowerCase().replace(/[^a-z0-9]/g, '-')}.html`;
+    downloadLink.href = URL.revokeObjectURL(zipBlob);
+    downloadLink.href = URL.createObjectURL(zipBlob);
+    downloadLink.download = `${dateFormattedString}-${folderName}-package.zip`;
     downloadLink.click();
     URL.revokeObjectURL(downloadLink.href);
 });
