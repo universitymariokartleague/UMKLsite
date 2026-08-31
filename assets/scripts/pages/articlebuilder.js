@@ -48,22 +48,16 @@ const checklistWidget = document.getElementById('checklistWidget');
 const checklistHeader = document.getElementById('checklistHeader');
 const toggleChecklistBtn = document.getElementById('toggleChecklistBtn');
 
-const MIN_WORDS = 500;
+const ogPreviewImage = document.getElementById('ogPreviewImage');
+const ogPreviewTitle = document.getElementById('ogPreviewTitle');
+const ogPreviewDescription = document.getElementById('ogPreviewDescription');
 
+const MIN_WORDS = 200;
 const STORAGE_KEY = 'umkl_article_builder_draft';
 
 function toggleChecklist() {
     const isCollapsed = checklistWidget.classList.toggle('collapsed');
     localStorage.setItem('umkl_checklist_collapsed', isCollapsed);
-
-    if (!isCollapsed && window.innerWidth <= 600) {
-        requestAnimationFrame(() => {
-            window.scrollTo({
-                top: document.body.scrollHeight,
-                behavior: 'smooth'
-            });
-        });
-    }
 }
 
 if (checklistHeader) {
@@ -107,33 +101,6 @@ editableElements.forEach(el => {
         el.addEventListener('paste', handlePlainTextPaste);
     }
 });
-
-document.addEventListener('DOMContentLoaded', () => {
-    const splashScreen = document.getElementById('splashScreen');
-    const splashProgressBar = document.getElementById('splashProgressBar');
-    const splashTip = document.getElementById('splashTip');
-
-    let progress = 0;
-    const progressInterval = setInterval(() => {
-        progress += Math.floor(Math.random() * 20) + 10;
-
-        if (progress >= 90) {
-            clearInterval(progressInterval);
-        } else {
-            splashProgressBar.style.width = `${progress}%`;
-        }
-    }, 80);
-
-    window.addEventListener('load', () => {
-        clearInterval(progressInterval);
-        splashProgressBar.style.width = '100%';
-
-        setTimeout(() => {
-            splashScreen.classList.add('fade-out');
-        }, 300);
-    });
-});
-
 
 // Save all form and editor data to localStorage
 function saveDraft() {
@@ -203,7 +170,7 @@ const outputDocument = ({ title, subtitle, mainImageUrl, mainCaption, bodyConten
     <link rel="stylesheet" href="/assets/css/ext/fontawesome.min.css">
 
     <meta property="og:title" content="${title} | UMKL" />
-    <meta property="og:site_name" content="UMKL" />
+    <meta property="og:site_name" content="umkl.co.uk" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://umkl.co.uk/news/" />
     <meta property="og:image" content="${mainImageUrl}" />
@@ -388,6 +355,7 @@ function setMainImage(url) {
     mainPlus.classList.add('hidden');
     mainLabel.classList.add('hidden');
     validateArticleRequirements();
+    updateOgPreview();
     saveDraft();
 }
 
@@ -427,7 +395,7 @@ function validateArticleRequirements() {
     const wordCount = getBodyWordCount();
 
     const titleText = articleTitle.innerText.trim();
-    const titlePlaceholder = 'CLICK TO EDIT TITLE';
+    const titlePlaceholder = 'Click to edit title';
     const hasTitle = titleText.length > 0 && titleText !== titlePlaceholder;
 
     const subtitleText = articleSubtitle.innerText.trim();
@@ -472,11 +440,29 @@ function validateArticleRequirements() {
     return { isValid: passedCount === totalChecks, passedCount, totalChecks };
 }
 
+// Mirrors the og:title/og:description/og:image to OG preview
+function updateOgPreview() {
+    if (!ogPreviewTitle) return;
+
+    const titleText = articleTitle.innerText.trim();
+    const titlePlaceholder = 'Click to edit title';
+    const hasTitle = titleText.length > 0 && titleText !== titlePlaceholder;
+
+    const subtitleText = articleSubtitle.innerText.trim();
+    const subtitlePlaceholder = articleSubtitle.getAttribute('data-placeholder') || 'Click to edit subtitle';
+    const hasSubtitle = subtitleText.length > 0 && subtitleText !== subtitlePlaceholder;
+
+    ogPreviewTitle.innerText = `${hasTitle ? titleText : 'Untitled Article'} | UMKL`;
+    ogPreviewDescription.innerText = hasSubtitle ? subtitleText : 'Add a subtitle to fill in this description.';
+    ogPreviewImage.src = mainImageUrl;
+}
+
 // Auto-save on any edit
 [articleTitle, articleSubtitle, mainCaption, bodyEditor].forEach(el => {
     if (el) {
         el.addEventListener('input', () => {
             validateArticleRequirements();
+            updateOgPreview();
             saveDraft();
         });
     }
@@ -494,6 +480,7 @@ function validateArticleRequirements() {
 // Load draft on startup
 loadDraft();
 validateArticleRequirements();
+updateOgPreview();
 
 // Toolbar state & selection detection
 function updateToolbarState() {

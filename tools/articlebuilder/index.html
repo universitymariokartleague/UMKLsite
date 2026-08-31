@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/assets/css/pages/articlebuilder.css">
 
     <meta property="og:title" content="Article Builder | University Mario Kart League" />
-    <meta property="og:site_name" content="UMKL" />
+    <meta property="og:site_name" content="umkl.co.uk" />
     <meta property="og:url" content="https://umkl.co.uk/tools/articlebuilder" />
     <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
     <meta property="og:description" content="Build a news article for the UMKL website" />
@@ -34,19 +34,6 @@
 </head>
 
 <body>
-
-    <div id="splashScreen" class="splash-overlay">
-        <div class="splash-card">
-            <div class="splash-spinner"></div>
-            <h2 class="splash-title">Loading Article Builder...</h2>
-
-            <div class="splash-progress-container">
-                <div id="splashProgressBar" class="splash-progress-bar"></div>
-            </div>
-
-        </div>
-    </div>
-
     <div class="builder-top-bar">
         <header class="builder-bar">
             <a id="homeLink" class="nav-bar-title no-color-link no-underline-link-footer" href="/" title="Go home"
@@ -173,6 +160,78 @@
                     <input type="text" id="metaTags" class="meta-input"
                         placeholder="Click to add tags (comma separated)">
                 </div>
+
+                <div id="checklistWidget" class="checklist-widget">
+                    <div class="checklist-header" id="checklistHeader">
+                        <div class="checklist-title-group">
+                            <span class="widget-label">Export Requirements</span>
+                            <span id="checklistScore" class="checklist-score">0 / 7</span>
+                        </div>
+                        <button id="toggleChecklistBtn" class="btn-toggle-checklist" aria-label="Toggle checklist"
+                            type="button">
+                            <svg id="toggleChevron" class="chevron-icon" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="progress-bar-container">
+                        <div id="checklistProgressBar" class="progress-bar-fill"></div>
+                    </div>
+
+                    <div id="checklistContent" class="checklist-content">
+                        <ul class="checklist-items">
+                            <li id="reqTitle" class="checklist-item">
+                                <span class="check-icon">✕</span> Title added
+                            </li>
+                            <li id="reqSubtitle" class="checklist-item">
+                                <span class="check-icon">✕</span> Subtitle added
+                            </li>
+                            <li id="reqMainImage" class="checklist-item">
+                                <span class="check-icon">✕</span> Main image uploaded
+                            </li>
+                            <li id="reqCaption" class="checklist-item">
+                                <span class="check-icon">✕</span> Main image caption added
+                            </li>
+                            <li id="reqAuthor" class="checklist-item">
+                                <span class="check-icon">✕</span> Author name specified
+                            </li>
+                            <li id="reqTags" class="checklist-item">
+                                <span class="check-icon">✕</span> At least 1 tag added
+                            </li>
+                            <li id="reqWords" class="checklist-item">
+                                <span class="check-icon">✕</span> Body text (200+ words)
+                                <span id="widgetWordCount" class="word-count-badge">0/500</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="ogWidget" class="og-widget">
+                    <span class="widget-label">Open Graph Preview</span>
+                    <p class="og-explainer">
+                        <a href="https://thetrevorharmon.com/blog/a-developers-guide-to-the-open-graph-protocol/"
+                            target="_blank">Open
+                            Graph (OG)</a> tags tell social platforms and chat apps how to render a preview when this
+                        article's link is shared.
+                    </p>
+                    <p class="og-explainer">
+                        Here's an example of what an OG preview:
+                    </p>
+
+                    <div class="og-card">
+                        <div class="og-card-image-wrapper">
+                            <img id="ogPreviewImage" class="og-card-image" src="" alt="">
+                        </div>
+                        <div class="og-card-body">
+                            <span class="og-card-site">umkl.co.uk</span>
+                            <span id="ogPreviewTitle" class="og-card-title">Click to edit title | UMKL</span>
+                            <span id="ogPreviewDescription" class="og-card-description">Click to edit subtitle</span>
+                        </div>
+                    </div>
+                </div>
             </aside>
 
 
@@ -207,52 +266,6 @@
             <button id="modalCloseBtn" class="btn-modal-close">Cancel</button>
         </div>
     </div>
-
-
-<div id="checklistWidget" class="floating-checklist-widget">
-    <div class="checklist-header" id="checklistHeader">
-        <div class="checklist-title-group">
-            <span class="widget-label">Export Requirements</span>
-            <span id="checklistScore" class="checklist-score">0 / 7</span>
-        </div>
-        <button id="toggleChecklistBtn" class="btn-toggle-checklist" aria-label="Toggle checklist" type="button">
-            <svg id="toggleChevron" class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-        </button>
-    </div>
-
-    <div class="progress-bar-container">
-        <div id="checklistProgressBar" class="progress-bar-fill"></div>
-    </div>
-
-    <div id="checklistContent" class="checklist-content">
-        <ul class="checklist-items">
-            <li id="reqTitle" class="checklist-item">
-                <span class="check-icon">✕</span> Title added
-            </li>
-            <li id="reqSubtitle" class="checklist-item">
-                <span class="check-icon">✕</span> Subtitle added
-            </li>
-            <li id="reqMainImage" class="checklist-item">
-                <span class="check-icon">✕</span> Main image uploaded
-            </li>
-            <li id="reqCaption" class="checklist-item">
-                <span class="check-icon">✕</span> Main image caption added
-            </li>
-            <li id="reqAuthor" class="checklist-item">
-                <span class="check-icon">✕</span> Author name specified
-            </li>
-            <li id="reqTags" class="checklist-item">
-                <span class="check-icon">✕</span> At least 1 tag added
-            </li>
-            <li id="reqWords" class="checklist-item">
-                <span class="check-icon">✕</span> Body text (500+ words)
-                <span id="widgetWordCount" class="word-count-badge">0/500</span>
-            </li>
-        </ul>
-    </div>
-</div>
 </body>
 
 </html>

@@ -24,7 +24,7 @@ BLANK_NEWS_PAGE = """<!DOCTYPE html>
     <meta name="color-scheme" content="dark light">
 
     <meta property="og:title" content="{TITLE} | UMKL" />
-    <meta property="og:site_name" content="UMKL" />
+    <meta property="og:site_name" content="umkl.co.uk" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://umkl.co.uk/{LINK}" />
     <meta property="og:image" content="https://umkl.co.uk/{IMAGE}" />
@@ -132,7 +132,9 @@ def create_new_blog():
     description = input("Enter blog description > ")
     image = input("Enter blog image link > ")
     alt = input("Enter an alt description for the image > ")
-    date = input("Enter blog date (DD/MM/YYYY) (leave blank to use the current date) > ").strip()
+    date = input(
+        "Enter blog date (DD/MM/YYYY) (leave blank to use the current date) > "
+    ).strip()
     if not date:
         date = datetime.date.today().strftime("%d/%m/%Y")
     tags_input = input("Enter tags (comma separated) > ")

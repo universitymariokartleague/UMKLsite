@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="/assets/css/components/audioplayer.css">
 
     <meta property="og:title" content="UMKL | Credits" />
-    <meta property="og:site_name" content="UMKL" />
+    <meta property="og:site_name" content="umkl.co.uk" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://umkl.co.uk/credits/" />
     <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
@@ -32,8 +32,8 @@
 
     <!-- Scripts -->
     <script src="/assets/scripts/base/theme.js"></script>
-<script type="module" src="/assets/scripts/base/settings.js" defer></script>
-<script defer src="/assets/scripts/base/imagefade.js" type="module"></script>
+    <script type="module" src="/assets/scripts/base/settings.js" defer></script>
+    <script defer src="/assets/scripts/base/imagefade.js" type="module"></script>
     <script type="module" src="/assets/scripts/pages/creditsgenerate.js" defer></script>
 </head>
 
@@ -43,7 +43,8 @@
     <main>
         <div>
             <audio id="audio" src="/assets/media/bgm/loading_playlist.opus" preload="auto"></audio>
-            <script type="text/javascript" src="/assets/scripts/components/audioplayer.js" id="audioPlayerScript" defer></script>
+            <script type="text/javascript" src="/assets/scripts/components/audioplayer.js" id="audioPlayerScript"
+                defer></script>
             <div id="audioStatus" data-playlist="bgm.txt" class="hidden">
                 <span id="BGMName">Music</span><br>
                 <div class="audioControls">
@@ -59,7 +60,10 @@
                 </div>
                 <p id="playlistText" class="hidden"></p>
             </div>
-            <noscript><blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as is it used on this page<br></blockquote></noscript>
+            <noscript>
+                <blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as is it used on
+                    this page<br></blockquote>
+            </noscript>
         </div>
 
         <div class="header-wrapper">
@@ -67,11 +71,12 @@
             <p class="p-below-title">People who worked on and contributed to the University Mario Kart League</p>
             <a href="/sitemap">View sitemap</a>
         </div>
-        
+
 
         <div id="creditGenerate"></div>
     </main>
 
     <umkl-footer></umkl-footer>
 </body>
+
 </html>

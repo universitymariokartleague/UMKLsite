@@ -6,7 +6,8 @@
     <meta name="color-scheme" content="dark light">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Cheep Cheep Architecture & Code Guide | UMKL</title>
-    <meta name="description" content="Technical documentation explaining how the Cheep Cheep Discord bot and API codebase is structured, module by module.">
+    <meta name="description"
+        content="Technical documentation explaining how the Cheep Cheep Discord bot and API codebase is structured, module by module.">
     <link rel="icon" href="/assets/media/brand/favicon.png" type="image/png">
     <link rel="stylesheet" href="/assets/css/base/style.css">
     <link rel="stylesheet" href="/assets/css/base/settings.css">
@@ -14,11 +15,12 @@
     <link rel="stylesheet" href="/assets/css/ext/fontawesome.min.css">
 
     <meta property="og:title" content="UMKL | Cheep Cheep Architecture & Code Guide" />
-    <meta property="og:site_name" content="UMKL" />
+    <meta property="og:site_name" content="umkl.co.uk" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://umkl.co.uk/rules/cheepcheeparchitecture/" />
     <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
-    <meta property="og:description" content="Technical documentation explaining how the Cheep Cheep Discord bot and API codebase is structured, module by module." />
+    <meta property="og:description"
+        content="Technical documentation explaining how the Cheep Cheep Discord bot and API codebase is structured, module by module." />
     <meta content="#bc0839" name="theme-color" />
 
     <!-- Include this to make the og:image larger -->
@@ -774,15 +776,15 @@
             make a request like this:
         </p>
         <pre class="codeBox" translate="no">return fetch('https://api.umkl.co.uk/teamdata', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-        team: "York",
-        season: 2
-    })
-})</pre>
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+            team: "York",
+            season: 2
+            })
+            })</pre>
 
         <h4 id="route-teamdata" translate="no">POST /teamdata</h4>
         <p class="p-no-spacing">
@@ -791,31 +793,31 @@
         </p>
         <p class="p-no-spacing"><b>Example payload:</b></p>
         <pre class="codeBox" translate="no">{
-    "team": "York", // Team name (string) - optional
-    "season": 2 // Season (int) - optional
-}</pre>
+            "team": "York", // Team name (string) - optional
+            "season": 2 // Season (int) - optional
+            }</pre>
         <p class="p-no-spacing"><b>Example response:</b></p>
         <pre class="codeBox" translate="no">[
-    {
-        "career_wins_losses": [3, 0],
-        "coords": [53.96, -1.08],
-        "first_entry": 1,
-        "place_id": 1826149980,
-        "season_matches_played": 0,
-        "season_penalties": 0,
-        "season_position": 1,
-        "season_wins_losses": [0, 0],
-        "team_career_points": 1781,
-        "team_championships": 1,
-        "team_color": "#1BAA8B",
-        "team_full_name": "University of York",
-        "team_id": 1,
-        "team_name": "York",
-        "team_place": "York, England",
-        "team_season_points": 0
-    },
-    ...
-]</pre>
+            {
+            "career_wins_losses": [3, 0],
+            "coords": [53.96, -1.08],
+            "first_entry": 1,
+            "place_id": 1826149980,
+            "season_matches_played": 0,
+            "season_penalties": 0,
+            "season_position": 1,
+            "season_wins_losses": [0, 0],
+            "team_career_points": 1781,
+            "team_championships": 1,
+            "team_color": "#1BAA8B",
+            "team_full_name": "University of York",
+            "team_id": 1,
+            "team_name": "York",
+            "team_place": "York, England",
+            "team_season_points": 0
+            },
+            ...
+            ]</pre>
 
         <h4 id="route-seasoninfo" translate="no">POST /seasoninfo</h4>
         <p class="p-no-spacing">
@@ -825,13 +827,13 @@
         </p>
         <p class="p-no-spacing"><b>Example payload:</b></p>
         <pre class="codeBox" translate="no">{
-    "season": 2 // Season (int) - optional
-}</pre>
+            "season": 2 // Season (int) - optional
+            }</pre>
         <p class="p-no-spacing"><b>Example response:</b></p>
         <pre class="codeBox" translate="no">[
-    2,
-    "Upcoming"
-]</pre>
+            2,
+            "Upcoming"
+            ]</pre>
 
         <h4 id="route-teamcolors" translate="no">POST /teamcolors</h4>
         <p class="p-no-spacing">
@@ -840,22 +842,22 @@
         </p>
         <p class="p-no-spacing"><b>Example payload:</b></p>
         <pre class="codeBox" translate="no">{
-    "season": 2 // Season (int) - optional
-}</pre>
+            "season": 2 // Season (int) - optional
+            }</pre>
         <p class="p-no-spacing"><b>Example response:</b></p>
         <pre class="codeBox" translate="no">[
-    [
-        { "team_color": "#1BAA8B", "team_name": "York" },
-        { "team_color": "#A11212", "team_name": "Staffs" },
-        { "team_color": "#287AC8", "team_name": "Edinburgh" },
-        { "team_color": "#61B6CB", "team_name": "Keele" },
-        { "team_color": "#FDD017", "team_name": "Birmingham" },
-        { "team_color": "#616161", "team_name": "Bristol Bob-Ombs" },
-        { "team_color": "#BD4AFF", "team_name": "Glasgow" },
-        { "team_color": "#002147", "team_name": "Oxford" },
-        { "team_color": "#3C1053", "team_name": "Warwick" }
-    ]
-]</pre>
+            [
+            { "team_color": "#1BAA8B", "team_name": "York" },
+            { "team_color": "#A11212", "team_name": "Staffs" },
+            { "team_color": "#287AC8", "team_name": "Edinburgh" },
+            { "team_color": "#61B6CB", "team_name": "Keele" },
+            { "team_color": "#FDD017", "team_name": "Birmingham" },
+            { "team_color": "#616161", "team_name": "Bristol Bob-Ombs" },
+            { "team_color": "#BD4AFF", "team_name": "Glasgow" },
+            { "team_color": "#002147", "team_name": "Oxford" },
+            { "team_color": "#3C1053", "team_name": "Warwick" }
+            ]
+            ]</pre>
 
         <h4 id="route-teamlocations" translate="no">POST /teamlocations</h4>
         <p class="p-no-spacing">
@@ -864,23 +866,23 @@
         <p class="p-no-spacing"><b>Example payload:</b> none</p>
         <p class="p-no-spacing"><b>Example response:</b></p>
         <pre class="codeBox" translate="no">[
-    {
-        "coords": [53.96, -1.08],
-        "team_color": "#1BAA8B",
-        "team_name": "York"
-    },
-    {
-        "coords": [53.0, -2.1833],
-        "team_color": "#A11212",
-        "team_name": "Staffs"
-    },
-    {
-        "coords": [55.9533, -3.1892],
-        "team_color": "#287AC8",
-        "team_name": "Edinburgh"
-    },
-    ...
-]</pre>
+            {
+            "coords": [53.96, -1.08],
+            "team_color": "#1BAA8B",
+            "team_name": "York"
+            },
+            {
+            "coords": [53.0, -2.1833],
+            "team_color": "#A11212",
+            "team_name": "Staffs"
+            },
+            {
+            "coords": [55.9533, -3.1892],
+            "team_color": "#287AC8",
+            "team_name": "Edinburgh"
+            },
+            ...
+            ]</pre>
 
         <h4 id="route-matchdata" translate="no">POST /matchdata</h4>
         <p class="p-no-spacing">
@@ -889,24 +891,24 @@
         <p class="p-no-spacing"><b>Example payload:</b> none</p>
         <p class="p-no-spacing"><b>Example response:</b></p>
         <pre class="codeBox" translate="no">{
-    "2025-04-16": [
-        {
+            "2025-04-16": [
+            {
             "title": "York VS Staffs",
             "time": "18:00",
             "description": "A 6v6 test match...",
             "teamsInvolved": ["York", "Staffs"]
-        }
-    ],
-    "2025-04-21": [
-        {
+            }
+            ],
+            "2025-04-21": [
+            {
             "title": "Staffs VS Birmingham",
             "time": "18:00",
             "description": "A 6v6 test match...",
             "teamsInvolved": ["Staffs", "Birmingham"]
-        }
-    ],
-    ...
-}</pre>
+            }
+            ],
+            ...
+            }</pre>
 
         <h4 id="route-live" translate="no">POST /live</h4>
         <p class="p-no-spacing">
@@ -915,18 +917,18 @@
         <p class="p-no-spacing"><b>Example payload:</b> none</p>
         <p class="p-no-spacing"><b>Example response:</b></p>
         <pre class="codeBox" translate="no">[
-    {
-        "1": [2, 3, 6, 8, 10, 12],
-        "2": [1, 4, 5, 7, 9, 11],
-        "track": "GBA Ribbon Road"
-    },
-    {
-        "1": [2, 4, 6, 7, 8, 10],
-        "2": [1, 3, 5, 9, 11, 12],
-        "track": "3DS Piranha Plant Pipeway"
-    },
-    ...
-]</pre>
+            {
+            "1": [2, 3, 6, 8, 10, 12],
+            "2": [1, 4, 5, 7, 9, 11],
+            "track": "GBA Ribbon Road"
+            },
+            {
+            "1": [2, 4, 6, 7, 8, 10],
+            "2": [1, 3, 5, 9, 11, 12],
+            "track": "3DS Piranha Plant Pipeway"
+            },
+            ...
+            ]</pre>
 
         <h3 id="services-data-export-py">5.13 <code translate="no">services/data_export.py</code></h3>
         <p>
