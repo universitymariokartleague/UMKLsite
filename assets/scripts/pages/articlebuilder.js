@@ -43,31 +43,61 @@ const articleTitle = document.getElementById('articleTitle');
 const articleSubtitle = document.getElementById('articleSubtitle');
 const mainCaption = document.getElementById('mainCaption');
 
-const MIN_WORDS = 500;
 
-const STORAGE_KEY = 'umkl_article_builder_draft';
-
-// --- CHECKLIST COLLAPSE/EXPAND LOGIC ---
 const checklistWidget = document.getElementById('checklistWidget');
 const checklistHeader = document.getElementById('checklistHeader');
 const toggleChecklistBtn = document.getElementById('toggleChecklistBtn');
+
+const MIN_WORDS = 500;
+
+const STORAGE_KEY = 'umkl_article_builder_draft';
 
 function toggleChecklist() {
     const isCollapsed = checklistWidget.classList.toggle('collapsed');
     localStorage.setItem('umkl_checklist_collapsed', isCollapsed);
 }
 
-// Toggle when clicking header or icon
 if (checklistHeader) {
     checklistHeader.addEventListener('click', toggleChecklist);
 }
 
-// Auto-collapse on small mobile screens by default if not set
 const savedState = localStorage.getItem('umkl_checklist_collapsed');
 if (savedState === 'true' || (savedState === null && window.innerWidth <= 600)) {
     checklistWidget.classList.add('collapsed');
 }
 
+// Forces all paste operations to not have formatting
+function handlePlainTextPaste(e) {
+    e.preventDefault();
+    
+    // Get plain text from clipboard
+    const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+    
+    // Insert text at cursor position
+    if (document.queryCommandSupported('insertText')) {
+        document.execCommand('insertText', false, text);
+    } else {
+        // Fallback for browsers that don't support insertText
+        const selection = window.getSelection();
+        if (!selection.rangeCount) return;
+        selection.deleteFromDocument();
+        selection.getRangeAt(0).insertNode(document.createTextNode(text));
+    }
+}
+
+// Attach event listener to all editable regions
+const editableElements = [
+    document.getElementById('articleTitle'),
+    document.getElementById('articleSubtitle'),
+    document.getElementById('mainCaption'),
+    document.getElementById('bodyEditor')
+];
+
+editableElements.forEach(el => {
+    if (el) {
+        el.addEventListener('paste', handlePlainTextPaste);
+    }
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     const splashScreen = document.getElementById('splashScreen');
@@ -85,12 +115,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 80);
 
-    // Complete loading after restoring draft state & resources
     window.addEventListener('load', () => {
         clearInterval(progressInterval);
         splashProgressBar.style.width = '100%';
 
-        // Smooth transition out
         setTimeout(() => {
             splashScreen.classList.add('fade-out');
         }, 300);
