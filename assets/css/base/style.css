@@ -147,6 +147,7 @@ body {
     background-color: var(--bg-color);
     text-decoration: none;
     word-wrap: break-word;
+    hyphens: auto;
 }
 
 main {

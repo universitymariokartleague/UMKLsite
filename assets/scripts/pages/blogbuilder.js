@@ -350,9 +350,9 @@ homeLink.addEventListener('click', (e) => {
 
 // Export to HTML file
 saveBtn.addEventListener('click', () => {
-    const title = document.getElementById('articleTitle').innerText.trim() || 'Untitled Article';
-    const subtitle = document.getElementById('articleSubtitle').innerText.trim();
-    const mainCaption = document.getElementById('mainCaption').innerText.trim();
+    const title = document.getElementById('articleTitle').textContent.trim() || 'Untitled Article';
+    const subtitle = document.getElementById('articleSubtitle').textContent.trim();
+    const mainCaption = document.getElementById('mainCaption').textContent.trim();
     const author = metaAuthor.value.trim() || 'Anonymous';
     const date = metaDate.innerText;
 

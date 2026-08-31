@@ -185,7 +185,6 @@
     word-break: break-word;
 }
 
-/* Body Content Area */
 .body-editor {
     min-height: 300px;
         word-break: break-word;
@@ -285,14 +284,11 @@
     outline: 1px solid var(--text-color);
 }
 
-/* Responsive Styles */
 
-/* Prevent canvas overflow on small screens */
 .article-main-content {
     min-width: 0;
 }
 
-/* Modal Overlay */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -368,7 +364,7 @@
 @media screen and (max-width: 900px) {
     .editor-container {
         margin: 12px auto;
-        padding: 16px; /* Reduce container padding */
+        padding: 16px;
     }
 
     .article-layout {
