@@ -1,4 +1,3 @@
-/* Splash Screen Styles */
 .splash-overlay {
     position: fixed;
     top: 0;
@@ -34,16 +33,21 @@
 .splash-spinner {
     width: 42px;
     height: 42px;
-    border: 4px solid rgba(255, 255, 255, 0.15);
-    border-top: 4px solid var(--brand-primary, #bc0839);
+    border: 4px solid var(--translucent-color);
+    border-top: 4px solid var(--brand-primary);
     border-radius: 50%;
     animation: splashSpin 0.9s linear infinite;
     margin-bottom: 16px;
 }
 
 @keyframes splashSpin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .splash-title {
@@ -55,7 +59,7 @@
 .splash-progress-container {
     width: 100%;
     height: 6px;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--translucent-color);
     border-radius: 3px;
     overflow: hidden;
     margin-bottom: 16px;
@@ -64,17 +68,9 @@
 .splash-progress-bar {
     width: 0%;
     height: 100%;
-    background: var(--brand-primary, #bc0839);
+    background: var(--brand-primary);
     transition: width 0.2s ease;
 }
-
-.splash-tip {
-    font-size: 0.85rem;
-    opacity: 0.75;
-    line-height: 1.4;
-    min-height: 2.8em; /* Prevents layout jump when tip text rotates */
-}
-
 
 .hidden {
     display: none !important;
@@ -137,7 +133,8 @@
     background-color: var(--translucent-color);
 }
 
-.toolbar select, .btn-tool {
+.toolbar select,
+.btn-tool {
     background: none;
     padding: 6px 12px;
     border: 1px solid #00000000;
@@ -264,7 +261,7 @@
 
 .body-editor {
     min-height: 300px;
-        word-break: break-word;
+    word-break: break-word;
 }
 
 .body-editor h3 {
@@ -293,7 +290,7 @@
     gap: 6px;
     max-width: 80%;
     width: 100%;
-        position: relative;
+    position: relative;
 }
 
 
@@ -450,22 +447,56 @@
     opacity: 1;
 }
 
-/* Floating Requirements Checklist Widget */
 .floating-checklist-widget {
     position: fixed;
     bottom: 48px;
     right: 48px;
     z-index: 1500;
     width: 260px;
-    background: var(--bg-color, #ffffff);
-    color: var(--text-color, #111111);
+    background: var(--bg-color);
+    color: var(--text-color);
     padding: 14px 18px;
     border-radius: 12px;
-    border: 1px solid var(--translucent-color, #e0e0e0);
+    border: 1px solid var(--translucent-color);
     display: flex;
     flex-direction: column;
     gap: 10px;
-    backdrop-filter: blur(8px);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+.btn-toggle-checklist {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+    transition: transform 0.3s ease, opacity 0.2s ease;
+}
+
+.btn-toggle-checklist:hover {
+    opacity: 1;
+}
+
+.chevron-icon {
+    transition: transform 0.3s ease;
+}
+
+.floating-checklist-widget.collapsed .checklist-content {
+    display: none;
+}
+
+.floating-checklist-widget.collapsed .chevron-icon {
+    transform: rotate(180deg);
+}
+
+.checklist-content {
+    display: block;
+    animation: fadeIn 0.2s ease-in-out;
 }
 
 .checklist-header {
@@ -521,7 +552,7 @@
 .checklist-item .check-icon {
     font-weight: bold;
     font-size: 0.85rem;
-    color: var(--brand-negative); /* Red cross by default */
+    color: var(--brand-negative);
 }
 
 .checklist-item.passed {
@@ -530,7 +561,7 @@
 }
 
 .checklist-item.passed .check-icon {
-    color: var(--brand-positive); /* Green tick when valid */
+    color: var(--brand-positive);
 }
 
 .word-count-badge {
@@ -541,7 +572,19 @@
 }
 
 .progress-complete {
-    background-color: var(--brand-positive) !important; /* Green bar when all checks pass */
+    background-color: var(--brand-positive) !important;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes dialogPopIn {
@@ -549,6 +592,7 @@
         opacity: 0;
         transform: scale(0.95);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -560,6 +604,7 @@
         opacity: 1;
         transform: scale(1);
     }
+
     to {
         opacity: 0;
         transform: scale(0.95);
@@ -567,31 +612,22 @@
 }
 
 @keyframes dialogBackdropFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
+    from {
+        opacity: 0;
+    }
 
-@keyframes dialogBackdropFadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-
-@media screen and (max-width: 600px) {
-    .floating-checklist-widget {
-        bottom: 12px;
-        right: 12px;
-        width: 220px;
-        padding: 10px 14px;
+    to {
+        opacity: 1;
     }
 }
 
-/* Adjust position for mobile screens */
-@media screen and (max-width: 600px) {
-    .floating-word-widget {
-        bottom: 12px;
-        right: 12px;
-        width: 180px;
-        padding: 10px 12px;
+@keyframes dialogBackdropFadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
     }
 }
 
@@ -604,6 +640,15 @@
     .article-layout {
         flex-direction: column;
         gap: 16px;
+    }
+
+    .floating-checklist-widget {
+        position: static;
+        width: auto;
+        padding: 10px 14px;
+        border-radius: 0;
+        border: none;
+        border-top: 1px solid var(--translucent-color);
     }
 
     .article-sidebar {
@@ -619,6 +664,7 @@
         max-width: 100%;
     }
 }
+
 
 @media screen and (max-width: 600px) {
     .builder-bar {
@@ -638,7 +684,8 @@
         height: 20px;
     }
 
-    .toolbar select, .btn-tool {
+    .toolbar select,
+    .btn-tool {
         height: 40px;
         min-width: 36px;
         padding: 4px 8px;

@@ -209,16 +209,24 @@
     </div>
 
 
-    <div id="checklistWidget" class="floating-checklist-widget">
-        <div class="checklist-header">
+<div id="checklistWidget" class="floating-checklist-widget">
+    <div class="checklist-header" id="checklistHeader">
+        <div class="checklist-title-group">
             <span class="widget-label">Export Requirements</span>
             <span id="checklistScore" class="checklist-score">0 / 7</span>
         </div>
+        <button id="toggleChecklistBtn" class="btn-toggle-checklist" aria-label="Toggle checklist" type="button">
+            <svg id="toggleChevron" class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </button>
+    </div>
 
-        <div class="progress-bar-container">
-            <div id="checklistProgressBar" class="progress-bar-fill"></div>
-        </div>
+    <div class="progress-bar-container">
+        <div id="checklistProgressBar" class="progress-bar-fill"></div>
+    </div>
 
+    <div id="checklistContent" class="checklist-content">
         <ul class="checklist-items">
             <li id="reqTitle" class="checklist-item">
                 <span class="check-icon">✕</span> Title added
@@ -244,6 +252,7 @@
             </li>
         </ul>
     </div>
+</div>
 </body>
 
 </html>

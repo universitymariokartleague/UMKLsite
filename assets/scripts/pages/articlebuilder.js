@@ -46,6 +46,29 @@ const mainCaption = document.getElementById('mainCaption');
 const MIN_WORDS = 500;
 
 const STORAGE_KEY = 'umkl_article_builder_draft';
+
+// --- CHECKLIST COLLAPSE/EXPAND LOGIC ---
+const checklistWidget = document.getElementById('checklistWidget');
+const checklistHeader = document.getElementById('checklistHeader');
+const toggleChecklistBtn = document.getElementById('toggleChecklistBtn');
+
+function toggleChecklist() {
+    const isCollapsed = checklistWidget.classList.toggle('collapsed');
+    localStorage.setItem('umkl_checklist_collapsed', isCollapsed);
+}
+
+// Toggle when clicking header or icon
+if (checklistHeader) {
+    checklistHeader.addEventListener('click', toggleChecklist);
+}
+
+// Auto-collapse on small mobile screens by default if not set
+const savedState = localStorage.getItem('umkl_checklist_collapsed');
+if (savedState === 'true' || (savedState === null && window.innerWidth <= 600)) {
+    checklistWidget.classList.add('collapsed');
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const splashScreen = document.getElementById('splashScreen');
     const splashProgressBar = document.getElementById('splashProgressBar');
