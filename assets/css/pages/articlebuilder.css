@@ -330,7 +330,7 @@
 
 .meta-group {
     padding: 20px;
-    border-bottom: 1px solid var(--text-color);
+    border-bottom: 1px solid var(--translucent-color);
     display: flex;
     flex-direction: column;
     gap: 5px;

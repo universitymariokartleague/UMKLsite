@@ -287,10 +287,52 @@ const outputDocument = ({ title, subtitle, mainImageUrl, mainCaption, bodyConten
 
 </html>`;
 
-// Default the date field to now, in UTC
-const now = new Date();
-const formattedDate = `${now.getUTCDate()} ${now.toLocaleString('en-GB', { month: 'long', timeZone: 'UTC' })}, ${now.getUTCFullYear()} ${String(now.getUTCHours()).padStart(2, '0')}:${String(now.getUTCMinutes()).padStart(2, '0')} UTC`;
-metaDate.innerText = formattedDate;
+// Date field: defaults to now, and auto-corrects to this format whenever it's edited
+function formatDate(date) {
+    return `${date.getDate()} ${date.toLocaleString('en-GB', { month: 'long' })}, ${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+}
+
+// Accepts "28/2/26", "28-02-2026", "28th Feb 2026", etc., in addition to whatever Date() understands natively
+function parseDateInput(value) {
+    const cleaned = value.trim().replace(/,\s*$/, '');
+    if (!cleaned) return null;
+
+    const numeric = cleaned.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})(?:[,\s]+(\d{1,2}):(\d{2}))?$/);
+    if (numeric) {
+        const day = parseInt(numeric[1], 10);
+        const month = parseInt(numeric[2], 10);
+        let year = parseInt(numeric[3], 10);
+        const hour = numeric[4] ? parseInt(numeric[4], 10) : 0;
+        const minute = numeric[5] ? parseInt(numeric[5], 10) : 0;
+        if (year < 100) year += 2000;
+        if (month < 1 || month > 12 || day < 1 || day > 31) return null;
+
+        const date = new Date(year, month - 1, day, hour, minute);
+        // Reject overflow days (e.g. 31 February) that Date() would otherwise roll into the next month
+        if (date.getDate() !== day || date.getMonth() !== month - 1) return null;
+        return date;
+    }
+
+    const withoutOrdinals = cleaned.replace(/(\d+)(st|nd|rd|th)/gi, '$1');
+    const parsed = new Date(withoutOrdinals);
+    return isNaN(parsed.getTime()) ? null : parsed;
+}
+
+let lastValidDate = new Date();
+metaDate.value = formatDate(lastValidDate);
+
+metaDate.addEventListener('blur', () => {
+    const value = metaDate.value.trim();
+    if (value) {
+        const parsed = parseDateInput(value);
+        if (parsed) {
+            lastValidDate = parsed;
+        } else {
+            alert('Could not understand that date, reverting to the last valid value.');
+        }
+    }
+    metaDate.value = formatDate(lastValidDate);
+});
 
 // Image source modal (file upload or web URL)
 function openImageModal(fileInput, callback) {
@@ -704,7 +746,7 @@ saveBtn.addEventListener('click', async () => {
     const subtitle = articleSubtitle.textContent.trim();
     const mainCapText = mainCaption.textContent.trim();
     const author = metaAuthor.value.trim() || 'Anonymous';
-    const dateStr = metaDate.innerText;
+    const dateStr = metaDate.value.trim() || formatDate(lastValidDate);
     const bodyContent = bodyClone.innerHTML.trim();
 
     const rawTags = metaTags.value.split(',').map(t => t.trim()).filter(t => t.length > 0);
