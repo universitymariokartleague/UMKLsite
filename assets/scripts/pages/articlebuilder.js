@@ -1,3 +1,7 @@
+import { createDebugLogger } from '/assets/scripts/utils/debuglogger.js';
+
+const debugLog = createDebugLogger('articlebuilder.js', '#2dd4bf', '#99f6e4');
+
 // Elements
 const mainImageContainer = document.getElementById('mainImageContainer');
 const mainFileInput = document.getElementById('mainFileInput');
@@ -12,10 +16,12 @@ const blockTypeSelect = document.getElementById('blockTypeSelect');
 const boldBtn = document.getElementById('boldBtn');
 const linkBtn = document.getElementById('linkBtn');
 const insertImageBtn = document.getElementById('insertImageBtn');
+const insertVideoBtn = document.getElementById('insertVideoBtn');
 const clearBtn = document.getElementById('clearBtn');
 const saveBtn = document.getElementById('saveBtn');
 const exitBtn = document.getElementById('exitBtn');
 const homeLink = document.getElementById('homeLink');
+const storageUsageEl = document.getElementById('storageUsage');
 
 const metaDate = document.getElementById('metaDate');
 const metaAuthor = document.getElementById('metaAuthor');
@@ -26,6 +32,16 @@ const modalCard = document.getElementById('modalCard')
 const modalUploadBtn = document.getElementById('modalUploadBtn');
 const modalUrlBtn = document.getElementById('modalUrlBtn');
 const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+const urlModal = document.getElementById('urlModal');
+const urlModalCard = document.getElementById('urlModalCard');
+const urlModalTitle = document.getElementById('urlModalTitle');
+const urlModalSubtitle = document.getElementById('urlModalSubtitle');
+const urlModalInput = document.getElementById('urlModalInput');
+const urlModalCancelBtn = document.getElementById('urlModalCancelBtn');
+const urlModalConfirmBtn = document.getElementById('urlModalConfirmBtn');
+
+const conversionStatusEl = document.getElementById('conversionStatus');
 
 const reqTitle = document.getElementById('reqTitle');
 const reqSubtitle = document.getElementById('reqSubtitle');
@@ -52,43 +68,6 @@ const ogPreviewImage = document.getElementById('ogPreviewImage');
 const ogPreviewTitle = document.getElementById('ogPreviewTitle');
 const ogPreviewDescription = document.getElementById('ogPreviewDescription');
 
-const MIN_WORDS = 200;
-const STORAGE_KEY = 'umkl_article_builder_draft';
-
-function toggleChecklist() {
-    const isCollapsed = checklistWidget.classList.toggle('collapsed');
-    localStorage.setItem('umkl_checklist_collapsed', isCollapsed);
-}
-
-if (checklistHeader) {
-    checklistHeader.addEventListener('click', toggleChecklist);
-}
-
-const savedState = localStorage.getItem('umkl_checklist_collapsed');
-if (savedState === 'true' || (savedState === null && window.innerWidth <= 600)) {
-    checklistWidget.classList.add('collapsed');
-}
-
-// Forces all paste operations to not have formatting
-function handlePlainTextPaste(e) {
-    e.preventDefault();
-
-    // Get plain text from clipboard
-    const text = (e.clipboardData || window.clipboardData).getData('text/plain');
-
-    // Insert text at cursor position
-    if (document.queryCommandSupported('insertText')) {
-        document.execCommand('insertText', false, text);
-    } else {
-        // Fallback for browsers that don't support insertText
-        const selection = window.getSelection();
-        if (!selection.rangeCount) return;
-        selection.deleteFromDocument();
-        selection.getRangeAt(0).insertNode(document.createTextNode(text));
-    }
-}
-
-// Attach event listener to all editable regions
 const editableElements = [
     document.getElementById('articleTitle'),
     document.getElementById('articleSubtitle'),
@@ -96,61 +75,13 @@ const editableElements = [
     document.getElementById('bodyEditor')
 ];
 
-editableElements.forEach(el => {
-    if (el) {
-        el.addEventListener('paste', handlePlainTextPaste);
-    }
-});
-
-// Save all form and editor data to localStorage
-function saveDraft() {
-    const draftData = {
-        title: articleTitle.innerHTML,
-        subtitle: articleSubtitle.innerHTML,
-        mainCaption: mainCaption.innerHTML,
-        mainImageUrl: mainImageUrl,
-        isMainImageVisible: !mainImagePreview.classList.contains('hidden'),
-        bodyHtml: bodyEditor.innerHTML,
-        author: metaAuthor.value,
-        tags: metaTags.value
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(draftData));
-}
-
-
-function loadDraft() {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (!saved) return;
-
-    try {
-        const draft = JSON.parse(saved);
-
-        if (draft.title) articleTitle.innerHTML = draft.title;
-        if (draft.subtitle) articleSubtitle.innerHTML = draft.subtitle;
-        if (draft.mainCaption) mainCaption.innerHTML = draft.mainCaption;
-
-        if (draft.mainImageUrl && draft.isMainImageVisible) {
-            setMainImage(draft.mainImageUrl);
-        }
-
-        if (draft.bodyHtml) bodyEditor.innerHTML = draft.bodyHtml;
-        if (draft.author !== undefined) metaAuthor.value = draft.author;
-        if (draft.tags !== undefined) metaTags.value = draft.tags;
-
-    } catch (e) {
-        console.error("Failed to restore article draft:", e);
-    }
-}
-
-
-function clearDraft() {
-    localStorage.removeItem(STORAGE_KEY);
-}
-
-// State
-let mainImageUrl = "https://mario.wiki.gallery/images/thumb/4/48/MK8DX_Nintendo_Wallpaper_1.jpg/1600px-MK8DX_Nintendo_Wallpaper_1.jpg";
-let activeImageCallback = null;
-let activeFileInput = null;
+// Config
+const MIN_WORDS = 200;
+const STORAGE_KEY = 'umkl_article_builder_draft';
+const LOCAL_STORAGE_LIMIT_BYTES = 5 * 1024 * 1024; // browsers typically cap each origin at ~5MB
+const MAX_IMAGE_DIMENSION = 800; // cap uploaded body images to this before AVIF-encoding them
+const MAX_MAIN_IMAGE_DIMENSION = 1000; // main image gets a bit more room since it's shown larger
+const savedState = localStorage.getItem('umkl_checklist_collapsed');
 
 // Exported article HTML template
 const outputDocument = ({ title, subtitle, mainImageUrl, mainCaption, bodyContent, date, author, tagsMarkup }) => `<!DOCTYPE html>
@@ -254,6 +185,135 @@ const outputDocument = ({ title, subtitle, mainImageUrl, mainCaption, bodyConten
 
 </html>`;
 
+function toggleChecklist() {
+    const isCollapsed = checklistWidget.classList.toggle('collapsed');
+    localStorage.setItem('umkl_checklist_collapsed', isCollapsed);
+}
+
+if (checklistHeader) {
+    checklistHeader.addEventListener('click', toggleChecklist);
+}
+
+if (savedState === 'true' || (savedState === null && window.innerWidth <= 600)) {
+    checklistWidget.classList.add('collapsed');
+}
+
+// Forces all paste operations to not have formatting
+function handlePlainTextPaste(e) {
+    e.preventDefault();
+
+    // Get plain text from clipboard
+    const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+
+    // Insert text at cursor position
+    if (document.queryCommandSupported('insertText')) {
+        document.execCommand('insertText', false, text);
+    } else {
+        // Fallback for browsers that don't support insertText
+        const selection = window.getSelection();
+        if (!selection.rangeCount) return;
+        selection.deleteFromDocument();
+        selection.getRangeAt(0).insertNode(document.createTextNode(text));
+    }
+}
+
+// Attach event listener to all editable regions
+editableElements.forEach(el => {
+    if (el) {
+        el.addEventListener('paste', handlePlainTextPaste);
+    }
+});
+
+// localStorage usage indicator
+function getLocalStorageUsageBytes() {
+    let total = 0;
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        total += (key.length + (localStorage.getItem(key) || '').length) * 2;
+    }
+    return total;
+}
+
+function formatBytes(bytes) {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+}
+
+function updateStorageUsage() {
+    if (!storageUsageEl) return;
+    const used = getLocalStorageUsageBytes();
+    const percent = ((used / LOCAL_STORAGE_LIMIT_BYTES) * 100).toFixed(1);
+
+    if (!autoSaveEnabled) {
+        storageUsageEl.textContent = `Draft storage full! Changes won't be autosaved, so please download your draft instead.`;
+        storageUsageEl.classList.add('storage-usage-error');
+    } else {
+        storageUsageEl.textContent = `Draft storage used: ${formatBytes(used)} / ${formatBytes(LOCAL_STORAGE_LIMIT_BYTES)} (${percent}%)`;
+        storageUsageEl.classList.remove('storage-usage-error');
+    }
+}
+
+// Save all form and editor data to localStorage
+function saveDraft() {
+    const draftData = {
+        title: articleTitle.innerHTML,
+        subtitle: articleSubtitle.innerHTML,
+        mainCaption: mainCaption.innerHTML,
+        mainImageUrl: mainImageUrl,
+        isMainImageVisible: !mainImagePreview.classList.contains('hidden'),
+        bodyHtml: bodyEditor.innerHTML,
+        author: metaAuthor.value,
+        tags: metaTags.value
+    };
+
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(draftData));
+        autoSaveEnabled = true;
+    } catch (e) {
+        autoSaveEnabled = false;
+        console.error('Failed to save draft, likely over the local storage limit:', e);
+    }
+    updateStorageUsage();
+}
+
+
+function loadDraft() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return;
+
+    try {
+        const draft = JSON.parse(saved);
+
+        if (draft.title) articleTitle.innerHTML = draft.title;
+        if (draft.subtitle) articleSubtitle.innerHTML = draft.subtitle;
+        if (draft.mainCaption) mainCaption.innerHTML = draft.mainCaption;
+
+        if (draft.mainImageUrl && draft.isMainImageVisible) {
+            setMainImage(draft.mainImageUrl);
+        }
+
+        if (draft.bodyHtml) bodyEditor.innerHTML = draft.bodyHtml;
+        if (draft.author !== undefined) metaAuthor.value = draft.author;
+        if (draft.tags !== undefined) metaTags.value = draft.tags;
+
+    } catch (e) {
+        console.error("Failed to restore article draft:", e);
+    }
+}
+
+
+function clearDraft() {
+    localStorage.removeItem(STORAGE_KEY);
+}
+
+// State
+let mainImageUrl = "https://mario.wiki.gallery/images/thumb/4/48/MK8DX_Nintendo_Wallpaper_1.jpg/1600px-MK8DX_Nintendo_Wallpaper_1.jpg";
+let activeImageCallback = null;
+let activeFileInput = null;
+let activeUrlCallback = null;
+let autoSaveEnabled = true;
+
 // Date field: defaults to now, and auto-corrects to this format whenever it's edited
 function formatDate(date) {
     return `${date.getDate()} ${date.toLocaleString('en-GB', { month: 'long' })}, ${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
@@ -310,8 +370,11 @@ function openImageModal(fileInput, callback) {
     imageModal.style.display = 'flex';
 }
 
-function closeImageModal() {
-    if (imageModal.classList.contains('hidden') || imageModal.classList.contains('closing')) return;
+function closeImageModal(onComplete) {
+    if (imageModal.classList.contains('hidden') || imageModal.classList.contains('closing')) {
+        if (typeof onComplete === 'function') onComplete();
+        return;
+    }
 
     imageModal.classList.add('closing');
     modalCard.classList.add('closing');
@@ -324,6 +387,7 @@ function closeImageModal() {
         imageModal.removeEventListener('animationend', onAnimationEnd);
         activeImageCallback = null;
         activeFileInput = null;
+        if (typeof onComplete === 'function') onComplete();
     };
 
     imageModal.addEventListener('animationend', onAnimationEnd, { once: true });
@@ -337,15 +401,146 @@ modalUploadBtn.addEventListener('click', () => {
 });
 
 modalUrlBtn.addEventListener('click', () => {
-    const url = prompt("Enter the direct Web URL for the image:");
-    if (url && url.trim().length > 0 && activeImageCallback) {
-        activeImageCallback(url.trim());
-    }
-    closeImageModal();
+    const callback = activeImageCallback;
+    closeImageModal(() => {
+        openUrlModal({
+            title: 'Insert Image from URL',
+            subtitle: 'Enter the direct web URL for the image',
+            placeholder: 'https://example.com/image.jpg'
+        }, (url) => {
+            if (callback) callback(url);
+        });
+    });
 });
 
-modalCloseBtn.addEventListener('click', closeImageModal);
-imageModal.addEventListener('click', closeImageModal);
+modalCloseBtn.addEventListener('click', () => closeImageModal());
+imageModal.addEventListener('click', (e) => {
+    if (e.target === imageModal) closeImageModal();
+});
+
+// Generic URL-entry modal
+function openUrlModal({ title, subtitle, placeholder = 'https://', defaultValue = '' }, callback) {
+    urlModalTitle.textContent = title;
+    urlModalSubtitle.textContent = subtitle;
+    urlModalInput.placeholder = placeholder;
+    urlModalInput.value = defaultValue;
+    activeUrlCallback = callback;
+
+    urlModal.classList.remove('hidden');
+    urlModal.classList.remove('closing');
+    urlModal.style.display = 'flex';
+
+    requestAnimationFrame(() => {
+        urlModalInput.focus();
+        urlModalInput.select();
+    });
+}
+
+function closeUrlModal() {
+    if (urlModal.classList.contains('hidden') || urlModal.classList.contains('closing')) return;
+
+    urlModal.classList.add('closing');
+    urlModalCard.classList.add('closing');
+
+    const onAnimationEnd = () => {
+        urlModal.classList.add('hidden');
+        urlModal.classList.remove('closing');
+        urlModalCard.classList.remove('closing');
+
+        urlModal.removeEventListener('animationend', onAnimationEnd);
+        activeUrlCallback = null;
+    };
+
+    urlModal.addEventListener('animationend', onAnimationEnd, { once: true });
+}
+
+function confirmUrlModal() {
+    const value = urlModalInput.value.trim();
+    const callback = activeUrlCallback;
+    closeUrlModal();
+    if (value && callback) {
+        callback(value);
+    }
+}
+
+urlModalConfirmBtn.addEventListener('click', confirmUrlModal);
+urlModalCancelBtn.addEventListener('click', closeUrlModal);
+urlModal.addEventListener('click', (e) => {
+    if (e.target === urlModal) closeUrlModal();
+});
+urlModalInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        confirmUrlModal();
+    } else if (e.key === 'Escape') {
+        closeUrlModal();
+    }
+});
+
+// Uploaded images - convert to AVIF (skip GIFs)
+// uses jSquash's WASM build https://github.com/jamsinclair/jSquash
+let avifEncoderPromise = null;
+function loadAvifEncoder() {
+    if (!avifEncoderPromise) {
+        avifEncoderPromise = import('https://esm.sh/@jsquash/avif@2.1.1').then(mod => mod.encode);
+    }
+    return avifEncoderPromise;
+}
+
+function readFileAsDataUrl(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(file);
+    });
+}
+
+async function convertImageToAvif(file, maxDimension = MAX_IMAGE_DIMENSION) {
+    if (file.type === 'image/gif' || file.type === 'image/avif') {
+        return readFileAsDataUrl(file);
+    }
+
+    if (conversionStatusEl) conversionStatusEl.classList.remove('hidden');
+
+    try {
+        const objectUrl = URL.createObjectURL(file);
+        const img = await new Promise((resolve, reject) => {
+            const image = new Image();
+            image.onload = () => resolve(image);
+            image.onerror = reject;
+            image.src = objectUrl;
+        });
+
+        // Encode time scales with pixel count, and no article image needs more than this
+        const scale = Math.min(1, maxDimension / Math.max(img.naturalWidth, img.naturalHeight));
+        const width = Math.round(img.naturalWidth * scale);
+        const height = Math.round(img.naturalHeight * scale);
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        URL.revokeObjectURL(objectUrl);
+
+        const imageData = ctx.getImageData(0, 0, width, height);
+        const encode = await loadAvifEncoder();
+
+        const t0 = performance.now();
+        const avifBuffer = await encode(imageData, { speed: 8, quality: 80 });
+        const encodeMs = Math.round(performance.now() - t0);
+
+        debugLog(`AVIF conversion: ${formatBytes(file.size)} -> ${formatBytes(avifBuffer.byteLength)} in ${encodeMs}ms (${width}x${height})`);
+
+        return await readFileAsDataUrl(new Blob([avifBuffer], { type: 'image/avif' }));
+    } catch (e) {
+        console.error('AVIF conversion failed, using the original file instead:', e);
+        return readFileAsDataUrl(file);
+    } finally {
+        if (conversionStatusEl) conversionStatusEl.classList.add('hidden');
+    }
+}
 
 // Main image
 function setMainImage(url) {
@@ -366,9 +561,7 @@ mainImageContainer.addEventListener('click', () => {
 mainFileInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => setMainImage(event.target.result);
-        reader.readAsDataURL(file);
+        convertImageToAvif(file, MAX_MAIN_IMAGE_DIMENSION).then(setMainImage);
     }
 });
 
@@ -481,6 +674,7 @@ function updateOgPreview() {
 loadDraft();
 validateArticleRequirements();
 updateOgPreview();
+updateStorageUsage();
 
 // Toolbar state & selection detection
 function updateToolbarState() {
@@ -504,20 +698,20 @@ function updateToolbarState() {
         let parentBlock = sel.anchorNode;
         if (parentBlock.nodeType === 3) parentBlock = parentBlock.parentNode;
 
-        while (parentBlock && parentBlock !== bodyEditor && !['P', 'H3', 'DIV'].includes(parentBlock.tagName)) {
+        while (parentBlock && parentBlock !== bodyEditor && !['P', 'H3', 'BLOCKQUOTE', 'DIV'].includes(parentBlock.tagName)) {
             parentBlock = parentBlock.parentNode;
         }
 
         if (parentBlock && parentBlock !== bodyEditor) {
             const tag = parentBlock.tagName.toLowerCase();
-            if (['p', 'h3', 'div'].includes(tag)) {
+            if (['p', 'h3', 'blockquote', 'div'].includes(tag)) {
                 blockTypeSelect.value = tag === 'div' ? 'p' : tag;
             }
         }
     }
 
     // Disable toolbar controls when focused outside bodyEditor
-    const controls = [blockTypeSelect, boldBtn, linkBtn, insertImageBtn];
+    const controls = [blockTypeSelect, boldBtn, linkBtn, insertImageBtn, insertVideoBtn];
     controls.forEach(ctrl => {
         ctrl.disabled = !isBodyActive;
         ctrl.style.opacity = isBodyActive ? '1' : '0.4';
@@ -537,12 +731,27 @@ boldBtn.addEventListener('click', () => {
 });
 
 linkBtn.addEventListener('click', () => {
-    if (!linkBtn.disabled) {
-        const url = prompt('Enter the link URL:', 'https://');
-        if (url) {
-            document.execCommand('createLink', false, url);
+    if (linkBtn.disabled) return;
+
+    // Preserve the selection: opening the modal moves focus to its input,
+    // which would otherwise clear the range createLink needs to wrap.
+    const sel = window.getSelection();
+    const range = sel.rangeCount > 0 ? sel.getRangeAt(0).cloneRange() : null;
+
+    openUrlModal({
+        title: 'Insert Link',
+        subtitle: 'Enter the URL for the selected text',
+        placeholder: 'https://umkl.co.uk',
+        defaultValue: ''
+    }, (url) => {
+        bodyEditor.focus();
+        if (range) {
+            const restoredSel = window.getSelection();
+            restoredSel.removeAllRanges();
+            restoredSel.addRange(range);
         }
-    }
+        document.execCommand('createLink', false, url);
+    });
 });
 
 blockTypeSelect.addEventListener('change', (e) => {
@@ -562,18 +771,7 @@ bodyEditor.addEventListener('keydown', (e) => {
 });
 
 // Body images
-function insertImageToBody(imgUrl) {
-    const imageBlock = document.createElement('div');
-    imageBlock.className = 'article-image-container';
-    imageBlock.setAttribute('contenteditable', 'false');
-    imageBlock.innerHTML = `
-        <div class="article-image-wrapper">
-            <button type="button" class="btn-remove-image" title="Remove image">&times;</button>
-            <img loading="lazy" class="image article-content-image" src="${imgUrl}" />
-            <span class="article-image-caption" contenteditable="true">Lorem ipsum dolor sit amet</span>
-        </div>
-    `;
-
+function insertBlockToBody(block) {
     bodyEditor.focus();
     const sel = window.getSelection();
     if (sel.rangeCount > 0) {
@@ -592,16 +790,30 @@ function insertImageToBody(imgUrl) {
         if (currentBlock && currentBlock !== bodyEditor) {
             const p = document.createElement('p');
             p.innerHTML = '<br>';
-            currentBlock.after(imageBlock);
-            imageBlock.after(p);
+            currentBlock.after(block);
+            block.after(p);
         } else {
             const p = document.createElement('p');
             p.innerHTML = '<br>';
-            bodyEditor.appendChild(imageBlock);
+            bodyEditor.appendChild(block);
             bodyEditor.appendChild(p);
         }
     }
     saveDraft();
+}
+
+function insertImageToBody(imgUrl) {
+    const imageBlock = document.createElement('div');
+    imageBlock.className = 'article-image-container';
+    imageBlock.setAttribute('contenteditable', 'false');
+    imageBlock.innerHTML = `
+        <div class="article-image-wrapper">
+            <button type="button" class="btn-remove-image" title="Remove image">&times;</button>
+            <img loading="lazy" class="image article-content-image" src="${imgUrl}" />
+            <span class="article-image-caption" contenteditable="true">Lorem ipsum dolor sit amet</span>
+        </div>
+    `;
+    insertBlockToBody(imageBlock);
 }
 
 insertImageBtn.addEventListener('click', () => {
@@ -613,16 +825,61 @@ insertImageBtn.addEventListener('click', () => {
 bodyFileInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => insertImageToBody(event.target.result);
-        reader.readAsDataURL(file);
-
+        convertImageToAvif(file).then(insertImageToBody);
     }
 });
 
+// Video (YouTube embeds)
+function getYouTubeVideoId(url) {
+    const match = url.match(/(?:youtube(?:-nocookie)?\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    return match ? match[1] : null;
+}
+
+function insertVideoToBody(videoId) {
+    const videoBlock = document.createElement('div');
+    videoBlock.className = 'article-video-container';
+    videoBlock.setAttribute('contenteditable', 'false');
+    videoBlock.innerHTML = `
+        <div class="article-video-wrapper">
+            <button type="button" class="btn-remove-image btn-remove-video" title="Remove video">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <div class="article-video-embed">
+                <iframe src="https://www.youtube-nocookie.com/embed/${videoId}" title="YouTube video player"
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+            </div>
+            <span class="article-image-caption" contenteditable="true">Lorem ipsum dolor sit amet</span>
+        </div>
+    `;
+    insertBlockToBody(videoBlock);
+}
+
+insertVideoBtn.addEventListener('click', () => {
+    if (insertVideoBtn.disabled) return;
+
+    openUrlModal({
+        title: 'Insert YouTube Video',
+        subtitle: 'Paste a YouTube video URL',
+        placeholder: 'https://www.youtube.com/watch?v=ZcGLlh8WkDA&pp=0gcJCRoMAYcqIYzv'
+    }, (url) => {
+        const videoId = getYouTubeVideoId(url);
+        if (!videoId) {
+            alert("Couldn't find a YouTube video in that URL. Try a link like https://www.youtube.com/watch?v=ZcGLlh8WkDA&pp=0gcJCRoMAYcqIYzv");
+            return;
+        }
+        insertVideoToBody(videoId);
+    });
+});
+
 bodyEditor.addEventListener('click', (e) => {
-    if (e.target.classList.contains('btn-remove-image')) {
-        const container = e.target.closest('.article-image-container');
+    if (e.target.closest('.btn-remove-image')) {
+        const container = e.target.closest('.article-image-container, .article-video-container');
         if (container) {
             container.remove();
         }
@@ -676,17 +933,16 @@ function dataURLtoBlob(dataurl) {
     return new Blob([u8arr], { type: mime });
 }
 
-saveBtn.addEventListener('click', async () => {
-    // Ask the user for a folder name
-    let folderName = prompt("Enter a folder name for the article:");
-    if (!folderName) return;
+function slugify(text) {
+    return text
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
 
-    folderName = folderName.trim().toLowerCase();
-    const folderRegex = /^[a-z0-9-]+$/;
-    if (!folderRegex.test(folderName)) {
-        alert("Invalid folder name! Only lowercase letters, numbers, and hyphens are allowed (no spaces or capital letters).");
-        return;
-    }
+saveBtn.addEventListener('click', async () => {
+    // Derive the folder name from the article title instead of asking
+    const folderName = slugify(articleTitle.textContent.trim()) || 'untitled-article';
 
     const zip = new JSZip();
 
@@ -774,7 +1030,7 @@ saveBtn.addEventListener('click', async () => {
     const downloadLink = document.createElement('a');
     downloadLink.href = URL.revokeObjectURL(zipBlob);
     downloadLink.href = URL.createObjectURL(zipBlob);
-    downloadLink.download = `${dateFormattedString}-${folderName}-package.zip`;
+    downloadLink.download = `${dateFormattedString}-${folderName}-article.zip`;
     downloadLink.click();
     URL.revokeObjectURL(downloadLink.href);
 });

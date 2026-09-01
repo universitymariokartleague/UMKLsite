@@ -58,6 +58,7 @@
                 <select id="blockTypeSelect">
                     <option value="h3">Heading</option>
                     <option value="p" selected>Paragraph</option>
+                    <option value="blockquote">Quote</option>
                 </select>
                 <button id="boldBtn" class="btn-tool">
                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
@@ -91,6 +92,16 @@
                     </svg>
 
                 </button>
+                <button id="insertVideoBtn" class="btn-tool" title="Insert YouTube video">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        viewBox="0 0 24 24">
+                        <path fill-rule="evenodd"
+                            d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm8.5 2.6a1 1 0 0 0-1.5.87v5.06a1 1 0 0 0 1.5.87l4.5-2.53a1 1 0 0 0 0-1.74L10.5 8.6Z"
+                            clip-rule="evenodd" />
+                    </svg>
+
+                </button>
             </div>
 
             <div class="toolbar-divider"></div>
@@ -117,6 +128,8 @@
 
                 </button>
             </div>
+
+            <span id="storageUsage" class="storage-usage" title="Storage used by this draft"></span>
         </div>
     </div>
 
@@ -266,6 +279,22 @@
             <button id="modalCloseBtn" class="btn-modal-close">Cancel</button>
         </div>
     </div>
+
+    <div id="urlModal" class="modal-overlay hidden">
+        <div id="urlModalCard" class="modal-card">
+            <h3 id="urlModalTitle">Insert from URL</h3>
+            <span id="urlModalSubtitle" class="modal-subtitle">Enter the direct web URL</span>
+
+            <input type="text" id="urlModalInput" class="url-modal-input" placeholder="https://">
+
+            <div class="modal-actions modal-actions-row">
+                <button id="urlModalCancelBtn" class="btn-modal-option btn-modal-secondary">Cancel</button>
+                <button id="urlModalConfirmBtn" class="btn-modal-option btn-modal-primary">Insert</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="conversionStatus" class="conversion-status hidden">Optimising image... Please wait...&hellip;</div>
 </body>
 
 </html>

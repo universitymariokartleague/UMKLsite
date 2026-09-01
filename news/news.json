@@ -1,150 +1,139 @@
-[{
-    "title": "Treatment of miscarriages",
-    "link": "/news/2026-08-31/intralipid-therapy/",
-    "date": "2026-08-31",
-    "image": "https://images.squarespace-cdn.com/content/v1/5bb7a582fd67933734c064e5/376c684a-4ff4-4932-b490-f7081a87b6a5/IV+Intralipid+therapy.jpg",
-    "alt": "Intralipids are a potential cure for miscarriage",
-    "description": "New potential therapies are currently being investigated, like intralipid therapy.",
+[
+  {
+    "title": "New team 'Herts' joins the UMKL to represent the University of Hertfordshire",
+    "link": "/news/2026-07-13/herts-team-joins-umkl/",
+    "date": "2026-07-13",
+    "image": "/news/2026-07-13/herts-team-joins-umkl/herts_emblem_hero.avif",
+    "alt": "Herts team joins the UMKL",
+    "description": "Herts is the first new team to join the UMKL since the conclusion of Season 2, representing the University of Hertfordshire.",
     "tags": [
-        "Intralipid",
-        "Miscarriage"
+      "Herts",
+      "Teams",
+      "Season 3"
     ]
-},
-    {
-        "title": "New app, Lakitu, now available on the UMKL Discord Server",
-        "link": "/news/2026-07-08/lakitu-release/",
-        "date": "2026-07-08",
-        "image": "/assets/media/news/lakitu_banner.png",
-        "alt": "Lakitu app released on UMKL Discord server",
-        "description": "Lakitu is a new custom app for Discord that stores a user's time trial records across all games in the Mario Kart series.",
-        "tags": [
-            "Discord",
-            "Time Trials"
-        ]
-    },
-    {
-        "title": "New team 'Herts' joins the UMKL to represent the University of Hertfordshire",
-        "link": "/news/2026-07-13/herts-team-joins-umkl/",
-        "date": "2026-07-13",
-        "image": "/assets/media/news/herts_emblem_hero.png",
-        "alt": "Herts team joins the UMKL",
-        "description": "Herts is the first new team to join the UMKL since the conclusion of Season 2, representing the University of Hertfordshire.",
-        "tags": [
-            "Herts",
-            "Teams",
-            "Season 3"
-        ]
-    },
-    {
-        "title": "Season 2 Round 4 Fixtures Revealed!",
-        "link": "/news/2026-03-31/season-2-round-4-fixtures-revealed/",
-        "date": "2026-03-31",
-        "image": "/assets/media/news/season2fixtures4.avif",
-        "alt": "Matches Season 2 - Round 4",
-        "description": "The matches for Round 4 of Season 2 have been revealed! Find out who will be facing each other here!",
-        "tags": [
-            "Season 2"
-        ]
-    },
-    {
-        "title": "Season 2 Round 3 Fixtures Revealed!",
-        "link": "/news/2026-01-01/season-2-round-3-fixtures-revealed/",
-        "date": "2026-01-01",
-        "image": "/assets/media/news/season2fixtures3.avif",
-        "alt": "Matches Season 2 - Round 3",
-        "description": "The matches for Round 3 of Season 2 have been revealed! Find out who will be facing each other here!",
-        "tags": [
-            "Season 2"
-        ]
-    },
-    {
-        "title": "Season 2 Round 2 Fixtures Revealed!",
-        "link": "/news/2025-11-06/season-2-round-2-fixtures-revealed/",
-        "date": "2025-11-06",
-        "image": "/assets/media/news/season2fixtures2.avif",
-        "alt": "Matches Season 2 - Round 2",
-        "description": "The second round of Season 2 fixtures has been revealed! Find out who will be facing each other here!",
-        "tags": [
-            "Season 2"
-        ]
-    },
-    {
-        "title": "Season 2 Round 1 Fixtures Revealed!",
-        "link": "/news/2025-10-01/season-2-round-1-fixtures-revealed/",
-        "date": "2025-10-01",
-        "image": "/assets/media/news/season2fixtures.avif",
-        "alt": "Matches Season 2 - Round 1",
-        "description": "The first round of Season 2 fixtures has been revealed! Find out who will be facing each other here!",
-        "tags": [
-            "Season 2"
-        ]
-    },
-    {
-        "title": "The Structure for Season 2",
-        "link": "/news/2025-09-29/the-structure-for-season-2/",
-        "date": "2025-09-29",
-        "image": "/assets/media/news/season2structure.avif",
-        "alt": "How will Season 2 work?",
-        "description": "Season 2 of the UMKL will be using a Swiss Style system, here's how it will work!",
-        "tags": [
-            "Season 2"
-        ]
-    },
-    {
-        "title": "Cheep Cheep Updates",
-        "link": "/news/2025-07-17/cheep-cheep-updates/",
-        "date": "2025-07-17",
-        "image": "/assets/media/news/newcommands.avif",
-        "alt": "An image showing new commands that can be used with the Cheep Cheep app",
-        "description": "Some updates about the Cheep Cheep Discord app and upcoming test matches.",
-        "tags": [
-            "Discord",
-            "Test Matches"
-        ]
-    },
-    {
-        "title": "Upcoming summer test matches!",
-        "link": "/news/2025-06-13/upcoming-summer-test-matches/",
-        "date": "2025-06-13",
-        "image": "/assets/media/news/summertestmatches.avif",
-        "alt": "An image showing new commands that can be used with the Cheep Cheep app",
-        "description": "More test matches between teams are being planned as exams finish and summer approaches.",
-        "tags": [
-            "Test Matches"
-        ]
-    },
-    {
-        "title": "Test matches are being conducted!",
-        "link": "/news/2025-04-22/umkl-test-matches-are-being-conducted/",
-        "date": "2025-04-22",
-        "image": "/assets/media/news/testmatches.avif",
-        "alt": "An image depicting Cheep Cheep in the ocean",
-        "description": "Test matches are planned in the upcoming week, more will follow in the upcoming month...",
-        "tags": [
-            "Test Matches"
-        ]
-    },
-    {
-        "title": "Join the UMKL Discord server!",
-        "link": "/news/2025-04-19/umkl-discord/",
-        "date": "2025-04-19",
-        "image": "/assets/media/news/discordinspire.avif",
-        "alt": "A piece of Discord promotional artwork",
-        "description": "All matches are organised through our Discord server. Please join it to take part in a match!",
-        "tags": [
-            "Intro",
-            "Discord"
-        ]
-    },
-    {
-        "title": "Welcome to the UMKL!",
-        "link": "/news/2025-04-19/umkl-intro/",
-        "date": "2025-04-19",
-        "image": "/assets/media/brand/UMKL_banner.avif",
-        "alt": "An image showing the UMKL logo",
-        "description": "We are a Mario Kart 8 Deluxe championship featuring teams from universities across the UK!",
-        "tags": [
-            "Intro"
-        ]
-    }
+  },
+  {
+    "title": "New app, Lakitu, now available on the UMKL Discord Server",
+    "link": "/news/2026-07-08/lakitu-release/",
+    "date": "2026-07-08",
+    "image": "/news/2026-07-08/lakitu-release/lakitu_banner.avif",
+    "alt": "Lakitu app released on UMKL Discord server",
+    "description": "Lakitu is a new custom app for Discord that stores a user's time trial records across all games in the Mario Kart series.",
+    "tags": [
+      "Discord",
+      "Time Trials"
+    ]
+  },
+  {
+    "title": "Season 2 Round 4 Fixtures Revealed!",
+    "link": "/news/2026-03-31/season-2-round-4-fixtures-revealed/",
+    "date": "2026-03-31",
+    "image": "/news/2026-03-31/season-2-round-4-fixtures-revealed/round4fixtures.avif",
+    "alt": "Matches Season 2 - Round 4",
+    "description": "The matches for Round 4 of Season 2 have been revealed! Find out who will be facing each other here!",
+    "tags": [
+      "Season 2"
+    ]
+  },
+  {
+    "title": "Season 2 Round 3 Fixtures Revealed!",
+    "link": "/news/2026-01-01/season-2-round-3-fixtures-revealed/",
+    "date": "2026-01-01",
+    "image": "/news/2026-01-01/season-2-round-3-fixtures-revealed/round3fixtures.avif",
+    "alt": "Matches Season 2 - Round 3",
+    "description": "The matches for Round 3 of Season 2 have been revealed! Find out who will be facing each other here!",
+    "tags": [
+      "Season 2"
+    ]
+  },
+  {
+    "title": "Season 2 Round 2 Fixtures Revealed!",
+    "link": "/news/2025-11-06/season-2-round-2-fixtures-revealed/",
+    "date": "2025-11-06",
+    "image": "/news/2025-11-06/season-2-round-2-fixtures-revealed/round2fixtures.avif",
+    "alt": "Matches Season 2 - Round 2",
+    "description": "The second round of Season 2 fixtures has been revealed! Find out who will be facing each other here!",
+    "tags": [
+      "Season 2"
+    ]
+  },
+  {
+    "title": "Season 2 Round 1 Fixtures Revealed!",
+    "link": "/news/2025-10-01/season-2-round-1-fixtures-revealed/",
+    "date": "2025-10-01",
+    "image": "/news/2025-10-01/season-2-round-1-fixtures-revealed/round2fixtures.avif",
+    "alt": "Matches Season 2 - Round 1",
+    "description": "The first round of Season 2 fixtures has been revealed! Find out who will be facing each other here!",
+    "tags": [
+      "Season 2"
+    ]
+  },
+  {
+    "title": "The Structure for Season 2",
+    "link": "/news/2025-09-29/the-structure-for-season-2/",
+    "date": "2025-09-29",
+    "image": "/news/2025-09-29/the-structure-for-season-2/season2structureupdated.avif",
+    "alt": "How will Season 2 work?",
+    "description": "Season 2 of the UMKL will be using a Swiss Style system, here's how it will work!",
+    "tags": [
+      "Season 2"
+    ]
+  },
+  {
+    "title": "Cheep Cheep Updates",
+    "link": "/news/2025-07-17/cheep-cheep-updates/",
+    "date": "2025-07-17",
+    "image": "/news/2025-07-17/cheep-cheep-updates/newcommands.avif",
+    "alt": "An image showing new commands that can be used with the Cheep Cheep app",
+    "description": "Some updates about the Cheep Cheep Discord app and upcoming test matches.",
+    "tags": [
+      "Discord",
+      "Test Matches"
+    ]
+  },
+  {
+    "title": "Upcoming summer test matches!",
+    "link": "/news/2025-06-13/upcoming-summer-test-matches/",
+    "date": "2025-06-13",
+    "image": "/news/2025-06-13/upcoming-summer-test-matches/versus.avif",
+    "alt": "An image showing new commands that can be used with the Cheep Cheep app",
+    "description": "More test matches between teams are being planned as exams finish and summer approaches.",
+    "tags": [
+      "Test Matches"
+    ]
+  },
+  {
+    "title": "Test matches are being conducted!",
+    "link": "/news/2025-04-22/umkl-test-matches-are-being-conducted/",
+    "date": "2025-04-22",
+    "image": "/news/2025-04-22/umkl-test-matches-are-being-conducted/versus.avif",
+    "alt": "An image depicting Cheep Cheep in the ocean",
+    "description": "Test matches are planned in the upcoming week, more will follow in the upcoming month...",
+    "tags": [
+      "Test Matches"
+    ]
+  },
+  {
+    "title": "Join the UMKL Discord server!",
+    "link": "/news/2025-04-19/umkl-discord/",
+    "date": "2025-04-19",
+    "image": "/news/2025-04-19/umkl-discord/discordinspire.avif",
+    "alt": "A piece of Discord promotional artwork",
+    "description": "All matches are organised through our Discord server. Please join it to take part in a match!",
+    "tags": [
+      "Intro",
+      "Discord"
+    ]
+  },
+  {
+    "title": "Welcome to the UMKL!",
+    "link": "/news/2025-04-19/umkl-intro/",
+    "date": "2025-04-19",
+    "image": "/assets/media/brand/UMKL_banner.avif",
+    "alt": "An image showing the UMKL logo",
+    "description": "We are a Mario Kart 8 Deluxe championship featuring teams from universities across the UK!",
+    "tags": [
+      "Intro"
+    ]
+  }
 ]
