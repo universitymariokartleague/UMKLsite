@@ -178,6 +178,12 @@
     background: var(--translucent-color);
 }
 
+.btn-tool.active {
+    background: var(--translucent-color);
+    border: 1px solid var(--brand-primary);
+    color: var(--brand-primary);
+}
+
 .btn-icon-label {
     display: flex;
     flex-direction: column;
@@ -251,6 +257,13 @@
     position: relative;
     overflow: hidden;
     margin-bottom: 6px;
+    outline: 2px dashed transparent;
+    outline-offset: -2px;
+    transition: outline-color 0.15s;
+}
+
+.main-image-placeholder.drag-over {
+    outline-color: var(--brand-primary);
 }
 
 .main-image-placeholder:has(.main-image-preview.hidden) {
@@ -281,6 +294,12 @@
 .body-editor {
     min-height: 300px;
     word-break: break-word;
+    outline-offset: 4px;
+}
+
+.body-editor.drag-over {
+    outline: 2px dashed var(--brand-primary);
+    border-radius: 4px;
 }
 
 .body-editor h3 {
@@ -300,6 +319,10 @@
     font-size: 1.1em;
     font-style: italic;
     opacity: 0.85;
+}
+
+.body-editor pre.codeBox {
+    margin: 0 0 24px;
 }
 
 .article-image-container {

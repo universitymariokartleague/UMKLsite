@@ -31,6 +31,7 @@
     <script type="module" src="/assets/scripts/pages/articlebuilder.js" defer></script>
     <script type="module" src="/assets/scripts/base/settings.js" defer></script>
     <script defer src="/assets/scripts/base/imagefade.js" type="module"></script>
+    <script type="module" src="/assets/scripts/pages/codehighlight.js" defer></script>
 </head>
 
 <body>
@@ -59,6 +60,7 @@
                     <option value="h3">Heading</option>
                     <option value="p" selected>Paragraph</option>
                     <option value="blockquote">Quote</option>
+                    <option value="pre">Code Block</option>
                 </select>
                 <button id="boldBtn" class="btn-tool">
                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
@@ -73,6 +75,13 @@
                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M13.213 9.787a3.391 3.391 0 0 0-4.795 0l-3.425 3.426a3.39 3.39 0 0 0 4.795 4.794l.321-.304m-.321-4.49a3.39 3.39 0 0 0 4.795 0l3.424-3.426a3.39 3.39 0 0 0-4.794-4.795l-1.028.961" />
+                    </svg>
+                </button>
+                <button id="codeBtn" class="btn-tool" title="Inline code">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m8 8-4 4 4 4m8-8 4 4-4 4m-2-10-4 12" />
                     </svg>
                 </button>
             </div>

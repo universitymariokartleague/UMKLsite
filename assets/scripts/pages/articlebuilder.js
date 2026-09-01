@@ -15,6 +15,7 @@ const bodyFileInput = document.getElementById('bodyFileInput');
 const blockTypeSelect = document.getElementById('blockTypeSelect');
 const boldBtn = document.getElementById('boldBtn');
 const linkBtn = document.getElementById('linkBtn');
+const codeBtn = document.getElementById('codeBtn');
 const insertImageBtn = document.getElementById('insertImageBtn');
 const insertVideoBtn = document.getElementById('insertVideoBtn');
 const clearBtn = document.getElementById('clearBtn');
@@ -119,6 +120,7 @@ const outputDocument = ({ title, subtitle, mainImageUrl, mainCaption, bodyConten
     <script src="/assets/scripts/base/theme.js"></script>
     <script type="module" src="/assets/scripts/base/settings.js" defer></script>
     <script defer src="/assets/scripts/base/imagefade.js" type="module"></script>
+    <script type="module" src="/assets/scripts/pages/codehighlight.js" defer></script>
 </head>
 
 <body id="top">
@@ -271,8 +273,26 @@ function saveDraft() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(draftData));
         autoSaveEnabled = true;
     } catch (e) {
-        autoSaveEnabled = false;
         console.error('Failed to save draft, likely over the local storage limit:', e);
+
+        // Save a text-only draft to avoid silently saving nothing at all
+        let textOnlySaved = false;
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...draftData, mainImageUrl: '', isMainImageVisible: false }));
+            textOnlySaved = true;
+        } catch (e2) {
+            console.error('Failed to save even a text-only draft:', e2);
+        }
+
+        autoSaveEnabled = false;
+        if (!hasWarnedAboutStorage) {
+            hasWarnedAboutStorage = true;
+            alert(
+                textOnlySaved
+                    ? "Your draft's storage is full, most likely because of an uploaded image. Your text is still being saved, but the image will be lost on reload - please download your draft now to keep it safe."
+                    : "Your draft's storage is completely full and nothing more can be autosaved, including your text. Please download your draft now to avoid losing your work."
+            );
+        }
     }
     updateStorageUsage();
 }
@@ -288,14 +308,14 @@ function loadDraft() {
         if (draft.title) articleTitle.innerHTML = draft.title;
         if (draft.subtitle) articleSubtitle.innerHTML = draft.subtitle;
         if (draft.mainCaption) mainCaption.innerHTML = draft.mainCaption;
-
-        if (draft.mainImageUrl && draft.isMainImageVisible) {
-            setMainImage(draft.mainImageUrl);
-        }
-
         if (draft.bodyHtml) bodyEditor.innerHTML = draft.bodyHtml;
         if (draft.author !== undefined) metaAuthor.value = draft.author;
         if (draft.tags !== undefined) metaTags.value = draft.tags;
+
+        // Restore the main image if it was saved
+        if (draft.mainImageUrl && draft.isMainImageVisible) {
+            setMainImage(draft.mainImageUrl);
+        }
 
     } catch (e) {
         console.error("Failed to restore article draft:", e);
@@ -313,6 +333,7 @@ let activeImageCallback = null;
 let activeFileInput = null;
 let activeUrlCallback = null;
 let autoSaveEnabled = true;
+let hasWarnedAboutStorage = false;
 
 // Date field: defaults to now, and auto-corrects to this format whenever it's edited
 function formatDate(date) {
@@ -503,6 +524,7 @@ async function convertImageToAvif(file, maxDimension = MAX_IMAGE_DIMENSION) {
 
     if (conversionStatusEl) conversionStatusEl.classList.remove('hidden');
 
+    let canvas;
     try {
         const objectUrl = URL.createObjectURL(file);
         const img = await new Promise((resolve, reject) => {
@@ -517,26 +539,36 @@ async function convertImageToAvif(file, maxDimension = MAX_IMAGE_DIMENSION) {
         const width = Math.round(img.naturalWidth * scale);
         const height = Math.round(img.naturalHeight * scale);
 
-        const canvas = document.createElement('canvas');
+        canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, width, height);
         URL.revokeObjectURL(objectUrl);
+    } catch (e) {
+        // Couldn't load/decode the image into a canvas, fall back to the original file untouched.
+        console.error('Image decode failed, using the original file instead:', e);
+        if (conversionStatusEl) conversionStatusEl.classList.add('hidden');
+        return readFileAsDataUrl(file);
+    }
 
-        const imageData = ctx.getImageData(0, 0, width, height);
+    try {
+        const ctx = canvas.getContext('2d');
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const encode = await loadAvifEncoder();
 
         const t0 = performance.now();
         const avifBuffer = await encode(imageData, { speed: 8, quality: 80 });
         const encodeMs = Math.round(performance.now() - t0);
 
-        debugLog(`AVIF conversion: ${formatBytes(file.size)} -> ${formatBytes(avifBuffer.byteLength)} in ${encodeMs}ms (${width}x${height})`);
+        debugLog(`AVIF conversion: ${formatBytes(file.size)} -> ${formatBytes(avifBuffer.byteLength)} in ${encodeMs}ms (${canvas.width}x${canvas.height})`);
 
         return await readFileAsDataUrl(new Blob([avifBuffer], { type: 'image/avif' }));
     } catch (e) {
-        console.error('AVIF conversion failed, using the original file instead:', e);
-        return readFileAsDataUrl(file);
+        // AVIF encoding failed, fall back to a resized JPEG
+        console.error('AVIF conversion failed, using a resized JPEG instead:', e);
+        const jpegBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.85));
+        return jpegBlob ? readFileAsDataUrl(jpegBlob) : readFileAsDataUrl(file);
     } finally {
         if (conversionStatusEl) conversionStatusEl.classList.add('hidden');
     }
@@ -560,6 +592,26 @@ mainImageContainer.addEventListener('click', () => {
 
 mainFileInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
+    if (file) {
+        convertImageToAvif(file, MAX_MAIN_IMAGE_DIMENSION).then(setMainImage);
+    }
+});
+
+mainImageContainer.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+    mainImageContainer.classList.add('drag-over');
+});
+
+mainImageContainer.addEventListener('dragleave', (e) => {
+    if (e.target === mainImageContainer) mainImageContainer.classList.remove('drag-over');
+});
+
+mainImageContainer.addEventListener('drop', (e) => {
+    e.preventDefault();
+    mainImageContainer.classList.remove('drag-over');
+
+    const file = Array.from(e.dataTransfer?.files || []).find(f => f.type.startsWith('image/'));
     if (file) {
         convertImageToAvif(file, MAX_MAIN_IMAGE_DIMENSION).then(setMainImage);
     }
@@ -698,25 +750,34 @@ function updateToolbarState() {
         let parentBlock = sel.anchorNode;
         if (parentBlock.nodeType === 3) parentBlock = parentBlock.parentNode;
 
-        while (parentBlock && parentBlock !== bodyEditor && !['P', 'H3', 'BLOCKQUOTE', 'DIV'].includes(parentBlock.tagName)) {
+        while (parentBlock && parentBlock !== bodyEditor && !['P', 'H3', 'BLOCKQUOTE', 'PRE', 'DIV'].includes(parentBlock.tagName)) {
             parentBlock = parentBlock.parentNode;
         }
 
         if (parentBlock && parentBlock !== bodyEditor) {
             const tag = parentBlock.tagName.toLowerCase();
-            if (['p', 'h3', 'blockquote', 'div'].includes(tag)) {
+            if (['p', 'h3', 'blockquote', 'pre', 'div'].includes(tag)) {
                 blockTypeSelect.value = tag === 'div' ? 'p' : tag;
             }
         }
     }
 
     // Disable toolbar controls when focused outside bodyEditor
-    const controls = [blockTypeSelect, boldBtn, linkBtn, insertImageBtn, insertVideoBtn];
+    const controls = [blockTypeSelect, boldBtn, linkBtn, codeBtn, insertImageBtn, insertVideoBtn];
     controls.forEach(ctrl => {
         ctrl.disabled = !isBodyActive;
         ctrl.style.opacity = isBodyActive ? '1' : '0.4';
         ctrl.style.cursor = isBodyActive ? 'pointer' : 'not-allowed';
     });
+
+    // Highlight bold/code buttons when the caret or selection sits inside that formatting
+    const isBold = isBodyActive && document.queryCommandState('bold');
+    boldBtn.classList.toggle('active', isBold);
+
+    let inlineNode = isBodyActive && sel && sel.rangeCount > 0 ? sel.anchorNode : null;
+    if (inlineNode && inlineNode.nodeType === 3) inlineNode = inlineNode.parentNode;
+    const isCode = !!(inlineNode && inlineNode.closest && inlineNode.closest('code'));
+    codeBtn.classList.toggle('active', isCode);
 }
 
 document.addEventListener('selectionchange', updateToolbarState);
@@ -754,6 +815,40 @@ linkBtn.addEventListener('click', () => {
     });
 });
 
+codeBtn.addEventListener('click', () => {
+    if (codeBtn.disabled) return;
+
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return;
+    const range = sel.getRangeAt(0);
+
+    let node = sel.anchorNode;
+    if (node && node.nodeType === 3) node = node.parentNode;
+    const existingCode = node ? node.closest('code') : null;
+
+    if (existingCode && bodyEditor.contains(existingCode)) {
+        const parent = existingCode.parentNode;
+        while (existingCode.firstChild) parent.insertBefore(existingCode.firstChild, existingCode);
+        parent.removeChild(existingCode);
+    } else {
+        if (range.collapsed) return;
+        const code = document.createElement('code');
+        code.setAttribute('translate', 'no');
+        try {
+            range.surroundContents(code);
+        } catch (e) {
+            const content = range.extractContents();
+            code.appendChild(content);
+            range.insertNode(code);
+        }
+        const newRange = document.createRange();
+        newRange.selectNodeContents(code);
+        sel.removeAllRanges();
+        sel.addRange(newRange);
+    }
+    saveDraft();
+});
+
 blockTypeSelect.addEventListener('change', (e) => {
     if (!blockTypeSelect.disabled) {
         const tag = e.target.value;
@@ -761,6 +856,17 @@ blockTypeSelect.addEventListener('change', (e) => {
             document.execCommand('defaultParagraphSeparator', false, 'p');
         }
         document.execCommand('formatBlock', false, `<${tag}>`);
+
+        if (tag === 'pre') {
+            const sel = window.getSelection();
+            let node = sel.anchorNode;
+            if (node && node.nodeType === 3) node = node.parentNode;
+            const pre = node ? node.closest('pre') : null;
+            if (pre && bodyEditor.contains(pre)) {
+                pre.classList.add('codeBox');
+                pre.setAttribute('translate', 'no');
+            }
+        }
     }
 });
 
@@ -827,6 +933,55 @@ bodyFileInput.addEventListener('change', (e) => {
     if (file) {
         convertImageToAvif(file).then(insertImageToBody);
     }
+});
+
+// Drag-and-drop image insertion
+function getDropRange(x, y) {
+    if (document.caretRangeFromPoint) {
+        return document.caretRangeFromPoint(x, y);
+    }
+    if (document.caretPositionFromPoint) {
+        const pos = document.caretPositionFromPoint(x, y);
+        if (pos) {
+            const range = document.createRange();
+            range.setStart(pos.offsetNode, pos.offset);
+            range.collapse(true);
+            return range;
+        }
+    }
+    return null;
+}
+
+bodyEditor.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+    bodyEditor.classList.add('drag-over');
+});
+
+bodyEditor.addEventListener('dragleave', (e) => {
+    if (e.target === bodyEditor) bodyEditor.classList.remove('drag-over');
+});
+
+bodyEditor.addEventListener('drop', (e) => {
+    bodyEditor.classList.remove('drag-over');
+
+    const files = Array.from(e.dataTransfer?.files || []).filter(f => f.type.startsWith('image/'));
+    if (files.length === 0) return; // not a file drop - let the browser handle it as normal
+
+    e.preventDefault();
+
+    const range = getDropRange(e.clientX, e.clientY);
+    if (range) {
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+    }
+
+    // Insert sequentially: insertBlockToBody relies on the current selection, so each
+    // image needs to finish inserting (and settle the selection after it) before the next
+    files.reduce((chain, file) => {
+        return chain.then(() => convertImageToAvif(file)).then(insertImageToBody);
+    }, Promise.resolve());
 });
 
 // Video (YouTube embeds)
