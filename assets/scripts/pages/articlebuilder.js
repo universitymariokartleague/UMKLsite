@@ -136,7 +136,7 @@ const outputDocument = ({ title, subtitle, mainImageUrl, mainCaption, bodyConten
                         d="M22 13H4.94l5.18 5.29-1.38 1.42-6.17-6.3a2 2 0 0 1 0-2.82l6.17-6.3 1.38 1.42L4.94 11H22z">
                     </path>
                 </svg>
-                All news</a>
+                Back</a>
         </div>
 
         <div class="article-wrapper">

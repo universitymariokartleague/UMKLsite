@@ -86,15 +86,35 @@
 .season-stats-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-
+    gap: 0;
 }
 
 .stat-item {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    padding: 5px 0;
+    padding: 12px 16px;
+}
+
+.stat-item:nth-child(odd) {
+    padding-left: 0;
+    border-right: 1px solid var(--translucent-color);
+}
+
+.stat-item:nth-child(even) {
+    padding-right: 0;
+}
+
+.stat-item:nth-child(-n+2) {
+    padding-top: 0;
+}
+
+.stat-item:not(:nth-last-child(-n+2)) {
+    border-bottom: 1px solid var(--translucent-color);
+}
+
+.stat-item:nth-last-child(-n+2) {
+    padding-bottom: 0;
 }
 
 
@@ -329,5 +349,13 @@
 
     .match-history-table .column-points {
         width: auto;
+    }
+
+    .section {
+        margin-top: 25px;
+    }
+
+    .stats-grid {
+        margin-top: 10px;
     }
 }

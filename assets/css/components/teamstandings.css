@@ -333,8 +333,6 @@ picture img {
         -webkit-mask-size: 1200px;
         mask-size: 1200px;
     }
-
-
 }
 
 @media screen and (max-width: 900px) {
