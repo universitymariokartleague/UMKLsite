@@ -1,5 +1,5 @@
 .section {
-    margin-bottom: 75px;
+    margin-bottom: 50px;
 }
 
 .news-grid-container {
@@ -33,8 +33,8 @@ img {
 
 .hero-card {
     position: relative;
-    height: 100%;
-    min-height: 400px;
+    aspect-ratio: 16 / 10;
+    align-self: start;
     cursor: pointer;
     color: var(--brand-light);
     border-radius: var(--border-radius);
@@ -53,11 +53,11 @@ img {
 .hero-content {
     position: absolute;
     z-index: 2;
-    left: -1px;
-    right: -1px;
-    bottom: -1px;
+    inset: -1px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     padding: 24px;
-    padding-top: 200px;
     background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.9) 100%);
     box-sizing: border-box;
     overflow: hidden;
@@ -87,6 +87,11 @@ img {
     line-height: 1.25;
     margin: 0;
     font-weight: 700;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .hero-card p {
@@ -322,6 +327,7 @@ article:hover h3 {
 
     .hero-card {
         grid-column: span 2;
+        aspect-ratio: 1;
     }
 
     .right-column {
@@ -331,10 +337,34 @@ article:hover h3 {
     .video-card {
         flex: 0 0 calc(33.333% - 11px);
     }
+
+    .hero-card h2 {
+        font-size: 1.1rem;
+    }
+
+    .hero-card p {
+        font-size: 0.8rem;
+    }
+
+    .small-card p {
+        font-size: 0.65rem;
+    }
+
+    .small-card-meta {
+        margin-top: 2px;
+    }
+
+    .section {
+        margin-bottom: 15px;
+    }
 }
 
 @media (max-width: 650px) {
     .video-card {
         flex: 0 0 calc(60% - 10px);
+    }
+
+    .right-column .small-card:nth-child(n+3) {
+        display: none;
     }
 }

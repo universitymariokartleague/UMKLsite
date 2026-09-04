@@ -341,6 +341,10 @@ picture img {
     .team-standings-emblem-wrapper {
         display: none;
     }
+
+    .standings-row td {
+        padding: 8px;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -359,7 +363,6 @@ picture img {
         width: 65px;
         height: 65px;
     }
-
 
     .teamStandingPattern {
         -webkit-mask-size: 500px;

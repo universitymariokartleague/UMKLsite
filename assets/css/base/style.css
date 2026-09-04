@@ -3,9 +3,9 @@
 :root {
     --content-max-width: 1400px;
     --article-max-width: 1400px;
-    --navbar-height: 80px;
-    --border-radius: 10px;
-    --border-radius-pill: 99px;
+    --navbar-height: 70px;
+    --border-radius: 15px;
+    --border-radius-pill: 100px;
 
     --brand-primary: #bc0839;
     --brand-secondary: #ff6874;
@@ -174,7 +174,7 @@ h4 {
 
 h1 {
     font-size: 4.5em;
-    font-weight: 1000;
+    font-weight: 900;
     text-transform: uppercase;
 }
 
@@ -183,16 +183,20 @@ h2 {
 }
 
 h3 {
-    font-size: 1.75em;
+    font-size: 1.5em;
 }
 
 @media screen and (max-width: 900px) {
     h1 {
-        font-size: 2.5em;
+        font-size: 2em;
     }
 
     h2 {
         font-size: 1.5em;
+    }
+
+    h3 {
+        font-size: 1.25em;
     }
 }
 
@@ -202,7 +206,7 @@ li {
 
 .p-below-title {
     margin: 0;
-    margin-bottom: 50px;
+    margin-bottom: 25px;
 }
 
 .p-no-spacing {

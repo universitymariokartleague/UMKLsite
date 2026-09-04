@@ -36,6 +36,7 @@
 
     <script type="module" src="/assets/scripts/base/settings.js" defer></script>
     <script defer src="/assets/scripts/base/imagefade.js" type="module"></script>
+    <script type="module" src="/assets/scripts/base/smartback.js" defer></script>
     <script type="module" src="/assets/scripts/pages/teamboxgenerate.js" defer></script>
     <script type="module" src="/assets/scripts/pages/copystandingsimage.js" defer></script>
 </head>
@@ -44,6 +45,17 @@
     <umkl-navbar></umkl-navbar>
 
     <main>
+        <div class="bubble-link-wrapper">
+            <a href="/" class="bubble-link no-color-link" data-smart-back>
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24"
+                    role="presentation">
+                    <path fill="currentColor"
+                        d="M22 13H4.94l5.18 5.29-1.38 1.42-6.17-6.3a2 2 0 0 1 0-2.82l6.17-6.3 1.38 1.42L4.94 11H22z">
+                    </path>
+                </svg>
+                Home</a>
+        </div>
+
         <noscript>
             <blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as is it used on this
                 page<br></blockquote>
