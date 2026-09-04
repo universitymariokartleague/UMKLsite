@@ -50,7 +50,7 @@ async function getLiveResults(match_id) {
 }
 
 function getCurrentMatch(team_name) {
-        return fetch(`https://api.umkl.co.uk/match/current/${team_name}`, {
+    return fetch(`https://api.umkl.co.uk/match/current/${team_name}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -167,6 +167,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
         const currentMatch = await getCurrentMatch(team_name)
 
+        if (!currentMatch || !currentMatch['teamsinvolved']) {
+            debugLog("No live match found");
+            return;
+        }
 
         const match_id = Number(currentMatch['match_id'])
         const team_info = currentMatch['teamsinvolved']
@@ -204,14 +208,19 @@ document.addEventListener("DOMContentLoaded", async () => {
                 window.retryCount++;
             }
             debugLog(`Refreshing live data...`);
-            
-                const currentMatch = await getCurrentMatch(team_name)
 
-                const match_id = Number(currentMatch['match_id'])
-                const team_info = currentMatch['teamsinvolved']
+            const currentMatch = await getCurrentMatch(team_name)
 
-                const team_ids = team_info.map(team => Object.keys(team)[0]);
-                const team_names = team_info.map(team => Object.values(team)[0]);
+            if (!currentMatch || !currentMatch['teamsinvolved']) {
+                debugLog("No live match found");
+                return;
+            }
+
+            const match_id = Number(currentMatch['match_id'])
+            const team_info = currentMatch['teamsinvolved']
+
+            const team_ids = team_info.map(team => Object.keys(team)[0]);
+            const team_names = team_info.map(team => Object.values(team)[0]);
 
 
             if (!window.lastMatchUpdate || Date.now() - window.lastMatchUpdate >= 60000) {
