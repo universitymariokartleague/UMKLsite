@@ -15,7 +15,10 @@ const secondTeamLogo = document.getElementById("secondteamlogo");
 const errorMessage = document.getElementById("errormessage");
 
 const urlParams = new URLSearchParams(window.location.search);
-const swapped = urlParams.get('order') === 'second';
+
+let swapped;
+
+const team_name = urlParams.get('team');
 
 const MATCH_LENGTH_MINS = 90;
 
@@ -28,13 +31,13 @@ let refreshTimer = null;
 
 let startTime;
 
-async function getLiveResults() {
-    return fetch('https://api.umkl.co.uk/live', {
-        method: 'POST',
+async function getLiveResults(match_id) {
+    console.log(match_id)
+    return fetch(`https://api.umkl.co.uk/live/${match_id}`, {
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-        },
-        body: "{}"
+        }
     })
         .then(response => {
             if (!response.ok) {
@@ -46,61 +49,36 @@ async function getLiveResults() {
         });
 }
 
-function getLiveMatchTeams() {
+function getCurrentMatch(team_name) {
+        return fetch(`https://api.umkl.co.uk/match/current/${team_name}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
+            return response.json();
+        });
+}
+
+function getLiveMatchTeams(team_names) {
     if (receivedValidLogos) return;
 
-    const getUKDate = (offsetDays = 0) => {
-        const now = new Date();
-        const formatter = new Intl.DateTimeFormat('en-GB', {
-            timeZone: 'Europe/London',
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-        });
+    receivedValidLogos = Boolean(team_names && team_names[0] && team_names[1]);
 
-        const parts = formatter.formatToParts(now);
-        let year = parseInt(parts.find(p => p.type === 'year').value);
-        let month = parseInt(parts.find(p => p.type === 'month').value);
-        let day = parseInt(parts.find(p => p.type === 'day').value);
+    swapped = team_names[1] == team_name
 
-        day += offsetDays;
-        return new Date(Date.UTC(year, month - 1, day));
-    };
+    console.log(team_names)
 
-    const todayUK = getUKDate(0);
-    const tomorrowUK = getUKDate(1);
-
-    const pad = n => String(n).padStart(2, '0');
-    const formatDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-
-    const todayStr = formatDate(todayUK);
-    const tomorrowStr = formatDate(tomorrowUK);
-
-    const matches = [
-        ...(matchData[todayStr] || []),
-        ...(matchData[tomorrowStr] || [])
-    ];
-
-    const now = new Date();
-
-    const liveMatches = matches.filter(entry => {
-        if (!entry.time || entry.endTime) return false;
-
-        const [hours, minutes] = entry.time.split(':').map(Number);
-        const matchDateStr = (matchData[todayStr]?.includes(entry) ? todayStr : tomorrowStr);
-        const matchStart = new Date(matchDateStr);
-        matchStart.setHours(hours, minutes, 0, 0);
-
-        const matchEnd = new Date(matchStart.getTime() + MATCH_LENGTH_MINS * 60 * 1000);
-        return now >= matchStart && now <= matchEnd;
-    });
-
-    const teamNames = liveMatches.map(entry => entry.teamsInvolved)[0];
-    receivedValidLogos = Boolean(teamNames && teamNames[0] && teamNames[1]);
-    if (teamNames) {
+    if (team_names) {
         const [logoA, logoB] = swapped
-            ? [teamNames[1], teamNames[0]]
-            : [teamNames[0], teamNames[1]];
+            ? [team_names[1], team_names[0]]
+            : [team_names[0], team_names[1]];
         firstTeamLogo.src = `https://api.umkl.co.uk/teamemblems/${logoA.toUpperCase()}`
         secondTeamLogo.src = `https://api.umkl.co.uk/teamemblems/${logoB.toUpperCase()}`
     }
@@ -130,7 +108,7 @@ function animateNumberChange(element, oldValue, newValue, duration = 500, grow =
     requestAnimationFrame(update);
 }
 
-function setScores() {
+function setScores(team_ids) {
     window.retryCount = 0;
 
     function calculatePoints(positions) {
@@ -143,11 +121,11 @@ function setScores() {
     }
 
     let teamAPoints = raceresults.reduce((total, race) => {
-        return total + calculatePoints(race["1"] || []);
+        return total + calculatePoints(race[`${team_ids[0]}`] || []);
     }, 0);
 
     let teamBPoints = raceresults.reduce((total, race) => {
-        return total + calculatePoints(race["2"] || []);
+        return total + calculatePoints(race[`${team_ids[1]}`] || []);
     }, 0);
 
     let scores = [teamAPoints, teamBPoints]
@@ -187,10 +165,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     debugLog(`Getting live match data...`);
 
     try {
+        const currentMatch = await getCurrentMatch(team_name)
+
+
+        const match_id = Number(currentMatch['match_id'])
+        const team_info = currentMatch['teamsinvolved']
+
+        const team_ids = team_info.map(team => Object.keys(team)[0]);
+        const team_names = team_info.map(team => Object.values(team)[0]);
+
+        swapped = team_names[1] == team_name
+
         matchData = await getMatchData();
-        raceresults = await getLiveResults();
-        setScores();
-        getLiveMatchTeams()
+        raceresults = await getLiveResults(Number(match_id));
+
+        setScores(team_ids);
+        getLiveMatchTeams(team_names)
         errorMessage.innerHTML = "";
         window.lastMatchUpdate = Date.now();
     } catch (error) {
@@ -214,15 +204,25 @@ document.addEventListener("DOMContentLoaded", async () => {
                 window.retryCount++;
             }
             debugLog(`Refreshing live data...`);
+            
+                const currentMatch = await getCurrentMatch(team_name)
+
+                const match_id = Number(currentMatch['match_id'])
+                const team_info = currentMatch['teamsinvolved']
+
+                const team_ids = team_info.map(team => Object.keys(team)[0]);
+                const team_names = team_info.map(team => Object.values(team)[0]);
+
 
             if (!window.lastMatchUpdate || Date.now() - window.lastMatchUpdate >= 60000) {
+
                 matchData = await getMatchData();
-                getLiveMatchTeams();
+                getLiveMatchTeams(team_names);
                 window.lastMatchUpdate = Date.now();
             }
 
-            raceresults = await getLiveResults();
-            setScores();
+            raceresults = await getLiveResults(Number(match_id));
+            setScores(team_ids);
             errorMessage.innerHTML = "";
         } catch (error) {
             errorMessage.innerHTML = `Retrying: attempt ${window.retryCount}`;
