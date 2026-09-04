@@ -116,7 +116,7 @@ function highlightMatch(text, term) {
 }
 
 function buildVideoCard(item, locale, searchTerm) {
-    const thumbnailUrl = `https://wsrv.nl/?height=300&q=50&url=${item.thumbnail}`;
+    const thumbnailUrl = `https://wsrv.nl/?height=300&q=50&output=webp&url=${item.thumbnail}`;
     const title = item.title || item.match?.title || "UMKL Video";
     const date = item.published ? new Date(item.published) : null;
     const dateStr = date ? date.toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" }) : "";

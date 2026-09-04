@@ -70,7 +70,7 @@ async function loadVideoCarousel() {
 
             card.innerHTML = `
                 <div class="video-thumb-wrapper">
-                    <img src="https://wsrv.nl/?height=300&q=50&url=${thumbnailUrl}" alt="${title}" loading="lazy" />
+                    <img src="https://wsrv.nl/?height=300&q=50&output=webp&url=${thumbnailUrl}" alt="${title}" loading="lazy" />
                     <div class="play-icon-overlay">
                         <i class="fa-solid fa-play"></i>
                     </div>
