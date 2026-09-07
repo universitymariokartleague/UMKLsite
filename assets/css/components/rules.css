@@ -12,9 +12,13 @@
     font-weight: bold;
 }
 
-.tag-clan-table {
-    border: 1px solid #ccccccaa;
+.tag-clan-table,
+.schema-table {
+    border: 1px solid var(--translucent-color);
     border-radius: var(--border-radius);
+}
+
+.tag-clan-table {
     width: fit-content;
     max-width: 100%;
     overflow-x: auto;
@@ -26,8 +30,8 @@
 
 .tag-clan-table th,
 .tag-clan-table td {
-    border-bottom: 1px solid #ccccccaa;
-    border-right: 1px solid #ccccccaa;
+    border-bottom: 1px solid var(--translucent-color);
+    border-right: 1px solid var(--translucent-color);
     padding: 8px;
     text-align: left;
 }
@@ -50,7 +54,7 @@
 }
 
 .file-tree {
-    border: 1px solid #ccccccaa;
+    border: 1px solid var(--translucent-color);
     border-radius: var(--border-radius);
     overflow: hidden;
     margin: 10px 0;
@@ -67,7 +71,7 @@
 }
 
 .file-tree-row:not(:last-child) {
-    border-bottom: 1px solid #ccccccaa;
+    border-bottom: 1px solid var(--translucent-color);
 }
 
 .file-tree-row[data-depth="1"] {
@@ -81,7 +85,7 @@
     left: 23px;
     top: 0;
     bottom: 0;
-    border-left: 1px dashed #ccccccaa;
+    border-left: 1px dashed var(--translucent-color);
 }
 
 .file-tree-name {
@@ -133,7 +137,7 @@
 
 .import-tree {
     margin: 14px 0;
-    border: 1px solid #ccccccaa;
+    border: 1px solid var(--translucent-color);
     border-radius: var(--border-radius);
     padding: 16px 16px 16px 10px;
 }
@@ -153,7 +157,7 @@
     top: 0;
     left: 0;
     height: 100%;
-    border-left: 1px dashed #ccccccaa;
+    border-left: 1px dashed var(--translucent-color);
 }
 
 .import-tree li:last-child::before {
@@ -166,7 +170,7 @@
     top: 21px;
     left: 0;
     width: 16px;
-    border-top: 1px dashed #ccccccaa;
+    border-top: 1px dashed var(--translucent-color);
 }
 
 .import-tree > li::before,
@@ -224,8 +228,6 @@ h4[id^="route-"] {
 }
 
 .schema-table {
-    border: 1px solid #ccccccaa;
-    border-radius: var(--border-radius);
     overflow: hidden;
     background-color: var(--box-area-bg-color);
 }
@@ -237,7 +239,7 @@ h4[id^="route-"] {
     font-size: 14px;
     color: var(--link-color);
     padding: 8px 12px;
-    border-bottom: 1px solid #ccccccaa;
+    border-bottom: 1px solid var(--translucent-color);
 }
 
 .schema-column {
@@ -252,7 +254,7 @@ h4[id^="route-"] {
 }
 
 .schema-column:not(:last-child) {
-    border-bottom: 1px dashed #ccccccaa;
+    border-bottom: 1px dashed var(--translucent-color);
 }
 
 .schema-fk {
@@ -342,7 +344,7 @@ h4[id^="route-"] {
     left: 11px;
     top: 24px;
     bottom: 0;
-    border-left: 2px dashed #ccccccaa;
+    border-left: 2px dashed var(--translucent-color);
 }
 
 .flow-step-body {
@@ -373,7 +375,7 @@ h4[id^="route-"] {
 }
 
 .pipeline-step {
-    border: 1px solid #ccccccaa;
+    border: 1px solid var(--translucent-color);
     border-radius: calc(var(--border-radius) * 0.8);
     padding: 6px 12px;
     font-family: var(--mono-font);

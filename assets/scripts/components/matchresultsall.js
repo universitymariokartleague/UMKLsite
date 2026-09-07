@@ -79,15 +79,17 @@ function generateAllMatches(selectedSeason) {
 
         const emblemA = getEmblem(teamA);
         const emblemB = getEmblem(teamB);
-        const emblemWinner = getEmblem(winningTeam);
         const matchCalculatorLink = generate6v6ScoreCalculatorLink(match);
         const hrefAttr = matchCalculatorLink ? ` data-href="${matchCalculatorLink}"` : '';
+
+        const teamAIsWinner = winningTeam === teamA;
+        const teamBIsWinner = winningTeam === teamB;
 
         return `
             <tr class="standings-row"${hrefAttr}>
                 <td class="column-team fixed-width-column">
                     <div class="match-team team-a">
-                        <span class="team-name">${teamA}</span>
+                        <span class="team-name${teamAIsWinner ? ' winner' : ''}">${teamA}</span>
                         <picture>
                             <source srcset="${emblemA.avif}" type="image/avif">
                             <img loading="lazy" src="${emblemA.png}" class="team-logo" alt="${teamA} logo">
@@ -101,43 +103,36 @@ function generateAllMatches(selectedSeason) {
                             <source srcset="${emblemB.avif}" type="image/avif">
                             <img loading="lazy" src="${emblemB.png}" class="team-logo" alt="${teamB} logo">
                         </picture>
-                        <span class="team-name">${teamB}</span>
+                        <div class="match-team-info">
+                            <span class="team-name${teamBIsWinner ? ' winner' : ''}">${teamB}</span>
+                            <span class="team-date">${formatDate(match.matchDate, locale)}</span>
+                        </div>
                     </div>
                 </td>
 
-                <td class="column-date">${formatDate(match.matchDate, locale)}</td>
                 <td class="column-score">
                     <strong>${scoreDisplay}</strong>
-                </td>
-                <td class="column-winner">
-                    <div class="match-team">
-                        <picture>
-                            <source srcset="${emblemWinner.avif}" type="image/avif">
-                            <img loading="lazy" src="${emblemWinner.png}" class="team-logo" alt="${teamB} logo">
-                        </picture>
-                        <span class="team-name">${winningTeam}</span>
-                    </div>
                 </td>
             </tr>
         `;
     }).join("");
 
     allMatchesBox.innerHTML = `
-        <table class="standings-table">
-            <thead>
-                <tr>
-                    <th class="column-team"></th>
-                    <th class="column-vs">Match</th>
-                    <th class="column-team"></th>
-                    <th class="column-date">Date</th>
-                    <th class="column-score">Score</th>
-                    <th class="column-winner">Winner</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${rowsHTML}
-            </tbody>
-        </table>
+        <div class="table-scroll-wrapper">
+            <table class="standings-table">
+                <thead>
+                    <tr>
+                        <th class="column-team"></th>
+                        <th class="column-vs"><span class="th-full">Match</span><span class="th-short">VS</span></th>
+                        <th class="column-team"></th>
+                        <th class="column-score">Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rowsHTML}
+                </tbody>
+            </table>
+        </div>
     `;
 }
 

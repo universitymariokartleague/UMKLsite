@@ -27,6 +27,7 @@
 .column-vs {
     text-align: center;
     width: 0;
+    white-space: nowrap;
 }
 
 .column-score {
@@ -35,4 +36,51 @@
 
 .column-result {
     text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+    #JSAllMatches .standings-table {
+        width: auto;
+    }
+
+    #JSAllMatches .standings-table th,
+    #JSAllMatches .standings-table td {
+        padding: 10px 6px;
+        font-size: 0.85rem;
+    }
+
+    #JSAllMatches .team-logo {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+    }
+
+    #JSAllMatches .fixed-width-column {
+        width: auto;
+    }
+
+    #JSAllMatches .column-team {
+        max-width: 96px;
+    }
+
+    #JSAllMatches .match-team {
+        min-width: 0;
+        gap: 6px;
+    }
+
+    #JSAllMatches .match-team-info {
+        min-width: 0;
+    }
+
+    #JSAllMatches .team-name {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    #JSAllMatches .column-vs {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
 }

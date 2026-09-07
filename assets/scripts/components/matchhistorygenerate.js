@@ -99,7 +99,7 @@ function generateTeamMatches(teamName) {
     }).join("");
 
     matchHistoryBox.innerHTML = `
-        <div class="match-history-table-wrapper">
+        <div class="table-scroll-wrapper">
             <table class="standings-table match-history-table">
                 <thead>
                     <tr>

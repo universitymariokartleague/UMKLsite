@@ -28,6 +28,26 @@ picture img {
     height: 150px;
 }
 
+.table-scroll-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Swap a table header's full label for a short one on narrow screens */
+.th-short {
+    display: none;
+}
+
+@media screen and (max-width: 600px) {
+    .th-full {
+        display: none;
+    }
+
+    .th-short {
+        display: inline;
+    }
+}
+
 .standings-table {
     width: 100%;
     border-collapse: collapse;
@@ -57,11 +77,6 @@ picture img {
 
 .standings-row {
     cursor: pointer;
-    border-bottom: 1px solid var(--translucent-color);
-}
-
-.standings-row:last-child {
-    border-bottom: none;
 }
 
 .standings-row:hover .column-team {
@@ -101,6 +116,32 @@ picture img {
 
 .team-name {
     font-weight: 700;
+}
+
+.team-name.winner {
+    color: var(--brand-positive);
+}
+
+.match-team-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.team-date,
+.team-season-mobile {
+    font-size: 0.75rem;
+    font-weight: 500;
+    opacity: 0.65;
+}
+
+.team-season-mobile {
+    display: none;
+}
+
+@media screen and (max-width: 600px) {
+    .team-season-mobile {
+        display: block;
+    }
 }
 
 .column-points strong {

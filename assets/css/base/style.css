@@ -155,6 +155,7 @@ main {
     flex: 1;
     width: calc(100vw - 60px);
     max-width: calc(var(--content-max-width) - env(safe-area-inset-left));
+    min-height: 50vh;
     margin-top: calc(var(--navbar-height) + 35px);
     margin-bottom: 25px;
     font-size: 16px;
@@ -932,4 +933,15 @@ umkl-footer::selection {
 
 .skeleton-circle {
     border-radius: 50%;
+}
+
+/* Shared divider between rows in table-like lists (standings, all-teams list, etc.) */
+.standings-row,
+.teams-table-item {
+    border-bottom: 1px solid var(--translucent-color);
+}
+
+.standings-row:last-child,
+.teams-table-item:last-child {
+    border-bottom: none;
 }

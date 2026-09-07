@@ -160,31 +160,6 @@
     text-align: right;
 }
 
-.match-history-table-wrapper {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-.match-history-table .th-short {
-    display: none;
-}
-
-.match-history-table .match-team-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.match-history-table .team-date,
-.match-history-table .team-season-mobile {
-    font-size: 0.75rem;
-    font-weight: 500;
-    opacity: 0.65;
-}
-
-.match-history-table .team-season-mobile {
-    display: none;
-}
-
 .result-badge {
     font-weight: 800;
 }
@@ -318,18 +293,6 @@
 @media screen and (max-width: 600px) {
     .match-history-table .column-season {
         display: none;
-    }
-
-    .match-history-table .team-season-mobile {
-        display: block;
-    }
-
-    .match-history-table .th-full {
-        display: none;
-    }
-
-    .match-history-table .th-short {
-        display: inline;
     }
 
     .match-history-table th,
