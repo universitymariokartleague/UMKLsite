@@ -96,7 +96,10 @@ function generateAllMatches(selectedSeason) {
                         </picture>
                     </div>
                 </td>
-                <td class="column-vs">VS</td>
+                <td class="column-vs">
+                    <span class="vs-label">VS</span>
+                    <span class="team-date">${formatDate(match.matchDate, locale)}</span>
+                </td>
                 <td class="column-team">
                     <div class="match-team team-b">
                         <picture>
@@ -105,11 +108,11 @@ function generateAllMatches(selectedSeason) {
                         </picture>
                         <div class="match-team-info">
                             <span class="team-name${teamBIsWinner ? ' winner' : ''}">${teamB}</span>
-                            <span class="team-date">${formatDate(match.matchDate, locale)}</span>
                         </div>
                     </div>
                 </td>
 
+                <td class="column-date">${formatDate(match.matchDate, locale)}</td>
                 <td class="column-score">
                     <strong>${scoreDisplay}</strong>
                 </td>
@@ -125,6 +128,7 @@ function generateAllMatches(selectedSeason) {
                         <th class="column-team"></th>
                         <th class="column-vs"><span class="th-full">Match</span><span class="th-short">VS</span></th>
                         <th class="column-team"></th>
+                        <th class="column-date">Date</th>
                         <th class="column-score">Score</th>
                     </tr>
                 </thead>

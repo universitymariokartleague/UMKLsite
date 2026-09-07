@@ -34,6 +34,15 @@
     text-align: center;
 }
 
+.column-date {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.column-vs .team-date {
+    display: none;
+}
+
 .column-result {
     text-align: center;
 }
@@ -82,5 +91,16 @@
     #JSAllMatches .column-vs {
         padding-left: 2px;
         padding-right: 2px;
+    }
+
+    #JSAllMatches .column-date {
+        display: none;
+    }
+
+    #JSAllMatches .column-vs .team-date {
+        display: block;
+        margin-top: 2px;
+        text-align: center;
+        white-space: nowrap;
     }
 }
