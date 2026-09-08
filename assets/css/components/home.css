@@ -33,7 +33,7 @@ img {
 
 .hero-card {
     position: relative;
-    aspect-ratio: 16 / 10;
+
     cursor: pointer;
     color: var(--brand-light);
     border-radius: var(--border-radius);

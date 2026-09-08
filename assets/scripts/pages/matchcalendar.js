@@ -36,14 +36,12 @@ let currentlyShownLog = null;
 let devMode = false;
 let cached = false;
 let discardLogOnChange = false;
-let listViewEnabled = false;
 let listViewToggledOnce = false;
 let overseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1 || false;
 let eventliveIndicatorToUpdate;
 let previewTimeout = null;
 let currentPreview = null;
 let refreshTimer = null;
-let listViewOverlay = null;
 let retryCount = 0;
 
 const YTSVGPATH = `<img loading="lazy" class="ytsvg" alt="YouTube logo" src="/assets/media/calendar/youtubelogo.svg">`;
@@ -51,7 +49,6 @@ const YTSVGPATH = `<img loading="lazy" class="ytsvg" alt="YouTube logo" src="/as
 document.addEventListener("DOMContentLoaded", async () => {
     const startTime = performance.now();
     debugLog(`Fetching calendar...`);
-    generateListViewButton();
     checkIfOutsideUK();
 
     if (localStorage.matchDataCache && localStorage.teamColorsCache) {
@@ -683,6 +680,8 @@ async function showDailyLog(date, dayCell) {
 }
 
 function generateCalendarListView() {
+    if (!calendarListView) return;
+
     const today = new Date();
     const formattedToday = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
@@ -690,22 +689,14 @@ function generateCalendarListView() {
     const sortedDates = Object.keys(matchDataToUse);
     const locale = localStorage.getItem("locale") || "en-GB";
 
-    if (listViewOverlay) listViewOverlay.remove();
-
-    listViewOverlay = document.createElement('div');
-    listViewOverlay.id = 'listViewOverlay';
-    listViewOverlay.innerHTML = `
-        <div class="list-view-slide-over">
-            <div class="list-view-header">
-                <h2>All Matches</h2>
-                <button class="close-list-view-button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-            </div>
-            <div class="list-view-content" id="listViewContent"></div>
+    calendarListView.innerHTML = `
+        <div class="list-view-header">
+            <h2>All Matches</h2>
         </div>
+        <div class="list-view-content" id="listViewContent"></div>
     `;
-    document.body.appendChild(listViewOverlay);
 
-    const listViewContent = listViewOverlay.querySelector('#listViewContent');
+    const listViewContent = calendarListView.querySelector('#listViewContent');
     let HTMLOutput = "";
     let todayMarkerInserted = false;
 
@@ -826,15 +817,10 @@ function generateCalendarListView() {
             const urlParams = new URLSearchParams(window.location.search);
             urlParams.set('date', date);
             window.history.pushState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
-            toggleListView(false);
             displayCalendar();
         });
     });
 
-    listViewOverlay.querySelector('.close-list-view-button').addEventListener('click', () => toggleListView(false));
-    listViewOverlay.addEventListener('click', (e) => { if (e.target === listViewOverlay) toggleListView(false); });
-
-    requestAnimationFrame(() => listViewOverlay.classList.add('active'));
     scrollMatchList();
 }
 
@@ -930,27 +916,9 @@ async function displayCalendar() {
     }
 }
 
-function generateListViewButton() {
-    const listViewButton = document.getElementById("listViewButton");
-    listViewButton.onclick = () => { listViewEnabled = !listViewEnabled; toggleListView(listViewEnabled); };
-}
-
-function toggleListView(enable) {
-    if (enable) {
-        generateCalendarListView();
-        document.body.style.overflow = 'hidden';
-    } else {
-        document.body.style.overflow = '';
-        if (listViewOverlay) {
-            listViewOverlay.classList.remove('active');
-            setTimeout(() => { if (listViewOverlay) { listViewOverlay.remove(); listViewOverlay = null; } }, 300);
-        }
-        listViewEnabled = false;
-    }
-}
-
 function loadCalendarView() {
-    listViewEnabled ? generateCalendarListView() : displayCalendar();
+    displayCalendar();
+    generateCalendarListView();
 }
 
 function checkIfOutsideUK() {
@@ -1053,7 +1021,6 @@ const updateFetch = async () => {
 
 document.addEventListener('keydown', handleKeyNavigation);
 document.addEventListener('keyup', () => { isKeyPressed = false; });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && listViewOverlay?.classList.contains('active')) toggleListView(false); });
 document.addEventListener('keydown', (e) => { if (e.key.toLowerCase() === 's') generateMatchImage(); });
 
 async function generateMatchImage() {

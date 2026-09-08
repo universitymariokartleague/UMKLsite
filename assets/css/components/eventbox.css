@@ -243,45 +243,19 @@
 }
 
 #calendarListView {
-    max-height: calc(75vh - 100px);
-    overflow-y: auto;
-}
-
-#listViewOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.list-view-slide-over {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    max-width: 500px;
-    height: 100%;
-    background-color: var(--bg-color);
-    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.3);
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
+    position: relative;
     display: flex;
     flex-direction: column;
+    max-height: calc(100vh - 120px);
+    overflow: hidden;
+    border: 1px solid #cccccccc;
+    border-radius: var(--border-radius);
 }
 
-#listViewOverlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-#listViewOverlay.active .list-view-slide-over {
-    transform: translateX(0);
+#calendarListView .list-view-content {
+    min-height: 0;
+    max-height: none;
+    padding: 15px 20px 20px 20px;
 }
 
 .list-view-header {
@@ -351,10 +325,6 @@
 }
 
 @media screen and (max-width: 767px) {
-    .list-view-slide-over {
-        max-width: 100%;
-    }
-
     .list-view-content .event-box-team {
         font-size: 2vmin;
     }

@@ -1,5 +1,13 @@
+.calendar-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 20px;
+}
+
 .calendar {
-    flex: 0 0 375px;
+    flex: 1 1 0;
+    min-width: 320px;
     height: fit-content;
     border-radius: var(--border-radius);
     overflow: hidden;
@@ -7,8 +15,26 @@
     border: 1px solid #cccccccc;
 }
 
+.calendar-sidebar {
+    flex: 1 1 0;
+    min-width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.calendar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.calendar-actions button {
+    margin: 0;
+}
+
 #expandedLog {
-    margin-top: 20px;
+    margin-top: 0;
     min-width: 100px;
 }
 
@@ -30,7 +56,8 @@
     transition: 0.1s ease-in-out;
 }
 
-.month-arrow:hover:not(.empty), .month-name:hover:not(.empty) {
+.month-arrow:hover:not(.empty),
+.month-name:hover:not(.empty) {
     cursor: pointer;
     color: var(--accent-color);
 }
@@ -78,13 +105,13 @@
 }
 
 .day.selected {
-    background-color: #F0185130!important;
+    background-color: #F0185130 !important;
     outline: 1px solid #F01851D0;
     border: 1px solid #F01851D0;
 }
 
 .day.selected:hover {
-    background-color: #F0185180!important;
+    background-color: #F0185180 !important;
 }
 
 .today {
@@ -109,7 +136,7 @@
 .color-bar-container {
     display: flex;
     align-items: center;
-    margin: 2px 0;   
+    margin: 2px 0;
 }
 
 .team-color-bar {
@@ -134,11 +161,25 @@
     margin: 0 10px;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 900px) {
+    .calendar-container {
+        gap: 15px;
+    }
+
     .calendar {
         flex: 0 0 100%;
+        min-width: 0;
         height: fit-content;
         padding: 15px;
+    }
+
+    .calendar-sidebar {
+        flex: 1 1 100%;
+        min-width: 0;
+    }
+
+    .calendar-actions button {
+        flex: 1 1 auto;
     }
 
     .month-arrow {
@@ -155,7 +196,7 @@
 
     .day-header {
         margin: 0px;
-        font-size: clamp(5px, 2.5vw, 16px)    
+        font-size: clamp(5px, 2.5vw, 16px)
     }
 
     .day {
