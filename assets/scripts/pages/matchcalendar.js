@@ -296,7 +296,7 @@ function generateCalendar(month, year, dateParam = null) {
     document.getElementById('nextMonthButton').addEventListener('click', () => changeMonth(1));
 
     calendarDays.innerHTML = '';
-    if (discardLogOnChange) expandedLog.innerHTML = '';
+    if (discardLogOnChange) expandedLog.innerHTML = dateParam ? '' : SELECT_DATE_PROMPT;
     currentlyShownDate = [year, month];
 
     const firstDay = (new Date(year, month, 1).getDay() - startDay + 7) % 7;

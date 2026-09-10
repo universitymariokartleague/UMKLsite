@@ -247,10 +247,6 @@ function renderTeamSummary(teamData) {
 
     summaryList.innerHTML = `
         <div class="summary-row">
-            <span class="summary-label">Institution</span>
-            <span class="summary-value">${teamData.team_full_name || teamData.team_name}</span>
-        </div>
-        <div class="summary-row">
             <span class="summary-label">Location</span>
             <span class="summary-value">${locationHTML}</span>
         </div>
