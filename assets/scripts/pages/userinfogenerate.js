@@ -1210,7 +1210,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const json = LZString.decompressFromEncodedURIComponent(compressed);
     data = JSON.parse(json);
 
-    // TODO: implemented item unlocked via profile_items, right now every item is unlocked.
+    // TODO: implement item unlocks via profile_items, right now every item is unlocked.
     let mappedProfileItems = [];
     areProfileItems = true;
     try {

@@ -47,44 +47,47 @@
 
     <main>
         <noscript>
-            <blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as is it used on this
+            <blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as it is used on this
                 page<br></blockquote>
         </noscript>
 
-        <div class="header-wrapper">
-            <h1>Schedule</h1>
-            <p class="p-below-title">
-                View the schedule for upcoming matches.
-                Please take a look at the <a href="/rules/match">match rules</a> before playing.<br>
-            </p>
+        <h1>Schedule</h1>
+        <p class="p-below-title">
+            View the schedule for upcoming matches, and see the results for past matches.
+        </p>
+
+        <div class="bubble-link-wrapper">
+            <nav class="bubble-nav">
+                <a class="bubble-nav-item no-color-link active" href="/schedule/">Schedule</a>
+                <a class="bubble-nav-item no-color-link" href="/schedule/stats/">Match Stats</a>
+            </nav>
+            <a class="bubble-link no-color-link" href="webcal://api.umkl.co.uk/matches.ics">
+                <span class="fa-solid fa-calendar"></span> Subscribe to calendar
+            </a>
+            <a class="bubble-link no-color-link" href="/rules/match/">
+                <span class="fa-solid fa-flag"></span> Match rules
+            </a>
         </div>
 
         <div id="calendarError"></div>
 
-        <blockquote class="hidden warning" id="overseasMessage"></blockquote>
+        <div class="hidden" id="overseasMessage"></div>
 
         <div class="calendar-container" id="calendar-container">
-            <div class="calendar">
-                <div class="calendar-header">
-                    <div class="month" id="monthYear">
-                        <a class="month-arrow" id="previousMonthButton"></a>
-                        <span class="month-name" id="goToCurrentMonthButton">Loading...</span>
-                        <a class="month-arrow" id="nextMonthButton"></a>
+            <div class="calendar-main">
+                <section class="calendar" aria-label="Match calendar">
+                    <div class="calendar-header">
+                        <div class="month" id="monthYear">
+                            <span class="month-name">Loading&hellip;</span>
+                        </div>
                     </div>
-                </div>
-                <div class="calendar-body" id="calendarDays"></div>
+                    <div class="calendar-body" id="calendarDays"></div>
+                </section>
+
+                <div id="expandedLog"></div>
             </div>
 
             <div class="calendar-sidebar">
-                <div class="calendar-actions">
-                    <button onclick="location.href='/schedule/stats'"><span class="fa-solid fa-trophy"></span> View Match
-                        Stats</button>
-                    <button onclick="location.href='webcal://api.umkl.co.uk/matches.ics'"><span
-                            class="fa-solid fa-calendar"></span> Import Calendar (.ics)</button>
-                </div>
-
-                <div id="expandedLog"></div>
-
                 <div id="calendarListView"></div>
             </div>
         </div>

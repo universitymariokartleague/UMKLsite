@@ -45,6 +45,7 @@ let refreshTimer = null;
 let retryCount = 0;
 
 const YTSVGPATH = `<img loading="lazy" class="ytsvg" alt="YouTube logo" src="/assets/media/calendar/youtubelogo.svg">`;
+const SELECT_DATE_PROMPT = `<div class="settingSubheading">Select a date to see the matches happening on that day.<br>You can also use the arrow keys to navigate!</div>`;
 
 document.addEventListener("DOMContentLoaded", async () => {
     const startTime = performance.now();
@@ -110,12 +111,17 @@ const fetchAPI = async (endpoint, body = {}) => {
     });
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     localStorage.setItem("apiReqsSent", (parseInt(localStorage.getItem("apiReqsSent")) || 0) + 1);
-    return response.json();
+    const raw = await response.text();
+    try {
+        return JSON.parse(raw);
+    } catch {
+        throw new Error(`Non-JSON response from ${endpoint}`);
+    }
 };
 
 const getMatchData = () => fetchAPI('matchdata', {});
 const getTeamColors = () => fetchAPI('teamcolors', {});
-const getLiveResults = () => fetchAPI('live', {});
+const getLiveResults = () => fetchAPI('match/current/null', {});
 
 const makePossessive = name => !name ? "" : (name.endsWith("s") || name.endsWith("S") ? `${name}'` : `${name}'s`);
 
@@ -397,7 +403,6 @@ function showMonthPicker(currentDate) {
 
     const preview = document.createElement('div');
     preview.className = 'preview text-preview';
-    preview.style.left = `${buttonRect.left + scrollX + buttonRect.width / 2 - 105}px`;
     preview.style.top = `${buttonRect.bottom + scrollY + 10}px`;
 
     preview.innerHTML = `
@@ -418,6 +423,10 @@ function showMonthPicker(currentDate) {
     `;
 
     document.body.appendChild(preview);
+
+    const buttonCenter = buttonRect.left + scrollX + buttonRect.width / 2;
+    const maxLeft = scrollX + document.documentElement.clientWidth - preview.offsetWidth - 8;
+    preview.style.left = `${Math.max(scrollX + 8, Math.min(buttonCenter - preview.offsetWidth / 2, maxLeft))}px`;
 
     document.getElementById('currentDateButton').addEventListener('click', () => {
         generateCalendar(month, year);
@@ -658,7 +667,12 @@ async function showDailyLog(date, dayCell) {
     const log = matchDataToUse[date] || [];
 
     if (log.length) {
-        const liveResults = await getLiveResults();
+        let liveResults = [];
+        try {
+            liveResults = await getLiveResults();
+        } catch (error) {
+            debugLog(`Failed to fetch live results: ${error.message}`);
+        }
         const sortedLog = sortMatchesByTime(log);
         const formattedDate = parseLocalDate(date).toLocaleString(locale, { dateStyle: "full" });
         const is12Hour = uses12HourClock(locale);
@@ -666,15 +680,16 @@ async function showDailyLog(date, dayCell) {
         expandedLog.innerHTML = `
             <div class="current-season-area">
                 <h3 style="margin: 3px">${formattedDate}</h3>
-                <button id="shareButton"><span class="fa-solid fa-share"></span> Share Date</button>
+                <button id="shareButton"><span class="fa-solid fa-share"></span> Share</button>
             </div>
             <hr class="after-title" style="margin-bottom:10px;">
             ${sortedLog.map((entry, index) => createMatchHTML(entry, index, date, locale, is12Hour, liveResults)).join('')}
         `;
 
         createShareButtonListener(formattedDate);
+        scrollMatchList(true);
     } else {
-        expandedLog.innerHTML = `<div class="settingSubheading">Select a date to see the matches happening on that day.</div>`;
+        expandedLog.innerHTML = SELECT_DATE_PROMPT;
         clearURLParams();
     }
 }
@@ -824,21 +839,23 @@ function generateCalendarListView() {
     scrollMatchList();
 }
 
-function scrollMatchList() {
-    const today = new Date();
-    const formattedToday = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-    const urlParams = new URLSearchParams(window.location.search);
-    const dateParam = urlParams.get('date');
+function scrollMatchList(smooth = false) {
     const listViewContent = document.getElementById('listViewContent');
     if (!listViewContent) return;
 
-    const targetDate = dateParam || formattedToday;
-    let target = listViewContent.querySelector(`.list-view-date-header[data-date="${targetDate}"]`);
+    const behavior = smooth ? 'smooth' : 'auto';
+    const dateParam = new URLSearchParams(window.location.search).get('date');
+    if (!dateParam) {
+        listViewContent.scrollTo({ top: listViewContent.scrollHeight, behavior });
+        return;
+    }
+
+    let target = listViewContent.querySelector(`.list-view-date-header[data-date="${dateParam}"]`);
     if (!target) {
         const allHeaders = [...listViewContent.querySelectorAll('.list-view-date-header[data-date]')];
-        target = allHeaders.find(h => h.dataset.date >= targetDate) || allHeaders.at(-1);
+        target = allHeaders.find(h => h.dataset.date >= dateParam) || allHeaders.at(-1);
     }
-    if (target) listViewContent.scrollTo({ top: target.offsetTop - listViewContent.offsetTop - 20 });
+    if (target) listViewContent.scrollTo({ top: target.offsetTop - listViewContent.offsetTop - 20, behavior });
 }
 
 function clearURLParams() {
@@ -872,7 +889,8 @@ window.addEventListener('popstate', () => {
         debugLog(`URL parameter changed`);
         showDailyLog(dateParam);
     } else {
-        expandedLog.innerHTML = 'No logs for this day';
+        currentlyShownLog = new Date().toISOString().split('T')[0];
+        expandedLog.innerHTML = SELECT_DATE_PROMPT;
     }
 });
 
@@ -912,7 +930,9 @@ async function displayCalendar() {
     } else {
         const currentDate = new Date();
         generateCalendar(currentDate.getMonth(), currentDate.getFullYear());
-        showDailyLog(currentDate.toISOString().split('T')[0]);
+        currentlyShownLog = currentDate.toISOString().split('T')[0];
+        expandedLog.innerHTML = SELECT_DATE_PROMPT;
+        clearURLParams();
     }
 }
 
@@ -923,33 +943,35 @@ function loadCalendarView() {
 
 function checkIfOutsideUK() {
     const { outsideUKTimezone } = formatMatchTime('2025-01-01', '00:00:00+01:00', "en-GB");
-    if (outsideUKTimezone) {
-        overseasMessage.classList.remove("hidden");
-        overseasMessage.innerHTML = `
-            <b translate="no">Note</b><br>Outside the UK,
-            times and dates displayed will show according to the UK timezone, with your local time next to it.<br>
-            <b>Overseas date type:</b> <button id="overseasDisplayButton"><span class="fa-solid fa-bars"></span> Overseas Display Toggle</button>
-        `;
-        generateOverseasDateDisplayButton();
-    }
+    if (!outsideUKTimezone) return;
+
+    overseasMessage.classList.remove("hidden");
+    overseasMessage.innerHTML = `
+        <span class="overseas-notice-icon fa-solid fa-earth"></span>
+        <div class="overseas-notice-body">
+            <p class="overseas-notice-title">You're outside the UK</p>
+            <p class="overseas-notice-text">Match times are shown in UK time with your local time beside them. Choose which day each match is listed under:</p>
+            <div class="overseas-toggle" role="group" aria-label="Match date display">
+                <button type="button" class="overseas-toggle-option" data-overseas="0"><span class="fa-solid fa-house"></span> UK date</button>
+                <button type="button" class="overseas-toggle-option" data-overseas="1"><span class="fa-solid fa-earth"></span> Local date</button>
+            </div>
+        </div>
+    `;
+    setupOverseasToggle();
 }
 
-function updateButton() {
-    const tempOverseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1;
-    const overseasDisplayButton = document.getElementById("overseasDisplayButton");
-    if (overseasDisplayButton) {
-        overseasDisplayButton.innerHTML = `<span class="fa-solid ${tempOverseasDateDisplay ? 'fa-earth' : 'fa-house'}"></span> ${tempOverseasDateDisplay ? 'Overseas' : 'UK'}`;
-    }
-}
-
-function generateOverseasDateDisplayButton() {
-    const overseasDisplayButton = document.getElementById("overseasDisplayButton");
-    updateButton();
-    overseasDisplayButton.onclick = () => {
-        const tempOverseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1;
-        localStorage.setItem("overseasDateDisplay", tempOverseasDateDisplay ? 0 : 1);
-        location.reload();
-    };
+function setupOverseasToggle() {
+    const current = localStorage.getItem("overseasDateDisplay") == 1 ? "1" : "0";
+    overseasMessage.querySelectorAll(".overseas-toggle-option").forEach(option => {
+        const isActive = option.dataset.overseas === current;
+        option.classList.toggle("active", isActive);
+        option.setAttribute("aria-pressed", String(isActive));
+        option.addEventListener("click", () => {
+            if (option.dataset.overseas === current) return;
+            localStorage.setItem("overseasDateDisplay", option.dataset.overseas);
+            location.reload();
+        });
+    });
 }
 
 const debounce = (fn, delay) => {

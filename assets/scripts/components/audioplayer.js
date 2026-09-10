@@ -33,6 +33,7 @@ var originalTabTitle = document.title; // unused
 let downloadingEnabled = false;
 let downloadingAllEnabled = false;
 let jsZipScriptLoaded = false;
+let duration; // audio duration in minutes:seconds
 
 // Load JSZip script once during initial page load
 function loadJSZipScript() {
@@ -456,7 +457,7 @@ async function setPlaylistData() {
             downloadingAllEnabled = true; // whether downloadingAll enabled
         }
     }
-    playlist = playlist.slice(1); // remove the first item (playlist information has already been set)
+    playlist = playlist.slice(1).filter(s => s); // remove the first item (playlist information has already been set)
 
     playlistOriginal = JSON.parse(JSON.stringify(playlist)) // original playlist with extra data
     for (let i = 0; i < playlist.length; i++) { // only keep audio.srcs in playlist
@@ -516,7 +517,7 @@ function adjustAudioLink(index) {
     }
     else {
         isLiveOnce = false;
-        newpath = path + playlist[index]; // 'audio file' with website url prefixed
+        const newpath = path + playlist[index]; // 'audio file' with website url prefixed
         return newpath.replaceAll('#', '%23') // javascript dumb
     }
 }
@@ -596,6 +597,11 @@ function downloadAllTracks() {
         document.getElementById('downloadAllButton').innerHTML = `Download All`;
     });
 }
+
+window.prevBGM = prevBGM;
+window.nextBGM = nextBGM;
+window.pickRandomTrack = pickRandomTrack;
+window.downloadAllTracks = downloadAllTracks;
 
 async function zipTracksToDownload() {
     const zip = new JSZip();

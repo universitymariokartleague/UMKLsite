@@ -3,9 +3,10 @@
 :root {
     --content-max-width: 1400px;
     --article-max-width: 1400px;
+    --reading-max-width: 800px;
     --navbar-height: 70px;
     --border-radius: 15px;
-    --border-radius-pill: 100px;
+    --border-radius-pill: 50px;
 
     --brand-primary: #bc0839;
     --brand-secondary: #ff6874;
@@ -163,6 +164,10 @@ main {
 
 main.article-main {
     max-width: calc(var(--article-max-width) - env(safe-area-inset-left));
+}
+
+main.reading-page {
+    max-width: calc(var(--reading-max-width) - env(safe-area-inset-left));
 }
 
 h1,

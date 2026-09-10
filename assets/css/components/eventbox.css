@@ -6,7 +6,7 @@
     margin: 0 0 10px 0;
     border-radius: var(--border-radius);
     overflow: hidden;
-    border: 1px solid #ccccccaa;
+    border: 1px solid var(--translucent-color);
     background-color: var(--bg-color);
 }
 
@@ -242,29 +242,37 @@
     margin: 0 5px 0 2px;
 }
 
+/* Absolutely positioned so its content height can't stretch the row;
+   max-height: 100% then clamps it to the calendar column's height. */
 #calendarListView {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    max-height: 100%;
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 120px);
     overflow: hidden;
-    border: 1px solid #cccccccc;
+    border: 1px solid var(--translucent-color);
     border-radius: var(--border-radius);
+    background-color: var(--box-area-bg-color);
 }
 
 #calendarListView .list-view-content {
     min-height: 0;
     max-height: none;
-    padding: 15px 20px 20px 20px;
+    padding: 4px 20px 20px 20px;
 }
 
 .list-view-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 20px 10px 20px;
-    border-bottom: 1px solid var(--border-color);
-    background-color: var(--bg-color);
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--translucent-color);
+    background-color: color-mix(in srgb, var(--bg-color) 80%, transparent);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
     flex-shrink: 0;
 }
 
@@ -274,26 +282,39 @@
 
 .list-view-header h2 {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 1.15rem;
+    font-weight: 700;
     color: var(--text-color);
 }
 
 .list-view-content {
     flex: 1;
     overflow-y: auto;
-    padding: 0 20px 20px 20px;
+    padding: 4px 20px 20px 20px;
     max-height: calc(100vh - 80px);
+    scrollbar-width: thin;
 }
 
-.list-view-content h3 {
-    margin: 20px 0 10px 0;
+.list-view-content h3,
+.list-view-date-header {
+    position: sticky;
+    top: -5px;
+    z-index: 5;
+    margin: 18px -20px 10px;
+    padding: 8px 20px;
+    background-color: var(--bg-color);
     color: var(--text-color);
-    font-size: 1.1rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.list-view-content> :first-child {
+    margin-top: 4px;
 }
 
 .list-view-content hr {
     border: none;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid var(--translucent-color);
     margin: 10px 0;
 }
 

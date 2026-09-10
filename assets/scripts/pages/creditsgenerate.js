@@ -36,17 +36,17 @@ const contributors = [
 const sections = [
     {
         title: "Founding",
-        description: `People responsible for the creation of the University Mario Kart League`,
+        description: `People responsible for the creation of the UMKL`,
         contributorIndexes: [0, 1, 2, 3, 4, 5]
     },
     {
         title: "Cheep Cheep App",
-        description: `Development of the Cheep Cheep app, which is used on the UMKL Discord server. <br><a href="/rules/privacy">View the privacy policy and terms of service</a>, you can also <a href="/changelog">view the changelog</a>.`,
+        description: `Development of the app, used in the <a href="https://discord.gg/jz3hKEmDss">Discord server</a>.`,
         contributorIndexes: [0, 4, 5]
     },
     {
         title: "Website",
-        description: `All the source code for the website can be found at our <a href="https://github.com/universitymariokartleague/UMKLsite">GitHub repository</a>, you can also <a href="/rules/privacy">view this site's privacy policy</a>`,
+        description: `Development and maintenance of this very site.`,
         contributorIndexes: [0, 4, 5]
     }
 ];
@@ -90,13 +90,15 @@ function renderCreditsSection({ title, description, contributorIndexes }) {
         .join("");
 
     return `
-        <div class="credits-title">
-            <h2${title !== "Founding" ? ' class="after-title"' : ''}>${title}</h2>
-            <p class="p-below-title">${description}</p>
-        </div>
-        <div class="credits-wrapper">
-            ${contributorsHTML}
-        </div>
+        <section class="credits-section">
+            <div class="credits-title">
+                <h2>${title}</h2>
+                ${description ? `<p class="p-below-title">${description}</p>` : ''}
+            </div>
+            <div class="credits-wrapper">
+                ${contributorsHTML}
+            </div>
+        </section>
     `;
 }
 

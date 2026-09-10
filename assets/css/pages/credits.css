@@ -1,61 +1,144 @@
 #creditGenerate {
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
+    margin-top: 24px;
 }
 
 #creditGenerate.fade-in {
     opacity: 1;
 }
 
-.credits-wrapper {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-top: 0.5em;
+.credits-section+.credits-section {
+    margin-top: 2em;
+    padding-top: 1.75em;
+    border-top: 1px solid var(--translucent-color);
 }
 
-.credits-title {
-    margin-top: 0.5em;
+.credits-title h2 {
+    margin: 0;
+}
+
+.credits-title .p-below-title {
+    margin: 0.4em 0 0;
+}
+
+.credits-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+    margin-top: 1.25em;
 }
 
 .credit-container {
-    border: 1px solid #ccccccaa;
-    border-radius: var(--border-radius);
-    padding: 10px;
     display: flex;
-    gap: 10px;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border: 1px solid var(--translucent-color);
+    border-radius: var(--border-radius);
+    background-color: var(--box-area-bg-color);
+    transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.credit-container a {
-    height: 26px;
+.credit-container:hover {
+    border-color: var(--opaque-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.credit-container>a {
+    display: flex;
+    flex-shrink: 0;
 }
 
 .credit-image {
-    border-radius: calc(var(--border-radius) * 0.5);
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 1px solid var(--translucent-color);
+    object-fit: cover;
     opacity: 0;
     transition: opacity 0.2s ease-in;
-    width: 50px;
-    height: 50px;
+}
+
+.credit-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.credit-info b {
+    font-size: 1.05rem;
 }
 
 .credit-socials {
-    margin: 2px 0;
     display: flex;
-    gap: 5px;
+    gap: 4px;
+    margin: 0;
+}
+
+.credit-socials a {
+    display: inline-flex;
 }
 
 .credits-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
     color: var(--text-color);
+    transition: background-color 0.12s ease, color 0.12s ease;
 }
 
 .credits-icon:hover {
+    background-color: var(--translucent-color);
     color: var(--link-color);
-    transition: 0.1s ease-in-out;
 }
 
-@media screen and (max-width: 767px) {
-    .credits-wrapper {
+.credits-footnotes {
+    margin-top: 2.5em;
+    padding-top: 1.5em;
+    border-top: 1px solid var(--translucent-color);
+    font-size: 0.9rem;
+    opacity: 0.75;
+}
+
+.credits-footnotes p {
+    margin: 0.5em 0;
+}
+
+/* Desktop: the three sections sit side by side */
+@media screen and (min-width: 1000px) {
+    #creditGenerate {
         display: flex;
-        flex-direction: column;
+    }
+
+    .credits-section {
+        flex: 1;
+        min-width: 0;
+        padding: 0 28px;
+    }
+
+    .credits-section:first-child {
+        padding-left: 0;
+    }
+
+    .credits-section:last-child {
+        padding-right: 0;
+    }
+
+    .credits-section+.credits-section {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: none;
+        border-left: 1px solid var(--translucent-color);
+    }
+
+    .credits-wrapper {
+        grid-template-columns: 1fr;
+        gap: 12px;
     }
 }

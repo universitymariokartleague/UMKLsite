@@ -41,39 +41,59 @@
     <umkl-navbar></umkl-navbar>
 
     <main>
-        <div>
-            <audio id="audio" src="/assets/media/bgm/loading_playlist.opus" preload="auto"></audio>
-            <script type="text/javascript" src="/assets/scripts/components/audioplayer.js" id="audioPlayerScript"
-                defer></script>
-            <div id="audioStatus" data-playlist="bgm.txt" class="hidden">
-                <span id="BGMName">Music</span><br>
-                <div class="audioControls">
-                    <span class="playContainer">
-                        <img loading="lazy" src="" id="playIcon" />
-                    </span>
-                    <div id="audioProgressBar">
-                        <div id="audioBufferBar"></div>
-                    </div>
-                    <span id="currentTime" class="time">0:00</span>
-                    <span>/</span>
-                    <span id="totalTime" class="time">0:00</span>
+        <noscript>
+            <blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as it is used on this
+                page<br></blockquote>
+        </noscript>
+
+        <audio id="audio" src="/assets/media/bgm/credits/loading_playlist.opus" preload="auto"></audio>
+        <div id="audioStatus" data-playlist="bgm.txt" class="hidden">
+            <span id="BGMName">Music</span><br>
+            <div class="audioControls">
+                <span class="playContainer">
+                    <img loading="lazy" src="" id="playIcon" />
+                </span>
+                <div id="audioProgressBar">
+                    <div id="audioBufferBar"></div>
                 </div>
-                <p id="playlistText" class="hidden"></p>
+                <span id="currentTime" class="time">0:00</span>
+                <span>/</span>
+                <span id="totalTime" class="time">0:00</span>
             </div>
-            <noscript>
-                <blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as is it used on
-                    this page<br></blockquote>
-            </noscript>
+            <p id="playlistText" class="hidden"></p>
         </div>
+        <script type="module" src="/assets/scripts/components/audioplayer.js" id="audioPlayerScript"></script>
 
-        <div class="header-wrapper">
-            <h1>Credits</h1>
-            <p class="p-below-title">People who worked on and contributed to the University Mario Kart League</p>
-            <a href="/sitemap">View sitemap</a>
+        <h1>Credits</h1>
+        <p class="p-below-title">People who worked on and contributed to the University Mario Kart League</p>
+
+        <div class="bubble-link-wrapper">
+            <a class="bubble-link no-color-link" href="/sitemap/">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" width="14" height="14" aria-hidden="true">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+                View sitemap
+            </a>
         </div>
-
 
         <div id="creditGenerate"></div>
+
+        <div class="credits-footnotes">
+            <p>
+                <a href="/rules/privacy">View the privacy policy and terms of service for the UMKL site and Cheep
+                    Cheep</a>, you can also <a href="/changelog">view changelogs here</a>.
+            </p>
+            <p>
+                All the source code for the website can be found at our
+                <a href="https://github.com/universitymariokartleague/UMKLsite">GitHub repository</a>.
+            </p>
+        </div>
     </main>
 
     <umkl-footer></umkl-footer>

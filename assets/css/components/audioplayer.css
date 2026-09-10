@@ -1,193 +1,257 @@
 .hidden {
-	display: none;
+    display: none;
 }
 
 .visible {
-	display: block;
+    display: block;
 }
 
 #audioStatus {
-	position: fixed;
-	top: 60px;
-	right: 0;
-	width: 450px;
-	padding: 10px;
-	padding-right: calc(env(safe-area-inset-right) - 10px);
-	border-radius: calc(var(--border-radius) * 1.5) 0 0 calc(var(--border-radius) * 1.5);
-	border: 1px solid #ccccccaa;
-	background-color: var(--news-box-bg-color);
-	z-index: 100;
-	transform: translateX(5px);
-	animation: slideLeft 0.5s ease-in-out;
-	will-change: transform, bottom;
-	user-select: none;
-	-webkit-user-select: none;
-	-webkit-backdrop-filter: blur(15px);
-	backdrop-filter: blur(15px);
+    position: fixed;
+    top: 80px;
+    right: 0;
+    width: 450px;
+    padding: 14px;
+    padding-right: calc(env(safe-area-inset-right) - 14px);
+    border-radius: calc(var(--border-radius) * 1.5) 0 0 calc(var(--border-radius) * 1.5);
+    border: 1px solid var(--translucent-color);
+    background-color: color-mix(in srgb, var(--bg-color) 78%, transparent);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+    z-index: 100;
+    transform: translateX(5px);
+    animation: slideLeft 0.5s ease-in-out;
+    will-change: transform, bottom;
+    user-select: none;
+    -webkit-user-select: none;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
 }
 
 #audioStatus button {
-	border: none;
-	background: none;
-	cursor: pointer;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: var(--body-font);
 }
 
 .audioControls {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	flex-wrap: wrap;
-	margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 5px;
 }
 
 #playIcon {
-	width: 50px;
-	height: 50px;
-	border-radius: 50%;
-	margin: 5px 5px 0 0;
-	transition: transform 0.1s, outline 0.05s;
-	cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin: 5px 5px 0 0;
+    transition: transform 0.1s, outline 0.05s;
+    cursor: pointer;
 }
 
 #playIcon:hover {
-	outline: 2px solid rgba(255, 255, 255, 0.8);
-	filter: drop-shadow(0 0 0.2rem rgba(255, 255, 255));
+    outline: 2px solid rgba(255, 255, 255, 0.8);
+    filter: drop-shadow(0 0 0.2rem rgba(255, 255, 255));
 }
 
 #playIcon:active {
-	transform: scale(0.9);
+    transform: scale(0.9);
 }
 
 @media (prefers-reduced-motion) {
-	#playIcon:active {
-		transform: none;
-	}
+    #playIcon:active {
+        transform: none;
+    }
 }
 
 #BGMName {
-	font-weight: 600;
-	margin: 0 20px 0 5px;
-	margin-right: calc(max(20px, env(safe-area-inset-right) * 2.5));
+    font-weight: 600;
+    margin: 0 20px 0 5px;
+    margin-right: calc(max(20px, env(safe-area-inset-right) * 2.5));
+    font-size: 0.92rem;
 }
 
 #BGMNameSelect {
-	user-select: all;
-	-webkit-user-select: text;
+    user-select: all;
+    -webkit-user-select: text;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: calc(var(--border-radius) * 0.4);
+    transition: background-color 0.15s ease;
+}
+
+#BGMNameSelect:hover {
+    background-color: color-mix(in srgb, var(--text-color) 10%, transparent);
 }
 
 #audioProgressBar {
-	position: relative;
-	width: 200px;
-	height: 10px;
-	background-color: rgba(255, 91, 91, 0.2);
-	border-radius: calc(var(--border-radius) * 0.25);
-	cursor: pointer;
-}
-
-#audioProgressBar:hover {
-	filter: drop-shadow(0 0 0.75rem #f86f6f);
+    position: relative;
+    width: 200px;
+    height: 10px;
+    background-color: rgba(255, 91, 91, 0.2);
+    border-radius: calc(var(--border-radius) * 0.25);
+    cursor: pointer;
+    border: 1px solid var(--box-border);
 }
 
 #audioBufferBar {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 0;
-	height: 1px;
-	background-color: #ffffff20;
-	border-radius: calc(var(--border-radius) * 0.1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: #ffffff20;
+    border-radius: calc(var(--border-radius) * 0.1);
 }
 
 #currentTime,
 #totalTime {
-	font-weight: 700;
-	letter-spacing: 0.01em;
-	word-spacing: 0.01em;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    word-spacing: 0.01em;
+    font-variant-numeric: tabular-nums;
 }
 
 #currentTime {
-	margin-left: 5px;
+    margin-left: 5px;
 }
 
 #playlistText {
-	text-align: center;
-	margin: 0;
-	margin-right: calc(max(20px, env(safe-area-inset-right) * 2.5));
+    text-align: center;
+    margin: 0;
+    margin-right: calc(max(20px, env(safe-area-inset-right) * 2.5));
+    font-size: 0.82rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    font-family: var(--body-font);
+}
+
+#playlistText button {
+    color: var(--text-color);
+    opacity: 0.7;
+    transition: opacity 0.15s ease, color 0.15s ease;
+    padding: 2px 6px;
+    border-radius: calc(var(--border-radius) * 0.4);
+    font-size: 0.82rem;
+    font-family: var(--body-font);
+}
+
+#playlistText button:hover {
+    opacity: 1;
+    color: var(--accent-color);
+}
+
+#playlistText button:active {
+    opacity: 0.85;
+    transform: scale(0.96);
+}
+
+#playlistText button:focus-visible {
+    outline: var(--box-outline);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand-primary) 35%, transparent);
+}
+
+#playlistText #downloadAllButton {
+    font-weight: 600;
+    color: var(--accent-color) !important;
+    opacity: 1 !important;
+}
+
+#downloadAllButton {
+    transition: color 0.15s ease, opacity 0.15s ease;
+}
+
+#playlistText a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+#playlistText a:hover {
+    color: var(--link-hover-color);
+    text-decoration: underline;
 }
 
 .blankButton {
-	color: var(--text-color) !important;
+    color: var(--text-color) !important;
 }
 
 .albumArt {
-	position: absolute;
-	left: 3px;
-	top: 0;
-	bottom: 0;
-	margin: auto;
-	height: 95%;
-	border-radius: var(--border-radius);
-	filter: drop-shadow(0 0 0.5rem white);
-	opacity: 0.6;
-	z-index: -1;
+    position: absolute;
+    left: 3px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    height: 95%;
+    border-radius: var(--border-radius);
+    filter: drop-shadow(0 0 0.5rem white);
+    opacity: 0.6;
+    z-index: -1;
 }
 
 @media screen and (max-width: 1000px) {
-	.albumArt {
-		border-radius: calc(var(--border-radius) * 0.5);
-	}
+    .albumArt {
+        border-radius: calc(var(--border-radius) * 0.5);
+    }
 }
 
 @media screen and (max-width: 1000px) {
-	#audioStatus {
-		position: fixed;
-		top: unset;
-		left: 0;
-		bottom: 0;
-		width: 100%;
-		width: calc(100% + env(safe-area-inset-right));
-		height: auto;
-		padding: 10px;
-		padding-left: max(10px, calc(env(safe-area-inset-left) - 10px));
-		padding-bottom: 40px;
-		margin-bottom: -5px;
-		border: none;
-		border-radius: 0;
-		border-top: 1px solid #ccccccaa;
-		transform: translateX(0);
-		animation: slideUp 0.5s ease-in-out;
-		z-index: 0;
-	}
+    #audioStatus {
+        position: fixed;
+        top: unset;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        width: calc(100% + env(safe-area-inset-right));
+        height: auto;
+        padding: 10px;
+        padding-left: max(10px, calc(env(safe-area-inset-left) - 10px));
+        padding-bottom: 40px;
+        margin-bottom: -5px;
+        border: none;
+        border-radius: 0;
+        border-top: 1px solid var(--translucent-color);
+        transform: translateX(0);
+        animation: slideUp 0.5s ease-in-out;
+        z-index: 0;
+    }
 
-	#playIcon {
-		padding: 0;
-	}
+    #playIcon {
+        padding: 0;
+    }
 }
 
 @media screen and (orientation: landscape) and (max-width: 1000px) {
-	#BGMName {
-		padding-left: calc(env(safe-area-inset-left) - 35px);
-	}
+    #BGMName {
+        padding-left: calc(env(safe-area-inset-left) - 35px);
+    }
 }
 
 @keyframes slideLeft {
-	0% {
-		transform: translateX(100%);
-		opacity: 0;
-	}
-	100% {
-		transform: translateX(5px);
-		opacity: 1;
-	}
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(5px);
+        opacity: 1;
+    }
 }
 
 @keyframes slideUp {
-	0% {
-		transform: translateY(100%);
-		opacity: 0;
-	}
-	100% {
-		transform: translateY(0);
-		opacity: 1;
-	}
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
