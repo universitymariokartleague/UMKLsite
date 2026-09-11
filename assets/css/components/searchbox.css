@@ -1,6 +1,7 @@
-/* Shared search-box widget used on the news and videos pages */
+/* Shared search-box widget used on the news, videos, and schedule pages */
 #news-search-wrapper,
-#videos-search-wrapper {
+#videos-search-wrapper,
+#calendar-search-wrapper {
     display: flex;
     align-items: center;
     border: 1.5px solid #ccccccaa;
@@ -12,7 +13,8 @@
 }
 
 #news-search-wrapper::before,
-#videos-search-wrapper::before {
+#videos-search-wrapper::before,
+#calendar-search-wrapper::before {
     content: "\f002";
     font-family: "Font Awesome 6 Free";
     color: #999;
@@ -22,13 +24,15 @@
 }
 
 #news-search-wrapper:focus-within,
-#videos-search-wrapper:focus-within {
+#videos-search-wrapper:focus-within,
+#calendar-search-wrapper:focus-within {
     border-color: var(--accent-color);
     box-shadow: 0 0 0 3px rgba(188, 8, 57, 0.15);
 }
 
 #news-search,
-#videos-search {
+#videos-search,
+#calendar-search {
     flex: 1;
     min-width: 100px;
     padding: 9px 4px 9px 0;
@@ -41,19 +45,22 @@
 }
 
 #news-search::placeholder,
-#videos-search::placeholder {
+#videos-search::placeholder,
+#calendar-search::placeholder {
     color: #999;
 }
 
 #news-no-results,
-#videos-no-results {
+#videos-no-results,
+#calendar-no-results {
     text-align: center;
     padding: 20px;
     color: #666;
 }
 
 #news-no-results button,
-#videos-no-results button {
+#videos-no-results button,
+#calendar-no-results button {
     margin-top: 10px;
     padding: 8px 16px;
     border: none;

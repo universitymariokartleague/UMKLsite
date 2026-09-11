@@ -14,6 +14,7 @@ const teamBoxFormatHTML = `
 
 const JSTeamBox = document.getElementById("JSTeamBox")
 const startYear = 2023;
+const SKELETON_TRACK_COUNT = 10;
 
 const scoreMap = [15, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 const maxPos = scoreMap.length
@@ -31,6 +32,24 @@ const testMatchesCheckbox = document.getElementById("testMatches");
 const pointsDiffCheckbox = document.getElementById("pointsDiff");
 const teamFrequencyCheckbox = document.getElementById("teamFrequency");
 const daysPlayedCheckbox = document.getElementById("daysPlayed");
+
+function renderStatsSkeleton() {
+    const skeletonItem = `
+        <div class="track-item" aria-hidden="true">
+            <div class="track-icon skeleton" style="opacity:1;"></div>
+            <div class="skeleton skeleton-line" style="width:85%; margin-top:8px;"></div>
+            <div class="skeleton skeleton-line" style="width:50%; margin-top:6px;"></div>
+        </div>
+    `;
+    JSTeamBox.innerHTML = `
+        <div class="team-info-wrapper">
+            <div class="carousel-header">
+                <h2>Track Frequency</h2>
+            </div>
+            <div class="track-frequency">${skeletonItem.repeat(SKELETON_TRACK_COUNT)}</div>
+        </div>
+    `;
+}
 
 function buildTrackCountDiv(data) {
     const sorted = Object.entries(data).sort((a, b) => b[1].count - a[1].count);
@@ -77,7 +96,7 @@ function buildTrackCountDiv(data) {
     const length = Object.keys(data).length;
 
     return `
-        <div class="title">
+        <div class="carousel-header">
             <h2>Track Frequency</h2>
             <p class="p-no-spacing">${length}/96 total tracks played
             ${testMatchesCheckbox.checked ? '<span class="settings-extra-info">(including test matches)</span>' : ''}</p>
@@ -213,7 +232,7 @@ async function getCurrentSeason() {
 document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     debugLog(`Generating match stats box`);
-    JSTeamBox.innerHTML = "Loading match information...";
+    renderStatsSkeleton();
 
     let showError = 0;
 

@@ -17,11 +17,11 @@ const API_BASE = 'https://api.umkl.co.uk';
 const DEV_MODE_SEQUENCE = ['d', 'e', 'v'];
 
 const calendarContainer = document.getElementById("calendar-container");
-const calendarListView = document.getElementById("calendarListView");
 const expandedLog = document.getElementById("expandedLog");
 const calendarError = document.getElementById("calendarError");
 const overseasMessage = document.getElementById("overseasMessage");
 const calendarDays = document.getElementById("calendarDays");
+const calendarSearchInput = document.getElementById("calendar-search");
 
 const currentYear = new Date().getFullYear();
 const startYear = 2023;
@@ -43,6 +43,10 @@ let previewTimeout = null;
 let currentPreview = null;
 let refreshTimer = null;
 let retryCount = 0;
+let initialDateParamOnLoad = false;
+let dailyLogRequestId = 0;
+let calendarSearchTerm = "";
+let listScrollAnimationFrame = null;
 
 const YTSVGPATH = `<img loading="lazy" class="ytsvg" alt="YouTube logo" src="/assets/media/calendar/youtubelogo.svg">`;
 const SELECT_DATE_PROMPT = `<div class="settingSubheading">Select a date to see the matches happening on that day.<br>You can also use the arrow keys to navigate!</div>`;
@@ -51,6 +55,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const startTime = performance.now();
     debugLog(`Fetching calendar...`);
     checkIfOutsideUK();
+    setupCalendarSearch();
+    initialDateParamOnLoad = !!new URLSearchParams(window.location.search).get('date');
 
     if (localStorage.matchDataCache && localStorage.teamColorsCache) {
         try {
@@ -59,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             matchData = JSON.parse(localStorage.matchDataCache);
             teamColors = JSON.parse(localStorage.teamColorsCache);
             makeTeamsColorStyles();
-            loadCalendarView();
+            await loadCalendarView();
         } catch {
             localStorage.matchDataCache = "";
             localStorage.teamColorsCache = "";
@@ -99,7 +105,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     listViewToggledOnce = false;
     discardLogOnChange = false;
     makeTeamsColorStyles();
-    loadCalendarView();
+    await loadCalendarView();
     debugLog(`Match data loaded in ${(performance.now() - startTime).toFixed(2)}ms`);
 });
 
@@ -238,6 +244,28 @@ const normalizeMatchData = (data) => {
 };
 
 const sortMatchesByTime = (matches) => [...matches].sort((a, b) => (a.time || '00:00:00').localeCompare(b.time || '00:00:00'));
+
+const escapeHTML = (str) => str.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const escapeRegExp = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const highlightMatch = (text, term) => {
+    const escaped = escapeHTML(text);
+    if (!term) return escaped;
+    const regex = new RegExp(`(${escapeRegExp(term)})`, 'gi');
+    return escaped.replace(regex, '<mark class="search-highlight">$1</mark>');
+};
+
+const matchesCalendarSearch = (entry, formattedDateLower, term) => {
+    if (!term) return true;
+
+    const seasonQuery = term.match(/^season\s*(\d+)$/i);
+    if (seasonQuery) return entry.season === parseInt(seasonQuery[1], 10);
+    if (term === 'test match') return !!entry.testMatch;
+
+    const teams = entry.teamsInvolved.join(' ').toLowerCase();
+    const description = (entry.description || '').toLowerCase();
+    return teams.includes(term) || description.includes(term) || formattedDateLower.includes(term);
+};
 
 const autoLink = (text) => {
     text = text.replaceAll("\n", "<br>");
@@ -650,6 +678,7 @@ function createMatchHTML(entry, index, date, locale, is12Hour, liveResults) {
 }
 
 async function showDailyLog(date, dayCell) {
+    const requestId = ++dailyLogRequestId;
     currentlyShownLog = date;
     listViewToggledOnce = false;
 
@@ -673,6 +702,10 @@ async function showDailyLog(date, dayCell) {
         } catch (error) {
             debugLog(`Failed to fetch live results: ${error.message}`);
         }
+        // a newer date was clicked while this one's getLiveResults() was in flight -
+        // bail so its stale render doesn't clobber the current one and yank the scroll
+        if (requestId !== dailyLogRequestId) return;
+
         const sortedLog = sortMatchesByTime(log);
         const formattedDate = parseLocalDate(date).toLocaleString(locale, { dateStyle: "full" });
         const is12Hour = uses12HourClock(locale);
@@ -695,7 +728,8 @@ async function showDailyLog(date, dayCell) {
 }
 
 function generateCalendarListView() {
-    if (!calendarListView) return;
+    const listViewContent = document.getElementById('listViewContent');
+    if (!listViewContent) return;
 
     const today = new Date();
     const formattedToday = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
@@ -703,31 +737,29 @@ function generateCalendarListView() {
     matchDataToUse = overseasDateDisplay ? normalizeMatchData(matchData) : matchData;
     const sortedDates = Object.keys(matchDataToUse);
     const locale = localStorage.getItem("locale") || "en-GB";
+    const term = calendarSearchTerm;
 
-    calendarListView.innerHTML = `
-        <div class="list-view-header">
-            <h2>All Matches</h2>
-        </div>
-        <div class="list-view-content" id="listViewContent"></div>
-    `;
-
-    const listViewContent = calendarListView.querySelector('#listViewContent');
     let HTMLOutput = "";
     let todayMarkerInserted = false;
+    let resultsCount = 0;
 
     for (const date of sortedDates) {
+        const formattedDate = parseLocalDate(date).toLocaleString(locale, { dateStyle: "full" });
+        const sortedMatches = sortMatchesByTime(matchDataToUse[date])
+            .filter(entry => matchesCalendarSearch(entry, formattedDate.toLowerCase(), term));
+        if (!sortedMatches.length) continue;
+
         if (!todayMarkerInserted && formattedToday < date) {
             HTMLOutput += `<div class="today-marker">Today - ${new Date(formattedToday).toLocaleDateString(locale, { dateStyle: 'long' })}</div><hr>`;
             todayMarkerInserted = true;
         }
 
-        const formattedDate = parseLocalDate(date).toLocaleString(locale, { dateStyle: "full" });
         HTMLOutput += `<h3 class="list-view-date-header" data-date="${date}">${formattedToday === date ? ' ☆ ' : ''}${formattedDate}</h3>`;
 
-        const sortedMatches = sortMatchesByTime(matchDataToUse[date]);
         const is12Hour = uses12HourClock(locale);
 
         for (const entry of sortedMatches) {
+            resultsCount++;
             const [team1Name, team2Name] = entry.teamsInvolved;
             const team1 = createTeamObject(team1Name);
             const team2 = createTeamObject(team2Name);
@@ -781,7 +813,7 @@ function generateCalendarListView() {
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link team-box-underline-hover" href="${team1.link}">
                                     <img height="100px" class="team-box-image" src="https://api.umkl.co.uk/teamemblems/${team1.team_name.toUpperCase()}" alt="${makePossessive(team1.team_name)} team logo" loading="lazy" ${cached ? `` : 'onload="this.style.opacity=1"'}>
-                                    <h2>${team1.team_name}</h2>
+                                    <h2>${highlightMatch(team1.team_name, term)}</h2>
                                 </a>
                                 <div class="youtube-box left-team">
                                     ${team1.youtubeLink ? `<a class="no-underline-link-footer ${isLive ? 'youtube-live-animation' : 'no-color-link'}" href="${team1.youtubeLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'View the archived livestream'}">${YTSVGPATH}</a>` : ''}
@@ -791,7 +823,7 @@ function generateCalendarListView() {
                             <div class="event-box-team">
                                 <a class="no-underline-link no-color-link team-box-underline-hover" href="${team2.link}">
                                     <img height="100px" class="team-box-image" src="https://api.umkl.co.uk/teamemblems/${team2.team_name.toUpperCase()}" alt="${makePossessive(team2.team_name)} team logo" loading="lazy" ${cached ? `` : 'onload="this.style.opacity=1"'}>
-                                    <h2>${team2.team_name}</h2>
+                                    <h2>${highlightMatch(team2.team_name, term)}</h2>
                                 </a>
                                 <div class="youtube-box right-team">
                                     ${team2.youtubeLink ? `<a class="no-underline-link-footer ${isLive ? 'youtube-live-animation' : 'no-color-link'}" href="${team2.youtubeLink}" target="_blank" title="${isLive ? 'Watch the livestream' : 'View the archived livestream'}">${YTSVGPATH}</a>` : ''}
@@ -823,6 +855,9 @@ function generateCalendarListView() {
         }
     }
 
+    if (term && resultsCount === 0) {
+        HTMLOutput = `<div id="calendar-no-results"><p>No matches found</p><button id="calendar-clear-search" type="button">Clear search</button></div>`;
+    }
     listViewContent.innerHTML = HTMLOutput;
 
     listViewContent.querySelectorAll('.list-view-date-header').forEach(header => {
@@ -836,17 +871,60 @@ function generateCalendarListView() {
         });
     });
 
-    scrollMatchList();
+    document.getElementById('calendar-clear-search')?.addEventListener('click', () => {
+        calendarSearchTerm = "";
+        if (calendarSearchInput) calendarSearchInput.value = "";
+        generateCalendarListView();
+        calendarSearchInput?.focus();
+    });
+
+    // filtering changes what's in the list, so keep the scroll-to-selected-date
+    // behaviour for a fresh render, but don't yank the view around while typing
+    if (term) listViewContent.scrollTop = 0;
+    else scrollMatchList();
+}
+
+function setupCalendarSearch() {
+    if (!calendarSearchInput) return;
+    let debounceTimer;
+    calendarSearchInput.addEventListener("input", (e) => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            calendarSearchTerm = e.target.value.trim().toLowerCase();
+            generateCalendarListView();
+        }, 50);
+    });
+}
+
+// Chromium's native scrollTo({behavior:'smooth'}) tends to get stuck after a
+// handful of redirected in-flight animations, so drive the scroll ourselves -
+// only one rAF loop ever owns the element's scrollTop at a time.
+function animateScrollTo(el, top, duration = 350) {
+    if (listScrollAnimationFrame) cancelAnimationFrame(listScrollAnimationFrame);
+
+    const clampedTop = Math.max(0, Math.min(top, el.scrollHeight - el.clientHeight));
+    const startTop = el.scrollTop;
+    const distance = clampedTop - startTop;
+    const startTime = performance.now();
+    const ease = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+
+    const step = (now) => {
+        const progress = Math.min((now - startTime) / duration, 1);
+        el.scrollTop = startTop + distance * ease(progress);
+        listScrollAnimationFrame = progress < 1 ? requestAnimationFrame(step) : null;
+    };
+    listScrollAnimationFrame = requestAnimationFrame(step);
 }
 
 function scrollMatchList(smooth = false) {
     const listViewContent = document.getElementById('listViewContent');
     if (!listViewContent) return;
 
-    const behavior = smooth ? 'smooth' : 'auto';
+    const scrollTo = (top) => smooth ? animateScrollTo(listViewContent, top) : (listViewContent.scrollTop = top);
+
     const dateParam = new URLSearchParams(window.location.search).get('date');
     if (!dateParam) {
-        listViewContent.scrollTo({ top: listViewContent.scrollHeight, behavior });
+        scrollTo(listViewContent.scrollHeight);
         return;
     }
 
@@ -855,7 +933,7 @@ function scrollMatchList(smooth = false) {
         const allHeaders = [...listViewContent.querySelectorAll('.list-view-date-header[data-date]')];
         target = allHeaders.find(h => h.dataset.date >= dateParam) || allHeaders.at(-1);
     }
-    if (target) listViewContent.scrollTo({ top: target.offsetTop - listViewContent.offsetTop - 20, behavior });
+    if (target) scrollTo(target.offsetTop - listViewContent.offsetTop - 20);
 }
 
 function clearURLParams() {
@@ -926,7 +1004,7 @@ async function displayCalendar() {
         debugLog(`URL parameter detected`);
         const dateObj = new Date(dateParam);
         generateCalendar(dateObj.getMonth(), dateObj.getFullYear(), dateParam);
-        showDailyLog(dateParam);
+        await showDailyLog(dateParam);
     } else {
         const currentDate = new Date();
         generateCalendar(currentDate.getMonth(), currentDate.getFullYear());
@@ -936,9 +1014,23 @@ async function displayCalendar() {
     }
 }
 
-function loadCalendarView() {
-    displayCalendar();
+async function loadCalendarView() {
+    await displayCalendar();
     generateCalendarListView();
+    // wait a frame for layout to settle before measuring, then fix the sidebar's
+    // height so later expandedLog resizes (e.g. selecting a date) can't affect it
+    requestAnimationFrame(() => requestAnimationFrame(lockCalendarSidebarHeight));
+}
+
+function lockCalendarSidebarHeight() {
+    const sidebar = document.querySelector('.calendar-sidebar');
+    if (!sidebar) return;
+    sidebar.style.height = '';
+    if (window.innerWidth <= 900) return;
+    // a date param on load means expandedLog opened tall right away; cap it so
+    // the sidebar doesn't lock in an oversized height for the rest of the visit
+    const height = initialDateParamOnLoad ? Math.min(sidebar.offsetHeight, 700) : sidebar.offsetHeight;
+    sidebar.style.height = `${height}px`;
 }
 
 function checkIfOutsideUK() {
@@ -978,6 +1070,8 @@ const debounce = (fn, delay) => {
     let timer;
     return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), delay); };
 };
+
+window.addEventListener('resize', debounce(lockCalendarSidebarHeight, 150));
 
 let keySequence = [];
 let isKeyPressed = false;

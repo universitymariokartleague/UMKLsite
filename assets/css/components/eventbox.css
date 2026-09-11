@@ -287,6 +287,22 @@
     color: var(--text-color);
 }
 
+.list-view-search-row {
+    padding: 12px 20px;
+    flex-shrink: 0;
+}
+
+.list-view-search-row #calendar-search-wrapper {
+    margin-bottom: 0;
+}
+
+.search-highlight {
+    background-color: rgba(188, 8, 57, 0.3);
+    color: inherit;
+    border-radius: calc(var(--border-radius) * 0.3);
+    padding: 0 1px;
+}
+
 .list-view-content {
     flex: 1;
     overflow-y: auto;

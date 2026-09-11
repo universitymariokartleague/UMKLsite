@@ -44,6 +44,11 @@
     <umkl-navbar></umkl-navbar>
 
     <main>
+        <noscript>
+            <blockquote class="rainbow"><b>Javascript disabled!</b><br>Please enable javascript, as it is used on this
+                page<br></blockquote>
+        </noscript>
+
         <h1>Match Stats</h1>
         <p class="p-below-title">View stats about past matches.</p>
 
@@ -54,26 +59,39 @@
             </nav>
         </div>
 
-        <hr class="hr-below-title">
-
-        <p>
-            <b>Options</b><br>
-            <label for="testMatches">Include test matches:</label>
-            <input type="checkbox" id="testMatches" name="testMatches">
-            <br>
-            <label for="pointsDiff">Show the average points difference for a track:</label>
-            <input type="checkbox" id="pointsDiff" name="pointsDiff">
-            <br>
-            <label for="teamFrequency">Show how often teams have played a track:</label>
-            <input type="checkbox" id="teamFrequency" name="teamFrequency">
-            <br>
-            <label for="daysPlayed">Show the dates a track was played on:</label>
-            <input type="checkbox" id="daysPlayed" name="daysPlayed">
-        </p>
-
-        <div id="JSTeamBox" class="team-info">
-            Loading match information...
+        <p class="stats-options-label">Options</p>
+        <div class="stats-options">
+            <label class="stats-option-row">
+                <span class="stats-option-label">Include test matches</span>
+                <span class="stats-toggle">
+                    <input type="checkbox" id="testMatches">
+                    <span class="stats-toggle-track"></span>
+                </span>
+            </label>
+            <label class="stats-option-row">
+                <span class="stats-option-label">Show the average points difference for a track</span>
+                <span class="stats-toggle">
+                    <input type="checkbox" id="pointsDiff">
+                    <span class="stats-toggle-track"></span>
+                </span>
+            </label>
+            <label class="stats-option-row">
+                <span class="stats-option-label">Show how often teams have played a track</span>
+                <span class="stats-toggle">
+                    <input type="checkbox" id="teamFrequency">
+                    <span class="stats-toggle-track"></span>
+                </span>
+            </label>
+            <label class="stats-option-row">
+                <span class="stats-option-label">Show the dates a track was played on</span>
+                <span class="stats-toggle">
+                    <input type="checkbox" id="daysPlayed">
+                    <span class="stats-toggle-track"></span>
+                </span>
+            </label>
         </div>
+
+        <div id="JSTeamBox" class="team-info"></div>
     </main>
 
     <umkl-footer></umkl-footer>

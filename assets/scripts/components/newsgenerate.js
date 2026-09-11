@@ -61,7 +61,7 @@ function renderNewsListingSkeleton() {
         </article>
     `;
 
-    container.innerHTML = cardSkeleton.repeat(8);
+    container.innerHTML = cardSkeleton.repeat(12);
 }
 
 function renderHomeNews(news) {
@@ -175,7 +175,7 @@ function addLinksToTags() {
             tag.translate = false;
             tag.className = "tag-link-text";
             tag.style.textDecoration = "none";
-            
+
             tag.parentNode.replaceChild(anchor, tag);
             anchor.appendChild(tag);
         });
