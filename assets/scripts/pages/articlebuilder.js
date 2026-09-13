@@ -918,7 +918,7 @@ function insertImageToBody(imgUrl) {
         <div class="article-image-wrapper">
             <button type="button" class="btn-remove-image" title="Remove image">&times;</button>
             <img loading="lazy" class="image article-content-image" src="${imgUrl}" />
-            <span class="article-image-caption" contenteditable="true">Lorem ipsum dolor sit amet</span>
+            <span class="article-image-caption" contenteditable="true">Add a description for this image here!</span>
         </div>
     `;
     insertBlockToBody(imageBlock);
@@ -1011,7 +1011,7 @@ function insertVideoToBody(videoId) {
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowfullscreen></iframe>
             </div>
-            <span class="article-image-caption" contenteditable="true">Lorem ipsum dolor sit amet</span>
+            <span class="article-image-caption" contenteditable="true">Add a description for this image here!</span>
         </div>
     `;
     insertBlockToBody(videoBlock);
