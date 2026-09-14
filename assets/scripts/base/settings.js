@@ -86,12 +86,25 @@ document.getElementById('settings-box-close-button').addEventListener('click', c
 // `meta`, `root` and `darkThemeEnabled` are declared globally by assets/scripts/theme.js,
 // which runs synchronously before this module to apply the theme without a flash.
 
+const icons = {
+    sun: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>`,
+    moon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`,
+    system: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg>`,
+};
+
+function segmentedControl(id, options) {
+    return `
+        <div class="settings-segmented" id="${id}">
+            ${options.map(o => `<button data-value="${o.value}" class="${o.active ? 'active' : ''}">${o.icon ? icons[o.icon] : ''}${o.label}</button>`).join('')}
+        </div>
+    `;
+}
+
 function generateSettingsPanel() {
     try {
-        const tempTheme = localStorage.getItem("darktheme") == 1 ? "Dark" : (localStorage.getItem("darktheme") == 0 ? "Light" : "System");
+        const currentTheme = localStorage.getItem("darktheme") == 1 ? "dark" : (localStorage.getItem("darktheme") == 0 ? "light" : "system");
 
         const tempLocale = localStorage.getItem("locale") || "en-GB";
-        const tempLocaleDisplay = tempLocale === "en-GB" ? "English (UK)" : "English (US)";
         const tempStartDay = localStorage.getItem("startDay") || 1;
         const tempOverseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1 || false;
 
@@ -99,49 +112,59 @@ function generateSettingsPanel() {
 
         settingsBoxJS.innerHTML = `
             <section class="settings-group">
-                <div translate="yes" class="setting-sub-heading">Appearance</div>
                 <div class="setting-row">
                     <div class="setting-info">
                         <span translate="yes" class="setting-label">Page Theme</span>
                         <span translate="yes" class="setting-desc">Switch between light, dark, or system themes</span>
                     </div>
-                    <button id="toggleTheme" class="settings-btn">${tempTheme}</button>
+                    ${segmentedControl('themeSegmented', [
+            { value: 'light', icon: 'sun', label: 'Light', active: currentTheme === 'light' },
+            { value: 'dark', icon: 'moon', label: 'Dark', active: currentTheme === 'dark' },
+            { value: 'system', icon: 'system', label: 'System', active: currentTheme === 'system' },
+        ])}
                 </div>
             </section>
 
             <section class="settings-group">
-                <div translate="yes" class="setting-sub-heading">${tempLocale == "en-GB" ? "Localisation" : "Localization"}</div>
                 <div class="setting-row">
                     <div class="setting-info">
                         <span translate="yes" class="setting-label">Locale</span>
                         <span translate="yes" class="setting-desc">UK or US date and time formatting</span>
                     </div>
-                    <button id="toggleLocaleTypeButton" class="settings-btn">${tempLocaleDisplay}</button>
+                    ${segmentedControl('localeSegmented', [
+            { value: 'en-GB', label: 'UK', active: tempLocale === 'en-GB' },
+            { value: 'en-US', label: 'US', active: tempLocale === 'en-US' },
+        ])}
                 </div>
                 <div class="setting-row">
                     <div class="setting-info">
                         <span translate="yes" class="setting-label">First Day of Week</span>
                         <span translate="yes" class="setting-desc">Sets the start of the week on the match calendar</span>
                     </div>
-                    <button id="toggleStartDayButton" class="settings-btn">${weekdayNamesFull[tempStartDay]}</button>
+                    ${segmentedControl('startDaySegmented', [
+            { value: '0', label: 'Sunday', active: tempStartDay == 0 },
+            { value: '1', label: 'Monday', active: tempStartDay == 1 },
+        ])}
                 </div>
                 <div class="setting-row">
                     <div class="setting-info">
                         <span translate="yes" class="setting-label">Overseas Date Display</span>
                         <span translate="yes" class="setting-desc">Use UK or local dates when travelling</span>
                     </div>
-                    <button id="toggleOverseasDateDisplayButton" class="settings-btn">${tempOverseasDateDisplay ? 'Overseas' : 'UK'}</button>
+                    ${segmentedControl('overseasSegmented', [
+            { value: '0', label: 'UK', active: !tempOverseasDateDisplay },
+            { value: '1', label: 'Overseas', active: tempOverseasDateDisplay },
+        ])}
                 </div>
             </section>
 
             <section class="settings-group">
-                <div translate="yes" class="setting-sub-heading">Website Data</div>
                 <div class="setting-row">
                     <div class="setting-info">
                         <span translate="yes" class="setting-label">API Requests Sent</span>
                         <span translate="yes" class="setting-desc">Total requests made during your active session</span>
                     </div>
-                    <span class="settings-badge">${apiReqsSent}</span>
+                    <span>${apiReqsSent}</span>
                 </div>
                 <div class="setting-row">
                     <div class="setting-info">
@@ -158,9 +181,8 @@ function generateSettingsPanel() {
     generateEventListeners();
 }
 
-function toggleTheme() {
-    let current = localStorage.getItem("darktheme");
-    let next = current === null ? 0 : current == 0 ? 1 : current == 1 ? null : 0;
+function setTheme(value) {
+    const next = value === 'system' ? null : (value === 'dark' ? 1 : 0);
 
     if (next === null) {
         localStorage.removeItem("darktheme");
@@ -207,26 +229,21 @@ document.addEventListener('scrollbarToCalendarListView', (event) => {
     document.dispatchEvent(new CustomEvent('addScrollbarToCalendarListView', { detail: { darkThemeEnabled, scrollToY: event.detail.scrollToY } }));
 })
 
-function toggleStartDay() {
-    const newStartDay = localStorage.getItem("startDay") == 0 ? 1 : 0;
+function setStartDay(newStartDay) {
     localStorage.setItem("startDay", newStartDay);
     debugLog(`set startDay to ${newStartDay} (${weekdayNamesFull[newStartDay]})`);
     document.dispatchEvent(new CustomEvent('startDayChange'));
     generateSettingsPanel();
 }
 
-function toggleLocale() {
-    const locales = ["en-GB", "en-US"];
-    const currentLocale = localStorage.getItem("locale") || "en-GB";
-    const newLocale = locales[(locales.indexOf(currentLocale) + 1) % locales.length];
+function setLocale(newLocale) {
     localStorage.setItem("locale", newLocale);
     debugLog(`set locale to ${newLocale}`);
     document.dispatchEvent(new CustomEvent('startDayChange'));
     generateSettingsPanel();
 }
 
-function toggleOverseasDateDisplayButton() {
-    const newOverseasDateDisplay = localStorage.getItem("overseasDateDisplay") == 1 ? 0 : 1;
+function setOverseasDateDisplay(newOverseasDateDisplay) {
     localStorage.setItem("overseasDateDisplay", newOverseasDateDisplay);
     debugLog(`set overseasDateDisplay to ${newOverseasDateDisplay}`);
     document.dispatchEvent(new CustomEvent('startDayChange'));
@@ -239,10 +256,10 @@ function clearLocalStorage() {
 }
 
 function generateEventListeners() {
-    document.getElementById('toggleTheme').addEventListener('click', toggleTheme);
-    document.getElementById('toggleStartDayButton').addEventListener('click', toggleStartDay);
-    document.getElementById('toggleLocaleTypeButton').addEventListener('click', toggleLocale);
-    document.getElementById('toggleOverseasDateDisplayButton').addEventListener('click', toggleOverseasDateDisplayButton);
+    document.querySelectorAll('#themeSegmented button').forEach(btn => btn.addEventListener('click', () => setTheme(btn.dataset.value)));
+    document.querySelectorAll('#localeSegmented button').forEach(btn => btn.addEventListener('click', () => setLocale(btn.dataset.value)));
+    document.querySelectorAll('#startDaySegmented button').forEach(btn => btn.addEventListener('click', () => setStartDay(btn.dataset.value)));
+    document.querySelectorAll('#overseasSegmented button').forEach(btn => btn.addEventListener('click', () => setOverseasDateDisplay(btn.dataset.value)));
     document.getElementById('clearLocalStorage').addEventListener('click', clearLocalStorage);
 }
 

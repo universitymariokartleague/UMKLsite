@@ -35,6 +35,12 @@
     align-items: center;
 }
 
+#settingsBox hr {
+    border: none;
+    border-top: 1px solid var(--translucent-color);
+    margin: 16px 0;
+}
+
 .settings-close-btn {
     background: var(--translucent-color);
     border: none;
@@ -71,14 +77,6 @@
 .settings-group:last-child {
     margin-bottom: 0;
     border-bottom: none;
-}
-
-.setting-sub-heading {
-    font-size: 0.8rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-bottom: 12px;
 }
 
 .setting-row {
@@ -139,6 +137,59 @@
     background: rgba(235, 57, 66, 0.4);
 }
 
+.settings-segmented {
+    display: flex;
+    background: var(--translucent-color);
+    border-radius: 10px;
+    padding: 3px;
+    gap: 2px;
+    min-width: 220px;
+}
+
+.settings-segmented button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: none;
+    background: transparent;
+    color: var(--text-color);
+    opacity: 0.65;
+    padding: 7px 10px;
+    border-radius: 7px;
+    font-size: 0.85rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+}
+
+.settings-segmented button svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+.settings-segmented button:hover:not(.active) {
+    opacity: 1;
+}
+
+.settings-segmented button.active {
+    background: var(--bg-color);
+    opacity: 1;
+    font-weight: 600;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.settings-segmented button:active {
+    transform: scale(0.97);
+}
+
+.settings-segmented button:focus-visible {
+    outline: 2px solid var(--brand-primary);
+    outline-offset: 2px;
+}
+
 .settings-error {
     padding: 16px;
     background: rgba(235, 57, 66, 0.1);
@@ -147,18 +198,12 @@
     font-size: 0.875rem;
 }
 
-.settings-badge {
-    background: var(--translucent-color);
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-family: var(--mono-font);
-}
-
 @keyframes dialogPopIn {
     from {
         opacity: 0;
         transform: scale(0.95);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -170,6 +215,7 @@
         opacity: 1;
         transform: scale(1);
     }
+
     to {
         opacity: 0;
         transform: scale(0.95);
@@ -177,13 +223,23 @@
 }
 
 @keyframes dialogBackdropFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes dialogBackdropFadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
 }
 
 @media (max-width: 480px) {
@@ -197,7 +253,8 @@
         gap: 10px;
     }
 
-    .settings-btn {
+    .settings-btn,
+    .settings-segmented {
         width: 100%;
     }
 }
