@@ -291,7 +291,7 @@ function generateTeamBox(teamData, showError) {
         heroPattern.style.backgroundColor = teamData.team_color;
     }
 
-    // document.documentElement.style.setProperty('--highlight-color', teamData.team_color);
+    document.documentElement.style.setProperty('--selection-color', teamData.team_color);
 
     const heroLogo = document.getElementById('teamHeroLogo');
     if (heroLogo) {

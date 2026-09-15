@@ -326,7 +326,7 @@ article:hover h3 {
 
     .hero-card {
         grid-column: span 2;
-        aspect-ratio: 1;
+        aspect-ratio: 4/3;
     }
 
     .right-column {
@@ -334,7 +334,7 @@ article:hover h3 {
     }
 
     .video-card {
-        flex: 0 0 calc(33.333% - 11px);
+        flex: 0 0 calc(33.3% - 11px);
     }
 
     .hero-card h2 {

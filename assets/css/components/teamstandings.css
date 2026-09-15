@@ -77,6 +77,11 @@ picture img {
 
 .standings-row {
     cursor: pointer;
+    transition: background-color 0.1s ease;
+}
+
+.standings-row:hover {
+    background-color: var(--translucent-color);
 }
 
 .standings-row:hover .column-team {
@@ -305,7 +310,7 @@ picture img {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 24px;
+    margin-top: var(--section-spacing);
 }
 
 .teamStandingPattern {

@@ -7,6 +7,7 @@
     --navbar-height: 70px;
     --border-radius: 15px;
     --border-radius-pill: 50px;
+    --section-spacing: 24px;
 
     --brand-primary: #bc0839;
     --brand-secondary: #ff6874;
@@ -19,9 +20,10 @@
     --brand-positive: #22a65e;
     --brand-negative: #ff6874;
 
-    /* Same in every theme - not overridden below */
+    /* Same in every theme */
     --accent-color: var(--brand-primary);
     --highlight-color: var(--brand-primary);
+    --selection-color: var(--highlight-color);
     --light-highlight-color: #ffffff80;
     --dark-highlight-color: color-mix(in oklch, var(--brand-dark) 50%, transparent);
 }
@@ -112,8 +114,7 @@
     --footer-end-highlight-color: var(--dark-highlight-color);
 }
 
-
-/*adjust mobile text inflation*/
+/* Adjust mobile text inflation */
 html {
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
@@ -179,17 +180,17 @@ h4 {
 }
 
 h1 {
-    font-size: 4.5em;
+    font-size: 3em;
     font-weight: 900;
     text-transform: uppercase;
 }
 
 h2 {
-    font-size: 2.5em;
+    font-size: 1.5em;
 }
 
 h3 {
-    font-size: 1.5em;
+    font-size: 1.25em;
 }
 
 @media screen and (max-width: 900px) {
@@ -198,11 +199,11 @@ h3 {
     }
 
     h2 {
-        font-size: 1.5em;
+        font-size: 1.25em;
     }
 
     h3 {
-        font-size: 1.25em;
+        font-size: 1.1em;
     }
 }
 
@@ -281,7 +282,7 @@ h4:target {
 }
 
 ::selection {
-    background-color: var(--highlight-color);
+    background-color: var(--selection-color);
 }
 
 a:link {

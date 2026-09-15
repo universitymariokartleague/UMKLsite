@@ -9,7 +9,7 @@
 }
 
 .article-content {
-    flex: 3;
+    flex: 2;
 }
 
 .article-header {
@@ -20,7 +20,11 @@
 }
 
 .article-main h1 {
-    line-height: 0.85;
+    line-height: 0.95;
+}
+
+.article-main h3 {
+    line-height: 1.4;
 }
 
 .article-subtitle {
@@ -28,7 +32,8 @@
 }
 
 .article-main p {
-    font-size: 1.1em;
+    font-size: 1.05em;
+    line-height: 1.5;
 }
 
 .article-body p {
@@ -59,6 +64,7 @@
 
 .article-image-caption {
     width: 100%;
+    font-size: 1.05em;
     opacity: 0.8;
 }
 

@@ -1,7 +1,7 @@
 #creditGenerate {
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
-    margin-top: 24px;
+    margin-top: var(--section-spacing);
 }
 
 #creditGenerate.fade-in {

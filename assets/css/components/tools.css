@@ -19,15 +19,15 @@
     border: 1px solid var(--translucent-color);
     border-radius: var(--border-radius);
     padding: 16px;
+    transition: background-color 0.1s ease;
 }
 
 .tool-button:hover {
-    background-color: color-mix(in oklch, var(--accent-color) 8%, transparent);
-    border-color: var(--accent-color);
+    background-color: var(--translucent-color);
 }
 
 .tool-button:active {
-    background-color: color-mix(in oklch, var(--accent-color) 15%, transparent);
+    background-color: var(--opaque-color);
 }
 
 .tool-icon {
@@ -35,19 +35,15 @@
     width: 52px;
     height: 52px;
     border-radius: calc(var(--border-radius) * 0.65);
-    background-color: color-mix(in oklch, var(--accent-color) 15%, transparent);
+    background-color: var(--accent-color);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.tool-button:hover .tool-icon {
-    background-color: color-mix(in oklch, var(--accent-color) 25%, transparent);
-}
-
 .tool-icon i {
     font-size: 1.3rem;
-    color: var(--accent-color);
+    color: var(--brand-light);
 }
 
 .tool-icon img {

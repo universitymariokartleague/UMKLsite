@@ -2,7 +2,7 @@
 
 /* news */
 #news-search-wrapper {
-    margin-top: 24px;
+    margin-top: var(--section-spacing);
     margin-bottom: 24px;
 }
 
