@@ -40,6 +40,11 @@
     text-transform: none;
 }
 
+#teamHero ::selection {
+    background-color: #fff;
+    color: var(--selection-color);
+}
+
 @media screen and (max-width: 900px) {
     .team-hero {
         min-height: 80px;

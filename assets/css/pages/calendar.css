@@ -184,7 +184,8 @@
 }
 
 .month-arrow:active:not(.empty) {
-    transform: scale(0.92);
+    background-color: var(--opaque-color);
+    filter: brightness(0.9);
 }
 
 /* Day grid */
@@ -374,12 +375,8 @@
         border-radius: calc(var(--border-radius) * 0.4);
     }
 
-    .color-bar-container {
-        margin-top: 2px;
-    }
-
     .team-color-bar {
-        width: clamp(4px, 2.2vw, 16px);
-        height: clamp(2px, 0.6vw, 6px);
+        width: clamp(4px, 2.6vw, 16px);
+        height: clamp(2px, 0.8vw, 6px);
     }
 }
