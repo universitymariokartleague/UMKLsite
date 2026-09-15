@@ -7,22 +7,115 @@
     align-items: center;
 }
 
-.coloris {
-    width: 75px;
+.color-picker-field {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.color-picker-swatch {
+    position: absolute;
+    left: 4px;
+    width: 25px;
     height: 25px;
+    padding: 0;
     border: 1px solid #ccccccaa;
-    background-color: var(--box-area-bg-color);
+    border-radius: calc(var(--border-radius) * 0.35);
+    cursor: pointer;
+}
+
+.color-picker-input {
+    box-sizing: border-box;
+    width: 105px;
+    height: 30px;
+    padding: 4px 8px 4px 38px;
+    border: 1px solid #ccccccaa;
     border-radius: calc(var(--border-radius) * 0.5);
+    background-color: var(--box-area-bg-color);
+    color: var(--text-color);
+    font-family: var(--mono-font);
+    font-size: 13px;
 }
 
-.square .clr-field button {
-    left: 0px;
-    right: auto;
-
+.color-picker-panel {
+    position: absolute;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 200px;
+    box-sizing: border-box;
+    padding: 14px;
+    border: var(--box-border);
+    border-radius: var(--border-radius);
+    background-color: var(--bg-color);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
 }
 
-.square .clr-field input {
-    padding-left: 48px;
+.color-picker-panel[hidden] {
+    display: none;
+}
+
+.color-picker-gradient {
+    position: relative;
+    width: 100%;
+    height: 120px;
+    border-radius: calc(var(--border-radius) * 0.5);
+    background-image: linear-gradient(rgba(0, 0, 0, 0), #000), linear-gradient(90deg, #fff, currentColor);
+    cursor: crosshair;
+    touch-action: none;
+}
+
+.color-picker-gradient-marker {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    margin: -7px 0 0 -7px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background-color: currentColor;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
+    pointer-events: none;
+}
+
+.color-picker-hue {
+    position: relative;
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    background-image: linear-gradient(to right, red 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, red 100%);
+    cursor: pointer;
+    touch-action: none;
+}
+
+.color-picker-hue-marker {
+    position: absolute;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background-color: currentColor;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
+    pointer-events: none;
+}
+
+.color-picker-swatches {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+}
+
+.color-picker-swatches button {
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 1px solid #ccccccaa;
+    border-radius: calc(var(--border-radius) * 0.3);
+    background-color: currentColor;
+    cursor: pointer;
 }
 
 #colorWheel {
@@ -53,7 +146,7 @@
 @media (max-width: 767px) {
     #colorWheel {
         float: unset;
-        max-width: 100%!important;
-        height: auto!important;
+        max-width: 100% !important;
+        height: auto !important;
     }
 }

@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="/assets/css/components/colorpicker.css">
     <link rel="stylesheet" href="/assets/css/components/discordrolepreview.css">
     <link rel="stylesheet" href="/assets/css/ext/fontawesome.min.css">
-    <link rel="stylesheet" href="/assets/css/ext/coloris.min.css">
 
     <meta property="og:title" content="UMKL | Colour Picker" />
     <meta property="og:site_name" content="umkl.co.uk" />
@@ -38,7 +37,7 @@
 
     <script type="module" src="/assets/scripts/base/settings.js" defer></script>
     <script defer src="/assets/scripts/base/imagefade.js" type="module"></script>
-    <script type="module" src="/assets/scripts/ext/coloris.js" defer></script>
+    <script type="module" src="/assets/scripts/components/colorpicker.js" defer></script>
 </head>
 
 <body id="top">
@@ -55,7 +54,10 @@
         </div>
 
         <p class="color-picker square">
-            <input value="#1baa8b" id="color-picker" class="coloris" type="text" data-coloris>
+            <span class="color-picker-field" id="colorPickerField">
+                <button type="button" class="color-picker-swatch" id="colorPickerSwatch" aria-label="Open colour picker" aria-expanded="false" style="background-color: #1baa8b;"></button>
+                <input value="#1baa8b" id="color-picker" class="color-picker-input" type="text" autocomplete="off" spellcheck="false" maxlength="7" aria-label="Colour value">
+            </span>
             <span id="colorMessage">Current colour: <code translate="no">#1baa8b</code></span>
         </p>
     </main>

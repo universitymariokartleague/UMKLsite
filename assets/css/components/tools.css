@@ -1,71 +1,96 @@
 .tool-section {
-    margin-bottom: 28px;
+    margin-bottom: 36px;
 }
 
 .tool-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 8px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 14px;
+    margin-top: 14px;
 }
 
 .tool-button {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
     text-decoration: none;
-    border: var(--box-border);
-    border-radius: calc(var(--border-radius) * 0.5);
-    padding: 12px 14px;
+    background-color: var(--box-area-bg-color);
+    border: 1px solid var(--translucent-color);
+    border-radius: var(--border-radius);
+    padding: 16px;
 }
 
 .tool-button:hover {
-    outline: var(--box-outline);
+    background-color: color-mix(in oklch, var(--accent-color) 8%, transparent);
+    border-color: var(--accent-color);
+}
+
+.tool-button:active {
+    background-color: color-mix(in oklch, var(--accent-color) 15%, transparent);
 }
 
 .tool-icon {
     flex-shrink: 0;
     width: 52px;
     height: 52px;
+    border-radius: calc(var(--border-radius) * 0.65);
+    background-color: color-mix(in oklch, var(--accent-color) 15%, transparent);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.tool-icon img {
-    max-width: 38px;
-    max-height: 38px;
+.tool-button:hover .tool-icon {
+    background-color: color-mix(in oklch, var(--accent-color) 25%, transparent);
 }
 
-.tool-icon i,
+.tool-icon i {
+    font-size: 1.3rem;
+    color: var(--accent-color);
+}
+
+.tool-icon img {
+    max-width: 30px;
+    max-height: 30px;
+}
+
 .tool-info {
     display: flex;
     flex-direction: column;
     gap: 3px;
+    min-width: 0;
 }
 
 .tool-label {
-    font-weight: bold;
+    font-weight: 700;
     color: var(--text-color);
-    font-size: 0.95rem;
+    font-size: 0.98rem;
 }
 
 .tool-desc {
     font-size: 0.8rem;
-    opacity: 0.6;
+    opacity: 0.65;
     color: var(--text-color);
 }
 
 @media (max-width: 480px) {
+    .tool-grid {
+        grid-template-columns: 1fr;
+    }
+
     .tool-button {
-        padding: 10px 12px;
+        padding: 12px 14px;
         gap: 12px;
     }
 
     .tool-icon {
         width: 44px;
         height: 44px;
+    }
+
+    .tool-icon i {
+        font-size: 1.1rem;
     }
 
     .tool-label {
