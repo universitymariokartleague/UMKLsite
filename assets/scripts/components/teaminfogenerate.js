@@ -292,6 +292,7 @@ function generateTeamBox(teamData, showError) {
     }
 
     document.documentElement.style.setProperty('--selection-color', teamData.team_color);
+    document.documentElement.style.setProperty('--link-color', teamData.team_color);
 
     const heroLogo = document.getElementById('teamHeroLogo');
     if (heroLogo) {
