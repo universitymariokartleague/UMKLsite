@@ -37,6 +37,7 @@
     <script src="/assets/scripts/base/theme.js"></script>
     <script type="module" src="/assets/scripts/base/settings.js" defer></script>
     <script defer src="/assets/scripts/base/imagefade.js" type="module"></script>
+    <script type="module" src="/assets/scripts/base/smartback.js" defer></script>
     <script type="module" src="/assets/scripts/pages/lostworldeasteregg.js" defer></script>
     <script type="module" src="/assets/scripts/pages/spmystery.js" defer></script>
 </head>
@@ -50,13 +51,21 @@
                 page<br></blockquote>
         </noscript>
 
-        <a href="/rules/">Back</a>
+        <div class="bubble-link-wrapper">
+            <a href="/rules/" class="bubble-link no-color-link" data-smart-back>
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24"
+                    role="presentation">
+                    <path fill="currentColor"
+                        d="M22 13H4.94l5.18 5.29-1.38 1.42-6.17-6.3a2 2 0 0 1 0-2.82l6.17-6.3 1.38 1.42L4.94 11H22z">
+                    </path>
+                </svg>
+                Back</a>
+        </div>
         <h1>Discord/Cheep Cheep FAQ</h1>
         <p class="p-below-title">Frequently asked questions concerning using the Cheep Cheep app and the UMKL Discord
             server</p>
         <img loading="lazy" src="/assets/media/brand/cheep_cheep_banner_crop.avif" class="image after-title"
             alt="An image of Cheep Cheep in the ocean" />
-        <hr class="hr-below-title">
 
         <h2 id="how-it-works"><a href="/rules/faq/#how-it-works">How Cheep Cheep Works</a></h2>
         <p class="p-no-spacing">
@@ -242,7 +251,7 @@
         </p>
         <p>
             For a full technical breakdown of how the codebase itself is structured, see the
-            <a href="/rules/cheepcheeparchitecture/">Cheep Cheep Architecture & Code Guide</a>.
+            <a href="/rules/cheepcheeparchitecture/">Cheep Cheep Architecture Guide</a>.
         </p>
 
         <div id="hex" class="hidden">

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="color-scheme" content="dark light">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Cheep Cheep Architecture & Code Guide | UMKL</title>
+    <title>Cheep Cheep Architecture Guide | UMKL</title>
     <meta name="description"
         content="Technical documentation explaining how the Cheep Cheep Discord bot and API codebase is structured, module by module.">
     <link rel="icon" href="/assets/media/brand/favicon.png" type="image/png">
@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="/assets/css/components/rules.css">
     <link rel="stylesheet" href="/assets/css/ext/fontawesome.min.css">
 
-    <meta property="og:title" content="UMKL | Cheep Cheep Architecture & Code Guide" />
+    <meta property="og:title" content="UMKL | Cheep Cheep Architecture Guide" />
     <meta property="og:site_name" content="umkl.co.uk" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://umkl.co.uk/rules/cheepcheeparchitecture/" />
@@ -37,6 +37,7 @@
     <script src="/assets/scripts/base/theme.js"></script>
     <script type="module" src="/assets/scripts/base/settings.js" defer></script>
     <script defer src="/assets/scripts/base/imagefade.js" type="module"></script>
+    <script type="module" src="/assets/scripts/base/smartback.js" defer></script>
     <script type="module" src="/assets/scripts/pages/codehighlight.js" defer></script>
 </head>
 
@@ -44,13 +45,21 @@
     <umkl-navbar></umkl-navbar>
 
     <main class="article-main reading-page">
-        <a href="/rules/">Back</a>
-        <h1>Cheep Cheep Architecture & Code Guide <span class="doc-version-badge" translate="no">v1.0</span></h1>
+        <div class="bubble-link-wrapper">
+            <a href="/rules/" class="bubble-link no-color-link" data-smart-back>
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24"
+                    role="presentation">
+                    <path fill="currentColor"
+                        d="M22 13H4.94l5.18 5.29-1.38 1.42-6.17-6.3a2 2 0 0 1 0-2.82l6.17-6.3 1.38 1.42L4.94 11H22z">
+                    </path>
+                </svg>
+                Back</a>
+        </div>
+        <h1>Cheep Cheep Architecture Guide</h1>
         <p class="p-below-title">
             A technical, developer-facing guide to how the Cheep Cheep codebase is put
             together
         </p>
-        <hr class="hr-below-title">
 
         <p class="p-no-spacing">
             This page is aimed at developers. For a general, non-technical explanation of how Cheep Cheep works, see the

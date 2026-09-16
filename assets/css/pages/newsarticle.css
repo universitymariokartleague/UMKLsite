@@ -1,5 +1,5 @@
 .article-main .bubble-link-wrapper {
-    margin-bottom: 20px;
+    margin-bottom: var(--section-spacing);
 }
 
 .article-wrapper {
@@ -19,29 +19,15 @@
     margin-bottom: 12px;
 }
 
-.article-main h1 {
-    line-height: 0.95;
-}
-
-.article-main h3 {
-    line-height: 1.4;
-}
-
-.article-subtitle {
-    font-size: 1.1em;
-}
-
-.article-main p {
-    font-size: 1.05em;
-    line-height: 1.5;
-}
-
 .article-body p {
     margin-bottom: 24px;
 }
 
 .article-body blockquote {
     margin: 0 0 24px;
+}
+
+.article-body blockquote:not(.info):not(.warning):not(.success):not(.fail):not(.rainbow) {
     padding: 4px 20px;
     border-left: 4px solid var(--brand-primary);
     font-style: italic;

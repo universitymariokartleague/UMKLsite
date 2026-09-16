@@ -1,21 +1,48 @@
-.rule-section, .sub-rule-section {
-    margin-top: 10px;
-    margin-left: 30px;
-}
-
-.rule-heading {
+.rule-section {
     margin-top: 20px;
 }
 
+ul {
+    margin: 5px;
+}
+
+.sub-rule-section {
+    margin-top: 14px;
+    padding-left: 16px;
+    border-left: 2px solid var(--translucent-color);
+}
+
+.rule-heading,
+h2[id^="rule"] {
+    margin-top: var(--section-spacing);
+}
+
 .rule-number {
-    margin-right: 10px;
-    font-weight: bold;
+    margin-right: 6px;
+    font-weight: 700;
+    font-family: var(--mono-font);
+    white-space: nowrap;
+}
+
+.rule-number a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.rule-number a:hover {
+    text-decoration: underline;
 }
 
 .tag-clan-table,
 .schema-table {
     border: 1px solid var(--translucent-color);
     border-radius: var(--border-radius);
+    background-color: var(--box-area-bg-color);
+}
+
+.tag-clan-table td.table-key {
+    font-family: var(--mono-font);
+    font-weight: 600;
 }
 
 .tag-clan-table {
@@ -46,6 +73,7 @@
 }
 
 @media screen and (max-width: 767px) {
+
     .tag-clan-table th,
     .tag-clan-table td {
         padding: 3px;
@@ -173,8 +201,8 @@
     border-top: 1px dashed var(--translucent-color);
 }
 
-.import-tree > li::before,
-.import-tree > li::after {
+.import-tree>li::before,
+.import-tree>li::after {
     display: none;
 }
 
@@ -292,16 +320,6 @@ h4[id^="route-"] {
     background-color: var(--accent-color);
     color: #fff;
     margin-left: 6px;
-}
-
-.doc-version-badge {
-    vertical-align: middle;
-    font-size: 12px;
-    padding: 2px 8px;
-    border: 1px solid var(--accent-color);
-    border-radius: var(--border-radius);
-    background-color: var(--accent-color);
-    color: #fff;
 }
 
 .flow-steps {

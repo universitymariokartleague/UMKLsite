@@ -36,16 +36,25 @@
 
     <script type="module" src="/assets/scripts/base/settings.js" defer></script>
     <script defer src="/assets/scripts/base/imagefade.js" type="module"></script>
+    <script type="module" src="/assets/scripts/base/smartback.js" defer></script>
 </head>
 
 <body id="top">
     <umkl-navbar></umkl-navbar>
 
-    <main class="article-main reading-page">
-        <a href="/rules/">Back</a>
+    <main class="reading-page">
+        <div class="bubble-link-wrapper">
+            <a href="/rules/" class="bubble-link no-color-link" data-smart-back>
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24"
+                    role="presentation">
+                    <path fill="currentColor"
+                        d="M22 13H4.94l5.18 5.29-1.38 1.42-6.17-6.3a2 2 0 0 1 0-2.82l6.17-6.3 1.38 1.42L4.94 11H22z">
+                    </path>
+                </svg>
+                Back</a>
+        </div>
         <h1>Match Rules</h1>
         <p class="p-below-title">Rules and regulations for matches</p>
-        <hr class="hr-below-title">
 
         <h2 id="rule1"><a href="/rules/match/#rule1">1. Teams and Matches</a></h2>
 
@@ -122,24 +131,24 @@
                 <div class="tag-clan-table after-title">
                     <table>
                         <tr>
-                            <td>✅</td>
-                            <td translate="no" class="table-key">$★Mario</td>
-                            <td>$★Luigi</td>
+                            <td>✓</td>
+                            <td translate="no">$★Mario</td>
+                            <td translate="no">$★Luigi</td>
                         </tr>
                         <tr>
-                            <td>✅</td>
-                            <td translate="no" class="table-key">PRI Peach</td>
-                            <td>PRI Daisy</td>
+                            <td>✓</td>
+                            <td translate="no">PRI Peach</td>
+                            <td translate="no">PRI Daisy</td>
                         </tr>
                         <tr>
-                            <td>❌<br><b>seperator<br>differs</b></td>
-                            <td translate="no" class="table-key">YOS|Yoshi</td>
-                            <td>YOS Birdo</td>
+                            <td>✕<br><b>seperator<br>differs</b></td>
+                            <td translate="no">YOS|Yoshi</td>
+                            <td translate="no">YOS Birdo</td>
                         </tr>
                         <tr>
-                            <td>❌<br><b>tag after<br>display<br>name</b></td>
-                            <td translate="no" class="table-key">Wario MON</td>
-                            <td>Waluigi MON</td>
+                            <td>✕<br><b>tag after<br>name</b></td>
+                            <td translate="no">Wario MON</td>
+                            <td translate="no">Waluigi MON</td>
                         </tr>
                     </table>
                 </div>
@@ -197,7 +206,6 @@
             the end of a season, their highest finishing positions will be compared to determine their ranking.
         </div>
 
-        <br>
         <h2 id="rule2"><a href="/rules/match/#rule2">2. Hosting</a></h2>
 
         <div class="rule-section" id="rule2.1">
@@ -250,9 +258,11 @@
                     </tr>
                 </table>
             </div>
+            <img loading="lazy" class="image after-title" style="max-width: 500px"
+                src="/assets/media/match/racesettings.avif"
+                alt="The in-game race settings menu, showing the settings a host should use for a match">
         </div>
 
-        <br>
         <h2 id="rule3"><a href="/rules/match/#rule3">3. Disconnections and Lag</a></h2>
 
         <div class="rule-section" id="rule3.1">
@@ -303,7 +313,6 @@
             host may be requested.
         </div>
 
-        <br>
         <h2 id="rule4"><a href="/rules/match/#rule4">4. Disqualifications</a></h2>
 
         <div class="rule-section" id="rule4.1">

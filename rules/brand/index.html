@@ -37,17 +37,27 @@
 
     <script type="module" src="/assets/scripts/base/settings.js" defer></script>
     <script defer src="/assets/scripts/base/imagefade.js" type="module"></script>
+    <script type="module" src="/assets/scripts/base/smartback.js" defer></script>
+    <script type="module" src="/assets/scripts/pages/brandswatches.js" defer></script>
 </head>
 
 <body id="top">
     <umkl-navbar></umkl-navbar>
 
     <main class="article-main reading-page">
-        <a href="/rules/">Back</a>
+        <div class="bubble-link-wrapper">
+            <a href="/rules/" class="bubble-link no-color-link" data-smart-back>
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24"
+                    role="presentation">
+                    <path fill="currentColor"
+                        d="M22 13H4.94l5.18 5.29-1.38 1.42-6.17-6.3a2 2 0 0 1 0-2.82l6.17-6.3 1.38 1.42L4.94 11H22z">
+                    </path>
+                </svg>
+                Back</a>
+        </div>
         <h1>Brand Guidelines</h1>
         <p class="p-below-title">Guidelines for the use of
             intellectual property belonging to the UMKL</p>
-        <hr class="hr-below-title">
 
         <h2>Our Logo</h2>
         <p class="p-below-title">
@@ -82,17 +92,26 @@
 
         <h2 class="h-below-image">Colours</h2>
         <p class="p-below-title">Any content regarding the league as a whole must feature our colours</p>
-        <div class="brand-container">
-            <div class="brand-element brand-standard">
-                <div class="brand-element-text">
-                    <h2>Red</h2>
-                    <p class="p-below-title">#BC0839</p>
+        <div class="color-swatch-grid">
+            <div class="color-swatch">
+                <div class="color-swatch-block" style="background-color: var(--brand-primary);"></div>
+                <div class="color-swatch-info">
+                    <span class="color-swatch-name">Carmine</span>
+                    <button type="button" class="color-swatch-code" aria-label="Copy hex code">…</button>
                 </div>
             </div>
-            <div class="brand-element brand-white">
-                <div class="brand-element-text">
-                    <h2>White</h2>
-                    <p class="p-below-title">#FFFFFF</p>
+            <div class="color-swatch">
+                <div class="color-swatch-block" style="background-color: var(--brand-light);"></div>
+                <div class="color-swatch-info">
+                    <span class="color-swatch-name">White</span>
+                    <button type="button" class="color-swatch-code" aria-label="Copy hex code">…</button>
+                </div>
+            </div>
+            <div class="color-swatch">
+                <div class="color-swatch-block" style="background-color: var(--brand-dark);"></div>
+                <div class="color-swatch-info">
+                    <span class="color-swatch-name">Burnt Umber Void</span>
+                    <button type="button" class="color-swatch-code" aria-label="Copy hex code">…</button>
                 </div>
             </div>
         </div>

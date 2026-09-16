@@ -11,8 +11,8 @@
 
     --brand-primary: #bc0839;
     --brand-secondary: #ff6874;
-    --brand-dark: oklch(15% 0.025 17);
-    --brand-light: oklch(100% 0.00011 271.152);
+    --brand-dark: #160702;
+    --brand-light: #FFF;
     --brand-dark-translucent: color-mix(in oklch, var(--brand-dark) 8%, transparent);
     --brand-light-translucent: color-mix(in oklch, var(--brand-light) 20%, transparent);
     --brand-dark-opaque: color-mix(in oklch, var(--brand-dark) 50%, transparent);
@@ -160,6 +160,47 @@ main.article-main {
 
 main.reading-page {
     max-width: calc(var(--reading-max-width) - env(safe-area-inset-left));
+}
+
+main.article-main h1,
+main.reading-page h1 {
+    line-height: 0.95;
+}
+
+main.article-main h2,
+main.reading-page h2 {
+    line-height: 1.25;
+}
+
+main.article-main h3,
+main.reading-page h3 {
+    line-height: 1.4;
+}
+
+.article-subtitle,
+.p-below-title {
+    font-size: 1.1em;
+    line-height: 1.35;
+}
+
+main.article-main p,
+main.reading-page p {
+    font-size: 1.05em;
+    line-height: 1.5;
+}
+
+main.reading-page .rule-section {
+    font-size: 1.05em;
+    line-height: 1.35;
+}
+
+main.reading-page li {
+    font-size: 1.05em;
+    line-height: 1.35;
+}
+
+main.reading-page .bubble-link-wrapper {
+    margin-bottom: var(--section-spacing);
 }
 
 h1,
