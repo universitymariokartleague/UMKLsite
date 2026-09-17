@@ -90,6 +90,7 @@ const outputDocument = ({ title, subtitle, mainImageUrl, mainCaption, bodyConten
 
 <head>
     <meta charset="utf-8">
+    <meta content="#bc0839" name="theme-color" />
     <meta name="color-scheme" content="dark light">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>${title} | UMKL</title>
@@ -109,7 +110,6 @@ const outputDocument = ({ title, subtitle, mainImageUrl, mainCaption, bodyConten
     <meta property="og:image" content="${mainImageUrl}" />
     <meta property="og:description"
         content="${subtitle}" />
-    <meta content="#bc0839" name="theme-color" />
 
     <meta name="twitter:card" content="summary_large_image">
 
