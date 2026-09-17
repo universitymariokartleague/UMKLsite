@@ -110,20 +110,21 @@
     opacity: 1;
 }
 
-.btn-exit {
-    background: transparent;
-    border: 1px solid var(--brand-light);
+/* .builder-bar is always brand-red regardless of theme, so its bubble-link
+   needs fixed light colours instead of the theme-aware defaults */
+.builder-bar .bubble-link {
+    background-color: #ffffff29;
     color: var(--brand-light);
-    padding: 4px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    padding: 6px 16px;
+    font-size: 15px;
 }
 
-.btn-exit:hover {
-    background: var(--brand-light-translucent);
+.builder-bar .bubble-link:hover {
+    background-color: #ffffff40;
+}
+
+.builder-bar .bubble-link:active {
+    background-color: #ffffff59;
 }
 
 .toolbar {

@@ -20,7 +20,6 @@ const insertImageBtn = document.getElementById('insertImageBtn');
 const insertVideoBtn = document.getElementById('insertVideoBtn');
 const clearBtn = document.getElementById('clearBtn');
 const saveBtn = document.getElementById('saveBtn');
-const exitBtn = document.getElementById('exitBtn');
 const homeLink = document.getElementById('homeLink');
 const storageUsageEl = document.getElementById('storageUsage');
 
@@ -334,7 +333,7 @@ let hasWarnedAboutStorage = false;
 
 // Date field: defaults to now, and auto-corrects to this format whenever it's edited
 function formatDate(date) {
-    return `${date.getDate()} ${date.toLocaleString('en-GB', { month: 'long' })} ${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+    return `${date.getDate()} ${date.toLocaleString('en-GB', { month: 'long' })} ${date.getFullYear()}`;
 }
 
 // Accepts "28/2/26", "28-02-2026", "28th Feb 2026", etc., in addition to whatever Date() understands natively
@@ -759,8 +758,9 @@ function updateToolbarState() {
         }
     }
 
-    // Disable toolbar controls when focused outside bodyEditor
-    const controls = [blockTypeSelect, boldBtn, linkBtn, codeBtn, insertImageBtn, insertVideoBtn];
+    // Disable toolbar controls when focused outside bodyEditor - block type and bold
+    // stay usable throughout, since they restore the last body selection themselves.
+    const controls = [linkBtn, codeBtn, insertImageBtn, insertVideoBtn];
     controls.forEach(ctrl => {
         ctrl.disabled = !isBodyActive;
         ctrl.style.opacity = isBodyActive ? '1' : '0.4';
@@ -781,11 +781,38 @@ document.addEventListener('selectionchange', updateToolbarState);
 document.addEventListener('focusin', updateToolbarState);
 updateToolbarState();
 
-// Rich text
-boldBtn.addEventListener('click', () => {
-    if (!boldBtn.disabled) {
-        document.execCommand('bold', false, null);
+// Remembers the last selection made inside bodyEditor, so toolbar controls that
+// need focus elsewhere to work (e.g. a <select>) can still act on body text -
+// otherwise clicking them first steals focus/selection away from bodyEditor.
+let lastBodyRange = null;
+
+function isSelectionInBody(sel) {
+    if (!sel || sel.rangeCount === 0) return false;
+    const node = sel.anchorNode;
+    return !!(node && bodyEditor.contains(node.nodeType === 3 ? node.parentNode : node));
+}
+
+document.addEventListener('selectionchange', () => {
+    const sel = window.getSelection();
+    if (isSelectionInBody(sel)) {
+        lastBodyRange = sel.getRangeAt(0).cloneRange();
     }
+});
+
+function restoreBodySelection() {
+    bodyEditor.focus();
+    const sel = window.getSelection();
+    if (!isSelectionInBody(sel) && lastBodyRange) {
+        sel.removeAllRanges();
+        sel.addRange(lastBodyRange);
+    }
+}
+
+// Rich text
+boldBtn.addEventListener('mousedown', (e) => e.preventDefault());
+boldBtn.addEventListener('click', () => {
+    restoreBodySelection();
+    document.execCommand('bold', false, null);
 });
 
 linkBtn.addEventListener('click', () => {
@@ -847,22 +874,21 @@ codeBtn.addEventListener('click', () => {
 });
 
 blockTypeSelect.addEventListener('change', (e) => {
-    if (!blockTypeSelect.disabled) {
-        const tag = e.target.value;
-        if (document.queryCommandSupported('defaultParagraphSeparator')) {
-            document.execCommand('defaultParagraphSeparator', false, 'p');
-        }
-        document.execCommand('formatBlock', false, `<${tag}>`);
+    const tag = e.target.value;
+    restoreBodySelection();
+    if (document.queryCommandSupported('defaultParagraphSeparator')) {
+        document.execCommand('defaultParagraphSeparator', false, 'p');
+    }
+    document.execCommand('formatBlock', false, `<${tag}>`);
 
-        if (tag === 'pre') {
-            const sel = window.getSelection();
-            let node = sel.anchorNode;
-            if (node && node.nodeType === 3) node = node.parentNode;
-            const pre = node ? node.closest('pre') : null;
-            if (pre && bodyEditor.contains(pre)) {
-                pre.classList.add('codeBox');
-                pre.setAttribute('translate', 'no');
-            }
+    if (tag === 'pre') {
+        const sel = window.getSelection();
+        let node = sel.anchorNode;
+        if (node && node.nodeType === 3) node = node.parentNode;
+        const pre = node ? node.closest('pre') : null;
+        if (pre && bodyEditor.contains(pre)) {
+            pre.classList.add('codeBox');
+            pre.setAttribute('translate', 'no');
         }
     }
 });
@@ -889,18 +915,34 @@ function insertBlockToBody(block) {
             currentBlock = currentBlock.parentNode;
         }
 
+        const p = document.createElement('p');
+        p.innerHTML = '<br>';
+
+        // An empty line (e.g. one the user just pressed Enter to create) shouldn't
+        // linger above the inserted block - use it as the block's slot instead.
+        const isEmptyLine = currentBlock && currentBlock.nodeType === 1
+            && currentBlock.textContent.trim() === ''
+            && !currentBlock.querySelector('img');
+
         // Create new line if inserting mid-text line
         if (currentBlock && currentBlock !== bodyEditor) {
-            const p = document.createElement('p');
-            p.innerHTML = '<br>';
-            currentBlock.after(block);
+            if (isEmptyLine) {
+                currentBlock.replaceWith(block);
+            } else {
+                currentBlock.after(block);
+            }
             block.after(p);
         } else {
-            const p = document.createElement('p');
-            p.innerHTML = '<br>';
             bodyEditor.appendChild(block);
             bodyEditor.appendChild(p);
         }
+
+        // Move the cursor onto the new empty line after the inserted block
+        const newRange = document.createRange();
+        newRange.setStart(p, 0);
+        newRange.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(newRange);
     }
     saveDraft();
 }
@@ -1060,11 +1102,6 @@ clearBtn.addEventListener('click', () => {
         validateArticleRequirements();
         saveDraft();
     }
-});
-
-exitBtn.addEventListener('click', () => {
-    window.location.href = '/tools/';
-
 });
 
 homeLink.addEventListener('click', (e) => {
