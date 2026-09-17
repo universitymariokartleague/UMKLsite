@@ -7,18 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Credits | UMKL</title>
     <meta name="description" content="Credits for the UMKL site">
-    <link rel="icon" href="/assets/media/brand/favicon.png" type="image/png">
-    <link rel="apple-touch-icon" href="/assets/media/brand/favicon.png">
-    <link rel="stylesheet" href="/assets/css/base/style.css">
-    <link rel="stylesheet" href="/assets/css/base/settings.css">
-    <link rel="stylesheet" href="/assets/css/pages/credits.css">
-    <link rel="stylesheet" href="/assets/css/components/audioplayer.css">
+    <link rel="icon" href="/_assets/media/brand/favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/_assets/media/brand/favicon.png">
+    <link rel="stylesheet" href="/_assets/css/base/style.css">
+    <link rel="stylesheet" href="/_assets/css/base/settings.css">
+    <link rel="stylesheet" href="/_assets/css/pages/credits.css">
+    <link rel="stylesheet" href="/_assets/css/components/audioplayer.css">
 
     <meta property="og:title" content="UMKL | Credits" />
     <meta property="og:site_name" content="umkl.co.uk" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://umkl.co.uk/credits/" />
-    <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/UMKL_banner.avif" />
+    <meta property="og:image" content="https://umkl.co.uk/_assets/media/brand/UMKL_banner.avif" />
     <meta property="og:description" content="Credits for the UMKL site" />
     <meta content="#bc0839" name="theme-color" />
 
@@ -26,16 +26,16 @@
     <meta name="twitter:card" content="summary_large_image">
 
     <!-- Components -->
-    <link rel="modulepreload" href="/assets/components/navbar.js">
-    <link rel="modulepreload" href="/assets/components/footer.js">
-    <script type="module" src="/assets/components/navbar.js" defer></script>
-    <script type="module" src="/assets/components/footer.js" defer></script>
+    <link rel="modulepreload" href="/_assets/webcomponents/navbar.js">
+    <link rel="modulepreload" href="/_assets/webcomponents/footer.js">
+    <script type="module" src="/_assets/webcomponents/navbar.js" defer></script>
+    <script type="module" src="/_assets/webcomponents/footer.js" defer></script>
 
     <!-- Scripts -->
-    <script src="/assets/scripts/base/theme.js"></script>
-    <script type="module" src="/assets/scripts/base/settings.js" defer></script>
-    <script defer src="/assets/scripts/base/imagefade.js" type="module"></script>
-    <script type="module" src="/assets/scripts/pages/creditsgenerate.js" defer></script>
+    <script src="/_assets/scripts/base/theme.js"></script>
+    <script type="module" src="/_assets/scripts/base/settings.js" defer></script>
+    <script defer src="/_assets/scripts/base/imagefade.js" type="module"></script>
+    <script type="module" src="/_assets/scripts/pages/creditsgenerate.js" defer></script>
 </head>
 
 <body id="top">
@@ -47,7 +47,7 @@
                 page<br></blockquote>
         </noscript>
 
-        <audio id="audio" src="/assets/media/bgm/credits/loading_playlist.opus" preload="auto"></audio>
+        <audio id="audio" src="/_assets/media/bgm/credits/loading_playlist.opus" preload="auto"></audio>
         <div id="audioStatus" data-playlist="bgm.txt" class="hidden">
             <span id="BGMName">Music</span><br>
             <div class="audioControls">
@@ -63,32 +63,17 @@
             </div>
             <p id="playlistText" class="hidden"></p>
         </div>
-        <script type="module" src="/assets/scripts/components/audioplayer.js" id="audioPlayerScript"></script>
+        <script type="module" src="/_assets/scripts/components/audioplayer.js" id="audioPlayerScript"></script>
 
         <h1>Credits</h1>
         <p class="p-below-title">People who worked on and contributed to the University Mario Kart League</p>
-
-        <div class="bubble-link-wrapper">
-            <a class="bubble-link no-color-link" href="/sitemap/">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" width="14" height="14" aria-hidden="true">
-                    <line x1="8" y1="6" x2="21" y2="6"></line>
-                    <line x1="8" y1="12" x2="21" y2="12"></line>
-                    <line x1="8" y1="18" x2="21" y2="18"></line>
-                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
-                </svg>
-                View sitemap
-            </a>
-        </div>
 
         <div id="creditGenerate"></div>
 
         <div class="credits-footnotes">
             <p>
-                <a href="/rules/privacy">View the privacy policy and terms of service for the UMKL site and Cheep
-                    Cheep</a>, you can also <a href="/changelog">view changelogs here</a>.
+                <a href="/rules/privacy">View the privacy policy and terms of service for Cheep
+                    Cheep and the UMKL website</a>, you can also <a href="/changelog">view changelogs here</a>.
             </p>
             <p>
                 All the source code for the website can be found at our

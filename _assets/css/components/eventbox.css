@@ -1,0 +1,518 @@
+.event-wrapper {
+    padding-bottom: 2px;
+}
+
+.event-container {
+    margin: 0 0 10px 0;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    border: 1px solid var(--translucent-color);
+    background-color: var(--bg-color);
+}
+
+.team-box-container {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+}
+
+.match-details-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+}
+
+.match-date-time-box {
+    display: flex;
+    gap: 15px;
+}
+
+.match-date-field {
+    font-size: 14px;
+}
+
+.match-detail-container {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.match-detail-container .live-dot {
+    margin-left: 5px;
+}
+
+.test-match-indicator .live-dot {
+    margin-left: 0;
+    margin-right: 4px;
+}
+
+.match-season {
+    margin: 0;
+}
+
+.match-description {
+    padding: 0 15px 5px;
+}
+
+.team-background {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    z-index: 1;
+}
+
+.team-background.left {
+    left: 0;
+}
+
+.team-background.right {
+    right: 0;
+}
+
+.team-background-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.75s ease-in;
+}
+
+.test-match-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-image: repeating-conic-gradient(rgba(255, 255, 255, 0.4) 0deg 90deg, rgba(0, 0, 0, 0.2) 90deg 180deg);
+    background-size: 20px 20px;
+    background-repeat: repeat;
+    opacity: 0.4;
+    background-position: center;
+}
+
+.event-overlay {
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    flex: 1;
+}
+
+.score-box {
+    background-color: #fff;
+    color: var(--accent-color);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    font-size: 28px;
+    font-weight: 800;
+    white-space: nowrap;
+    display: inline-block;
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--brand-dark) 20%, transparent);
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.score-box a {
+    color: var(--accent-color) !important;
+}
+
+.score-box a:hover {
+    text-decoration: underline;
+}
+
+.event-container .test-match-indicator {
+    font-size: 15px;
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    padding: 3px 6px;
+    color: var(--accent-color);
+    font-weight: 600;
+    background-color: #fff;
+    border-radius: calc(var(--border-radius) * 0.5);
+    z-index: 3;
+}
+
+.test-match-indicator.signed-up-count {
+    right: unset;
+    left: 6px;
+}
+
+.event-box-team {
+    width: 100%;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.event-box-team h2 {
+    color: #FFF !important;
+}
+
+.team-box-underline-hover:hover {
+    text-decoration: underline;
+}
+
+.event-box-team .youtube-box {
+    width: 25px;
+    bottom: -1px;
+    position: absolute;
+}
+
+.youtube-live-animation {
+    animation: youtubeLiveAnimation 2s ease-in-out infinite;
+}
+
+@keyframes youtubeLiveAnimation {
+
+    0%,
+    100% {
+        color: #FFF;
+        text-shadow: 0 0 8px rgba(255, 255, 255, 1);
+    }
+
+    50% {
+        color: #FFF;
+        text-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+    }
+}
+
+.event-box-team .left-team {
+    left: 0;
+    margin-left: 6px;
+}
+
+.event-box-team .right-team {
+    right: 0;
+    margin-right: 6px;
+}
+
+.youtube-box a[target="_blank"]::after {
+    content: none !important;
+}
+
+.team-box-image {
+    max-height: 100px;
+    max-width: 100px;
+}
+
+.penalty-text {
+    font-size: 0.6em;
+    margin: 0;
+    text-align: center;
+}
+
+.local-time-clock {
+    position: relative;
+}
+
+.local-time-clock::after {
+    content: 'UK';
+    position: absolute;
+    font-size: 6px;
+    left: 8px;
+    bottom: -4px;
+    font-family: "Montserrat", system-ui, sans-serif;
+    font-weight: 600;
+    background-color: var(--bg-color);
+    border: var(--box-border);
+    padding: 0 1px;
+    border-radius: calc(var(--border-radius) * 0.5);
+    display: inline-block;
+    line-height: 1;
+}
+
+.overseas-time-clock {
+    font-size: 16px;
+    margin: 0 5px 0 2px;
+}
+
+/* Absolutely positioned so its content height can't stretch the row;
+   max-height: 100% then clamps it to the calendar column's height. */
+#calendarListView {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--translucent-color);
+    border-radius: var(--border-radius);
+    background-color: var(--box-area-bg-color);
+}
+
+#calendarListView .list-view-content {
+    min-height: 0;
+    max-height: none;
+    padding: 4px 20px 20px 20px;
+}
+
+.list-view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--translucent-color);
+    background-color: color-mix(in srgb, var(--bg-color) 80%, transparent);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    flex-shrink: 0;
+}
+
+.list-view-date-header:hover {
+    text-decoration: underline;
+}
+
+.list-view-header h2 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.list-view-search-row {
+    padding: 12px 20px;
+    flex-shrink: 0;
+}
+
+.list-view-search-row #calendar-search-wrapper {
+    margin-bottom: 0;
+}
+
+.list-view-content {
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 4px 20px 20px 20px;
+    max-height: calc(100vh - 80px);
+    scrollbar-width: thin;
+    scrollbar-color: var(--opaque-color) transparent;
+    scroll-padding-top: 20px;
+}
+
+.list-view-content h3,
+.list-view-date-header {
+    position: sticky;
+    top: -5px;
+    z-index: 5;
+    margin: 0 -20px 0;
+    padding: 8px 20px;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.list-view-content> :first-child {
+    margin-top: 4px;
+}
+
+.list-view-content hr {
+    border: none;
+    border-top: 1px solid var(--translucent-color);
+    margin: 10px 0;
+}
+
+.youtube-box .ytsvg {
+    opacity: 1;
+}
+
+.youtube-box .ytsvg:hover {
+    opacity: 0.5;
+    transition: 0.1s ease-in-out;
+}
+
+.list-view-content .standings-table {
+    margin: 0 -20px 0;
+    width: calc(100% + 40px);
+    table-layout: fixed;
+}
+
+@keyframes dateHighlightFlash {
+    from {
+        background-color: rgba(188, 8, 57, 0.3);
+    }
+
+    to {
+        background-color: transparent;
+    }
+}
+
+/* The header is sticky and must stay opaque throughout, or other headers
+   scrolling underneath show through it during the flash. */
+@keyframes dateHighlightFlashHeader {
+    from {
+        background-color: var(--brand-primary);
+    }
+
+    to {
+        background-color: var(--bg-color);
+    }
+}
+
+.list-view-date-header.date-highlight-flash {
+    animation: dateHighlightFlashHeader 1s ease-out;
+}
+
+.list-view-content .standings-table.date-highlight-flash tr {
+    animation: dateHighlightFlash 1s ease-out;
+}
+
+.list-view-content .standings-table th,
+.list-view-content .standings-row td {
+    padding: 8px 0px;
+    font-size: 0.85rem;
+}
+
+.list-view-content .standings-row .column-match {
+    padding-left: 20px;
+}
+
+.list-view-content .standings-row .column-score {
+    padding-right: 20px;
+}
+
+.list-view-content .column-info {
+    width: 92px;
+}
+
+.list-view-content .column-score {
+    width: 68px;
+}
+
+.list-view-content .team-logo {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.list-view-content .match-team {
+    min-width: 0;
+    flex: 1;
+    gap: 6px;
+}
+
+.list-view-content .team-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.list-view-content .match-teams-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.list-view-content .column-info {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.list-view-content .match-season-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    opacity: 0.65;
+}
+
+.list-view-content .match-time {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-weight: 700;
+}
+
+.list-view-content .standings-row.test-match-row {
+    opacity: 0.6;
+}
+
+#upcomingMatchesBox {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#upcomingMatchesBox.fade-in {
+    opacity: 1;
+}
+
+.dayRelation {
+    font-size: 10px;
+    font-family: "Montserrat", system-ui, sans-serif;
+    font-weight: 600;
+    background-color: var(--bg-color);
+    border: var(--box-border);
+    padding: 0 1px;
+    border-radius: calc(var(--border-radius) * 0.5);
+    display: inline-block;
+}
+
+@media screen and (max-width: 767px) {
+    .event-box-team {
+        font-size: 2vmin;
+    }
+
+    .event-box-team .youtube-box {
+        width: 3.5vmin;
+    }
+
+    .team-box-image {
+        max-height: 15vmin;
+        max-width: 15vmin;
+    }
+
+    .score-box {
+        font-size: 5vmin;
+        padding: 2vmin;
+        border-radius: calc(var(--border-radius) * 0.5);
+    }
+
+    .match-detail-container {
+        font-size: 3vmin;
+    }
+
+    .match-season {
+        font-size: 12px;
+    }
+
+    .local-time-clock,
+    .overseas-time-clock {
+        font-size: 2.5vmin;
+        margin: 0 2px 0 1px;
+    }
+
+    .overseas-time-clock {
+        margin: 0 4px 0 1px;
+    }
+
+    .local-time-clock::after {
+        font-size: 5.5px;
+        left: 4px;
+        border-radius: calc(var(--border-radius) * 0.5);
+    }
+
+    .dayRelation {
+        font-size: 8px;
+    }
+
+    .event-container .test-match-indicator {
+        font-size: 12px;
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        padding: 2px 4px;
+        z-index: 3;
+    }
+
+}

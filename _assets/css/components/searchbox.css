@@ -1,0 +1,92 @@
+/* Shared search-box widget used on the news, videos, and schedule pages */
+#news-search-wrapper,
+#videos-search-wrapper,
+#calendar-search-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1.5px solid #ccccccaa;
+    border-radius: var(--border-radius);
+    padding: 0 4px 0 12px;
+    gap: 6px;
+    background-color: var(--bg-color);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#news-search-wrapper::before,
+#videos-search-wrapper::before,
+#calendar-search-wrapper::before {
+    content: "\f002";
+    font-family: "Font Awesome 6 Free";
+    color: #999;
+    font-size: 12px;
+    flex-shrink: 0;
+    pointer-events: none;
+}
+
+#news-search-wrapper:focus-within,
+#videos-search-wrapper:focus-within,
+#calendar-search-wrapper:focus-within {
+    border-color: var(--accent-color);
+}
+
+#news-search,
+#videos-search,
+#calendar-search {
+    flex: 1;
+    min-width: 100px;
+    padding: 9px 4px 9px 0;
+    border: none;
+    background: transparent;
+    color: var(--text-color);
+    outline: none;
+    font-size: 15px;
+    margin-bottom: 0;
+}
+
+#news-search::placeholder,
+#videos-search::placeholder,
+#calendar-search::placeholder {
+    color: #999;
+}
+
+#news-no-results,
+#videos-no-results,
+#calendar-no-results {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}
+
+#news-no-results button,
+#videos-no-results button,
+#calendar-no-results button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    font: inherit;
+    font-weight: 600;
+    color: var(--text-color);
+    background-color: var(--translucent-color);
+    border: none;
+    border-radius: var(--border-radius-pill);
+    cursor: pointer;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+#news-no-results button:hover,
+#videos-no-results button:hover,
+#calendar-no-results button:hover {
+    background-color: var(--opaque-color);
+}
+
+#news-no-results button:active,
+#videos-no-results button:active,
+#calendar-no-results button:active {
+    transform: scale(0.96);
+}
+
+.search-highlight {
+    background-color: rgba(188, 8, 57, 0.3);
+    color: inherit;
+    border-radius: calc(var(--border-radius) * 0.3);
+    padding: 0 1px;
+}

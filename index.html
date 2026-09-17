@@ -8,20 +8,21 @@
     <title>Home | UMKL</title>
     <meta name="description"
         content="The University Mario Kart League (UMKL) brings together students from universities around the UK to compete as teams of six in Mario Kart 8 Deluxe!">
-    <link rel="icon" href="https://umkl.co.uk/assets/media/brand/favicon.png" type="image/png">
-    <link rel="apple-touch-icon" href="https://umkl.co.uk/assets/media/brand/favicon.png">
-    <link rel="stylesheet" href="/assets/css/base/style.css">
-    <link rel="stylesheet" href="/assets/css/components/teamstandings.css">
-    <link rel="stylesheet" href="/assets/css/components/home.css">
-    <link rel="stylesheet" href="/assets/css/components/eventbox.css">
-    <link rel="stylesheet" href="/assets/css/components/news.css">
-    <link rel="stylesheet" href="/assets/css/base/settings.css">
-    <link rel="stylesheet" href="/assets/css/ext/fontawesome.min.css">
+    <link rel="icon" href="https://umkl.co.uk/_assets/media/brand/favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="https://umkl.co.uk/_assets/media/brand/favicon.png">
+    <link rel="stylesheet" href="/_assets/css/base/style.css">
+    <link rel="stylesheet" href="/_assets/css/components/teamstandings.css">
+    <link rel="stylesheet" href="/_assets/css/components/home.css">
+    <link rel="stylesheet" href="/_assets/css/components/eventbox.css">
+    <link rel="stylesheet" href="/_assets/css/components/news.css">
+    <link rel="stylesheet" href="/_assets/css/base/settings.css">
+    <link rel="stylesheet" href="/_assets/css/ext/fontawesome.min.css">
 
     <meta property="og:title" content="UMKL" />
     <meta property="og:site_name" content="umkl.co.uk" />
     <meta property="og:url" content="https://umkl.co.uk/" />
-    <meta property="og:image" content="https://umkl.co.uk/assets/media/brand/promo/oganimated.avif" />
+    <meta property="og:image"
+        content="https://umkl.co.uk/_assets/media/brand/promo/guidelines/wordmark_on_standard_background.png" />
     <meta property="og:description"
         content="The University Mario Kart League (UMKL) brings together students from universities around the UK to compete as teams of six in Mario Kart 8 Deluxe!" />
     <meta content="#bc0839" name="theme-color" />
@@ -29,24 +30,45 @@
     <!-- Include this to make the og:image larger -->
     <meta name="twitter:card" content="summary_large_image">
 
-    <link rel="modulepreload" href="/assets/components/navbar.js">
-    <link rel="modulepreload" href="/assets/components/footer.js">
-    <script defer src="/assets/components/navbar.js" type="module"></script>
-    <script defer src="/assets/components/footer.js" type="module"></script>
+    <link rel="modulepreload" href="/_assets/webcomponents/navbar.js">
+    <link rel="modulepreload" href="/_assets/webcomponents/footer.js">
+    <script defer src="/_assets/webcomponents/navbar.js" type="module"></script>
+    <script defer src="/_assets/webcomponents/footer.js" type="module"></script>
 
-    <script src="/assets/scripts/base/theme.js"></script>
-    <script defer src="/assets/scripts/base/settings.js" type="module"></script>
-    <script defer src="/assets/scripts/base/imagefade.js" type="module"></script>
-    <script defer src="/assets/scripts/components/showupcomingmatches.js" type="module"></script>
-    <script defer src="/assets/scripts/components/homestandings.js" type="module"></script>
-    <script defer src="/assets/scripts/components/newsgenerate.js" type="module"></script>
-    <script defer src="/assets/scripts/components/videocarousel.js" type="module"></script>
+    <script src="/_assets/scripts/base/theme.js"></script>
+    <script defer src="/_assets/scripts/base/settings.js" type="module"></script>
+    <script defer src="/_assets/scripts/base/imagefade.js" type="module"></script>
+    <script defer src="/_assets/scripts/components/showupcomingmatches.js" type="module"></script>
+    <script defer src="/_assets/scripts/components/homestandings.js" type="module"></script>
+    <script defer src="/_assets/scripts/components/newsgenerate.js" type="module"></script>
+    <script defer src="/_assets/scripts/components/videocarousel.js" type="module"></script>
 </head>
 
 <body id="top">
     <umkl-navbar></umkl-navbar>
 
     <main>
+        <div class="intro-section section-card">
+            <div class="intro-content">
+                <h1>Welcome to the UMKL!</h1>
+                <p>The UMKL is a Mario Kart e-sports championship where students from universities across the UK compete
+                    in 6v6 matches. Check the standings, watch match replays, or bring your university on board.</p>
+
+                <div class="bubble-link-wrapper">
+                    <a href="news/2025-04-19/umkl-intro/" class="bubble-link bubble-link-accent">New to UMKL?</a>
+                    <a href="/rules/joining/" class="bubble-link no-color-link">University Joining Guide</a>
+                </div>
+            </div>
+            <div class="intro-video" aria-hidden="true">
+                <video class="intro-video-video" autoplay muted loop playsinline preload="auto">
+                    <source src="/_assets/media/brand/promo/UMKLReelAV1.mp4" type='video/mp4; codecs="av01.0.05M.08"'>
+                    <source src="/_assets/media/brand/promo/UMKLReelh265.mp4"
+                        type='video/mp4; codecs="hvc1.1.6.L153.B0"'>
+                    <source src="/_assets/media/brand/promo/UMKLReelh264.mp4" type='video/mp4; codecs="avc1.42E01E"'>
+                </video>
+            </div>
+        </div>
+
         <div class="section">
             <div class="bubble-link-wrapper">
                 <a href="/news/" class="bubble-link no-color-link">
@@ -67,18 +89,6 @@
                         </path>
                     </svg>
                     Videos</a>
-                <a href="news/2025-04-19/umkl-intro/" class="bubble-link no-color-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24"
-                        role="presentation" class="IconVector-module_sm__Q8ZiC">
-                        <title>Question</title>
-                        <path fill="currentColor"
-                            d="M13.017 14.92V18h-2.7v-3.08zM12.312 7q2.142 0 3.234.821 1.093.822 1.093 2.523 0 1.774-1.093 2.61-1.092.837-3.234.837h-1.995v-2.288h2.274q.719 0 1.004-.25.286-.249.286-.865t-.315-.858-1.122-.242h-3.52V7z">
-                        </path>
-                        <path fill="currentColor" fill-rule="evenodd"
-                            d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2m0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                    New to UMKL?</a>
             </div>
 
             <div class="news-grid-container">
@@ -123,8 +133,8 @@
             </div>
         </div>
 
-        <div class="section">
-            <h1>Season 2</h1>
+        <div class="section section-band">
+            <h2 class="section-title">Season 2</h2>
             <p class="p-below-title" id="HomeSeasonFlavourText">Check out the standings</p>
             <div class="standings-container">
                 <!-- Static skeleton so the layout has content on first paint, before homestandings.js runs. Keep in sync with renderStandingsSkeleton() in homestandings.js -->
@@ -315,6 +325,41 @@
 
             <!-- Static skeleton so the layout has content on first paint, before videocarousel.js runs. Keep in sync with renderVideoCarouselSkeleton() in videocarousel.js -->
             <div class="carousel-container" id="videoCarousel">
+                <div class="video-card video-card-skeleton" aria-hidden="true">
+                    <div class="video-thumb-wrapper skeleton"></div>
+                    <p class="video-title skeleton"></p>
+                    <p class="video-date skeleton"></p>
+                </div>
+                <div class="video-card video-card-skeleton" aria-hidden="true">
+                    <div class="video-thumb-wrapper skeleton"></div>
+                    <p class="video-title skeleton"></p>
+                    <p class="video-date skeleton"></p>
+                </div>
+                <div class="video-card video-card-skeleton" aria-hidden="true">
+                    <div class="video-thumb-wrapper skeleton"></div>
+                    <p class="video-title skeleton"></p>
+                    <p class="video-date skeleton"></p>
+                </div>
+                <div class="video-card video-card-skeleton" aria-hidden="true">
+                    <div class="video-thumb-wrapper skeleton"></div>
+                    <p class="video-title skeleton"></p>
+                    <p class="video-date skeleton"></p>
+                </div>
+                <div class="video-card video-card-skeleton" aria-hidden="true">
+                    <div class="video-thumb-wrapper skeleton"></div>
+                    <p class="video-title skeleton"></p>
+                    <p class="video-date skeleton"></p>
+                </div>
+                <div class="video-card video-card-skeleton" aria-hidden="true">
+                    <div class="video-thumb-wrapper skeleton"></div>
+                    <p class="video-title skeleton"></p>
+                    <p class="video-date skeleton"></p>
+                </div>
+                <div class="video-card video-card-skeleton" aria-hidden="true">
+                    <div class="video-thumb-wrapper skeleton"></div>
+                    <p class="video-title skeleton"></p>
+                    <p class="video-date skeleton"></p>
+                </div>
                 <div class="video-card video-card-skeleton" aria-hidden="true">
                     <div class="video-thumb-wrapper skeleton"></div>
                     <p class="video-title skeleton"></p>

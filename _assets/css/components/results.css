@@ -1,0 +1,134 @@
+.fixed-width-column {
+    width: 150px;
+}
+
+.match-team {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.standings-row:hover .column-team {
+    text-decoration: none;
+}
+
+.team-a {
+    justify-content: right;
+}
+
+.team-b {
+    justify-content: left;
+}
+
+.column-vs {
+    text-align: center;
+    width: 0;
+    white-space: nowrap;
+}
+
+.column-score {
+    text-align: center;
+}
+
+.column-date {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.column-vs .team-date {
+    display: none;
+}
+
+.column-result {
+    text-align: center;
+}
+
+.team-score {
+    display: none;
+}
+
+#JSAllMatches .standings-row.test-match-row {
+    opacity: 0.6;
+}
+
+.test-match-tag {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    opacity: 0.8;
+    white-space: nowrap;
+}
+
+@media screen and (max-width: 600px) {
+    #JSAllMatches .standings-table {
+        width: 100%;
+    }
+
+    #JSAllMatches .standings-table th,
+    #JSAllMatches .standings-table td {
+        padding: 10px 6px;
+        font-size: 0.85rem;
+    }
+
+    #JSAllMatches .team-logo {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+    }
+
+    #JSAllMatches .fixed-width-column {
+        width: auto;
+    }
+
+    #JSAllMatches .column-team {
+        max-width: 96px;
+    }
+
+    #JSAllMatches .match-team {
+        min-width: 0;
+        gap: 6px;
+    }
+
+    #JSAllMatches .match-team-info {
+        min-width: 0;
+        align-items: center;
+        text-align: center;
+    }
+
+    #JSAllMatches .team-name {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    #JSAllMatches .column-vs {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    #JSAllMatches .column-date {
+        display: none;
+    }
+
+    #JSAllMatches .column-vs .team-date {
+        display: block;
+        margin-top: 2px;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    /* Scores move under each team's name instead of their own column, which
+       doesn't leave enough room for names next to the icons on small screens. */
+    #JSAllMatches .column-score {
+        display: none;
+    }
+
+    #JSAllMatches .team-score {
+        display: block;
+        font-weight: 700;
+        font-size: 0.85rem;
+        opacity: 0.85;
+    }
+}

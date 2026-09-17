@@ -1,0 +1,258 @@
+.article-main .bubble-link-wrapper {
+    margin-bottom: var(--section-spacing);
+}
+
+.article-wrapper {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 50px;
+}
+
+.article-content {
+    flex: 2;
+}
+
+.article-header {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 12px;
+}
+
+.article-body p {
+    margin-bottom: 24px;
+}
+
+.article-body blockquote {
+    margin: 0 0 24px;
+}
+
+.article-body blockquote:not(.info):not(.warning):not(.success):not(.fail):not(.rainbow) {
+    padding: 4px 20px;
+    border-left: 4px solid var(--brand-primary);
+    font-style: italic;
+    opacity: 0.85;
+}
+
+.article-body pre.codeBox {
+    margin: 0 0 24px;
+}
+
+.article-image-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.article-body .article-image-wrapper {
+    max-width: 80%;
+}
+
+.article-image-caption {
+    width: 100%;
+    font-size: 1.05em;
+    opacity: 0.8;
+}
+
+.article-image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.8em;
+    margin-bottom: 20px;
+}
+
+.article-video-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.8em;
+    margin-bottom: 20px;
+}
+
+.article-video-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+}
+
+.article-body .article-video-wrapper {
+    max-width: 80%;
+}
+
+.article-video-embed {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.article-video-embed iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.article-meta {
+    flex: 1;
+    width: 100%;
+}
+
+.article-meta .article-meta-item {
+    padding: 20px;
+    border-bottom: 1px solid var(--translucent-color);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.article-meta-heading {
+    opacity: 0.5;
+    font-size: 0.8em;
+    font-weight: 600;
+}
+
+.article-meta-item:last-child {
+    border-bottom: none;
+}
+
+.related-articles {
+    gap: 10px;
+}
+
+.related-article-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* a:link/a:visited in style.css outrank a plain .related-article-item selector
+   (element+pseudo-class beats a single class), which was leaking the accent
+   link colour into the date/tags text - match its specificity to win instead. */
+.related-article-item:link,
+.related-article-item:visited {
+    color: var(--text-color);
+}
+
+.related-article-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    text-decoration: none;
+    border: 1px solid var(--translucent-color);
+    border-radius: var(--border-radius);
+    padding: 8px;
+}
+
+.related-article-item:hover .related-article-title {
+    text-decoration: underline;
+}
+
+.related-article-thumb-wrapper {
+    width: 96px;
+    flex-shrink: 0;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: calc(var(--border-radius) * 0.5);
+}
+
+.related-article-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.related-article-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.related-article-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--text-color);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Matches the home page's small-card-meta/date/tags exactly, so related
+   articles read as the same "kind" of preview as everywhere else on the site. */
+.small-card-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.small-card-date {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-color);
+    opacity: 0.6;
+}
+
+.small-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.small-card-tags tag {
+    border-radius: var(--border-radius-pill);
+    padding: 1px 6px;
+    font-size: 0.62rem;
+    font-weight: 500;
+}
+
+.related-more-thumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    background-color: var(--translucent-color);
+}
+
+.related-more-thumb svg {
+    width: 55%;
+    height: auto;
+    fill: currentColor;
+    opacity: 0.6;
+}
+
+.related-article-more .related-article-title {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+@media screen and (max-width: 900px) {
+    .article-wrapper {
+        flex-direction: column;
+    }
+
+    .article-header {
+        gap: 10px;
+    }
+
+    .article-image-container {
+        margin-bottom: 15px;
+    }
+
+    /* Related articles are desktop-only - the mobile layout already stacks
+       .article-meta below the full article body, too far from the top to
+       act as a useful "keep reading" prompt. */
+    .related-articles {
+        display: none;
+    }
+}
