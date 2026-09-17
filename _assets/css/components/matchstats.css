@@ -84,6 +84,40 @@
     outline-offset: 2px;
 }
 
+.stats-controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: var(--section-spacing);
+}
+
+#track-search-wrapper {
+    flex: 1;
+}
+
+.stats-sort {
+    border: 1.5px solid #ccccccaa;
+    border-radius: var(--border-radius);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 0 12px;
+    font-size: 15px;
+    font-family: inherit;
+}
+
+.team-color-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 4px;
+}
+
+@media screen and (max-width: 767px) {
+    .stats-controls {
+        flex-direction: column;
+    }
+}
+
 .team-info-wrapper {
     display: flex;
     flex-direction: column;
@@ -99,7 +133,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 160px));
     gap: 12px;
-    align-items: start;
+    align-items: stretch;
 }
 
 .track-item {
@@ -127,7 +161,7 @@
 
 .track-label {
     padding-top: 8px;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     line-height: 1.4;
 }
 

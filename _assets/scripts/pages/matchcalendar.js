@@ -22,6 +22,7 @@ const calendarError = document.getElementById("calendarError");
 const overseasMessage = document.getElementById("overseasMessage");
 const calendarDays = document.getElementById("calendarDays");
 const calendarSearchInput = document.getElementById("calendar-search");
+const calendarSearchClear = document.getElementById("calendar-search-clear");
 
 const currentYear = new Date().getFullYear();
 const startYear = 2023;
@@ -832,6 +833,7 @@ function generateCalendarListView() {
     document.getElementById('calendar-clear-search')?.addEventListener('click', () => {
         calendarSearchTerm = "";
         if (calendarSearchInput) calendarSearchInput.value = "";
+        calendarSearchClear?.classList.remove("visible");
         generateCalendarListView();
         calendarSearchInput?.focus();
     });
@@ -858,11 +860,20 @@ function setupCalendarSearch() {
     if (!calendarSearchInput) return;
     let debounceTimer;
     calendarSearchInput.addEventListener("input", (e) => {
+        calendarSearchClear?.classList.toggle("visible", e.target.value.length > 0);
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
             calendarSearchTerm = e.target.value.trim().toLowerCase();
             generateCalendarListView();
         }, 50);
+    });
+
+    calendarSearchClear?.addEventListener("click", () => {
+        calendarSearchTerm = "";
+        calendarSearchInput.value = "";
+        calendarSearchClear.classList.remove("visible");
+        generateCalendarListView();
+        calendarSearchInput.focus();
     });
 }
 

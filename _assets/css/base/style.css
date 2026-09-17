@@ -988,13 +988,11 @@ umkl-footer::selection {
     border-radius: 50%;
 }
 
-/* Shared divider between rows in table-like lists (standings, all-teams list, etc.) */
-.standings-row,
-.teams-table-item {
+/* Shared divider between rows in table-like lists (standings, etc.) */
+.standings-row {
     border-bottom: 1px solid var(--translucent-color);
 }
 
-.standings-row:last-child,
-.teams-table-item:last-child {
+.standings-row:last-child {
     border-bottom: none;
 }

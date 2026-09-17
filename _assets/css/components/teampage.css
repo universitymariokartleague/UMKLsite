@@ -16,15 +16,15 @@
 .hero-content {
     position: relative;
     z-index: 2;
-    padding: 30px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
 }
 
 .hero-logo-wrapper {
-    max-width: 200px;
+    max-width: 120px;
 }
 
 .hero-logo {
@@ -50,7 +50,7 @@
     right: 32px;
     transform: rotate(-5deg);
     opacity: 0.5;
-    width: 150px;
+    height: calc(100% - 32px);
     aspect-ratio: 1326 / 2475;
     z-index: 1;
     pointer-events: none;

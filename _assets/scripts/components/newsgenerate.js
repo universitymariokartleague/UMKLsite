@@ -235,9 +235,11 @@ function addSearchBar() {
     searchWrapper.innerHTML = `
         ${tagChip}
         <input type="text" id="news-search" placeholder="${placeholder}" value="${existingSearch}" ${disabledAttr} />
+        <button type="button" id="news-search-clear" class="search-clear-inline${existingSearch ? " visible" : ""}" aria-label="Clear search">&times;</button>
     `;
 
     searchInput = document.getElementById("news-search");
+    const inlineClearBtn = document.getElementById("news-search-clear");
 
     let noResultsMsg = document.getElementById("news-no-results");
     if (!noResultsMsg) {
@@ -252,6 +254,13 @@ function addSearchBar() {
     }
 
     document.getElementById("news-clear-search")?.addEventListener("click", () => {
+        searchInput.value = "";
+        filterNews("");
+        updateURL("");
+        searchInput.focus();
+    });
+
+    inlineClearBtn?.addEventListener("click", () => {
         searchInput.value = "";
         filterNews("");
         updateURL("");
@@ -274,6 +283,8 @@ function addSearchBar() {
     function filterNews(searchTerm) {
         const term = searchTerm.toLowerCase();
         let visibleCount = 0;
+
+        inlineClearBtn?.classList.toggle("visible", term.length > 0);
 
         containers.forEach(container => {
             const titleEl = container.querySelector(".news-title");

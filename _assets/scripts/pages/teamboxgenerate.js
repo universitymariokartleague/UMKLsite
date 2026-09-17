@@ -6,6 +6,7 @@
 */
 
 import { createDebugLogger } from '/_assets/scripts/utils/debuglogger.js';
+import { getMatchData } from '/_assets/scripts/utils/matchdata.js';
 
 const debugLog = createDebugLogger('teamboxgenerate.js', '#9452ff', '#c29cff');
 const JSTeamBox = document.getElementById("JSTeamBox");
@@ -56,6 +57,42 @@ const fetchTeamData = async (season) => {
 };
 
 const makePossessive = name => !name ? "" : (name.endsWith("s") || name.endsWith("S") ? `${name}'` : `${name}'s`);
+
+const formatDate = dateStr => new Date(dateStr).toLocaleDateString(localStorage.getItem("locale") || "en-GB", { day: "numeric", month: "short", year: "numeric" });
+
+const getTeamDescription = (team, firstMatchDate) => {
+    if (!firstMatchDate) return "New";
+
+    const info = teamData.find(t => t.team_name === team.team_name);
+    if (info?.team_place) return info.team_place;
+    return `First match ${formatDate(firstMatchDate)}`;
+};
+
+let teamFirstMatchDatesPromise = null;
+
+function getTeamFirstMatchDates() {
+    if (teamFirstMatchDatesPromise) return teamFirstMatchDatesPromise;
+
+    teamFirstMatchDatesPromise = (async () => {
+        const teamFirstMatchDates = {};
+        try {
+            const matchData = await getMatchData();
+            for (const date in matchData) {
+                for (const match of matchData[date]) {
+                    (match.teamsInvolved || []).forEach(team => {
+                        if (!teamFirstMatchDates[team] || date < teamFirstMatchDates[team]) {
+                            teamFirstMatchDates[team] = date;
+                        }
+                    });
+                }
+            }
+        } catch {
+            // Leave whatever was found before the failure - a partial/missing "team created" line isn't worth blocking the page for.
+        }
+        return teamFirstMatchDates;
+    })();
+    return teamFirstMatchDatesPromise;
+}
 
 const darkenColor = (color, percent = 20) => {
     if (!/^#?[0-9A-Fa-f]{6}$/.test(color)) return color;
@@ -172,36 +209,49 @@ if (pickerSortSelect) {
 }
 
 async function populateAllTeamsTable() {
+    // Kick this off immediately so it fetches match data in parallel with the
+    // teamcolors request below, instead of only starting once that resolves.
+    getTeamFirstMatchDates();
+
     if (!allTeamsCache) {
         if (!allTeamsFetchPromise) allTeamsFetchPromise = fetchAPI('teamcolors', {}).catch(() => []);
         allTeamsCache = await allTeamsFetchPromise;
         allTeamsFetchPromise = null;
         if (!allTeamsCache.length) {
             allTeamsTable.innerHTML = 'Failed to load teams.';
+            allTeamsTable.classList.add('fade-in');
             return;
         }
     }
-    renderAllTeamsTable();
+    await renderAllTeamsTable();
 }
 
-function renderAllTeamsTable() {
+async function renderAllTeamsTable() {
     if (!allTeamsTable || !allTeamsCache) return;
+
+    const firstMatchDates = await getTeamFirstMatchDates();
 
     allTeamsTable.innerHTML = '';
     for (const team of sortPickerTeams(allTeamsCache)) {
         const nameUpper = team.team_name.toUpperCase();
+        const firstMatchDate = firstMatchDates[team.team_name];
         const row = document.createElement('a');
         row.className = 'teams-table-item';
         row.href = `/teams/details/?team=${encodeURIComponent(team.team_name)}`;
         row.innerHTML = `
-                <picture class="team-table-icon-container" style="background-color: ${team.team_color}">
+                <picture class="team-table-icon-container">
                     <source srcset="https://api.umkl.co.uk/teamemblems/${nameUpper}" type="image/avif">
                     <img class="team-table-icon" src="https://api.umkl.co.uk/teamemblems/${nameUpper}" alt="${makePossessive(team.team_name)} team emblem" loading="lazy" onload="this.style.opacity=1;">
                 </picture>
-                <span class="team-table-name">${team.team_name}</span>
+                <span class="team-table-name-area">
+                    <span class="team-table-name">${team.team_name}</span>
+                    <span class="team-table-created">${getTeamDescription(team, firstMatchDate)}</span>
+                </span>
         `;
         allTeamsTable.appendChild(row);
     }
+
+    allTeamsTable.classList.add('fade-in');
 }
 
 
@@ -274,9 +324,15 @@ async function generateTeamBoxes(data) {
             if (e.key === 'Enter' || e.key === ' ') window.location.href = dest;
         });
 
+        const championships = Number(team.team_championships) || 0;
+        const starsHTML = championships > 0
+            ? `<div class="teamStars" title="${championships} championship${championships === 1 ? '' : 's'}">${'★'.repeat(championships)}</div>`
+            : '';
+
         row.innerHTML = `
     <div class="teamStandingPattern" style="background-color: ${team.team_color};"></div>
     <div translate="no" class="teamName" title="${team.team_full_name}">${name}</div>
+    ${starsHTML}
     <picture>
         <source srcset="${avif}" type="image/avif">
         <img class="teamLogo" src="${png}" alt="${makePossessive(name)} team emblem"
@@ -327,6 +383,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (parsedCache?.length > 0) {
                 JSTeamBoxLoading.innerHTML = "";
                 debugLog(`Generating team boxes (cache)...`);
+                teamData = parsedCache;
                 await generateTeamBoxes(parsedCache);
                 await populateAllTeamsTable();
             } else {
@@ -355,6 +412,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         teamData = teamResult.value;
         JSTeamBoxLoading.innerHTML = "";
         await generateTeamBoxes(teamData);
+        await populateAllTeamsTable();
         debugLog(`Generated updated team data in ${(performance.now() - startTime).toFixed(2)}ms`);
         localStorage.setItem(CACHE_KEY, JSON.stringify(teamData));
     } else {
@@ -391,7 +449,7 @@ function generateSeasonPicker() {
     for (let season = 1; season <= maxSeason; season++) {
         const option = document.createElement("option");
         option.value = season;
-        option.textContent = `20${String(START_YEAR + season).slice(-2)}/${String(START_YEAR + 1 + season).slice(-2)}`;
+        option.textContent = `Season ${season}`;
         option.selected = season === currentSeason;
         seasonPicker.appendChild(option);
     }

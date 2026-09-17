@@ -241,6 +241,7 @@ function setupVideoSearch(container) {
     const searchInput = document.getElementById("videos-search");
     const noResultsMsg = document.getElementById("videos-no-results");
     const clearSearchBtn = document.getElementById("videos-clear-search");
+    const inlineClearBtn = document.getElementById("videos-search-clear");
     const tagsContainer = document.getElementById("videos-tags");
     const testMatchToggle = document.getElementById("videos-test-match-toggle");
     if (!searchInput) return null;
@@ -255,12 +256,19 @@ function setupVideoSearch(container) {
         renderVideos(container, filtered, term);
         if (noResultsMsg) noResultsMsg.style.display = filtered.length === 0 ? "block" : "none";
         if (tagsContainer) updateActiveTag(tagsContainer, term);
+        inlineClearBtn?.classList.toggle("visible", term.length > 0);
     };
 
     let debounceTimer;
     searchInput.addEventListener("input", (e) => {
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => runSearch(e.target.value.trim().toLowerCase()), 50);
+    });
+
+    inlineClearBtn?.addEventListener("click", () => {
+        searchInput.value = "";
+        runSearch("");
+        searchInput.focus();
     });
 
     clearSearchBtn?.addEventListener("click", () => {

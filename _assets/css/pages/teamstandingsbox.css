@@ -5,26 +5,17 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-auto-rows: minmax(50px, auto);
-    gap: 20px;
-
-    /*
-    color: var(--standings-text-color); */
-    /* background-color: var(--standings-bg-color); */
-    /* border: var(--box-border); */
-    min-height: 100px;
+    gap: 14px;
     border-radius: var(--border-radius);
-
-    margin-bottom: 50px;
-
-    font-family: "Montserrat";
+    margin-bottom: var(--section-spacing);
 }
 
 .teamStandingsBox .teamStanding {
     display: flex;
-    gap: 20px;
-    padding: 20px 30px;
+    gap: 16px;
+    padding: 14px 22px;
     cursor: pointer;
-    height: 100px;
+    height: 60px;
     align-items: center;
     border-radius: var(--border-radius);
     font-weight: 1000;
@@ -33,13 +24,14 @@
     isolation: isolate;
 }
 
-.teamStandingsBox .teamStanding:hover {
+.teamStandingsBox .teamStanding:hover .teamName {
     text-decoration: underline;
 }
 
 .teamStanding picture {
-    height: 5vw;
-    width: 5vw;
+    height: clamp(48px, 4vw, 56px);
+    width: auto;
+    flex-shrink: 0;
     margin-left: auto;
 }
 
@@ -51,15 +43,28 @@
 }
 
 .teamStandingsBox .teamName {
-    font-size: 30px;
+    font-size: clamp(1.1rem, 2.4vw, 1.875rem);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.teamStandingsBox .teamStanding .teamStars {
+    position: absolute;
+    left: 22px;
+    bottom: 12px;
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+    color: currentColor;
+    opacity: 0.85;
+    pointer-events: none;
 }
 
 .teamStandingPattern {
     z-index: 0;
-
     -webkit-mask-image: url('/_assets/pattern/finish_pattern.svg');
     mask-image: url('/_assets/pattern/finish_pattern.svg');
-
     -webkit-mask-size: 850px;
     mask-size: 850px;
 }
@@ -69,196 +74,19 @@
     z-index: 1;
 }
 
-/* .teamStandingsBox .teamPointsArea {
-    margin-left: auto;
-    margin-right: 10px;
-    text-align: right;
-    line-height: 1;
-} */
-
-/* .teamStandingsBox .teamPointsArea .teamPoints {
-    font-size: 35px;
-}
-
-.teamStandingsBox .teamPointsArea .teamStandings,
-.teamStandings {
-    font-size: 14.5px;
-    font-weight: 600;
-} */
-
-/* .teamStandingsBox .teamStanding.champion-standing .teamPosition {
-    background: linear-gradient(135deg, #b8860b, #ffd700, #b8860b);
-    background-size: 200% 200%;
-    animation: champion-shimmer 3s ease-in-out infinite alternate;
-    color: #3a2800;
-} */
-
-/* @keyframes champion-shimmer {
-    from {
-        background-position: 0% 50%;
-    }
-
-    to {
-        background-position: 100% 50%;
-    }
-} */
-
-/* .season-selection {
-    display: flex;
-    flex-direction: column;
-    border-radius: var(--border-radius);
-    padding: 10px;
-    margin: 20px 0;
-}
-
-#season-select {
-    font-size: 100%;
-    color: var(--text-color);
-    background-color: var(--bg-color);
-    border: 1px solid var(--text-color);
-    outline: none;
-    padding: 10px;
-    border-radius: var(--border-radius);
-    font-weight: bold;
-    cursor: pointer;
-} */
-
-#season-select:hover {
-    background-color: var(--translucent-color);
-}
-
-/* .team-picker-button {
-    white-space: nowrap;
-}
-
-.team-sort-select {
-    padding: 4px 6px;
-    font-size: 13px;
-    border-radius: calc(var(--border-radius) * 0.5);
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    border: 1px solid #ccccccaa;
-    font-weight: 600;
-    outline: none;
-    cursor: pointer;
-}
-
-.team-picker-dialog {
-    padding: 0;
-    border: 1px solid #ccccccaa;
-    border-radius: calc(var(--border-radius) * 1.2);
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    width: min(500px, 92vw);
-    max-height: 85vh;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-    animation: dialogPopIn 0.2s cubic-bezier(0.2, 0, 0.1, 1);
-    will-change: transform;
-}
-
-.team-picker-dialog.closing {
-    animation: dialogPopOut 0.15s ease-in-out forwards;
-}
-
-.team-picker-dialog::backdrop {
-    background-color: rgba(0, 0, 0, 0.5);
-    -webkit-backdrop-filter: blur(3px);
-    backdrop-filter: blur(3px);
-    animation: dialogBackdropFadeIn 0.2s ease;
-}
-
-.team-picker-dialog.closing::backdrop {
-    animation: dialogBackdropFadeOut 0.15s ease-in-out forwards;
-}
-
-.team-picker-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 15px 20px;
-    border-bottom: 1px solid #ccccccaa;
-    position: sticky;
-    top: 0;
-    background-color: var(--bg-color);
-}
-
-.team-picker-title-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-width: 0;
-    flex-wrap: wrap;
-}
-
-.team-picker-header h2 {
-    margin: 0;
-    font-size: 20px;
-}
-
-.team-picker-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-    gap: 12px;
-    padding: 20px;
-    overflow-y: auto;
-}
-
-.team-picker-loading {
-    grid-column: 1 / -1;
-    text-align: center;
-    color: var(--text-color);
-    opacity: 0.7;
-}
-
-.team-picker-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 6px;
-    border-radius: var(--border-radius);
-    border: 1px solid #ccccccaa;
-    color: inherit;
-    text-decoration: none;
-    text-align: center;
-    -webkit-user-select: none;
-    user-select: none;
-}
-
-.team-picker-item:hover,
-.team-picker-item:focus-visible {
-    background-color: var(--team-color, var(--accent-color));
-    color: #fff;
-    outline: none;
-    transition: background-color 0.2s ease;
-}
-
-.team-picker-item:active {
-    transform: scale(0.95);
-    transition: transform 0.1s ease;
-}
-
-.team-picker-icon {
-    width: 48px;
-    height: 48px;
-    opacity: 0;
-    transition: opacity 0.2s ease-in;
-}
-
-.team-picker-name {
-    color: var(--text-color);
-    font-size: 13px;
-    font-weight: 600;
-    line-height: 1.2;
-    word-break: break-word;
-} */
-
 .all-teams-table {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 6px;
     width: 100%;
-    font-weight: bold;
-    font-size: 20px;
-    border-style: hidden;
+    margin-top: var(--section-spacing);
+    font-weight: 800;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.all-teams-table.fade-in {
+    opacity: 1;
 }
 
 .all-teams-table a {
@@ -267,34 +95,61 @@
 }
 
 .all-teams-table a:hover {
-    text-decoration: underline;
+    background-color: var(--translucent-color);
 }
 
 .teams-table-item {
-    padding: 16px 8px;
+    padding: 8px;
     display: flex;
     align-items: center;
     gap: 10px;
+    border: 1px solid var(--translucent-color);
+    border-radius: var(--border-radius);
+    background-color: var(--box-area-bg-color);
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.teams-table-item:hover {
+    border-color: var(--opaque-color);
 }
 
 .team-table-icon-container {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
-    height: 60px;
-    border-radius: var(--border-radius);
+    flex-shrink: 0;
 }
 
 .team-table-icon {
-    width: 80%;
-    height: 80%;
+    width: 38px;
+    height: 38px;
+}
+
+.team-table-name-area {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.team-table-name {
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.team-table-created {
+    font-size: 11px;
+    font-weight: 500;
+    opacity: 0.6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .current-season-area {
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-bottom: var(--section-spacing);
 }
 
 #current-season {
@@ -333,16 +188,8 @@
 }
 
 @media screen and (max-width: 900px) {
-
     .teamStandingsBox {
         grid-template-columns: 1fr;
-    }
-
-    .teamStandingsBox .teamLogo,
-    .teamStanding picture {
-        margin-left: auto;
-        height: 10vw;
-        width: 10vw;
     }
 
     .teamStandingsBox .teamName {

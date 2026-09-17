@@ -21,7 +21,6 @@ const settingsBoxHTML = `
                 </svg>
             </button>
         </div>
-        <hr>
         <div class="setting-options" id="settingsBoxJS"></div>
     </dialog>
 `;

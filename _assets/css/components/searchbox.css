@@ -1,7 +1,8 @@
-/* Shared search-box widget used on the news, videos, and schedule pages */
+/* Shared search-box widget used on the news, videos, schedule, and stats pages */
 #news-search-wrapper,
 #videos-search-wrapper,
-#calendar-search-wrapper {
+#calendar-search-wrapper,
+#track-search-wrapper {
     display: flex;
     align-items: center;
     border: 1.5px solid #ccccccaa;
@@ -14,7 +15,8 @@
 
 #news-search-wrapper::before,
 #videos-search-wrapper::before,
-#calendar-search-wrapper::before {
+#calendar-search-wrapper::before,
+#track-search-wrapper::before {
     content: "\f002";
     font-family: "Font Awesome 6 Free";
     color: #999;
@@ -25,13 +27,15 @@
 
 #news-search-wrapper:focus-within,
 #videos-search-wrapper:focus-within,
-#calendar-search-wrapper:focus-within {
+#calendar-search-wrapper:focus-within,
+#track-search-wrapper:focus-within {
     border-color: var(--accent-color);
 }
 
 #news-search,
 #videos-search,
-#calendar-search {
+#calendar-search,
+#track-search {
     flex: 1;
     min-width: 100px;
     padding: 9px 4px 9px 0;
@@ -45,13 +49,15 @@
 
 #news-search::placeholder,
 #videos-search::placeholder,
-#calendar-search::placeholder {
+#calendar-search::placeholder,
+#track-search::placeholder {
     color: #999;
 }
 
 #news-no-results,
 #videos-no-results,
-#calendar-no-results {
+#calendar-no-results,
+#track-no-results {
     text-align: center;
     padding: 20px;
     color: #666;
@@ -59,7 +65,8 @@
 
 #news-no-results button,
 #videos-no-results button,
-#calendar-no-results button {
+#calendar-no-results button,
+#track-no-results button {
     margin-top: 10px;
     padding: 8px 16px;
     font: inherit;
@@ -74,14 +81,43 @@
 
 #news-no-results button:hover,
 #videos-no-results button:hover,
-#calendar-no-results button:hover {
+#calendar-no-results button:hover,
+#track-no-results button:hover {
     background-color: var(--opaque-color);
 }
 
 #news-no-results button:active,
 #videos-no-results button:active,
-#calendar-no-results button:active {
+#calendar-no-results button:active,
+#track-no-results button:active {
     transform: scale(0.96);
+}
+
+.search-clear-inline {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #999;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.search-clear-inline:hover {
+    background-color: var(--translucent-color);
+    color: var(--text-color);
+}
+
+.search-clear-inline.visible {
+    display: flex;
 }
 
 .search-highlight {

@@ -142,7 +142,6 @@ const outputDocument = ({ title, subtitle, mainImageUrl, mainCaption, bodyConten
         </div>
 
         <div class="article-wrapper">
-
             <div class="article-content">
                 <div class="article-header">
                     <h1>${title}</h1>
@@ -152,9 +151,7 @@ const outputDocument = ({ title, subtitle, mainImageUrl, mainCaption, bodyConten
                             <img loading="lazy" class="image article-header-image" height="auto" width="100%"
                                 src="${mainImageUrl}" />
                             <span class="article-image-caption">${mainCaption}</span>
-
                         </div>
-
                     </div>
                 </div>
 
@@ -177,12 +174,9 @@ const outputDocument = ({ title, subtitle, mainImageUrl, mainCaption, bodyConten
                     <div class="tag-container">
                         ${tagsMarkup}
                     </div>
-
                 </div>
             </div>
-
         </div>
-
     </main>
 
     <umkl-footer></umkl-footer>
