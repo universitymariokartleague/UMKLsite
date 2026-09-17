@@ -29,6 +29,7 @@
 }
 
 .teamStanding picture {
+    display: inline-block;
     height: clamp(48px, 4vw, 56px);
     width: auto;
     flex-shrink: 0;
@@ -38,6 +39,7 @@
 .teamStandingsBox .teamLogo {
     height: 100%;
     width: 100%;
+    object-fit: contain;
     opacity: 0;
     transition: opacity 0.2s ease-in;
 }

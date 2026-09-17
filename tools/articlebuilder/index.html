@@ -17,6 +17,8 @@
 
     <meta property="og:title" content="Article Builder | UMKL" />
     <meta property="og:site_name" content="umkl.co.uk" />
+    <meta property="og:logo" content="https://umkl.co.uk/_assets/media/brand/guidelines/logo_transparent_standard.png" />
+    <meta property="og:type" content="website" />
     <meta property="og:url" content="https://umkl.co.uk/tools/articlebuilder" />
     <meta property="og:image" content="https://umkl.co.uk/_assets/media/brand/UMKL_banner.avif" />
     <meta property="og:description" content="Build a news article for the UMKL website" />
@@ -127,7 +129,20 @@
                     </svg>
 
                 </button>
-                <button id="saveBtn" class="btn-tool">
+                <button id="importBtn" class="btn-tool" title="Import article from .zip">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        viewBox="0 0 24 24">
+                        <path fill-rule="evenodd"
+                            d="M13 6.85V14a1 1 0 1 1-2 0V6.85L8.78 9.626a1 1 0 1 1-1.56-1.25l4-5a1 1 0 0 1 1.56 0l4 5a1 1 0 1 1-1.56 1.25L13 6.85Z"
+                            clip-rule="evenodd" />
+                        <path fill-rule="evenodd"
+                            d="M9.657 15.874 7.358 13H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2.358l-2.3 2.874a3 3 0 0 1-4.685 0ZM17 16a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </button>
+                <input type="file" id="importFileInput" accept=".zip" class="hidden">
+                <button id="saveBtn" class="btn-tool" title="Export article as .zip">
                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                         viewBox="0 0 24 24">

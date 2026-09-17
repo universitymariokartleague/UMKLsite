@@ -20,6 +20,8 @@ const insertImageBtn = document.getElementById('insertImageBtn');
 const insertVideoBtn = document.getElementById('insertVideoBtn');
 const clearBtn = document.getElementById('clearBtn');
 const saveBtn = document.getElementById('saveBtn');
+const importBtn = document.getElementById('importBtn');
+const importFileInput = document.getElementById('importFileInput');
 const homeLink = document.getElementById('homeLink');
 const storageUsageEl = document.getElementById('storageUsage');
 
@@ -105,6 +107,7 @@ const outputDocument = ({ title, subtitle, mainImageUrl, mainCaption, bodyConten
 
     <meta property="og:title" content="${title} | UMKL" />
     <meta property="og:site_name" content="umkl.co.uk" />
+    <meta property="og:logo" content="https://umkl.co.uk/_assets/media/brand/guidelines/logo_transparent_standard.png" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://umkl.co.uk/news/" />
     <meta property="og:image" content="${mainImageUrl}" />
@@ -325,7 +328,7 @@ function clearDraft() {
 }
 
 // State
-let mainImageUrl = "https://mario.wiki.gallery/images/thumb/4/48/MK8DX_Nintendo_Wallpaper_1.jpg/1600px-MK8DX_Nintendo_Wallpaper_1.jpg";
+let mainImageUrl = "";
 let activeImageCallback = null;
 let activeFileInput = null;
 let activeUrlCallback = null;
@@ -1088,7 +1091,7 @@ clearBtn.addEventListener('click', () => {
         articleSubtitle.textContent = 'Click to edit subtitle';
         mainCaption.textContent = 'Click to edit caption';
 
-        mainImageUrl = "https://mario.wiki.gallery/images/thumb/4/48/MK8DX_Nintendo_Wallpaper_1.jpg/1600px-MK8DX_Nintendo_Wallpaper_1.jpg";
+        mainImageUrl = "";
         mainImagePreview.src = '';
         mainImagePreview.classList.add('hidden');
         mainPlus.classList.remove('hidden');
@@ -1224,3 +1227,86 @@ saveBtn.addEventListener('click', async () => {
     downloadLink.click();
     URL.revokeObjectURL(downloadLink.href);
 });
+
+// Import a previously-exported .zip and restore it into the editor
+importBtn.addEventListener('click', () => importFileInput.click());
+
+importFileInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    e.target.value = '';
+    if (!file) return;
+
+    try {
+        await importArticleFromZip(file);
+    } catch (err) {
+        console.error('Failed to import article:', err);
+        alert("Couldn't import that .zip - make sure it was exported from this tool.");
+    }
+});
+
+async function importArticleFromZip(file) {
+    const zip = await JSZip.loadAsync(file);
+
+    const indexPath = Object.keys(zip.files).find(path => path.endsWith('index.html') && !zip.files[path].dir);
+    if (!indexPath) throw new Error('No article index.html found in zip');
+
+    const folderPath = indexPath.slice(0, indexPath.length - 'index.html'.length);
+    const htmlText = await zip.file(indexPath).async('string');
+    const doc = new DOMParser().parseFromString(htmlText, 'text/html');
+
+    // Re-embed images referenced by the exported /news/.../filename paths as data URLs,
+    // since the folder they point to won't exist until this draft is exported again.
+    async function resolveImage(src) {
+        if (!src || src.startsWith('data:') || /^https?:\/\//.test(src)) return src;
+
+        const relative = src.replace(/^\//, '');
+        const entry = zip.file(relative) || zip.file(folderPath + relative.split('/').pop());
+        if (!entry) return src;
+
+        const blob = await entry.async('blob');
+        return readFileAsDataUrl(blob);
+    }
+
+    const headerEl = doc.querySelector('.article-header');
+    const titleText = headerEl?.querySelector('h1')?.innerHTML.trim();
+    const subtitleText = headerEl?.querySelector('.article-subtitle')?.innerHTML.trim();
+    const headerImage = headerEl?.querySelector('.article-header-image');
+    const captionText = headerImage?.closest('.article-image-wrapper')?.querySelector('.article-image-caption')?.innerHTML.trim();
+    const bodyEl = doc.querySelector('.article-body');
+    const metaValues = doc.querySelectorAll('.article-meta-value');
+    const dateText = metaValues[0]?.textContent.trim();
+    const authorText = metaValues[1]?.textContent.trim();
+    const tags = Array.from(doc.querySelectorAll('.tag-container tag')).map(t => t.textContent.trim()).filter(Boolean);
+
+    if (titleText) articleTitle.innerHTML = titleText;
+    if (subtitleText) articleSubtitle.innerHTML = subtitleText;
+    if (captionText) mainCaption.innerHTML = captionText;
+
+    const headerImageSrc = headerImage?.getAttribute('src');
+    if (headerImageSrc) {
+        setMainImage(await resolveImage(headerImageSrc));
+    }
+
+    if (bodyEl) {
+        for (const img of bodyEl.querySelectorAll('img')) {
+            img.setAttribute('src', await resolveImage(img.getAttribute('src')));
+        }
+        bodyEditor.innerHTML = bodyEl.innerHTML;
+    }
+
+    if (dateText) {
+        const parsed = parseDateInput(dateText);
+        if (parsed) {
+            lastValidDate = parsed;
+            metaDate.value = formatDate(lastValidDate);
+        }
+    }
+
+    if (authorText) metaAuthor.value = authorText;
+    if (tags.length) metaTags.value = tags.join(', ');
+
+    updateToolbarState();
+    validateArticleRequirements();
+    updateOgPreview();
+    saveDraft();
+}
