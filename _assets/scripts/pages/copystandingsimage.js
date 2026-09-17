@@ -1,10 +1,10 @@
 /*
     This script handles the sharing of images using the Web Share API or the Clipboard API.
     Since the web share API doesn't work well on Windows/Linux, those platforms get a small
-    preview of the image before it's copied to the clipboard. 
+    preview of the image before it's copied to the clipboard.
     It works as expected on mobile devices and MacOS.
 
-    The preview is a small popup that shows the image and a message indicating 
+    The preview is a small popup that shows the image and a message indicating
     that it has been copied.
 */
 import { isWindowsOrLinux, copyImageToClipboard, shareImage, showImagePreview, setOriginalMessage, getOriginalMessage, getIsPopupShowing } from "/_assets/scripts/utils/shareAPIhelper.js";
@@ -21,7 +21,7 @@ function generateMessage() {
     const randomChance = Math.random();
     return randomChance < 0.01
         ? `初音ミクが語るUMKLシーズン${currentSeason.value}！`
-        : `Take a look at Season ${currentSeason.value}'s team standings in the University Mario Kart League!`;
+        : `Take a look at Season ${currentSeason.value}'s team standings in the UMKL!`;
 }
 
 async function shareButtonPressed() {
