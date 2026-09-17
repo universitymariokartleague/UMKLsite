@@ -14,12 +14,32 @@ document.addEventListener("click", (e) => {
 
 // Remember the previous page
 const link = document.querySelector("a[data-smart-back]");
+
+// news article recommendations ignore this
+const ARTICLE_ORIGIN_KEY = "articleBackOrigin";
+const isNewsArticle = /^\/news\/[^/]+\/[^/]+\/?$/.test(location.pathname);
+
 if (link) {
-    const cameFromSameSite = document.referrer && new URL(document.referrer).origin === location.origin;
-    if (cameFromSameSite && history.length > 1) {
+    const storedOrigin = isNewsArticle ? sessionStorage.getItem(ARTICLE_ORIGIN_KEY) : null;
+
+    if (storedOrigin) {
+        link.href = storedOrigin;
         link.addEventListener("click", (e) => {
             e.preventDefault();
-            history.back();
+            location.href = storedOrigin;
         });
+    } else {
+        const cameFromSameSite = document.referrer && new URL(document.referrer).origin === location.origin;
+        if (cameFromSameSite && history.length > 1) {
+            link.addEventListener("click", (e) => {
+                e.preventDefault();
+                history.back();
+            });
+        }
+        if (isNewsArticle) {
+            sessionStorage.setItem(ARTICLE_ORIGIN_KEY, cameFromSameSite ? document.referrer : link.href);
+        }
     }
 }
+
+if (!isNewsArticle) sessionStorage.removeItem(ARTICLE_ORIGIN_KEY);
