@@ -145,6 +145,16 @@ picture img {
 
 .team-name {
     font-weight: 700;
+    text-decoration: none;
+}
+
+.team-name:link,
+.team-name:visited {
+    color: inherit;
+}
+
+.team-name:hover {
+    text-decoration: underline;
 }
 
 .team-name.winner {

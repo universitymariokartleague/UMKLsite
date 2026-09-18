@@ -94,7 +94,7 @@ function generateAllMatches(selectedSeason) {
                 <td class="column-team fixed-width-column">
                     <div class="match-team team-a">
                         <div class="match-team-info">
-                            <span class="team-name${teamAIsWinner ? ' winner' : ''}">${teamA}</span>
+                            <a href="/teams/details/?team=${encodeURIComponent(teamA)}" class="team-name${teamAIsWinner ? ' winner' : ''}">${teamA}</a>
                             ${scoreAText ? `<span class="team-score">${scoreAText}</span>` : ''}
                         </div>
                         <picture>
@@ -115,7 +115,7 @@ function generateAllMatches(selectedSeason) {
                             <img loading="lazy" src="${emblemB.png}" class="team-logo" alt="${teamB} logo">
                         </picture>
                         <div class="match-team-info">
-                            <span class="team-name${teamBIsWinner ? ' winner' : ''}">${teamB}</span>
+                            <a href="/teams/details/?team=${encodeURIComponent(teamB)}" class="team-name${teamBIsWinner ? ' winner' : ''}">${teamB}</a>
                             ${scoreBText ? `<span class="team-score">${scoreBText}</span>` : ''}
                         </div>
                     </div>
@@ -150,6 +150,7 @@ function generateAllMatches(selectedSeason) {
 }
 
 allMatchesBox?.addEventListener("click", (e) => {
+    if (e.target.closest("a")) return;
     const row = e.target.closest("tr[data-href]");
     if (row) window.location.href = row.dataset.href;
 });

@@ -792,18 +792,29 @@ function generateCalendarListView() {
 
             const resultsHTML = formatResults(entry.results);
 
+            let team1IsWinner = false;
+            let team2IsWinner = false;
+            if (entry.results && entry.results.length === 2) {
+                const team1Score = Number(entry.results[0][1]);
+                const team2Score = Number(entry.results[1][1]);
+                if (!Number.isNaN(team1Score) && !Number.isNaN(team2Score) && team1Score !== team2Score) {
+                    team1IsWinner = team1Score > team2Score;
+                    team2IsWinner = team2Score > team1Score;
+                }
+            }
+
             HTMLOutput += `
                 <tr class="standings-row${entry.testMatch ? ' test-match-row' : ''}" data-date="${date}">
                     <td class="column-match">
                         <div class="match-teams-row">
                             <div class="match-team team-a">
-                                <span class="team-name">${highlightMatch(team1.team_name, term)}</span>
+                                <a href="${team1.link}" class="team-name${team1IsWinner ? ' winner' : ''}">${highlightMatch(team1.team_name, term)}</a>
                                 <img loading="lazy" src="https://api.umkl.co.uk/teamemblems/${team1.team_name.toUpperCase()}" class="team-logo" alt="${team1.team_name} logo">
                             </div>
                             <span>VS</span>
                             <div class="match-team team-b">
                                 <img loading="lazy" src="https://api.umkl.co.uk/teamemblems/${team2.team_name.toUpperCase()}" class="team-logo" alt="${team2.team_name} logo">
-                                <span class="team-name">${highlightMatch(team2.team_name, term)}</span>
+                                <a href="${team2.link}" class="team-name${team2IsWinner ? ' winner' : ''}">${highlightMatch(team2.team_name, term)}</a>
                             </div>
                         </div>
                     </td>
@@ -852,6 +863,7 @@ function jumpToDate(date) {
 }
 
 document.getElementById('listViewContent')?.addEventListener('click', (e) => {
+    if (e.target.closest('a')) return;
     const row = e.target.closest('tr[data-date]');
     if (row) jumpToDate(row.dataset.date);
 });

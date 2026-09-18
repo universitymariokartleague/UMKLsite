@@ -133,19 +133,15 @@
 }
 
 .score-box {
-    background-color: color-mix(in srgb, #fff 82%, transparent);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    background-color: #fff;
+    padding: 16px;
     color: var(--accent-color);
-    padding: 12px 20px;
-    border-radius: var(--border-radius-pill);
-    font-size: 20px;
+    border-radius: var(--border-radius);
+    font-size: 24px;
     font-weight: 800;
-    letter-spacing: 0.2px;
     white-space: nowrap;
     display: inline-block;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--brand-dark) 20%, transparent);
     user-select: none;
     -webkit-user-select: none;
 }
@@ -270,8 +266,6 @@
     margin: 0 5px 0 2px;
 }
 
-/* Absolutely positioned so its content height can't stretch the row;
-   max-height: 100% then clamps it to the calendar column's height. */
 #calendarListView {
     position: absolute;
     top: 0;
