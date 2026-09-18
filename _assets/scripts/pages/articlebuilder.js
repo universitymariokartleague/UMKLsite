@@ -200,6 +200,17 @@ if (savedState === 'true' || (savedState === null && window.innerWidth <= 600)) 
     checklistWidget.classList.add('collapsed');
 }
 
+function getImageFileFromClipboard(e) {
+    const items = (e.clipboardData || window.clipboardData)?.items;
+    if (!items) return null;
+    for (const item of items) {
+        if (item.kind === 'file' && item.type.startsWith('image/')) {
+            return item.getAsFile();
+        }
+    }
+    return null;
+}
+
 // Forces all paste operations to not have formatting
 function handlePlainTextPaste(e) {
     e.preventDefault();
@@ -221,9 +232,16 @@ function handlePlainTextPaste(e) {
 
 // Attach event listener to all editable regions
 editableElements.forEach(el => {
-    if (el) {
-        el.addEventListener('paste', handlePlainTextPaste);
-    }
+    if (!el) return;
+    el.addEventListener('paste', (e) => {
+        const imageFile = el === bodyEditor ? getImageFileFromClipboard(e) : null;
+        if (imageFile) {
+            e.preventDefault();
+            convertImageToAvif(imageFile).then(insertImageToBody);
+            return;
+        }
+        handlePlainTextPaste(e);
+    });
 });
 
 // localStorage usage indicator
@@ -588,6 +606,14 @@ function setMainImage(url) {
 
 mainImageContainer.addEventListener('click', () => {
     openImageModal(mainFileInput, setMainImage);
+});
+
+mainImageContainer.addEventListener('paste', (e) => {
+    const imageFile = getImageFileFromClipboard(e);
+    if (imageFile) {
+        e.preventDefault();
+        convertImageToAvif(imageFile, MAX_MAIN_IMAGE_DIMENSION).then(setMainImage);
+    }
 });
 
 mainFileInput.addEventListener('change', (e) => {
