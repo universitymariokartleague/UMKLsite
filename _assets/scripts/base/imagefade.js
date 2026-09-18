@@ -5,11 +5,15 @@
     only catches "plain" images that would otherwise just pop in once decoded.
 */
 
+const fadingImages = new WeakSet();
+
 function fadeInOnLoad(img) {
     if (window.location.href.includes("/profile")) return;
     if (img.hasAttribute("onload") || img.dataset.noFade !== undefined) return;
+    if (fadingImages.has(img)) return;
     if (img.complete && img.naturalWidth !== 0) return;
 
+    fadingImages.add(img);
     img.style.opacity = "0";
     img.style.transition = "opacity 0.25s ease-in";
 
