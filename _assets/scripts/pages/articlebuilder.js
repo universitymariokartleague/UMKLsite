@@ -91,8 +91,7 @@ const outputDocument = ({ title, subtitle, mainImageUrl, mainCaption, bodyConten
 
 <head>
     <meta charset="utf-8">
-    <meta content="#bc0839" name="theme-color" media="(prefers-color-scheme: light)" />
-    <meta content="#bc0839" name="theme-color" media="(prefers-color-scheme: dark)" />
+    <meta content="#bc0839" name="theme-color" />
     <meta name="color-scheme" content="dark light">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>${title} | UMKL</title>
