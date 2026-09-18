@@ -42,7 +42,8 @@ const testMatchesCheckbox = document.getElementById("testMatches");
 const pointsDiffCheckbox = document.getElementById("pointsDiff");
 const teamFrequencyCheckbox = document.getElementById("teamFrequency");
 const daysPlayedCheckbox = document.getElementById("daysPlayed");
-const trackSortSelect = document.getElementById("track-sort");
+const trackSortWrapper = document.getElementById("track-sort");
+let currentTrackSort = "mostPlayed";
 const trackSearchInput = document.getElementById("track-search");
 const trackSearchClear = document.getElementById("track-search-clear");
 const trackNoResults = document.getElementById("track-no-results");
@@ -56,12 +57,7 @@ function renderStatsSkeleton() {
         </div>
     `;
     JSTeamBox.innerHTML = `
-        <div class="team-info-wrapper">
-            <div class="carousel-header">
-                <h2>Track Frequency</h2>
-            </div>
-            <div class="track-frequency">${skeletonItem.repeat(SKELETON_TRACK_COUNT)}</div>
-        </div>
+        <div class="track-frequency">${skeletonItem.repeat(SKELETON_TRACK_COUNT)}</div>
     `;
 }
 
@@ -76,7 +72,7 @@ function getTeamColor(team) {
 }
 
 function buildTrackCountDiv(data, matchesCounted) {
-    const sorter = trackSorters[trackSortSelect.value] || trackSorters.mostPlayed;
+    const sorter = trackSorters[currentTrackSort] || trackSorters.mostPlayed;
     const sorted = Object.entries(data).sort(sorter);
     const maxCount = Math.max(...sorted.map(([, stats]) => stats.count));
 
@@ -109,7 +105,7 @@ function buildTrackCountDiv(data, matchesCounted) {
 
             return `
                 <div class="track-item" data-track="${track.toLowerCase()}">
-                    <img class="track-icon" width="135px" style="aspect-ratio:45/31" onload="this.style.opacity=1" loading="lazy" src="/_assets/media/courses/mk8dxicons/${track.replaceAll(' ', '_').replaceAll("'", '').toLowerCase()}.avif" alt="The icon for ${track}">
+                    <img class="track-icon" style="aspect-ratio:45/31" onload="this.style.opacity=1" loading="lazy" src="/_assets/media/courses/mk8dxicons/${track.replaceAll(' ', '_').replaceAll("'", '').toLowerCase()}.avif" alt="The icon for ${track}">
                     <span class="track-label">
                         <b class="track-name">${track}</b><br>
                         Played ${stats.count} ${stats.count === 1 ? "time" : "times"}<br>
@@ -125,11 +121,8 @@ function buildTrackCountDiv(data, matchesCounted) {
     const length = Object.keys(data).length;
 
     return `
-        <div class="carousel-header">
-            <h2>Track Frequency</h2>
-            <p class="p-no-spacing">${length}/96 total tracks played across ${matchesCounted} ${matchesCounted === 1 ? "match" : "matches"}
-            ${testMatchesCheckbox.checked ? '<span class="settings-extra-info">(including test matches)</span>' : ''}</p>
-        </div>
+        <span>${length}/96 total tracks played across ${matchesCounted} ${matchesCounted === 1 ? "match" : "matches"}
+        ${testMatchesCheckbox.checked ? '<span class="settings-extra-info">(including test matches)</span>' : ''}</span>
         <div class="track-frequency">
             ${resultString}
         </div>
@@ -336,8 +329,18 @@ daysPlayedCheckbox.addEventListener("click", async function () {
     await generateMatchStatsBox();
 });
 
-trackSortSelect.addEventListener("change", async function () {
-    await generateMatchStatsBox();
+trackSortWrapper.querySelectorAll("button").forEach(button => {
+    button.addEventListener("click", async function () {
+        if (currentTrackSort === button.dataset.value) return;
+        currentTrackSort = button.dataset.value;
+
+        trackSortWrapper.querySelectorAll("button").forEach(b => {
+            b.classList.toggle("bubble-link-accent", b === button);
+            b.classList.toggle("no-color-link", b !== button);
+        });
+
+        await generateMatchStatsBox();
+    });
 });
 
 trackSearchInput.addEventListener("input", () => applyTrackSearch());

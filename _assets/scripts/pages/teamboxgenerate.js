@@ -60,11 +60,28 @@ const makePossessive = name => !name ? "" : (name.endsWith("s") || name.endsWith
 
 const formatDate = dateStr => new Date(dateStr).toLocaleDateString(localStorage.getItem("locale") || "en-GB", { day: "numeric", month: "short", year: "numeric" });
 
-const getTeamDescription = (team, firstMatchDate) => {
-    if (!firstMatchDate) return "New";
+const teamPlaceCache = {};
 
-    const info = teamData.find(t => t.team_name === team.team_name);
+const getTeamPlace = async (teamName) => {
+    const info = teamData.find(t => t.team_name === teamName);
     if (info?.team_place) return info.team_place;
+
+    if (teamPlaceCache[teamName] === undefined) {
+        try {
+            const result = await fetchAPI('teamdata', { team: teamName, season: "" });
+            teamPlaceCache[teamName] = result?.[0]?.team_place || null;
+        } catch {
+            teamPlaceCache[teamName] = null;
+        }
+    }
+    return teamPlaceCache[teamName];
+};
+
+const getTeamDescription = async (team, firstMatchDate) => {
+    const place = await getTeamPlace(team.team_name);
+    if (place) return place;
+
+    if (!firstMatchDate) return "New";
     return `First match ${formatDate(firstMatchDate)}`;
 };
 
@@ -230,11 +247,14 @@ async function renderAllTeamsTable() {
     if (!allTeamsTable || !allTeamsCache) return;
 
     const firstMatchDates = await getTeamFirstMatchDates();
+    const teams = sortPickerTeams(allTeamsCache);
+    const descriptions = await Promise.all(
+        teams.map(team => getTeamDescription(team, firstMatchDates[team.team_name]))
+    );
 
     allTeamsTable.innerHTML = '';
-    for (const team of sortPickerTeams(allTeamsCache)) {
+    teams.forEach((team, i) => {
         const nameUpper = team.team_name.toUpperCase();
-        const firstMatchDate = firstMatchDates[team.team_name];
         const row = document.createElement('a');
         row.className = 'teams-table-item';
         row.href = `/teams/details/?team=${encodeURIComponent(team.team_name)}`;
@@ -245,11 +265,11 @@ async function renderAllTeamsTable() {
                 </picture>
                 <span class="team-table-name-area">
                     <span class="team-table-name">${team.team_name}</span>
-                    <span class="team-table-created">${getTeamDescription(team, firstMatchDate)}</span>
+                    <span class="team-table-created">${descriptions[i]}</span>
                 </span>
         `;
         allTeamsTable.appendChild(row);
-    }
+    });
 
     allTeamsTable.classList.add('fade-in');
 }

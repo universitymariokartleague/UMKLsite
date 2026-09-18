@@ -94,7 +94,7 @@ const icons = {
 function segmentedControl(id, options) {
     return `
         <div class="settings-segmented" id="${id}">
-            ${options.map(o => `<button data-value="${o.value}" class="${o.active ? 'active' : ''}">${o.icon ? icons[o.icon] : ''}${o.label}</button>`).join('')}
+            ${options.map(o => `<button data-value="${o.value}" class="${o.active ? 'active' : ''}">${o.fa ? `<span class="fa-solid fa-${o.fa}"></span>` : (o.icon ? icons[o.icon] : '')}${o.label}</button>`).join('')}
         </div>
     `;
 }
@@ -151,8 +151,8 @@ function generateSettingsPanel() {
                         <span translate="yes" class="setting-desc">Use UK or local dates when travelling</span>
                     </div>
                     ${segmentedControl('overseasSegmented', [
-            { value: '0', label: 'UK', active: !tempOverseasDateDisplay },
-            { value: '1', label: 'Overseas', active: tempOverseasDateDisplay },
+            { value: '0', fa: 'house', label: 'UK', active: !tempOverseasDateDisplay },
+            { value: '1', fa: 'earth', label: 'Overseas', active: tempOverseasDateDisplay },
         ])}
                 </div>
             </section>

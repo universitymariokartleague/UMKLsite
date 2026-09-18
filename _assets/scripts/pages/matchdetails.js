@@ -22,7 +22,7 @@ const penaltyDisclaimer = document.getElementById("penalty-disclaimer");
 const canvas = document.getElementById("scoreChart");
 
 let teamColors = [];
-let matchName, penalties;
+let matchName, penalties, ytLinks, matchDate;
 let currentPerspective = 0;
 let extraInfoOpened = false;
 
@@ -46,6 +46,18 @@ async function getTeamcolors() {
 
 const makePossessive = name =>
     !name ? "" : (name.endsWith("s") || name.endsWith("S") ? `${name}'` : `${name}'s`);
+
+function getYouTubeVideoId(link) {
+    try {
+        const url = new URL(link);
+        if (url.hostname.includes("youtu.be")) return url.pathname.slice(1);
+        if (url.searchParams.get("v")) return url.searchParams.get("v");
+        const match = url.pathname.match(/\/(?:live|embed|shorts)\/([^/]+)/);
+        return match ? match[1] : null;
+    } catch {
+        return null;
+    }
+}
 
 function calculateScore(position) {
     return scoreMap[position - 1] || 1; // Default to 1 if position is out of range
@@ -127,7 +139,7 @@ function renderResults(width) {
         return `
         <div class="track-item">
             <a href="/matches/stats/" title="Click to open the match stats page">
-                <img class="track-icon" width="135px" style="aspect-ratio:45/31" onload="this.style.opacity=1" loading="lazy" src="${getTrackIconPath(track)}" alt="The icon for ${track}" onerror="this.onerror=null; this.src='/_assets/media/courses/mk8dxicons/.unknown.avif';">
+                <img class="track-icon" style="aspect-ratio:45/31" onload="this.style.opacity=1" loading="lazy" src="${getTrackIconPath(track)}" alt="The icon for ${track}" onerror="this.onerror=null; this.src='/_assets/media/courses/mk8dxicons/.unknown.avif';">
             </a>
             <span class="track-label">#${i + 1}<br><b>${track}</b><br>Difference: <span class="diff-${colorClass}">${diff > 0 ? "+" : ""}${diff}</span></span>
         </div>`;
@@ -414,6 +426,8 @@ function loadFromURLParams() {
     const teamsCompressed = urlParams.get('n');
     const matchNameCompressed = urlParams.get('m');
     const penaltiesCompressed = urlParams.get('pen');
+    const ytLinksCompressed = urlParams.get('y');
+    const dateCompressed = urlParams.get('d');
 
     if (positionsCompressed) {
         const positionsRaw = LZString.decompressFromEncodedURIComponent(positionsCompressed);
@@ -440,6 +454,14 @@ function loadFromURLParams() {
     } else {
         penalties = [0, 0];
     }
+
+    if (ytLinksCompressed) {
+        ytLinks = LZString.decompressFromEncodedURIComponent(ytLinksCompressed).split('\n');
+    } else {
+        ytLinks = [];
+    }
+
+    matchDate = dateCompressed ? LZString.decompressFromEncodedURIComponent(dateCompressed) : null;
 }
 
 document.addEventListener('themeChange', () => {
@@ -494,7 +516,38 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderResults();
     if (matchName) {
         inputArea.style.display = "block";
-        inputArea.innerHTML = `<h2>${matchName}</h2><button id="shareButton" class="bubble-link"><span class="fa-solid fa-share"></span> Share Results Graph</button>`;
+        const teamNames = teamNamesInput.value.trim().split('\n').map(name => name.trim());
+        const locale = localStorage.getItem("locale") || "en-GB";
+        const parsedMatchDate = matchDate ? new Date(matchDate) : null;
+        const matchDateStr = parsedMatchDate && !isNaN(parsedMatchDate.getTime())
+            ? parsedMatchDate.toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" })
+            : "";
+        const livestreamThumbnailsHTML = ytLinks.some(Boolean)
+            ? `<div class="match-header-thumbnails">${ytLinks.map((link, i) => {
+                if (!link) return '';
+                const videoId = getYouTubeVideoId(link);
+                const label = `${makePossessive(teamNames[i])} livestream`;
+                const thumbnailImg = videoId
+                    ? `<img src="https://wsrv.nl/?height=180&q=50&output=webp&url=https://i.ytimg.com/vi/${videoId}/hqdefault.jpg" alt="${label}" loading="lazy">`
+                    : '';
+                return `
+                <a class="video-card match-thumbnail" href="${link}" target="_blank" rel="noopener">
+                    <div class="video-thumb-wrapper">
+                        ${thumbnailImg}
+                    </div>
+                    <h4 class="video-title no-color-link"><i class="fa-solid fa-play"></i> ${label}</h4>
+                </a>`;
+            }).join('')}</div>`
+            : '';
+        inputArea.innerHTML = `
+            <div class="match-header">
+                <div class="match-header-info">
+                    <h2>${matchName}</h2>
+                    ${matchDateStr ? `<p class="match-date">${matchDateStr}</p>` : ''}
+                    <button id="shareButton" class="bubble-link"><span class="fa-solid fa-share"></span> Share Results Graph</button>
+                </div>
+                ${livestreamThumbnailsHTML}
+            </div>`;
         const shareButton = document.getElementById("shareButton");
 
         setOriginalMessage(shareButton.innerHTML);

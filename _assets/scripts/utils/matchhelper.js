@@ -1,7 +1,7 @@
 export { generate6v6ScoreCalculatorLink };
 
-function generate6v6ScoreCalculatorLink(entry) {
-    const url = new URL("/tools/6v6scorecalculator/", window.location.origin);
+function generate6v6ScoreCalculatorLink(entry, date) {
+    const url = new URL("/tools/matchdetails/", window.location.origin);
 
     if (!entry.detailedResults) return '';
 
@@ -27,6 +27,17 @@ function generate6v6ScoreCalculatorLink(entry) {
     url.searchParams.set('t', compressedTracks);
     url.searchParams.set('n', compressedTeams);
     url.searchParams.set('pen', compressedPenalties);
+
+    if (entry.ytLinks && entry.ytLinks.some(Boolean)) {
+        const ytLinksString = entry.ytLinks.join('\n');
+        const compressedYtLinks = LZString.compressToEncodedURIComponent(ytLinksString);
+        url.searchParams.set('y', compressedYtLinks);
+    }
+
+    const matchDate = date || entry.matchDate;
+    if (matchDate) {
+        url.searchParams.set('d', LZString.compressToEncodedURIComponent(matchDate));
+    }
 
     return url;
 }

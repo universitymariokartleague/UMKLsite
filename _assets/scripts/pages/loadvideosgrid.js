@@ -130,11 +130,8 @@ function buildVideoCard(item, locale, searchTerm) {
     card.innerHTML = `
         <div class="video-thumb-wrapper">
             <img src="${thumbnailUrl}" alt="${escapeHTML(title)}" loading="lazy" />
-            <div class="play-icon-overlay">
-                <i class="fa-solid fa-play"></i>
-            </div>
         </div>
-        <h4 class="video-title no-color-link">${highlightMatch(title, searchTerm)}</h4>
+        <h4 class="video-title no-color-link"><i class="fa-solid fa-play"></i> ${highlightMatch(title, searchTerm)}</h4>
         ${dateStr ? `<p class="video-date">${dateStr}</p>` : ""}
     `;
 

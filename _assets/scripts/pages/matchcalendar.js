@@ -631,7 +631,7 @@ function createMatchHTML(entry, index, date, locale, is12Hour, liveResults) {
         team2.youtubeLink = entry.ytLinks[1];
     }
 
-    const matchDetailsLink = resultsHTML && entry.detailedResults ? generate6v6ScoreCalculatorLink(entry) : '';
+    const matchDetailsLink = resultsHTML && entry.detailedResults ? generate6v6ScoreCalculatorLink(entry, date) : '';
 
     if (isLive && !entry.endTime) eventliveIndicatorToUpdate = entry.eventID;
 
@@ -1000,7 +1000,7 @@ function findEventByID(graphEventID) {
     for (const [date, events] of Object.entries(matchData)) {
         const found = events.find(event => event.eventID === graphEventID);
         if (found) {
-            return found;
+            return { ...found, matchDate: date };
         }
     }
 

@@ -38,7 +38,7 @@ https://umkl.co.uk/standings/
 https://umkl.co.uk/teams/
 https://umkl.co.uk/teams/details/
 https://umkl.co.uk/tools/
-https://umkl.co.uk/tools/6v6scorecalculator/
+https://umkl.co.uk/tools/matchdetails/
 https://umkl.co.uk/tools/colourpicker/
 https://umkl.co.uk/tools/comborandomiser/
 https://umkl.co.uk/tools/favtrack/

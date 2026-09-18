@@ -417,10 +417,11 @@ select option {
 
 .bubble-link-wrapper {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
-    overflow-x: auto;
+    overflow-x: visible;
     overflow-y: hidden;
-    white-space: nowrap;
+    white-space: normal;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
 }

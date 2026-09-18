@@ -19,7 +19,8 @@
 
     <meta property="og:title" content="UMKL | Match Stats" />
     <meta property="og:site_name" content="umkl.co.uk" />
-    <meta property="og:logo" content="https://umkl.co.uk/_assets/media/brand/guidelines/logo_transparent_standard.png" />
+    <meta property="og:logo"
+        content="https://umkl.co.uk/_assets/media/brand/guidelines/logo_transparent_standard.png" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://umkl.co.uk/schedule/stats/" />
     <meta property="og:image" content="https://umkl.co.uk/_assets/media/brand/cheep_cheep_banner_crop.avif" />
@@ -95,13 +96,14 @@
         <div class="stats-controls">
             <div id="track-search-wrapper">
                 <input type="text" id="track-search" placeholder="Search tracks..." autocomplete="off">
-                <button type="button" id="track-search-clear" class="search-clear-inline" aria-label="Clear search">&times;</button>
+                <button type="button" id="track-search-clear" class="search-clear-inline"
+                    aria-label="Clear search">&times;</button>
             </div>
-            <select id="track-sort" class="stats-sort" aria-label="Sort tracks by">
-                <option value="mostPlayed">Most played</option>
-                <option value="leastPlayed">Least played</option>
-                <option value="alphabetical">A-Z</option>
-            </select>
+            <div id="track-sort" class="bubble-link-wrapper" role="group" aria-label="Sort tracks by">
+                <button type="button" class="bubble-link bubble-link-accent" data-value="mostPlayed">Most played</button>
+                <button type="button" class="bubble-link no-color-link" data-value="leastPlayed">Least played</button>
+                <button type="button" class="bubble-link no-color-link" data-value="alphabetical">A-Z</button>
+            </div>
         </div>
 
         <div id="JSTeamBox" class="team-info"></div>
