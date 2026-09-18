@@ -83,6 +83,7 @@ const STORAGE_KEY = 'umkl_article_builder_draft';
 const LOCAL_STORAGE_LIMIT_BYTES = 5 * 1024 * 1024; // browsers typically cap each origin at ~5MB
 const MAX_IMAGE_DIMENSION = 800; // cap uploaded body images to this before AVIF-encoding them
 const MAX_MAIN_IMAGE_DIMENSION = 1000; // main image gets a bit more room since it's shown larger
+const OG_PLACEHOLDER_IMAGE = '/_assets/media/brand/og-placeholder.svg';
 const savedState = localStorage.getItem('umkl_checklist_collapsed');
 
 // Exported article HTML template
@@ -698,7 +699,7 @@ function updateOgPreview() {
 
     ogPreviewTitle.innerText = `${hasTitle ? titleText : 'Untitled Article'} | UMKL`;
     ogPreviewDescription.innerText = hasSubtitle ? subtitleText : 'Add a subtitle to fill in this description.';
-    ogPreviewImage.src = mainImageUrl;
+    ogPreviewImage.src = mainImageUrl || OG_PLACEHOLDER_IMAGE;
 }
 
 // Auto-save on any edit
