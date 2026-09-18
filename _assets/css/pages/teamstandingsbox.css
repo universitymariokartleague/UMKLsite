@@ -31,7 +31,7 @@
 .teamStanding picture {
     display: inline-block;
     height: clamp(48px, 4vw, 56px);
-    width: auto;
+    aspect-ratio: 1 / 1;
     flex-shrink: 0;
     margin-left: auto;
 }
