@@ -110,6 +110,24 @@ picture img {
     .column-played {
         display: none;
     }
+
+    .standings-table th,
+    .standings-row td {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .column-position {
+        width: 32px;
+    }
+
+    .column-points {
+        width: 70px;
+    }
+
+    .team-info {
+        gap: 8px;
+    }
 }
 
 .team-info {

@@ -930,20 +930,6 @@ umkl-navbar {
     z-index: 8;
 }
 
-/* Plain, non-blurred safe-area cover so iOS always has a solid color to sample for the
-   status bar, independent of the navbar web component's JS having loaded/upgraded yet. */
-umkl-navbar::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: env(safe-area-inset-top, 0px);
-    background-color: var(--accent-color);
-    z-index: 9;
-    pointer-events: none;
-}
-
 umkl-navbar::selection {
     background-color: var(--light-highlight-color);
 }
