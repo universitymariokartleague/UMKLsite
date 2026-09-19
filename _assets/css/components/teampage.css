@@ -40,12 +40,7 @@
     width: 190px;
     height: 190px;
     object-fit: contain;
-    filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.35));
     transition: transform 0.2s ease;
-}
-
-.hero-logo-link:hover .hero-logo {
-    transform: scale(1.04);
 }
 
 .hero-team-name {
