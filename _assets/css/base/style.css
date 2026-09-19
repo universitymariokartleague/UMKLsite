@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-
 :root {
     --content-max-width: 1400px;
     --article-max-width: 1400px;
@@ -385,38 +383,10 @@ a[target="_blank"]::after {
     text-decoration: none;
 }
 
-/* button {
-    background-color: var(--accent-color);
-    font-weight: 600;
-    border-radius: var(--border-radius-pill);
-    font-size: 15px;
-    color: #fff;
-    border: 1px solid #ffffff15;
-    cursor: pointer;
-    transition: transform 0.1s, color 0.1s, background-color 0.1s;
-}
-
-button:active {
-    transform: scale(0.95);
-}
-
-button:hover,
-button:focus {
-    color: var(--accent-color) !important;
-    background: #fff;
-    outline: 1px solid var(--accent-color);
-} */
-
 /* Options popups can't use a translucent background */
 select option {
     background-color: var(--bg-color);
     color: var(--text-color);
-}
-
-@media (prefers-reduced-motion) {
-    button:active {
-        transform: none;
-    }
 }
 
 .bubble-link-wrapper {
@@ -531,29 +501,6 @@ select option {
 
 .bubble-nav .active {
     background-color: var(--translucent-color);
-}
-
-.close-list-view-button {
-    background: var(--bg-color);
-    border: var(--box-border);
-    color: var(--text-color);
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    transition: background-color 0.2s, transform 0.2s;
-}
-
-.close-list-view-button:hover,
-.close-list-view-button:focus {
-    background: var(--accent-color) !important;
-    color: #fff !important;
-    border: 1px solid #fff !important;
-    outline: none;
 }
 
 code,
@@ -865,7 +812,7 @@ blockquote {
 @keyframes dialogPopIn {
     from {
         opacity: 0;
-        transform: scale(0.9);
+        transform: scale(0.95);
     }
 
     to {
@@ -882,7 +829,7 @@ blockquote {
 
     to {
         opacity: 0;
-        transform: scale(0.9);
+        transform: scale(0.95);
     }
 }
 
@@ -933,12 +880,6 @@ dialog.cookie-popup {
         border: none;
         border-top: 1px solid #cccccccc;
     }
-}
-
-.youtube-embed {
-    width: 100%;
-    max-width: 100%;
-    aspect-ratio: 16 / 9;
 }
 
 umkl-navbar {

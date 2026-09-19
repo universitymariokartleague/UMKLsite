@@ -1,0 +1,233 @@
+#HomeJSTeamTable {
+    overflow-x: auto;
+}
+
+.podium-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+    align-items: end;
+}
+
+.podium-card {
+    border-radius: var(--border-radius);
+    padding: 22px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    min-height: 175px;
+    position: relative;
+    overflow: hidden;
+    /* Contains pattern within rounded card corners */
+    isolation: isolate;
+    /* Creates stacking context for z-index ordering */
+}
+
+.podium-card:hover .podium-team-name {
+    text-decoration: underline;
+}
+
+.podium-emblem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.podium-emblem img {
+    width: 115px;
+    height: 115px;
+}
+
+.podium-card.pos-1 {
+    min-height: 200px;
+}
+
+.podium-card.pos-1 .podium-emblem img {
+    width: 150px;
+    height: 150px;
+}
+
+.podium-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 2;
+}
+
+.podium-pos {
+    font-size: 1.6rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.podium-pos sup {
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-left: 2px;
+}
+
+.podium-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.podium-body {
+    margin-top: 14px;
+}
+
+.podium-team-name {
+    font-size: 1.6rem;
+    font-weight: 1000;
+}
+
+.podium-pts {
+    margin-top: 2px;
+    font-size: 1rem;
+}
+
+.podium-pts span {
+    font-size: 0.85em;
+    font-weight: 600;
+    opacity: 0.7;
+}
+
+.podium-card-skeleton {
+    background-color: var(--translucent-color);
+    cursor: default;
+}
+
+.podium-pos-skeleton {
+    width: 50px;
+    height: 26px;
+}
+
+.podium-team-name-skeleton {
+    width: 65%;
+    height: 22px;
+    margin-bottom: 10px;
+}
+
+.podium-pts-skeleton {
+    width: 40%;
+    height: 16px;
+}
+
+.podium-emblem-skeleton {
+    width: 115px;
+    height: 115px;
+}
+
+.podium-card-skeleton.pos-1 .podium-emblem-skeleton {
+    width: 150px;
+    height: 150px;
+}
+
+.standings-row-skeleton {
+    cursor: default;
+    border-bottom: 1px solid var(--translucent-color);
+}
+
+.standings-row-skeleton td {
+    padding: 16px;
+    vertical-align: middle;
+}
+
+.full-standings-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: var(--section-spacing);
+}
+
+.teamStandingPattern {
+    z-index: 0;
+    left: -300px;
+
+    -webkit-mask-image: url('/_assets/pattern/finish_pattern.svg');
+    mask-image: url('/_assets/pattern/finish_pattern.svg');
+
+    -webkit-mask-size: 1200px;
+    mask-size: 1200px;
+
+    opacity: 1;
+}
+
+.podium-card> :not(.teamStandingPattern) {
+    position: relative;
+    z-index: 1;
+}
+
+@media screen and (max-width: 1200px) {
+    .podium-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin: 20px 0;
+    }
+
+    .podium-card.pos-1 {
+        order: 1;
+        min-height: auto;
+    }
+
+    .podium-card.pos-2 {
+        order: 2;
+        min-height: auto;
+    }
+
+    .podium-card.pos-3 {
+        order: 3;
+        min-height: auto;
+    }
+
+    .podium-card {
+        padding: 16px;
+        min-height: auto;
+    }
+
+    .podium-team-name {
+        font-size: 1.3rem;
+    }
+
+    .podium-emblem img,
+    .podium-card.pos-1 .podium-emblem img,
+    .podium-emblem-skeleton,
+    .podium-card-skeleton.pos-1 .podium-emblem-skeleton {
+        width: 85px;
+        height: 85px;
+    }
+
+    .podium-pos {
+        font-size: 1.4rem;
+    }
+
+    .teamStandingPattern {
+        left: 0;
+        -webkit-mask-size: 1200px;
+        mask-size: 1200px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .podium-card {
+        padding: 14px;
+    }
+
+    .podium-team-name {
+        font-size: 1.1rem;
+    }
+
+    .podium-emblem img,
+    .podium-card.pos-1 .podium-emblem img,
+    .podium-emblem-skeleton,
+    .podium-card-skeleton.pos-1 .podium-emblem-skeleton {
+        width: 65px;
+        height: 65px;
+    }
+
+    .teamStandingPattern {
+        -webkit-mask-size: 500px;
+        mask-size: 500px;
+    }
+}

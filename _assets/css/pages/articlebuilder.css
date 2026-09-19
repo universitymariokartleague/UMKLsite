@@ -1,77 +1,3 @@
-.splash-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: var(--bg-color, #121212);
-    color: var(--text-color, #ffffff);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    opacity: 1;
-    transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-
-.splash-overlay.fade-out {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-}
-
-.splash-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    max-width: 380px;
-    width: 90%;
-    padding: 24px;
-}
-
-.splash-spinner {
-    width: 42px;
-    height: 42px;
-    border: 4px solid var(--translucent-color);
-    border-top: 4px solid var(--brand-primary);
-    border-radius: 50%;
-    animation: splashSpin 0.9s linear infinite;
-    margin-bottom: 16px;
-}
-
-@keyframes splashSpin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-.splash-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 16px;
-}
-
-.splash-progress-container {
-    width: 100%;
-    height: 6px;
-    background: var(--translucent-color);
-    border-radius: 3px;
-    overflow: hidden;
-    margin-bottom: 16px;
-}
-
-.splash-progress-bar {
-    width: 0%;
-    height: 100%;
-    background: var(--brand-primary);
-    transition: width 0.2s ease;
-}
-
 .hidden {
     display: none !important;
 }
@@ -185,18 +111,6 @@
     color: var(--brand-primary);
 }
 
-.btn-icon-label {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 11px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 2px 8px;
-}
-
-
 .editor-container {
     max-width: 1400px;
     margin: 24px auto;
@@ -212,6 +126,7 @@
 
 .article-main-content {
     flex: 3;
+    min-width: 0;
 }
 
 .article-sidebar {
@@ -345,8 +260,6 @@
     margin-bottom: 24px;
 }
 
-
-
 .article-image-wrapper {
     display: flex;
     flex-direction: column;
@@ -355,8 +268,6 @@
     width: 100%;
     position: relative;
 }
-
-
 
 .article-image-wrapper img {
     width: 100%;
@@ -474,11 +385,6 @@
     outline: 1px solid var(--text-color);
 }
 
-
-.article-main-content {
-    min-width: 0;
-}
-
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -493,8 +399,6 @@
     z-index: 2000;
     animation: dialogBackdropFadeIn 0.2s ease;
 }
-
-
 
 .modal-card {
     background: var(--bg-color, #ffffff);
@@ -643,57 +547,6 @@
     font-weight: 600;
     cursor: pointer;
     user-select: none;
-}
-
-.stats-toggle {
-    position: relative;
-    display: inline-flex;
-    flex-shrink: 0;
-}
-
-.stats-toggle input {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-    pointer-events: none;
-}
-
-.stats-toggle-track {
-    position: relative;
-    width: 34px;
-    height: 20px;
-    border-radius: var(--border-radius-pill);
-    background-color: var(--translucent-color);
-    transition: background-color 0.15s;
-}
-
-.stats-toggle-track::before {
-    content: "";
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background-color: var(--text-color);
-    opacity: 0.6;
-    transition: transform 0.15s, background-color 0.15s, opacity 0.15s;
-}
-
-.stats-toggle input:checked+.stats-toggle-track {
-    background-color: var(--accent-color);
-}
-
-.stats-toggle input:checked+.stats-toggle-track::before {
-    transform: translateX(14px);
-    background-color: #fff;
-    opacity: 1;
-}
-
-.stats-toggle input:focus-visible+.stats-toggle-track {
-    outline: 2px solid var(--accent-color);
-    outline-offset: 2px;
 }
 
 .btn-modal-secondary {
@@ -906,50 +759,6 @@
     }
 }
 
-@keyframes dialogPopIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-@keyframes dialogPopOut {
-    from {
-        opacity: 1;
-        transform: scale(1);
-    }
-
-    to {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-}
-
-@keyframes dialogBackdropFadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes dialogBackdropFadeOut {
-    from {
-        opacity: 1;
-    }
-
-    to {
-        opacity: 0;
-    }
-}
-
 @media screen and (max-width: 900px) {
     .editor-container {
         margin: 12px auto;
@@ -983,7 +792,6 @@
         max-width: 100%;
     }
 }
-
 
 @media screen and (max-width: 600px) {
     .builder-bar {

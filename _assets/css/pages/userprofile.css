@@ -49,7 +49,6 @@
     background-size: cover;
     background-position: center;
     z-index: -10;
-    opacity: 1;
     background-image: var(--bg-image);
     opacity: var(--bg-opacity, 1);
 }

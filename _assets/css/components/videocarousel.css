@@ -1,0 +1,123 @@
+.carousel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.carousel-container {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 12px;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.video-card {
+    flex: 0 0 calc(20% - 12.8px);
+    min-width: 180px;
+    text-decoration: none;
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    scroll-snap-align: start;
+}
+
+.video-more-thumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    background-color: var(--translucent-color);
+}
+
+.video-more-thumb svg {
+    width: 55%;
+    height: auto;
+    fill: currentColor;
+    opacity: 0.6;
+}
+
+.video-card-more .video-title {
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.video-thumb-wrapper {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--border-radius);
+    margin-bottom: 8px;
+    background-color: var(--translucent-color);
+    clip-path: inset(0 round var(--border-radius));
+}
+
+.video-thumb-wrapper img {
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
+    object-fit: cover;
+    transform: translateZ(0);
+}
+
+.video-thumb-wrapper.skeleton {
+    background-color: var(--translucent-color);
+    border-radius: var(--border-radius);
+}
+
+.video-title {
+    font-weight: 600;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.video-title .fa-play {
+    font-size: 0.9em;
+    opacity: 0.7;
+}
+
+.video-card[target="_blank"]::after {
+    content: none !important;
+}
+
+.video-card:hover .video-title {
+    text-decoration: underline;
+}
+
+.video-date {
+    margin: 2px 0 0;
+    font-size: 0.8rem;
+    font-weight: 500;
+    opacity: 0.7;
+    color: var(--text-color);
+    min-height: 1.2em;
+}
+
+.carousel-loading {
+    padding: 20px 0;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+@media (max-width: 900px) {
+    .video-card {
+        flex: 0 0 calc(33.3% - 11px);
+    }
+}
+
+@media (max-width: 650px) {
+    .video-card {
+        flex: 0 0 calc(60% - 10px);
+    }
+}

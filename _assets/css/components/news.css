@@ -1,5 +1,3 @@
-@import url("/_assets/css/components/searchbox.css");
-
 /* news */
 #news-search-wrapper {
     margin-top: var(--section-spacing);
@@ -156,12 +154,6 @@ tag:hover {
 
 tag:active {
     background-color: var(--translucent-color);
-}
-
-.news-credits {
-    margin-top: 5px;
-    font-size: 0.9em;
-    font-style: italic;
 }
 
 @media (max-width: 1200px) {
