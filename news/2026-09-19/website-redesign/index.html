@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="#bc0839" name="theme-color" />
+    <meta name="color-scheme" content="dark light">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Website Redesign! | UMKL</title>
+    <meta name="description" content="Check out the redesigned site in preparation for Season 3!">
+    <link rel="icon" href="/_assets/media/brand/favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/_assets/media/brand/favicon.png">
+    <link rel="stylesheet" href="/_assets/css/base/style.css">
+    <link rel="stylesheet" href="/_assets/css/base/settings.css">
+    <link rel="stylesheet" href="/_assets/css/pages/newsarticle.css">
+    <link rel="stylesheet" href="/_assets/css/ext/fontawesome.min.css">
+
+    <meta property="og:title" content="Website Redesign! | UMKL" />
+    <meta property="og:site_name" content="umkl.co.uk" />
+    <meta property="og:logo"
+        content="https://umkl.co.uk/_assets/media/brand/guidelines/logo_transparent_standard.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://umkl.co.uk/news/" />
+    <meta property="og:image" content="/news/2026-09-19/website-redesign/main-image.avif" />
+    <meta property="og:description" content="Check out the redesigned site in preparation for Season 3!" />
+
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="modulepreload" href="/_assets/webcomponents/navbar.js">
+    <link rel="modulepreload" href="/_assets/webcomponents/footer.js">
+    <script type="module" src="/_assets/webcomponents/navbar.js" defer></script>
+    <script type="module" src="/_assets/webcomponents/footer.js" defer></script>
+
+    <script src="/_assets/scripts/base/theme.js"></script>
+    <script type="module" src="/_assets/scripts/base/settings.js" defer></script>
+    <script defer src="/_assets/scripts/base/imagefade.js" type="module"></script>
+    <script type="module" src="/_assets/scripts/pages/codehighlight.js" defer></script>
+    <script type="module" src="/_assets/scripts/base/smartback.js" defer></script>
+    <script type="module" src="/_assets/scripts/pages/relatedarticles.js" defer></script>
+</head>
+
+<body id="top">
+    <umkl-navbar></umkl-navbar>
+
+    <main class="article-main">
+        <div class="bubble-link-wrapper">
+            <a href="/news/" class="bubble-link no-color-link" data-smart-back>
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24"
+                    role="presentation">
+                    <path fill="currentColor"
+                        d="M22 13H4.94l5.18 5.29-1.38 1.42-6.17-6.3a2 2 0 0 1 0-2.82l6.17-6.3 1.38 1.42L4.94 11H22z">
+                    </path>
+                </svg>
+                Back</a>
+        </div>
+
+        <div class="article-wrapper">
+            <div class="article-content">
+                <div class="article-header">
+                    <h1>Website Redesign!</h1>
+                    <span class="article-subtitle">Check out the redesigned site in preparation for Season 3!</span>
+                    <div class="article-image-container">
+                        <div class="article-image-wrapper">
+                            <img loading="lazy" class="image article-header-image" height="auto" width="100%"
+                                src="/news/2026-09-19/website-redesign/main-image.avif" />
+                            <span class="article-image-caption">September 2026 Website Redesign</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="article-body">
+                    <h3>The UMKL site has received a refresh, in-line with new brand guidelines, which will be published
+                        soon!</h3>
+                    <p>In preparation for Season 3, the UMKL website has been refreshed. Expect a more consistent brand
+                        style across all of the UMKL. Lots of news articles will be posted shortly, so be sure to check
+                        it out! Prepare to get excited as Season 3 is right around the corner!</p>
+                    <p>Thanks to everyone who helped design and test the site! More content will be released soon.</p>
+                    <div class="article-image-container" contenteditable="false">
+                        <div class="article-image-wrapper">
+
+                            <img loading="lazy" class="image article-content-image"
+                                src="/news/2026-09-19/website-redesign/image-1.avif">
+                            <span class="article-image-caption" contenteditable="true">The redesigned website has better
+                                support for higher resolution screens</span>
+                        </div>
+                    </div>
+                    <p>Here is a full list of changes made to Cheep Cheep and the UMKL site below:</p>
+                    <blockquote><b>Cheep Cheep/Discord<br></b>- Fixed a bug that showed York as having 1 season win when
+                        they had 2<br>- Majorly refactored the bot's code base into cogs and folders for easier
+                        maintenance<br>- Added the ability for server members to /request-stream-key,
+                        /request-board-password and /request-media-password<br>- Added various admin commands<br>-
+                        Increased the team name length limit to 16 characters<br>- Added captchas that new members must
+                        complete before accessing all the channels in the server, sadly it's necessary as Discord can't
+                        make their own platform usable<br>- Added /export-my-data, which lets you download all the data
+                        UMKL holds on you<br>- Added automatic database backups<br>- Cheep Cheep now serves profile
+                        pictures and team emblems directly (used by the credits and teams pages)<br>- Added
+                        /change-team-name for admins<br>- Added Best Match Score leaderboards (season/lifetime,
+                        team/individual) to /leaderboards<br>- Team locations shown by Cheep Cheep now link to Google
+                        Maps<br>- Cheep Cheep now suggests using /disconnect when someone mentions disconnecting in a
+                        match chat<br>- Added fun dev commands<br>- Fixed various timezone and daylight saving time bugs
+                        affecting match and event times<br>- Fixed a bug where SP sometimes wasn't applied properly
+                        after a match ended<br>- Fixed a bug where SP history could be lost for some players<br>-
+                        Various performance improvements<br>- Fixed various bugs<br>- Fun fact Cheep Cheep runs on an
+                        AMD Ryzen 3 2200G with 16GB of RAM<br>- Another fun fact Cheep Cheep uses about 120MB of RAM
+                    </blockquote>
+                    <blockquote><b>UMKL website<br></b>- Resigned entire website with a modern design<br>- Added a list
+                        of all teams underneath the current season's teams<br>- Added the ability to add a 'UMKL
+                        Matches' calendar to your calendar app<br>- Redesigned the live results page to work at any
+                        screen resolution, and with team parameters<br>- Made it obvious who the winner is on the teams
+                        page<br>- Rewrote all help/guide articles<br>- Added a downloadable assets pack containing team
+                        logos and emblems<br>- Added a search bar to the news page<br>- Revamped the tools page<br>-
+                        Various performance and page loading speed improvements across the site<br>- Added a disclaimer
+                        on the matches page for users viewing match times from outside the UK<br>- Fixed bugs and
+                        oversights</blockquote>
+                    <p>This article is a summary of an announcement made on the UMKL Discord server, you can join the
+                        server <a href="https://discord.gg/jz3hKEmDss" target="_blank"
+                            rel="noopener noreferrer">here</a>.</p>
+                </div>
+            </div>
+
+            <div class="article-meta">
+                <div class="article-meta-item">
+                    <span class="article-meta-heading">Date</span>
+                    <span class="article-meta-value">19 September 2026</span>
+                </div>
+                <div class="article-meta-item">
+                    <span class="article-meta-heading">Author</span>
+                    <span class="article-meta-value">zy</span>
+                </div>
+                <div class="article-meta-item">
+                    <span class="article-meta-heading">Tags</span>
+                    <div class="tag-container">
+                        <tag translate="no">Website</tag>
+                        <tag translate="no">Branding</tag>
+                        <tag translate="no">Season 3</tag>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <umkl-footer></umkl-footer>
+</body>
+
+</html>

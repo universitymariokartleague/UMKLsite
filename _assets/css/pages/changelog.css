@@ -1,0 +1,99 @@
+.changelog-entry {
+    padding-bottom: 12px;
+    margin-bottom: 32px;
+    scroll-margin-top: calc(var(--navbar-height) + 35px);
+}
+
+.changelog-entry:not(:last-child) {
+    border-bottom: 1px solid var(--translucent-color);
+}
+
+.article-body .changelog-related {
+    margin: 4px 0 0;
+    opacity: 0.8;
+}
+
+.changelog-entry h3 {
+    margin: 24px 0 10px;
+}
+
+.changelog-entry h2+ul {
+    margin-top: 16px;
+}
+
+.changelog-entry ul {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 0 12px;
+    padding-left: 1.25em;
+}
+
+.changelog-toc {
+    position: sticky;
+    top: calc(var(--navbar-height) + 20px);
+    align-self: flex-start;
+}
+
+.changelog-toc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.changelog-toc-list a:link,
+.changelog-toc-list a:visited {
+    padding: 6px 12px;
+    border-left: 2px solid var(--translucent-color);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    text-decoration: none;
+    opacity: 0.65;
+    transition: opacity 0.15s, border-color 0.15s;
+}
+
+.changelog-toc-list a:hover {
+    opacity: 1;
+}
+
+.changelog-toc-list a.active {
+    border-left-color: var(--brand-primary);
+    font-weight: 600;
+    opacity: 1;
+}
+
+@media screen and (max-width: 900px) {
+    .changelog-entry {
+        scroll-margin-top: calc(var(--navbar-height) + 75px);
+    }
+
+    .changelog-toc {
+        order: -1;
+        top: var(--navbar-height);
+        z-index: 1;
+        margin: 0 -2px;
+        background-color: var(--bg-color);
+    }
+
+    .article-meta.changelog-toc .article-meta-item {
+        padding: 10px 0;
+    }
+
+    .changelog-toc-list {
+        flex-direction: row;
+        gap: 6px;
+        overflow-x: auto;
+    }
+
+    .changelog-toc-list a:link,
+    .changelog-toc-list a:visited {
+        flex-shrink: 0;
+        border: 1px solid var(--translucent-color);
+        border-radius: var(--border-radius-pill);
+        padding: 4px 12px;
+    }
+
+    .changelog-toc-list a.active {
+        border-color: var(--brand-primary);
+    }
+}
