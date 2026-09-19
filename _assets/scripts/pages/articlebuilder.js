@@ -1216,7 +1216,7 @@ saveBtn.addEventListener('click', async () => {
         ? rawTags.map(tag => `                        <tag translate="no">${tag}</tag>`).join('\n')
         : '                        <tag translate="no">News</tag>';
 
-    // index.html file inside the .zip folder
+    // index.html file inside the .umklpost folder
     const htmlContent = outputDocument({
         title,
         subtitle,
@@ -1244,17 +1244,17 @@ saveBtn.addEventListener('click', async () => {
 
     zip.file("news_entry.json", JSON.stringify(newsJsonEntry, null, 4));
 
-    // Compile a .zip to be downloaded
+    // Compile a .umklpost to be downloaded
     const zipBlob = await zip.generateAsync({ type: "blob" });
     const downloadLink = document.createElement('a');
     downloadLink.href = URL.revokeObjectURL(zipBlob);
     downloadLink.href = URL.createObjectURL(zipBlob);
-    downloadLink.download = `${dateFormattedString}-${folderName}-article.zip`;
+    downloadLink.download = `${dateFormattedString}-${folderName}-article.umklpost`;
     downloadLink.click();
     URL.revokeObjectURL(downloadLink.href);
 });
 
-// Import a previously-exported .zip and restore it into the editor
+// Import a previously-exported .umklpost and restore it into the editor
 importBtn.addEventListener('click', () => importFileInput.click());
 
 importFileInput.addEventListener('change', async (e) => {
@@ -1266,7 +1266,7 @@ importFileInput.addEventListener('change', async (e) => {
         await importArticleFromZip(file);
     } catch (err) {
         console.error('Failed to import article:', err);
-        alert("Couldn't import that .zip - make sure it was exported from this tool.");
+        alert("Couldn't import that .umklpost - make sure it was exported from this tool.");
     }
 });
 
