@@ -169,6 +169,15 @@ def externalize_data_images(article_dir, entry, taken_names):
     return len(saved)
 
 
+def update_rss_feed():
+    try:
+        import genrss
+    except ImportError as e:
+        print(f"Couldn't update the RSS feed ({e}); run _tools/genrss.py once its dependencies are installed.")
+        return
+    genrss.generate_rss_feed()
+
+
 def update_news_json(entry):
     """
     Adds a news entry to news/news.json (creating the file if it doesn't
@@ -245,6 +254,8 @@ def import_article_zip(zip_path):
     if converted:
         print(f"Converted {converted} inline image(s) into image files")
     print("news/news.json updated")
+
+    update_rss_feed()
 
 
 if __name__ == "__main__":

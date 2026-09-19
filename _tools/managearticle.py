@@ -1,6 +1,6 @@
 # This script provides an interactive CLI for editing news/news.json:
 # listing, editing, and removing articles, including moving an article's
-# files when its date changes.
+# files when its date changes. The RSS feed is regenerated after every change.
 
 import datetime
 import json
@@ -41,12 +41,22 @@ def load_news():
         return json.load(f)
 
 
+def update_rss_feed():
+    try:
+        import genrss
+    except ImportError as e:
+        print(f"Couldn't update the RSS feed ({e}); run _tools/genrss.py once its dependencies are installed.")
+        return
+    genrss.generate_rss_feed()
+
+
 def save_news(news):
-    """Writes the news list back to news/news.json, sorted newest-first."""
+    """Writes the news list back to news/news.json, sorted newest-first, and regenerates the RSS feed."""
     news.sort(key=lambda item: item["date"], reverse=True)
     with open(NEWS_JSON_PATH, "w", encoding="utf-8") as f:
         json.dump(news, f, indent=4)
         f.write("\n")
+    update_rss_feed()
 
 
 def slug_from_link(link):
