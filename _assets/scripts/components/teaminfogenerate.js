@@ -298,6 +298,7 @@ function generateTeamBox(teamData, showError) {
     if (heroLogo) {
         heroLogo.src = logoUrl;
         heroLogo.alt = `${makePossessive(teamData.team_name)} team logo`;
+        document.getElementById('teamHeroLogoLink')?.setAttribute('href', logoUrl);
     }
 
     const teamNameBox = document.getElementById('teamNameBox');
