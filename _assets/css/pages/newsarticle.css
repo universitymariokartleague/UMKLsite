@@ -28,10 +28,22 @@
 }
 
 .article-body blockquote:not(.info):not(.warning):not(.success):not(.fail):not(.rainbow) {
-    padding: 4px 20px;
-    border-left: 4px solid var(--brand-primary);
-    font-style: italic;
-    opacity: 0.85;
+    position: relative;
+    overflow: hidden;
+    padding: 20px 28px 20px 30px;
+    border: 0;
+    border-radius: var(--border-radius);
+    background: color-mix(in oklch, var(--brand-primary) 8%, transparent);
+    font-size: 1.05em;
+    line-height: 1.6;
+}
+
+.article-body blockquote:not(.info):not(.warning):not(.success):not(.fail):not(.rainbow)::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 5px;
+    background: var(--brand-primary);
 }
 
 .article-body pre.codeBox {

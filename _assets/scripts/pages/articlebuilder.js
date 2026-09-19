@@ -14,8 +14,8 @@ const bodyFileInput = document.getElementById('bodyFileInput');
 
 const blockTypeSelect = document.getElementById('blockTypeSelect');
 const boldBtn = document.getElementById('boldBtn');
+const italicBtn = document.getElementById('italicBtn');
 const linkBtn = document.getElementById('linkBtn');
-const codeBtn = document.getElementById('codeBtn');
 const insertImageBtn = document.getElementById('insertImageBtn');
 const insertVideoBtn = document.getElementById('insertVideoBtn');
 const clearBtn = document.getElementById('clearBtn');
@@ -42,6 +42,9 @@ const urlModalSubtitle = document.getElementById('urlModalSubtitle');
 const urlModalInput = document.getElementById('urlModalInput');
 const urlModalCancelBtn = document.getElementById('urlModalCancelBtn');
 const urlModalConfirmBtn = document.getElementById('urlModalConfirmBtn');
+const urlModalPresets = document.getElementById('urlModalPresets');
+const urlModalNewTabRow = document.getElementById('urlModalNewTabRow');
+const urlModalNewTab = document.getElementById('urlModalNewTab');
 
 const conversionStatusEl = document.getElementById('conversionStatus');
 
@@ -83,6 +86,12 @@ const STORAGE_KEY = 'umkl_article_builder_draft';
 const LOCAL_STORAGE_LIMIT_BYTES = 5 * 1024 * 1024; // browsers typically cap each origin at ~5MB
 const MAX_IMAGE_DIMENSION = 800; // cap uploaded body images to this before AVIF-encoding them
 const MAX_MAIN_IMAGE_DIMENSION = 1000; // main image gets a bit more room since it's shown larger
+const LINK_PRESETS = [
+    { label: 'Discord Server', url: 'https://discord.gg/jz3hKEmDss' },
+    { label: 'YouTube Channel', url: 'https://www.youtube.com/@universitymariokartleague' },
+    { label: 'TikTok', url: 'https://www.tiktok.com/@umkl_uk' },
+    { label: 'Instagram', url: 'https://www.instagram.com/universitymariokartleague' }
+];
 const OG_PLACEHOLDER_IMAGE = '/_assets/media/brand/og-placeholder.svg';
 const savedState = localStorage.getItem('umkl_checklist_collapsed');
 
@@ -230,6 +239,48 @@ function handlePlainTextPaste(e) {
     }
 }
 
+// Chrome copies computed colour/size onto inline spans/fonts when merging blocks or dropping in rich text
+function stripInlineFormatting(root) {
+    const junk = root.querySelectorAll('font, span:not([class]), [style], [color], [face], [size], [bgcolor]');
+    if (junk.length === 0) return;
+
+    const sel = window.getSelection();
+    const saved = sel && sel.rangeCount > 0 && root.contains(sel.anchorNode) ? {
+        startContainer: sel.getRangeAt(0).startContainer,
+        startOffset: sel.getRangeAt(0).startOffset,
+        endContainer: sel.getRangeAt(0).endContainer,
+        endOffset: sel.getRangeAt(0).endOffset
+    } : null;
+
+    junk.forEach(el => {
+        ['style', 'color', 'face', 'size', 'bgcolor'].forEach(attr => el.removeAttribute(attr));
+        if (el.tagName === 'FONT' || (el.tagName === 'SPAN' && !el.hasAttribute('class'))) {
+            el.replaceWith(...el.childNodes);
+        }
+    });
+
+    if (saved && root.contains(saved.startContainer) && root.contains(saved.endContainer)) {
+        const range = document.createRange();
+        range.setStart(saved.startContainer, saved.startOffset);
+        range.setEnd(saved.endContainer, saved.endOffset);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    }
+}
+
+// Pasting a lone URL over selected text turns the selection into a link (like markdown editors)
+function pasteUrlOverSelection(e) {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0 || sel.isCollapsed) return false;
+
+    const text = (e.clipboardData || window.clipboardData).getData('text/plain').trim();
+    if (!/^https?:\/\/\S+$/i.test(text)) return false;
+
+    e.preventDefault();
+    document.execCommand('createLink', false, text);
+    return true;
+}
+
 // Attach event listener to all editable regions
 editableElements.forEach(el => {
     if (!el) return;
@@ -240,6 +291,7 @@ editableElements.forEach(el => {
             convertImageToAvif(imageFile).then(insertImageToBody);
             return;
         }
+        if (el === bodyEditor && pasteUrlOverSelection(e)) return;
         handlePlainTextPaste(e);
     });
 });
@@ -335,6 +387,7 @@ function loadDraft() {
             setMainImage(draft.mainImageUrl);
         }
 
+        editableElements.forEach(el => el && stripInlineFormatting(el));
     } catch (e) {
         console.error("Failed to restore article draft:", e);
     }
@@ -350,6 +403,7 @@ let mainImageUrl = "";
 let activeImageCallback = null;
 let activeFileInput = null;
 let activeUrlCallback = null;
+let activePresetLabel = null;
 let autoSaveEnabled = true;
 let hasWarnedAboutStorage = false;
 
@@ -458,12 +512,32 @@ imageModal.addEventListener('click', (e) => {
 });
 
 // Generic URL-entry modal
-function openUrlModal({ title, subtitle, placeholder = 'https://', defaultValue = '' }, callback) {
+function openUrlModal({ title, subtitle, placeholder = 'https://', defaultValue = '', presets = null, newTabOption = false }, callback) {
     urlModalTitle.textContent = title;
     urlModalSubtitle.textContent = subtitle;
     urlModalInput.placeholder = placeholder;
     urlModalInput.value = defaultValue;
     activeUrlCallback = callback;
+    activePresetLabel = null;
+
+    urlModalPresets.replaceChildren();
+    urlModalPresets.classList.toggle('hidden', !presets);
+    (presets || []).forEach(preset => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn-url-preset';
+        btn.textContent = preset.label;
+        btn.addEventListener('click', () => {
+            urlModalInput.value = preset.url;
+            activePresetLabel = preset.label;
+            urlModalPresets.querySelectorAll('.btn-url-preset').forEach(b => b.classList.toggle('active', b === btn));
+            urlModalInput.focus();
+        });
+        urlModalPresets.appendChild(btn);
+    });
+
+    urlModalNewTab.checked = true;
+    urlModalNewTabRow.classList.toggle('hidden', !newTabOption);
 
     urlModal.classList.remove('hidden');
     urlModal.classList.remove('closing');
@@ -496,9 +570,10 @@ function closeUrlModal() {
 function confirmUrlModal() {
     const value = urlModalInput.value.trim();
     const callback = activeUrlCallback;
+    const options = { newTab: urlModalNewTab.checked, label: activePresetLabel };
     closeUrlModal();
     if (value && callback) {
-        callback(value);
+        callback(value, options);
     }
 }
 
@@ -506,6 +581,10 @@ urlModalConfirmBtn.addEventListener('click', confirmUrlModal);
 urlModalCancelBtn.addEventListener('click', closeUrlModal);
 urlModal.addEventListener('click', (e) => {
     if (e.target === urlModal) closeUrlModal();
+});
+urlModalInput.addEventListener('input', () => {
+    activePresetLabel = null;
+    urlModalPresets.querySelectorAll('.btn-url-preset').forEach(b => b.classList.remove('active'));
 });
 urlModalInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
@@ -732,6 +811,7 @@ function updateOgPreview() {
 [articleTitle, articleSubtitle, mainCaption, bodyEditor].forEach(el => {
     if (el) {
         el.addEventListener('input', () => {
+            stripInlineFormatting(el);
             validateArticleRequirements();
             updateOgPreview();
             saveDraft();
@@ -790,21 +870,17 @@ function updateToolbarState() {
 
     // Disable toolbar controls when focused outside bodyEditor - block type and bold
     // stay usable throughout, since they restore the last body selection themselves.
-    const controls = [linkBtn, codeBtn, insertImageBtn, insertVideoBtn];
+    const controls = [linkBtn, insertImageBtn, insertVideoBtn];
     controls.forEach(ctrl => {
         ctrl.disabled = !isBodyActive;
         ctrl.style.opacity = isBodyActive ? '1' : '0.4';
         ctrl.style.cursor = isBodyActive ? 'pointer' : 'not-allowed';
     });
 
-    // Highlight bold/code buttons when the caret or selection sits inside that formatting
+    // Highlight bold/italic buttons when the caret or selection sits inside that formatting
     const isBold = isBodyActive && document.queryCommandState('bold');
     boldBtn.classList.toggle('active', isBold);
-
-    let inlineNode = isBodyActive && sel && sel.rangeCount > 0 ? sel.anchorNode : null;
-    if (inlineNode && inlineNode.nodeType === 3) inlineNode = inlineNode.parentNode;
-    const isCode = !!(inlineNode && inlineNode.closest && inlineNode.closest('code'));
-    codeBtn.classList.toggle('active', isCode);
+    italicBtn.classList.toggle('active', isBodyActive && document.queryCommandState('italic'));
 }
 
 document.addEventListener('selectionchange', updateToolbarState);
@@ -830,7 +906,7 @@ document.addEventListener('selectionchange', () => {
 });
 
 function restoreBodySelection() {
-    bodyEditor.focus();
+    bodyEditor.focus({ preventScroll: true });
     const sel = window.getSelection();
     if (!isSelectionInBody(sel) && lastBodyRange) {
         sel.removeAllRanges();
@@ -843,6 +919,14 @@ boldBtn.addEventListener('mousedown', (e) => e.preventDefault());
 boldBtn.addEventListener('click', () => {
     restoreBodySelection();
     document.execCommand('bold', false, null);
+    updateToolbarState();
+});
+
+italicBtn.addEventListener('mousedown', (e) => e.preventDefault());
+italicBtn.addEventListener('click', () => {
+    restoreBodySelection();
+    document.execCommand('italic', false, null);
+    updateToolbarState();
 });
 
 linkBtn.addEventListener('click', () => {
@@ -855,52 +939,39 @@ linkBtn.addEventListener('click', () => {
 
     openUrlModal({
         title: 'Insert Link',
-        subtitle: 'Enter the URL for the selected text',
+        subtitle: 'Enter the URL for the selected text, or pick a shortcut',
         placeholder: 'https://umkl.co.uk',
-        defaultValue: ''
-    }, (url) => {
-        bodyEditor.focus();
+        defaultValue: '',
+        presets: LINK_PRESETS,
+        newTabOption: true
+    }, (rawUrl, { newTab, label }) => {
+        // Without preventScroll, focusing the (very tall) editor jumps the page to its top
+        bodyEditor.focus({ preventScroll: true });
         if (range) {
             const restoredSel = window.getSelection();
             restoredSel.removeAllRanges();
             restoredSel.addRange(range);
         }
-        document.execCommand('createLink', false, url);
-    });
-});
 
-codeBtn.addEventListener('click', () => {
-    if (codeBtn.disabled) return;
+        const url = /^([a-z][a-z0-9+.-]*:|\/|#)/i.test(rawUrl) ? rawUrl : `https://${rawUrl}`;
+        const marker = `#umkl-new-link-${Date.now()}`;
 
-    const sel = window.getSelection();
-    if (!sel.rangeCount) return;
-    const range = sel.getRangeAt(0);
-
-    let node = sel.anchorNode;
-    if (node && node.nodeType === 3) node = node.parentNode;
-    const existingCode = node ? node.closest('code') : null;
-
-    if (existingCode && bodyEditor.contains(existingCode)) {
-        const parent = existingCode.parentNode;
-        while (existingCode.firstChild) parent.insertBefore(existingCode.firstChild, existingCode);
-        parent.removeChild(existingCode);
-    } else {
-        if (range.collapsed) return;
-        const code = document.createElement('code');
-        code.setAttribute('translate', 'no');
-        try {
-            range.surroundContents(code);
-        } catch (e) {
-            const content = range.extractContents();
-            code.appendChild(content);
-            range.insertNode(code);
+        if (range && !range.collapsed) {
+            document.execCommand('createLink', false, marker);
+        } else {
+            const text = (label || rawUrl).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            document.execCommand('insertHTML', false, `<a href="${marker}">${text}</a>`);
         }
-        const newRange = document.createRange();
-        newRange.selectNodeContents(code);
-        sel.removeAllRanges();
-        sel.addRange(newRange);
-    }
-    saveDraft();
+
+        bodyEditor.querySelectorAll(`a[href="${marker}"]`).forEach(a => {
+            a.setAttribute('href', url);
+            if (newTab) {
+                a.setAttribute('target', '_blank');
+                a.setAttribute('rel', 'noopener noreferrer');
+            }
+        });
+        saveDraft();
+    });
 });
 
 blockTypeSelect.addEventListener('change', (e) => {
@@ -1318,6 +1389,7 @@ async function importArticleFromZip(file) {
             img.setAttribute('src', await resolveImage(img.getAttribute('src')));
         }
         bodyEditor.innerHTML = bodyEl.innerHTML;
+        stripInlineFormatting(bodyEditor);
     }
 
     if (dateText) {

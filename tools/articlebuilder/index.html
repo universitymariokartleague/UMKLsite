@@ -73,18 +73,18 @@
                     </svg>
 
                 </button>
+                <button id="italicBtn" class="btn-tool" title="Italic">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 4h-9m4 16H5M15 4 9 20" />
+                    </svg>
+                </button>
                 <button id="linkBtn" class="btn-tool">
                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M13.213 9.787a3.391 3.391 0 0 0-4.795 0l-3.425 3.426a3.39 3.39 0 0 0 4.795 4.794l.321-.304m-.321-4.49a3.39 3.39 0 0 0 4.795 0l3.424-3.426a3.39 3.39 0 0 0-4.794-4.795l-1.028.961" />
-                    </svg>
-                </button>
-                <button id="codeBtn" class="btn-tool" title="Inline code">
-                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m8 8-4 4 4 4m8-8 4 4-4 4m-2-10-4 12" />
                     </svg>
                 </button>
             </div>
@@ -314,6 +314,16 @@
             <span id="urlModalSubtitle" class="modal-subtitle">Enter the direct web URL</span>
 
             <input type="text" id="urlModalInput" class="url-modal-input" placeholder="https://">
+
+            <div id="urlModalPresets" class="url-modal-presets hidden"></div>
+
+            <label id="urlModalNewTabRow" class="url-modal-checkbox hidden">
+                <span>Open in a new tab</span>
+                <span class="stats-toggle">
+                    <input type="checkbox" id="urlModalNewTab" checked>
+                    <span class="stats-toggle-track"></span>
+                </span>
+            </label>
 
             <div class="modal-actions modal-actions-row">
                 <button id="urlModalCancelBtn" class="btn-modal-option btn-modal-secondary">Cancel</button>

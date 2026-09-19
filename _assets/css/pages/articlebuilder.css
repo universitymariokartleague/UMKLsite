@@ -315,11 +315,22 @@
 
 .body-editor blockquote {
     margin: 0 0 24px;
-    padding: 4px 20px;
-    border-left: 4px solid var(--brand-primary);
+    position: relative;
+    overflow: hidden;
+    padding: 20px 28px 20px 30px;
+    border: 0;
+    border-radius: var(--border-radius);
+    background: color-mix(in oklch, var(--brand-primary) 8%, transparent);
     font-size: 1.1em;
-    font-style: italic;
-    opacity: 0.85;
+    line-height: 1.6;
+}
+
+.body-editor blockquote::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 5px;
+    background: var(--brand-primary);
 }
 
 .body-editor pre.codeBox {
@@ -590,6 +601,99 @@
 
 .url-modal-input:focus {
     outline: 1px solid var(--text-color);
+}
+
+.url-modal-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.url-modal-presets.hidden,
+.url-modal-checkbox.hidden {
+    display: none;
+}
+
+.btn-url-preset {
+    padding: 5px 12px;
+    border-radius: var(--border-radius-pill);
+    border: 1px solid var(--translucent-color);
+    background: transparent;
+    color: var(--text-color);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-url-preset:hover,
+.btn-url-preset.active {
+    background: var(--translucent-color);
+}
+
+.btn-url-preset.active {
+    border-color: var(--brand-primary);
+}
+
+.url-modal-checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+}
+
+.stats-toggle {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+}
+
+.stats-toggle input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.stats-toggle-track {
+    position: relative;
+    width: 34px;
+    height: 20px;
+    border-radius: var(--border-radius-pill);
+    background-color: var(--translucent-color);
+    transition: background-color 0.15s;
+}
+
+.stats-toggle-track::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--text-color);
+    opacity: 0.6;
+    transition: transform 0.15s, background-color 0.15s, opacity 0.15s;
+}
+
+.stats-toggle input:checked+.stats-toggle-track {
+    background-color: var(--accent-color);
+}
+
+.stats-toggle input:checked+.stats-toggle-track::before {
+    transform: translateX(14px);
+    background-color: #fff;
+    opacity: 1;
+}
+
+.stats-toggle input:focus-visible+.stats-toggle-track {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
 }
 
 .btn-modal-secondary {
