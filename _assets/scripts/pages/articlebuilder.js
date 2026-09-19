@@ -87,8 +87,8 @@ const LOCAL_STORAGE_LIMIT_BYTES = 5 * 1024 * 1024; // browsers typically cap eac
 const MAX_IMAGE_DIMENSION = 800; // cap uploaded body images to this before AVIF-encoding them
 const MAX_MAIN_IMAGE_DIMENSION = 1000; // main image gets a bit more room since it's shown larger
 const LINK_PRESETS = [
-    { label: 'Discord Server', url: 'https://discord.gg/jz3hKEmDss' },
-    { label: 'YouTube Channel', url: 'https://www.youtube.com/@universitymariokartleague' },
+    { label: 'Discord', url: 'https://discord.gg/jz3hKEmDss' },
+    { label: 'YouTube', url: 'https://www.youtube.com/@universitymariokartleague' },
     { label: 'TikTok', url: 'https://www.tiktok.com/@umkl_uk' },
     { label: 'Instagram', url: 'https://www.instagram.com/universitymariokartleague' }
 ];
