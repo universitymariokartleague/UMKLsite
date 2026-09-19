@@ -1,5 +1,5 @@
 .section {
-    margin-bottom: 50px;
+    margin-bottom: calc(var(--section-spacing) * 2);
 }
 
 #matchStatusLine {
@@ -17,7 +17,7 @@
     border: 1px solid var(--translucent-color);
     border-radius: var(--border-radius);
     padding: 28px;
-    margin-bottom: 50px;
+    margin-bottom: calc(var(--section-spacing) * 2);
 }
 
 .intro-section {
@@ -64,6 +64,23 @@
     border: 1px solid var(--translucent-color);
 }
 
+@keyframes introTextFade {
+
+    0%,
+    40% {
+        opacity: 1;
+    }
+
+    50%,
+    90% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 @media screen and (max-width: 900px) {
     .intro-video {
         display: none;
@@ -72,7 +89,61 @@
 
 @media screen and (max-width: 600px) {
     .section-card {
-        padding: 20px;
+        padding: 0px;
+    }
+
+    .intro-section {
+        padding: 16px;
+    }
+
+    .intro-section h1 {
+        font-size: 1.35em;
+        margin-bottom: 6px;
+    }
+
+    .intro-section p {
+        font-size: 0.9rem;
+        line-height: 1.35;
+        margin-bottom: 12px;
+    }
+
+    .intro-section p {
+        display: grid;
+    }
+
+    .intro-primary,
+    .intro-extra {
+        grid-area: 1 / 1;
+        animation: introTextFade 14s ease-in-out infinite;
+    }
+
+    .intro-extra {
+        animation-delay: -7s;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .intro-primary {
+            animation: none;
+        }
+
+        .intro-extra {
+            display: none;
+        }
+    }
+
+    .intro-section .bubble-link-wrapper {
+        gap: 4px;
+    }
+
+    .intro-section .bubble-link {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+    }
+
+    .intro-disclaimer {
+        margin-top: 10px;
+        font-size: 0.58rem;
+        line-height: 1.2;
     }
 }
 
@@ -100,7 +171,7 @@
 
 .news-grid-container {
     margin: 0 auto;
-    margin-top: 20px;
+    margin-top: var(--section-spacing);
     display: grid;
     grid-template-columns: 3fr 2fr;
     gap: 20px;
@@ -457,10 +528,6 @@ article:hover h3 {
 
     .small-card-meta {
         margin-top: 2px;
-    }
-
-    .section {
-        margin-bottom: 15px;
     }
 }
 

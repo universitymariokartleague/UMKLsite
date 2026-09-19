@@ -50,7 +50,7 @@ let calendarSearchTerm = "";
 let listScrollAnimationFrame = null;
 
 const YTSVGPATH = `<img loading="lazy" class="ytsvg" alt="YouTube logo" src="/_assets/media/calendar/youtubelogo.svg">`;
-const SELECT_DATE_PROMPT = `<div class="settingSubheading">Select a date to see the matches happening on that day.<br>You can also use the arrow keys to navigate!</div>`;
+const SELECT_DATE_PROMPT = `<div class="settingSubheading">Select a date to see the matches happening on that day.<span class="arrow-keys-hint"><br>You can also use the arrow keys to navigate!</span></div>`;
 
 document.addEventListener("DOMContentLoaded", async () => {
     const startTime = performance.now();

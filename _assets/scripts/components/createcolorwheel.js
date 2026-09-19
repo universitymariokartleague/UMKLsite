@@ -63,14 +63,49 @@ function hexToHue(hex) {
     return h;
 }
 
+const labelFont = "12px Montserrat";
+const lineHeight = 14;
+
+function resolveLabelOverlaps(labels) {
+    for (let pass = 0; pass < 100; pass++) {
+        let moved = false;
+        labels.sort((a, b) => a.y - b.y);
+
+        for (let i = 0; i < labels.length; i++) {
+            for (let j = i + 1; j < labels.length; j++) {
+                const a = labels[i];
+                const b = labels[j];
+                const gap = b.y - a.y;
+                if (gap >= lineHeight) break;
+                if (a.left >= b.right || b.left >= a.right) continue;
+
+                const push = (lineHeight - gap) / 2;
+                a.y -= push;
+                b.y += push;
+                moved = true;
+            }
+        }
+
+        for (const label of labels) {
+            label.y = Math.min(Math.max(label.y, lineHeight / 2), cssHeight - lineHeight / 2);
+        }
+
+        if (!moved) break;
+    }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     teamColors = await getTeamcolors();
+    await document.fonts.load(labelFont);
 
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
     ctx.strokeStyle = "#cccccc";
     ctx.lineWidth = 1;
     ctx.stroke();
+
+    ctx.font = labelFont;
+    const labels = [];
 
     for (const team of teamColors) {
         const hex = team.team_color;
@@ -96,20 +131,46 @@ document.addEventListener("DOMContentLoaded", async () => {
         const textX = centerX + (distance + textOffset) * Math.cos(angle);
         const textY = centerY + (distance + textOffset) * Math.sin(angle);
 
-        if (angle > Math.PI / 2 && angle < 3 * Math.PI / 2) {
-            ctx.textAlign = "right";
-        } else {
-            ctx.textAlign = "left";
+        const align = angle > Math.PI / 2 && angle < 3 * Math.PI / 2 ? "right" : "left";
+        const width = ctx.measureText(team.team_name).width;
+        const left = align === "right" ? textX - width : textX;
+
+        labels.push({
+            name: team.team_name,
+            hex,
+            align,
+            x: textX,
+            y: textY,
+            originY: textY,
+            dotX: x,
+            dotY: y,
+            left,
+            right: left + width,
+        });
+    }
+
+    resolveLabelOverlaps(labels);
+
+    for (const label of labels) {
+        if (Math.abs(label.y - label.originY) > 2) {
+            ctx.beginPath();
+            ctx.moveTo(label.dotX, label.dotY);
+            ctx.lineTo(label.x, label.y);
+            ctx.strokeStyle = label.hex;
+            ctx.globalAlpha = 0.5;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            ctx.globalAlpha = 1;
         }
 
+        ctx.fillStyle = label.hex;
+        ctx.textAlign = label.align;
         ctx.textBaseline = "middle";
-        ctx.shadowColor = `${hex}`
+        ctx.shadowColor = label.hex;
         ctx.shadowOffsetX = 1;
         ctx.shadowOffsetY = 1;
         ctx.shadowBlur = 10;
-
-        ctx.font = "12px Montserrat";
-        ctx.fillText(team.team_name, textX, textY);
+        ctx.fillText(label.name, label.x, label.y);
 
         // Reset shadow to avoid affecting other drawings
         ctx.shadowColor = 'transparent';

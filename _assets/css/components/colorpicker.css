@@ -118,6 +118,17 @@
     cursor: pointer;
 }
 
+.color-picker-copy {
+    padding: 5px 10px;
+    border: 1px solid #ccccccaa;
+    border-radius: calc(var(--border-radius) * 0.5);
+    background-color: var(--box-area-bg-color);
+    color: var(--text-color);
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+}
+
 #colorWheel {
     float: right;
 }

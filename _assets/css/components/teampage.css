@@ -3,6 +3,7 @@
 .team-hero {
     position: relative;
     width: 100%;
+    height: 230px;
     border-radius: calc(var(--border-radius) * 1.2);
     overflow: hidden;
     isolation: isolate;
@@ -28,8 +29,8 @@
 }
 
 .hero-logo {
-    width: 100%;
-    height: auto;
+    width: 120px;
+    height: 120px;
     object-fit: contain;
 }
 
@@ -49,11 +50,11 @@
     position: absolute;
     right: 32px;
     transform: rotate(-5deg);
-    opacity: 0.5;
     height: calc(100% - 32px);
     aspect-ratio: 1326 / 2475;
     z-index: 1;
-    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1s ease-out forwards;
 }
 
 .hero-map-outline {
@@ -76,11 +77,39 @@
 
 .hero-map-dot.visible {
     opacity: 1;
+    cursor: pointer;
+}
+
+/* The dot is only 4px, so pad out the click target */
+.hero-map-dot::before {
+    content: "";
+    position: absolute;
+    inset: -12px;
+}
+
+.hero-map-tooltip {
+    position: absolute;
+    right: calc(100% + 8px);
+    top: calc(50% - 2px);
+    transform: translateY(-50%) rotate(5deg);
+    padding: 3px 8px;
+    border-radius: var(--border-radius-pill);
+    background-color: var(--brand-dark-opaque);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.hero-map-wrapper:hover .hero-map-tooltip {
+    opacity: 1;
 }
 
 .team-hero #heroPattern {
-    top: -200px;
-    z-index: 1;
+    top: -350px;
 
     -webkit-mask-image: url('/_assets/pattern/finish_pattern_down.svg');
     mask-image: url('/_assets/pattern/finish_pattern_down.svg');
@@ -118,14 +147,15 @@
         height: 2px;
     }
 
-    /* The desktop version offsets the mask way up and sizes it huge, tuned for
-       a tall hero - on the ~80px mobile bar that puts the pattern's one
-       no-repeat copy entirely outside the visible box. Reset top to the
-       actual box and use `cover` so it's guaranteed to fill the small bar. */
     .team-hero #heroPattern {
-        top: 0;
-        -webkit-mask-size: cover;
-        mask-size: cover;
+        top: unset;
+        height: 100%;
+
+        -webkit-mask-size: 500px;
+        mask-size: 500px;
+
+        -webkit-mask-image: url('/_assets/pattern/finish_pattern.svg');
+        mask-image: url('/_assets/pattern/finish_pattern.svg');
     }
 }
 
@@ -142,6 +172,16 @@
 
 .stats-grid h3 {
     margin-bottom: 10px;
+}
+
+.stats-header-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.stats-header-row h3 {
+    margin: 0;
 }
 
 #JSMatchHistory {
@@ -244,6 +284,13 @@
 .result-badge.result-draw {
     color: var(--text-color);
     opacity: 0.6;
+}
+
+.carousel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
 }
 
 .carousel-container {
@@ -379,6 +426,15 @@
 
     .match-history-table .column-points {
         width: auto;
+    }
+
+    .team-hero {
+        height: unset;
+    }
+
+    .hero-logo {
+        width: 100%;
+        height: auto;
     }
 
     .section {

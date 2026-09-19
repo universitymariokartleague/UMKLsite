@@ -6,7 +6,6 @@ const iframe = document.getElementById("discordRoleiFrame");
 const field = document.getElementById("colorPickerField");
 const swatchButton = document.getElementById("colorPickerSwatch");
 const input = document.getElementById("color-picker");
-const colorMessage = document.getElementById("colorMessage");
 
 const attractColors = [
     "#ff6262",
@@ -33,6 +32,7 @@ panel.innerHTML = `
         <div class="color-picker-hue-marker"></div>
     </div>
     <div class="color-picker-swatches"></div>
+    <button type="button" class="color-picker-copy"></button>
 `;
 document.body.appendChild(panel);
 
@@ -41,6 +41,19 @@ const gradientMarker = panel.querySelector(".color-picker-gradient-marker");
 const hueSlider = panel.querySelector(".color-picker-hue");
 const hueMarker = panel.querySelector(".color-picker-hue-marker");
 const swatchesContainer = panel.querySelector(".color-picker-swatches");
+const copyButton = panel.querySelector(".color-picker-copy");
+let copyResetTimeout;
+
+copyButton.addEventListener("click", async () => {
+    try {
+        await navigator.clipboard.writeText(input.value);
+        copyButton.textContent = "Copied!";
+    } catch {
+        copyButton.textContent = "Copy failed";
+    }
+    clearTimeout(copyResetTimeout);
+    copyResetTimeout = setTimeout(() => { copyButton.textContent = `Copy ${input.value}`; }, 1500);
+});
 
 for (const color of attractColors) {
     const button = document.createElement("button");
@@ -120,13 +133,7 @@ function updateVisuals() {
 function applyColor(hex) {
     swatchButton.style.backgroundColor = hex;
     input.value = hex;
-    if (hex === "#ffffff") {
-        colorMessage.textContent = "⚠︎ Pure white (#ffffff) is not allowed";
-    } else if (hex === "#000000") {
-        colorMessage.textContent = "⚠︎ Pure black (#000000) is not allowed";
-    } else {
-        colorMessage.innerHTML = `Current colour: <code translate="no">${hex}</code>`;
-    }
+    copyButton.textContent = `Copy ${hex}`;
     iframe.contentWindow.postMessage({ type: "setRoleColor", color: hex }, "*");
 }
 

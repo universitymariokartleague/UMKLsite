@@ -537,3 +537,54 @@
     }
 
 }
+
+@media screen and (max-width: 600px) {
+
+    .list-view-content .standings-table,
+    .list-view-content .standings-table tbody {
+        display: block;
+    }
+
+    .list-view-content .standings-row {
+        display: grid;
+        grid-template-columns: 1fr auto auto 1fr;
+        grid-template-areas:
+            "match match match match"
+            ". info score .";
+        align-items: center;
+        gap: 4px 16px;
+        padding: 10px 20px;
+    }
+
+    .list-view-content .standings-row .column-match {
+        grid-area: match;
+        padding: 0;
+    }
+
+    .list-view-content .standings-row .column-info {
+        grid-area: info;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 2px 8px;
+        width: auto;
+        padding: 0;
+        text-align: center;
+    }
+
+    .list-view-content .standings-row .column-score {
+        grid-area: score;
+        width: auto;
+        padding: 0;
+        text-align: center;
+    }
+
+    .list-view-content .match-time {
+        order: -1;
+    }
+
+    .list-view-content .match-season-label {
+        display: inline;
+    }
+}

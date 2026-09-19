@@ -38,10 +38,10 @@ function generateTeamMatches(teamName) {
     const allMatches = normalizeMatchData(matchData);
     const teamMatches = allMatches.filter(match => match.teamsInvolved?.includes(teamName));
 
-    if (teamMatches.length === 0) {
-        matchHistoryBox.innerHTML = `<p style="margin-top: 0px;">No matches found for ${teamName}.</p>`;
-        return;
-    }
+    const section = matchHistoryBox.closest(".match-history-section");
+    if (section) section.hidden = teamMatches.length === 0;
+
+    if (teamMatches.length === 0) return;
 
     teamMatches.sort((a, b) => {
         const aDate = new Date(`${a.matchDate}T${a.time || "00:00:00"}`);
@@ -71,6 +71,9 @@ function generateTeamMatches(teamName) {
         const resultClass = { W: "result-win", L: "result-loss", D: "result-draw" }[winStatus] || "";
 
         const matchCalculatorLink = generate6v6ScoreCalculatorLink(match);
+        const otherTeamHTML = match.teamsInvolved.includes(otherTeam)
+            ? `<a href="/teams/details/?team=${encodeURIComponent(otherTeam)}" class="team-name" onclick="event.stopPropagation()">${otherTeam}</a>`
+            : `<span class="team-name">${otherTeam}</span>`;
         const rowClickAttr = matchCalculatorLink ? `onclick="window.location.href='${matchCalculatorLink}'"` : '';
 
         return `
@@ -82,7 +85,7 @@ function generateTeamMatches(teamName) {
                             <img loading="lazy" src="${getEmblem(otherTeam).png}" class="team-logo" alt="${otherTeam} logo">
                         </picture>
                         <div class="match-team-info">
-                            <span class="team-name">${otherTeam}</span>
+                            ${otherTeamHTML}
                             <span class="team-date">${formatDate(match.matchDate, locale)}</span>
                             <span class="team-season-mobile">${match.testMatch ? "Test match" : `Season ${match.season}`}</span>
                         </div>

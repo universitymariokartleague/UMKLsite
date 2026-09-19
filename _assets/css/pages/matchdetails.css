@@ -321,8 +321,8 @@
     opacity: 0.85;
 }
 
-.perspective-text button {
-    font-size: 0.8rem;
+.perspective-text .bubble-link {
+    margin-left: auto;
 }
 
 #penalty-disclaimer {

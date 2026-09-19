@@ -322,6 +322,14 @@
 }
 
 @media screen and (max-width: 900px) {
+    .arrow-keys-hint {
+        display: none;
+    }
+
+    #expandedLog .settingSubheading {
+        padding: 0;
+    }
+
     .calendar-container {
         gap: 15px;
     }
@@ -333,10 +341,10 @@
         gap: 15px;
     }
 
-    /* Stacked: back in flow, no sibling column to match, so cap by viewport */
+    /* Cap height on mobile */
     .calendar-sidebar #calendarListView {
         position: static;
-        max-height: calc(100vh - 120px);
+        max-height: calc(100vh - 360px);
     }
 
     .calendar {

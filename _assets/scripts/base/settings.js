@@ -161,7 +161,7 @@ function generateSettingsPanel() {
                 <div class="setting-row">
                     <div class="setting-info">
                         <span translate="yes" class="setting-label">API Requests Sent</span>
-                        <span translate="yes" class="setting-desc">Total requests made during your active session</span>
+                        <span translate="yes" class="setting-desc">Total requests sent to Cheep Cheep (api.umkl.co.uk)</span>
                     </div>
                     <span>${apiReqsSent}</span>
                 </div>

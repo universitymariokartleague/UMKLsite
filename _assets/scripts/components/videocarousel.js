@@ -61,7 +61,7 @@ async function loadVideoCarousel() {
             : data;
 
         if (videos.length === 0) {
-            container.innerHTML = `<p class="carousel-loading">No videos available for this team yet.</p>`;
+            container.closest(".carousel-section").style.display = "none";
             return;
         }
 

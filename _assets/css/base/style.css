@@ -5,9 +5,11 @@
     --article-max-width: 1400px;
     --reading-max-width: 800px;
     --navbar-height: 70px;
+    --page-side-space: 60px;
+    --page-top-space: 35px;
     --border-radius: 15px;
     --border-radius-pill: 50px;
-    --section-spacing: 24px;
+    --section-spacing: 20px;
 
     --brand-primary: #bc0839;
     --brand-secondary: #ff6874;
@@ -31,6 +33,9 @@
 @media screen and (max-width: 900px) {
     :root {
         --navbar-height: 60px;
+        --page-side-space: 36px;
+        --page-top-space: 15px;
+        --section-spacing: 10px;
     }
 }
 
@@ -148,10 +153,10 @@ body {
 main {
     margin: 0 auto;
     flex: 1;
-    width: calc(100vw - 60px);
+    width: calc(100vw - var(--page-side-space));
     max-width: calc(var(--content-max-width) - env(safe-area-inset-left));
     min-height: 50vh;
-    margin-top: calc(var(--navbar-height) + 35px);
+    margin-top: calc(var(--navbar-height) + var(--page-top-space));
     margin-bottom: 25px;
     font-size: 16px;
 }
@@ -165,8 +170,7 @@ main.reading-page {
 }
 
 /* Pages combining both classes (the news-style rules pages) should use the
-   wider article width, not the narrower reading width - .reading-page just
-   contributes its rule-section/li typography sizing on those pages. */
+   wider article width, not the narrower reading width */
 main.article-main.reading-page {
     max-width: calc(var(--article-max-width) - env(safe-area-inset-left));
 }
@@ -255,7 +259,7 @@ li {
 
 .p-below-title {
     margin: 0;
-    margin-bottom: 25px;
+    margin-bottom: var(--section-spacing);
 }
 
 .p-no-spacing {
@@ -444,6 +448,13 @@ select option {
     transition: transform 0.1s, color 0.1s, background-color 0.1s;
 }
 
+@media screen and (max-width: 900px) {
+    .bubble-link {
+        padding: 8px 14px;
+        font-size: 0.9rem;
+    }
+}
+
 .bubble-link:hover {
     background-color: var(--opaque-color);
     cursor: pointer;
@@ -499,6 +510,13 @@ select option {
 .bubble-nav .bubble-nav-item {
     padding: 10px 20px;
     text-decoration: none;
+}
+
+@media screen and (max-width: 900px) {
+    .bubble-nav .bubble-nav-item {
+        padding: 8px 14px;
+        font-size: 0.9rem;
+    }
 }
 
 .bubble-nav-item:first-child {

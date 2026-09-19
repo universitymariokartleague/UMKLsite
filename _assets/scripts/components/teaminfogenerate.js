@@ -308,17 +308,21 @@ function generateTeamBox(teamData, showError) {
     const hasPlayed = !!minSeason;
     const selectWrapper = document.getElementById('teamSeasonSelectWrapper');
     const seasonHeading = document.getElementById('currentSeasonHeading');
-    if (seasonHeading) seasonHeading.textContent = `SEASON ${latestSeason}`;
+    const hasDropdown = hasPlayed && latestSeason > minSeason;
+    if (seasonHeading) {
+        seasonHeading.textContent = `Season ${latestSeason}`;
+        seasonHeading.hidden = hasDropdown;
+    }
 
     if (selectWrapper && hasPlayed) {
-        if (latestSeason <= minSeason) {
-            selectWrapper.innerHTML = `<span class="season-badge">Season ${latestSeason}</span>`;
+        if (!hasDropdown) {
+            selectWrapper.innerHTML = '';
         } else {
             const options = Array.from(
                 { length: latestSeason - minSeason + 1 },
                 (_, i) => minSeason + i
             ).map(s => `<option value="${s}"${s === latestSeason ? ' selected' : ''}>Season ${s}</option>`).join('');
-            selectWrapper.innerHTML = `<select id="team-season-select">${options}</select>`;
+            selectWrapper.innerHTML = `<select id="team-season-select" class="bubble-link" aria-label="Select season">${options}</select>`;
         }
     }
 
@@ -333,10 +337,8 @@ function generateTeamBox(teamData, showError) {
             const season = parseInt(this.value);
             viewingSeason = season;
 
-            if (seasonHeading) seasonHeading.textContent = `SEASON ${season}`;
-
             if (season === latestSeason) {
-                renderSeasonStats(teamData);
+                renderSeasonStats(lastRenderedTeamData);
                 return;
             }
 
