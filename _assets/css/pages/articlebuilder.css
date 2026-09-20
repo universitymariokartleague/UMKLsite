@@ -112,7 +112,9 @@
 }
 
 .editor-container {
-    max-width: 1400px;
+    box-sizing: border-box;
+    /* 1400px of content plus 40px padding and 1px border on each side */
+    max-width: 1482px;
     margin: 24px auto;
     padding: 40px;
     border-radius: var(--border-radius);

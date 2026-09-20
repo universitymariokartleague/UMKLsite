@@ -7,6 +7,9 @@ import json
 import os
 import shutil
 
+import genrss
+import makesitemap
+
 NEWS_JSON_PATH = "news/news.json"
 
 
@@ -42,12 +45,8 @@ def load_news():
 
 
 def update_rss_feed():
-    try:
-        import genrss
-    except ImportError as e:
-        print(f"Couldn't update the RSS feed ({e}); run _tools/genrss.py once its dependencies are installed.")
-        return
     genrss.generate_rss_feed()
+    makesitemap.generate_sitemap()
 
 
 def save_news(news):

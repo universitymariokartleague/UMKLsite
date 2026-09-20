@@ -1,5 +1,3 @@
-# Please use .runbeforecommit.py instead
-#
 # This script imports a news article package (.zip) exported by the
 # Article Builder tool (tools/articlebuilder/) and wires it into the site.
 
@@ -12,6 +10,9 @@ import re
 import subprocess
 import sys
 import zipfile
+
+import genrss
+import makesitemap
 
 NEWS_JSON_PATH = "news/news.json"
 DATA_URL_PATTERN = re.compile(r"data:([\w/+.-]*);base64,([A-Za-z0-9+/=]+)")
@@ -172,14 +173,8 @@ def externalize_data_images(article_dir, entry, taken_names):
 
 
 def update_rss_feed():
-    try:
-        import genrss
-    except ImportError as e:
-        print(
-            f"Couldn't update the RSS feed ({e}); run _tools/genrss.py once its dependencies are installed."
-        )
-        return
     genrss.generate_rss_feed()
+    makesitemap.generate_sitemap()
 
 
 def update_news_json(entry):
