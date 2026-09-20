@@ -139,7 +139,9 @@ def externalize_data_images(article_dir, entry, taken_names):
 
         extension = IMAGE_EXTENSIONS.get(match.group(1)) or sniff_image_extension(data)
         if not extension:
-            print(f"Warning: left an inline image in {index_path} as-is (unrecognised format)")
+            print(
+                f"Warning: left an inline image in {index_path} as-is (unrecognised format)"
+            )
             return data_url
 
         if data_url == entry.get("image"):
@@ -173,7 +175,9 @@ def update_rss_feed():
     try:
         import genrss
     except ImportError as e:
-        print(f"Couldn't update the RSS feed ({e}); run _tools/genrss.py once its dependencies are installed.")
+        print(
+            f"Couldn't update the RSS feed ({e}); run _tools/genrss.py once its dependencies are installed."
+        )
         return
     genrss.generate_rss_feed()
 
@@ -181,7 +185,8 @@ def update_rss_feed():
 def update_news_json(entry):
     """
     Adds a news entry to news/news.json (creating the file if it doesn't
-    exist yet) and keeps the list sorted newest-first.
+    exist yet) and keeps the list sorted newest-first. An article with the
+    same date as existing ones is placed above them, as the most recent import.
     """
     if os.path.exists(NEWS_JSON_PATH):
         with open(NEWS_JSON_PATH, encoding="utf-8") as f:
@@ -190,7 +195,8 @@ def update_news_json(entry):
         news = []
 
     news = [item for item in news if item["link"] != entry["link"]]
-    news.append(entry)
+    # the new entry is inserted first
+    news.insert(0, entry)
     news.sort(key=lambda item: item["date"], reverse=True)
 
     with open(NEWS_JSON_PATH, "w", encoding="utf-8") as f:

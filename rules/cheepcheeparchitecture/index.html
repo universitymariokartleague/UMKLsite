@@ -189,12 +189,14 @@
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">core_cog.py</span>
                             <span class="file-tree-desc">Bot lifecycle (<code translate="no">/restart</code>), tree
-                                sync, gated
-                                board/media account access commands</span>
+                                sync, the <code translate="no">/request</code> group (gated board/media passwords,
+                                team stream keys)</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">dev_cog.py</span>
-                            <span class="file-tree-desc">Dev commands and tools</span>
+                            <span class="file-tree-desc">Dev commands and tools: the <code translate="no">/generate</code>
+                                graphics group (open to everyone), the <code translate="no">/dev</code> group and
+                                <code translate="no">umkl!</code> prefix commands</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">listeners_cog.py</span>
@@ -203,12 +205,12 @@
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">live_score_cog.py</span>
-                            <span class="file-tree-desc">Admin commands to add/edit/clear the livescore data</span>
+                            <span class="file-tree-desc">The <code translate="no">/live-score</code> group: add/edit/clear the livescore data</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">match_cog.py</span>
-                            <span class="file-tree-desc">Match creation/editing, the signup flow, room codes,
-                                substitutions</span>
+                            <span class="file-tree-desc">Match creation/editing (including the <code translate="no">/edit</code>
+                                group), the signup flow, room codes, substitutions</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">results_cog.py</span>
@@ -217,7 +219,7 @@
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">season_cog.py</span>
-                            <span class="file-tree-desc">Season, round and team pairings management</span>
+                            <span class="file-tree-desc">The <code translate="no">/season</code> group: season, round and team pairings management</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">sql_cog.py</span>
@@ -225,8 +227,7 @@
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">team_cog.py</span>
-                            <span class="file-tree-desc">Team creation, colour/name changes, season entry, stream
-                                keys</span>
+                            <span class="file-tree-desc">Team creation, colour/name changes, season entry</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">user_profile_cog.py</span>
@@ -298,8 +299,8 @@
                         </div>
                         <div class="file-tree-row" data-depth="0" data-dir>
                             <span class="file-tree-name">tests/</span>
-                            <span class="file-tree-desc">Mix of unittests and manual test scripts (see
-                                <a href="/rules/cheepcheeparchitecture/#tests">§8</a>)</span>
+                            <span class="file-tree-desc">pytest tests (run in CI), plus a few benchmark and manual
+                                scripts (see <a href="/rules/cheepcheeparchitecture/#tests">§8</a>)</span>
                         </div>
                     </div>
 
@@ -557,6 +558,16 @@
                             translate="no">/generate-stream-overlay</code>.
                     </p>
                     <p>
+                        The standings, versus, results, winner and YouTube thumbnail functions take an optional
+                        <code translate="no">output_path</code> (the stream overlay has <code
+                            translate="no">filename</code>). By default they write to a fixed file in
+                        <code translate="no">output/</code>, which live announcements re-open after awaiting other
+                        messages, so the <code translate="no">/generate</code> commands pass a per-call temporary path
+                        instead and can't overwrite an announcement mid-send. Made-up teams
+                        (<code translate="no">fake_team_name</code>) are never added to <code
+                            translate="no">IMAGE_CACHE</code>, so arbitrary names and colours can't grow it.
+                    </p>
+                    <p>
                         The captcha text/image pipeline (<code translate="no">generate_captcha_text()</code>,
                         <code translate="no">create_captcha_image()</code>) also lives here.
                         <code translate="no">cogs/listeners_cog.py</code> initiates the captcha flow (challenging
@@ -626,6 +637,19 @@
                         each cog imports from another cog - <code translate="no">cogs/match_cog.py</code> in particular
                         acts as a shared library of autocomplete providers and helpers for several other cogs.
                     </p>
+                    <p>
+                        Related commands are grouped with <code translate="no">app_commands.Group</code> class
+                        attributes: <code translate="no">/edit</code> (<code translate="no">match_cog</code>),
+                        <code translate="no">/live-score</code>, <code translate="no">/season</code>,
+                        <code translate="no">/request</code> (<code translate="no">core_cog</code>), and
+                        <code translate="no">/dev</code> and <code translate="no">/generate</code> (<code
+                            translate="no">dev_cog</code>). discord.py only collects and binds commands declared on
+                        the cog's own class, so a group's subcommands must live in the same cog as the group. This is
+                        why <code translate="no">/request stream-key</code> is in <code translate="no">core_cog</code>
+                        rather than <code translate="no">team_cog</code>, and <code
+                            translate="no">/dev add-match-results</code> is in <code translate="no">dev_cog</code>
+                        rather than <code translate="no">results_cog</code>.
+                    </p>
 
                     <div class="tag-clan-table after-title">
                         <table>
@@ -636,15 +660,19 @@
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">core_cog.py</code></td>
                                 <td>Bot lifecycle (<code translate="no">/restart</code> →
-                                    <code translate="no">services.gitimport.restart_bot()</code>), tree sync, gated
-                                    board/media password commands
+                                    <code translate="no">services.gitimport.restart_bot()</code>), tree sync, the
+                                    <code translate="no">/request</code> group (gated board/media password commands,
+                                    team stream keys)
                                 </td>
                             </tr>
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">dev_cog.py</code></td>
                                 <td>Dev tools for exercising
                                     <code translate="no">core.graphics</code>/<code translate="no">core.logic</code>
-                                    directly
+                                    directly: the <code translate="no">/generate</code> group (graphics previews any
+                                    member can run, rate-limited per user, admins and Developers skip the limit), the
+                                    <code translate="no">/dev</code> group and <code translate="no">umkl!</code>
+                                    prefix commands
                                 </td>
                             </tr>
                             <tr>
@@ -654,11 +682,12 @@
                             </tr>
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">live_score_cog.py</code></td>
-                                <td>Commands to add/edit/clear the live per-race livescore graphic data</td>
+                                <td>The <code translate="no">/live-score</code> group: add/edit/clear the live per-race livescore graphic data</td>
                             </tr>
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">match_cog.py</code></td>
-                                <td>Match creation/editing, the signup flow (button + modal), room codes, substitutions
+                                <td>Match creation/editing (including the <code translate="no">/edit</code> group), the signup
+                                    flow (button + modal), room codes, substitutions
                                 </td>
                             </tr>
                             <tr>
@@ -667,7 +696,7 @@
                             </tr>
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">season_cog.py</code></td>
-                                <td>Season, round and team pairings management</td>
+                                <td>The <code translate="no">/season</code> group: season, round and team pairings management</td>
                             </tr>
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">sql_cog.py</code></td>
@@ -677,9 +706,7 @@
                             </tr>
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">team_cog.py</code></td>
-                                <td>Team creation (Discord role/channels/category), colour/name changes, season entry,
-                                    stream
-                                    keys</td>
+                                <td>Team creation (Discord role/channels/category), colour/name changes, season entry</td>
                             </tr>
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">user_profile_cog.py</code>
@@ -1043,7 +1070,9 @@
                         Most cogs only import <code translate="no">config</code>, <code translate="no">bot.embed</code>,
                         <code translate="no">core.logic</code>, <code translate="no">core.graphics</code>, though some
                         cogs
-                        import from <code translate="no">cogs.match_cog</code>.
+                        import from <code translate="no">cogs.match_cog</code> (<code translate="no">dev_cog</code>
+                        also imports from <code translate="no">cogs.results_cog</code> and <code
+                            translate="no">cogs.team_cog</code>, see below).
                     </p>
 
                     <div class="tag-clan-table after-title">
@@ -1062,27 +1091,34 @@
                                     function onto the bot for <code translate="no">dev_cog</code></td>
                             </tr>
                             <tr>
+                                <td class="table-key" translate="no"><code translate="no">cogs/dev_cog.py</code>
+                                </td>
+                                <td><code translate="no">match_conditional_team_autocomplete</code>,
+                                    <code translate="no">open_match_autocomplete</code>
+                                </td>
+                                <td>Match and team autocomplete for <code translate="no">/dev add-match-results</code>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td class="table-key" translate="no"><code translate="no">cogs/live_score_cog.py</code>
                                 </td>
-                                <td><code translate="no">live_score_autocomplete</code>,
-                                    <code translate="no">live_score_edit_autocomplete</code>,
+                                <td><code translate="no">live_score_edit_autocomplete</code>,
+                                    <code translate="no">match_conditional_team_autocomplete</code>,
+                                    <code translate="no">open_match_autocomplete</code>,
                                     <code translate="no">track_name_autocomplete</code>
                                 </td>
-                                <td>Parameter autocomplete for its three livescore commands</td>
+                                <td>Parameter autocomplete for its three <code translate="no">/live-score</code>
+                                    commands</td>
                             </tr>
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">cogs/results_cog.py</code>
                                 </td>
                                 <td><code translate="no">get_match_lock</code>,
-                                    <code translate="no">match_conditional_team_autocomplete</code>,
-                                    <code translate="no">open_match_autocomplete</code>,
-                                    <code translate="no">team_open_match_autocomplete</code>,
-                                    <code translate="no">update_signup_embed</code>
+                                    <code translate="no">team_open_match_autocomplete</code>
                                 </td>
                                 <td><code translate="no">get_match_lock</code> guards the Approve button against
-                                    double-approval races, the rest are autocompletes, <code
-                                        translate="no">update_signup_embed</code>
-                                    refreshes the roster embed after results affect a match</td>
+                                    double-approval races, <code translate="no">team_open_match_autocomplete</code>
+                                    is the match picker for <code translate="no">/add-match-results</code></td>
                             </tr>
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">cogs/team_cog.py</code></td>
@@ -1103,14 +1139,21 @@
                     </div>
 
                     <p>
-                        <code translate="no">cogs/dev_cog.py</code> doesn't import from
+                        <code translate="no">cogs/dev_cog.py</code> doesn't import
+                        <code translate="no">update_signup_embed</code> or <code
+                            translate="no">PredictionPollView</code> from
                         <code translate="no">match_cog</code>/<code translate="no">listeners_cog</code> - instead
-                        <code translate="no">main.py</code> passes <code translate="no">update_signup_embed</code> and
-                        <code translate="no">PredictionPollView</code> into its constructor, which is why
+                        <code translate="no">main.py</code> passes them into its constructor, which is why
                         <code translate="no">dev_cog</code> must be <code translate="no">load_extension</code>'d
                         <i>last</i> in <code translate="no">main.py</code>'s <code translate="no">setup_hook</code>
                         (both
-                        symbols need to already exist on the bot object).
+                        symbols need to already exist on the bot object). Besides the <code
+                            translate="no">match_cog</code> autocompletes above, it imports
+                        <code translate="no">ResultModal</code> from <code translate="no">cogs.results_cog</code>
+                        (for <code translate="no">/dev add-match-results</code>) and
+                        <code translate="no">all_teams_autocomplete</code> from <code
+                            translate="no">cogs.team_cog</code> (the team picker on the <code
+                            translate="no">/generate</code> commands).
                     </p>
 
                     <p>
@@ -1396,9 +1439,9 @@
                             </tr>
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">streamkeys.json</code></td>
-                                <td>(read directly by <code translate="no">team_cog.py</code>)</td>
+                                <td>(read directly by <code translate="no">core_cog.py</code>)</td>
                                 <td>manual</td>
-                                <td>Per-team livestream keys for <code translate="no">/request-stream-key</code></td>
+                                <td>Per-team livestream keys for <code translate="no">/request stream-key</code></td>
                             </tr>
                         </table>
                     </div>
@@ -1407,17 +1450,80 @@
 
                     <h2 id="tests"><a href="/rules/cheepcheeparchitecture/#tests">8. Tests</a>
                     </h2>
+                    <p>
+                        Everything lives in <code translate="no">tests/</code> and runs with
+                        <code translate="no">pytest tests/</code>. <code
+                            translate="no">.github/workflows/tests.yml</code> runs that on every push and pull request
+                        (Python 3.12), skipping the three files listed under <i>Not run in CI</i> below.
+                        <code translate="no">conftest.py</code> switches to the repo root and creates the git-ignored
+                        <code translate="no">logs/</code>, <code translate="no">output/</code> and
+                        <code translate="no">data/</code> folders (plus an empty <code
+                            translate="no">data/creditsaccounts.json</code>), so modules that touch them at import
+                        time work on a fresh checkout.
+                    </p>
+
+                    <h3>Run in CI</h3>
                     <p class="p-no-spacing">
-                        A mix of unittests tests and manual testing scripts:
+                        These need no Discord connection, network access or real database:
+                    </p>
+                    <ul>
+                        <li>
+                            <b><code translate="no">test_bot_startup.py</code></b> - imports every module in <code translate="no">bot</code>,
+                            <code translate="no">cogs</code>, <code translate="no">core</code> and
+                            <code translate="no">services</code>, then runs <code
+                                translate="no">PersistentViewBot.setup_hook()</code> and checks that all ten cogs load
+                            and that <code translate="no">/join</code>, <code translate="no">/restart</code> and
+                            <code translate="no">/team-profile</code> are registered. The cog list in the test is
+                            hardcoded, so a new cog has to be added to it
+                        </li>
+                        <li>
+                            <b><code translate="no">test_command_tree.py</code></b> - builds the command tree the same way and checks Discord's
+                            sync limits across every command, including subcommands inside groups: top-level names
+                            are unique and at most 100, names match <code translate="no">^[a-z0-9_-]{1,32}$</code>,
+                            descriptions are 1-100 characters, commands have at most 25 parameters, and every
+                            parameter has a 1-100 character description. A command that breaks one of these fails CI
+                            instead of failing when the tree is synced
+                        </li>
+                        <li>
+                            <b><code translate="no">test_assets.py</code></b> - scans every <code translate="no">.py</code> file outside
+                            <code translate="no">tests/</code> for hardcoded <code translate="no">assets/…</code>
+                            image and font paths and checks each file exists (paths built with f-strings are skipped)
+                        </li>
+                        <li>
+                            <b><code translate="no">test_config.py</code></b> - sanity checks on <code translate="no">config.py</code>:
+                            <code translate="no">CHANNEL_IDS</code> are unique integers, the guild, dev server and admin
+                            account IDs are distinct, and <code translate="no">MK8DX_TRACK_NAMES</code> has no
+                            duplicates
+                        </li>
+                        <li>
+                            <b><code translate="no">test_helpers.py</code></b> - unit tests for small pure helpers:
+                            <code translate="no">logic.is_hex_color</code>, <code
+                                translate="no">format_date_UK</code>, <code translate="no">compute_total_pages</code>,
+                            <code translate="no">get_position_icon</code>, <code
+                                translate="no">gitimport.normalized_size</code>, and that <code
+                                translate="no">get_text_channel</code> raises for a missing or wrong-type channel
+                        </li>
+                        <li>
+                            <b><code translate="no">test_patterns.py</code></b> - tests the regexes in <code translate="no">listeners_cog</code>
+                            that trigger Cheep Cheep's replies: <code translate="no">JOIN_TEAM_PATTERN</code> ("how do
+                            I join a team", "add me to a team"), <code translate="no">DISCONNECT_PATTERN</code>
+                            ("dc'd", "disconnected") and that <code translate="no">JOIN_TEAM_CHANNELS</code> are
+                            lowercase
+                        </li>
+                    </ul>
+
+                    <h3>Not run in CI</h3>
+                    <p class="p-no-spacing">
+                        These need the real database, or the network, or are benchmarks:
                     </p>
                     <ul>
                         <li>
                             <b><code translate="no">test_graphics.py</code></b> - a real
-                            <code translate="no">unittest.IsolatedAsyncioTestCase</code> suite. Generates every
-                            <code translate="no">core.graphics</code> image type and pixel-diffs it (via Pillow + numpy,
-                            0.99
-                            similarity threshold) against a checked-in reference image in
-                            <code translate="no">tests/output/</code>
+                            <code translate="no">unittest.IsolatedAsyncioTestCase</code> suite. Generates most
+                            <code translate="no">core.graphics</code> image types (everything except captcha images) and
+                            pixel-diffs each one (via Pillow + numpy, 0.99 similarity threshold) against a checked-in
+                            reference image in <code translate="no">tests/output/</code>. It renders team ID 10 and
+                            season 1 from the local database, so it only passes against matching data
                         </li>
                         <li>
                             <b><code translate="no">test_dbserver.py</code></b> - a
@@ -1432,6 +1538,21 @@
                             real HTTP
                             requests at <code translate="no">https://api.umkl.co.uk</code> (every
                             <code translate="no">dbserver.py</code> route) and prints status/timing/JSON
+                        </li>
+                    </ul>
+
+                    <h3>Other scripts</h3>
+                    <p class="p-no-spacing">
+                        Not tests, but kept in the same folder:
+                    </p>
+                    <ul>
+                        <li>
+                            <b><code translate="no">supervisor.py</code></b> - restarts <code translate="no">main.py</code> whenever it exits,
+                            standing in for systemd when running on Windows
+                        </li>
+                        <li>
+                            <b><code translate="no">test.py</code></b> - a scratch script that prints the output of a couple of
+                            <code translate="no">core.logic</code> functions, for poking at the database by hand
                         </li>
                     </ul>
 

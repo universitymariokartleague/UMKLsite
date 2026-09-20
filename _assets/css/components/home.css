@@ -393,6 +393,10 @@ article:hover h3 {
     .small-card-meta {
         margin-top: 2px;
     }
+
+    .small-card-date {
+        font-size: 0.65rem;
+    }
 }
 
 @media (max-width: 650px) {

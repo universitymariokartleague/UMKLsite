@@ -73,6 +73,13 @@
                         for an overview of how everything fits together before diving into the full command list below.
                     </p>
 
+                    <blockquote class="info">
+                        <b translate="no">Note</b><br>
+                        Some commands are grouped together. Type <code translate="no">/edit</code>, <code translate="no">/live-score</code>,
+                        <code translate="no">/season</code>, <code translate="no">/request</code> or <code translate="no">/generate</code> and Discord will show a
+                        list of the commands inside that group to pick from.
+                    </blockquote>
+
                     <h2>Commands Usable by All Members</h2>
                     <p class="p-below-title">All players can use these commands</p>
 
@@ -155,18 +162,72 @@
                             href="/rules/stream/">livestreams</a></p>
 
                     <div class="command">
-                        <div class="codeBoxTight">/add-live-score-positions</div>
+                        <div class="codeBoxTight">/live-score add-positions</div>
                         <p>Add the results of a race, which will update the live score graphic.</p>
                     </div>
 
                     <div class="command">
-                        <div class="codeBoxTight">/edit-live-score-positions</div>
+                        <div class="codeBoxTight">/live-score edit-positions</div>
                         <p>Edit the results of a previous race, which will update the live score graphic.</p>
                     </div>
 
                     <div class="command">
-                        <div class="codeBoxTight">/clear-live-score</div>
+                        <div class="codeBoxTight">/live-score clear</div>
                         <p>Reset the live score streaming graphic, setting the score to 0-0.</p>
+                    </div>
+
+                    <h3>Graphics</h3>
+                    <p class="p-below-title">Generate and preview UMKL graphics, all part of the <code translate="no">/generate</code>
+                        group</p>
+
+                    <div class="command">
+                        <div class="codeBoxTight">/generate team-images</div>
+                        <p>Preview every graphic UMKL makes for a team: the versus, results and winner images, the YouTube thumbnail and the stream overlay.</p>
+                    </div>
+
+                    <div class="command">
+                        <div class="codeBoxTight">/generate custom-team-images</div>
+                        <p>The same preview for any team name and colour (as a hex code such as <code translate="no">#FF5733</code>), useful for designing a team before it exists. If the name doesn't match a team, the default emblem is used.</p>
+                    </div>
+
+                    <div class="command">
+                        <div class="codeBoxTight">/generate team-article-thumbnail</div>
+                        <p>Generate a news article thumbnail for a team, using the team's colour and emblem.</p>
+                    </div>
+
+                    <div class="command">
+                        <div class="codeBoxTight">/generate team-standings</div>
+                        <p>Generate an image of the current team standings.</p>
+                    </div>
+
+                    <div class="command">
+                        <div class="codeBoxTight">/generate all-standings</div>
+                        <p>Generate a standings image for every season, one image per season.</p>
+                    </div>
+
+                    <div class="command">
+                        <div class="codeBoxTight">/generate results-image</div>
+                        <p>Generate the results image for a match, along with its results embed.</p>
+                    </div>
+
+                    <div class="command">
+                        <div class="codeBoxTight">/generate winner-image</div>
+                        <p>Generate the winner image for a match.</p>
+                    </div>
+
+                    <div class="command">
+                        <div class="codeBoxTight">/generate round-schedule</div>
+                        <p>Generate an image of the upcoming schedule for the next round.</p>
+                    </div>
+
+                    <div class="command">
+                        <div class="codeBoxTight">/generate versus-image</div>
+                        <p>Generate a versus image for two teams, with an option to add the Test Match label.</p>
+                    </div>
+
+                    <div class="command">
+                        <div class="codeBoxTight">/generate schedule-preview</div>
+                        <p>Preview the schedule announcement for a match, showing the versus image and embed that get posted when a match is created.</p>
                     </div>
 
                     <h2>Commands Only Usable by Board Members</h2>
@@ -201,7 +262,7 @@
                     </div>
 
                     <div class="command">
-                        <div class="codeBoxTight">/request-stream-key</div>
+                        <div class="codeBoxTight">/request stream-key</div>
                         <p>Get your team's stream key, used for <a href="/rules/stream/">livestreaming</a> matches.</p>
                     </div>
 
@@ -214,22 +275,22 @@
                     </div>
 
                     <div class="command">
-                        <div class="codeBoxTight">/edit-match-title</div>
+                        <div class="codeBoxTight">/edit match-title</div>
                         <p>Edit an existing match's title.</p>
                     </div>
 
                     <div class="command">
-                        <div class="codeBoxTight">/edit-match-description</div>
+                        <div class="codeBoxTight">/edit match-description</div>
                         <p>Edit an existing match's description.</p>
                     </div>
 
                     <div class="command">
-                        <div class="codeBoxTight">/edit-match-date</div>
+                        <div class="codeBoxTight">/edit match-date</div>
                         <p>Reschedule an existing match to a new date.</p>
                     </div>
 
                     <div class="command">
-                        <div class="codeBoxTight">/edit-match-time</div>
+                        <div class="codeBoxTight">/edit match-time</div>
                         <p>Edit an existing match's time.</p>
                     </div>
 
@@ -267,17 +328,17 @@
 
                     <h3>Season</h3>
                     <div class="command">
-                        <div class="codeBoxTight">/start-season</div>
+                        <div class="codeBoxTight">/season start</div>
                         <p>Start a new season of the UMKL.</p>
                     </div>
 
                     <div class="command">
-                        <div class="codeBoxTight">/start-next-round</div>
+                        <div class="codeBoxTight">/season start-next-round</div>
                         <p>Start the next round of the season and send out match organisation threads.</p>
                     </div>
 
                     <div class="command">
-                        <div class="codeBoxTight">/add-next-round-pairings</div>
+                        <div class="codeBoxTight">/season add-next-round-pairings</div>
                         <p>Add the team pairings for the next round.</p>
                     </div>
 
@@ -288,12 +349,12 @@
                     </div>
 
                     <div class="command">
-                        <div class="codeBoxTight">/request-board-password</div>
+                        <div class="codeBoxTight">/request board-password</div>
                         <p>Get the board password.</p>
                     </div>
 
                     <div class="command">
-                        <div class="codeBoxTight">/request-media-password</div>
+                        <div class="codeBoxTight">/request media-password</div>
                         <p>Get the media team password.</p>
                     </div>
                 </div>
