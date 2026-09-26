@@ -87,3 +87,52 @@
 #event-status:empty {
     display: none;
 }
+
+.table-maker-modes {
+    margin-bottom: 16px;
+}
+
+.table-maker-modes .bubble-nav-item {
+    border: none;
+    background-color: transparent;
+    color: var(--text-color);
+    font: inherit;
+    cursor: pointer;
+}
+
+.table-maker-modes .bubble-nav-item.active {
+    background-color: var(--translucent-color);
+}
+
+.table-maker-team[hidden] {
+    display: none;
+}
+
+#importModalTitle {
+    margin: 0;
+}
+
+.import-modal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.import-modal-list li {
+    padding: 10px 12px;
+    border-radius: calc(var(--border-radius) * 0.6);
+    background-color: var(--translucent-color);
+    font-size: 0.9rem;
+}
+
+.import-modal-list:empty {
+    display: none;
+}
+
+.import-modal-warning {
+    color: var(--accent-color);
+    font-weight: 600;
+}

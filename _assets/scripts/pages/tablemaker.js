@@ -1,36 +1,63 @@
 /*
     This script draws a results table in the same style as the one
     posted by the bot after a match, using user-provided scores.
+    Supports 6v6, 4v4v4 and 3v3v3v3 matches.
 */
 import { createColorPicker } from '/_assets/scripts/components/colorpicker.js';
 import { getMatchData, getMatchCache } from '/_assets/scripts/utils/matchdata.js';
+import { readResultsScreenshot, groupPlayersByTag } from '/_assets/scripts/utils/resultsocr.js';
+import { TEAM_TAGS } from '/_assets/scripts/utils/teamtags.js';
 import { isWindowsOrLinux, copyImageToClipboard, shareImage, showImagePreview, setOriginalMessage, getOriginalMessage, getIsPopupShowing } from '/_assets/scripts/utils/shareAPIhelper.js';
 
 const TEAM_ICON_DIR = "https://api.umkl.co.uk/teamemblems/";
-const OVERLAY_PATH = "/_assets/media/graphics/resultsoverlay.avif";
+const BACKGROUND_PATH = "/_assets/media/graphics/resultsbackground.avif";
 const FONT = "Montserrat";
 const ACCENT_COLOR = "#bc0839";
 const WIDTH = 3268;
 const HEIGHT = 2430;
-const HALF = 1215;
-const ROW_SPACING = 192;
-const ROW_Y = [118, 1358];
-const TEXT_POS = [[465, 945], [465, 2160]];
-const SCORE_X_OFFSET = 2300;
-const SCORE_Y_OFFSET = -325;
-const PENALTY_POS = [[2770, 875], [2770, 875 + HALF]];
-const EMBLEM_SIZE = 600;
-const PLAYER_MAX_WIDTH = 900;
-const TEAM_NAME_MAX_WIDTH = 800;
-const MAX_PLAYERS = 6;
+const TOTAL_PLAYERS = 12;
+const MAX_TEAMS = 4;
 const SCORE_MAP = [15, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 const STORAGE_KEY = "tableMakerState";
+const TESSERACT_URL = "https://cdn.jsdelivr.net/npm/tesseract.js@7/dist/tesseract.esm.min.js";
+
+const ROW_X = 941;
+const ROW_WIDTH = 1301;
+const ROW_HEIGHT = 162;
+const ROW_SPACING = 192;
+const POSITION_X = 1022;
+const PLAYER_NAME_X = 1110;
+const PLAYER_SCORE_X = 2200;
+const PLAYER_MAX_WIDTH = 900;
+const TEAM_NAME_X = 465;
+const TEAM_NAME_MAX_WIDTH = 800;
+const TEAM_SCORE_X = 2765;
+const RIGHT_BOX_X = 2770;
+const PENALTY_HEIGHT = 100;
+const PENALTY_GAP = 45;
+
+// Sizes per team count, scaled down so each team's band still fits
+const LAYOUTS = {
+    2: { emblem: 600, nameSize: 135, scoreSize: 425 },
+    3: { emblem: 440, nameSize: 115, scoreSize: 340 },
+    4: { emblem: 300, nameSize: 90, scoreSize: 260 },
+};
+
+const DEFAULT_TEAMS = [
+    { name: "York", color: "#1baa8b" },
+    { name: "Staffs", color: "#a11212" },
+    { name: "Edinburgh", color: "#287ac8" },
+    { name: "Birmingham", color: "#c59a00" },
+];
 
 let teamColors = [];
-let overlayImage;
+let backgroundImage;
+let teamCount = 2;
 const emblemCache = new Map();
 let renderQueued = false;
 let renderId = 0;
+let ocrWorkerPromise;
+let importing = false;
 
 const canvas = document.getElementById("table-canvas");
 const ctx = canvas.getContext("2d");
@@ -40,17 +67,74 @@ const clearButton = document.getElementById("clearButton");
 const testMatchInput = document.getElementById("test-match");
 const teamList = document.getElementById("team-list");
 const eventStatus = document.getElementById("event-status");
-const teamInputs = [0, 1].map(i => ({
-    name: document.getElementById(`team-name-${i}`),
-    color: createColorPicker(document.getElementById(`team-color-field-${i}`), { onChange: () => queueRender() }),
-    players: document.getElementById(`players-${i}`),
-    penalty: document.getElementById(`penalty-${i}`),
-}));
+const modeButtons = document.querySelectorAll("#mode-select [data-teams]");
+const teamInputsContainer = document.getElementById("team-inputs");
+const importButton = document.getElementById("importButton");
+const importInput = document.getElementById("importInput");
+const importModal = document.getElementById("importModal");
+const importModalCard = document.getElementById("importModalCard");
+const importModalTitle = document.getElementById("importModalTitle");
+const importModalSubtitle = document.getElementById("importModalSubtitle");
+const importModalList = document.getElementById("importModalList");
+const importModalClose = document.getElementById("importModalClose");
 
-const defaultColors = teamInputs.map(inputs => inputs.color.getColor());
+const teamInputs = DEFAULT_TEAMS.map((team, i) => createTeamPanel(team, i));
 
 setOriginalMessage(shareButton.innerHTML);
 loadState();
+applyMode();
+
+function createTeamPanel(team, i) {
+    const panel = document.createElement("div");
+    panel.className = "table-maker-team";
+    panel.innerHTML = `
+        <label for="team-name-${i}">Team ${i + 1} name</label>
+        <div class="table-maker-row">
+            <input type="text" id="team-name-${i}" list="team-list" placeholder="${team.name}" autocomplete="off">
+            <span class="color-picker-field">
+                <button type="button" class="color-picker-swatch" aria-label="Open colour picker"
+                    aria-expanded="false" style="background-color: ${team.color};"></button>
+                <input value="${team.color}" class="color-picker-input" type="text"
+                    autocomplete="off" spellcheck="false" maxlength="7" aria-label="Team ${i + 1} colour">
+            </span>
+        </div>
+        <label for="players-${i}">Players (one per line: name score)</label>
+        <textarea translate="no" id="players-${i}"></textarea>
+        <label for="penalty-${i}">Penalty</label>
+        <input type="number" id="penalty-${i}" min="0" value="0">
+    `;
+    teamInputsContainer.appendChild(panel);
+
+    return {
+        panel,
+        name: panel.querySelector(`#team-name-${i}`),
+        color: createColorPicker(panel.querySelector(".color-picker-field"), { onChange: () => queueRender() }),
+        players: panel.querySelector(`#players-${i}`),
+        penalty: panel.querySelector(`#penalty-${i}`),
+    };
+}
+
+function getPlayersPerTeam() {
+    return TOTAL_PLAYERS / teamCount;
+}
+
+function applyMode() {
+    const playersPerTeam = getPlayersPerTeam();
+    modeButtons.forEach(button => {
+        button.classList.toggle("active", Number(button.dataset.teams) === teamCount);
+    });
+    teamInputs.forEach((inputs, i) => {
+        inputs.panel.hidden = i >= teamCount;
+        inputs.players.placeholder = Array.from({ length: playersPerTeam }, (_, j) =>
+            `Player ${i * playersPerTeam + j + 1} ${Math.max(5, 85 - j * 9 - i * 4)}`).join("\n");
+    });
+}
+
+function setMode(count) {
+    teamCount = count;
+    applyMode();
+    queueRender();
+}
 
 function loadImage(url) {
     return new Promise((resolve, reject) => {
@@ -94,24 +178,24 @@ async function findEvent(eventID) {
 }
 
 // Player names aren't public, so each placeholder player takes the nth best finish of every race
-function getPlaceholderScores(event, teamIndex) {
+function getPlaceholderScores(event, teamIndex, playerCount) {
     const [, points, penalty] = event.results[teamIndex];
     const rawTotal = points + penalty;
-    const scores = Array(MAX_PLAYERS).fill(0);
+    const scores = Array(playerCount).fill(0);
     const races = event.detailedResults || [];
 
     races.forEach(race => {
-        [...(race[teamIndex + 1] || [])].sort((a, b) => a - b).slice(0, MAX_PLAYERS)
+        [...(race[teamIndex + 1] || [])].sort((a, b) => a - b).slice(0, playerCount)
             .forEach((position, i) => { scores[i] += SCORE_MAP[position - 1] || 0; });
     });
 
     if (!races.length) {
         scores.forEach((_, i) => {
-            scores[i] = Math.floor(rawTotal / MAX_PLAYERS) + (i < rawTotal % MAX_PLAYERS ? 1 : 0);
+            scores[i] = Math.floor(rawTotal / playerCount) + (i < rawTotal % playerCount ? 1 : 0);
         });
     } else {
         // Some stored race positions don't add up to the official total, which takes priority
-        scores[MAX_PLAYERS - 1] += rawTotal - scores.reduce((sum, s) => sum + s, 0);
+        scores[playerCount - 1] += rawTotal - scores.reduce((sum, s) => sum + s, 0);
     }
     return scores;
 }
@@ -124,13 +208,18 @@ async function loadEvent(eventID) {
         return;
     }
 
+    const count = Math.min(event.teamsInvolved.length, MAX_TEAMS);
+    teamCount = LAYOUTS[count] ? count : 2;
+    applyMode();
+    const playersPerTeam = getPlayersPerTeam();
+
     testMatchInput.checked = !!event.testMatch;
-    event.teamsInvolved.slice(0, 2).forEach((teamName, i) => {
+    event.teamsInvolved.slice(0, teamCount).forEach((teamName, i) => {
         const inputs = teamInputs[i];
-        const scores = getPlaceholderScores(event, i);
+        const scores = getPlaceholderScores(event, i, playersPerTeam);
         const color = teamColors.find(t => t.team_name.toLowerCase() === teamName.toLowerCase())?.team_color;
         inputs.name.value = teamName;
-        inputs.players.value = scores.map((score, j) => `Player ${i * MAX_PLAYERS + j + 1} ${score}`).join("\n");
+        inputs.players.value = scores.map((score, j) => `Player ${i * playersPerTeam + j + 1} ${score}`).join("\n");
         inputs.penalty.value = event.results[i][2];
         if (color) inputs.color.setColor(color);
     });
@@ -138,11 +227,96 @@ async function loadEvent(eventID) {
     queueRender();
 }
 
+// Only downloaded the first time a screenshot is imported, since it's several MB
+function getOcrWorker() {
+    ocrWorkerPromise ??= import(TESSERACT_URL).then(async ({ default: Tesseract }) => {
+        const worker = await Tesseract.createWorker("eng");
+        await worker.setParameters({ tessedit_pageseg_mode: Tesseract.PSM.SINGLE_LINE });
+        return worker;
+    }).catch(error => {
+        ocrWorkerPromise = null;
+        throw error;
+    });
+    return ocrWorkerPromise;
+}
+
+function openImportModal(title, subtitle, items = []) {
+    importModalTitle.textContent = title;
+    importModalSubtitle.textContent = subtitle;
+    importModalList.replaceChildren(...items.map(({ text, warning }) => {
+        const item = document.createElement("li");
+        item.textContent = text;
+        if (warning) item.classList.add("import-modal-warning");
+        return item;
+    }));
+    importModal.classList.remove("hidden", "closing");
+    importModalCard.classList.remove("closing");
+    importModalClose.focus();
+}
+
+function closeImportModal() {
+    if (importModal.classList.contains("hidden") || importModal.classList.contains("closing")) return;
+    importModal.classList.add("closing");
+    importModalCard.classList.add("closing");
+    importModal.addEventListener("animationend", () => {
+        importModal.classList.add("hidden");
+        importModal.classList.remove("closing");
+        importModalCard.classList.remove("closing");
+    }, { once: true });
+}
+
+const plural = (count, word) => `${count} ${word}${count === 1 ? "" : "s"}`;
+
+async function importScreenshot(file) {
+    if (importing || !file?.type.startsWith("image/")) return;
+    importing = true;
+    importButton.disabled = true;
+    try {
+        const image = await createImageBitmap(file);
+        if (Math.abs(image.width / image.height - 16 / 9) > 0.05) {
+            openImportModal("Couldn't import screenshot", "That doesn't look like a full 16:9 screenshot of the results screen.");
+            return;
+        }
+
+        const players = await readResultsScreenshot(image, await getOcrWorker());
+        const unreadScores = players.filter(p => p.score === null).length;
+        const { teams, unmatchedCount } = groupPlayersByTag(
+            players.map(p => ({ name: p.name || "Unknown", score: p.score ?? 0 })), teamCount, TEAM_TAGS);
+
+        teams.forEach((team, i) => {
+            const inputs = teamInputs[i];
+            inputs.players.value = team.players.map(p => `${p.shortName} ${p.score}`).join("\n");
+            if (team.teamName) {
+                inputs.name.value = team.teamName;
+                const color = teamColors.find(t => t.team_name.toLowerCase() === team.teamName.toLowerCase())?.team_color;
+                if (color) inputs.color.setColor(color);
+            }
+        });
+        queueRender();
+
+        const items = teams.map((team, i) => {
+            const name = team.teamName || teamInputs[i].name.value.trim() || `Team ${i + 1}`;
+            const tag = team.tag ? ` (${team.tag})` : " (no tag found)";
+            return { text: `${name}${tag}: ${plural(team.players.length, "player")}` };
+        });
+        if (unmatchedCount) items.push({ text: `${plural(unmatchedCount, "player")} had no matching tag and went into a team with space`, warning: true });
+        if (unreadScores) items.push({ text: `${plural(unreadScores, "score")} couldn't be read and ${unreadScores === 1 ? "was" : "were"} set to 0`, warning: true });
+        openImportModal(`Imported ${plural(players.length, "player")}`, "Check the names, as symbols can be misread.", items);
+    } catch (error) {
+        console.error("Failed to read screenshot:", error);
+        openImportModal("Couldn't import screenshot", "Something went wrong reading that image.");
+    } finally {
+        importing = false;
+        importButton.disabled = false;
+        importInput.value = "";
+    }
+}
+
 function parsePlayers(text) {
     return text.split("\n")
         .map(line => line.trim())
         .filter(Boolean)
-        .slice(0, MAX_PLAYERS)
+        .slice(0, getPlayersPerTeam())
         .map(line => {
             const match = line.match(/^(.*?)[\s,]+(-?\d+)$/);
             return match
@@ -152,7 +326,7 @@ function parsePlayers(text) {
 }
 
 function readTeams() {
-    return teamInputs.map((inputs, i) => {
+    return teamInputs.slice(0, teamCount).map(inputs => {
         const players = parsePlayers(inputs.players.value || inputs.players.placeholder)
             .sort((a, b) => b.score - a.score);
         const penalty = Math.max(0, parseInt(inputs.penalty.value) || 0);
@@ -193,6 +367,15 @@ function drawRoundedRect(x, y, width, height, radius, fill) {
     ctx.fill();
 }
 
+// The position square is a see-through hole so the team colour shows behind the number
+function drawRowBox(top) {
+    ctx.beginPath();
+    ctx.roundRect(ROW_X, top, ROW_WIDTH, ROW_HEIGHT, 24);
+    ctx.roundRect(ROW_X + 27, top + 27, 107, 108, 14);
+    ctx.fillStyle = "#fff";
+    ctx.fill("evenodd");
+}
+
 function truncate(text, maxWidth) {
     if (ctx.measureText(text).width <= maxWidth) return text;
     const ellipsisWidth = ctx.measureText("...").width;
@@ -202,7 +385,7 @@ function truncate(text, maxWidth) {
     return text + "...";
 }
 
-// Competition ranking across both teams, so tied scores share a position
+// Competition ranking across all teams, so tied scores share a position
 function getPositions(teams) {
     const allScores = teams.flatMap(t => t.players.map(p => p.score));
     return score => 1 + allScores.filter(s => s > score).length;
@@ -210,8 +393,7 @@ function getPositions(teams) {
 
 async function render() {
     const id = ++renderId;
-    const teams = readTeams();
-    if (teams[1].total > teams[0].total) teams.reverse();
+    const teams = readTeams().sort((a, b) => b.total - a.total);
     const [emblems] = await Promise.all([
         Promise.all(teams.map(t => getEmblem(t.name))),
         document.fonts.load(`700 100px "${FONT}"`),
@@ -219,57 +401,85 @@ async function render() {
     ]);
     // A newer render started while this one was waiting on emblems
     if (id !== renderId) return;
+
+    const layout = LAYOUTS[teams.length];
+    const bandHeight = HEIGHT / teams.length;
+    const playersPerTeam = getPlayersPerTeam();
+    const rowGroupHeight = (playersPerTeam - 1) * ROW_SPACING + ROW_HEIGHT;
     const positionOf = getPositions(teams);
 
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
     teams.forEach((team, i) => {
         ctx.fillStyle = team.color;
-        ctx.fillRect(0, i * HALF, WIDTH, HALF);
+        ctx.fillRect(0, i * bandHeight, WIDTH, bandHeight);
     });
 
-    if (overlayImage) ctx.drawImage(overlayImage, 0, 0, WIDTH, HEIGHT);
-
-    if (testMatchInput.checked) {
-        drawRoundedRect(210, 1150, 500, 125, 15, "#fff");
-        drawText("Test Match", 460, 1212, 75, ACCENT_COLOR, "center", 600);
-    }
+    if (backgroundImage) ctx.drawImage(backgroundImage, 0, 0, WIDTH, HEIGHT);
 
     teams.forEach((team, i) => {
-        const [x, y] = TEXT_POS[i];
+        const bandTop = i * bandHeight;
+        const bandCenter = bandTop + bandHeight / 2;
 
-        let nameSize = 135;
+        const nameOffset = layout.emblem + layout.nameSize * 0.74;
+        const blockTop = bandCenter - (nameOffset + layout.nameSize / 2) / 2;
+        if (emblems[i]) {
+            ctx.drawImage(emblems[i], TEAM_NAME_X - layout.emblem / 2, blockTop, layout.emblem, layout.emblem);
+        }
+
+        let nameSize = layout.nameSize;
         setFont(nameSize, 700);
         while (ctx.measureText(team.name).width > TEAM_NAME_MAX_WIDTH && nameSize > 10) {
             nameSize -= 5;
             setFont(nameSize, 700);
         }
-        drawText(team.name, x, y, nameSize, "#fff", "center", 700, true);
-        drawText(`${team.total}`, x + SCORE_X_OFFSET, y + SCORE_Y_OFFSET, 425, "#fff", "center", 700, true);
+        drawText(team.name, TEAM_NAME_X, blockTop + nameOffset, nameSize, "#fff", "center", 700, true);
+
+        // Centre on the digits' real ink bounds, and centre the score and penalty together as one block
+        const scoreText = `${team.total}`;
+        setFont(layout.scoreSize, 700);
+        ctx.textBaseline = "middle";
+        const scoreMetrics = ctx.measureText(scoreText);
+        const scoreInkHeight = scoreMetrics.actualBoundingBoxAscent + scoreMetrics.actualBoundingBoxDescent;
+        const blockHeight = scoreInkHeight + (team.penalty > 0 ? PENALTY_GAP + PENALTY_HEIGHT : 0);
+        const scoreInkTop = bandCenter - blockHeight / 2;
+        const scoreY = scoreInkTop + scoreMetrics.actualBoundingBoxAscent;
+        drawText(scoreText, TEAM_SCORE_X, scoreY, layout.scoreSize, "#fff", "center", 700, true);
 
         if (team.penalty > 0) {
-            const [px, py] = PENALTY_POS[i];
-            drawRoundedRect(px - 250, py - 50, 500, 100, 12, "#fff");
-            drawText(`Penalty: -${team.penalty}`, px, py + 2, 70, ACCENT_COLOR, "center", 600);
+            const penaltyTop = scoreInkTop + scoreInkHeight + PENALTY_GAP;
+            drawRoundedRect(RIGHT_BOX_X - 250, penaltyTop, 500, PENALTY_HEIGHT, 12, "#fff");
+            drawText(`Penalty: -${team.penalty}`, RIGHT_BOX_X, penaltyTop + PENALTY_HEIGHT / 2 + 2, 70, ACCENT_COLOR, "center", 600);
         }
 
+        const rowsTop = bandTop + (bandHeight - rowGroupHeight) / 2;
+        for (let j = 0; j < playersPerTeam; j++) {
+            drawRowBox(rowsTop + j * ROW_SPACING);
+        }
         team.players.forEach((player, j) => {
-            const rowY = ROW_Y[i] + j * ROW_SPACING;
-            drawText(`${positionOf(player.score)}`, 1022, rowY, 75, "#fff");
+            const rowY = rowsTop + j * ROW_SPACING + ROW_HEIGHT / 2;
+            drawText(`${positionOf(player.score)}`, POSITION_X, rowY, 75, "#fff");
             setFont(100, 700);
-            drawText(truncate(player.name, PLAYER_MAX_WIDTH), 1110, rowY, 100, team.color, "left");
-            drawText(`${player.score}`, 2200, rowY, 100, team.color, "right", 600);
+            drawText(truncate(player.name, PLAYER_MAX_WIDTH), PLAYER_NAME_X, rowY, 100, team.color, "left");
+            drawText(`${player.score}`, PLAYER_SCORE_X, rowY, 100, team.color, "right", 600);
         });
-
-        if (emblems[i]) {
-            ctx.drawImage(emblems[i], x - EMBLEM_SIZE / 2, y - 700, EMBLEM_SIZE, EMBLEM_SIZE);
-        }
     });
 
-    drawText(`±${Math.abs(teams[0].total - teams[1].total)}`, 2770, HALF + 2, 100, ACCENT_COLOR);
+    if (teams.length === 2) {
+        drawRoundedRect(2596, bandHeight - 85, 353, 171, 16, "#fff");
+        drawText(`±${Math.abs(teams[0].total - teams[1].total)}`, RIGHT_BOX_X, bandHeight + 2, 100, ACCENT_COLOR);
+    }
+
+    if (testMatchInput.checked) {
+        // Sit on a band boundary so it never covers a team's emblem or name
+        const boundaryY = Math.floor(teams.length / 2) * bandHeight;
+        drawRoundedRect(210, boundaryY - 65, 500, 125, 15, "#fff");
+        drawText("Test Match", 460, boundaryY - 3, 75, ACCENT_COLOR, "center", 600);
+    }
 }
 
 function saveState() {
     const state = {
+        teamCount,
         testMatch: testMatchInput.checked,
         teams: teamInputs.map(inputs => ({
             name: inputs.name.value,
@@ -289,8 +499,9 @@ function loadState() {
         return;
     }
     if (!state?.teams) return;
+    if (LAYOUTS[state.teamCount]) teamCount = state.teamCount;
     testMatchInput.checked = !!state.testMatch;
-    state.teams.slice(0, 2).forEach((team, i) => {
+    state.teams.slice(0, MAX_TEAMS).forEach((team, i) => {
         const inputs = teamInputs[i];
         inputs.name.value = team.name ?? "";
         inputs.players.value = team.players ?? "";
@@ -307,7 +518,7 @@ function clearState() {
         inputs.name.value = "";
         inputs.players.value = "";
         inputs.penalty.value = 0;
-        inputs.color.setColor(defaultColors[i]);
+        inputs.color.setColor(DEFAULT_TEAMS[i].color);
     });
     queueRender();
 }
@@ -326,17 +537,20 @@ function canvasToBlob() {
     return new Promise(resolve => canvas.toBlob(resolve, "image/png"));
 }
 
+function getTeamNames() {
+    return readTeams().map(t => t.name);
+}
+
 function getFilename() {
-    const [a, b] = readTeams().map(t => t.name.replaceAll(" ", "_"));
-    return `results_${a}_vs_${b}.png`;
+    return `results_${getTeamNames().map(name => name.replaceAll(" ", "_")).join("_vs_")}.png`;
 }
 
 async function shareButtonPressed() {
     if (getIsPopupShowing()) return;
     await render();
     const blob = await canvasToBlob();
-    const [a, b] = readTeams().map(t => t.name);
-    const message = `Check out the results for ${a} vs ${b}!`;
+    const title = getTeamNames().join(" vs ");
+    const message = `Check out the results for ${title}!`;
 
     if (isWindowsOrLinux() || !navigator.canShare) {
         const success = await copyImageToClipboard(blob);
@@ -347,7 +561,7 @@ async function shareButtonPressed() {
             setTimeout(() => { shareButton.innerHTML = getOriginalMessage(); }, 2000);
         }
     } else {
-        await shareImage(`${a} vs ${b} Results`, message, blob, getFilename());
+        await shareImage(`${title} Results`, message, blob, getFilename());
     }
 }
 
@@ -369,6 +583,22 @@ teamInputs.forEach(inputs => {
     });
     [inputs.players, inputs.penalty].forEach(el => el.addEventListener("input", queueRender));
 });
+modeButtons.forEach(button => {
+    button.addEventListener("click", () => setMode(Number(button.dataset.teams)));
+});
+importButton.addEventListener("click", () => importInput.click());
+importInput.addEventListener("change", () => importScreenshot(importInput.files[0]));
+importModalClose.addEventListener("click", closeImportModal);
+importModal.addEventListener("click", event => {
+    if (event.target === importModal) closeImportModal();
+});
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") closeImportModal();
+});
+document.addEventListener("paste", event => {
+    const file = [...event.clipboardData.files].find(f => f.type.startsWith("image/"));
+    if (file) importScreenshot(file);
+});
 testMatchInput.addEventListener("change", queueRender);
 shareButton.addEventListener("click", shareButtonPressed);
 downloadButton.addEventListener("click", downloadButtonPressed);
@@ -376,7 +606,7 @@ clearButton.addEventListener("click", clearState);
 
 document.addEventListener("DOMContentLoaded", async () => {
     try {
-        overlayImage = await loadImage(OVERLAY_PATH);
+        backgroundImage = await loadImage(BACKGROUND_PATH);
     } catch (error) {
         console.error(error);
     }

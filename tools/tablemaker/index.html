@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="apple-mobile-web-app-title" content="UMKL">
     <title>Table Maker | UMKL</title>
-    <meta name="description" content="Make a UMKL styled results table for a 6v6 match">
+    <meta name="description" content="Make a UMKL styled results table for a 6v6, 4v4v4 or 3v3v3v3 match">
     <link rel="icon" href="/_assets/media/brand/favicon.jpg" type="image/png">
     <link rel="apple-touch-icon" href="/_assets/media/brand/favicon.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="/_assets/css/base/style.css">
     <link rel="stylesheet" href="/_assets/css/components/colorpicker.css">
     <link rel="stylesheet" href="/_assets/css/components/toggle.css">
+    <link rel="stylesheet" href="/_assets/css/components/modal.css">
     <link rel="stylesheet" href="/_assets/css/pages/tablemaker.css">
     <link rel="stylesheet" href="/_assets/css/base/settings.css">
     <link rel="stylesheet" href="/_assets/css/components/copypopup.css">
@@ -30,7 +31,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://umkl.co.uk/tools/tablemaker/" />
     <meta property="og:image" content="https://umkl.co.uk/_assets/media/brand/UMKL_banner.avif" />
-    <meta property="og:description" content="Make a UMKL styled results table for a 6v6 match" />
+    <meta property="og:description" content="Make a UMKL styled results table for a 6v6, 4v4v4 or 3v3v3v3 match" />
 
     <!-- Include this to make the og:image larger -->
     <meta name="twitter:card" content="summary_large_image">
@@ -64,56 +65,33 @@
                 Back</a>
         </div>
         <h1>Table Maker</h1>
-        <p class="p-below-title">Make a results table for a 6v6 match</p>
+        <p class="p-below-title">Make a results table for a 6v6, 4v4v4 or 3v3v3v3 match</p>
 
         <datalist id="team-list"></datalist>
         <p id="event-status"></p>
 
-        <div class="table-maker-inputs">
-            <div class="table-maker-team" data-team="0">
-                <label for="team-name-0">Team name</label>
-                <div class="table-maker-row">
-                    <input type="text" id="team-name-0" list="team-list" placeholder="York" autocomplete="off">
-                    <span class="color-picker-field" id="team-color-field-0">
-                        <button type="button" class="color-picker-swatch" aria-label="Open colour picker"
-                            aria-expanded="false" style="background-color: #1baa8b;"></button>
-                        <input value="#1baa8b" id="team-color-0" class="color-picker-input" type="text"
-                            autocomplete="off" spellcheck="false" maxlength="7" aria-label="Team colour">
-                    </span>
-                </div>
-                <label for="players-0">Players (one per line: name score)</label>
-                <textarea translate="no" id="players-0" placeholder="Player 1 82
-Player 2 70
-Player 3 64
-Player 4 55
-Player 5 48
-Player 6 40"></textarea>
-                <label for="penalty-0">Penalty</label>
-                <input type="number" id="penalty-0" min="0" value="0">
-            </div>
-
-            <div class="table-maker-team" data-team="1">
-                <label for="team-name-1">Team name</label>
-                <div class="table-maker-row">
-                    <input type="text" id="team-name-1" list="team-list" placeholder="Staffs" autocomplete="off">
-                    <span class="color-picker-field" id="team-color-field-1">
-                        <button type="button" class="color-picker-swatch" aria-label="Open colour picker"
-                            aria-expanded="false" style="background-color: #a11212;"></button>
-                        <input value="#a11212" id="team-color-1" class="color-picker-input" type="text"
-                            autocomplete="off" spellcheck="false" maxlength="7" aria-label="Team colour">
-                    </span>
-                </div>
-                <label for="players-1">Players (one per line: name score)</label>
-                <textarea translate="no" id="players-1" placeholder="Player 7 78
-Player 8 66
-Player 9 60
-Player 10 52
-Player 11 44
-Player 12 30"></textarea>
-                <label for="penalty-1">Penalty</label>
-                <input type="number" id="penalty-1" min="0" value="0">
-            </div>
+        <div class="bubble-link-wrapper table-maker-modes">
+            <nav class="bubble-nav" id="mode-select">
+                <button type="button" class="bubble-nav-item" data-teams="2">6v6</button>
+                <button type="button" class="bubble-nav-item" data-teams="3">4v4v4</button>
+                <button type="button" class="bubble-nav-item" data-teams="4">3v3v3v3</button>
+            </nav>
+            <button type="button" id="importButton" class="bubble-link"><svg xmlns="http://www.w3.org/2000/svg"
+                    width="1em" height="1em" fill="none" viewBox="0 0 24 24" role="presentation">
+                    <path fill="currentColor"
+                        d="M4 5h3l2-2h6l2 2h3a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2m8 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10m0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6">
+                    </path>
+                </svg> Import screenshot (OCR)</button>
+            <button id="clearButton" class="bubble-link"><svg xmlns="http://www.w3.org/2000/svg" width="1em"
+                    height="1em" fill="none" viewBox="0 0 24 24" role="presentation">
+                    <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"
+                        d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z">
+                    </path>
+                </svg> Clear</button>
+            <input type="file" id="importInput" accept="image/*" hidden>
         </div>
+
+        <div class="table-maker-inputs" id="team-inputs"></div>
 
         <div class="stats-options">
             <label class="stats-option-row">
@@ -127,24 +105,29 @@ Player 12 30"></textarea>
 
         <div class="table-maker-actions">
             <button id="shareButton" class="bubble-link"><span class="fa-solid fa-share"></span> Share Table</button>
-            <button id="downloadButton" class="bubble-link"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none"
-                    viewBox="0 0 24 24" role="presentation">
+            <button id="downloadButton" class="bubble-link"><svg xmlns="http://www.w3.org/2000/svg" width="1em"
+                    height="1em" fill="none" viewBox="0 0 24 24" role="presentation">
                     <path fill="currentColor"
                         d="M13 3v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17V3zM4 19h16v2H4z">
                     </path>
                 </svg> Download</button>
-            <button id="clearButton" class="bubble-link"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none"
-                    viewBox="0 0 24 24" role="presentation">
-                    <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"
-                        d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z">
-                    </path>
-                </svg> Clear</button>
         </div>
 
         <canvas id="table-canvas" class="table-maker-preview" width="3268" height="2430"></canvas>
     </main>
 
     <umkl-footer></umkl-footer>
+
+    <div id="importModal" class="modal-overlay hidden">
+        <div id="importModalCard" class="modal-card" role="dialog" aria-modal="true" aria-labelledby="importModalTitle">
+            <h3 id="importModalTitle"></h3>
+            <span id="importModalSubtitle" class="modal-subtitle"></span>
+            <ul id="importModalList" class="import-modal-list"></ul>
+            <div class="modal-actions modal-actions-row">
+                <button type="button" id="importModalClose" class="btn-modal-option btn-modal-primary">OK</button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
