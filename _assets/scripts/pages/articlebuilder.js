@@ -104,11 +104,12 @@ const outputDocument = ({ title, subtitle, mainImageUrl, mainCaption, bodyConten
     <meta content="#bc0839" name="theme-color" />
     <meta name="color-scheme" content="dark light">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-title" content="UMKL">
     <title>${title} | UMKL</title>
     <meta name="description"
         content="${subtitle}">
-    <link rel="icon" href="/_assets/media/brand/favicon.png" type="image/png">
-    <link rel="apple-touch-icon" href="/_assets/media/brand/favicon.png">
+    <link rel="icon" href="/_assets/media/brand/favicon.jpg" type="image/png">
+    <link rel="apple-touch-icon" href="/_assets/media/brand/favicon.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">

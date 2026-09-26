@@ -211,7 +211,7 @@ def build_rss(items):
     ET.SubElement(
         channel_image,
         "url",
-    ).text = "https://umkl.co.uk/_assets/media/brand/favicon.png"
+    ).text = "https://umkl.co.uk/_assets/media/brand/favicon.jpg"
 
     ET.SubElement(
         channel_image,

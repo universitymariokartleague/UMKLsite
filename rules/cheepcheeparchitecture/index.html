@@ -6,14 +6,16 @@
     <meta content="#bc0839" name="theme-color" />
     <meta name="color-scheme" content="dark light">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-title" content="UMKL">
     <title>Cheep Cheep Architecture Guide | UMKL</title>
     <meta name="description"
         content="Technical documentation explaining how the Cheep Cheep Discord bot and API codebase is structured, module by module.">
-    <link rel="icon" href="/_assets/media/brand/favicon.png" type="image/png">
-    <link rel="apple-touch-icon" href="/_assets/media/brand/favicon.png">
+    <link rel="icon" href="/_assets/media/brand/favicon.jpg" type="image/png">
+    <link rel="apple-touch-icon" href="/_assets/media/brand/favicon.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
     <link rel="stylesheet" href="/_assets/css/base/style.css">
     <link rel="stylesheet" href="/_assets/css/base/settings.css">
     <link rel="stylesheet" href="/_assets/css/components/rules.css">
@@ -22,7 +24,8 @@
 
     <meta property="og:title" content="UMKL | Cheep Cheep Architecture Guide" />
     <meta property="og:site_name" content="umkl.co.uk" />
-    <meta property="og:logo" content="https://umkl.co.uk/_assets/media/brand/guidelines/logo_transparent_standard.png" />
+    <meta property="og:logo"
+        content="https://umkl.co.uk/_assets/media/brand/guidelines/logo_transparent_standard.png" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://umkl.co.uk/rules/cheepcheeparchitecture/" />
     <meta property="og:image" content="https://umkl.co.uk/_assets/media/brand/UMKL_banner.avif" />
@@ -194,7 +197,8 @@
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">dev_cog.py</span>
-                            <span class="file-tree-desc">Dev commands and tools: the <code translate="no">/generate</code>
+                            <span class="file-tree-desc">Dev commands and tools: the <code
+                                    translate="no">/generate</code>
                                 graphics group (open to everyone), the <code translate="no">/dev</code> group and
                                 <code translate="no">umkl!</code> prefix commands</span>
                         </div>
@@ -205,11 +209,13 @@
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">live_score_cog.py</span>
-                            <span class="file-tree-desc">The <code translate="no">/live-score</code> group: add/edit/clear the livescore data</span>
+                            <span class="file-tree-desc">The <code translate="no">/live-score</code> group:
+                                add/edit/clear the livescore data</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">match_cog.py</span>
-                            <span class="file-tree-desc">Match creation/editing (including the <code translate="no">/edit</code>
+                            <span class="file-tree-desc">Match creation/editing (including the <code
+                                    translate="no">/edit</code>
                                 group), the signup flow, room codes, substitutions</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
@@ -219,7 +225,8 @@
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">season_cog.py</span>
-                            <span class="file-tree-desc">The <code translate="no">/season</code> group: season, round and team pairings management</span>
+                            <span class="file-tree-desc">The <code translate="no">/season</code> group: season, round
+                                and team pairings management</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">sql_cog.py</span>
@@ -646,8 +653,8 @@
                             translate="no">dev_cog</code>). discord.py only collects and binds commands declared on
                         the cog's own class, so a group's subcommands must live in the same cog as the group. This is
                         why <code translate="no">/request stream-key</code> is in <code translate="no">core_cog</code>
-                        rather than <code translate="no">team_cog</code>, and <code
-                            translate="no">/dev add-match-results</code> is in <code translate="no">dev_cog</code>
+                        rather than <code translate="no">team_cog</code>, and <code translate="no">/dev
+                            add-match-results</code> is in <code translate="no">dev_cog</code>
                         rather than <code translate="no">results_cog</code>.
                     </p>
 
@@ -682,11 +689,13 @@
                             </tr>
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">live_score_cog.py</code></td>
-                                <td>The <code translate="no">/live-score</code> group: add/edit/clear the live per-race livescore graphic data</td>
+                                <td>The <code translate="no">/live-score</code> group: add/edit/clear the live per-race
+                                    livescore graphic data</td>
                             </tr>
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">match_cog.py</code></td>
-                                <td>Match creation/editing (including the <code translate="no">/edit</code> group), the signup
+                                <td>Match creation/editing (including the <code translate="no">/edit</code> group), the
+                                    signup
                                     flow (button + modal), room codes, substitutions
                                 </td>
                             </tr>
@@ -696,7 +705,8 @@
                             </tr>
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">season_cog.py</code></td>
-                                <td>The <code translate="no">/season</code> group: season, round and team pairings management</td>
+                                <td>The <code translate="no">/season</code> group: season, round and team pairings
+                                    management</td>
                             </tr>
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">sql_cog.py</code></td>
@@ -706,7 +716,8 @@
                             </tr>
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">team_cog.py</code></td>
-                                <td>Team creation (Discord role/channels/category), colour/name changes, season entry</td>
+                                <td>Team creation (Discord role/channels/category), colour/name changes, season entry
+                                </td>
                             </tr>
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">user_profile_cog.py</code>
@@ -1468,7 +1479,8 @@
                     </p>
                     <ul>
                         <li>
-                            <b><code translate="no">test_bot_startup.py</code></b> - imports every module in <code translate="no">bot</code>,
+                            <b><code translate="no">test_bot_startup.py</code></b> - imports every module in <code
+                                translate="no">bot</code>,
                             <code translate="no">cogs</code>, <code translate="no">core</code> and
                             <code translate="no">services</code>, then runs <code
                                 translate="no">PersistentViewBot.setup_hook()</code> and checks that all ten cogs load
@@ -1477,7 +1489,8 @@
                             hardcoded, so a new cog has to be added to it
                         </li>
                         <li>
-                            <b><code translate="no">test_command_tree.py</code></b> - builds the command tree the same way and checks Discord's
+                            <b><code translate="no">test_command_tree.py</code></b> - builds the command tree the same
+                            way and checks Discord's
                             sync limits across every command, including subcommands inside groups: top-level names
                             are unique and at most 100, names match <code translate="no">^[a-z0-9_-]{1,32}$</code>,
                             descriptions are 1-100 characters, commands have at most 25 parameters, and every
@@ -1485,26 +1498,29 @@
                             instead of failing when the tree is synced
                         </li>
                         <li>
-                            <b><code translate="no">test_assets.py</code></b> - scans every <code translate="no">.py</code> file outside
+                            <b><code translate="no">test_assets.py</code></b> - scans every <code
+                                translate="no">.py</code> file outside
                             <code translate="no">tests/</code> for hardcoded <code translate="no">assets/…</code>
                             image and font paths and checks each file exists (paths built with f-strings are skipped)
                         </li>
                         <li>
-                            <b><code translate="no">test_config.py</code></b> - sanity checks on <code translate="no">config.py</code>:
+                            <b><code translate="no">test_config.py</code></b> - sanity checks on <code
+                                translate="no">config.py</code>:
                             <code translate="no">CHANNEL_IDS</code> are unique integers, the guild, dev server and admin
                             account IDs are distinct, and <code translate="no">MK8DX_TRACK_NAMES</code> has no
                             duplicates
                         </li>
                         <li>
                             <b><code translate="no">test_helpers.py</code></b> - unit tests for small pure helpers:
-                            <code translate="no">logic.is_hex_color</code>, <code
-                                translate="no">format_date_UK</code>, <code translate="no">compute_total_pages</code>,
+                            <code translate="no">logic.is_hex_color</code>, <code translate="no">format_date_UK</code>,
+                            <code translate="no">compute_total_pages</code>,
                             <code translate="no">get_position_icon</code>, <code
                                 translate="no">gitimport.normalized_size</code>, and that <code
                                 translate="no">get_text_channel</code> raises for a missing or wrong-type channel
                         </li>
                         <li>
-                            <b><code translate="no">test_patterns.py</code></b> - tests the regexes in <code translate="no">listeners_cog</code>
+                            <b><code translate="no">test_patterns.py</code></b> - tests the regexes in <code
+                                translate="no">listeners_cog</code>
                             that trigger Cheep Cheep's replies: <code translate="no">JOIN_TEAM_PATTERN</code> ("how do
                             I join a team", "add me to a team"), <code translate="no">DISCONNECT_PATTERN</code>
                             ("dc'd", "disconnected") and that <code translate="no">JOIN_TEAM_CHANNELS</code> are
@@ -1547,11 +1563,13 @@
                     </p>
                     <ul>
                         <li>
-                            <b><code translate="no">supervisor.py</code></b> - restarts <code translate="no">main.py</code> whenever it exits,
+                            <b><code translate="no">supervisor.py</code></b> - restarts <code
+                                translate="no">main.py</code> whenever it exits,
                             standing in for systemd when running on Windows
                         </li>
                         <li>
-                            <b><code translate="no">test.py</code></b> - a scratch script that prints the output of a couple of
+                            <b><code translate="no">test.py</code></b> - a scratch script that prints the output of a
+                            couple of
                             <code translate="no">core.logic</code> functions, for poking at the database by hand
                         </li>
                     </ul>
