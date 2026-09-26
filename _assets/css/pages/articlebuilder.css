@@ -400,22 +400,6 @@
     opacity: 1;
 }
 
-.conversion-status {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: var(--bg-color);
-    color: var(--text-color);
-    border: 1px solid var(--translucent-color);
-    padding: 10px 16px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    font-size: 0.9rem;
-    font-weight: 600;
-    z-index: 3000;
-    animation: dialogPopIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
 .url-modal-input {
     box-sizing: border-box;
     border: 1px solid var(--translucent-color);

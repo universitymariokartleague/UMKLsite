@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="/_assets/css/components/colorpicker.css">
     <link rel="stylesheet" href="/_assets/css/components/toggle.css">
     <link rel="stylesheet" href="/_assets/css/components/modal.css">
+    <link rel="stylesheet" href="/_assets/css/components/conversionstatus.css">
     <link rel="stylesheet" href="/_assets/css/pages/tablemaker.css">
     <link rel="stylesheet" href="/_assets/css/base/settings.css">
     <link rel="stylesheet" href="/_assets/css/components/copypopup.css">
@@ -117,6 +118,15 @@
     </main>
 
     <umkl-footer></umkl-footer>
+
+    <div class="corner-stack">
+        <div id="importStatus" class="conversion-status" role="status" hidden></div>
+        <div id="screenshotPreview" class="screenshot-preview" hidden>
+            <img id="screenshotPreviewImage" alt="Imported screenshot">
+            <button type="button" id="screenshotPreviewClose" class="screenshot-preview-close"
+                aria-label="Hide screenshot">&times;</button>
+        </div>
+    </div>
 
     <div id="importModal" class="modal-overlay hidden">
         <div id="importModalCard" class="modal-card" role="dialog" aria-modal="true" aria-labelledby="importModalTitle">

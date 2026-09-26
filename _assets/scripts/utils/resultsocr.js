@@ -36,6 +36,10 @@ const SYMBOL_MIN_SCORE = 0.35;
 // Tesseract is 93-99% sure of real letters but under 93% on the guesses it makes for symbols like ★
 const CONFIDENT_LETTER = 95;
 const CONFIDENT_LETTERS = 85;
+// Real game symbols match their screenshot templates at 0.65+, while Rodin-only matches are weaker,
+// so a weak match can't overrule a letter or digit Tesseract was fairly sure of
+const STRONG_SYMBOL_MATCH = 0.6;
+const LIKELY_LETTER = 70;
 
 // Sample rectangles [x0, y0, x1, y1] inside a digit cell for each seven-segment bar
 const SEGMENTS = {
@@ -336,7 +340,9 @@ function matchSymbol(normalised, baseline, templates) {
             bestOther = Math.max(bestOther, score);
         }
     }
-    return bestSymbolScore >= SYMBOL_MIN_SCORE && bestSymbolScore > bestOther ? bestSymbol : null;
+    return bestSymbolScore >= SYMBOL_MIN_SCORE && bestSymbolScore > bestOther
+        ? { char: bestSymbol, score: bestSymbolScore }
+        : null;
 }
 
 function getNameCanvas(mask, width) {
@@ -374,10 +380,13 @@ function mergeSymbols(words, symbols) {
         })),
     }));
     const isCovered = (c, x0, x1) => c.x >= x0 - 1 && c.x <= x1 + 1;
-    for (const { char, x0, x1 } of symbols) {
+    for (const { char, score, x0, x1 } of symbols) {
         const covered = merged.flatMap(word => word.chars.filter(c => isCovered(c, x0, x1)));
         const isLetter = c => /[\p{L}\p{N}]/u.test(c.text);
-        if (covered.length === 1 && isLetter(covered[0]) && covered[0].confidence >= CONFIDENT_LETTER) continue;
+        if (covered.length === 1 && isLetter(covered[0])) {
+            const { confidence } = covered[0];
+            if (confidence >= CONFIDENT_LETTER || (confidence >= LIKELY_LETTER && score < STRONG_SYMBOL_MATCH)) continue;
+        }
         // Touching letters get cut out as one glyph, so trust Tesseract when it saw several
         if (covered.filter(c => isLetter(c) && c.confidence >= CONFIDENT_LETTERS).length >= 2) continue;
 
@@ -413,14 +422,14 @@ async function readName(imageData, rowTop, worker, templates) {
     const symbols = columns
         .map(([x0, x1]) => {
             const glyph = normaliseGlyph(mask, width, x0, x1);
-            return { char: glyph && matchSymbol(glyph, baseline, templates), x0, x1 };
+            return { ...(glyph && matchSymbol(glyph, baseline, templates)), x0, x1 };
         })
         .filter(symbol => symbol.char);
     return cleanName(mergeSymbols(words, symbols));
 }
 
-// worker is a Tesseract.js worker; image is anything drawImage accepts
-async function readResultsScreenshot(image, worker) {
+// worker is a Tesseract.js worker; image is anything drawImage accepts; onProgress gets (rowsRead, totalRows)
+async function readResultsScreenshot(image, worker, onProgress = () => { }) {
     const canvas = createCanvas(BASE_WIDTH, BASE_HEIGHT);
     const ctx = canvas.getContext("2d");
     ctx.drawImage(image, 0, 0, BASE_WIDTH, BASE_HEIGHT);
@@ -440,6 +449,7 @@ async function readResultsScreenshot(image, worker) {
             name: await readName(imageData, rowTop, worker, templates),
             score: readScore(imageData, rowTop),
         });
+        onProgress(i + 1, ROW_COUNT);
     }
     return players;
 }
@@ -522,12 +532,16 @@ function groupPlayersByTag(players, teamCount, knownTags = {}) {
     }
     while (teams.length < teamCount) teams.push({ tag: null, label: null, teamName: null, members: [] });
 
-    const unmatched = players.map((_, i) => i).filter(i => !assigned.has(i));
-    for (const i of unmatched) {
+    const untagged = new Set();
+    for (const i of players.map((_, i) => i).filter(i => !assigned.has(i))) {
         const open = teams.filter(team => team.members.length < teamSize);
         // Catches a missing separator, e.g. "MKSJamWamm" alongside "MKS Primo", but not "Wario" for "WAR"
         const closest = open.find(team => team.label && getTagCore(team.label) && players[i].name.startsWith(getTagCore(team.label)));
-        if (closest) shortNames[i] = removePrefix(players[i].name, getTagCore(closest.label).length);
+        if (closest) {
+            shortNames[i] = removePrefix(players[i].name, getTagCore(closest.label).length);
+        } else {
+            untagged.add(i);
+        }
         (closest || open[0]).members.push(i);
     }
 
@@ -537,8 +551,7 @@ function groupPlayersByTag(players, teamCount, knownTags = {}) {
         teams: teams.map(team => ({
             tag: team.label,
             teamName: team.teamName ?? knownTags[team.label] ?? null,
-            players: team.members.map(i => ({ ...players[i], shortName: shortNames[i] })),
+            players: team.members.map(i => ({ ...players[i], shortName: shortNames[i], untagged: untagged.has(i) })),
         })),
-        unmatchedCount: unmatched.length,
     };
 }

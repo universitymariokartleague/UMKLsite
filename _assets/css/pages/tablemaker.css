@@ -136,3 +136,69 @@
     color: var(--accent-color);
     font-weight: 600;
 }
+
+.corner-stack {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 1500;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.corner-stack .conversion-status {
+    position: static;
+}
+
+.screenshot-preview {
+    position: relative;
+    width: 240px;
+    border: 1px solid var(--translucent-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    background-color: var(--bg-color);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    cursor: zoom-in;
+    transition: width 0.2s ease;
+}
+
+.screenshot-preview[hidden] {
+    display: none;
+}
+
+.screenshot-preview:hover,
+.screenshot-preview.expanded {
+    width: min(960px, calc(100vw - 32px));
+}
+
+.screenshot-preview.expanded {
+    cursor: zoom-out;
+}
+
+.screenshot-preview img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.screenshot-preview-close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.screenshot-preview-close:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}

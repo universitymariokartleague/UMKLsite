@@ -58,6 +58,7 @@ let renderQueued = false;
 let renderId = 0;
 let ocrWorkerPromise;
 let importing = false;
+let pendingScreenshot = null;
 
 const canvas = document.getElementById("table-canvas");
 const ctx = canvas.getContext("2d");
@@ -77,6 +78,10 @@ const importModalTitle = document.getElementById("importModalTitle");
 const importModalSubtitle = document.getElementById("importModalSubtitle");
 const importModalList = document.getElementById("importModalList");
 const importModalClose = document.getElementById("importModalClose");
+const importStatus = document.getElementById("importStatus");
+const screenshotPreview = document.getElementById("screenshotPreview");
+const screenshotPreviewImage = document.getElementById("screenshotPreviewImage");
+const screenshotPreviewClose = document.getElementById("screenshotPreviewClose");
 
 const teamInputs = DEFAULT_TEAMS.map((team, i) => createTeamPanel(team, i));
 
@@ -256,6 +261,10 @@ function openImportModal(title, subtitle, items = []) {
 
 function closeImportModal() {
     if (importModal.classList.contains("hidden") || importModal.classList.contains("closing")) return;
+    if (pendingScreenshot) {
+        showScreenshotPreview(pendingScreenshot);
+        pendingScreenshot = null;
+    }
     importModal.classList.add("closing");
     importModalCard.classList.add("closing");
     importModal.addEventListener("animationend", () => {
@@ -263,6 +272,24 @@ function closeImportModal() {
         importModal.classList.remove("closing");
         importModalCard.classList.remove("closing");
     }, { once: true });
+}
+
+function setImportStatus(message) {
+    importStatus.textContent = message ?? "";
+    importStatus.hidden = !message;
+}
+
+function showScreenshotPreview(file) {
+    if (screenshotPreviewImage.src) URL.revokeObjectURL(screenshotPreviewImage.src);
+    screenshotPreviewImage.src = URL.createObjectURL(file);
+    screenshotPreview.classList.remove("expanded");
+    screenshotPreview.hidden = false;
+}
+
+function hideScreenshotPreview() {
+    screenshotPreview.hidden = true;
+    if (screenshotPreviewImage.src) URL.revokeObjectURL(screenshotPreviewImage.src);
+    screenshotPreviewImage.removeAttribute("src");
 }
 
 const plural = (count, word) => `${count} ${word}${count === 1 ? "" : "s"}`;
@@ -278,9 +305,16 @@ async function importScreenshot(file) {
             return;
         }
 
-        const players = await readResultsScreenshot(image, await getOcrWorker());
+        // The first import also downloads Tesseract, which can take a few seconds
+        setImportStatus("Loading text recognition, please wait...");
+        const worker = await getOcrWorker();
+        setImportStatus("Reading screenshot, please wait...");
+
+        const players = await readResultsScreenshot(image, worker,
+            (done, total) => setImportStatus(`Reading screenshot, please wait... (${done}/${total})`));
+        setImportStatus(null);
         const unreadScores = players.filter(p => p.score === null).length;
-        const { teams, unmatchedCount } = groupPlayersByTag(
+        const { teams } = groupPlayersByTag(
             players.map(p => ({ name: p.name || "Unknown", score: p.score ?? 0 })), teamCount, TEAM_TAGS);
 
         teams.forEach((team, i) => {
@@ -294,18 +328,22 @@ async function importScreenshot(file) {
         });
         queueRender();
 
+        const teamLabels = teams.map((team, i) => team.teamName || teamInputs[i].name.value.trim() || `Team ${i + 1}`);
         const items = teams.map((team, i) => {
-            const name = team.teamName || teamInputs[i].name.value.trim() || `Team ${i + 1}`;
             const tag = team.tag ? ` (${team.tag})` : " (no tag found)";
-            return { text: `${name}${tag}: ${plural(team.players.length, "player")}` };
+            return { text: `${teamLabels[i]}${tag}: ${plural(team.players.length, "player")}` };
         });
-        if (unmatchedCount) items.push({ text: `${plural(unmatchedCount, "player")} had no matching tag and went into a team with space`, warning: true });
+        teams.forEach((team, i) => team.players.filter(p => p.untagged).forEach(p => {
+            items.push({ text: `"${p.name}" (${p.score}) had no team tag, so they were put in ${teamLabels[i]}. Check they're on the right team.`, warning: true });
+        }));
         if (unreadScores) items.push({ text: `${plural(unreadScores, "score")} couldn't be read and ${unreadScores === 1 ? "was" : "were"} set to 0`, warning: true });
+        pendingScreenshot = file;
         openImportModal(`Imported ${plural(players.length, "player")}`, "Check the names, as symbols can be misread.", items);
     } catch (error) {
         console.error("Failed to read screenshot:", error);
         openImportModal("Couldn't import screenshot", "Something went wrong reading that image.");
     } finally {
+        setImportStatus(null);
         importing = false;
         importButton.disabled = false;
         importInput.value = "";
@@ -513,6 +551,7 @@ function loadState() {
 function clearState() {
     if (!confirm("Clear all table data?")) return;
     localStorage.removeItem(STORAGE_KEY);
+    hideScreenshotPreview();
     testMatchInput.checked = false;
     teamInputs.forEach((inputs, i) => {
         inputs.name.value = "";
@@ -589,6 +628,11 @@ modeButtons.forEach(button => {
 importButton.addEventListener("click", () => importInput.click());
 importInput.addEventListener("change", () => importScreenshot(importInput.files[0]));
 importModalClose.addEventListener("click", closeImportModal);
+// Touch screens can't hover, so tapping toggles the larger size too
+screenshotPreview.addEventListener("click", event => {
+    if (event.target !== screenshotPreviewClose) screenshotPreview.classList.toggle("expanded");
+});
+screenshotPreviewClose.addEventListener("click", hideScreenshotPreview);
 importModal.addEventListener("click", event => {
     if (event.target === importModal) closeImportModal();
 });

@@ -319,7 +319,7 @@ function formatBytes(bytes) {
 function updateStorageUsage() {
     if (!storageUsageEl) return;
     const used = getLocalStorageUsageBytes();
-    const percent = ((used / LOCAL_STORAGE_LIMIT_BYTES) * 100).toFixed(1);
+    const percent = Math.round((used / LOCAL_STORAGE_LIMIT_BYTES) * 100);
 
     if (!autoSaveEnabled) {
         storageUsageEl.textContent = `Draft storage full! Changes won't be autosaved, so please download your draft instead.`;

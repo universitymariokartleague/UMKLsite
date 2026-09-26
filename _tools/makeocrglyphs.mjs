@@ -25,7 +25,9 @@ const FONT_SIZE = 38;
 const STROKE_WIDTH = 2;
 const BASELINE = 41;
 
-const SYMBOLS = "★☆♪♬♩♥♡♦♢♠♤♣♧◆◇■□●○◎▲△▼▽※†‡∞♭♯→←↑↓√×÷±°·•〆々Ω¥£€¢";
+// Only symbols people actually use in tags; look-alikes such as 々 (4), × (x), Ω (O) or £ (E) cause more
+// misreads than they fix
+const SYMBOLS = "★☆♪♬♩♥♡♦♢♠♤♣♧◆◇■□●○◎▲△▼▽※†‡¥";
 const OTHERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$#&@%+=~^|\\/*!?-_()[]{}<>";
 
 const [fontPath, ...samples] = process.argv.slice(2);
