@@ -1,0 +1,47 @@
+{
+  "carmine": {
+    "name": "Carmine",
+    "hex": "#BC0839",
+    "rgb": [
+      188,
+      8,
+      57
+    ],
+    "cmyk": [
+      0,
+      96,
+      70,
+      26
+    ]
+  },
+  "burnt-umber-void": {
+    "name": "Burnt Umber Void",
+    "hex": "#160702",
+    "rgb": [
+      22,
+      7,
+      2
+    ],
+    "cmyk": [
+      0,
+      68,
+      91,
+      91
+    ]
+  },
+  "white": {
+    "name": "White",
+    "hex": "#FFFFFF",
+    "rgb": [
+      255,
+      255,
+      255
+    ],
+    "cmyk": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

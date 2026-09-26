@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="/_assets/css/pages/brand.css">
     <link rel="stylesheet" href="/_assets/css/base/settings.css">
     <link rel="stylesheet" href="/_assets/css/pages/newsarticle.css">
-    <link rel="stylesheet" href="/_assets/css/ext/fontawesome.min.css">
+    <link rel="stylesheet" href="/_assets/css/components/articletoc.css">
 
     <meta property="og:title" content="UMKL | Brand Guidelines" />
     <meta property="og:site_name" content="umkl.co.uk" />
@@ -46,6 +46,7 @@
     <script type="module" src="/_assets/scripts/base/settings.js" defer></script>
     <script defer src="/_assets/scripts/base/imagefade.js" type="module"></script>
     <script type="module" src="/_assets/scripts/base/smartback.js" defer></script>
+    <script type="module" src="/_assets/scripts/base/articletoc.js" defer></script>
     <script type="module" src="/_assets/scripts/pages/brandswatches.js" defer></script>
 </head>
 
@@ -71,130 +72,452 @@
                         UMKL</span>
                 </div>
 
-                <div class="article-body">
-                    <h2>Text Guidelines</h2>
-                    <p class="p-below-title">
-                        Please use our text guidelines to ensure consistency and readability across all UMKL content
-                    </p>
-                    <ul>
-                        <li>Do not use generative AI in ANY graphics or media</li>
-                        <li>Address the reader as "you" and the league as "we"</li>
-                        <li>Refer the seasons like this: "Season 3", not "Season three" (same for rounds)</li>
-                        <li>Write "UMKL" in all caps, always, (eg: the UMKL)</li>
-                        <li>Write placings as "1st", "2nd", "3rd"</li>
-                        <li>Please obtain permission before writing about a player, especially if using someones real
-                            name</li>
-                        <li>Use they/them if you don't know someone's pronouns</li>
-                        <li>Keep the tone inclusive and non-toxic when writing about players and results</li>
-                        <li>Articles here generally use the Oxford comma</li>
-                    </ul>
-
-                    <h2>Our Logo</h2>
-                    <p class="p-below-title">
-                        Please use our logo and wordmark in white or with the UMKL's accent colour
-                    </p>
-                    <div class="brand-container">
-                        <div class="brand-element brand-standard image-container">
-                            <img loading="lazy" src="/_assets/media/brand/guidelines/logo_transparent_white.png"
-                                alt="UMKL Logo White" style="height: 100%;" class="brand-logo" />
-                        </div>
-                        <div class="brand-element brand-white">
-                            <img loading="lazy" src="/_assets/media/brand/guidelines/logo_transparent_standard.png"
-                                alt="UMKL Logo Standard" style="height: 100%;" class="brand-logo" />
-                        </div>
+                <div class="article-body brand-body">
+                    <div class="brand-pack-links">
+                        <a href="/_assets/media/brand/guidelines/branding_asset_pack/umkl_brand_guidelines.pdf"
+                            class="brand-pack-download">
+                            <span class="brand-pack-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em"
+                                    height="1em" viewBox="0 0 24 24" role="presentation">
+                                    <path fill="currentColor"
+                                        d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2m0 2v16h12V9h-5V4zm2 9h8v2H8zm0 4h8v2H8z" />
+                                </svg></span>
+                            <span class="brand-asset-text">
+                                <span class="brand-asset-name">View the guidelines</span>
+                                <span class="brand-asset-desc">The full brand guidelines document</span>
+                            </span>
+                        </a>
+                        <a href="/_assets/media/brand/guidelines/branding_asset_pack.zip" class="brand-pack-download"
+                            download>
+                            <span class="brand-pack-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em"
+                                    height="1em" viewBox="0 0 24 24" role="presentation">
+                                    <path fill="currentColor"
+                                        d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17zM4 19h16v2H4z" />
+                                </svg></span>
+                            <span class="brand-asset-text">
+                                <span class="brand-asset-name">Brand asset pack</span>
+                                <span class="brand-asset-desc">Logos, colour palettes, fonts, graphics and the full PDF
+                                    guidelines</span>
+                            </span>
+                        </a>
                     </div>
 
-                    <h2 class="h-below-image">Wordmark</h2>
-                    <p class="p-below-title">Our wordmark must always feature the symbol. The typeface is <b>Montserrat
-                            Bold</b>
-                    </p>
-                    <div class="brand-container">
-                        <div class="brand-element brand-standard image-container">
-                            <img loading="lazy" src="/_assets/media/brand/guidelines/wordmark_white.png"
-                                alt="UMKL Logo Full" style="width: 40%;" class="brand-logo" />
-                        </div>
-                    </div>
-                    <div class="brand-container">
-                        <div class="brand-element brand-white image-container">
-                            <img loading="lazy" src="/_assets/media/brand/guidelines/wordmark_standard.png"
-                                alt="UMKL Logo Full" style="width: 40%;" class="brand-logo" />
-                        </div>
-                    </div>
+                    <section id="overview" class="brand-section">
+                        <h2>Overview</h2>
+                        <p>We bring together students from universities around the UK to compete in 6v6 matches in
+                            Mario Kart. These guidelines ensure all content involving the UMKL is consistent and aligns
+                            with our overall vision: a simple, intuitive brand identity that adapts to specific
+                            situations.</p>
+                        <p>Our vision is to be <b>modern</b>, <b>intuitive</b>, <b>bold</b> and <b>dynamic</b>.</p>
+                        <p>The UMKL is built by students, for students, and our brand should reflect that. It reaches
+                            potential players in a variety of places, so these guidelines apply across all of the UMKL:
+                            the Discord server, the website, YouTube, other social media, print, and video broadcasts.
+                            Consistent colours, shapes and typefaces convey the quality the UMKL strives for, and make
+                            everything feel like it came from the same place.</p>
+                    </section>
 
-                    <h2 class="h-below-image">Colours</h2>
-                    <p class="p-below-title">Any content regarding the league as a whole must feature our colours</p>
-                    <div class="color-swatch-grid">
-                        <div class="color-swatch">
-                            <div class="color-swatch-block" style="background-color: var(--brand-primary);"></div>
-                            <div class="color-swatch-info">
-                                <span class="color-swatch-name">Carmine</span>
-                                <button type="button" class="color-swatch-code" aria-label="Copy hex code">…</button>
+                    <section id="logo" class="brand-section">
+                        <h2>Logo</h2>
+                        <p class="p-below-title">Our emblem combines symbols representing every facet of the UMKL</p>
+                        <div class="brand-logo-feature">
+                            <div class="brand-asset-preview brand-on-white">
+                                <img loading="lazy"
+                                    src="/_assets/media/brand/guidelines/branding_asset_pack/logos/umkl_emblem_carmine.svg"
+                                    alt="The UMKL emblem">
+                            </div>
+                            <div class="brand-logo-meaning">
+                                <ul class="brand-list">
+                                    <li>The <b>shield</b> represents British universities and engine classes</li>
+                                    <li>The <b>spiny shell</b> and <b>stars</b> represent Mario Kart</li>
+                                    <li>The <b>olive branches</b> and <b>chequered flag</b> are historic symbols of
+                                        racing, and heavily featured in the game</li>
+                                </ul>
+                                <span class="settings-extra-info">UMKL Emblem, Tushar Sundarka, 2025</span>
                             </div>
                         </div>
-                        <div class="color-swatch">
-                            <div class="color-swatch-block" style="background-color: var(--brand-light);"></div>
-                            <div class="color-swatch-info">
-                                <span class="color-swatch-name">White</span>
-                                <button type="button" class="color-swatch-code" aria-label="Copy hex code">…</button>
+                        <p class="brand-note">Use the logo in white or Carmine only</p>
+                    </section>
+
+                    <section id="logo-suite" class="brand-section">
+                        <h2>Logo Suite</h2>
+                        <p class="p-below-title">A suite of layouts so the logo looks its best in every application</p>
+                        <div class="brand-asset-grid">
+                            <figure class="brand-asset">
+                                <div class="brand-asset-preview brand-on-white">
+                                    <img loading="lazy"
+                                        src="/_assets/media/brand/guidelines/branding_asset_pack/logos/umkl_emblem_carmine.svg"
+                                        alt="UMKL logo">
+                                </div>
+                                <figcaption class="brand-asset-caption">
+                                    <div class="brand-asset-text">
+                                        <span class="brand-asset-name">UMKL logo</span>
+                                        <span class="brand-asset-desc">The default in our own channels, without text
+                                            lock-ups</span>
+                                    </div>
+                                    <div class="brand-asset-downloads">
+                                        <a href="/_assets/media/brand/guidelines/branding_asset_pack/logos/umkl_emblem_carmine.svg"
+                                            download class="brand-asset-download"><svg
+                                                xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                viewBox="0 0 24 24" role="presentation">
+                                                <path fill="currentColor"
+                                                    d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17zM4 19h16v2H4z" />
+                                            </svg> SVG</a>
+                                        <a href="/_assets/media/brand/guidelines/branding_asset_pack/logos/umkl_emblem_carmine.png"
+                                            download class="brand-asset-download"><svg
+                                                xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                viewBox="0 0 24 24" role="presentation">
+                                                <path fill="currentColor"
+                                                    d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17zM4 19h16v2H4z" />
+                                            </svg> PNG</a>
+                                    </div>
+                                </figcaption>
+                            </figure>
+                            <figure class="brand-asset">
+                                <div class="brand-asset-preview brand-on-white brand-asset-wide">
+                                    <img loading="lazy"
+                                        src="/_assets/media/brand/guidelines/branding_asset_pack/logos/umkl_text_logo_carmine.svg"
+                                        alt="UMKL text logo">
+                                </div>
+                                <figcaption class="brand-asset-caption">
+                                    <div class="brand-asset-text">
+                                        <span class="brand-asset-name">UMKL text logo</span>
+                                        <span class="brand-asset-desc">For out-of-home use where a text descriptor may
+                                            be needed</span>
+                                    </div>
+                                    <div class="brand-asset-downloads">
+                                        <a href="/_assets/media/brand/guidelines/branding_asset_pack/logos/umkl_text_logo_carmine.svg"
+                                            download class="brand-asset-download"><svg
+                                                xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                viewBox="0 0 24 24" role="presentation">
+                                                <path fill="currentColor"
+                                                    d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17zM4 19h16v2H4z" />
+                                            </svg> SVG</a>
+                                        <a href="/_assets/media/brand/guidelines/branding_asset_pack/logos/umkl_text_logo_carmine.png"
+                                            download class="brand-asset-download"><svg
+                                                xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                viewBox="0 0 24 24" role="presentation">
+                                                <path fill="currentColor"
+                                                    d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17zM4 19h16v2H4z" />
+                                            </svg> PNG</a>
+                                    </div>
+                                </figcaption>
+                            </figure>
+                            <figure class="brand-asset">
+                                <div class="brand-asset-preview brand-on-white brand-asset-wide">
+                                    <img loading="lazy"
+                                        src="/_assets/media/brand/guidelines/branding_asset_pack/logos/umkl_full_logo_carmine.svg"
+                                        alt="UMKL full logo reading University Mario Kart League">
+                                </div>
+                                <figcaption class="brand-asset-caption">
+                                    <div class="brand-asset-text">
+                                        <span class="brand-asset-name">UMKL full logo</span>
+                                        <span class="brand-asset-desc">Only for the most official scenarios</span>
+                                    </div>
+                                    <div class="brand-asset-downloads">
+                                        <a href="/_assets/media/brand/guidelines/branding_asset_pack/logos/umkl_full_logo_carmine.svg"
+                                            download class="brand-asset-download"><svg
+                                                xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                viewBox="0 0 24 24" role="presentation">
+                                                <path fill="currentColor"
+                                                    d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17zM4 19h16v2H4z" />
+                                            </svg> SVG</a>
+                                        <a href="/_assets/media/brand/guidelines/branding_asset_pack/logos/umkl_full_logo_carmine.png"
+                                            download class="brand-asset-download"><svg
+                                                xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                viewBox="0 0 24 24" role="presentation">
+                                                <path fill="currentColor"
+                                                    d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17zM4 19h16v2H4z" />
+                                            </svg> PNG</a>
+                                    </div>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <p class="brand-note">White and black versions of every logo are in the <a
+                                href="/_assets/media/brand/guidelines/branding_asset_pack.zip">asset pack</a></p>
+                    </section>
+
+                    <section id="wordmark" class="brand-section">
+                        <h2>Wordmark</h2>
+                        <p class="p-below-title">Our standard wordmark, set in Montserrat</p>
+                        <div class="brand-asset-grid">
+                            <figure class="brand-asset">
+                                <div class="brand-asset-preview brand-on-white brand-asset-wide">
+                                    <img loading="lazy"
+                                        src="/_assets/media/brand/guidelines/branding_asset_pack/logos/umkl_wordmark_carmine.svg"
+                                        alt="UMKL wordmark in Carmine">
+                                </div>
+                                <figcaption class="brand-asset-caption">
+                                    <div class="brand-asset-text">
+                                        <span class="brand-asset-name">Carmine</span>
+                                    </div>
+                                    <div class="brand-asset-downloads">
+                                        <a href="/_assets/media/brand/guidelines/branding_asset_pack/logos/umkl_wordmark_carmine.svg"
+                                            download class="brand-asset-download"><svg
+                                                xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                viewBox="0 0 24 24" role="presentation">
+                                                <path fill="currentColor"
+                                                    d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17zM4 19h16v2H4z" />
+                                            </svg> SVG</a>
+                                        <a href="/_assets/media/brand/guidelines/branding_asset_pack/logos/umkl_wordmark_carmine.png"
+                                            download class="brand-asset-download"><svg
+                                                xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                viewBox="0 0 24 24" role="presentation">
+                                                <path fill="currentColor"
+                                                    d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17zM4 19h16v2H4z" />
+                                            </svg> PNG</a>
+                                    </div>
+                                </figcaption>
+                            </figure>
+                            <figure class="brand-asset">
+                                <div class="brand-asset-preview brand-on-accent brand-asset-wide">
+                                    <img loading="lazy"
+                                        src="/_assets/media/brand/guidelines/branding_asset_pack/logos/umkl_wordmark_white.svg"
+                                        alt="UMKL wordmark in white">
+                                </div>
+                                <figcaption class="brand-asset-caption">
+                                    <div class="brand-asset-text">
+                                        <span class="brand-asset-name">White</span>
+                                    </div>
+                                    <div class="brand-asset-downloads">
+                                        <a href="/_assets/media/brand/guidelines/branding_asset_pack/logos/umkl_wordmark_white.svg"
+                                            download class="brand-asset-download"><svg
+                                                xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                viewBox="0 0 24 24" role="presentation">
+                                                <path fill="currentColor"
+                                                    d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17zM4 19h16v2H4z" />
+                                            </svg> SVG</a>
+                                        <a href="/_assets/media/brand/guidelines/branding_asset_pack/logos/umkl_wordmark_white.png"
+                                            download class="brand-asset-download"><svg
+                                                xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                viewBox="0 0 24 24" role="presentation">
+                                                <path fill="currentColor"
+                                                    d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17zM4 19h16v2H4z" />
+                                            </svg> PNG</a>
+                                    </div>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <p class="brand-note">The wordmark can only be used on its own in the UMKL's own channels, and
+                            material using it must include the UMKL logo somewhere else. Other parties may not use the
+                            wordmark on its own.</p>
+                    </section>
+
+                    <section id="colours" class="brand-section">
+                        <h2>Colours</h2>
+                        <p class="p-below-title">Any content about the league as a whole must use our colours. Team
+                            accent colours also feature prominently in specific graphics. Click a swatch to copy its hex
+                            code</p>
+                        <div class="color-swatch-grid">
+                            <div class="color-swatch color-swatch-primary">
+                                <div class="color-swatch-block" style="background-color: var(--brand-primary);"></div>
+                                <div class="color-swatch-info">
+                                    <span class="color-swatch-name">Carmine</span>
+                                    <button type="button" class="color-swatch-code"
+                                        aria-label="Copy hex code">…</button>
+                                </div>
+                            </div>
+                            <div class="color-swatch">
+                                <div class="color-swatch-block" style="background-color: var(--brand-dark);"></div>
+                                <div class="color-swatch-info">
+                                    <span class="color-swatch-name">Burnt Umber Void</span>
+                                    <button type="button" class="color-swatch-code"
+                                        aria-label="Copy hex code">…</button>
+                                </div>
+                            </div>
+                            <div class="color-swatch">
+                                <div class="color-swatch-block" style="background-color: var(--brand-light);"></div>
+                                <div class="color-swatch-info">
+                                    <span class="color-swatch-name">White</span>
+                                    <button type="button" class="color-swatch-code"
+                                        aria-label="Copy hex code">…</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="color-swatch">
-                            <div class="color-swatch-block" style="background-color: var(--brand-dark);"></div>
-                            <div class="color-swatch-info">
-                                <span class="color-swatch-name">Burnt Umber Void</span>
-                                <button type="button" class="color-swatch-code" aria-label="Copy hex code">…</button>
+                        <div class="brand-file-links">
+                            <span>Download palettes:</span>
+                            <a href="/_assets/media/brand/guidelines/branding_asset_pack/colours/umkl_brand.ase"
+                                download class="brand-asset-download"><svg xmlns="http://www.w3.org/2000/svg"
+                                    width="1em" height="1em" viewBox="0 0 24 24" role="presentation">
+                                    <path fill="currentColor"
+                                        d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17zM4 19h16v2H4z" />
+                                </svg> ASE</a>
+                            <a href="/_assets/media/brand/guidelines/branding_asset_pack/colours/umkl_brand.gpl"
+                                download class="brand-asset-download"><svg xmlns="http://www.w3.org/2000/svg"
+                                    width="1em" height="1em" viewBox="0 0 24 24" role="presentation">
+                                    <path fill="currentColor"
+                                        d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17zM4 19h16v2H4z" />
+                                </svg> GPL</a>
+                            <a href="/_assets/media/brand/guidelines/branding_asset_pack/colours/umkl_colours.css"
+                                download class="brand-asset-download"><svg xmlns="http://www.w3.org/2000/svg"
+                                    width="1em" height="1em" viewBox="0 0 24 24" role="presentation">
+                                    <path fill="currentColor"
+                                        d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17zM4 19h16v2H4z" />
+                                </svg> CSS</a>
+                            <a href="/_assets/media/brand/guidelines/branding_asset_pack/colours/umkl_colours.json"
+                                download class="brand-asset-download"><svg xmlns="http://www.w3.org/2000/svg"
+                                    width="1em" height="1em" viewBox="0 0 24 24" role="presentation">
+                                    <path fill="currentColor"
+                                        d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17zM4 19h16v2H4z" />
+                                </svg> JSON</a>
+                        </div>
+                    </section>
+
+                    <section id="typography" class="brand-section">
+                        <h2>Typography</h2>
+                        <p class="p-below-title">All UMKL text uses <a target="_blank"
+                                href="https://fonts.google.com/specimen/Montserrat">Montserrat</a> in three weights</p>
+                        <div class="brand-type-list">
+                            <div class="brand-type-row">
+                                <div class="brand-type-meta">
+                                    <b>Headings</b>
+                                    <span class="brand-type-use">Montserrat Black, for bold titles and standout
+                                        text</span>
+                                </div>
+                                <span class="brand-type-sample"
+                                    style="font-weight: 900; font-size: 2.6rem;">Champions</span>
+                            </div>
+                            <div class="brand-type-row">
+                                <div class="brand-type-meta">
+                                    <b>Sub-headings</b>
+                                    <span class="brand-type-use">Montserrat Semi-Bold, for sub-headings and
+                                        emphasis</span>
+                                </div>
+                                <span class="brand-type-sample" style="font-weight: 600; font-size: 1.5rem;">Season 3 is
+                                    starting in October!</span>
+                            </div>
+                            <div class="brand-type-row">
+                                <div class="brand-type-meta">
+                                    <b>Body</b>
+                                    <span class="brand-type-use">Montserrat Regular, for general reading content</span>
+                                </div>
+                                <span class="brand-type-sample" style="font-weight: 400;">In preparation for Season 3,
+                                    the UMKL website has been refreshed. Expect a more consistent brand style across all
+                                    of the UMKL.</span>
                             </div>
                         </div>
-                    </div>
+                        <div class="brand-file-links">
+                            <span>Download fonts:</span>
+                            <a href="/_assets/media/brand/guidelines/branding_asset_pack/fonts/ttf/Montserrat-Black.ttf"
+                                download class="brand-asset-download"><svg xmlns="http://www.w3.org/2000/svg"
+                                    width="1em" height="1em" viewBox="0 0 24 24" role="presentation">
+                                    <path fill="currentColor"
+                                        d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17zM4 19h16v2H4z" />
+                                </svg> Black</a>
+                            <a href="/_assets/media/brand/guidelines/branding_asset_pack/fonts/ttf/Montserrat-SemiBold.ttf"
+                                download class="brand-asset-download"><svg xmlns="http://www.w3.org/2000/svg"
+                                    width="1em" height="1em" viewBox="0 0 24 24" role="presentation">
+                                    <path fill="currentColor"
+                                        d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17zM4 19h16v2H4z" />
+                                </svg> Semi-Bold</a>
+                            <a href="/_assets/media/brand/guidelines/branding_asset_pack/fonts/ttf/Montserrat-Regular.ttf"
+                                download class="brand-asset-download"><svg xmlns="http://www.w3.org/2000/svg"
+                                    width="1em" height="1em" viewBox="0 0 24 24" role="presentation">
+                                    <path fill="currentColor"
+                                        d="M11 3h2v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17zM4 19h16v2H4z" />
+                                </svg> Regular</a>
+                        </div>
+                    </section>
 
-                    <blockquote class="info">
-                        <b>Note:</b><br>
-                        You can download a pack of some UMKL brand assets here: <a
-                            href="/_assets/media/brand/guidelines/branding_asset_pack.zip">branding_asset_pack.zip</a>.
-                    </blockquote>
+                    <section id="writing" class="brand-section">
+                        <h2>Writing</h2>
+                        <p class="p-below-title">Keep UMKL content consistent and readable</p>
+                        <ul class="brand-list">
+                            <li>Write "the UMKL" in capitals, not "the Umkl"</li>
+                            <li>Write seasons and rounds with numbers: "Season 3, Round 2", not "Season three"</li>
+                            <li>Write placings as "1st", "2nd", "3rd"</li>
+                            <li>Address the reader as "you" and the league as "we"</li>
+                            <li>Do not use generative AI in any graphics or media, please refer to the brand guidelines
+                                for design inspiration, or ask people for help</li>
+                            <li>Get permission before writing about a player, especially if using their real name</li>
+                            <li>Use they/them if you don't know someone's pronouns</li>
+                            <li>Keep the tone inclusive and non-toxic when writing about players and results</li>
+                            <li>Use the Oxford comma</li>
+                        </ul>
+                    </section>
 
-                    <h2 class="h-below-image">Social Media</h2>
-                    <p class="p-below-title">Guidelines for posting our content online</p>
-                    <blockquote class="warning">
-                        <b translate="no">Important</b><br>
-                        Promotion of the UMKL via society channels is allowed, but you must make clear that membership
-                        of that society isn't required to join the UMKL team. See the points below for specifics.
-                    </blockquote>
+                    <section id="social" class="brand-section">
+                        <h2>Social Media</h2>
+                        <p class="p-below-title">Guidelines for posting our content online</p>
+                        <blockquote class="warning">
+                            <b translate="no">Important</b><br>
+                            Promotion of the UMKL via society channels is allowed, but you must make clear that
+                            membership of that society isn't required to join the UMKL team.
+                        </blockquote>
 
-                    <ul>
-                        <li>
-                            Please <b>do not reupload full unedited matches</b> from the UMKL channel onto separate
-                            channels.
-                            <b>Clips and montages/highlights</b> are OK and encouraged!
-                        </li>
-                        <li>
-                            A disclaimer should be included in the description, which could go along the lines of:<br>
-                            "This is a match/clip/content from the UMKL. Anyone who is a member of any of the
-                            universities
-                            playing in the UMKL can participate. You do not need to be a member of this society to
-                            join your university's UMKL team."
-                        </li>
-                        <li>
-                            Please <b>leave a link</b> to <a href="https://umkl.co.uk">https://umkl.co.uk</a>
-                            and the <a href="https://discord.gg/jz3hKEmDss">Discord server</a>
-                            when uploading content related to the UMKL.
-                        </li>
-                        <li>
-                            Please do not obscure or edit information on our graphics.
-                            For example: cropping out the test match watermark in graphics uploaded to social media
-                        </li>
-                    </ul>
+                        <ul class="brand-list">
+                            <li><b>Clips, montages and highlights</b> are encouraged, but please do not reupload full
+                                unedited matches from the UMKL channel</li>
+                            <li>Do not crop or edit information on our graphics, like the test match watermark</li>
+                            <li>Include links to <a href="https://umkl.co.uk">umkl.co.uk</a> and the <a
+                                    href="https://discord.gg/jz3hKEmDss">Discord server</a> when uploading UMKL
+                                content:</li>
+                        </ul>
 
-                    <img loading="lazy" class="image"
-                        src="/_assets/media/brand/guidelines/cheepcheepresultsexample.avif"
-                        alt="An example of a results graphic that can be generated by the Cheep Cheep app on the UMKL Discord server." />
-                    <br>
-                    <span class="settings-extra-info">A test of the results graphic from Cheep Cheep app, used in the
-                        <a target="_blank" href="https://discord.gg/jz3hKEmDss">Discord server</a>.</span>
+                        <div class="brand-disclaimer">
+                            <p id="brand-links-text">You can check out the UMKL website here: https://umkl.co.uk<br>
+                                and be sure to join the Discord server here: https://discord.gg/jz3hKEmDss</p>
+                            <button type="button" class="bubble-link" data-copy-target="brand-links-text">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
+                                    role="presentation">
+                                    <path fill="currentColor"
+                                        d="M8 2h11a2 2 0 0 1 2 2v12h-2V4H8zM5 6h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2m0 2v12h10V8z" />
+                                </svg> <span>Copy</span>
+                            </button>
+                        </div>
+
+                        <ul class="brand-list">
+                            <li>Include a disclaimer in the description, along the lines of:</li>
+                        </ul>
+
+                        <div class="brand-disclaimer">
+                            <p id="brand-disclaimer-text">This clip is from a match in the UMKL. Anyone who is a
+                                member of any of the universities playing in the UMKL can participate. You do not need
+                                to be a member of this society to join your university's UMKL team.</p>
+                            <button type="button" class="bubble-link" data-copy-target="brand-disclaimer-text">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
+                                    role="presentation">
+                                    <path fill="currentColor"
+                                        d="M8 2h11a2 2 0 0 1 2 2v12h-2V4H8zM5 6h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2m0 2v12h10V8z" />
+                                </svg> <span>Copy</span>
+                            </button>
+                        </div>
+
+                        <figure class="brand-example">
+                            <svg class="brand-post-mock" viewBox="0 0 600 580" role="img"
+                                aria-label="A mock social media post sharing a results graphic generated by the Cheep Cheep app.">
+                                <defs>
+                                    <clipPath id="postImageClip">
+                                        <rect x="16" y="104" width="568" height="422" rx="12" />
+                                    </clipPath>
+                                </defs>
+                                <rect x="0.5" y="0.5" width="599" height="579" rx="16" class="brand-post-card" />
+                                <circle cx="38" cy="38" r="22" class="brand-post-skeleton" />
+                                <rect x="70" y="24" width="110" height="12" rx="5" class="brand-post-skeleton" />
+                                <rect x="70" y="44" width="70" height="10" rx="5" class="brand-post-skeleton" />
+                                <rect x="16" y="74" width="420" height="10" rx="5" class="brand-post-skeleton" />
+                                <image href="/_assets/media/brand/guidelines/cheepcheepresultsexample.avif" x="16"
+                                    y="104" width="568" height="422" clip-path="url(#postImageClip)"
+                                    preserveAspectRatio="xMidYMid slice" />
+                                <rect x="16" y="542" width="56" height="18" rx="9" class="brand-post-skeleton" />
+                                <rect x="88" y="542" width="56" height="18" rx="9" class="brand-post-skeleton" />
+                                <rect x="160" y="542" width="56" height="18" rx="9" class="brand-post-skeleton" />
+                                <rect x="548" y="542" width="36" height="18" rx="9" class="brand-post-skeleton" />
+                            </svg>
+                            <figcaption class="settings-extra-info">An example post sharing a results graphic from the
+                                Cheep
+                                Cheep app, which is used in the <a target="_blank"
+                                    href="https://discord.gg/jz3hKEmDss">Discord
+                                    server</a>.
+                            </figcaption>
+                        </figure>
+                    </section>
                 </div>
             </div>
 
-            <div class="article-meta">
+            <div class="article-meta article-toc">
+                <div class="article-meta-item article-toc-item">
+                    <span class="article-meta-heading">Contents</span>
+                    <nav class="article-toc-list" id="articleToc" aria-label="Contents"></nav>
+                </div>
                 <div class="article-meta-item">
                     <span class="article-meta-heading">Author</span>
                     <span class="article-meta-value">UMKL Team</span>

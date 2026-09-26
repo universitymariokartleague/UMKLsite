@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="768" height="256" viewBox="0 0 768 256">
+  <title>UMKL brand palette</title>
+  <rect x="0" width="256" height="256" fill="#BC0839"/>
+  <rect x="256" width="256" height="256" fill="#160702"/>
+  <rect x="512" width="256" height="256" fill="#FFFFFF"/>
+</svg>

@@ -29,3 +29,17 @@ document.querySelectorAll(".color-swatch").forEach((swatch) => {
     codeButton.addEventListener("click", copy);
     block.addEventListener("click", copy);
 });
+
+document.querySelectorAll("[data-copy-target]").forEach((button) => {
+    const source = document.getElementById(button.dataset.copyTarget);
+    const label = button.querySelector("span");
+    if (!source || !label) return;
+
+    button.addEventListener("click", async () => {
+        try {
+            await navigator.clipboard.writeText(source.innerText.trim());
+            label.textContent = "Copied!";
+            setTimeout(() => { label.textContent = "Copy"; }, 1200);
+        } catch { }
+    });
+});

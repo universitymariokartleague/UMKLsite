@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="/_assets/css/base/settings.css">
     <link rel="stylesheet" href="/_assets/css/components/rules.css">
     <link rel="stylesheet" href="/_assets/css/pages/newsarticle.css">
+    <link rel="stylesheet" href="/_assets/css/components/articletoc.css">
     <link rel="stylesheet" href="/_assets/css/ext/fontawesome.min.css">
 
     <meta property="og:title" content="UMKL | Cheep Cheep Architecture Guide" />
@@ -46,6 +47,7 @@
     <script type="module" src="/_assets/scripts/base/settings.js" defer></script>
     <script defer src="/_assets/scripts/base/imagefade.js" type="module"></script>
     <script type="module" src="/_assets/scripts/base/smartback.js" defer></script>
+    <script type="module" src="/_assets/scripts/base/articletoc.js" defer></script>
     <script type="module" src="/_assets/scripts/pages/codehighlight.js" defer></script>
 </head>
 
@@ -82,25 +84,6 @@
                         For the full command list, see the <a href="/rules/cheepcheepcommands/">Commands
                             Documentation</a> page.
                     </p>
-
-                    <h3>Page Contents</h3>
-                    <ul class="after-title">
-                        <li><a href="/rules/cheepcheeparchitecture/#what-this-project-is">1. What this project is</a>
-                        </li>
-                        <li><a href="/rules/cheepcheeparchitecture/#directory-layout">2. Directory layout</a></li>
-                        <li><a href="/rules/cheepcheeparchitecture/#layering-rules">3. Layering rules (how imports
-                                actually
-                                flow)</a></li>
-                        <li><a href="/rules/cheepcheeparchitecture/#startup-sequence">4. Startup sequence
-                                - <code translate="no">main.py</code></a></li>
-                        <li><a href="/rules/cheepcheeparchitecture/#module-reference">5. Module reference</a></li>
-                        <li><a href="/rules/cheepcheeparchitecture/#cross-cog-import-map">6. Cross-cog import map</a>
-                        </li>
-                        <li><a href="/rules/cheepcheeparchitecture/#data-storage">7. Data storage</a></li>
-                        <li><a href="/rules/cheepcheeparchitecture/#tests">8. Tests</a></li>
-                        <li><a href="/rules/cheepcheeparchitecture/#worked-example">9. Worked example:
-                                <code translate="no">/create-match</code> end to end</a></li>
-                    </ul>
 
                     <hr>
 
@@ -1722,7 +1705,11 @@
                 </div>
             </div>
 
-            <div class="article-meta">
+            <div class="article-meta article-toc">
+                <div class="article-meta-item article-toc-item">
+                    <span class="article-meta-heading">Contents</span>
+                    <nav class="article-toc-list" id="articleToc" aria-label="Contents"></nav>
+                </div>
                 <div class="article-meta-item">
                     <span class="article-meta-heading">Author</span>
                     <span class="article-meta-value">UMKL Team</span>

@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="/_assets/css/base/settings.css">
     <link rel="stylesheet" href="/_assets/css/components/rules.css">
     <link rel="stylesheet" href="/_assets/css/pages/newsarticle.css">
+    <link rel="stylesheet" href="/_assets/css/components/articletoc.css">
     <link rel="stylesheet" href="/_assets/css/ext/fontawesome.min.css">
 
     <meta property="og:title" content="UMKL | Match Rules" />
@@ -45,6 +46,7 @@
     <script type="module" src="/_assets/scripts/base/settings.js" defer></script>
     <script defer src="/_assets/scripts/base/imagefade.js" type="module"></script>
     <script type="module" src="/_assets/scripts/base/smartback.js" defer></script>
+    <script type="module" src="/_assets/scripts/base/articletoc.js" defer></script>
 </head>
 
 <body id="top">
@@ -402,7 +404,11 @@
                 </div>
             </div>
 
-            <div class="article-meta">
+            <div class="article-meta article-toc">
+                <div class="article-meta-item article-toc-item">
+                    <span class="article-meta-heading">Contents</span>
+                    <nav class="article-toc-list" id="articleToc" aria-label="Contents"></nav>
+                </div>
                 <div class="article-meta-item">
                     <span class="article-meta-heading">Author</span>
                     <span class="article-meta-value">UMKL Team</span>

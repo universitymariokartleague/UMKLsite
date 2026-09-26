@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="/_assets/css/base/settings.css">
     <link rel="stylesheet" href="/_assets/css/components/discordrolepreview.css">
     <link rel="stylesheet" href="/_assets/css/pages/newsarticle.css">
+    <link rel="stylesheet" href="/_assets/css/components/articletoc.css">
     <link rel="stylesheet" href="/_assets/css/ext/fontawesome.min.css">
 
     <meta property="og:title" content="UMKL | Discord/Cheep Cheep FAQ" />
@@ -46,6 +47,7 @@
     <script type="module" src="/_assets/scripts/base/settings.js" defer></script>
     <script defer src="/_assets/scripts/base/imagefade.js" type="module"></script>
     <script type="module" src="/_assets/scripts/base/smartback.js" defer></script>
+    <script type="module" src="/_assets/scripts/base/articletoc.js" defer></script>
     <script type="module" src="/_assets/scripts/pages/lostworldeasteregg.js" defer></script>
     <script type="module" src="/_assets/scripts/pages/spmystery.js" defer></script>
 </head>
@@ -109,31 +111,6 @@
                         fits
                         together.
                     </p>
-
-                    <hr>
-
-                    <h3>Page Contents</h3>
-                    <ul class="after-title">
-                        <li><a href="/rules/faq/#missing-channel">Why can't I see my team's channel? What should I
-                                do?</a></li>
-                        <li><a href="/rules/faq/#wrong-team">I joined the wrong team! What should I do?</a></li>
-                        <li><a href="/rules/faq/#before-match">What should I do before a match starts?</a></li>
-                        <li><a href="/rules/faq/#results-verified">How are match results verified once they're
-                                submitted?</a>
-                        </li>
-                        <li><a href="/rules/faq/#sp-points">What is SP and how do I earn it?</a></li>
-                        <li><a href="/rules/faq/#leaderboards-profiles">What do the leaderboard and profile commands
-                                show?</a></li>
-                        <li><a href="/rules/faq/#season-rounds">How are matchups decided each round?</a></li>
-                        <li><a href="/rules/faq/#no-discord">A member on my team doesn't have a Discord account? What
-                                should I do
-                                about them?</a></li>
-                        <li><a href="/rules/faq/#profile-questionmark">Why is there a <img loading="lazy"
-                                    class="question-mark-icon" src="/_assets/media/faq/questionmark.avif"
-                                    alt="A question mark placeholder icon"> on my team's
-                                profile?</a></li>
-                        <li><a href="/rules/faq/#behind-the-scenes">What does Cheep Cheep actually run on?</a></li>
-                    </ul>
 
                     <hr>
 
@@ -363,7 +340,11 @@
                 </div>
             </div>
 
-            <div class="article-meta">
+            <div class="article-meta article-toc">
+                <div class="article-meta-item article-toc-item">
+                    <span class="article-meta-heading">Contents</span>
+                    <nav class="article-toc-list" id="articleToc" aria-label="Contents" data-headings="h4[id]"></nav>
+                </div>
                 <div class="article-meta-item">
                     <span class="article-meta-heading">Author</span>
                     <span class="article-meta-value">UMKL Team</span>
