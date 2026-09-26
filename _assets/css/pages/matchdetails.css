@@ -78,10 +78,10 @@
     content: none !important;
 }
 
-.score-calculator-input-areas {
-    display: block;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+.match-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
     background-color: var(--box-area-bg-color);
     border: 1px solid var(--translucent-color);
     border-radius: var(--border-radius);
@@ -89,25 +89,23 @@
     margin-bottom: 24px;
 }
 
-.positions-input-area {
+.match-inputs.hidden {
+    visibility: hidden;
+}
+
+.match-input-group {
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
-.positions-input-area label {
+.match-input-group label {
     font-size: 0.85rem;
     font-weight: 600;
     opacity: 0.75;
 }
 
-.positions-input-area label:not(:first-child) {
-    margin-top: 10px;
-}
-
-#positions-input,
-#track-names-input,
-#team-names-input {
+.match-input {
     height: 140px;
     padding: 10px 12px;
     border: 1.5px solid var(--translucent-color);
@@ -117,12 +115,10 @@
     font: inherit;
     font-size: 0.95rem;
     resize: vertical;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    transition: border-color 0.15s;
 }
 
-#positions-input:focus,
-#track-names-input:focus,
-#team-names-input:focus {
+.match-input:focus {
     outline: none;
     border-color: var(--accent-color);
 }
@@ -330,10 +326,6 @@
 }
 
 @media screen and (max-width: 767px) {
-    .score-calculator-input-areas {
-        grid-template-columns: 1fr;
-    }
-
     .match-header-thumbnails {
         margin-left: 0;
         width: 100%;
@@ -350,11 +342,9 @@
 
     .result-box {
         width: 100%;
-        order: 2;
     }
 
     .points-diff {
-        order: 2;
         width: 100%;
         flex-shrink: unset;
     }

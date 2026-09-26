@@ -1,0 +1,89 @@
+.table-maker-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    background-color: var(--box-area-bg-color);
+    border: 1px solid var(--translucent-color);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.table-maker-team {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.table-maker-team label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0.75;
+}
+
+.table-maker-team label:not(:first-child) {
+    margin-top: 10px;
+}
+
+.table-maker-row {
+    display: flex;
+    gap: 8px;
+}
+
+.table-maker-team input[type="text"]:not(.color-picker-input),
+.table-maker-team input[type="number"],
+.table-maker-team textarea {
+    padding: 10px 12px;
+    border: 1.5px solid var(--translucent-color);
+    border-radius: calc(var(--border-radius) * 0.6);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font: inherit;
+    font-size: 0.95rem;
+    transition: border-color 0.15s;
+    min-width: 0;
+}
+
+.table-maker-team input[type="text"]:not(.color-picker-input) {
+    flex: 1;
+}
+
+.table-maker-team textarea {
+    height: 160px;
+    resize: vertical;
+}
+
+.table-maker-team input:focus,
+.table-maker-team textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+.table-maker-row .color-picker-input {
+    height: 100%;
+}
+
+.table-maker-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 16px 0;
+}
+
+.table-maker-preview {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius);
+}
+
+@media screen and (max-width: 767px) {
+    .table-maker-inputs {
+        grid-template-columns: 1fr;
+    }
+}
+
+#event-status:empty {
+    display: none;
+}

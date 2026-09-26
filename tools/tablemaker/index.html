@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="#bc0839" name="theme-color" />
+    <meta name="color-scheme" content="dark light">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-title" content="UMKL">
+    <title>Table Maker | UMKL</title>
+    <meta name="description" content="Make a UMKL styled results table for a 6v6 match">
+    <link rel="icon" href="/_assets/media/brand/favicon.jpg" type="image/png">
+    <link rel="apple-touch-icon" href="/_assets/media/brand/favicon.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
+    <link rel="stylesheet" href="/_assets/css/base/style.css">
+    <link rel="stylesheet" href="/_assets/css/components/colorpicker.css">
+    <link rel="stylesheet" href="/_assets/css/components/toggle.css">
+    <link rel="stylesheet" href="/_assets/css/pages/tablemaker.css">
+    <link rel="stylesheet" href="/_assets/css/base/settings.css">
+    <link rel="stylesheet" href="/_assets/css/components/copypopup.css">
+    <link rel="stylesheet" href="/_assets/css/ext/fontawesome.min.css">
+
+    <meta property="og:title" content="UMKL | Table Maker" />
+    <meta property="og:site_name" content="umkl.co.uk" />
+    <meta property="og:logo"
+        content="https://umkl.co.uk/_assets/media/brand/guidelines/logo_transparent_standard.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://umkl.co.uk/tools/tablemaker/" />
+    <meta property="og:image" content="https://umkl.co.uk/_assets/media/brand/UMKL_banner.avif" />
+    <meta property="og:description" content="Make a UMKL styled results table for a 6v6 match" />
+
+    <!-- Include this to make the og:image larger -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Components -->
+    <link rel="modulepreload" href="/_assets/webcomponents/navbar.js">
+    <link rel="modulepreload" href="/_assets/webcomponents/footer.js">
+    <script type="module" src="/_assets/webcomponents/navbar.js" defer></script>
+    <script type="module" src="/_assets/webcomponents/footer.js" defer></script>
+
+    <!-- Scripts -->
+    <script src="/_assets/scripts/base/theme.js"></script>
+
+    <script type="module" src="/_assets/scripts/base/settings.js" defer></script>
+    <script type="module" src="/_assets/scripts/base/smartback.js" defer></script>
+    <script type="module" src="/_assets/scripts/pages/tablemaker.js" defer></script>
+</head>
+
+<body id="top">
+    <umkl-navbar></umkl-navbar>
+
+    <main class="reading-page">
+        <div class="bubble-link-wrapper">
+            <a href="/tools/" class="bubble-link no-color-link" data-smart-back>
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24"
+                    role="presentation">
+                    <path fill="currentColor"
+                        d="M22 13H4.94l5.18 5.29-1.38 1.42-6.17-6.3a2 2 0 0 1 0-2.82l6.17-6.3 1.38 1.42L4.94 11H22z">
+                    </path>
+                </svg>
+                Back</a>
+        </div>
+        <h1>Table Maker</h1>
+        <p class="p-below-title">Make a results table for a 6v6 match</p>
+
+        <datalist id="team-list"></datalist>
+        <p id="event-status"></p>
+
+        <div class="table-maker-inputs">
+            <div class="table-maker-team" data-team="0">
+                <label for="team-name-0">Team name</label>
+                <div class="table-maker-row">
+                    <input type="text" id="team-name-0" list="team-list" placeholder="York" autocomplete="off">
+                    <span class="color-picker-field" id="team-color-field-0">
+                        <button type="button" class="color-picker-swatch" aria-label="Open colour picker"
+                            aria-expanded="false" style="background-color: #1baa8b;"></button>
+                        <input value="#1baa8b" id="team-color-0" class="color-picker-input" type="text"
+                            autocomplete="off" spellcheck="false" maxlength="7" aria-label="Team colour">
+                    </span>
+                </div>
+                <label for="players-0">Players (one per line: name score)</label>
+                <textarea translate="no" id="players-0" placeholder="Player 1 82
+Player 2 70
+Player 3 64
+Player 4 55
+Player 5 48
+Player 6 40"></textarea>
+                <label for="penalty-0">Penalty</label>
+                <input type="number" id="penalty-0" min="0" value="0">
+            </div>
+
+            <div class="table-maker-team" data-team="1">
+                <label for="team-name-1">Team name</label>
+                <div class="table-maker-row">
+                    <input type="text" id="team-name-1" list="team-list" placeholder="Staffs" autocomplete="off">
+                    <span class="color-picker-field" id="team-color-field-1">
+                        <button type="button" class="color-picker-swatch" aria-label="Open colour picker"
+                            aria-expanded="false" style="background-color: #a11212;"></button>
+                        <input value="#a11212" id="team-color-1" class="color-picker-input" type="text"
+                            autocomplete="off" spellcheck="false" maxlength="7" aria-label="Team colour">
+                    </span>
+                </div>
+                <label for="players-1">Players (one per line: name score)</label>
+                <textarea translate="no" id="players-1" placeholder="Player 7 78
+Player 8 66
+Player 9 60
+Player 10 52
+Player 11 44
+Player 12 30"></textarea>
+                <label for="penalty-1">Penalty</label>
+                <input type="number" id="penalty-1" min="0" value="0">
+            </div>
+        </div>
+
+        <div class="stats-options">
+            <label class="stats-option-row">
+                <span class="stats-option-label">Test match</span>
+                <span class="stats-toggle">
+                    <input type="checkbox" id="test-match">
+                    <span class="stats-toggle-track"></span>
+                </span>
+            </label>
+        </div>
+
+        <div class="table-maker-actions">
+            <button id="shareButton" class="bubble-link"><span class="fa-solid fa-share"></span> Share Table</button>
+            <button id="downloadButton" class="bubble-link"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none"
+                    viewBox="0 0 24 24" role="presentation">
+                    <path fill="currentColor"
+                        d="M13 3v10.17l3.59-3.58L18 11l-6 6-6-6 1.41-1.41L11 13.17V3zM4 19h16v2H4z">
+                    </path>
+                </svg> Download</button>
+            <button id="clearButton" class="bubble-link"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none"
+                    viewBox="0 0 24 24" role="presentation">
+                    <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"
+                        d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z">
+                    </path>
+                </svg> Clear</button>
+        </div>
+
+        <canvas id="table-canvas" class="table-maker-preview" width="3268" height="2430"></canvas>
+    </main>
+
+    <umkl-footer></umkl-footer>
+</body>
+
+</html>

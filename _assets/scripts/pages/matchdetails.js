@@ -511,11 +511,9 @@ document.addEventListener('keydown', async (event) => {
 })
 
 document.addEventListener("DOMContentLoaded", async () => {
-    teamColors = await getTeamcolors();
     loadFromURLParams();
     renderResults();
     if (matchName) {
-        inputArea.style.display = "block";
         const teamNames = teamNamesInput.value.trim().split('\n').map(name => name.trim());
         const locale = localStorage.getItem("locale") || "en-GB";
         const parsedMatchDate = matchDate ? new Date(matchDate) : null;
@@ -561,4 +559,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     positionsInput.addEventListener("input", renderResults);
     trackNamesInput.addEventListener("input", renderResults);
     teamNamesInput.addEventListener("input", renderResults);
+
+    try {
+        teamColors = await getTeamcolors();
+        renderResults();
+    } catch (error) {
+        console.error("Failed to fetch team colours:", error);
+    }
 });

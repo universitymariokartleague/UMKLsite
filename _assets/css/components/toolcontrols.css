@@ -1,0 +1,79 @@
+.tool-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background-color: var(--box-area-bg-color);
+    border: 1px solid var(--translucent-color);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.tool-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.tool-field label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0.75;
+}
+
+.tool-select {
+    padding: 10px 12px;
+    border: 1.5px solid var(--translucent-color);
+    border-radius: calc(var(--border-radius) * 0.6);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font: inherit;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: border-color 0.15s;
+}
+
+.tool-select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+.tool-result {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.tool-result-text {
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.tool-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 16px 0;
+}
+
+.tool-choices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 12px 0;
+}
+
+.tool-choices .bubble-link {
+    padding: 20px;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    text-align: center;
+}
+
+@media screen and (max-width: 767px) {
+    .tool-choices {
+        grid-template-columns: 1fr;
+    }
+}

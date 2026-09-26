@@ -1,13 +1,10 @@
 /*
-    Used on the team creation guidelines page to show the current team colors.
+    Reusable colour picker, also used on the team creation guidelines page
+    to preview team colours as a Discord role.
 */
+export { createColorPicker };
 
-const iframe = document.getElementById("discordRoleiFrame");
-const field = document.getElementById("colorPickerField");
-const swatchButton = document.getElementById("colorPickerSwatch");
-const input = document.getElementById("color-picker");
-
-const attractColors = [
+const DEFAULT_SWATCHES = [
     "#ff6262",
     "#ffae7f",
     "#fff588",
@@ -15,57 +12,6 @@ const attractColors = [
     "#65b5ff",
     "#ff9ad0"
 ];
-let attractMode = true;
-let attractIndex = 0;
-let attractInterval;
-
-let hue = 0, saturation = 0, value = 0;
-
-const panel = document.createElement("div");
-panel.className = "color-picker-panel";
-panel.hidden = true;
-panel.innerHTML = `
-    <div class="color-picker-gradient">
-        <div class="color-picker-gradient-marker"></div>
-    </div>
-    <div class="color-picker-hue">
-        <div class="color-picker-hue-marker"></div>
-    </div>
-    <div class="color-picker-swatches"></div>
-    <button type="button" class="color-picker-copy"></button>
-`;
-document.body.appendChild(panel);
-
-const gradient = panel.querySelector(".color-picker-gradient");
-const gradientMarker = panel.querySelector(".color-picker-gradient-marker");
-const hueSlider = panel.querySelector(".color-picker-hue");
-const hueMarker = panel.querySelector(".color-picker-hue-marker");
-const swatchesContainer = panel.querySelector(".color-picker-swatches");
-const copyButton = panel.querySelector(".color-picker-copy");
-let copyResetTimeout;
-
-copyButton.addEventListener("click", async () => {
-    try {
-        await navigator.clipboard.writeText(input.value);
-        copyButton.textContent = "Copied!";
-    } catch {
-        copyButton.textContent = "Copy failed";
-    }
-    clearTimeout(copyResetTimeout);
-    copyResetTimeout = setTimeout(() => { copyButton.textContent = `Copy ${input.value}`; }, 1500);
-});
-
-for (const color of attractColors) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.style.color = color;
-    button.setAttribute("aria-label", `Set colour to ${color}`);
-    button.addEventListener("click", () => {
-        attractMode = false;
-        setColor(color);
-    });
-    swatchesContainer.appendChild(button);
-}
 
 function hexToRgb(hex) {
     const num = parseInt(hex.slice(1), 16);
@@ -120,67 +66,12 @@ function isValidHex(hex) {
     return /^#[0-9a-f]{6}$/.test(hex);
 }
 
-function updateVisuals() {
-    const hueColor = rgbToHex(hsvToRgb(hue, 1, 1));
-    gradient.style.color = hueColor;
-    gradientMarker.style.left = `${saturation * 100}%`;
-    gradientMarker.style.top = `${(1 - value) * 100}%`;
-    gradientMarker.style.color = rgbToHex(hsvToRgb(hue, saturation, value));
-    hueMarker.style.left = `${(hue / 360) * 100}%`;
-    hueMarker.style.color = hueColor;
-}
-
-function applyColor(hex) {
-    swatchButton.style.backgroundColor = hex;
-    input.value = hex;
-    copyButton.textContent = `Copy ${hex}`;
-    iframe.contentWindow.postMessage({ type: "setRoleColor", color: hex }, "*");
-}
-
-function setColor(hex) {
-    hex = normalizeHex(hex);
-    const hsv = rgbToHsv(hexToRgb(hex));
-    hue = hsv.h; saturation = hsv.s; value = hsv.v;
-    updateVisuals();
-    applyColor(hex);
-}
-
-function openPanel() {
-    const rect = field.getBoundingClientRect();
-    panel.style.left = `${rect.left + window.scrollX}px`;
-    panel.style.top = `${rect.bottom + window.scrollY + 6}px`;
-    panel.hidden = false;
-    swatchButton.setAttribute("aria-expanded", "true");
-}
-
-function closePanel() {
-    panel.hidden = true;
-    swatchButton.setAttribute("aria-expanded", "false");
-}
-
 function pointerToRatio(event, element) {
     const rect = element.getBoundingClientRect();
     const point = event.touches ? event.touches[0] : event;
     const x = Math.min(Math.max(point.clientX - rect.left, 0), rect.width);
     const y = Math.min(Math.max(point.clientY - rect.top, 0), rect.height);
     return { x: x / rect.width, y: y / rect.height };
-}
-
-function dragGradient(event) {
-    const { x, y } = pointerToRatio(event, gradient);
-    saturation = x;
-    value = 1 - y;
-    attractMode = false;
-    updateVisuals();
-    applyColor(rgbToHex(hsvToRgb(hue, saturation, value)));
-}
-
-function dragHue(event) {
-    const { x } = pointerToRatio(event, hueSlider);
-    hue = x * 360;
-    attractMode = false;
-    updateVisuals();
-    applyColor(rgbToHex(hsvToRgb(hue, saturation, value)));
 }
 
 function startDrag(moveHandler) {
@@ -200,54 +91,171 @@ function startDrag(moveHandler) {
     document.addEventListener("touchend", onUp);
 }
 
-swatchButton.addEventListener("click", () => {
-    if (panel.hidden) openPanel(); else closePanel();
-});
+// onChange(hex, fromUser) fires on every colour change; fromUser is false for setColor() calls
+function createColorPicker(field, { onChange = () => { }, swatches = DEFAULT_SWATCHES } = {}) {
+    const swatchButton = field.querySelector(".color-picker-swatch");
+    const input = field.querySelector(".color-picker-input");
+    let hue = 0, saturation = 0, value = 0;
 
-input.addEventListener("focus", openPanel);
+    const panel = document.createElement("div");
+    panel.className = "color-picker-panel";
+    panel.hidden = true;
+    panel.innerHTML = `
+        <div class="color-picker-gradient">
+            <div class="color-picker-gradient-marker"></div>
+        </div>
+        <div class="color-picker-hue">
+            <div class="color-picker-hue-marker"></div>
+        </div>
+        <div class="color-picker-swatches"></div>
+        <button type="button" class="color-picker-copy"></button>
+    `;
+    document.body.appendChild(panel);
 
-input.addEventListener("input", () => {
-    const hex = normalizeHex(input.value);
-    if (isValidHex(hex)) {
-        attractMode = false;
-        setColor(hex);
-    }
-});
+    const gradient = panel.querySelector(".color-picker-gradient");
+    const gradientMarker = panel.querySelector(".color-picker-gradient-marker");
+    const hueSlider = panel.querySelector(".color-picker-hue");
+    const hueMarker = panel.querySelector(".color-picker-hue-marker");
+    const swatchesContainer = panel.querySelector(".color-picker-swatches");
+    const copyButton = panel.querySelector(".color-picker-copy");
+    let copyResetTimeout;
 
-document.addEventListener("click", (event) => {
-    if (!panel.hidden && !panel.contains(event.target) && !field.contains(event.target)) {
-        closePanel();
-    }
-});
-
-document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") closePanel();
-});
-
-document.addEventListener("changeDiscordRoleColor", (event) => {
-    attractMode = false;
-    setColor(event.detail.color);
-});
-
-gradient.addEventListener("mousedown", (event) => { dragGradient(event); startDrag(dragGradient); });
-gradient.addEventListener("touchstart", (event) => { dragGradient(event); startDrag(dragGradient); });
-hueSlider.addEventListener("mousedown", (event) => { dragHue(event); startDrag(dragHue); });
-hueSlider.addEventListener("touchstart", (event) => { dragHue(event); startDrag(dragHue); });
-
-setColor(input.value || "#1baa8b");
-
-iframe.addEventListener("load", () => {
-    cycleThroughAttractColors();
-});
-
-function cycleThroughAttractColors() {
-    attractInterval = setInterval(() => {
-        if (!attractMode) {
-            clearInterval(attractInterval);
-            return;
+    copyButton.addEventListener("click", async () => {
+        try {
+            await navigator.clipboard.writeText(input.value);
+            copyButton.textContent = "Copied!";
+        } catch {
+            copyButton.textContent = "Copy failed";
         }
-        setColor(attractColors[attractIndex]);
-        attractMode = true;
-        attractIndex = (attractIndex + 1) % attractColors.length;
-    }, 1000);
+        clearTimeout(copyResetTimeout);
+        copyResetTimeout = setTimeout(() => { copyButton.textContent = `Copy ${input.value}`; }, 1500);
+    });
+
+    for (const color of swatches) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.style.color = color;
+        button.setAttribute("aria-label", `Set colour to ${color}`);
+        button.addEventListener("click", () => setColor(color, true));
+        swatchesContainer.appendChild(button);
+    }
+
+    function updateVisuals() {
+        const hueColor = rgbToHex(hsvToRgb(hue, 1, 1));
+        gradient.style.color = hueColor;
+        gradientMarker.style.left = `${saturation * 100}%`;
+        gradientMarker.style.top = `${(1 - value) * 100}%`;
+        gradientMarker.style.color = rgbToHex(hsvToRgb(hue, saturation, value));
+        hueMarker.style.left = `${(hue / 360) * 100}%`;
+        hueMarker.style.color = hueColor;
+    }
+
+    function applyColor(hex, fromUser) {
+        swatchButton.style.backgroundColor = hex;
+        input.value = hex;
+        copyButton.textContent = `Copy ${hex}`;
+        onChange(hex, fromUser);
+    }
+
+    function setColor(hex, fromUser = false) {
+        hex = normalizeHex(hex);
+        if (!isValidHex(hex)) return;
+        const hsv = rgbToHsv(hexToRgb(hex));
+        hue = hsv.h; saturation = hsv.s; value = hsv.v;
+        updateVisuals();
+        applyColor(hex, fromUser);
+    }
+
+    function openPanel() {
+        const rect = field.getBoundingClientRect();
+        panel.style.left = `${rect.left + window.scrollX}px`;
+        panel.style.top = `${rect.bottom + window.scrollY + 6}px`;
+        panel.hidden = false;
+        swatchButton.setAttribute("aria-expanded", "true");
+    }
+
+    function closePanel() {
+        panel.hidden = true;
+        swatchButton.setAttribute("aria-expanded", "false");
+    }
+
+    function dragGradient(event) {
+        const { x, y } = pointerToRatio(event, gradient);
+        saturation = x;
+        value = 1 - y;
+        updateVisuals();
+        applyColor(rgbToHex(hsvToRgb(hue, saturation, value)), true);
+    }
+
+    function dragHue(event) {
+        const { x } = pointerToRatio(event, hueSlider);
+        hue = x * 360;
+        updateVisuals();
+        applyColor(rgbToHex(hsvToRgb(hue, saturation, value)), true);
+    }
+
+    swatchButton.addEventListener("click", () => {
+        if (panel.hidden) openPanel(); else closePanel();
+    });
+
+    input.addEventListener("focus", openPanel);
+
+    input.addEventListener("input", () => {
+        const hex = normalizeHex(input.value);
+        if (isValidHex(hex)) setColor(hex, true);
+    });
+
+    document.addEventListener("click", (event) => {
+        if (!panel.hidden && !panel.contains(event.target) && !field.contains(event.target)) {
+            closePanel();
+        }
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closePanel();
+    });
+
+    gradient.addEventListener("mousedown", (event) => { dragGradient(event); startDrag(dragGradient); });
+    gradient.addEventListener("touchstart", (event) => { dragGradient(event); startDrag(dragGradient); });
+    hueSlider.addEventListener("mousedown", (event) => { dragHue(event); startDrag(dragHue); });
+    hueSlider.addEventListener("touchstart", (event) => { dragHue(event); startDrag(dragHue); });
+
+    setColor(input.value || "#1baa8b");
+
+    return {
+        setColor,
+        getColor: () => input.value,
+    };
+}
+
+const iframe = document.getElementById("discordRoleiFrame");
+if (iframe) initDiscordRolePicker();
+
+function initDiscordRolePicker() {
+    let attractMode = true;
+    let attractIndex = 0;
+    let attractInterval;
+
+    const picker = createColorPicker(document.getElementById("colorPickerField"), {
+        onChange: (hex, fromUser) => {
+            if (fromUser) attractMode = false;
+            iframe.contentWindow.postMessage({ type: "setRoleColor", color: hex }, "*");
+        },
+    });
+
+    document.addEventListener("changeDiscordRoleColor", (event) => {
+        attractMode = false;
+        picker.setColor(event.detail.color);
+    });
+
+    iframe.addEventListener("load", () => {
+        attractInterval = setInterval(() => {
+            if (!attractMode) {
+                clearInterval(attractInterval);
+                return;
+            }
+            picker.setColor(DEFAULT_SWATCHES[attractIndex]);
+            attractIndex = (attractIndex + 1) % DEFAULT_SWATCHES.length;
+        }, 1000);
+    });
 }
