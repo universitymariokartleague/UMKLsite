@@ -8,21 +8,25 @@
     <title>Live Team Results</title>
     <link rel="icon" href="/_assets/media/brand/favicon.jpg" type="image/png">
     <link rel="apple-touch-icon" href="/_assets/media/brand/favicon.jpg">
-    <link rel="stylesheet" href="/_assets/css/standalone/liveresultsnew.css">
+    <link rel="stylesheet" href="/_assets/css/standalone/livescore.css">
 
     <script type="module" src="/_assets/scripts/standalone/liveresultsdisplay.js" defer></script>
     <script defer src="/_assets/scripts/base/imagefade.js" type="module"></script>
 </head>
 
 <body>
-    <h1>
-        <img loading="lazy" id="firstteamlogo" class="liveteamlogo" src="https://api.umkl.co.uk/teamemblems/DEFAULT">
-        <span id="firstteamscore">0</span>
-        -
-        <span id="secondteamscore">0</span>
-        <img loading="lazy" id="secondteamlogo" class="liveteamlogo" src="https://api.umkl.co.uk/teamemblems/DEFAULT">
-    </h1>
-    <p class="liveErrorMessage"><span id="errormessage"></span></p>
+    <div class="stage">
+        <div class="scoreboard">
+            <h1>
+                <img loading="lazy" id="firstteamlogo" class="liveteamlogo" src="https://api.umkl.co.uk/teamemblems/DEFAULT">
+                <span id="firstteamscore">0</span>
+                -
+                <span id="secondteamscore">0</span>
+                <img loading="lazy" id="secondteamlogo" class="liveteamlogo" src="https://api.umkl.co.uk/teamemblems/DEFAULT">
+            </h1>
+            <p class="liveErrorMessage"><span id="errormessage"></span></p>
+        </div>
+    </div>
 </body>
 
 </html>

@@ -14,6 +14,13 @@ const firstTeamLogo = document.getElementById("firstteamlogo");
 const secondTeamLogo = document.getElementById("secondteamlogo");
 const errorMessage = document.getElementById("errormessage");
 
+function fitStage() {
+    const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    document.documentElement.style.setProperty("--stage-scale", scale);
+}
+fitStage();
+window.addEventListener("resize", fitStage);
+
 const urlParams = new URLSearchParams(window.location.search);
 
 let swapped;

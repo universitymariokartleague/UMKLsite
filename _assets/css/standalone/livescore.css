@@ -1,19 +1,34 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 html {
-    font-size: calc(100vw / 192);
-    /* 1920 base: 1vw = 10px equivalent */
+    font-size: 10px;
 }
 
 body {
     font-family: "Montserrat", sans-serif;
-    background: #fff;
+    background: transparent;
     color: #fff;
+    margin: 0;
+    overflow: hidden;
+}
+
+/* Laid out at a fixed 1920x1080 then transform-scaled */
+.stage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 1920px;
+    height: 1080px;
+    transform-origin: 0 0;
+    transform: scale(var(--stage-scale, 1));
+}
+
+.scoreboard {
     display: flex;
     align-items: flex-start;
     flex-direction: column;
-    position: fixed;
-    top: 12px;
+    position: absolute;
+    margin: 0.8rem;
     right: 29%;
 }
 
@@ -21,13 +36,12 @@ h1 {
     font-family: "Montserrat", sans-serif;
     font-weight: 600;
     font-size: 3.5rem;
-    /* relative to html font-size above */
-    margin: 1rem 1rem 0 0;
-    text-shadow: 0 0 15px rgba(0, 0, 0, 1);
+    margin: 1rem 0.5rem 0 0;
+    text-shadow: 0 0 1.5rem rgba(0, 0, 0, 1);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 0.8rem;
 }
 
 @keyframes growText {
@@ -52,9 +66,9 @@ h1 {
 .liveteamlogo {
     height: 4rem;
     width: auto;
-    margin: 0 5px;
+    margin: 0 0.5rem;
     vertical-align: middle;
-    filter: drop-shadow(0 0 15px rgba(0, 0, 0, 1));
+    filter: drop-shadow(0 0 1.5rem rgba(0, 0, 0, 1));
 }
 
 .liveErrorMessage {
