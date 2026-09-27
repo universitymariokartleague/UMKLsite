@@ -7,6 +7,7 @@
 import { generate6v6ScoreCalculatorLink } from '/_assets/scripts/utils/matchhelper.js';
 import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareText, shareImage, showTextPopup, showImagePreview, setOriginalMessage } from '/_assets/scripts/utils/shareAPIhelper.js';
 import { createDebugLogger } from '/_assets/scripts/utils/debuglogger.js';
+import { icon } from '/_assets/scripts/utils/icons.js';
 
 const debugLog = createDebugLogger('matchcalendar.js', '#fffc45', '#fcfb9a');
 const WEEKDAY_NAMES = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
@@ -328,9 +329,9 @@ function generateCalendar(month, year, dateParam = null) {
     const adjustedWeekdayNames = WEEKDAY_NAMES.slice(startDay).concat(WEEKDAY_NAMES.slice(0, startDay));
 
     monthYear.innerHTML = `
-        <a class="month-arrow fa-solid fa-arrow-left ${(year == minYear && month == 0) ? "empty" : ""}" id="previousMonthButton"></a>
+        <a class="month-arrow ${(year == minYear && month == 0) ? "empty" : ""}" id="previousMonthButton">${icon('arrow-left')}</a>
         <span class="month-name" id="goToCurrentMonthButton">${Intl.DateTimeFormat('en', { month: 'long' }).format(new Date(year, month))} ${year}</span>
-        <a class="month-arrow fa-solid fa-arrow-right ${(year == maxYear && month == 11) ? "empty" : ""}" id="nextMonthButton"></a>
+        <a class="month-arrow ${(year == maxYear && month == 11) ? "empty" : ""}" id="nextMonthButton">${icon('arrow-right')}</a>
     `;
 
     const currentDate = new Date();
@@ -461,7 +462,7 @@ function showMonthPicker(currentDate) {
         return `<option value="${y}"${y === currentlyShownDate[0] ? ' selected' : ''}>${y}</option>`;
     }).join('')}
             </select>
-            <button title="Return to the current date" class="currentDateButton" id="currentDateButton"><i class="fa-solid fa-calendar"></i></button>
+            <button title="Return to the current date" class="currentDateButton" id="currentDateButton">${icon('calendar')}</button>
         </div>
     `;
 
@@ -606,7 +607,7 @@ function createMatchHTML(entry, index, date, locale, is12Hour, liveResults) {
                         const hours = Math.floor((totalSeconds % 86400) / 3600);
                         const minutes = Math.floor((totalSeconds % 3600) / 60);
                         const seconds = totalSeconds % 60;
-                        countdownElement.innerHTML = `<i class="fa-solid fa-clock"></i> ${days > 0 ? `${days}d ` : ''}${hours}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+                        countdownElement.innerHTML = `${icon('clock')} ${days > 0 ? `${days}d ` : ''}${hours}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
                     }
                 }, 1000);
             }, 0);
@@ -642,7 +643,7 @@ function createMatchHTML(entry, index, date, locale, is12Hour, liveResults) {
                     <div class="team-background left ${team1.class_name}"></div>
                     <div class="team-background right ${team2.class_name}"></div>
                     ${entry.testMatch ? `<div class="test-match-overlay"></div>` : `<img class="team-background-overlay" src="/_assets/media/calendar/event_box_overlay.avif" alt="Team background overlay" ${cached ? `` : 'onload="this.style.opacity=1"'} loading="lazy"/>`}
-                    ${entry.endTime ? '' : `${isLive ? `<div class="test-match-indicator" id='liveIndicator${entry.eventID}'><span style="display:flex"><div class="live-dot"></div>Live ${devMode && !entry.endTime ? `${liveResults.length + 1 > 12 ? '(Finishing up...)' : `(${liveResults.length + 1}/12)`}` : ''}</span></div>` : `<div class="test-match-indicator timer-indicator" id="matchCountdown${entry.eventID}"><i class="fa-solid fa-clock"></i> ${timeUntilMatch}</div>`}`}
+                    ${entry.endTime ? '' : `${isLive ? `<div class="test-match-indicator" id='liveIndicator${entry.eventID}'><span style="display:flex"><div class="live-dot"></div>Live ${devMode && !entry.endTime ? `${liveResults.length + 1 > 12 ? '(Finishing up...)' : `(${liveResults.length + 1}/12)`}` : ''}</span></div>` : `<div class="test-match-indicator timer-indicator" id="matchCountdown${entry.eventID}">${icon('clock')} ${timeUntilMatch}</div>`}`}
                     ${devMode && !entry.endTime ? `<div class="test-match-indicator signed-up-count">Players signed up: ${team1.team_name}: ${entry.signedUpPlayerCounts[0]} | ${team2.team_name}: ${entry.signedUpPlayerCounts[1]}</div>` : ''}
                     <div class="event-overlay" translate="no">
                         <div class="event-box-team">
@@ -670,10 +671,10 @@ function createMatchHTML(entry, index, date, locale, is12Hour, liveResults) {
                     <div class="match-date-time-box">
                         <div class="match-detail-container">
                             ${overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ``}
-                            <i class="${outsideUKTimezone ? 'local-time-clock' : ''} fa-solid fa-clock"></i>
+                            ${outsideUKTimezone ? `<span class="local-time-clock">${icon('clock')}</span>` : icon('clock')}
                             <h2>
                                 <span translate="no" title="${matchEndedText}">${formattedMatchTime}</span>
-                                ${outsideUKTimezone ? `<span translate="no" title="Local time" style="display: inline-flex; align-items: center;">|&nbsp;<i class="overseas-time-clock fa-solid fa-clock"></i>${formattedLocalMatchTime}</span>` : ''}
+                                ${outsideUKTimezone ? `<span translate="no" title="Local time" style="display: inline-flex; align-items: center;">|&nbsp;${icon('clock', 'overseas-time-clock')}${formattedLocalMatchTime}</span>` : ''}
                             </h2>
                             ${!overseasDateDisplay && dayRelation ? `<span class="dayRelation">${dayRelation}</span>` : ''}
                             ${isLive ? '<div class="live-dot"></div>' : ''}
@@ -725,7 +726,7 @@ async function showDailyLog(date, dayCell) {
 
         expandedLog.innerHTML = `
             <div class="current-season-area" style="margin-bottom:10px;">
-                <button id="shareButton"><span class="fa-solid fa-share"></span> Share</button>
+                <button id="shareButton">${icon('share')} Share</button>
             </div>
             ${sortedLog.map((entry, index) => createMatchHTML(entry, index, date, locale, is12Hour, liveResults)).join('')}
         `;
@@ -764,7 +765,7 @@ function generateCalendarListView() {
         if (!sortedMatches.length) continue;
 
         if (!todayMarkerInserted && formattedToday < date) {
-            HTMLOutput += `<div class="today-marker">Today - ${new Date(formattedToday).toLocaleDateString(locale, { dateStyle: 'long' })}</div><hr>`;
+            HTMLOutput += `<div class="today-marker">Today - ${new Date(formattedToday).toLocaleDateString(locale, { dateStyle: 'long' })}</div>`;
             todayMarkerInserted = true;
         }
 
@@ -1073,13 +1074,13 @@ function checkIfOutsideUK() {
 
     overseasMessage.classList.remove("hidden");
     overseasMessage.innerHTML = `
-        <span class="overseas-notice-icon fa-solid fa-earth"></span>
+        ${icon('earth', 'overseas-notice-icon')}
         <div class="overseas-notice-body">
             <p class="overseas-notice-title">You're outside the UK</p>
             <p class="overseas-notice-text">Match times are shown in UK time with your local time beside them. Choose which day each match is listed under:</p>
             <div class="overseas-toggle" role="group" aria-label="Match date display">
-                <button type="button" class="overseas-toggle-option" data-overseas="0"><span class="fa-solid fa-house"></span> UK date</button>
-                <button type="button" class="overseas-toggle-option" data-overseas="1"><span class="fa-solid fa-earth"></span> Local date</button>
+                <button type="button" class="overseas-toggle-option" data-overseas="0">${icon('house')} UK date</button>
+                <button type="button" class="overseas-toggle-option" data-overseas="1">${icon('earth')} Local date</button>
             </div>
         </div>
     `;

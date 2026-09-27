@@ -4,6 +4,7 @@
 */
 
 import { getMatchData } from '/_assets/scripts/utils/matchdata.js';
+import { icon } from '/_assets/scripts/utils/icons.js';
 
 const matchStatusLine = document.getElementById('matchStatusLine');
 let countdownIntervals = [];
@@ -56,7 +57,7 @@ function buildPill(match, index) {
 
     const countdownId = `matchStatusCountdown-${match.eventID || index}`;
     return {
-        html: `<a href="/schedule/" class="bubble-link bubble-link-accent"><i class="fa-solid fa-clock"></i>${teamA} vs ${teamB} in <span id="${countdownId}">${formatCountdown(matchTime - Date.now())}</span></a>`,
+        html: `<a href="/schedule/" class="bubble-link bubble-link-accent">${icon('clock')}${teamA} vs ${teamB} in <span id="${countdownId}">${formatCountdown(matchTime - Date.now())}</span></a>`,
         matchTime,
         countdownId,
     };

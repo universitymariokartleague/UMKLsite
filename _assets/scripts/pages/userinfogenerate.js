@@ -3,6 +3,7 @@
 */
 import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareImage, showImagePreview, setOriginalMessage } from '/_assets/scripts/utils/shareAPIhelper.js';
 import { createDebugLogger } from '/_assets/scripts/utils/debuglogger.js';
+import { ICON_PATHS, icon } from '/_assets/scripts/utils/icons.js';
 
 const profileCardContentHTML = `
     <div class="profile-card-header">
@@ -202,7 +203,7 @@ function generateProfileCardContent(data) {
         .replace("{{firstPlaces}}", data.first_places || "0")
         .replace("{{highestFinish}}", data.highest_finish || "N/A")
         .replace("{{cardExtraText}}", "Use /user-profile to see your own card!")
-        .replace("{{profileCustomisationButton}}", areProfileItems ? `<button class="customise-button" id="showCardProfileItemsButton"><span class="fa-solid fa-paintbrush"></span> Customise design</button>` : '');
+        .replace("{{profileCustomisationButton}}", areProfileItems ? `<button class="customise-button" id="showCardProfileItemsButton">${icon('paintbrush')} Customise design</button>` : '');
 }
 
 function generateProfileCardHTML(data) {
@@ -421,8 +422,7 @@ async function getCurrentSeason() {
     return umklFetch('https://api.umkl.co.uk/seasoninfo', { season: 0 });
 }
 
-// fa-flag-checkered, fa-gear - SP graph match/testmatch markers, unrelated to item customisation
-const eventIcons = { match: '', testmatch: '' };
+const eventIcons = { match: new Path2D(ICON_PATHS['flag-checkered']), testmatch: new Path2D(ICON_PATHS.gear) };
 
 async function createSPGraph(data) {
     const canvas = document.getElementById('spGraph');
@@ -637,15 +637,15 @@ async function createSPGraph(data) {
     const iconY = 10 * graphResScale;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = `900 ${9 * graphResScale}px "Font Awesome 6 Free"`;
+    const iconSize = 9 * graphResScale;
 
     const minIconSpacing = 12 * graphResScale;
     let lastIconX = -Infinity;
 
     extendedDates.forEach((date, index) => {
         if (index === 0) return;
-        const icon = eventIcons[history[date]?.[0]?.event];
-        if (!icon) return;
+        const eventIcon = eventIcons[history[date]?.[0]?.event];
+        if (!eventIcon) return;
 
         const timeRatio = (dateTimestamps[index] - fakeStartTime) / timeRange;
         const x = padding + timeRatio * graphWidth;
@@ -654,7 +654,11 @@ async function createSPGraph(data) {
         lastIconX = x;
 
         ctx.fillStyle = '#666';
-        ctx.fillText(icon, x, iconY);
+        ctx.save();
+        ctx.translate(x - iconSize / 2, iconY - iconSize / 2);
+        ctx.scale(iconSize / 24, iconSize / 24);
+        ctx.fill(eventIcon);
+        ctx.restore();
     });
 
     // Hover tooltips on the points
@@ -1042,7 +1046,7 @@ function createItemElement(item, index, isEquipped) {
     info.className = "item-info";
     info.innerHTML = `
         <h4 class="item-name">${item.name}</h4>
-        <span class="item-type"><span class="fa-solid fa-${item.type}"></span> ${item.type}</span>
+        <span class="item-type">${icon(item.type)} ${item.type}</span>
     `;
 
     div.appendChild(preview);

@@ -41,14 +41,15 @@
     justify-content: center;
 }
 
-.tool-icon i {
+.tool-icon .icon {
     font-size: 1.3rem;
     color: var(--brand-light);
 }
 
-.tool-icon img {
-    max-width: 30px;
-    max-height: 30px;
+.tool-icon .tool-icon-art {
+    width: 30px;
+    height: 30px;
+    color: var(--brand-light);
 }
 
 .tool-info {
@@ -87,7 +88,7 @@
         height: 44px;
     }
 
-    .tool-icon i {
+    .tool-icon .icon {
         font-size: 1.1rem;
     }
 

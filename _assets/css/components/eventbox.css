@@ -235,6 +235,7 @@
 
 .local-time-clock {
     position: relative;
+    display: inline-flex;
 }
 
 .local-time-clock::after {

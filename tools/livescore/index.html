@@ -7,8 +7,8 @@
     <meta name="color-scheme" content="dark light">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="apple-mobile-web-app-title" content="UMKL">
-    <title>Colour Picker | UMKL</title>
-    <meta name="description" content="Pick a colour on the UMKL site">
+    <title>Livescore Link | UMKL</title>
+    <meta name="description" content="Get your team's livescore overlay link to add as a Browser source in OBS">
     <link rel="icon" href="/_assets/media/brand/favicon.jpg" type="image/png">
     <link rel="apple-touch-icon" href="/_assets/media/brand/favicon.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,17 +17,17 @@
         href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
     <link rel="stylesheet" href="/_assets/css/base/style.css">
     <link rel="stylesheet" href="/_assets/css/base/settings.css">
-    <link rel="stylesheet" href="/_assets/css/components/colorpicker.css">
-    <link rel="stylesheet" href="/_assets/css/components/discordrolepreview.css">
+    <link rel="stylesheet" href="/_assets/css/components/toolcontrols.css">
 
-    <meta property="og:title" content="UMKL | Colour Picker" />
+    <meta property="og:title" content="UMKL | Livescore Link" />
     <meta property="og:site_name" content="umkl.co.uk" />
     <meta property="og:logo"
         content="https://umkl.co.uk/_assets/media/brand/guidelines/logo_transparent_standard.png" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://umkl.co.uk/tools/colourpicker/" />
+    <meta property="og:url" content="https://umkl.co.uk/tools/livescore/" />
     <meta property="og:image" content="https://umkl.co.uk/_assets/media/brand/UMKL_banner.avif" />
-    <meta property="og:description" content="Pick a colour on the UMKL site" />
+    <meta property="og:description"
+        content="Get your team's livescore overlay link to add as a Browser source in OBS" />
 
     <!-- Include this to make the og:image larger -->
     <meta name="twitter:card" content="summary_large_image">
@@ -43,8 +43,7 @@
 
     <script type="module" src="/_assets/scripts/base/settings.js" defer></script>
     <script type="module" src="/_assets/scripts/base/smartback.js" defer></script>
-    <script defer src="/_assets/scripts/base/imagefade.js" type="module"></script>
-    <script type="module" src="/_assets/scripts/components/colorpicker.js" defer></script>
+    <script type="module" src="/_assets/scripts/pages/livescorelink.js" defer></script>
 </head>
 
 <body id="top">
@@ -61,20 +60,31 @@
                 </svg>
                 Back</a>
         </div>
-        <h1>Colour Picker</h1>
-        <p class="p-below-title">Pick and visualise colours here</p>
+        <h1>Livescore Link</h1>
+        <p class="p-below-title">Get your team's livescore overlay link to add as a Browser source in OBS</p>
 
-        <div class="discordRolePreview">
-            <iframe id="discordRoleiFrame" src="/rules/faq/discordrole.html" frameborder="0"></iframe>
+        <div class="tool-panel">
+            <div class="tool-field">
+                <label for="team-select">Your team</label>
+                <select id="team-select" class="tool-select">
+                    <option value="" disabled selected>Loading teams...</option>
+                </select>
+            </div>
+            <div class="tool-result">
+                <code translate="no" class="tool-result-text"><span id="livescore-link">Pick a team</span></code>
+                <button id="copyButton" class="bubble-link" disabled><svg class="icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" role="presentation"><path fill="currentColor" d="M8 2h11a2 2 0 0 1 2 2v12h-2V4H8zM5 6h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2m0 2v12h10V8z"></path></svg> Copy
+                    link</button>
+            </div>
         </div>
 
-        <p class="color-picker square">
-            <span class="color-picker-field" id="colorPickerField">
-                <button type="button" class="color-picker-swatch" id="colorPickerSwatch" aria-label="Open colour picker"
-                    aria-expanded="false" style="background-color: #1baa8b;"></button>
-                <input value="#1baa8b" id="color-picker" class="color-picker-input" type="text" autocomplete="off"
-                    spellcheck="false" maxlength="7" aria-label="Colour value">
-            </span>
+        <div class="tool-actions">
+            <a id="previewButton" class="bubble-link no-color-link" target="_blank" hidden><svg class="icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" role="presentation"><path fill="currentColor" d="M4 2h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-5.5l.5 3h2a1 1 0 0 1 0 2H7a1 1 0 0 1 0-2h2l.5-3H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2"></path></svg> Open preview</a>
+        </div>
+
+        <p>In OBS, add a new <strong>Browser</strong> source, paste the link into the URL field and set the size to
+            match your OBS' output resolution (for example: 1920 &times; 1080). The team logos and scores update
+            automatically once your match
+            starts. See the <a href="/rules/stream/#adding-sources-in-obs">stream guide</a> for the full OBS setup.
         </p>
     </main>
 

@@ -6,6 +6,7 @@
 
 import { halloweenEasterEgg, winterEasterEgg, newYearCountDown, newYearFireworks } from '/_assets/scripts/base/eastereggs.js';
 import { createDebugLogger } from '/_assets/scripts/utils/debuglogger.js';
+import { icon } from '/_assets/scripts/utils/icons.js';
 
 const debugLog = createDebugLogger('settings.js', '#ff4576', '#ff9eb8');
 export { toggleSettingsPanel, disableThemeShortcut, disableSettingsShortcut }
@@ -94,7 +95,7 @@ const icons = {
 function segmentedControl(id, options) {
     return `
         <div class="settings-segmented" id="${id}">
-            ${options.map(o => `<button data-value="${o.value}" class="${o.active ? 'active' : ''}">${o.fa ? `<span class="fa-solid fa-${o.fa}"></span>` : (o.icon ? icons[o.icon] : '')}${o.label}</button>`).join('')}
+            ${options.map(o => `<button data-value="${o.value}" class="${o.active ? 'active' : ''}">${o.fa ? icon(o.fa) : (o.icon ? icons[o.icon] : '')}${o.label}</button>`).join('')}
         </div>
     `;
 }

@@ -65,7 +65,7 @@
     overflow: hidden;
 }
 
-.match-header-thumbnails .video-title .fa-play {
+.match-header-thumbnails .video-title .icon {
     font-size: 0.9em;
     opacity: 0.7;
 }
@@ -290,10 +290,12 @@
 }
 
 .extra-info-box summary::after {
-    content: "\f078";
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 0.8em;
+    content: "";
+    width: 0.8em;
+    height: 0.8em;
+    background-color: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10.92 19.08Q11.39 19.5 12 19.5Q12.61 19.5 13.08 19.08L22.08 10.08Q22.5 9.61 22.5 9Q22.5 8.39 22.08 7.92Q21.61 7.5 21 7.5Q20.39 7.5 19.92 7.92L12 15.89L4.08 7.92Q3.61 7.5 3 7.5Q2.39 7.5 1.92 7.92Q1.5 8.39 1.5 9Q1.5 9.61 1.92 10.08L10.92 19.08Z'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10.92 19.08Q11.39 19.5 12 19.5Q12.61 19.5 13.08 19.08L22.08 10.08Q22.5 9.61 22.5 9Q22.5 8.39 22.08 7.92Q21.61 7.5 21 7.5Q20.39 7.5 19.92 7.92L12 15.89L4.08 7.92Q3.61 7.5 3 7.5Q2.39 7.5 1.92 7.92Q1.5 8.39 1.5 9Q1.5 9.61 1.92 10.08L10.92 19.08Z'/%3E%3C/svg%3E") center / contain no-repeat;
     opacity: 0.6;
     transition: transform 0.15s ease;
 }

@@ -1,3 +1,5 @@
+import { icon } from '/_assets/scripts/utils/icons.js';
+
 const API_URL = `https://api.umkl.co.uk/videos`;
 const SKELETON_CARD_COUNT = 12;
 
@@ -131,7 +133,7 @@ function buildVideoCard(item, locale, searchTerm) {
         <div class="video-thumb-wrapper">
             <img src="${thumbnailUrl}" alt="${escapeHTML(title)}" loading="lazy" />
         </div>
-        <h4 class="video-title no-color-link"><i class="fa-solid fa-play"></i> ${highlightMatch(title, searchTerm)}</h4>
+        <h4 class="video-title no-color-link">${icon('play')} ${highlightMatch(title, searchTerm)}</h4>
         ${dateStr ? `<p class="video-date">${dateStr}</p>` : ""}
     `;
 

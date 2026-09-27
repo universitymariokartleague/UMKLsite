@@ -4,6 +4,7 @@
 */
 import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareImage, showImagePreview, setOriginalMessage } from '/_assets/scripts/utils/shareAPIhelper.js';
 import { resolveTrackName, getTrackIconPath } from '/_assets/scripts/utils/tracknames.js';
+import { icon } from '/_assets/scripts/utils/icons.js';
 
 const inputArea = document.getElementById("inputArea");
 const positionsInput = document.getElementById("positions-input");
@@ -533,7 +534,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <div class="video-thumb-wrapper">
                         ${thumbnailImg}
                     </div>
-                    <h4 class="video-title no-color-link"><i class="fa-solid fa-play"></i> ${label}</h4>
+                    <h4 class="video-title no-color-link">${icon('play')} ${label}</h4>
                 </a>`;
             }).join('')}</div>`
             : '';
@@ -542,7 +543,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <div class="match-header-info">
                     <h2>${matchName}</h2>
                     ${matchDateStr ? `<p class="match-date">${matchDateStr}</p>` : ''}
-                    <button id="shareButton" class="bubble-link"><span class="fa-solid fa-share"></span> Share Results Graph</button>
+                    <button id="shareButton" class="bubble-link">${icon('share')} Share Results Graph</button>
                 </div>
                 ${livestreamThumbnailsHTML}
             </div>`;

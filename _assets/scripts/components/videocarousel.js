@@ -1,3 +1,5 @@
+import { icon } from '/_assets/scripts/utils/icons.js';
+
 const API_URL = `https://api.umkl.co.uk/videos`;
 const DEFAULT_VIDEO_COUNT = 12;
 const TEAM_VIDEO_COUNT = 7;
@@ -85,7 +87,7 @@ async function loadVideoCarousel() {
                 <div class="video-thumb-wrapper">
                     <img src="https://wsrv.nl/?height=300&q=50&output=webp&url=${thumbnailUrl}" alt="${title}" loading="lazy" />
                 </div>
-                <p class="video-title no-color-link"><i class="fa-solid fa-play"></i> ${title}</p>
+                <p class="video-title no-color-link">${icon('play')} ${title}</p>
                 ${dateStr ? `<p class="video-date">${dateStr}</p>` : ""}
             `;
 

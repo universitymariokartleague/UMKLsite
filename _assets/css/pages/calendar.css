@@ -154,7 +154,6 @@
     transition: background-color 0.12s ease, color 0.12s ease;
 }
 
-/* .month prefix beats Font Awesome's later `.fa-solid { display: inline-block }` */
 .month .month-arrow {
     display: flex;
     align-items: center;
