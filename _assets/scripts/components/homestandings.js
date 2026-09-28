@@ -6,27 +6,72 @@
 const JSTeamTable = document.getElementById("HomeJSTeamTable");
 const JSTeamTableLoading = document.getElementById("HomeTeamTableLoading");
 const SeasonTop3 = document.getElementById("HomeSeasonTop3");
+const SeasonHeading = document.getElementById("HomeSeasonHeading");
 const SeasonFlavourText = document.getElementById("HomeSeasonFlavourText");
+const StandingsCard = document.getElementById("HomeStandingsCard");
+const HomeTeamGrid = document.getElementById("HomeTeamGrid");
 const toggleShowAllBtn = document.getElementById("toggleShowAll");
 
 const API_BASE = 'https://api.umkl.co.uk';
 const CACHE_KEY = 'teamDataCache';
 const SEASON_CACHE_KEY = 'seasonInfoCache';
+const FALLBACK_SEASON = 3;
 
 const SEASON_FLAVOUR_TEXT = {
     ongoing: "Check out the current standings below!",
     completed: "Check out the final results from this season below!",
     concluded: "Check out the final results from this season below!",
-    upcoming: "This season hasn't started yet, check back soon for the standings!",
+    upcoming: "This season's about to start, check the schedule for upcoming matches!",
 };
 
 let allTeamsData = [];
 let isExpanded = false;
 let hasRenderedStandings = false;
 
+function renderSeasonHeading(season) {
+    const seasonNumber = parseInt(season);
+    if (!SeasonHeading || isNaN(seasonNumber)) return;
+    SeasonHeading.textContent = `Season ${seasonNumber}`;
+}
+
 function renderSeasonFlavourText(status) {
     if (!SeasonFlavourText || !status) return;
     SeasonFlavourText.textContent = SEASON_FLAVOUR_TEXT[status.toLowerCase()] || "Check out the standings";
+}
+
+// Before a season really starts every team is on 0 points so show a grid of the teams competing
+const hasSeasonStarted = (data) => data.some(team => Number(team.team_season_points) !== 0);
+
+function setStandingsPreviewVisible(visible) {
+    if (SeasonTop3) SeasonTop3.hidden = !visible;
+    if (StandingsCard) StandingsCard.hidden = !visible;
+}
+
+function renderHomeTeamGrid(data) {
+    if (!HomeTeamGrid) return;
+
+    HomeTeamGrid.innerHTML = data.map(team => {
+        const name = team.team_name;
+        const avif = `https://api.umkl.co.uk/teamemblems/${name.toUpperCase()}`;
+        const dest = `/teams/details/?team=${encodeURIComponent(name)}`;
+        const backgroundImage = `linear-gradient(90deg, ${team.team_color} 0%, ${darkenColor(team.team_color, 10)} 100%)`;
+        const color = team.team_color ? (isLightColor(team.team_color) ? 'var(--brand-dark)' : 'var(--brand-light)') : '';
+
+        return `
+            <div class="home-team-card" data-href="${dest}" style="background-image: ${backgroundImage}; color: ${color};">
+                <div class="teamStandingPattern" style="background-color: ${team.team_color};"></div>
+                <div translate="no" class="home-team-name" title="${team.team_full_name || name}">${name}</div>
+                <div class="home-team-emblem">
+                    <picture>
+                        <source srcset="${avif}" type="image/avif">
+                        <img src="${avif}" alt="${name} logo" loading="lazy">
+                    </picture>
+                </div>
+            </div>
+        `;
+    }).join("");
+
+    HomeTeamGrid.hidden = data.length === 0;
 }
 
 function renderStandingsSkeleton() {
@@ -162,6 +207,21 @@ async function renderHomeStandings(data) {
     allTeamsData = data;
     if (JSTeamTableLoading) JSTeamTableLoading.innerHTML = "";
 
+    const showPreview = hasSeasonStarted(data);
+    setStandingsPreviewVisible(showPreview);
+
+    if (!showPreview) {
+        SeasonTop3.innerHTML = "";
+        JSTeamTable.innerHTML = "";
+        renderHomeTeamGrid(data);
+        return;
+    }
+
+    if (HomeTeamGrid) {
+        HomeTeamGrid.innerHTML = "";
+        HomeTeamGrid.hidden = true;
+    }
+
     const sorted = data.slice().sort((a, b) => Number(b.team_season_points) - Number(a.team_season_points));
 
     const positionMap = new Map();
@@ -254,6 +314,11 @@ SeasonTop3?.addEventListener("click", (e) => {
     if (card) window.location.href = card.dataset.href;
 });
 
+HomeTeamGrid?.addEventListener("click", (e) => {
+    const card = e.target.closest("[data-href]");
+    if (card) window.location.href = card.dataset.href;
+});
+
 JSTeamTable?.addEventListener("click", (e) => {
     const row = e.target.closest(".standings-row");
     if (row?.dataset.href) window.location.href = row.dataset.href;
@@ -276,10 +341,13 @@ toggleShowAllBtn?.addEventListener("click", (e) => {
 document.addEventListener("DOMContentLoaded", async () => {
     renderStandingsSkeleton();
 
-    let currentSeason = 3;
+    let currentSeason = FALLBACK_SEASON;
+    renderSeasonHeading(currentSeason);
+
     const seasonCache = getSeasonInfoCache();
     if (seasonCache[0] != null) {
-        currentSeason = parseInt(seasonCache[0]) || 3;
+        currentSeason = parseInt(seasonCache[0]) || FALLBACK_SEASON;
+        renderSeasonHeading(currentSeason);
         renderSeasonFlavourText(seasonCache[0]?.[1]);
     }
 
@@ -300,6 +368,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!isNaN(liveSeason)) {
             currentSeason = liveSeason;
             setSeasonInfoCache(0, seasonInfo);
+            renderSeasonHeading(currentSeason);
             renderSeasonFlavourText(seasonInfo[1]);
         }
     } catch { }

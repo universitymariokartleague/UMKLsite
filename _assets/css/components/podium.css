@@ -10,6 +10,10 @@
     align-items: end;
 }
 
+.podium-grid[hidden] {
+    display: none;
+}
+
 .podium-card {
     border-radius: var(--border-radius);
     padding: 22px;
@@ -136,9 +140,67 @@
 
 .full-standings-wrapper {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    gap: 10px;
     margin-top: var(--section-spacing);
+}
+
+/* Shown instead of the podium and table before a season kicks off. There are no
+   points to rank yet, so it just shows who is competing. */
+.home-team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    /* 1fr rows share the available height equally, so every row ends up the same
+       height. min-height stays auto, so a row can never clip its contents. */
+    grid-auto-rows: 1fr;
+    align-items: stretch;
+    gap: 14px;
+    margin-bottom: 30px;
+}
+
+.home-team-grid[hidden] {
+    display: none;
+}
+
+.home-team-card {
+    border-radius: var(--border-radius);
+    padding: 14px 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 76px;
+    position: relative;
+    overflow: hidden;
+    /* Contains pattern within rounded card corners */
+    isolation: isolate;
+    font-weight: 1000;
+}
+
+.home-team-card:hover .home-team-name {
+    text-decoration: underline;
+}
+
+.home-team-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.home-team-emblem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.home-team-emblem img {
+    width: 52px;
+    height: 52px;
 }
 
 .teamStandingPattern {
@@ -154,7 +216,8 @@
     opacity: 1;
 }
 
-.podium-card> :not(.teamStandingPattern) {
+.podium-card> :not(.teamStandingPattern),
+.home-team-card> :not(.teamStandingPattern) {
     position: relative;
     z-index: 1;
 }
@@ -216,6 +279,15 @@
 
     .podium-team-name {
         font-size: 1.1rem;
+    }
+
+    .home-team-card {
+        padding: 10px 12px;
+    }
+
+    .home-team-emblem img {
+        width: 40px;
+        height: 40px;
     }
 
     .podium-emblem img,

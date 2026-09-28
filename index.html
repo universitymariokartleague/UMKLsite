@@ -153,7 +153,7 @@
         </div>
 
         <div class="section section-band">
-            <h2 class="section-title">Season 2</h2>
+            <h2 class="section-title" id="HomeSeasonHeading">Season 3</h2>
             <p class="p-below-title" id="HomeSeasonFlavourText">Check out the standings</p>
             <div class="standings-container">
                 <!-- Static skeleton so the layout has content on first paint, before homestandings.js runs. Keep in sync with renderStandingsSkeleton() in homestandings.js -->
@@ -202,7 +202,11 @@
                     </div>
                 </div>
 
-                <div class="standings-card-wrapper">
+                <!-- Shown in place of the podium and table when nobody has a point
+                     on the board yet, so there is nothing to rank. -->
+                <div id="HomeTeamGrid" class="home-team-grid" hidden></div>
+
+                <div class="standings-card-wrapper" id="HomeStandingsCard">
                     <div id="HomeTeamTableLoading"></div>
                     <div id="HomeJSTeamTable">
                         <table class="standings-table">
@@ -315,6 +319,7 @@
                 </div>
 
                 <div class="full-standings-wrapper">
+                    <a href="/schedule/" class="bubble-link bubble-link-accent">Check the schedule</a>
                     <a href="/standings/" class="bubble-link no-color-link">View full standings</a>
                 </div>
             </div>
