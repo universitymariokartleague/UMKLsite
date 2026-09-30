@@ -1,4 +1,12 @@
-export { generate6v6ScoreCalculatorLink };
+export { generate6v6ScoreCalculatorLink, getRacePositions };
+
+// fallback
+function getRacePositions(entry, race, seat) {
+    const id = entry?.results?.[seat]?.[0];
+    const byId = id != null ? race[String(id)] : undefined;
+    const bySeat = race[String(seat + 1)];
+    return Array.isArray(byId) ? byId : bySeat;
+}
 
 function generate6v6ScoreCalculatorLink(entry, date) {
     const url = new URL("/tools/matchdetails/", window.location.origin);
@@ -6,7 +14,8 @@ function generate6v6ScoreCalculatorLink(entry, date) {
     if (!entry.detailedResults) return '';
 
     const positionsString = entry.detailedResults
-        .map(race => race[1].join(',')) // take only the "1" array - {1: Array(6), 2: Array(6), track: 'GCN Baby Park'}
+        // only the first team's finishes are stored - the opponent's are the remaining positions
+        .map(race => getRacePositions(entry, race, 0)?.join(','))
         .join('\n');
 
     const tracksString = entry.detailedResults
