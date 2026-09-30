@@ -379,7 +379,17 @@ export const TRACKS = {
         "Bowser's Castle",
         "Acorn Heights",
         "Mario Circuit",
-        "Rainbow Road"
+        "Rainbow Road",
+        "SNES Mario Circuit 1",
+        "SNES Mario Circuit 2",
+        "SNES Mario Circuit 3",
+        "SNES Ghost Valley 1",
+        "SNES Ghost Valley 2",
+        "SNES Ghost Valley 3",
+        "SNES Choco Island 1",
+        "SNES Choco Island 2",
+        "SNES Vanilla Lake 1",
+        "SNES Koopa Beach 1",
     ],
     WORLD_ROUTES: [
         "Acorn Heights → Boo Cinema",
