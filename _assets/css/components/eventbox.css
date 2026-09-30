@@ -152,14 +152,14 @@
     top: 10px;
     right: 10px;
     padding: 5px 10px;
-    color: #fff;
+    color: var(--brand-dark);
     font-weight: 600;
     letter-spacing: 0.2px;
-    background-color: color-mix(in srgb, var(--brand-dark) 55%, transparent);
+    background-color: var(--brand-light);
     -webkit-backdrop-filter: blur(6px);
     backdrop-filter: blur(6px);
     border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: var(--border-radius-pill);
+    border-radius: var(--border-radius);
     z-index: 3;
 }
 
@@ -486,7 +486,6 @@
     .score-box {
         font-size: 5vmin;
         padding: 1.6vmin 3vmin;
-        border-radius: var(--border-radius-pill);
     }
 
     .match-detail-container {
