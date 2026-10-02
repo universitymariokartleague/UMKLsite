@@ -28,7 +28,7 @@
 }
 
 .match-thumbnail {
-    width: 160px;
+    width: 140px;
     text-decoration: none;
     color: var(--text-color);
     display: flex;

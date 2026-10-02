@@ -271,16 +271,27 @@ const highlightMatch = (text, term) => {
     return escaped.replace(regex, '<mark class="search-highlight">$1</mark>');
 };
 
+const normalizeSearchText = (str) =>
+    str.toLowerCase().replace(/[()]/g, ' ').replace(/\bvs?\b/g, ' ').replace(/\s+/g, ' ').trim();
+
 const matchesCalendarSearch = (entry, formattedDateLower, term) => {
     if (!term) return true;
 
     const seasonQuery = term.match(/^season\s*(\d+)$/i);
     if (seasonQuery) return entry.season === parseInt(seasonQuery[1], 10);
-    if (term === 'test match') return !!entry.testMatch;
 
-    const teams = entry.teamsInvolved.join(' ').toLowerCase();
-    const description = (entry.description || '').toLowerCase();
-    return teams.includes(term) || description.includes(term) || formattedDateLower.includes(term);
+    let requiresTestMatch = false;
+    let query = term;
+    if (/\btest\s+match\b/.test(query)) {
+        requiresTestMatch = true;
+        query = query.replace(/\btest\s+match\b/g, ' ').replace(/\s+/g, ' ').trim();
+    }
+    if (requiresTestMatch && !entry.testMatch) return false;
+    if (!query) return requiresTestMatch;
+
+    const teams = normalizeSearchText(entry.teamsInvolved.join(' '));
+    const description = normalizeSearchText(entry.description || '');
+    return teams.includes(query) || description.includes(query) || formattedDateLower.includes(query);
 };
 
 const autoLink = (text) => {
@@ -876,7 +887,7 @@ function setupCalendarSearch() {
         calendarSearchClear?.classList.toggle("visible", e.target.value.length > 0);
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
-            calendarSearchTerm = e.target.value.trim().toLowerCase();
+            calendarSearchTerm = normalizeSearchText(e.target.value);
             generateCalendarListView();
         }, 50);
     });
@@ -890,9 +901,6 @@ function setupCalendarSearch() {
     });
 }
 
-// Chromium's native scrollTo({behavior:'smooth'}) tends to get stuck after a
-// handful of redirected in-flight animations, so drive the scroll ourselves -
-// only one rAF loop ever owns the element's scrollTop at a time.
 let scrollAnimationStartTime = 0;
 function animateScrollTo(el, top, duration = 350) {
     if (listScrollAnimationFrame) cancelAnimationFrame(listScrollAnimationFrame);
@@ -912,12 +920,6 @@ function animateScrollTo(el, top, duration = 350) {
     listScrollAnimationFrame = requestAnimationFrame(step);
 }
 
-// A user grabbing the wheel/trackpad/touch mid-animation should always win -
-// otherwise the rAF loop keeps fighting their input and the list feels stuck.
-// But scrolling up to reveal and click an earlier date almost always leaves
-// trailing trackpad/wheel momentum firing for a couple hundred ms afterward,
-// which would otherwise cancel the resulting jump-to-date animation right as
-// it starts - so ignore cancellation requests in that short grace window.
 function cancelListScrollAnimation() {
     if (!listScrollAnimationFrame) return;
     if (performance.now() - scrollAnimationStartTime < 250) return;
@@ -1111,7 +1113,15 @@ window.addEventListener('resize', debounce(lockCalendarSidebarHeight, 150));
 let keySequence = [];
 let isKeyPressed = false;
 
+const isTypingTarget = (e) => {
+    const el = e.target;
+    if (!(el instanceof HTMLElement)) return false;
+    if (el.isContentEditable) return true;
+    return el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT';
+};
+
 const handleKeyNavigation = (e) => {
+    if (isTypingTarget(e)) return;
     const key = e.key.toLowerCase();
     if (!isKeyPressed) {
         let newDate;
@@ -1172,7 +1182,7 @@ const updateFetch = async () => {
 
 document.addEventListener('keydown', handleKeyNavigation);
 document.addEventListener('keyup', () => { isKeyPressed = false; });
-document.addEventListener('keydown', (e) => { if (e.key.toLowerCase() === 's') generateMatchImage(); });
+document.addEventListener('keydown', (e) => { if (isTypingTarget(e)) return; if (e.key.toLowerCase() === 's') generateMatchImage(); });
 
 async function generateMatchImage() {
     try {
