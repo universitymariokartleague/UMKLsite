@@ -279,7 +279,8 @@ function renderTeamSummary(teamData) {
 
 function generateTeamBox(teamData, showError) {
     const teamNameUpper = teamData.team_name.toUpperCase();
-    const logoUrl = `https://api.umkl.co.uk/teamemblems/${teamNameUpper}?og`;
+    const logoUrl = `https://api.umkl.co.uk/teamemblems/${teamNameUpper}?med`;
+    const logoHq = `https://api.umkl.co.uk/teamemblems/${teamNameUpper}?og`;
 
     latestSeason = teamData.season;
     viewingSeason = latestSeason;
@@ -298,7 +299,7 @@ function generateTeamBox(teamData, showError) {
     if (heroLogo) {
         heroLogo.src = logoUrl;
         heroLogo.alt = `${makePossessive(teamData.team_name)} team logo`;
-        document.getElementById('teamHeroLogoLink')?.setAttribute('href', logoUrl);
+        document.getElementById('teamHeroLogoLink')?.setAttribute('href', logoHq);
     }
 
     const teamNameBox = document.getElementById('teamNameBox');
