@@ -1,12 +1,4 @@
-export { generate6v6ScoreCalculatorLink, getRacePositions };
-
-// fallback
-function getRacePositions(entry, race, seat) {
-    const id = entry?.results?.[seat]?.[0];
-    const byId = id != null ? race[String(id)] : undefined;
-    const bySeat = race[String(seat + 1)];
-    return Array.isArray(byId) ? byId : bySeat;
-}
+export { generate6v6ScoreCalculatorLink };
 
 function generate6v6ScoreCalculatorLink(entry, date) {
     const url = new URL("/tools/matchdetails/", window.location.origin);
@@ -15,7 +7,7 @@ function generate6v6ScoreCalculatorLink(entry, date) {
 
     const positionsString = entry.detailedResults
         // only the first team's finishes are stored - the opponent's are the remaining positions
-        .map(race => getRacePositions(entry, race, 0)?.join(','))
+        .map(race => race["1"]?.join(','))
         .join('\n');
 
     const tracksString = entry.detailedResults

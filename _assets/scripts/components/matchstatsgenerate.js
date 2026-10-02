@@ -3,7 +3,6 @@
 */
 
 import { getMatchData } from '/_assets/scripts/utils/matchdata.js';
-import { getRacePositions } from '/_assets/scripts/utils/matchhelper.js';
 import { createDebugLogger } from '/_assets/scripts/utils/debuglogger.js';
 
 const debugLog = createDebugLogger('matchstatsgenerate.js', '#ff52dc', '#ffa3ed');
@@ -148,8 +147,9 @@ async function generateMatchStatsBox(showError) {
 
             for (const result of match.detailedResults) {
                 const track = result.track;
-                const positions1 = getRacePositions(match, result, 0) || [];
-                const positions2 = getRacePositions(match, result, 1) || [];
+                // race objects are keyed by seat ("1"/"2"), not by team ID
+                const positions1 = result["1"] || [];
+                const positions2 = result["2"] || [];
 
                 const score1 = positions1.reduce((sum, pos) => sum + calculateScore(pos), 0);
                 const score2 = positions2.reduce((sum, pos) => sum + calculateScore(pos), 0);
