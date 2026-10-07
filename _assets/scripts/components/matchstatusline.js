@@ -9,10 +9,10 @@ import { icon } from '/_assets/scripts/utils/icons.js';
 const matchStatusLine = document.getElementById('matchStatusLine');
 let countdownIntervals = [];
 
-// setTimeout clamps anything above this to 1ms, which would spin re-renders
+// save CPU cycles
 const MAX_TIMEOUT = 2 ** 31 - 1;
 
-// Closer than this and the pill shows a ticking countdown instead of "tomorrow"
+// Show a countdown when under this value instead of "tomorrow"
 const COUNTDOWN_WINDOW_MS = 12 * 60 * 60 * 1000;
 
 const pad = n => String(n).padStart(2, '0');
@@ -65,10 +65,6 @@ function buildPill(match, index) {
         };
     }
 
-    // Within 12 hours the countdown is actionable, so it ticks. Further out it's
-    // just "11:59:59"-style filler, so name the day instead. Matches are only ever
-    // today or tomorrow, but a late match today is still >12h out, so don't assume
-    // "tomorrow" here.
     const diffMs = matchTime.getTime() - Date.now();
     if (diffMs >= COUNTDOWN_WINDOW_MS) {
         const dayLabel = match.matchDate === formatDate(new Date()) ? 'today' : 'tomorrow';
@@ -76,8 +72,6 @@ function buildPill(match, index) {
             html: `<a href="${href}" class="bubble-link bubble-link-accent">${icon('clock')}${teamA} vs ${teamB} ${dayLabel}</a>`,
             matchTime,
             countdownId: null,
-            // Re-render as soon as the countdown window opens, so the pill picks up
-            // a ticking countdown instead of sitting on "tomorrow" until kick-off
             refreshAt: matchTime.getTime() - COUNTDOWN_WINDOW_MS,
         };
     }
@@ -104,8 +98,6 @@ function render(matchData) {
     matchStatusLine.innerHTML = pills.map(p => p.html).join('');
 
     pills.forEach(pill => {
-        // Pills with no countdown just need a re-render at some point in the
-        // future, so they don't stay stuck on stale wording
         if (!pill.countdownId) {
             if (!pill.refreshAt) return;
 
