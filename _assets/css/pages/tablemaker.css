@@ -137,6 +137,39 @@
     font-weight: 600;
 }
 
+/* Flagged player lines are marked using the textarea's own selection, so this
+   colours that selection (and ordinary text selection with it). */
+.table-maker-team textarea::selection {
+    background-color: var(--accent-color);
+    color: #fff;
+}
+
+.import-modal-jump {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.import-modal-jump-btn {
+    flex-shrink: 0;
+    padding: 5px 12px;
+    border: 1.5px solid var(--accent-color);
+    border-radius: calc(var(--border-radius) * 0.6);
+    background-color: transparent;
+    color: var(--accent-color);
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.import-modal-jump-btn:hover {
+    background-color: var(--accent-color);
+    color: #fff;
+}
+
 .corner-stack {
     position: fixed;
     right: 16px;

@@ -474,6 +474,10 @@
         font-size: 2vmin;
     }
 
+    .event-box-team h2 {
+        font-size: clamp(1rem, 2.5vw, 2rem);
+    }
+
     .event-box-team .youtube-box {
         width: 3.5vmin;
     }

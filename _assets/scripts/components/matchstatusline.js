@@ -9,6 +9,12 @@ import { icon } from '/_assets/scripts/utils/icons.js';
 const matchStatusLine = document.getElementById('matchStatusLine');
 let countdownIntervals = [];
 
+// setTimeout clamps anything above this to 1ms, which would spin re-renders
+const MAX_TIMEOUT = 2 ** 31 - 1;
+
+// Closer than this and the pill shows a ticking countdown instead of "tomorrow"
+const COUNTDOWN_WINDOW_MS = 12 * 60 * 60 * 1000;
+
 const pad = n => String(n).padStart(2, '0');
 const formatDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
@@ -38,7 +44,10 @@ function formatCountdown(diffMs) {
 }
 
 function clearAllCountdowns() {
-    countdownIntervals.forEach(id => clearInterval(id));
+    countdownIntervals.forEach(id => {
+        clearInterval(id);
+        clearTimeout(id);
+    });
     countdownIntervals = [];
 }
 
@@ -46,18 +55,36 @@ function buildPill(match, index) {
     const [teamA, teamB] = match.teamsInvolved || ['TBC', 'TBC'];
     const matchTime = new Date(`${match.matchDate}T${match.time || '00:00:00'}`);
     const isLive = matchTime.getTime() <= Date.now();
+    const href = `/schedule/?date=${match.matchDate}`;
 
     if (isLive) {
         return {
-            html: `<a href="/schedule/" class="bubble-link bubble-link-accent"><div class="live-dot"></div>Live now: ${teamA} vs ${teamB}</a>`,
+            html: `<a href="${href}" class="bubble-link bubble-link-accent"><div class="live-dot"></div>Live now: ${teamA} vs ${teamB}</a>`,
             matchTime,
             countdownId: null,
         };
     }
 
+    // Within 12 hours the countdown is actionable, so it ticks. Further out it's
+    // just "11:59:59"-style filler, so name the day instead. Matches are only ever
+    // today or tomorrow, but a late match today is still >12h out, so don't assume
+    // "tomorrow" here.
+    const diffMs = matchTime.getTime() - Date.now();
+    if (diffMs >= COUNTDOWN_WINDOW_MS) {
+        const dayLabel = match.matchDate === formatDate(new Date()) ? 'today' : 'tomorrow';
+        return {
+            html: `<a href="${href}" class="bubble-link bubble-link-accent">${icon('clock')}${teamA} vs ${teamB} ${dayLabel}</a>`,
+            matchTime,
+            countdownId: null,
+            // Re-render as soon as the countdown window opens, so the pill picks up
+            // a ticking countdown instead of sitting on "tomorrow" until kick-off
+            refreshAt: matchTime.getTime() - COUNTDOWN_WINDOW_MS,
+        };
+    }
+
     const countdownId = `matchStatusCountdown-${match.eventID || index}`;
     return {
-        html: `<a href="/schedule/" class="bubble-link bubble-link-accent">${icon('clock')}${teamA} vs ${teamB} in <span id="${countdownId}">${formatCountdown(matchTime - Date.now())}</span></a>`,
+        html: `<a href="${href}" class="bubble-link bubble-link-accent">${icon('clock')}${teamA} vs ${teamB} in <span id="${countdownId}">${formatCountdown(diffMs)}</span></a>`,
         matchTime,
         countdownId,
     };
@@ -77,7 +104,21 @@ function render(matchData) {
     matchStatusLine.innerHTML = pills.map(p => p.html).join('');
 
     pills.forEach(pill => {
-        if (!pill.countdownId) return;
+        // Pills with no countdown just need a re-render at some point in the
+        // future, so they don't stay stuck on stale wording
+        if (!pill.countdownId) {
+            if (!pill.refreshAt) return;
+
+            const delay = pill.refreshAt - Date.now();
+            if (delay <= 0 || delay > MAX_TIMEOUT) {
+                render(matchData);
+                return;
+            }
+
+            const timeout = setTimeout(() => render(matchData), delay);
+            countdownIntervals.push(timeout);
+            return;
+        }
 
         const interval = setInterval(() => {
             const countdownEl = document.getElementById(pill.countdownId);

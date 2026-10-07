@@ -334,11 +334,11 @@ async function importScreenshot(file) {
             return { text: `${teamLabels[i]}${tag}: ${plural(team.players.length, "player")}` };
         });
         teams.forEach((team, i) => team.players.filter(p => p.untagged).forEach(p => {
-            items.push({ text: `"${p.name}" (${p.score}) had no team tag, so they were put in ${teamLabels[i]}. Check they're on the right team.`, warning: true });
+            items.push({ text: `Failed to figure out the team for "${p.name}" (${p.score}), so they were put in ${teamLabels[i]}. Please check this.`, warning: true });
         }));
         if (unreadScores) items.push({ text: `${plural(unreadScores, "score")} couldn't be read and ${unreadScores === 1 ? "was" : "were"} set to 0`, warning: true });
         pendingScreenshot = file;
-        openImportModal(`Imported ${plural(players.length, "player")}`, "Check the names, as symbols can be misread.", items);
+        openImportModal(`Imported ${plural(players.length, "player")}`, "Check the data, as text can be misread. Points from disconnections will also need to be added manually.", items);
     } catch (error) {
         console.error("Failed to read screenshot:", error);
         openImportModal("Couldn't import screenshot", "Something went wrong reading that image.");

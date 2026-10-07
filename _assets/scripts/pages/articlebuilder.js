@@ -271,6 +271,43 @@ function stripInlineFormatting(root) {
     }
 }
 
+// Video IDs for pasted text that is nothing but YouTube links (one per line/space).
+// Returns an empty array for anything else, so ordinary pastes are left alone.
+function getPastedYouTubeVideoIds(text) {
+    const tokens = text.trim().split(/\s+/).filter(Boolean);
+    if (tokens.length === 0) return [];
+
+    const ids = [];
+    for (const token of tokens) {
+        // Bail out if the text merely mentions a link among other words
+        if (!/^(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube(?:-nocookie)?\.com|youtu\.be)\//i.test(token)) return [];
+        const id = getYouTubeVideoId(token);
+        if (!id) return [];
+        ids.push(id);
+    }
+    return ids;
+}
+
+// Pasting one or more YouTube links drops in the embeds instead of the raw URLs
+function pasteYouTubeVideos(e) {
+    const text = (e.clipboardData || window.clipboardData)?.getData('text/plain');
+    if (!text) return false;
+
+    const ids = getPastedYouTubeVideoIds(text);
+    if (ids.length === 0) return false;
+
+    // Captions are for text, not media - leave those pastes as plain text
+    if (e.target.closest?.('.article-image-container, .article-video-container')) return false;
+
+    e.preventDefault();
+    const range = captureBodyRange();
+
+    // One at a time: each insert leaves the caret on the line below the new block,
+    // which is where the next one belongs.
+    ids.forEach((id, i) => insertVideoToBody(id, i === 0 ? range : null));
+    return true;
+}
+
 // Pasting a lone URL over selected text turns the selection into a link (like markdown editors)
 function pasteUrlOverSelection(e) {
     const sel = window.getSelection();
@@ -294,6 +331,7 @@ editableElements.forEach(el => {
             convertImageToAvif(imageFile).then(insertImageToBody);
             return;
         }
+        if (el === bodyEditor && pasteYouTubeVideos(e)) return;
         if (el === bodyEditor && pasteUrlOverSelection(e)) return;
         handlePlainTextPaste(e);
     });
@@ -901,6 +939,12 @@ function isSelectionInBody(sel) {
     return !!(node && bodyEditor.contains(node.nodeType === 3 ? node.parentNode : node));
 }
 
+function captureBodyRange() {
+    const sel = window.getSelection();
+    if (isSelectionInBody(sel)) return sel.getRangeAt(0).cloneRange();
+    return lastBodyRange;
+}
+
 document.addEventListener('selectionchange', () => {
     const sel = window.getSelection();
     if (isSelectionInBody(sel)) {
@@ -909,12 +953,15 @@ document.addEventListener('selectionchange', () => {
 });
 
 function restoreBodySelection() {
-    bodyEditor.focus({ preventScroll: true });
     const sel = window.getSelection();
-    if (!isSelectionInBody(sel) && lastBodyRange) {
-        sel.removeAllRanges();
-        sel.addRange(lastBodyRange);
-    }
+
+    const range = isSelectionInBody(sel) ? sel.getRangeAt(0).cloneRange() : lastBodyRange;
+    if (!range) return;
+
+    bodyEditor.focus({ preventScroll: true });
+    const restored = window.getSelection();
+    restored.removeAllRanges();
+    restored.addRange(range);
 }
 
 // Rich text
@@ -1004,8 +1051,16 @@ bodyEditor.addEventListener('keydown', (e) => {
 });
 
 // Body images
-function insertBlockToBody(block) {
-    bodyEditor.focus();
+function insertBlockToBody(block, savedRange = null) {
+    if (savedRange && bodyEditor.contains(savedRange.startContainer)) {
+        bodyEditor.focus({ preventScroll: true });
+        const restored = window.getSelection();
+        restored.removeAllRanges();
+        restored.addRange(savedRange);
+    } else {
+        restoreBodySelection();
+    }
+
     const sel = window.getSelection();
     if (sel.rangeCount > 0) {
         const range = sel.getRangeAt(0);
@@ -1026,7 +1081,7 @@ function insertBlockToBody(block) {
         // linger above the inserted block - use it as the block's slot instead.
         const isEmptyLine = currentBlock && currentBlock.nodeType === 1
             && currentBlock.textContent.trim() === ''
-            && !currentBlock.querySelector('img');
+            && !currentBlock.querySelector('img, .article-video-container, iframe');
 
         // Create new line if inserting mid-text line
         if (currentBlock && currentBlock !== bodyEditor) {
@@ -1051,7 +1106,7 @@ function insertBlockToBody(block) {
     saveDraft();
 }
 
-function insertImageToBody(imgUrl) {
+function insertImageToBody(imgUrl, range = null) {
     const imageBlock = document.createElement('div');
     imageBlock.className = 'article-image-container';
     imageBlock.setAttribute('contenteditable', 'false');
@@ -1062,19 +1117,21 @@ function insertImageToBody(imgUrl) {
             <span class="article-image-caption" contenteditable="true">Add a description for this image here!</span>
         </div>
     `;
-    insertBlockToBody(imageBlock);
+    insertBlockToBody(imageBlock, range);
 }
 
 insertImageBtn.addEventListener('click', () => {
     if (!insertImageBtn.disabled) {
-        openImageModal(bodyFileInput, insertImageToBody);
+        const range = captureBodyRange();
+        openImageModal(bodyFileInput, (url) => insertImageToBody(url, range));
     }
 });
 
 bodyFileInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (file) {
-        convertImageToAvif(file).then(insertImageToBody);
+        const range = captureBodyRange();
+        convertImageToAvif(file).then(url => insertImageToBody(url, range));
     }
 });
 
@@ -1129,11 +1186,11 @@ bodyEditor.addEventListener('drop', (e) => {
 
 // Video (YouTube embeds)
 function getYouTubeVideoId(url) {
-    const match = url.match(/(?:youtube(?:-nocookie)?\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    const match = url.match(/(?:youtube(?:-nocookie)?\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
     return match ? match[1] : null;
 }
 
-function insertVideoToBody(videoId) {
+function insertVideoToBody(videoId, range = null) {
     const videoBlock = document.createElement('div');
     videoBlock.className = 'article-video-container';
     videoBlock.setAttribute('contenteditable', 'false');
@@ -1152,14 +1209,16 @@ function insertVideoToBody(videoId) {
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowfullscreen></iframe>
             </div>
-            <span class="article-image-caption" contenteditable="true">Add a description for this image here!</span>
+            <span class="article-image-caption" contenteditable="true">Add a description for this video here!</span>
         </div>
     `;
-    insertBlockToBody(videoBlock);
+    insertBlockToBody(videoBlock, range);
 }
 
 insertVideoBtn.addEventListener('click', () => {
     if (insertVideoBtn.disabled) return;
+
+    const range = captureBodyRange();
 
     openUrlModal({
         title: 'Insert YouTube Video',
@@ -1171,7 +1230,7 @@ insertVideoBtn.addEventListener('click', () => {
             alert("Couldn't find a YouTube video in that URL. Try a link like https://www.youtube.com/watch?v=ZcGLlh8WkDA&pp=0gcJCRoMAYcqIYzv");
             return;
         }
-        insertVideoToBody(videoId);
+        insertVideoToBody(videoId, range);
     });
 });
 
