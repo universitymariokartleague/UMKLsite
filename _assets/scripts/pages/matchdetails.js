@@ -5,6 +5,7 @@
 import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareImage, showImagePreview, setOriginalMessage } from '/_assets/scripts/utils/shareAPIhelper.js';
 import { resolveTrackName, getTrackIconPath } from '/_assets/scripts/utils/tracknames.js';
 import { icon } from '/_assets/scripts/utils/icons.js';
+import { videoStatusIcon } from '/_assets/scripts/utils/videostatus.js';
 
 const inputArea = document.getElementById("inputArea");
 const positionsInput = document.getElementById("positions-input");
@@ -534,7 +535,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <div class="video-thumb-wrapper">
                         ${thumbnailImg}
                     </div>
-                    <h4 class="video-title no-color-link">${icon('play')} ${label}</h4>
+                    <h4 class="video-title no-color-link">${videoStatusIcon({ published: matchDate })} ${label}</h4>
                 </a>`;
             }).join('')}</div>`
             : '';

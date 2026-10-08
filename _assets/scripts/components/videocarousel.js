@@ -1,4 +1,4 @@
-import { icon } from '/_assets/scripts/utils/icons.js';
+import { loadMatchStartTimes, videoStatusIcon } from '/_assets/scripts/utils/videostatus.js';
 
 const API_URL = `https://api.umkl.co.uk/videos`;
 const DEFAULT_VIDEO_COUNT = 12;
@@ -51,7 +51,7 @@ async function loadVideoCarousel() {
     renderVideoCarouselSkeleton(container, videoCount + 1);
 
     try {
-        const data = await fetchVideosWithRetry();
+        const [data] = await Promise.all([fetchVideosWithRetry(), loadMatchStartTimes()]);
 
         if (!Array.isArray(data) || data.length === 0) {
             container.innerHTML = `<p class="carousel-loading">No videos available.</p>`;
@@ -87,7 +87,7 @@ async function loadVideoCarousel() {
                 <div class="video-thumb-wrapper">
                     <img src="https://wsrv.nl/?height=300&q=50&output=webp&url=${thumbnailUrl}" alt="${title}" loading="lazy" />
                 </div>
-                <p class="video-title no-color-link">${icon('play')} ${title}</p>
+                <p class="video-title no-color-link">${videoStatusIcon(item)} ${title}</p>
                 ${dateStr ? `<p class="video-date">${dateStr}</p>` : ""}
             `;
 

@@ -87,6 +87,20 @@
     opacity: 0.7;
 }
 
+.video-live-badge {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: var(--border-radius-pill);
+    background-color: var(--translucent-color);
+    color: var(--text-color);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    line-height: 1.5;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
 .video-card[target="_blank"]::after {
     content: none !important;
 }

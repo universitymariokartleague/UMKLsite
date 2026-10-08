@@ -1,4 +1,4 @@
-import { icon } from '/_assets/scripts/utils/icons.js';
+import { loadMatchStartTimes, videoStatusIcon, VIDEO_STATUS_EXPIRED_EVENT } from '/_assets/scripts/utils/videostatus.js';
 
 const API_URL = `https://api.umkl.co.uk/videos`;
 const SKELETON_CARD_COUNT = 12;
@@ -149,7 +149,7 @@ function buildVideoCard(item, locale, searchTerm) {
         <div class="video-thumb-wrapper">
             <img src="${thumbnailUrl}" alt="${escapeHTML(title)}" loading="lazy" />
         </div>
-        <h4 class="video-title no-color-link">${icon('play')} ${highlightMatch(title, searchTerm)}</h4>
+        <h4 class="video-title no-color-link">${videoStatusIcon(item)} ${highlightMatch(title, searchTerm)}</h4>
         ${dateStr ? `<p class="video-date">${dateStr}</p>` : ""}
     `;
 
@@ -303,8 +303,14 @@ async function loadVideosGrid() {
     const searchInput = document.getElementById("videos-search");
     if (searchInput && initialSearch) searchInput.value = initialSearch;
 
+    document.addEventListener(VIDEO_STATUS_EXPIRED_EVENT, () => {
+        if (allVideos.length === 0) return;
+        const term = searchInput ? searchInput.value.trim().toLowerCase() : "";
+        runSearch ? runSearch(term) : renderVideos(container, allVideos, term);
+    });
+
     try {
-        const response = await fetch(API_URL);
+        const [response] = await Promise.all([fetch(API_URL), loadMatchStartTimes()]);
         const data = await response.json();
 
         if (!Array.isArray(data) || data.length === 0) {
