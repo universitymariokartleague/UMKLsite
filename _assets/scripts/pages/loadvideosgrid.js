@@ -56,7 +56,22 @@ function computeEffectiveSeasons(list) {
     });
 }
 
-// builds date search terms
+function computeVideoRounds(list) {
+    let round = null;
+    for (let i = list.length - 1; i >= 0; i--) {
+        const item = list[i];
+        if (isRoundReveal(item)) round = getRoundNumber(item);
+        item._round = round;
+    }
+}
+
+function getSectionLabel(item) {
+    const season = item._effectiveSeason;
+    const round = item._round;
+    if (season == null) return round != null ? `Round ${round}` : null;
+    return round != null ? `Season ${season} Round ${round}` : `Season ${season}`;
+}
+
 function getDateSearchText(item) {
     if (!item.published) return "";
     const date = new Date(item.published);
@@ -92,6 +107,7 @@ function getDateSearchText(item) {
 
 function precomputeSearchData(list) {
     computeEffectiveSeasons(list);
+    computeVideoRounds(list);
     list.forEach(item => { item._dateSearchText = getDateSearchText(item); });
 }
 
@@ -143,42 +159,15 @@ function buildVideoCard(item, locale, searchTerm) {
 function renderVideos(container, list, searchTerm = "") {
     const locale = localStorage.getItem("locale") || "en-GB";
     const fragment = document.createDocumentFragment();
-    let lastSeason;
-    let pendingDivider = null; // divider to insert before the next item, carried over from the previous one
-
-    const currentRoundReveal = list.find(isRoundReveal);
-    if (currentRoundReveal) {
-        const currentRound = getRoundNumber(currentRoundReveal);
-        const currentSeason = currentRoundReveal._effectiveSeason;
-        if (currentRound != null) {
-            fragment.appendChild(createDivider(currentSeason != null ? `Season ${currentSeason} Round ${currentRound}` : `Round ${currentRound}`));
-        }
-    }
+    let lastLabel;
 
     list.forEach((item, index) => {
-        const season = item._effectiveSeason;
+        const label = getSectionLabel(item);
 
-        if (index > 0) {
-            if (season != null && season !== lastSeason) {
-                fragment.appendChild(createDivider(`Season ${season}`));
-            } else if (pendingDivider) {
-                fragment.appendChild(createDivider(pendingDivider.label));
-            }
+        if (index === 0 || label !== lastLabel) {
+            fragment.appendChild(createDivider(label));
         }
-        pendingDivider = null;
-
-        if (season != null) lastSeason = season;
-
-        if (isRoundReveal(item)) {
-            const roundNumber = getRoundNumber(item);
-            if (roundNumber != null && roundNumber > 1) {
-                pendingDivider = { label: season != null ? `Season ${season} Round ${roundNumber - 1}` : `Round ${roundNumber - 1}` };
-            } else if (roundNumber === 1 && season != null) {
-                pendingDivider = { label: `Season ${season - 1}` };
-            } else {
-                pendingDivider = { label: undefined };
-            }
-        }
+        lastLabel = label;
 
         fragment.appendChild(buildVideoCard(item, locale, searchTerm));
     });
