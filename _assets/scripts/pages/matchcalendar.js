@@ -111,11 +111,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     debugLog(`Match data loaded in ${(performance.now() - startTime).toFixed(2)}ms`);
 });
 
-const fetchAPI = async (endpoint, body = {}) => {
+const fetchAPI = async (endpoint, { method = 'POST', body = {} } = {}) => {
     const response = await fetch(`${API_BASE}/${endpoint}`, {
-        method: 'POST',
+        method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+        ...(method === 'GET' ? {} : { body: JSON.stringify(body) })
     });
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     localStorage.setItem("apiReqsSent", (parseInt(localStorage.getItem("apiReqsSent")) || 0) + 1);
@@ -127,9 +127,14 @@ const fetchAPI = async (endpoint, body = {}) => {
     }
 };
 
-const getMatchData = () => fetchAPI('matchdata', {});
-const getTeamColors = () => fetchAPI('teamcolors', {});
-const getLiveResults = (teamName) => fetchAPI(`match/current/${encodeURIComponent(teamName)}`, {});
+const getMatchData = () => fetchAPI('matchdata');
+const getTeamColors = () => fetchAPI('teamcolors');
+
+const getLiveResults = async (teamName) => {
+    const currentMatch = await fetchAPI(`match/current/${encodeURIComponent(teamName)}`, { method: 'GET' });
+    if (!currentMatch?.match_id) return [];
+    return fetchAPI(`live/${currentMatch.match_id}`, { method: 'GET' });
+};
 
 // The API keys live matches by a team name, not an eventID, so find whichever entry
 // in a day's log is currently in progress and hand back its first team.
