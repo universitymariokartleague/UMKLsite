@@ -44,6 +44,7 @@ const teamFrequencyCheckbox = document.getElementById("teamFrequency");
 const daysPlayedCheckbox = document.getElementById("daysPlayed");
 const trackSortWrapper = document.getElementById("track-sort");
 let currentTrackSort = "mostPlayed";
+const teamFilterSelect = document.getElementById("team-filter");
 const trackSearchInput = document.getElementById("track-search");
 const trackSearchClear = document.getElementById("track-search-clear");
 const trackNoResults = document.getElementById("track-no-results");
@@ -69,6 +70,23 @@ const trackSorters = {
 
 function getTeamColor(team) {
     return (teamColors || []).find(t => t.team_name === team)?.team_color;
+}
+
+function populateTeamFilter() {
+    const teams = new Set();
+
+    for (const matches of Object.values(matchData || {})) {
+        for (const match of matches) {
+            for (const team of match.teamsInvolved || []) {
+                if (team) teams.add(team);
+            }
+        }
+    }
+
+    const options = [...teams].sort((a, b) => a.localeCompare(b))
+        .map(team => `<option value="${team}">${team}</option>`).join("");
+
+    teamFilterSelect.innerHTML = `<option value="">All teams</option>${options}`;
 }
 
 function buildTrackCountDiv(data, matchesCounted) {
@@ -119,9 +137,11 @@ function buildTrackCountDiv(data, matchesCounted) {
         .join("");
 
     const length = Object.keys(data).length;
+    const selectedTeam = teamFilterSelect.value;
 
     return `
         <span>${length}/96 total tracks played across ${matchesCounted} ${matchesCounted === 1 ? "match" : "matches"}
+        ${selectedTeam ? `<span class="settings-extra-info">(involving ${selectedTeam})</span>` : ''}
         ${testMatchesCheckbox.checked ? '<span class="settings-extra-info">(including test matches)</span>' : ''}</span>
         <div class="track-frequency">
             ${resultString}
@@ -135,6 +155,7 @@ async function generateMatchStatsBox(showError) {
 
     const trackStats = {};
     let matchesCounted = 0;
+    const selectedTeam = teamFilterSelect.value;
 
     for (const date in matchData) {
         const matches = matchData[date];
@@ -142,8 +163,10 @@ async function generateMatchStatsBox(showError) {
             if (!match.detailedResults) continue;
             if (!testMatchesCheckbox.checked && match.testMatch === true) continue;
 
-            matchesCounted++;
             const teams = match.teamsInvolved || [];
+            if (selectedTeam && !teams.includes(selectedTeam)) continue;
+
+            matchesCounted++;
 
             for (const result of match.detailedResults) {
                 const track = result.track;
@@ -286,6 +309,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         fetchedCurrentSeason = await getCurrentSeason();
         matchData = await getMatchData();
         teamColors = await getTeamcolors();
+        populateTeamFilter();
     } catch (error) {
         if (error && error.message && error.message.includes('429')) {
             showError = 2;
@@ -301,6 +325,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     fetchedCurrentSeason = await getCurrentSeason();
                     matchData = await getMatchData();
                     teamColors = await getTeamcolors();
+                    populateTeamFilter();
                     showError = 0;
                     await generateMatchStatsBox(showError);
                 } catch (err) {
@@ -329,6 +354,10 @@ teamFrequencyCheckbox.addEventListener("click", async function () {
 });
 
 daysPlayedCheckbox.addEventListener("click", async function () {
+    await generateMatchStatsBox();
+});
+
+teamFilterSelect.addEventListener("change", async function () {
     await generateMatchStatsBox();
 });
 
