@@ -19,6 +19,7 @@
     --brand-light-opaque: color-mix(in oklch, var(--brand-light) 50%, transparent);
     --brand-positive: #22a65e;
     --brand-negative: #ff6874;
+    --brand-caution: #e0a008;
 
     /* Same in every theme */
     --accent-color: var(--brand-primary);
@@ -277,10 +278,7 @@ h1 a::before,
 h2 a::before,
 h3 a::before,
 h4 a::before {
-    content: "#";
-    display: inline-block;
-    margin-right: 0.35em;
-    color: #888;
+    content: none;
 }
 
 h1 a:hover,
@@ -649,42 +647,53 @@ hr {
     color: var(--hr-color);
 }
 
-/*blockquote*/
 blockquote {
-    border-left: 5px solid rgba(255, 102, 102, 0.9);
-    padding: 15px;
-    margin-left: 0px;
-    margin-right: 0px;
-    background-color: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    --callout-accent: var(--brand-primary);
+
+    position: relative;
+    overflow: hidden;
+    margin: 0 0 24px;
+    padding: 14px 28px 14px 30px;
+    border: 0;
     border-radius: var(--border-radius);
+    background: color-mix(in oklch, var(--callout-accent) 15%, transparent);
+    color: var(--text-color);
+    font-size: 1.05em;
+    line-height: 1.6;
 }
 
-.success {
-    border: 2px solid rgba(8, 255, 111, 0.5);
-    background-color: rgba(8, 255, 111, 0.3);
+blockquote::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 5px;
+    background: var(--callout-accent);
 }
 
-.info {
-    border: 2px solid rgba(33, 150, 243, 0.5);
-    background-color: rgba(33, 150, 243, 0.3);
+blockquote.success {
+    --callout-accent: var(--brand-positive);
 }
 
-.warning {
-    border: 2px solid rgba(255, 152, 0, 0.5);
-    background-color: rgba(255, 152, 0, 0.3);
+blockquote.info {
+    --callout-accent: var(--brand-secondary);
 }
 
-.fail {
-    border: 2px solid rgba(253, 60, 26, 0.5);
-    background-color: rgba(253, 60, 26, 0.3);
+blockquote.warning {
+    --callout-accent: var(--brand-caution);
 }
 
-.rainbow {
-    border-left: 0px;
+blockquote.fail {
+    --callout-accent: var(--brand-negative);
+}
+
+blockquote.rainbow {
     border: 1px solid rgba(253, 60, 26, 0.5);
     box-shadow: 0px 0px 15px 5px rgba(255, 255, 255, 0.2);
     animation: rainbow 4s infinite;
+}
+
+blockquote.rainbow::before {
+    content: none;
 }
 
 @keyframes rainbow {

@@ -18,9 +18,8 @@ h2[id^="rule"] {
 }
 
 .rule-number {
-    margin-right: 6px;
+    margin-right: 4px;
     font-weight: 700;
-    font-family: var(--mono-font);
     white-space: nowrap;
 }
 

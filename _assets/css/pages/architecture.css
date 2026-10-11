@@ -1,0 +1,117 @@
+.doc-callout-label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+.doc-details {
+    margin: 0 0 24px;
+    border: 1px solid var(--translucent-color);
+    border-radius: var(--border-radius);
+    background-color: var(--box-area-bg-color);
+}
+
+.doc-details>summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    list-style: none;
+}
+
+.doc-details>summary::-webkit-details-marker {
+    display: none;
+}
+
+.doc-details>summary::marker {
+    content: "";
+}
+
+.doc-details>summary::before {
+    content: "";
+    flex-shrink: 0;
+    width: 0;
+    height: 0;
+    border-left: 6px solid currentColor;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+}
+
+.doc-details>summary:hover {
+    background-color: var(--translucent-color);
+}
+
+.doc-details>summary:focus-visible {
+    outline: 2px solid var(--brand-primary);
+    outline-offset: -2px;
+}
+
+.doc-details-count {
+    margin-left: auto;
+    font-family: var(--mono-font);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--settings-extra-info);
+    white-space: nowrap;
+}
+
+.doc-details-body {
+    padding: 4px 18px 18px;
+    border-top: 1px solid var(--translucent-color);
+}
+
+.doc-details-body>.tag-clan-table {
+    margin-top: 16px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+    .doc-details>summary::before {
+        transition: transform 0.15s ease;
+    }
+}
+
+.doc-details[open]>summary::before {
+    transform: rotate(90deg);
+}
+
+.doc-details[open]>summary {
+    border-bottom: 1px solid var(--translucent-color);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.doc-details:not([open])>summary {
+    border-radius: var(--border-radius);
+}
+
+@media screen and (max-width: 767px) {
+    .doc-details>summary {
+        padding: 10px 14px;
+        font-size: 0.9rem;
+    }
+
+    .doc-details-body {
+        padding: 4px 12px 12px;
+    }
+}
+
+.tag-clan-table code,
+.schema-table code {
+    overflow-wrap: normal;
+}
+
+.flow-step-title,
+.doc-details-body code {
+    overflow-wrap: anywhere;
+}
+
+.doc-details-body>.article-body p:last-child,
+.doc-details-body>blockquote:last-child,
+.doc-details-body>pre.codeBox:last-child {
+    margin-bottom: 0;
+}

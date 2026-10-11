@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="/_assets/css/components/rules.css">
     <link rel="stylesheet" href="/_assets/css/pages/newsarticle.css">
     <link rel="stylesheet" href="/_assets/css/components/articletoc.css">
+    <link rel="stylesheet" href="/_assets/css/pages/architecture.css">
 
     <meta property="og:title" content="UMKL | Cheep Cheep Architecture Guide" />
     <meta property="og:site_name" content="umkl.co.uk" />
@@ -73,18 +74,13 @@
                 </div>
 
                 <div class="article-body">
-                    <p class="p-no-spacing">
-                        This page is aimed at developers. For a general, non-technical explanation of how Cheep Cheep
-                        works, see the
-                        <a href="/rules/faq/#how-it-works">Discord/Cheep Cheep FAQ</a>.
-                    </p>
-
-                    <p>
-                        For the full command list, see the <a href="/rules/cheepcheepcommands/">Commands
-                            Documentation</a> page.
-                    </p>
-
-                    <hr>
+                    <blockquote class="info">
+                        <span class="doc-callout-label">Note</span>
+                        This page is aimed at developers. For a general,
+                        non-technical explanation of how Cheep Cheep works, see the
+                        <a href="/rules/faq/#how-it-works">Discord/Cheep Cheep FAQ</a>. For the full list of commands,
+                        see <a href="/rules/cheepcheepcommands/">Commands Documentation</a>.
+                    </blockquote>
 
                     <h2 id="what-this-project-is"><a href="/rules/cheepcheeparchitecture/#what-this-project-is">1. What
                             this project
@@ -99,25 +95,196 @@
                             A <b>discord.py bot</b> (slash commands, buttons, modals) that runs in the UMKL Discord
                             server,
                             providing team management, match scheduling, results verification, leaderboards,
-                            live-stream graphics, captcha verification, etc.
+                            live-stream graphics, captcha verification, player support tickets, etc.
                         </li>
                         <li>
                             A <b>Flask + Waitress HTTP API</b> (<code translate="no">services/dbserver.py</code>),
                             running in a
                             background thread inside the same process, that serves match/team/season data to the
-                            <code translate="no">umkl.co.uk</code> website.
+                            <code translate="no">umkl.co.uk</code> website (<code translate="no">api.umkl.co.uk</code>).
                         </li>
                     </ol>
 
                     <p>
-                        Both halves read and write the same SQLite database and JSON files, via the same
-                        <code translate="no">core/logic.py</code> module.
+                        Both use the same SQLite database and JSON files, via the same
+                        <code translate="no">core/logic/</code> package.
                     </p>
 
-                    <hr>
+                    <blockquote class="info">
+                        <span class="doc-callout-label">Single-server only</span>
+                        The bot only allowed in the UMKL server. <code translate="no">bot/guild_guard.py</code> makes
+                        the bot leave any server that isn't in <code translate="no">config.ALLOWED_GUILD_IDS</code> (see
+                        <a href="/rules/cheepcheeparchitecture/#bot-helpers">§5.7</a>).
+                    </blockquote>
 
                     <h2 id="directory-layout"><a href="/rules/cheepcheeparchitecture/#directory-layout">2. Directory
                             layout</a></h2>
+
+                    <h3 id="structure-at-a-glance">At a glance</h3>
+                    <p class="p-no-spacing">
+                        The repo splits into a handful of areas, each with one job:
+                    </p>
+
+                    <div class="tag-clan-table after-title">
+                        <table>
+                            <tr>
+                                <th>Area</th>
+                                <th>Folder</th>
+                                <th>What's in it</th>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">Discord</td>
+                                <td class="table-key" translate="no"><code translate="no">bot/</code></td>
+                                <td>Embed builders and other Discord helpers. <code translate="no">embed.py</code>
+                                    is for stuff members see, <code translate="no">embed_board.py</code> and
+                                    <code translate="no">embed_dev.py</code> for the board and devs. Also
+                                    pagination, permission checks, channel lookup and the guild allowlist
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">cogs/</code></td>
+                                <td>The command and event handlers. Each cog is loaded in
+                                    <code translate="no">main.py</code>: <code translate="no">match_cog</code>,
+                                    <code translate="no">results_cog</code>, <code translate="no">team_cog</code>,
+                                    <code translate="no">season_cog</code>, <code translate="no">ticket_cog</code>,
+                                    <code translate="no">user_profile_cog</code>,
+                                    <code translate="no">listeners_cog</code>,
+                                    <code translate="no">live_score_cog</code>, <code translate="no">sql_cog</code>,
+                                    <code translate="no">core_cog</code> and <code translate="no">dev_cog</code>
+                                    (dev only)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">Core</td>
+                                <td class="table-key" translate="no"><code translate="no">core/</code></td>
+                                <td><code translate="no">graphics.py</code> draws everything with Pillow (results,
+                                    versus, standings, stream overlays, thumbnails).
+                                    <code translate="no">generate_calendar.py</code> writes
+                                    <code translate="no">matches.ics</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">core/logic/</code></td>
+                                <td>All the UMKL data handling. <code translate="no">storage.py</code> and
+                                    <code translate="no">_db.py</code> do the reading and writing, then
+                                    <code translate="no">matchdata.py</code>, <code translate="no">matches.py</code>,
+                                    <code translate="no">standings.py</code>, <code translate="no">teams.py</code>,
+                                    <code translate="no">users.py</code>, <code translate="no">seasons.py</code>,
+                                    <code translate="no">sp.py</code>, <code translate="no">tickets.py</code>,
+                                    <code translate="no">profile.py</code>, <code translate="no">export.py</code>
+                                    and <code translate="no">utils.py</code> each cover one part of the data.
+                                    <code translate="no">__init__.py</code> re-exports everything so
+                                    <code translate="no">from core import logic</code> still works
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Services</td>
+                                <td class="table-key" translate="no"><code translate="no">services/</code></td>
+                                <td>Jobs that run alongside the bot. <code translate="no">dbserver.py</code> serves
+                                    the SQLite db over HTTP, <code translate="no">checkrss.py</code> polls the news
+                                    feed, <code translate="no">predictionpolls.py</code> runs the polls.
+                                    <code translate="no">backup.py</code>, <code translate="no">gitimport.py</code>,
+                                    <code translate="no">data_export.py</code> and
+                                    <code translate="no">team_emojis.py</code> handle the rest
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Assets</td>
+                                <td class="table-key" translate="no"><code translate="no">assets/</code></td>
+                                <td><code translate="no">graphics/</code> has the backgrounds, overlays and round
+                                    layouts. <code translate="no">embedicons/</code> are the little icons on embeds,
+                                    <code translate="no">teamemblems/</code> are the team crests,
+                                    <code translate="no">fonts/</code> are used by <code
+                                        translate="no">core/graphics.py</code> and
+                                    <code translate="no">tutorial/</code> holds the how-to images
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="5">Runtime files</td>
+                                <td class="table-key" translate="no"><code translate="no">data/</code></td>
+                                <td>The db (<code translate="no">umkl_db.db</code>), the JSON stores (matchdata,
+                                    rounddata, tickets, polldata, captchadata, sticky, stream keys and so on) and
+                                    <code translate="no">pfps/</code>. Gitignored apart from a few config files
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">output/</code></td>
+                                <td>Images generated while the bot runs, currently overlays and thumbnails.
+                                    Gitignored
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">backups/</code></td>
+                                <td>Dated <code translate="no">.7z</code> copies of the db and the JSON stores made by
+                                    <code translate="no">services/backup.py</code>. Gitignored
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">logs/</code></td>
+                                <td>Log files. Gitignored
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">changelogs/</code></td>
+                                <td>One markdown file per release with what changed
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">Tests and CI</td>
+                                <td class="table-key" translate="no"><code translate="no">tests/</code></td>
+                                <td>The pytest suite. <code translate="no">data/</code> holds fixtures that mirror
+                                    <code translate="no">data/</code>, <code translate="no">output/</code> holds
+                                    reference images the graphics tests compare against
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">.github/</code></td>
+                                <td><code translate="no">workflows/tests.yml</code> runs pytest on every push and PR
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">.zed/</code></td>
+                                <td>Zed tasks for running the tests
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">Root files</td>
+                                <td class="table-key" translate="no"><code translate="no">main.py</code></td>
+                                <td>Starts everything up: logging, calendar, dbserver, rss and polling threads, then
+                                    loads the cogs and runs the bot
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">config.py</code></td>
+                                <td>Loads <code translate="no">.env</code> and holds the channel ids, paths and other
+                                    settings
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">requirements.txt</code>, <code
+                                        translate="no">Pipfile</code></td>
+                                <td>Dependencies
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <p>
+                        The shape of it comes down to this: a slash command starts in <code translate="no">cogs/</code>,
+                        builds its reply in <code translate="no">bot/</code>, then reads or writes through
+                        <code translate="no">core/logic/</code>.
+                    </p>
+                    <div class="pipeline" translate="no">
+                        <div class="pipeline-step">cogs/</div>
+                        <span class="pipeline-arrow">→</span>
+                        <div class="pipeline-step">bot/</div>
+                        <span class="pipeline-arrow">→</span>
+                        <div class="pipeline-step">core/logic/</div>
+                        <span class="pipeline-arrow">→</span>
+                        <div class="pipeline-step">SQLite + JSON</div>
+                    </div>
+
+                    <h3 id="structure-in-full">In full</h3>
                     <div class="file-tree" translate="no">
                         <div class="file-tree-row" data-depth="0">
                             <span class="file-tree-name">main.py</span>
@@ -135,12 +302,6 @@
                             <span class="file-tree-desc">Framework-agnostic layer</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
-                            <span class="file-tree-name">logic.py</span>
-                            <span class="file-tree-desc">The data layer - the only module that touches SQLite or JSON
-                                files
-                                directly (see <a href="/rules/cheepcheeparchitecture/#core-logic-py">§5.2</a>)</span>
-                        </div>
-                        <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">graphics.py</span>
                             <span class="file-tree-desc">Image generation (Pillow) -
                                 results/versus/standings/overlays/captcha
@@ -152,6 +313,71 @@
                                     translate="no">matchdata.json</code> (see
                                 <a href="/rules/cheepcheeparchitecture/#core-generate-calendar-py">§5.4</a>)</span>
                         </div>
+                        <div class="file-tree-row" data-depth="1" data-dir>
+                            <span class="file-tree-name">logic/</span>
+                            <span class="file-tree-desc">The data layer, split into one module per domain - the only
+                                place that touches SQLite or JSON directly (see
+                                <a href="/rules/cheepcheeparchitecture/#core-logic-py">§5.2</a>)</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="2">
+                            <span class="file-tree-name">_db.py</span>
+                            <span class="file-tree-desc">The shared <code translate="no">get_connection()</code>
+                                context manager every query module uses</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="2">
+                            <span class="file-tree-name">storage.py</span>
+                            <span class="file-tree-desc">Every JSON store's getters/setters</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="2">
+                            <span class="file-tree-name">utils.py</span>
+                            <span class="file-tree-desc">Small pure helpers (date formatting, page counts, position
+                                icons, colour validation)</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="2">
+                            <span class="file-tree-name">seasons.py</span>
+                            <span class="file-tree-desc">Season lifecycle</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="2">
+                            <span class="file-tree-name">teams.py</span>
+                            <span class="file-tree-desc">Team entities, season membership, Discord role mapping</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="2">
+                            <span class="file-tree-name">tickets.py</span>
+                            <span class="file-tree-desc">Support ticket metadata</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="2">
+                            <span class="file-tree-name">users.py</span>
+                            <span class="file-tree-desc">User registration and per-user aggregates</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="2">
+                            <span class="file-tree-name">standings.py</span>
+                            <span class="file-tree-desc">Derived points, standings and team records</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="2">
+                            <span class="file-tree-name">matches.py</span>
+                            <span class="file-tree-desc">Matches, entries, participants and results</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="2">
+                            <span class="file-tree-name">matchdata.py</span>
+                            <span class="file-tree-desc">Schedule/matchdata lookups and live score state</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="2">
+                            <span class="file-tree-name">sp.py</span>
+                            <span class="file-tree-desc">Star Points: match SP, VC SP and SP rule versions</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="2">
+                            <span class="file-tree-name">profile.py</span>
+                            <span class="file-tree-desc">Compresses player stats into the profile-site URL</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="2">
+                            <span class="file-tree-name">export.py</span>
+                            <span class="file-tree-desc">The personal data export query</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="2">
+                            <span class="file-tree-name">__init__.py</span>
+                            <span class="file-tree-desc">Re-exports every public symbol, so
+                                <code translate="no">from core import logic</code> keeps working unchanged</span>
+                        </div>
 
                         <div class="file-tree-row" data-depth="0" data-dir>
                             <span class="file-tree-name">bot/</span>
@@ -159,17 +385,51 @@
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">embed.py</span>
-                            <span class="file-tree-desc">Builds discord embeds that the bot can send</span>
+                            <span class="file-tree-desc">Embeds that members see - the biggest module in
+                                <code translate="no">bot/</code></span>
+                        </div>
+                        <div class="file-tree-row" data-depth="1">
+                            <span class="file-tree-name">embed_board.py</span>
+                            <span class="file-tree-desc">Embeds only the board would see (log channels, progress
+                                updates, results approval)</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="1">
+                            <span class="file-tree-name">embed_dev.py</span>
+                            <span class="file-tree-desc">Embeds only a developer would see</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">pagination.py</span>
                             <span class="file-tree-desc">Embed pagination helper</span>
                         </div>
+                        <div class="file-tree-row" data-depth="1">
+                            <span class="file-tree-name">permissions.py</span>
+                            <span class="file-tree-desc">Role/admin checks for both slash commands and prefix
+                                commands</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="1">
+                            <span class="file-tree-name">channels.py</span>
+                            <span class="file-tree-desc">Channel lookup that asserts the channel is a text
+                                channel</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="1">
+                            <span class="file-tree-name">guild_guard.py</span>
+                            <span class="file-tree-desc">The guild allowlist - makes the bot leave any server it isn't
+                                allowed in</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="1">
+                            <span class="file-tree-name">interactions.py</span>
+                            <span class="file-tree-desc">Small helpers for reading component custom IDs</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="1">
+                            <span class="file-tree-name">avatar_sender.py</span>
+                            <span class="file-tree-desc">Sends through a per-channel webhook with a controllable
+                                avatar ("Meep Meep")</span>
+                        </div>
 
                         <div class="file-tree-row" data-depth="0" data-dir>
                             <span class="file-tree-name">cogs/</span>
                             <span class="file-tree-desc">discord.py extensions, feature split across cogs (see
-                                <a href="/rules/cheepcheeparchitecture/#module-reference">§5</a>)</span>
+                                <a href="/rules/cheepcheeparchitecture/#cogs-overview">§5.8</a>)</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">core_cog.py</span>
@@ -186,8 +446,8 @@
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">listeners_cog.py</span>
-                            <span class="file-tree-desc">Member join (captcha flow) and scheduled DB
-                                backups</span>
+                            <span class="file-tree-desc">Member join (captcha flow) and the scheduled background
+                                loops (backups, VC SP, sign-up embed sync, poll stickies)</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">live_score_cog.py</span>
@@ -198,7 +458,9 @@
                             <span class="file-tree-name">match_cog.py</span>
                             <span class="file-tree-desc">Match creation/editing (including the <code
                                     translate="no">/edit</code>
-                                group), the signup flow, room codes, substitutions</span>
+                                group), the signup flow, room codes, substitutions. Doubles as the shared library of
+                                autocomplete providers (see
+                                <a href="/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a>)</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">results_cog.py</span>
@@ -216,7 +478,14 @@
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">team_cog.py</span>
-                            <span class="file-tree-desc">Team creation, colour/name changes, season entry</span>
+                            <span class="file-tree-desc">Team creation, colour/name changes, season entry, team emoji
+                                syncing</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="1">
+                            <span class="file-tree-name">ticket_cog.py</span>
+                            <span class="file-tree-desc">The <code translate="no">/ticket</code> and
+                                <code translate="no">/tickets</code> support ticket system, shown as private Discord
+                                threads</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">user_profile_cog.py</span>
@@ -235,35 +504,41 @@
                             <span class="file-tree-desc">Copies the DB + JSON files to <code translate="no">7z</code>
                                 files for
                                 scheduled/pre-mutation backups (see
-                                <a href="/rules/cheepcheeparchitecture/#services-backup-py">§5.8</a>)</span>
+                                <a href="/rules/cheepcheeparchitecture/#services-backup-py">§5.9</a>)</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">checkrss.py</span>
                             <span class="file-tree-desc">Polls the news RSS feed and triggers new-post notifications
                                 (see
-                                <a href="/rules/cheepcheeparchitecture/#services-checkrss-py">§5.9</a>)</span>
+                                <a href="/rules/cheepcheeparchitecture/#services-checkrss-py">§5.10</a>)</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">data_export.py</span>
                             <span class="file-tree-desc">Zips a user's personal data, used with <code
                                     translate="no">/export-my-data</code> (see
-                                <a href="/rules/cheepcheeparchitecture/#services-data-export-py">§5.13</a>)</span>
+                                <a href="/rules/cheepcheeparchitecture/#services-data-export-py">§5.14</a>)</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">dbserver.py</span>
                             <span class="file-tree-desc">The public API used on this site (<code
                                     translate="no">api.umkl.co.uk</code>) (see
-                                <a href="/rules/cheepcheeparchitecture/#services-dbserver-py">§5.12</a>)</span>
+                                <a href="/rules/cheepcheeparchitecture/#services-dbserver-py">§5.13</a>)</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">gitimport.py</span>
                             <span class="file-tree-desc">Self-update mechanism initiated by <code
                                     translate="no">/restart</code>
-                                (see <a href="/rules/cheepcheeparchitecture/#services-gitimport-py">§5.11</a>)</span>
+                                (see <a href="/rules/cheepcheeparchitecture/#services-gitimport-py">§5.12</a>)</span>
                         </div>
                         <div class="file-tree-row" data-depth="1">
                             <span class="file-tree-name">predictionpolls.py</span>
                             <span class="file-tree-desc">Match prediction polls system (currently unfinished)</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="1">
+                            <span class="file-tree-name">team_emojis.py</span>
+                            <span class="file-tree-desc">Keeps each team's <code translate="no">team_markdown</code>
+                                emoji in sync with the server's emoji list (see
+                                <a href="/rules/cheepcheeparchitecture/#services-team-emojis-py">§5.15</a>)</span>
                         </div>
 
                         <div class="file-tree-row" data-depth="0" data-dir>
@@ -272,14 +547,15 @@
                                 <a href="/rules/cheepcheeparchitecture/#data-storage">§7</a>)</span>
                         </div>
                         <div class="file-tree-row" data-depth="0" data-dir>
-                            <span class="file-tree-name">_assets/</span>
-                            <span class="file-tree-desc">Fonts, team emblems and various assets used by
-                                core/graphics.py</span>
+                            <span class="file-tree-name">assets/</span>
+                            <span class="file-tree-desc">Fonts, team emblems, backgrounds/overlays, embed icons and
+                                how-to images used by <code translate="no">core/graphics.py</code> and the
+                                embeds</span>
                         </div>
                         <div class="file-tree-row" data-depth="0" data-dir>
                             <span class="file-tree-name">output/</span>
-                            <span class="file-tree-desc">Where generated images (results.png, versus.png, overlays, …)
-                                go, temporary
+                            <span class="file-tree-desc">Where generated images (results.png, versus.png,
+                                overlays/, yt/, …) go, temporary
                                 and overwritten often</span>
                         </div>
                         <div class="file-tree-row" data-depth="0" data-dir>
@@ -287,13 +563,30 @@
                             <span class="file-tree-desc">Timestamped .7z archives created by services/backup.py</span>
                         </div>
                         <div class="file-tree-row" data-depth="0" data-dir>
+                            <span class="file-tree-name">logs/</span>
+                            <span class="file-tree-desc">Log files - <code translate="no">cheep-cheep.log</code> for
+                                the bot and the services, <code translate="no">cheep-cheep-server.log</code> for the
+                                API</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="0" data-dir>
+                            <span class="file-tree-name">changelogs/</span>
+                            <span class="file-tree-desc">One markdown file per release, describing what changed</span>
+                        </div>
+                        <div class="file-tree-row" data-depth="0" data-dir>
                             <span class="file-tree-name">tests/</span>
                             <span class="file-tree-desc">pytest tests (run in CI), plus a few benchmark and manual
                                 scripts (see <a href="/rules/cheepcheeparchitecture/#tests">§8</a>)</span>
                         </div>
+                        <div class="file-tree-row" data-depth="0" data-dir>
+                            <span class="file-tree-name">.github/</span>
+                            <span class="file-tree-desc"><code translate="no">workflows/tests.yml</code> - the CI
+                                pipeline that runs pytest on every push and pull request</span>
+                        </div>
                     </div>
 
-                    <hr>
+                    <p>
+                        Every module in that tree gets its own entry in §5.
+                    </p>
 
                     <h2 id="layering-rules"><a href="/rules/cheepcheeparchitecture/#layering-rules">3. Layering rules
                             (how
@@ -316,7 +609,10 @@
                                         <li>
                                             <div class="import-tree-row">
                                                 <span class="import-tree-name">bot/*</span>
-                                                <span class="import-tree-desc">imports pagination.py → embed.py</span>
+                                                <span class="import-tree-desc">embed*.py for embeds, pagination.py for
+                                                    paginated views, permissions.py / channels.py / guild_guard.py /
+                                                    interactions.py / avatar_sender.py for the small
+                                                    Discord-side helpers</span>
                                             </div>
                                         </li>
                                         <li>
@@ -324,13 +620,13 @@
                                                 <span class="import-tree-name">services/*</span>
                                                 <span class="import-tree-desc">calls the service synchronously (such as
                                                     backup.py,
-                                                    data_export.py, gitimport.py)</span>
+                                                    data_export.py, gitimport.py, team_emojis.py)</span>
                                             </div>
                                         </li>
                                         <li>
                                             <div class="import-tree-row">
                                                 <span class="import-tree-name">core/*</span>
-                                                <span class="import-tree-desc">logic.py (SQLite + JSON), graphics.py
+                                                <span class="import-tree-desc">logic/ (SQLite + JSON), graphics.py
                                                     (Pillow), generate_calendar.py (matches.ics)</span>
                                             </div>
                                             <ul>
@@ -360,7 +656,7 @@
                                                     (<code translate="no">api.umkl.co.uk</code>) that powers this
                                                     website —
                                                     see <a
-                                                        href="/rules/cheepcheeparchitecture/#services-dbserver-py">§5.12</a></span>
+                                                        href="/rules/cheepcheeparchitecture/#services-dbserver-py">§5.13</a></span>
                                             </div>
                                         </li>
                                         <li>
@@ -378,20 +674,37 @@
 
                     <ul>
                         <li>
-                            <code translate="no">core/logic.py</code> is the only module that touches SQLite or the JSON
+                            <code translate="no">core/logic/</code> is the only layer that touches SQLite or the JSON
                             data files
                             directly, nothing else writes to the database
                         </li>
                         <li>
+                            Inside the package that holds by convention: query modules get their connection from
+                            <code translate="no">core/logic/_db.py</code>, and JSON access goes through
+                            <code translate="no">core/logic/storage.py</code>
+                        </li>
+                        <li>
                             <code translate="no">services/dbserver.py</code> keeps its own read-only connection to the
                             database
-                            for the web API (see <a
-                                href="/rules/cheepcheeparchitecture/#services-gitimport-py">§5.11</a> and
+                            for the web API (see <a href="/rules/cheepcheeparchitecture/#services-dbserver-py">§5.13</a>
+                            and
                             <a href="/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a>).
+                        </li>
+                        <li>
+                            No service imports <code translate="no">bot/</code> or
+                            <code translate="no">core/graphics.py</code>, and none import each other. The coupling
+                            only runs one way: cogs into services
                         </li>
                     </ul>
 
-                    <hr>
+                    <blockquote class="warning">
+                        <span class="doc-callout-label">One deliberate exception</span>
+                        <code translate="no">cogs/sql_cog.py</code> is the only thing that writes to the database
+                        without going through <code translate="no">core.logic</code> - it's an
+                        <code translate="no">umkl! sql</code> prefix command for raw SQL, gated to Developers and
+                        admins. Treat anything it changes as bypassing the calendar rebuild, the JSON stores and
+                        the backups in §5.9.
+                    </blockquote>
 
                     <h2 id="startup-sequence"><a href="/rules/cheepcheeparchitecture/#startup-sequence">4. Startup
                             sequence
@@ -407,8 +720,7 @@
                             passed, calls <code translate="no">services.gitimport.start_git_clone()</code> to pull the
                             latest
                             code from git before boot (used for the self-update/restart flow, see
-                            <a href="/rules/cheepcheeparchitecture/#services-gitimport-py">§5.11</a> and
-                            <a href="/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a>)
+                            <a href="/rules/cheepcheeparchitecture/#services-gitimport-py">§5.12</a>)
                         </li>
                         <li>
                             <code translate="no">core.generate_calendar.build_calendar()</code> - regenerates
@@ -416,24 +728,26 @@
                             <code translate="no">data/matchdata.json</code>
                         </li>
                         <li>
-                            <code translate="no">services.dbserver.start_db_server()</code> - spawns two daemon threads:
-                            the
-                            Waitress HTTP server (port 5555, proxied externally as <code
-                                translate="no">api.umkl.co.uk</code>)
-                            and an avatar-refresh loop used in said API
-                            (see <a href="/rules/cheepcheeparchitecture/#services-dbserver-py">§5.12</a>)
+                            <code translate="no">services.dbserver.start_db_server(bot)</code> - spawns three daemon
+                            threads: the
+                            Waitress HTTP server (port 5555, proxied as <code translate="no">api.umkl.co.uk</code>), an
+                            avatar-refresh loop and a videos-refresh
+                            loop (see <a href="/rules/cheepcheeparchitecture/#services-dbserver-py">§5.13</a>). It
+                            takes the bot object so the API can read guild roles for <code
+                                translate="no">/teamcounts</code>
                         </li>
                         <li>
                             A daemon thread runs <code translate="no">services.checkrss.check_rss_loop</code>, calling
                             back into<br>
                             <code translate="no">main.on_rss_update</code> → posts new UMKL news links to the
-                            <code translate="no">news-articles</code> channel
+                            <code translate="no">announcements</code> channel, pinging the
+                            <i>News Announcements</i> role
                         </li>
                         <li>
                             A daemon thread runs <code translate="no">services.predictionpolls.polling_loop</code> -
                             this file is
                             currently unfinished (see <a
-                                href="/rules/cheepcheeparchitecture/#services-predictionpolls-py">§5.10</a>)
+                                href="/rules/cheepcheeparchitecture/#services-predictionpolls-py">§5.11</a>)
                         </li>
                         <li>
                             <code translate="no">bot.run(TOKEN)</code> starts the Discord client.<br>
@@ -445,13 +759,16 @@
                                     message's
                                     view state)
                                 </li>
-                                <li>Loads every cog listed in <code translate="no">main.py</code> (order matters for
-                                    <code translate="no">dev_cog</code>, see
+                                <li>Loads the ten production cogs listed in <code translate="no">main.py</code>
+                                    (order matters for <code translate="no">dev_cog</code>, see
                                     <a href="/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a>)
                                 </li>
-                                <li>Registers <code translate="no">cogs.listeners_cog.CaptchaButton</code> as a
-                                    persistent
-                                    dynamic item
+                                <li>Registers <code translate="no">cogs.listeners_cog.CaptchaButton</code> and the
+                                    three <code translate="no">cogs.ticket_cog</code> buttons
+                                    (<code translate="no">TicketCategoryButton</code>,
+                                    <code translate="no">TicketCloseButton</code>,
+                                    <code translate="no">TicketReopenButton</code>) as persistent dynamic items, so
+                                    five buttons in total survive a restart
                                 </li>
                                 <li>Injects <code translate="no">update_signup_embed</code> (from
                                     <code translate="no">match_cog</code>) and <code
@@ -462,9 +779,14 @@
                                 </li>
                             </ul>
                         </li>
+                        <li>
+                            Once connected, <code translate="no">on_ready</code> calls
+                            <code translate="no">bot.guild_guard.enforce_guild_allowlist()</code> and
+                            <code translate="no">on_guild_join</code> calls
+                            <code translate="no">leave_unauthorised_guild()</code>, so the bot only ever stays in the
+                            UMKL server
+                        </li>
                     </ol>
-
-                    <hr>
 
                     <h2 id="module-reference"><a href="/rules/cheepcheeparchitecture/#module-reference">5. Module
                             reference</a></h2>
@@ -476,44 +798,158 @@
                     <ul>
                         <li>Discord token/IDs/map of channel IDs</li>
                         <li>File paths for the DB and all JSON data files</li>
-                        <li>Graphics constants (fonts, caching flags)</li>
+                        <li>Graphics constants (font paths, caching flags, emblem directories)</li>
                         <li>The full MK8DX track name list</li>
-                        <li>Captcha/backup tuning values</li>
+                        <li>Captcha/backup/SP tuning values</li>
+                        <li>The support ticket configuration: staff roles, archive delays, transcript and
+                            attachment limits, and the <code translate="no">TICKET_CATEGORIES</code> table (category
+                            key → emoji, label, description and which staff roles handle it)</li>
                     </ul>
                     <p>
-                        Every other module imports from here directly; it imports nothing from the rest of the project.
+                        Every other module imports from here. It imports nothing else from the project.
+                    </p>
+                    <p>
+                        <code translate="no">ALLOWED_GUILD_IDS</code> is just <code translate="no">GUILD_ID</code>. It
+                        drives <code translate="no">bot/guild_guard.py</code>, so Cheep Cheep only stays in the UMKL
+                        server.
                     </p>
 
-                    <h3 id="core-logic-py">5.2 <code translate="no">core/logic.py</code> (the data layer)</h3>
+                    <h3 id="core-logic-py">5.2 <code translate="no">core/logic/</code> (the data layer)</h3>
                     <p class="p-no-spacing">
-                        The point of contact with <code translate="no">data/umkl_db.db</code> (SQLite) and every JSON
-                        data file. Organised into sections:
+                        <code translate="no">core/logic/</code> is the only code that reads or writes
+                        <code translate="no">data/umkl_db.db</code> and the JSON data files. It used to be a single
+                        2000-line <code translate="no">core/logic.py</code>. It's now a package, one module per
+                        domain, with a flat public API:
                     </p>
-                    <ul>
-                        <li>Current season/match lookup</li>
-                        <li>Registration</li>
-                        <li>Points/standings (with both single-team and batched multi-team query variants - batched
-                            versions
-                            exist for speed and optimisation purposes)</li>
-                        <li>Match lifecycle (create/edit/signup/substitute)</li>
-                        <li>SP calculation</li>
-                        <li>Livescore data</li>
-                        <li>Prediction polls</li>
-                        <li>Captcha sessions</li>
-                        <li>Round pairings</li>
-                        <li>Profile-unlock items</li>
-                        <li>The personal data export query</li>
-                    </ul>
-                    <p>
-                        Also defines <code translate="no">TeamData</code> (a <code translate="no">namedtuple</code>)
-                        used as the
-                        return type of <code translate="no">get_team_data()</code> throughout the codebase.
+                    <div class="pipeline" translate="no">
+                        <div class="pipeline-step">cogs, bot, services</div>
+                        <span class="pipeline-arrow">→</span>
+                        <div class="pipeline-step">core.logic.&lt;anything&gt;</div>
+                        <span class="pipeline-arrow">→</span>
+                        <div class="pipeline-step">core/logic/&lt;module&gt;</div>
+                        <span class="pipeline-arrow">→</span>
+                        <div class="pipeline-step">_db / storage</div>
+                        <span class="pipeline-arrow">→</span>
+                        <div class="pipeline-step">SQLite + JSON</div>
+                    </div>
+                    <p class="p-no-spacing">
+                        Every module is re-exported from <code translate="no">core/logic/__init__.py</code>, so callers
+                        still write <code translate="no">from core import logic</code> and
+                        <code translate="no">logic.get_team_season_points()</code>. Which file a function lives in
+                        doesn't matter to them. Imports inside the package are relative
+                        (<code translate="no">from ._db import get_connection</code>), so the split stays internal.
                     </p>
+
+                    <div class="tag-clan-table after-title">
+                        <table>
+                            <tr>
+                                <th>Module</th>
+                                <th>Covers</th>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">_db.py</code></td>
+                                <td>The one <code translate="no">get_connection()</code> context manager every other
+                                    module opens SQLite through (10s timeout,
+                                    <code translate="no">busy_timeout</code>,
+                                    <code translate="no">sqlite3.Row</code> row factory)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">storage.py</code></td>
+                                <td>Every JSON store's getter/setter, plus higher-level helpers built on top
+                                    (captcha sessions, sticky messages, ticket blobs). This is the only module that
+                                    opens a JSON file
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">utils.py</code></td>
+                                <td>Small pure helpers with no I/O: <code translate="no">is_hex_color</code>,
+                                    <code translate="no">format_date_UK</code>,
+                                    <code translate="no">compute_total_pages</code>,
+                                    <code translate="no">get_position_icon</code>,
+                                    <code translate="no">strip_timezone</code> and the
+                                    <code translate="no">POSITION_ICONS</code> table
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">seasons.py</code></td>
+                                <td>Season lifecycle: current/latest-completed season, season status and match
+                                    progress
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">teams.py</code></td>
+                                <td>Team entities, season membership, place/coords lookup, Discord role ↔ team
+                                    mapping, and the round pairings generator. Also defines
+                                    <code translate="no">TeamData</code>, the
+                                    <code translate="no">namedtuple</code> returned by
+                                    <code translate="no">get_team_data()</code> and used as a return type throughout
+                                    the codebase
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">tickets.py</code></td>
+                                <td>Support ticket metadata - reservation, thread linking, open/closed state, listing
+                                    and deletion. Tickets themselves are private Discord threads; this is the index the
+                                    board uses to list and resolve them
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">users.py</code></td>
+                                <td>User registration and per-user aggregates (career points, podiums, wins, best
+                                    finishes)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">standings.py</code></td>
+                                <td>Derived points, standings and team records, in both single-team and batched
+                                    multi-team variants - batched versions exist for speed, so a single
+                                    <code translate="no">/teamdata</code> request doesn't run one query per team
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">matches.py</code></td>
+                                <td>The match lifecycle: create/edit, entries, sign-up, substitution, score
+                                    submission, approval and penalties
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">matchdata.py</code></td>
+                                <td>Schedule lookups over <code translate="no">matchdata.json</code>, live score
+                                    state, and the writes to
+                                    <code translate="no">matchdata.json</code> (which call
+                                    <code translate="no">build_calendar()</code> - see §5.4)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">sp.py</code></td>
+                                <td>Star Points: per-match SP, VC attendance SP, and the versioned SP rule table read
+                                    from <code translate="no">data/sp_versions.json</code> (so old matches keep
+                                    scoring under the rules they were played under)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">profile.py</code></td>
+                                <td>Compresses a player's stats into the profile-site URL
+                                    (<code translate="no">lzstring</code>), including the cosmetic unlock flags from
+                                    <code translate="no">profileunlockitems.json</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">export.py</code></td>
+                                <td>The personal data export query (see §5.14)
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
                     <p>
-                        It only imports <code translate="no">config</code> and
-                        <code translate="no">.generate_calendar.build_calendar</code> (which is called after any
-                        <code translate="no">matchdata.json</code> write - see
-                        <a href="/rules/cheepcheeparchitecture/#core-generate-calendar-py">§5.4</a>).
+                        It imports <code translate="no">config</code>,
+                        <code translate="no">core.generate_calendar</code> (to rebuild the calendar after a
+                        <code translate="no">matchdata.json</code> write), plus <code translate="no">discord</code>
+                        and <code translate="no">multipledispatch</code> for the team and role helpers. Nothing from
+                        <code translate="no">bot/</code>, <code translate="no">cogs/</code> or
+                        <code translate="no">services/</code>.
                     </p>
 
                     <h3 id="core-graphics-py">5.3 <code translate="no">core/graphics.py</code></h3>
@@ -527,40 +963,44 @@
                         <li>Winner images</li>
                         <li>Welcome images</li>
                         <li>Stream overlays</li>
+                        <li>Team article thumbnails</li>
                         <li>Room-code images</li>
                         <li>Captcha images</li>
                         <li>YouTube thumbnails</li>
                         <li>Round-schedule images</li>
                     </ul>
                     <p>
-                        Maintains in-memory <code translate="no">FONT_CACHE</code>,
-                        <code translate="no">IMAGE_CACHE</code>, and <code translate="no">URL_CACHE</code> dicts
-                        (toggled via
-                        <code translate="no">config.CACHING_ENABLED</code>) so repeated renders don't reload
-                        fonts/backgrounds/team
-                        emblems from the disk every time. Calls into <code translate="no">core.logic</code> for all the
-                        data it
-                        renders (team names/colours, match results, standings).
-                        <code translate="no">apply_team_gradient_overlay()</code> recolours the stream-overlay
-                        background
-                        per-team by hue distance matching, used for <code
-                            translate="no">/generate-stream-overlay</code>.
+                        Keeps fonts, backgrounds and team emblems in memory
+                        (<code translate="no">FONT_CACHE</code>, <code translate="no">IMAGE_CACHE</code>,
+                        <code translate="no">URL_CACHE</code>) so repeated renders don't hit the disk. Toggle with
+                        <code translate="no">config.CACHING_ENABLED</code>;
+                        <code translate="no">config.PRE_CACHING_ENABLED</code> warms up the gradient-overlay assets
+                        on start. All the data it renders comes from <code translate="no">core.logic</code>.
+                        <code translate="no">apply_team_gradient_overlay()</code> recolours the stream overlay per
+                        team by hue distance, used by <code translate="no">/generate-stream-overlay</code>.
+                    </p>
+                    <p>
+                        All of its file paths point into <code translate="no">assets/</code>
+                        (<code translate="no">fonts/</code>, <code translate="no">graphics/</code>,
+                        <code translate="no">teamemblems/</code>). <code translate="no">tests/test_assets.py</code>
+                        fails CI if a hardcoded asset path doesn't
+                        exist.
                     </p>
                     <p>
                         The standings, versus, results, winner and YouTube thumbnail functions take an optional
                         <code translate="no">output_path</code> (the stream overlay has <code
                             translate="no">filename</code>). By default they write to a fixed file in
-                        <code translate="no">output/</code>, which live announcements re-open after awaiting other
-                        messages, so the <code translate="no">/generate</code> commands pass a per-call temporary path
-                        instead and can't overwrite an announcement mid-send. Made-up teams
-                        (<code translate="no">fake_team_name</code>) are never added to <code
-                            translate="no">IMAGE_CACHE</code>, so arbitrary names and colours can't grow it.
+                        <code translate="no">output/</code>, which live announcements reopen after awaiting other
+                        messages. So the <code translate="no">/generate</code> commands pass a per-call temporary
+                        path, and a slow command can't overwrite an announcement mid-send. Made-up teams
+                        (<code translate="no">fake_team_name</code>) never enter <code
+                            translate="no">IMAGE_CACHE</code>, so random names and colours can't grow it.
                     </p>
                     <p>
                         The captcha text/image pipeline (<code translate="no">generate_captcha_text()</code>,
-                        <code translate="no">create_captcha_image()</code>) also lives here.
-                        <code translate="no">cogs/listeners_cog.py</code> initiates the captcha flow (challenging
-                        members on join).
+                        <code translate="no">create_captcha_image()</code>) lives here too.
+                        <code translate="no">cogs/listeners_cog.py</code> kicks off the flow, challenging members on
+                        join.
                     </p>
 
                     <h3 id="core-generate-calendar-py">5.4 <code translate="no">core/generate_calendar.py</code></h3>
@@ -569,13 +1009,15 @@
                             <code translate="no">data/matches.ics</code> (an RFC 5545 calendar, via the
                             <code translate="no">icalendar</code> package, localised to Europe/London)
                         </li>
+                        <li>Event UIDs are the match's Discord Scheduled Event ID when it has one, so rescheduling a
+                            match updates the same calendar entry rather than duplicating it; otherwise a UUIDv5 is
+                            derived from the title and start time
+                        </li>
                         <li><code translate="no">build_calendar()</code> is called once at boot by
                             <code translate="no">main.py</code> (<code translate="no">from core.generate_calendar import
                                 build_calendar</code>), and again by <code translate="no">core.logic</code> every time
                             match
                             data changes
-                            <code translate="no">services/</code> (see
-                            <a href="/rules/cheepcheeparchitecture/#layering-rules">§3</a>)
                         </li>
                         <li><code translate="no">services/dbserver.py</code> imports its
                             <code translate="no">OUTPUT_PATH</code> constant to serve the
@@ -583,29 +1025,60 @@
                         </li>
                     </ul>
 
-                    <h3 id="bot-embed-py">5.5 <code translate="no">bot/embed.py</code></h3>
-                    <ul>
-                        <li>
-                            Builds every <code translate="no">discord.Embed</code> sent by the bot, grouped by feature
-                            (teams,
-                            profile, matches, live score, leaderboards, polls, rules, logs/passwords, captcha)
-                        </li>
-                        <li>
-                            Reads whatever data it needs from <code translate="no">core.logic</code>
-                        </li>
-                        <li>
-                            Leaderboard functions return <code translate="no">(embed, total_pages)</code> tuples, with
-                            <code translate="no">total_pages</code> worked out via
-                            <code translate="no">logic.compute_total_pages(...)</code>
-                        </li>
-                    </ul>
+                    <h3 id="bot-embeds">5.5 <code translate="no">bot/embed*.py</code></h3>
+                    <p class="p-no-spacing">
+                        What the bot can <i>say</i> is split three ways, by who is allowed to see it. All three read
+                        whatever data they need from <code translate="no">core.logic</code> and are pure presentation
+                        - none of them mutate state:
+                    </p>
+                    <div class="tag-clan-table after-title">
+                        <table>
+                            <tr>
+                                <th>Module</th>
+                                <th>Audience</th>
+                                <th>Covers</th>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">embed.py</code></td>
+                                <td>Members</td>
+                                <td>Join flow, profiles, sign-up, matches, SP, leaderboards, prediction polls,
+                                    tickets and captcha. The largest module in <code translate="no">bot/</code>. Also
+                                    defines the <code translate="no">EMBED</code> colour palette and
+                                    <code translate="no">ALREADY_IN_TEAM_LINES</code>, the sarcastic replies
+                                    <code translate="no">/join</code> uses
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">embed_board.py</code></td>
+                                <td>The board</td>
+                                <td>Everything that goes to a log or staff channel: join/leave/substitution records,
+                                    captcha audit lines, ticket logs, results verification and penalties, season
+                                    rollovers, password responses and stream keys, live score edits, and the
+                                    <code translate="no">/create-match</code> progress embeds
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">embed_dev.py</code></td>
+                                <td>Developers</td>
+                                <td>SP gains per version (paginated for Discord's embed field limits) and the
+                                    prediction poll embed
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <p>
+                        Leaderboard functions in <code translate="no">embed.py</code> return
+                        <code translate="no">(embed, total_pages)</code> tuples, with
+                        <code translate="no">total_pages</code> worked out via
+                        <code translate="no">logic.compute_total_pages(...)</code>.
+                    </p>
 
                     <h3 id="bot-pagination-py">5.6 <code translate="no">bot/pagination.py</code></h3>
                     <ul>
                         <li>Two Views: <code translate="no">Pagination</code> (a paginator wrapping any
                             <code translate="no">get_page(index)</code> async callable) and
-                            <code translate="no">SeasonEmbedPagination</code> (adds a season <code
-                                translate="no">Select</code>
+                            <code translate="no">SeasonEmbedPagination</code> (adds a season
+                            <code translate="no">SeasonSelect</code>
                             dropdown on top, used by every season-scoped leaderboard)
                         </li>
                         <li>
@@ -618,26 +1091,95 @@
                         </li>
                     </ul>
 
-                    <h3 id="cogs-overview">5.7 <code translate="no">cogs/</code></h3>
+                    <h3 id="bot-helpers">5.7 <code translate="no">bot/</code> helpers</h3>
+                    <p class="p-no-spacing">
+                        The rest of <code translate="no">bot/</code> is a handful of small, single-purpose modules
+                        that every cog leans on:
+                    </p>
+                    <div class="tag-clan-table after-title">
+                        <table>
+                            <tr>
+                                <th>Module</th>
+                                <th>What it does</th>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">permissions.py</code></td>
+                                <td><code translate="no">has_role_or_admin(*roles)</code> and
+                                    <code translate="no">has_role_or_admin_command(*roles)</code> - the same role check
+                                    exposed as both an <code translate="no">app_commands.check</code> and a
+                                    <code translate="no">commands.check</code>, so slash and <code
+                                        translate="no">umkl!</code>
+                                    prefix commands share one definition. Guild admins always pass
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">channels.py</code></td>
+                                <td><code translate="no">get_text_channel(client, channel_id)</code> - looks a channel
+                                    up by ID and raises <code translate="no">TypeError</code> if it's missing or the
+                                    wrong type, which always means a <code translate="no">config.py</code>/Discord
+                                    mismatch. Replaces scattered <code translate="no">get_channel()</code> calls and
+                                    <code translate="no">isinstance</code> checks
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">guild_guard.py</code></td>
+                                <td>The server allowlist. <code translate="no">is_allowed_guild()</code>,
+                                    <code translate="no">leave_unauthorised_guild()</code> and
+                                    <code translate="no">enforce_guild_allowlist()</code> drive
+                                    <code translate="no">on_ready</code> and
+                                    <code translate="no">on_guild_join</code> in <code translate="no">main.py</code>.
+                                    discord.py 2.x has no public <code translate="no">leave_guild()</code>, so it goes
+                                    through <code translate="no">client.http.leave_guild()</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">interactions.py</code></td>
+                                <td><code translate="no">get_custom_id(interaction)</code> - pulls the
+                                    <code translate="no">custom_id</code> off the component that fired an
+                                    interaction
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">avatar_sender.py</code></td>
+                                <td><code translate="no">AvatarSender</code> - sends a message through a per-channel
+                                    webhook called <i>Meep Meep</i> so it can appear with a different avatar than the
+                                    bot's. Reuses one webhook per channel, re-applies the avatar to an adopted
+                                    webhook exactly once, and always hands Discord PNG bytes
+                                    (<code translate="no">avatar_bytes()</code>) rather than a data URI. Used by
+                                    <code translate="no">listeners_cog</code>'s join/disconnect replies
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <h3 id="cogs-overview">5.8 <code translate="no">cogs/</code></h3>
                     <p>
-                        All ten cogs are loaded by <code translate="no">main.py</code>. See
-                        <a href="/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a> for exactly which
-                        functions/classes
-                        each cog imports from another cog - <code translate="no">cogs/match_cog.py</code> in particular
-                        acts as a shared library of autocomplete providers and helpers for several other cogs.
+                        Eleven cogs. <code translate="no">main.py</code> loads ten in production, then
+                        <code translate="no">dev_cog</code> last (§6 has the reasons). Several cogs take autocomplete
+                        providers and helpers from <code translate="no">cogs/match_cog.py</code> —
+                        <a href="/rules/cheepcheeparchitecture/#cross-cog-import-map">§6</a> lists exactly what each
+                        one takes.
                     </p>
                     <p>
                         Related commands are grouped with <code translate="no">app_commands.Group</code> class
                         attributes: <code translate="no">/edit</code> (<code translate="no">match_cog</code>),
                         <code translate="no">/live-score</code>, <code translate="no">/season</code>,
-                        <code translate="no">/request</code> (<code translate="no">core_cog</code>), and
+                        <code translate="no">/request</code> (<code translate="no">core_cog</code>),
+                        <code translate="no">/tickets</code> (<code translate="no">ticket_cog</code>), and
                         <code translate="no">/dev</code> and <code translate="no">/generate</code> (<code
-                            translate="no">dev_cog</code>). discord.py only collects and binds commands declared on
-                        the cog's own class, so a group's subcommands must live in the same cog as the group. This is
-                        why <code translate="no">/request stream-key</code> is in <code translate="no">core_cog</code>
-                        rather than <code translate="no">team_cog</code>, and <code translate="no">/dev
+                            translate="no">dev_cog</code>). discord.py only binds commands declared on the cog's own
+                        class, so a group's subcommands have to sit in the same cog as the group. That's why
+                        <code translate="no">/request stream-key</code> is in <code translate="no">core_cog</code>
+                        and not <code translate="no">team_cog</code>, and <code translate="no">/dev
                             add-match-results</code> is in <code translate="no">dev_cog</code>
-                        rather than <code translate="no">results_cog</code>.
+                        and not <code translate="no">results_cog</code>.
+                    </p>
+                    <p>
+                        A few legacy <code translate="no">umkl!</code> prefix commands survive alongside the slash
+                        commands, for the things Discord's slash-command model can't do well:
+                        <code translate="no">sync_tree</code> (<code translate="no">core_cog</code>),
+                        <code translate="no">sql</code> (<code translate="no">sql_cog</code>) and
+                        <code translate="no">add_sp</code> (<code translate="no">dev_cog</code>).
                     </p>
 
                     <div class="tag-clan-table after-title">
@@ -666,8 +1208,11 @@
                             </tr>
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">listeners_cog.py</code></td>
-                                <td>Member join/leave (captcha flow), SP distribution, disconnect-keyword detection,
-                                    scheduled DB backups (<code translate="no">@tasks.loop</code>)</td>
+                                <td>Member join/leave (captcha flow), the join/disconnect keyword replies,
+                                    <code translate="no">/manually-verify</code>, and all of the scheduled
+                                    <code translate="no">@tasks.loop</code> work: DB backups, VC SP awards, sign-up
+                                    embed syncing and poll sticky messages
+                                </td>
                             </tr>
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">live_score_cog.py</code></td>
@@ -698,7 +1243,18 @@
                             </tr>
                             <tr>
                                 <td class="table-key" translate="no"><code translate="no">team_cog.py</code></td>
-                                <td>Team creation (Discord role/channels/category), colour/name changes, season entry
+                                <td>Team creation (Discord role/channels/category), colour/name changes, season entry,
+                                    and team emoji syncing via
+                                    <code translate="no">services/team_emojis.py</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">ticket_cog.py</code></td>
+                                <td>The member support system: <code translate="no">/ticket</code> opens a private
+                                    thread picked from <code translate="no">config.TICKET_CATEGORIES</code>, and the
+                                    <code translate="no">/tickets list</code>, <code translate="no">close</code> and
+                                    <code translate="no">reopen</code> group manages them. Metadata lives in
+                                    <code translate="no">data/tickets.json</code>
                                 </td>
                             </tr>
                             <tr>
@@ -711,26 +1267,50 @@
                         </table>
                     </div>
 
-                    <h3 id="services-backup-py">5.8 <code translate="no">services/backup.py</code></h3>
+                    <p>
+                        Five buttons are registered as persistent
+                        <code translate="no">discord.ui.DynamicItem</code>s in <code translate="no">main.py</code>, so
+                        they keep working on old messages after a restart:
+                        <code translate="no">match_cog.SignupButton</code>,
+                        <code translate="no">listeners_cog.CaptchaButton</code>, and
+                        <code translate="no">ticket_cog</code>'s
+                        <code translate="no">TicketCategoryButton</code>,
+                        <code translate="no">TicketCloseButton</code> and
+                        <code translate="no">TicketReopenButton</code>. Each one rebuilds itself from a
+                        <code translate="no">template</code> regex, so the close button only needs a ticket number.
+                    </p>
+
+                    <h3 id="services-backup-py">5.9 <code translate="no">services/backup.py</code></h3>
                     <ul>
                         <li>
-                            <code translate="no">backup_database()</code> copies the DB plus every JSON data file into a
-                            temp
+                            <code translate="no">backup_database()</code> copies the DB plus six JSON files into a temp
                             dir, then shells out to the external <code translate="no">7z</code> binary to produce
-                            <code translate="no">backups/YYYY/MM/DD/{timestamp}_backup.7z</code>
+                            <code translate="no">backups/YYYY/MM/DD/{timestamp}_backup.7z</code>. The seven paths
+                            come from the <code translate="no">core.logic</code> constants, so they can't drift.
                         </li>
                         <li>
-                            Not a background loop - it's called synchronously, on demand
+                            Not a loop of its own - it's called synchronously, on demand
                         </li>
                         <li>
                             From <code translate="no">listeners_cog.py</code>'s scheduled task (every
                             <code translate="no">config.BACKUP_INTERVAL</code> minutes, within
                             <code translate="no">config.BACKUP_START_HOUR</code>–<code
-                                translate="no">config.BACKUP_END_HOUR</code>)
+                                translate="no">config.BACKUP_END_HOUR</code>), which then uploads the archive to the
+                            dev-server <code translate="no">backups</code> channel
+                        </li>
+                        <li>
+                            Also called immediately <i>before</i> any mutating operation in
+                            <code translate="no">match_cog</code>, <code translate="no">results_cog</code>,
+                            <code translate="no">team_cog</code>, <code translate="no">season_cog</code> and
+                            <code translate="no">dev_cog</code>
+                        </li>
+                        <li>
+                            Returns the archive path on success and <code translate="no">None</code> on any failure, so
+                            callers can carry on regardless
                         </li>
                     </ul>
 
-                    <h3 id="services-checkrss-py">5.9 <code translate="no">services/checkrss.py</code></h3>
+                    <h3 id="services-checkrss-py">5.10 <code translate="no">services/checkrss.py</code></h3>
                     <ul>
                         <li>
                             Polls <code translate="no">https://umkl.co.uk/news/feed.xml</code> every 60s (using ETag
@@ -745,327 +1325,418 @@
                         <li>
                             Started as a daemon thread from <code translate="no">main.py</code> - the callback
                             (<code translate="no">main.on_rss_update</code>) posts each new link to the
-                            <code translate="no">news-articles</code> channel
+                            <code translate="no">announcements</code> channel
+                        </li>
+                        <li>
+                            Deliberately imports nothing from the rest of the project, so it stays runnable on its own
+                            with <code translate="no">python -m services.checkrss</code>
                         </li>
                     </ul>
 
-                    <h3 id="services-predictionpolls-py">5.10 <code translate="no">services/predictionpolls.py</code>
+                    <h3 id="services-predictionpolls-py">5.11 <code translate="no">services/predictionpolls.py</code>
                     </h3>
                     <ul>
                         <li>
-                            A currently unfinished match prediction polling system
+                            A currently unfinished match prediction polling system -
+                            <code translate="no">polling_loop()</code> is an empty stub, so the daemon thread
+                            <code translate="no">main.py</code> starts simply exits
                         </li>
                     </ul>
 
-                    <h3 id="services-gitimport-py">5.11 <code translate="no">services/gitimport.py</code></h3>
+                    <h3 id="services-gitimport-py">5.12 <code translate="no">services/gitimport.py</code></h3>
                     <ul>
                         <li>
-                            Self-update mechanism: <code translate="no">start_git_clone()</code> clones
-                            <code translate="no">config.GITHUB_LINK</code> into a temp folder and recursively moves the
-                            files
-                            over the project root
+                            Self-update. <code translate="no">start_git_clone()</code> clones
+                            <code translate="no">config.GITHUB_LINK</code> into <code
+                                translate="no">tempgitclonedir/</code>, then moves every file over the project
+                            root. If that folder was left over from a previous run it's deleted first and re-cloned
+                            shallowly (<code translate="no">depth=5</code>); otherwise the existing checkout is
+                            reused and hard-reset to <code translate="no">origin/main</code>
                         </li>
                         <li>
-                            <code translate="no">restart_bot()</code> runs that then calls
+                            <code translate="no">restart_bot()</code> runs that, then calls
                             <code translate="no">sys.exit(1)</code>
                         </li>
-                        <li>
-                            In production the bot runs on Linux, so that relauncher is <b>systemd</b> - the unit file
-                            runs
-                            with <code translate="no">Restart=always</code>, so when
-                            <code translate="no">sys.exit(1)</code> kills the process, systemd just starts it again, now
-                            running the freshly git-pulled code. <code translate="no">tests/supervisor.py</code> (see
-                            <a href="/rules/cheepcheeparchitecture/#tests">§8</a>) only exists to stand in for systemd
-                            on Windows, where there's no (easy) service manager to do this
-                        </li>
                     </ul>
 
-                    <h3 id="services-dbserver-py">5.12 <code translate="no">services/dbserver.py</code></h3>
+                    <blockquote class="info">
+                        <span class="doc-callout-label">The exit code <i>is</i> the restart</span>
+                        Cheep Cheep never restarts itself. In production the relauncher is <b>systemd</b>, whose unit
+                        file runs with <code translate="no">Restart=always</code>, so the
+                        <code translate="no">sys.exit(1)</code> at the end of
+                        <code translate="no">restart_bot()</code> is what brings the freshly pulled code back up.
+                        <code translate="no">tests/supervisor.py</code> (see
+                        <a href="/rules/cheepcheeparchitecture/#tests">§8</a>) stands in for systemd on Windows,
+                        where there's no easy service manager to do this.
+                    </blockquote>
+
+                    <h3 id="services-dbserver-py">5.13 <code translate="no">services/dbserver.py</code></h3>
                     <ul>
                         <li>
-                            The public web API - runs its own Flask app under Waitress on port 5555 (proxied externally
-                            as
+                            The public web API - runs its own Flask app under Waitress on port 5555 with 4 threads
+                            (proxied externally as
                             <code translate="no">api.umkl.co.uk</code>), started as a daemon thread by
-                            <code translate="no">start_db_server()</code> (called from <code
+                            <code translate="no">start_db_server(bot)</code> (called from <code
                                 translate="no">main.py</code>)
                         </li>
                         <li>
-                            Uses its own <code translate="no">get_db_connection()</code> context manager (separate from
-                            <code translate="no">core.logic.get_connection()</code>, though pointed at the same
-                            <code translate="no">data/umkl_db.db</code> file) for a couple of routes
+                            <code translate="no">start_db_server()</code> spawns <b>three</b> daemon threads: the
+                            Waitress server, <code translate="no">_avatar_refresh_loop()</code> for the
+                            <a href="/credits">Credits page</a> avatars (every 24h), and
+                            <code translate="no">_videos_refresh_loop()</code> for a YouTube playlist feed (every
+                            10 minutes). Video metadata is saved to <code translate="no">data/videometadata.json</code>
+                            so restarts don't lose it.
                         </li>
                         <li>
-                            Delegates almost all actual data assembly to batched <code translate="no">core.logic</code>
+                            Has its own <code translate="no">get_db_connection()</code> context manager for a couple
+                            of routes - same <code translate="no">data/umkl_db.db</code> file as
+                            <code translate="no">core.logic.get_connection()</code>, but set to autocommit
+                        </li>
+                        <li>
+                            Most of the data assembly is delegated to batched <code translate="no">core.logic</code>
                             functions (<code translate="no">get_teams_season_points</code>,
                             <code translate="no">get_teams_wins_losses_season</code>,
-                            <code translate="no">get_teams_championships_data</code>, etc.) so a single
-                            <code translate="no">/teamdata</code> request doesn't run one query per team
-                        </li>
-                        <li>
-                            Also runs its own avatar-refresh daemon thread (<code
-                                translate="no">_avatar_refresh_loop</code>)
-                            that re-caches Discord avatars for the <a href="/credits">Credits page</a> every 24 hours
+                            <code translate="no">get_teams_championships_data</code> and so on), so one
+                            <code translate="no">/teamdata</code> request doesn't run a query per team
                         </li>
                     </ul>
 
-                    <p class="p-no-spacing">
-                        The available routes:
-                    </p>
+                    <blockquote class="warning">
+                        <span class="doc-callout-label">Unauthenticated and uncapped</span>
+                        Every route below is open to anyone, with CORS wide open - they're public read-only data, so
+                        there's no key to leak. The only guard on the JSON
+                        routes is Flask's own 405 for a missing <code translate="no">Content-Type</code>, which a
+                        custom error handler turns into a friendly HTML page (as does the 404 handler).
+                    </blockquote>
 
-                    <div class="tag-clan-table after-title">
-                        <table>
-                            <tr>
-                                <th>Route</th>
-                                <th>Method</th>
-                                <th>Notes</th>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code translate="no">/teamdata</code></td>
-                                <td>POST</td>
-                                <td>Delegates to ~13 batched <code translate="no">core.logic</code> lookups, one per
-                                    team
-                                    field</td>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code translate="no">/seasoninfo</code></td>
-                                <td>POST</td>
-                                <td><code translate="no">logic.get_season_status</code> + <code
-                                        translate="no">logic.get_season_match_progress</code>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code translate="no">/teamcolors</code></td>
-                                <td>POST</td>
-                                <td>Direct query, enabled teams only</td>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code translate="no">/teamlocations</code></td>
-                                <td>POST</td>
-                                <td><code translate="no">logic.get_teams_coords</code>, optionally filtered by season
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code translate="no">/matchdata</code></td>
-                                <td>POST</td>
-                                <td><code translate="no">logic.get_matchdata()</code> enriched with computed
-                                    results/penalties for matches</td>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code translate="no">/matches.ics</code></td>
-                                <td>GET</td>
-                                <td>Serves the file written by
-                                    <code translate="no">core.generate_calendar.build_calendar()</code>, from the path
-                                    in
-                                    <code translate="no">core.generate_calendar.OUTPUT_PATH</code>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code translate="no">/live</code></td>
-                                <td>POST</td>
-                                <td><code translate="no">logic.get_live_score()</code></td>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code translate="no">/pfps/&lt;name&gt;</code></td>
-                                <td>GET</td>
-                                <td>Serves cached credits-team avatars</td>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code
-                                        translate="no">/teamemblems/&lt;name&gt;</code></td>
-                                <td>GET</td>
-                                <td>Serves team emblem assets (falls back to <code translate="no">DEFAULT</code> if no
-                                    team emblem
-                                    is available)</td>
-                            </tr>
-                        </table>
-                    </div>
+                    <details class="doc-details" open>
+                        <summary>Route reference <span class="doc-details-count">12 routes</span></summary>
+                        <div class="doc-details-body">
+                            <p class="p-no-spacing">
+                                The available routes:
+                            </p>
 
-                    <p>
-                        All of the <code translate="no">POST</code> routes above accept a JSON body and return JSON. You
-                        can
-                        make a request like this:
-                    </p>
-                    <pre class="codeBox" translate="no">return fetch('https://api.umkl.co.uk/teamdata', {
-                        method: 'POST',
-                        headers: {
-                        'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                        team: "York",
-                        season: 2
-                        })
-                        })</pre>
+                            <div class="tag-clan-table after-title">
+                                <table>
+                                    <tr>
+                                        <th>Route</th>
+                                        <th>Method</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code translate="no">/teamdata</code></td>
+                                        <td>POST</td>
+                                        <td>Delegates to ~13 batched <code translate="no">core.logic</code> lookups, one
+                                            per
+                                            team
+                                            field</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code translate="no">/seasoninfo</code>
+                                        </td>
+                                        <td>POST</td>
+                                        <td><code translate="no">logic.get_season_status</code> + <code
+                                                translate="no">logic.get_season_match_progress</code>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code translate="no">/teamcolors</code>
+                                        </td>
+                                        <td>POST</td>
+                                        <td>Direct query, enabled teams only</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code translate="no">/teamcounts</code>
+                                        </td>
+                                        <td>GET</td>
+                                        <td>Per-team member counts, read live off the Discord guild's roles rather than
+                                            the
+                                            database. Returns <code translate="no">503</code> if the bot isn't ready yet
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code translate="no">/teamlocations</code>
+                                        </td>
+                                        <td>POST</td>
+                                        <td><code translate="no">logic.get_teams_coords</code>, optionally filtered by
+                                            season
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code translate="no">/matchdata</code></td>
+                                        <td>POST</td>
+                                        <td><code translate="no">logic.get_matchdata()</code> enriched with computed
+                                            results/penalties for matches</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code
+                                                translate="no">/match/current/&lt;team&gt;</code></td>
+                                        <td>GET</td>
+                                        <td><code translate="no">logic.get_current_match()</code> for one team by name -
+                                            <code translate="no">{}</code> when they have no open match
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code translate="no">/matches.ics</code>
+                                        </td>
+                                        <td>GET</td>
+                                        <td>Serves the file written by
+                                            <code translate="no">core.generate_calendar.build_calendar()</code>, from
+                                            the path
+                                            in
+                                            <code translate="no">core.generate_calendar.OUTPUT_PATH</code>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code
+                                                translate="no">/live/&lt;match&gt;</code></td>
+                                        <td>GET</td>
+                                        <td><code translate="no">logic.get_live_score()</code> for one match ID</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code translate="no">/videos</code></td>
+                                        <td>GET</td>
+                                        <td>The cached UMKL YouTube playlist (title, thumbnail, URL). Refreshed in the
+                                            background every 10 minutes; oEmbed lookups that fail back off for 24 hours
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code
+                                                translate="no">/pfps/&lt;name&gt;</code></td>
+                                        <td>GET</td>
+                                        <td>Serves cached credits-team avatars, but only for names listed in
+                                            <code translate="no">data/creditsaccounts.json</code>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code
+                                                translate="no">/teamemblems/&lt;name&gt;</code></td>
+                                        <td>GET</td>
+                                        <td>Serves team emblem assets (falls back to <code translate="no">DEFAULT</code>
+                                            if no
+                                            team emblem
+                                            is available). <code translate="no">?og</code> and <code
+                                                translate="no">?med</code>
+                                            pick the Open Graph and medium thumbnail variants
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
 
-                    <h4 id="route-teamdata" translate="no">POST /teamdata</h4>
-                    <p class="p-no-spacing">
-                        Returns data about all teams in a specific season, or a specific team if a requested team is in
-                        the
-                        payload. If there isn't a season parameter in the payload, data from the latest season is
-                        returned.
-                    </p>
-                    <p class="p-no-spacing"><b>Example payload:</b></p>
-                    <pre class="codeBox" translate="no">{
-                        "team": "York", // Team name (string) - optional
-                        "season": 2 // Season (int) - optional
-                        }</pre>
-                    <p class="p-no-spacing"><b>Example response:</b></p>
-                    <pre class="codeBox" translate="no">[
-                        {
-                        "career_wins_losses": [3, 0],
-                        "coords": [53.96, -1.08],
-                        "first_entry": 1,
-                        "place_id": 1826149980,
-                        "season_matches_played": 0,
-                        "season_penalties": 0,
-                        "season_position": 1,
-                        "season_wins_losses": [0, 0],
-                        "team_career_points": 1781,
-                        "team_championships": 1,
-                        "team_color": "#1BAA8B",
-                        "team_full_name": "University of York",
-                        "team_id": 1,
-                        "team_name": "York",
-                        "team_place": "York, England",
-                        "team_season_points": 0
-                        },
-                        ...
-                        ]</pre>
+                            <p>
+                                All of the <code translate="no">POST</code> routes above accept a JSON body and return
+                                JSON. You
+                                can
+                                make a request like this:
+                            </p>
+                            <pre class="codeBox" translate="no">return fetch('https://api.umkl.co.uk/teamdata', {
+                                method: 'POST',
+                                headers: {
+                                'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                team: "York",
+                                season: 2
+                                })
+                                })</pre>
 
-                    <h4 id="route-seasoninfo" translate="no">POST /seasoninfo</h4>
-                    <p class="p-no-spacing">
-                        Returns data about a season, specifically the status of a season (concluded, recently completed,
-                        upcoming or ongoing). If no season is specified in the payload, data about the latest season is
-                        returned.
-                    </p>
-                    <p class="p-no-spacing"><b>Example payload:</b></p>
-                    <pre class="codeBox" translate="no">{
-                        "season": 2 // Season (int) - optional
-                        }</pre>
-                    <p class="p-no-spacing"><b>Example response:</b></p>
-                    <pre class="codeBox" translate="no">[
-                        2,
-                        "Upcoming"
-                        ]</pre>
+                            <h4 id="route-teamdata" translate="no">POST /teamdata</h4>
+                            <p class="p-no-spacing">
+                                Returns data about all teams in a specific season, or a specific team if a requested
+                                team is in
+                                the
+                                payload. If there isn't a season parameter in the payload, data from the latest season
+                                is
+                                returned.
+                            </p>
+                            <p class="p-no-spacing"><b>Example payload:</b></p>
+                            <pre class="codeBox" translate="no">{
+                                "team": "York", // Team name (string) - optional
+                                "season": 2 // Season (int) - optional
+                                }</pre>
+                            <p class="p-no-spacing"><b>Example response:</b></p>
+                            <pre class="codeBox" translate="no">[
+                                {
+                                "career_wins_losses": [3, 0],
+                                "coords": [53.96, -1.08],
+                                "first_entry": 1,
+                                "place_id": 1826149980,
+                                "season_matches_played": 0,
+                                "season_penalties": 0,
+                                "season_position": 1,
+                                "season_wins_losses": [0, 0],
+                                "team_career_points": 1781,
+                                "team_championships": 1,
+                                "team_color": "#1BAA8B",
+                                "team_full_name": "University of York",
+                                "team_id": 1,
+                                "team_name": "York",
+                                "team_place": "York, England",
+                                "team_season_points": 0
+                                },
+                                ...
+                                ]</pre>
 
-                    <h4 id="route-teamcolors" translate="no">POST /teamcolors</h4>
-                    <p class="p-no-spacing">
-                        Returns a list of team colours used in a specified season. If no season is specified in the
-                        payload,
-                        team colours from the latest season are returned.
-                    </p>
-                    <p class="p-no-spacing"><b>Example payload:</b></p>
-                    <pre class="codeBox" translate="no">{
-                        "season": 2 // Season (int) - optional
-                        }</pre>
-                    <p class="p-no-spacing"><b>Example response:</b></p>
-                    <pre class="codeBox" translate="no">[
-                        [
-                        { "team_color": "#1BAA8B", "team_name": "York" },
-                        { "team_color": "#A11212", "team_name": "Staffs" },
-                        { "team_color": "#287AC8", "team_name": "Edinburgh" },
-                        { "team_color": "#61B6CB", "team_name": "Keele" },
-                        { "team_color": "#FDD017", "team_name": "Birmingham" },
-                        { "team_color": "#616161", "team_name": "Bristol Bob-Ombs" },
-                        { "team_color": "#BD4AFF", "team_name": "Glasgow" },
-                        { "team_color": "#002147", "team_name": "Oxford" },
-                        { "team_color": "#3C1053", "team_name": "Warwick" }
-                        ]
-                        ]</pre>
+                            <h4 id="route-seasoninfo" translate="no">POST /seasoninfo</h4>
+                            <p class="p-no-spacing">
+                                Returns data about a season, specifically the status of a season (concluded, recently
+                                completed,
+                                upcoming or ongoing). If no season is specified in the payload, data about the latest
+                                season is
+                                returned.
+                            </p>
+                            <p class="p-no-spacing"><b>Example payload:</b></p>
+                            <pre class="codeBox" translate="no">{
+                                "season": 2 // Season (int) - optional
+                                }</pre>
+                            <p class="p-no-spacing"><b>Example response:</b></p>
+                            <pre class="codeBox" translate="no">[
+                                2,
+                                "Upcoming"
+                                ]</pre>
 
-                    <h4 id="route-teamlocations" translate="no">POST /teamlocations</h4>
-                    <p class="p-no-spacing">
-                        Returns locations of all teams in the database.
-                    </p>
-                    <p class="p-no-spacing"><b>Example payload:</b> none</p>
-                    <p class="p-no-spacing"><b>Example response:</b></p>
-                    <pre class="codeBox" translate="no">[
-                        {
-                        "coords": [53.96, -1.08],
-                        "team_color": "#1BAA8B",
-                        "team_name": "York"
-                        },
-                        {
-                        "coords": [53.0, -2.1833],
-                        "team_color": "#A11212",
-                        "team_name": "Staffs"
-                        },
-                        {
-                        "coords": [55.9533, -3.1892],
-                        "team_color": "#287AC8",
-                        "team_name": "Edinburgh"
-                        },
-                        ...
-                        ]</pre>
+                            <h4 id="route-teamcolors" translate="no">POST /teamcolors</h4>
+                            <p class="p-no-spacing">
+                                Returns a list of team colours used in a specified season. If no season is specified in
+                                the
+                                payload,
+                                team colours from the latest season are returned.
+                            </p>
+                            <p class="p-no-spacing"><b>Example payload:</b></p>
+                            <pre class="codeBox" translate="no">{
+                                "season": 2 // Season (int) - optional
+                                }</pre>
+                            <p class="p-no-spacing"><b>Example response:</b></p>
+                            <pre class="codeBox" translate="no">[
+                                [
+                                { "team_color": "#1BAA8B", "team_name": "York" },
+                                { "team_color": "#A11212", "team_name": "Staffs" },
+                                { "team_color": "#287AC8", "team_name": "Edinburgh" },
+                                { "team_color": "#61B6CB", "team_name": "Keele" },
+                                { "team_color": "#FDD017", "team_name": "Birmingham" },
+                                { "team_color": "#616161", "team_name": "Bristol Bob-Ombs" },
+                                { "team_color": "#BD4AFF", "team_name": "Glasgow" },
+                                { "team_color": "#002147", "team_name": "Oxford" },
+                                { "team_color": "#3C1053", "team_name": "Warwick" }
+                                ]
+                                ]</pre>
 
-                    <h4 id="route-matchdata" translate="no">POST /matchdata</h4>
-                    <p class="p-no-spacing">
-                        Returns match data, being a list of dates, containing matches that will happen on those days.
-                    </p>
-                    <p class="p-no-spacing"><b>Example payload:</b> none</p>
-                    <p class="p-no-spacing"><b>Example response:</b></p>
-                    <pre class="codeBox" translate="no">{
-                        "2025-04-16": [
-                        {
-                        "title": "York VS Staffs",
-                        "time": "18:00",
-                        "description": "A 6v6 test match...",
-                        "teamsInvolved": ["York", "Staffs"]
-                        }
-                        ],
-                        "2025-04-21": [
-                        {
-                        "title": "Staffs VS Birmingham",
-                        "time": "18:00",
-                        "description": "A 6v6 test match...",
-                        "teamsInvolved": ["Staffs", "Birmingham"]
-                        }
-                        ],
-                        ...
-                        }</pre>
+                            <h4 id="route-teamlocations" translate="no">POST /teamlocations</h4>
+                            <p class="p-no-spacing">
+                                Returns locations of all teams in the database.
+                            </p>
+                            <p class="p-no-spacing"><b>Example payload:</b> none</p>
+                            <p class="p-no-spacing"><b>Example response:</b></p>
+                            <pre class="codeBox" translate="no">[
+                                {
+                                "coords": [53.96, -1.08],
+                                "team_color": "#1BAA8B",
+                                "team_name": "York"
+                                },
+                                {
+                                "coords": [53.0, -2.1833],
+                                "team_color": "#A11212",
+                                "team_name": "Staffs"
+                                },
+                                {
+                                "coords": [55.9533, -3.1892],
+                                "team_color": "#287AC8",
+                                "team_name": "Edinburgh"
+                                },
+                                ...
+                                ]</pre>
 
-                    <h4 id="route-live" translate="no">POST /live</h4>
-                    <p class="p-no-spacing">
-                        Returns the live match data.
-                    </p>
-                    <p class="p-no-spacing"><b>Example payload:</b> none</p>
-                    <p class="p-no-spacing"><b>Example response:</b></p>
-                    <pre class="codeBox" translate="no">[
-                        {
-                        "1": [2, 3, 6, 8, 10, 12],
-                        "2": [1, 4, 5, 7, 9, 11],
-                        "track": "GBA Ribbon Road"
-                        },
-                        {
-                        "1": [2, 4, 6, 7, 8, 10],
-                        "2": [1, 3, 5, 9, 11, 12],
-                        "track": "3DS Piranha Plant Pipeway"
-                        },
-                        ...
-                        ]</pre>
+                            <h4 id="route-matchdata" translate="no">POST /matchdata</h4>
+                            <p class="p-no-spacing">
+                                Returns match data, being a list of dates, containing matches that will happen on those
+                                days.
+                            </p>
+                            <p class="p-no-spacing"><b>Example payload:</b> none</p>
+                            <p class="p-no-spacing"><b>Example response:</b></p>
+                            <pre class="codeBox" translate="no">{
+                                "2025-04-16": [
+                                {
+                                "title": "York VS Staffs",
+                                "time": "18:00",
+                                "description": "A 6v6 test match...",
+                                "teamsInvolved": ["York", "Staffs"]
+                                }
+                                ],
+                                "2025-04-21": [
+                                {
+                                "title": "Staffs VS Birmingham",
+                                "time": "18:00",
+                                "description": "A 6v6 test match...",
+                                "teamsInvolved": ["Staffs", "Birmingham"]
+                                }
+                                ],
+                                ...
+                                }</pre>
 
-                    <h3 id="services-data-export-py">5.13 <code translate="no">services/data_export.py</code></h3>
+                            <h4 id="route-live" translate="no">GET /live/&lt;match&gt;</h4>
+                            <p class="p-no-spacing">
+                                Returns the live match data for one match ID.
+                            </p>
+                            <p class="p-no-spacing"><b>Example payload:</b> none, the match ID is the last path
+                                segment</p>
+                            <p class="p-no-spacing"><b>Example response:</b></p>
+                            <pre class="codeBox" translate="no">[
+                                {
+                                "1": [2, 3, 6, 8, 10, 12],
+                                "2": [1, 4, 5, 7, 9, 11],
+                                "track": "GBA Ribbon Road"
+                                },
+                                {
+                                "1": [2, 4, 6, 7, 8, 10],
+                                "2": [1, 3, 5, 9, 11, 12],
+                                "track": "3DS Piranha Plant Pipeway"
+                                },
+                                ...
+                                ]</pre>
+
+                        </div>
+                    </details>
+
+                    <h3 id="services-data-export-py">5.14 <code translate="no">services/data_export.py</code></h3>
                     <p>
                         <code translate="no">create_user_data_export(user_id, dest_dir)</code> calls
-                        <code translate="no">core.logic.get_user_data_export</code> (match results, SP, poll votes) and
+                        <code translate="no">core.logic.get_user_data_export</code> (match results, SP, poll votes and
+                        tickets) and
                         zips it
-                        as <code translate="no">user_data.json</code>. Called from
+                        as <code translate="no">user_data.json</code>, inside a
+                        <code translate="no">{user_id}_umkl_data_{timestamp}.zip</code>. Called from
                         <code translate="no">cogs/user_profile_cog.py</code>'s <code
                             translate="no">/export-my-data</code>
-                        command.
+                        command, which wraps it in a temp directory and attaches the archive ephemerally.
                     </p>
 
-                    <hr>
+                    <h3 id="services-team-emojis-py">5.15 <code translate="no">services/team_emojis.py</code></h3>
+                    <p>
+                        Keeps each team's <code translate="no">team_markdown</code> emoji pointing at one that still
+                        exists on the server. <code translate="no">sync_team_emojis(client)</code> walks
+                        <code translate="no">logic.get_all_teams_list()</code>. For any team whose markdown ends in
+                        an <code translate="no">:id&gt;</code> that's gone from the client's emoji list, it looks
+                        the team up by name (spaces → underscores) and rewrites the column with
+                        <code translate="no">logic.update_team_markdown()</code>. Teams with a valid emoji are
+                        skipped, so it's safe to run often.
+                    </p>
+                    <p>
+                        Called from <code translate="no">cogs/team_cog.py</code> on
+                        <code translate="no">on_ready</code> and around <code translate="no">/join</code>, so an
+                        emoji deleted or renamed on the Discord side gets repaired on the next boot.
+                    </p>
 
                     <h2 id="cross-cog-import-map"><a href="/rules/cheepcheeparchitecture/#cross-cog-import-map">6.
                             Cross-cog
                             import map</a></h2>
                     <p class="p-no-spacing">
-                        Most cogs only import <code translate="no">config</code>, <code translate="no">bot.embed</code>,
-                        <code translate="no">core.logic</code>, <code translate="no">core.graphics</code>, though some
-                        cogs
-                        import from <code translate="no">cogs.match_cog</code> (<code translate="no">dev_cog</code>
-                        also imports from <code translate="no">cogs.results_cog</code> and <code
-                            translate="no">cogs.team_cog</code>, see below).
+                        Almost every cross-cog import goes through one hub. Six of the eleven cogs import from
+                        <code translate="no">cogs.match_cog</code>, and <code translate="no">dev_cog</code> also
+                        reaches into <code translate="no">cogs.results_cog</code> and <code
+                            translate="no">cogs.team_cog</code>. The other five
+                        (<code translate="no">core_cog</code>, <code translate="no">match_cog</code>,
+                        <code translate="no">season_cog</code>, <code translate="no">sql_cog</code>,
+                        <code translate="no">ticket_cog</code>) don't import from each other at all.
                     </p>
 
                     <div class="tag-clan-table after-title">
@@ -1090,6 +1761,16 @@
                                     <code translate="no">open_match_autocomplete</code>
                                 </td>
                                 <td>Match and team autocomplete for <code translate="no">/dev add-match-results</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-key" translate="no"><code translate="no">cogs/listeners_cog.py</code>
+                                </td>
+                                <td><code translate="no">render_signup_embed</code>
+                                </td>
+                                <td>Re-renders an existing sign-up embed for the periodic
+                                    <code translate="no">sync_signup_embeds</code> task, so an old signup message
+                                    updates itself as places fill up
                                 </td>
                             </tr>
                             <tr>
@@ -1132,16 +1813,23 @@
                     </div>
 
                     <p>
-                        <code translate="no">cogs/dev_cog.py</code> doesn't import
+                        <code translate="no">main.py</code> also imports <code translate="no">CaptchaButton</code> and
+                        <code translate="no">PredictionPollView</code> from <code translate="no">listeners_cog</code>,
+                        and <code translate="no">TicketCategoryButton</code>,
+                        <code translate="no">TicketCloseButton</code> and
+                        <code translate="no">TicketReopenButton</code> from <code translate="no">ticket_cog</code> -
+                        all inside <code translate="no">setup_hook()</code>, and all to be registered as persistent
+                        dynamic items.
+                    </p>
+
+                    <p>
+                        <code translate="no">dev_cog</code> doesn't import
                         <code translate="no">update_signup_embed</code> or <code
-                            translate="no">PredictionPollView</code> from
-                        <code translate="no">match_cog</code>/<code translate="no">listeners_cog</code> - instead
-                        <code translate="no">main.py</code> passes them into its constructor, which is why
-                        <code translate="no">dev_cog</code> must be <code translate="no">load_extension</code>'d
-                        <i>last</i> in <code translate="no">main.py</code>'s <code translate="no">setup_hook</code>
-                        (both
-                        symbols need to already exist on the bot object). Besides the <code
-                            translate="no">match_cog</code> autocompletes above, it imports
+                            translate="no">PredictionPollView</code> -
+                        <code translate="no">main.py</code> passes them into its constructor instead. Both have to
+                        exist on the bot object first, which is why <code translate="no">dev_cog</code> is
+                        <code translate="no">load_extension</code>'d
+                        <i>last</i>. It also imports
                         <code translate="no">ResultModal</code> from <code translate="no">cogs.results_cog</code>
                         (for <code translate="no">/dev add-match-results</code>) and
                         <code translate="no">all_teams_autocomplete</code> from <code
@@ -1150,11 +1838,9 @@
                     </p>
 
                     <p>
-                        This makes <code translate="no">cogs/match_cog.py</code> a shared library for match-related
-                        autocompletion and locking function.
+                        So <code translate="no">cogs/match_cog.py</code> doubles as a shared library: autocomplete
+                        providers, sign-up rendering and the match lock.
                     </p>
-
-                    <hr>
 
                     <h2 id="data-storage"><a href="/rules/cheepcheeparchitecture/#data-storage">7. Data storage</a></h2>
 
@@ -1334,125 +2020,230 @@
                         <li>
                             Points shown are always "team total minus the team's <code translate="no">penalty</code>
                             row for that entry" - see the various <code translate="no">get_teams_*_points*</code>
-                            functions
-                            in <code translate="no">core/logic.py</code>
+                            functions in
+                            <code translate="no">core/logic/standings.py</code>
                         </li>
                     </ul>
 
                     <h3>JSON files - <code translate="no">data/</code></h3>
-                    <div class="tag-clan-table after-title">
-                        <table>
-                            <tr>
-                                <th>File</th>
-                                <th>Config constant</th>
-                                <th>Written by</th>
-                                <th>Purpose</th>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code translate="no">matchdata.json</code></td>
-                                <td><code translate="no">MATCHDATA_PATH</code></td>
-                                <td><code translate="no">core.logic</code> (<code
-                                        translate="no">add_to_matchdata</code>,
-                                    <code translate="no">update_matchdata</code>, <code
-                                        translate="no">reschedule_match</code>,
-                                    <code translate="no">update_team_name</code>)
-                                </td>
-                                <td>Extended match info not in SQLite: title, description, YouTube links, Discord event
-                                    ID/URL,
-                                    live-computed results snapshot</td>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code translate="no">playersp.json</code></td>
-                                <td><code translate="no">PLAYERSP</code></td>
-                                <td><code translate="no">core.logic.update_player_sp</code></td>
-                                <td>Per-player SP totals (<code translate="no">matches_sp</code> +
-                                    <code translate="no">chat_sp</code>) and history
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code translate="no">liveresults.json</code></td>
-                                <td><code translate="no">LIVE_SCORE</code></td>
-                                <td><code translate="no">core.logic</code> (<code
-                                        translate="no">add_to_live_score</code>,
-                                    <code translate="no">edit_live_score</code>, <code
-                                        translate="no">clear_live_score</code>)
-                                </td>
-                                <td>Per-race 1st–12th place data for the live stream overlay/API</td>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code translate="no">rounddata.json</code></td>
-                                <td><code translate="no">ROUND_DATA</code></td>
-                                <td><code translate="no">core.logic.save_round_data</code> (via
-                                    <code translate="no">season_cog.py</code>)
-                                </td>
-                                <td>Current round number + team pairings</td>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code translate="no">polldata.json</code></td>
-                                <td><code translate="no">POLLDATA</code></td>
-                                <td><code translate="no">core.logic.save_poll_data</code></td>
-                                <td>Prediction poll votes</td>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code translate="no">captchadata.json</code></td>
-                                <td><code translate="no">CAPTCHA_DATA</code></td>
-                                <td><code translate="no">core.logic</code> (<code
-                                        translate="no">set_captcha_session</code>,
-                                    <code translate="no">clear_captcha_session</code>)
-                                </td>
-                                <td>Captcha challenges for new users</td>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code translate="no">allowedgameids.json</code>
-                                </td>
-                                <td><code translate="no">ALLOWED_GAME_IDS</code></td>
-                                <td><code translate="no">core.logic.<br>save_allowed_game_ids</code></td>
-                                <td>Which <code translate="no">game_id</code>s <code translate="no">/create-match</code>
-                                    may
-                                    use</td>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code translate="no">profileunlockitems.json</code>
-                                </td>
-                                <td><code translate="no">PROFILE_UNLOCK_ITEMS</code></td>
-                                <td>(read-only from code)</td>
-                                <td>Cosmetic unlock flags encoded into the profile-site URL</td>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code translate="no">seenrsslinks.json</code></td>
-                                <td>hardcoded in <code translate="no">checkrss.py</code></td>
-                                <td><code translate="no">services.checkrss.<br>save_seen_links</code></td>
-                                <td>Dedup set for the RSS poller</td>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code translate="no">matches.ics</code></td>
-                                <td><code translate="no">CALENDAR_OUTPUT_PATH</code></td>
-                                <td><code translate="no">core.generate_calendar<br>.build_calendar</code></td>
-                                <td>Generated calendar feed, served at <code translate="no">/matches.ics</code></td>
-                            </tr>
-                            <tr>
-                                <td class="table-key" translate="no"><code translate="no">streamkeys.json</code></td>
-                                <td>(read directly by <code translate="no">core_cog.py</code>)</td>
-                                <td>manual</td>
-                                <td>Per-team livestream keys for <code translate="no">/request stream-key</code></td>
-                            </tr>
-                        </table>
-                    </div>
+                    <p class="p-no-spacing">
+                        <code translate="no">data/</code> is gitignored apart from four files that have to exist on a
+                        fresh checkout (<code translate="no">allowedgameids.json</code>,
+                        <code translate="no">creditsaccounts.json</code>,
+                        <code translate="no">profileunlockitems.json</code> and
+                        <code translate="no">sp_versions.json</code>).
+                    </p>
 
-                    <hr>
+                    <details class="doc-details">
+                        <summary>Every JSON store <span class="doc-details-count">17 files</span></summary>
+                        <div class="doc-details-body">
+                            <div class="tag-clan-table after-title">
+                                <table>
+                                    <tr>
+                                        <th>File</th>
+                                        <th>Config constant</th>
+                                        <th>Written by</th>
+                                        <th>Purpose</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code translate="no">matchdata.json</code>
+                                        </td>
+                                        <td><code translate="no">MATCHDATA_PATH</code></td>
+                                        <td><code translate="no">core.logic.matchdata</code> (<code
+                                                translate="no">add_to_matchdata</code>,
+                                            <code translate="no">update_matchdata</code>, <code
+                                                translate="no">reschedule_match</code>)
+                                        </td>
+                                        <td>Extended match info not in SQLite: title, description, YouTube links,
+                                            Discord event
+                                            ID/URL,
+                                            live-computed results snapshot</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code translate="no">playersp.json</code>
+                                        </td>
+                                        <td><code translate="no">PLAYERSP</code></td>
+                                        <td><code translate="no">core.logic.sp.update_player_sp</code></td>
+                                        <td>Per-player SP totals (<code translate="no">matches_sp</code> +
+                                            <code translate="no">chat_sp</code>) and history
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code translate="no">vctime.json</code>
+                                        </td>
+                                        <td><code translate="no">VC_TIME</code></td>
+                                        <td><code translate="no">core.logic.sp.add_vc_minutes</code> (from
+                                            <code translate="no">listeners_cog</code>'s minute-by-minute task)
+                                        </td>
+                                        <td>How long each player has spent in a team voice channel, which
+                                            <code translate="no">award_vc_sp</code> turns into SP
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code
+                                                translate="no">sp_versions.json</code></td>
+                                        <td><code translate="no">SP_VERSIONS_PATH</code></td>
+                                        <td>(read-only from code, hand-maintained)
+                                        </td>
+                                        <td>Versioned SP award rules, so a match keeps scoring under the rules that were
+                                            live
+                                            when it was played
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code
+                                                translate="no">liveresults.json</code></td>
+                                        <td><code translate="no">LIVE_SCORE</code></td>
+                                        <td><code translate="no">core.logic.matchdata</code> (<code
+                                                translate="no">add_to_live_score</code>,
+                                            <code translate="no">edit_live_score</code>, <code
+                                                translate="no">clear_live_score</code>)
+                                        </td>
+                                        <td>Per-race 1st–12th place data for the live stream overlay/API</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code translate="no">rounddata.json</code>
+                                        </td>
+                                        <td><code translate="no">ROUND_DATA</code></td>
+                                        <td><code translate="no">core.logic.storage.save_round_data</code> (via
+                                            <code translate="no">season_cog.py</code>)
+                                        </td>
+                                        <td>Current round number + team pairings</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code translate="no">polldata.json</code>
+                                        </td>
+                                        <td><code translate="no">POLLDATA</code></td>
+                                        <td><code translate="no">core.logic.storage.save_poll_data</code></td>
+                                        <td>Prediction poll votes</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code
+                                                translate="no">captchadata.json</code></td>
+                                        <td><code translate="no">CAPTCHA_DATA</code></td>
+                                        <td><code translate="no">core.logic.storage</code> (<code
+                                                translate="no">set_captcha_session</code>,
+                                            <code translate="no">clear_captcha_session</code>)
+                                        </td>
+                                        <td>Captcha challenges for new users</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code translate="no">stickydata.json</code>
+                                        </td>
+                                        <td><code translate="no">STICKY_DATA</code></td>
+                                        <td><code translate="no">core.logic.storage.set_sticky_message</code> (from
+                                            <code translate="no">listeners_cog</code>'s poll sticky task)
+                                        </td>
+                                        <td>Tracks the current "active poll" sticky message so it can be bumped or
+                                            replaced
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code translate="no">tickets.json</code>
+                                        </td>
+                                        <td><code translate="no">TICKET_DATA</code></td>
+                                        <td><code translate="no">core.logic.tickets</code> (via
+                                            <code translate="no">ticket_cog.py</code>)
+                                        </td>
+                                        <td>Support ticket metadata: number, opener, category, thread ID, status and
+                                            timestamps
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code
+                                                translate="no">videometadata.json</code></td>
+                                        <td>hardcoded in <code translate="no">dbserver.py</code> as
+                                            <code translate="no">VIDEO_METADATA_CACHE_PATH</code>
+                                        </td>
+                                        <td><code translate="no">services.dbserver._save_video_metadata_cache</code>
+                                        </td>
+                                        <td>Persisted YouTube oEmbed results, so the <code translate="no">/videos</code>
+                                            route survives restarts without re-fetching
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code
+                                                translate="no">allowedgameids.json</code>
+                                        </td>
+                                        <td><code translate="no">ALLOWED_GAME_IDS</code></td>
+                                        <td><code translate="no">core.logic.storage.save_allowed_game_ids</code>
+                                        </td>
+                                        <td>Which <code translate="no">game_id</code>s <code
+                                                translate="no">/create-match</code>
+                                            may
+                                            use</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code
+                                                translate="no">profileunlockitems.json</code>
+                                        </td>
+                                        <td><code translate="no">PROFILE_UNLOCK_ITEMS</code></td>
+                                        <td>(read-only from code)</td>
+                                        <td>Cosmetic unlock flags encoded into the profile-site URL</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code
+                                                translate="no">creditsaccounts.json</code>
+                                        </td>
+                                        <td><code translate="no">CREDITS_ACCOUNTS_PATH</code></td>
+                                        <td>(read-only from code)</td>
+                                        <td>Name → Discord user ID map. It's also the allowlist for the
+                                            <code translate="no">/pfps/&lt;name&gt;</code> route, so only these accounts
+                                            get
+                                            their avatar served
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code
+                                                translate="no">seenrsslinks.json</code></td>
+                                        <td>hardcoded in <code translate="no">checkrss.py</code> as
+                                            <code translate="no">SEEN_LINKS_FILE</code>
+                                        </td>
+                                        <td><code translate="no">services.checkrss.<br>save_seen_links</code></td>
+                                        <td>Dedup set for the RSS poller</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code translate="no">matches.ics</code>
+                                        </td>
+                                        <td><code translate="no">CALENDAR_OUTPUT_PATH</code></td>
+                                        <td><code translate="no">core.generate_calendar<br>.build_calendar</code></td>
+                                        <td>Generated calendar feed, served at <code translate="no">/matches.ics</code>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code translate="no">streamkeys.json</code>
+                                        </td>
+                                        <td>(read directly by <code translate="no">core_cog.py</code>)</td>
+                                        <td>manual</td>
+                                        <td>Per-team livestream keys for <code translate="no">/request stream-key</code>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-key" translate="no"><code translate="no">pfps/</code></td>
+                                        <td>hardcoded in <code translate="no">dbserver.py</code> as
+                                            <code translate="no">PFP_CACHE_DIR</code>
+                                        </td>
+                                        <td><code translate="no">services.dbserver._refresh_avatars</code></td>
+                                        <td>Cached AVIF copies of the credits-page avatars, converted server-side from
+                                            Discord's CDN
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </details>
 
                     <h2 id="tests"><a href="/rules/cheepcheeparchitecture/#tests">8. Tests</a>
                     </h2>
                     <p>
-                        Everything lives in <code translate="no">tests/</code> and runs with
+                        Everything is in <code translate="no">tests/</code> and runs with
                         <code translate="no">pytest tests/</code>. <code
-                            translate="no">.github/workflows/tests.yml</code> runs that on every push and pull request
-                        (Python 3.12), skipping the three files listed under <i>Not run in CI</i> below.
-                        <code translate="no">conftest.py</code> switches to the repo root and creates the git-ignored
+                            translate="no">.github/workflows/tests.yml</code> runs it on every push and pull request
+                        (Python 3.12), skipping the three files listed under <i>Not run in CI</i>.
+                        <code translate="no">conftest.py</code> moves to the repo root and creates the git-ignored
                         <code translate="no">logs/</code>, <code translate="no">output/</code> and
-                        <code translate="no">data/</code> folders (plus an empty <code
-                            translate="no">data/creditsaccounts.json</code>), so modules that touch them at import
-                        time work on a fresh checkout.
+                        <code translate="no">data/</code> folders, plus an empty <code
+                            translate="no">data/creditsaccounts.json</code>, so a fresh checkout works.
                     </p>
 
                     <h3>Run in CI</h3>
@@ -1465,19 +2256,19 @@
                                 translate="no">bot</code>,
                             <code translate="no">cogs</code>, <code translate="no">core</code> and
                             <code translate="no">services</code>, then runs <code
-                                translate="no">PersistentViewBot.setup_hook()</code> and checks that all ten cogs load
+                                translate="no">PersistentViewBot.setup_hook()</code> and checks that all eleven cogs
+                            load
                             and that <code translate="no">/join</code>, <code translate="no">/restart</code> and
                             <code translate="no">/team-profile</code> are registered. The cog list in the test is
                             hardcoded, so a new cog has to be added to it
                         </li>
                         <li>
                             <b><code translate="no">test_command_tree.py</code></b> - builds the command tree the same
-                            way and checks Discord's
-                            sync limits across every command, including subcommands inside groups: top-level names
-                            are unique and at most 100, names match <code translate="no">^[a-z0-9_-]{1,32}$</code>,
-                            descriptions are 1-100 characters, commands have at most 25 parameters, and every
-                            parameter has a 1-100 character description. A command that breaks one of these fails CI
-                            instead of failing when the tree is synced
+                            way and checks Discord's sync limits across every command, subcommands included:
+                            unique top-level names, at most 100 of them, names matching
+                            <code translate="no">^[a-z0-9_-]{1,32}$</code>, 1-100 character descriptions, at most
+                            25 parameters per command, and a 1-100 character description on every parameter.
+                            A command that breaks one of these fails CI instead of at sync time
                         </li>
                         <li>
                             <b><code translate="no">test_assets.py</code></b> - scans every <code
@@ -1489,24 +2280,30 @@
                             <b><code translate="no">test_config.py</code></b> - sanity checks on <code
                                 translate="no">config.py</code>:
                             <code translate="no">CHANNEL_IDS</code> are unique integers, the guild, dev server and admin
-                            account IDs are distinct, and <code translate="no">MK8DX_TRACK_NAMES</code> has no
+                            account IDs are distinct, <code translate="no">ALLOWED_GUILD_IDS</code> is the UMKL server
+                            alone, and <code translate="no">MK8DX_TRACK_NAMES</code> has no
                             duplicates
                         </li>
                         <li>
-                            <b><code translate="no">test_helpers.py</code></b> - unit tests for small pure helpers:
-                            <code translate="no">logic.is_hex_color</code>, <code translate="no">format_date_UK</code>,
+                            <b><code translate="no">test_helpers.py</code></b> - unit tests for the small pure
+                            helpers (<code translate="no">logic.is_hex_color</code>,
+                            <code translate="no">format_date_UK</code>,
                             <code translate="no">compute_total_pages</code>,
-                            <code translate="no">get_position_icon</code>, <code
-                                translate="no">gitimport.normalized_size</code>, and that <code
-                                translate="no">get_text_channel</code> raises for a missing or wrong-type channel
+                            <code translate="no">get_position_icon</code>,
+                            <code translate="no">gitimport.normalized_size</code>), plus
+                            <code translate="no">get_text_channel</code> raising on a missing or wrong-type channel.
+                            Also covers flows that are still pure enough to fake out:
+                            <code translate="no">AvatarSender</code> webhook reuse,
+                            <code translate="no">render_signup_embed</code>, and the "already in a team" reply
                         </li>
                         <li>
                             <b><code translate="no">test_patterns.py</code></b> - tests the regexes in <code
                                 translate="no">listeners_cog</code>
                             that trigger Cheep Cheep's replies: <code translate="no">JOIN_TEAM_PATTERN</code> ("how do
-                            I join a team", "add me to a team"), <code translate="no">DISCONNECT_PATTERN</code>
-                            ("dc'd", "disconnected") and that <code translate="no">JOIN_TEAM_CHANNELS</code> are
-                            lowercase
+                            I join a team", "add me to a team") and <code translate="no">DISCONNECT_PATTERN</code>
+                            ("dc'd", "disconnected"). Also checks that <code translate="no">JOIN_TEAM_CHANNELS</code>
+                            are lowercase and that <code translate="no">embed.ALREADY_IN_TEAM_LINES</code> is a tuple
+                            of non-empty lines that survive <code translate="no">.format()</code>
                         </li>
                     </ul>
 
@@ -1516,26 +2313,23 @@
                     </p>
                     <ul>
                         <li>
-                            <b><code translate="no">test_graphics.py</code></b> - a real
+                            <b><code translate="no">test_graphics.py</code></b> - a
                             <code translate="no">unittest.IsolatedAsyncioTestCase</code> suite. Generates most
-                            <code translate="no">core.graphics</code> image types (everything except captcha images) and
-                            pixel-diffs each one (via Pillow + numpy, 0.99 similarity threshold) against a checked-in
-                            reference image in <code translate="no">tests/output/</code>. It renders team ID 10 and
-                            season 1 from the local database, so it only passes against matching data
+                            <code translate="no">core.graphics</code> image types (everything except captchas) and
+                            pixel-diffs each against a reference image in <code translate="no">tests/output/</code>
+                            (Pillow + numpy, 0.99 similarity). It renders team ID 10 and season 1 from the local
+                            database, so it only passes against matching data
                         </li>
                         <li>
-                            <b><code translate="no">test_dbserver.py</code></b> - a
-                            standalone benchmarking script that reimplements most of <code
-                                translate="no">core.logic</code>'s
-                            team/season query functions locally, each wrapped in
-                            <code translate="no">time.perf_counter()</code> timing, to profile the SQL behind
-                            <code translate="no">/teamdata</code>
+                            <b><code translate="no">test_dbserver.py</code></b> - a standalone benchmark that
+                            reimplements most of <code translate="no">core.logic</code>'s team and season queries
+                            locally, each wrapped in <code translate="no">time.perf_counter()</code>, to profile the
+                            SQL behind <code translate="no">/teamdata</code>
                         </li>
                         <li>
-                            <b><code translate="no">test_requests.py</code></b> - manual smoke-test script that fires
-                            real HTTP
+                            <b><code translate="no">test_requests.py</code></b> - a manual smoke test that fires real
                             requests at <code translate="no">https://api.umkl.co.uk</code> (every
-                            <code translate="no">dbserver.py</code> route) and prints status/timing/JSON
+                            <code translate="no">dbserver.py</code> route) and prints status, timing and JSON
                         </li>
                     </ul>
 
@@ -1556,8 +2350,6 @@
                         </li>
                     </ul>
 
-                    <hr>
-
                     <h2 id="worked-example"><a href="/rules/cheepcheeparchitecture/#worked-example">9. Worked example:
                             <code translate="no">/create-match</code> end to end</a></h2>
                     <p class="p-no-spacing">
@@ -1565,53 +2357,55 @@
                         <code translate="no">cogs/match_cog.py</code>'s <code translate="no">/create-match</code>:
                     </p>
                     <ol>
-                        <li><code translate="no">match_cog</code> validates the date/time and season membership using
-                            <code translate="no">core.logic</code> (<code translate="no">get_current_season</code>,
+                        <li><code translate="no">match_cog</code> validates the date, time and season membership
+                            with <code translate="no">core.logic</code> (<code translate="no">get_current_season</code>,
                             <code translate="no">get_teams_in_season</code>, <code
                                 translate="no">is_team_in_season</code>).
                         </li>
-                        <li><code translate="no">bot.embed.display_match_creation_progress_update</code> renders a
-                            "Creating
-                            match..." progress embed (updated multiple times as steps complete).</li>
+                        <li><code translate="no">bot.embed_board.display_match_creation_progress_update</code> renders
+                            the "Creating
+                            match..." progress embed, re-sent at each of the eight steps. It's a board-only embed,
+                            since the command is staff-only.</li>
                         <li><code translate="no">core.logic.create_match</code> inserts the <code
                                 translate="no">tournament</code>
-                            row and <code translate="no">create_new_match_entry</code> is called once per team to insert
+                            row, then <code translate="no">create_new_match_entry</code> runs once per team for the
                             <code translate="no">tournament_entry</code> rows.
                         </li>
                         <li><code translate="no">core.graphics.create_event_versus_image</code> renders
-                            <code translate="no">output/versus.png</code> from the two teams' data (fetched again via
-                            <code translate="no">core.logic.get_team_data</code>).
+                            <code translate="no">output/versus.png</code> from the two teams' data, fetched again with
+                            <code translate="no">core.logic.get_team_data</code>.
                         </li>
-                        <li>A Discord Scheduled Event is created directly via the discord.py API - its ID is stored back
-                            with
+                        <li>A Discord Scheduled Event is created via the discord.py API. Its ID is stored with
                             <code translate="no">core.logic.add_event_id_to_match</code>.
                         </li>
                         <li><code translate="no">core.logic.add_to_matchdata</code> appends the extended match info to
-                            <code translate="no">data/matchdata.json</code>, which internally calls
+                            <code translate="no">data/matchdata.json</code>, which calls
                             <code translate="no">core.generate_calendar.build_calendar()</code> to keep
                             <code translate="no">matches.ics</code> in sync.
                         </li>
                         <li><code translate="no">bot.embed.display_team_signup</code> builds the sign-up embed (with the
-                            versus image attached), <code translate="no">match_cog.SignupButton</code> (a persistent
-                            <code translate="no">discord.ui.DynamicItem</code>) is attached as the view and posted to
-                            each
-                            team's announcements channel plus the schedule channel.
+                            versus image attached). <code translate="no">match_cog.SignupButton</code> (a persistent
+                            <code translate="no">discord.ui.DynamicItem</code>) is attached as the view, and the
+                            whole thing goes to each
+                            team's announcements channel and the schedule channel.
                         </li>
-                        <li><code translate="no">services.backup.backup_database()</code> is called before all of the
+                        <li><code translate="no">services.backup.backup_database()</code> runs before all of the
                             above,
-                            since match creation mutates both the DB and JSON state.</li>
+                            since match creation writes to both the DB and the JSON state.</li>
                     </ol>
                     <p class="p-no-spacing">
                         Every other multi-step flow in the bot (results verification in
                         <code translate="no">results_cog.py</code>, team creation in <code
                             translate="no">team_cog.py</code>,
-                        season rollover in <code translate="no">season_cog.py</code>) follows the same shape:
+                        season rollover in <code translate="no">season_cog.py</code>, ticket handling in
+                        <code translate="no">ticket_cog.py</code>) follows the same shape:
                     </p>
                     <ul>
                         <li>Validate via <code translate="no">core.logic</code></li>
                         <li>Mutate via <code translate="no">core.logic</code></li>
                         <li>Render via <code translate="no">core.graphics</code></li>
-                        <li>Present via <code translate="no">bot.embed</code></li>
+                        <li>Present via <code translate="no">bot.embed*</code> - which one depends on who the
+                            audience is</li>
                         <li>Back up via <code translate="no">services.backup</code></li>
                     </ul>
 
@@ -1656,7 +2450,8 @@
                         <div class="flow-step">
                             <div class="flow-step-num">3</div>
                             <div class="flow-step-body">
-                                <span class="flow-step-title">bot.embed.display_match_creation_progress_update</span>
+                                <span
+                                    class="flow-step-title">bot.embed_board.display_match_creation_progress_update</span>
                                 <span class="flow-step-desc">"Creating match..." progress embed</span>
                             </div>
                         </div>
@@ -1705,15 +2500,20 @@
             </div>
 
             <div class="article-meta article-toc">
-                <div class="article-meta-item article-toc-item">
-                    <span class="article-meta-heading">Contents</span>
-                    <nav class="article-toc-list" id="articleToc" aria-label="Contents"></nav>
-                </div>
                 <div class="article-meta-item">
                     <span class="article-meta-heading">Author</span>
-                    <span class="article-meta-value">UMKL Team</span>
+                    <span class="article-meta-value">UMKL Developers</span>
+                </div>
+                <div class="article-meta-item">
+                    <span class="article-meta-heading">Last reviewed</span>
+                    <span class="article-meta-value">10 October 2026</span>
+                </div>
+                <div class="article-meta-item article-toc-item">
+                    <span class="article-meta-heading">Contents</span>
+                    <nav class="article-toc-list" id="articleToc" data-headings="h2, h3" aria-label="Contents"></nav>
                 </div>
             </div>
+            
         </div>
     </main>
 

@@ -14,9 +14,39 @@ if (tocList && headings.length > 1) {
         const content = heading.cloneNode(true);
         content.querySelectorAll('a').forEach((a) => a.replaceWith(...a.childNodes));
         link.append(...content.childNodes);
+        if (heading.tagName !== 'H2') link.dataset.level = heading.tagName;
         tocList.appendChild(link);
         return { target, link };
     });
+
+    const revealActiveEntry = (link) => {
+        const scroller = [...function* () {
+            for (let el = link.parentElement; el; el = el.parentElement) yield el;
+        }()].find((el) => el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1);
+        if (!scroller) return;
+
+        const pad = 10;
+        const box = scroller.getBoundingClientRect();
+        const item = link.getBoundingClientRect();
+        const smooth = matchMedia('(prefers-reduced-motion: no-preference)').matches ? 'smooth' : 'auto';
+
+        if (scroller.scrollHeight > scroller.clientHeight) {
+            if (item.top < box.top + pad) {
+                scroller.scrollTo({ top: scroller.scrollTop - (box.top + pad - item.top), behavior: smooth });
+            } else if (item.bottom > box.bottom - pad) {
+                scroller.scrollTo({ top: scroller.scrollTop + (item.bottom - box.bottom + pad), behavior: smooth });
+            }
+        }
+
+        if (scroller.scrollWidth > scroller.clientWidth) {
+            let delta = 0;
+            if (item.left >= box.right) delta = item.left - box.left;
+            else if (item.right <= box.left) delta = item.right - box.right;
+            else if (item.left < box.left + pad) delta = item.left - (box.left + pad);
+            else if (item.right > box.right - pad) delta = item.right - (box.right - pad);
+            if (delta) scroller.scrollTo({ left: scroller.scrollLeft + delta, behavior: smooth });
+        }
+    };
 
     let active;
     const setActive = (entry) => {
@@ -24,6 +54,7 @@ if (tocList && headings.length > 1) {
         active?.link.classList.remove('active');
         entry.link.classList.add('active');
         active = entry;
+        revealActiveEntry(entry.link);
     };
 
     // The section being read is the last one whose top has passed a line a quarter of the way down the viewport
