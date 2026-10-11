@@ -81,8 +81,9 @@
                         <b translate="no">Note</b><br>
                         Some commands are grouped together. Type <code translate="no">/edit</code>, <code
                             translate="no">/live-score</code>,
-                        <code translate="no">/season</code>, <code translate="no">/request</code> or <code
-                            translate="no">/generate</code> and Discord will show a
+                        <code translate="no">/season</code>, <code translate="no">/request</code>, <code
+                            translate="no">/tickets</code> or <code translate="no">/generate</code> and Discord will
+                        show a
                         list of the commands inside that group to pick from.
                     </blockquote>
 
@@ -163,25 +164,6 @@
                             with <a href="/rules/stream/">livestreaming from OBS</a>.</p>
                     </div>
 
-                    <h3>Live Score</h3>
-                    <p class="p-below-title">Commands for use with the live score graphic, as shown on <a
-                            href="/rules/stream/">livestreams</a></p>
-
-                    <div class="command">
-                        <div class="codeBoxTight">/live-score add-positions</div>
-                        <p>Add the results of a race, which will update the live score graphic.</p>
-                    </div>
-
-                    <div class="command">
-                        <div class="codeBoxTight">/live-score edit-positions</div>
-                        <p>Edit the results of a previous race, which will update the live score graphic.</p>
-                    </div>
-
-                    <div class="command">
-                        <div class="codeBoxTight">/live-score clear</div>
-                        <p>Reset the live score streaming graphic, setting the score to 0-0.</p>
-                    </div>
-
                     <h3>Graphics</h3>
                     <p class="p-below-title">Generate and preview UMKL graphics, all part of the <code
                             translate="no">/generate</code>
@@ -241,6 +223,30 @@
                             posted when a match is created.</p>
                     </div>
 
+                    <h3>Support</h3>
+                    <p class="p-below-title">Talk to the board privately. Each ticket opens in its own thread</p>
+
+                    <div class="command">
+                        <div class="codeBoxTight">/ticket</div>
+                        <p>Open a private ticket with the UMKL board, follow the on-screen instructions to enter a
+                            description and optionally upload media.
+                    </div>
+
+                    <div class="command">
+                        <div class="codeBoxTight">/tickets list</div>
+                        <p>List your tickets, showing only open, only closed, or every ticket.</p>
+                    </div>
+
+                    <div class="command">
+                        <div class="codeBoxTight">/tickets close</div>
+                        <p>Close one of your tickets.</p>
+                    </div>
+
+                    <div class="command">
+                        <div class="codeBoxTight">/tickets reopen</div>
+                        <p>Reopen a closed ticket.</p>
+                    </div>
+
                     <h2>Commands Only Usable by Board Members</h2>
                     <p class="p-below-title">Only board members can use these commands</p>
 
@@ -263,8 +269,9 @@
                     </div>
 
                     <div class="command">
-                        <div class="codeBoxTight">/enter-team-into-season</div>
-                        <p>Enter a team into the current season.</p>
+                        <div class="codeBoxTight">/add-team-to-season</div>
+                        <p>Enter a team into the current season. Run <code translate="no">/season start</code>
+                            first.</p>
                     </div>
 
                     <div class="command">
@@ -344,13 +351,32 @@
                     </div>
 
                     <div class="command">
-                        <div class="codeBoxTight">/season start-next-round</div>
+                        <div class="codeBoxTight">/season start-round</div>
                         <p>Start the next round of the season and send out match organisation threads.</p>
                     </div>
 
                     <div class="command">
                         <div class="codeBoxTight">/season add-next-round-pairings</div>
                         <p>Add the team pairings for the next round.</p>
+                    </div>
+
+                    <h3>Live Score</h3>
+                    <p class="p-below-title">Commands for updating the live score graphic, as shown on <a
+                            href="/rules/stream/">livestreams</a></p>
+
+                    <div class="command">
+                        <div class="codeBoxTight">/live-score add-positions</div>
+                        <p>Add the results of a race, which will update the live score graphic.</p>
+                    </div>
+
+                    <div class="command">
+                        <div class="codeBoxTight">/live-score edit-positions</div>
+                        <p>Edit the results of a previous race, which will update the live score graphic.</p>
+                    </div>
+
+                    <div class="command">
+                        <div class="codeBoxTight">/live-score clear</div>
+                        <p>Reset the live score streaming graphic, setting the score to 0-0.</p>
                     </div>
 
                     <h3>Admin</h3>
@@ -360,13 +386,19 @@
                     </div>
 
                     <div class="command">
+                        <div class="codeBoxTight">/manually-verify</div>
+                        <p>Verify a member who is stuck at the captcha challenge, so they can take part in the
+                            server.</p>
+                    </div>
+
+                    <div class="command">
                         <div class="codeBoxTight">/request board-password</div>
-                        <p>Get the board password.</p>
+                        <p>Get the board password, also used for the UMKL Google and Discord account.</p>
                     </div>
 
                     <div class="command">
                         <div class="codeBoxTight">/request media-password</div>
-                        <p>Get the media team password.</p>
+                        <p>Get the password used for UMKL social media (Instagram, Facebook and TikTok).</p>
                     </div>
                 </div>
             </div>
