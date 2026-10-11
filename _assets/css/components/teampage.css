@@ -198,6 +198,11 @@
     margin: 0;
 }
 
+.stats-header-link {
+    margin-left: auto;
+    white-space: nowrap;
+}
+
 #JSMatchHistory {
     margin-top: var(--section-spacing);
 }

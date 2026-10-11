@@ -272,7 +272,7 @@ function renderTeamSummary(teamData) {
         </div>
         <div class="summary-row" title="${worstTrackString ? `And their worst track is ${worstTrackString.track}...` : ''}">
             <span class="summary-label">Best Track</span>
-            <span class="summary-value">${bestTrackString ? `<a href="/schedule/stats/">${bestTrackString.track}</a>` : 'N/A'}</span>
+            <span class="summary-value">${bestTrackString ? `<a href="/schedule/stats/?team=${encodeURIComponent(teamData.team_name)}">${bestTrackString.track}</a>` : 'N/A'}</span>
         </div>
     `;
 }
@@ -305,6 +305,11 @@ function generateTeamBox(teamData, showError) {
     const teamNameBox = document.getElementById('teamNameBox');
     if (teamNameBox) teamNameBox.textContent = teamData.team_name;
     if (isLightColor(teamData.team_color)) teamNameBox.style.color = 'var(--brand-dark)'
+
+    const matchStatsLink = document.getElementById('matchStatsLink');
+    if (matchStatsLink) {
+        matchStatsLink.href = `/schedule/stats/?team=${encodeURIComponent(teamData.team_name)}`;
+    }
 
     const minSeason = teamData.first_entry;
     const hasPlayed = !!minSeason;

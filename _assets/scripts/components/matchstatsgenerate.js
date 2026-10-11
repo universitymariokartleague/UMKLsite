@@ -87,6 +87,28 @@ function populateTeamFilter() {
         .map(team => `<option value="${team}">${team}</option>`).join("");
 
     teamFilterSelect.innerHTML = `<option value="">All teams</option>${options}`;
+
+    applyTeamFromURL(teams);
+}
+
+function resolveTeamName(requested, teams) {
+    if (!requested) return "";
+    return [...teams].find(team => team.toLowerCase() === requested.toLowerCase()) || "";
+}
+
+function applyTeamFromURL(teams) {
+    const requested = new URLSearchParams(window.location.search).get("team");
+    teamFilterSelect.value = resolveTeamName(requested, teams);
+}
+
+function updateTeamParam() {
+    const url = new URL(window.location);
+    if (teamFilterSelect.value) {
+        url.searchParams.set("team", teamFilterSelect.value);
+    } else {
+        url.searchParams.delete("team");
+    }
+    window.history.replaceState({}, "", url);
 }
 
 function buildTrackCountDiv(data, matchesCounted) {
@@ -358,6 +380,15 @@ daysPlayedCheckbox.addEventListener("click", async function () {
 });
 
 teamFilterSelect.addEventListener("change", async function () {
+    updateTeamParam();
+    await generateMatchStatsBox();
+});
+
+window.addEventListener("popstate", async function () {
+    const teams = [...teamFilterSelect.options].map(option => option.value).filter(Boolean);
+    const requested = resolveTeamName(new URLSearchParams(window.location.search).get("team"), teams);
+    if (requested === teamFilterSelect.value) return;
+    teamFilterSelect.value = requested;
     await generateMatchStatsBox();
 });
 
