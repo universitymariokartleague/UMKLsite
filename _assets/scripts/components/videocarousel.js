@@ -1,4 +1,4 @@
-import { loadMatchStartTimes, videoStatusIcon } from '/_assets/scripts/utils/videostatus.js';
+import { loadMatchStartTimes, videoStatusIcon, isTestMatchVideo } from '/_assets/scripts/utils/videostatus.js';
 
 const API_URL = `https://api.umkl.co.uk/videos`;
 const DEFAULT_VIDEO_COUNT = 12;
@@ -78,7 +78,7 @@ async function loadVideoCarousel() {
             const dateStr = date ? date.toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" }) : "";
 
             const card = document.createElement("a");
-            card.className = "video-card";
+            card.className = isTestMatchVideo(item) ? "video-card test-match-card" : "video-card";
             card.href = item.url;
             card.target = "_blank";
             card.rel = "noopener noreferrer";

@@ -1,7 +1,7 @@
 import { icon } from '/_assets/scripts/utils/icons.js';
 import { getMatchData, normalizeMatchData, getMatchCache, setMatchCache } from '/_assets/scripts/utils/matchdata.js';
 
-export { getVideoStatus, loadMatchStartTimes, videoStatusIcon, VIDEO_STATUS_EXPIRED_EVENT };
+export { getVideoStatus, loadMatchStartTimes, videoStatusIcon, isTestMatchVideo, VIDEO_STATUS_EXPIRED_EVENT };
 
 const BADGE_CLASS = 'video-live-badge';
 const TICKING_BADGE_SELECTOR = `.${BADGE_CLASS}[data-live-at]`;
@@ -12,6 +12,11 @@ const VIDEO_STATUS_EXPIRED_EVENT = 'videos:badgeexpired';
 let matchStartTimes = new Map();
 let matchStartTimesPromise = null;
 let tickerId = null;
+
+// YouTube marks these in the title rather than any structured field
+function isTestMatchVideo(video) {
+    return /\(Test Match\)/i.test(video?.title || "");
+}
 
 function formatDuration(milliseconds) {
     const hours = Math.floor(milliseconds / 3600000);

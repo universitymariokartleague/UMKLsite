@@ -455,7 +455,7 @@
 }
 
 .list-view-content .standings-row.test-match-row {
-    opacity: 0.6;
+    opacity: var(--test-match-opacity);
 }
 
 .dayRelation {

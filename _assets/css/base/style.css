@@ -27,6 +27,8 @@
     --selection-color: var(--highlight-color);
     --light-highlight-color: #ffffff80;
     --dark-highlight-color: color-mix(in oklch, var(--brand-dark) 50%, transparent);
+
+    --test-match-opacity: 0.6;
 }
 
 @media screen and (max-width: 900px) {

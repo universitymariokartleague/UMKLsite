@@ -39,10 +39,13 @@ let refreshTimer = null;
 let startTime;
 
 const testMatchesCheckbox = document.getElementById("testMatches");
-const pointsDiffCheckbox = document.getElementById("pointsDiff");
-const teamFrequencyCheckbox = document.getElementById("teamFrequency");
-const daysPlayedCheckbox = document.getElementById("daysPlayed");
 const trackSortWrapper = document.getElementById("track-sort");
+const trackModal = document.getElementById("trackModal");
+const trackModalCard = document.getElementById("trackModalCard");
+const trackModalClose = document.getElementById("trackModalClose");
+const trackModalTitle = document.getElementById("trackModalTitle");
+const trackModalIcon = document.getElementById("trackModalIcon");
+const trackModalBody = document.getElementById("trackModalBody");
 let currentTrackSort = "mostPlayed";
 const teamFilterSelect = document.getElementById("team-filter");
 const trackSearchInput = document.getElementById("track-search");
@@ -68,8 +71,15 @@ const trackSorters = {
     alphabetical: (a, b) => a[0].localeCompare(b[0]),
 };
 
+let trackStatsByTrack = {};
+let lastFocusedTrackItem = null;
+
 function getTeamColor(team) {
     return (teamColors || []).find(t => t.team_name === team)?.team_color;
+}
+
+function getTrackIconUrl(track) {
+    return `/_assets/media/courses/mk8dxicons/${track.replaceAll(' ', '_').replaceAll("'", '').toLowerCase()}.avif`;
 }
 
 function populateTeamFilter() {
@@ -114,48 +124,17 @@ function updateTeamParam() {
 function buildTrackCountDiv(data, matchesCounted) {
     const sorter = trackSorters[currentTrackSort] || trackSorters.mostPlayed;
     const sorted = Object.entries(data).sort(sorter);
-    const maxCount = Math.max(...sorted.map(([, stats]) => stats.count));
-
-    let teamFrequencyString;
-    let datesPlayedString;
 
     const resultString = sorted
-        .map(([track, stats]) => {
-            const avgDiff = (stats.totalDiff / stats.count).toFixed(1);
-
-            if (teamFrequencyCheckbox.checked) {
-                const sortedTeams = Object.entries(stats.teamCounts)
-                    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-
-                teamFrequencyString = '<b>Frequency for teams</b><br>' + sortedTeams
-                    .map(([team, count]) => {
-                        const color = getTeamColor(team);
-                        const dot = color ? `<span class="team-color-dot" style="background-color:${color}"></span>` : "";
-                        return `${dot}${team}: ${count}`;
-                    })
-                    .join("<br>");
-            }
-
-            if (daysPlayedCheckbox.checked) {
-                datesPlayedString = '<b>Dates played on</b><br>' +
-                    stats.matchDates
-                        .map(date => `<a target="_blank" href="/schedule/?date=${date}">${date}</a>`)
-                        .join("<br>");
-            }
-
-            return `
-                <div class="track-item" data-track="${track.toLowerCase()}">
-                    <img class="track-icon" style="aspect-ratio:45/31" onload="this.style.opacity=1" loading="lazy" src="/_assets/media/courses/mk8dxicons/${track.replaceAll(' ', '_').replaceAll("'", '').toLowerCase()}.avif" alt="The icon for ${track}">
-                    <span class="track-label">
-                        <b class="track-name">${track}</b><br>
-                        Played ${stats.count} ${stats.count === 1 ? "time" : "times"}<br>
-                        ${teamFrequencyCheckbox.checked ? `<hr style="margin:4px 0 4px 0;" />${teamFrequencyString}` : ''}
-                        ${pointsDiffCheckbox.checked ? `<hr style="margin:4px 0 4px 0;" /><span class="settings-extra-info">Avg diff: ${avgDiff}</span>` : ''}
-                        ${daysPlayedCheckbox.checked ? `<hr style="margin:4px 0 4px 0;" />${datesPlayedString}` : ''}
-                    </span>
-                </div>
-            `;
-        })
+        .map(([track, stats]) => `
+            <button type="button" class="track-item" data-track="${escapeHTML(track.toLowerCase())}">
+                <img class="track-icon" onload="this.style.opacity=1" loading="lazy" src="${getTrackIconUrl(track)}" alt="">
+                <span class="track-label">
+                    <b class="track-name">${escapeHTML(track)}</b><br>
+                    Played ${stats.count} ${stats.count === 1 ? "time" : "times"}
+                </span>
+            </button>
+        `)
         .join("");
 
     const length = Object.keys(data).length;
@@ -163,7 +142,7 @@ function buildTrackCountDiv(data, matchesCounted) {
 
     return `
         <span>${length}/96 total tracks played across ${matchesCounted} ${matchesCounted === 1 ? "match" : "matches"}
-        ${selectedTeam ? `<span class="settings-extra-info">(involving ${selectedTeam})</span>` : ''}
+        ${selectedTeam ? `<span class="settings-extra-info">(involving ${escapeHTML(selectedTeam)})</span>` : ''}
         ${testMatchesCheckbox.checked ? '<span class="settings-extra-info">(including test matches)</span>' : ''}</span>
         <div class="track-frequency">
             ${resultString}
@@ -226,6 +205,8 @@ async function generateMatchStatsBox(showError) {
         }
     }
 
+    trackStatsByTrack = trackStats;
+
     const extraFields = buildTrackCountDiv(trackStats, matchesCounted);
 
     let tempTeamBox = teamBoxFormatHTML
@@ -237,6 +218,120 @@ async function generateMatchStatsBox(showError) {
     applyTrackSearch();
     showErrorBox(showError);
 }
+
+function buildTrackModalBody(track, stats) {
+    const avgDiff = (stats.totalDiff / stats.count).toFixed(1);
+
+    const teams = Object.entries(stats.teamCounts)
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .map(([team, count]) => {
+            const color = getTeamColor(team);
+            const dot = color ? `<span class="team-color-dot" style="background-color:${color}"></span>` : "";
+            return `<li>${dot}<span class="track-modal-team">${escapeHTML(team)}</span><span class="track-modal-count">${count}</span></li>`;
+        })
+        .join("");
+
+    const dates = stats.matchDates
+        .map(date => `<li><a target="_blank" rel="noopener" href="/schedule/?date=${encodeURIComponent(date)}">${escapeHTML(date)}</a></li>`)
+        .join("");
+
+    return `
+        <div class="track-modal-stats">
+            <div class="track-modal-stat">
+                <span class="track-modal-stat-label">Times played</span>
+                <span class="track-modal-stat-value">${stats.count}</span>
+            </div>
+            <div class="track-modal-stat">
+                <span class="track-modal-stat-label">Avg points difference</span>
+                <span class="track-modal-stat-value">${avgDiff}</span>
+            </div>
+        </div>
+        <div class="track-modal-section">
+            <p class="track-modal-heading">Played by</p>
+            <ul class="track-modal-list">${teams}</ul>
+        </div>
+        <div class="track-modal-section">
+            <p class="track-modal-heading">Dates played on</p>
+            <ul class="track-modal-list">${dates}</ul>
+        </div>
+    `;
+}
+
+function openTrackModal(track) {
+    const stats = trackStatsByTrack[track];
+    if (!stats) return;
+
+    lastFocusedTrackItem = document.activeElement?.closest?.(".track-item") ?? null;
+
+    trackModalTitle.textContent = track;
+    trackModalIcon.src = getTrackIconUrl(track);
+    trackModalIcon.alt = `The icon for ${track}`;
+    trackModalBody.innerHTML = buildTrackModalBody(track, stats);
+
+    trackModal.classList.remove("hidden", "closing");
+    trackModalCard.classList.remove("closing");
+    trackModalClose.focus();
+}
+
+function closeTrackModal() {
+    if (trackModal.classList.contains("hidden") || trackModal.classList.contains("closing")) return;
+
+    trackModal.classList.add("closing");
+    trackModalCard.classList.add("closing");
+
+    const onAnimationEnd = () => {
+        trackModal.classList.add("hidden");
+        trackModal.classList.remove("closing");
+        trackModalCard.classList.remove("closing");
+        trackModal.removeEventListener("animationend", onAnimationEnd);
+        lastFocusedTrackItem?.focus();
+        lastFocusedTrackItem = null;
+    };
+
+    trackModal.addEventListener("animationend", onAnimationEnd, { once: true });
+}
+
+function findTrackName(searchKey) {
+    return Object.keys(trackStatsByTrack).find(track => track.toLowerCase() === searchKey) ?? null;
+}
+
+JSTeamBox.addEventListener("click", e => {
+    const item = e.target.closest(".track-item");
+    if (!item) return;
+
+    const track = findTrackName(item.dataset.track);
+    if (track) openTrackModal(track);
+});
+
+trackModalClose.addEventListener("click", closeTrackModal);
+
+trackModal.addEventListener("click", e => {
+    if (e.target === trackModal) closeTrackModal();
+});
+
+document.addEventListener("keydown", e => {
+    if (e.key !== "Escape") return;
+    if (trackModal.classList.contains("hidden")) return;
+    closeTrackModal();
+});
+
+trackModal.addEventListener("keydown", e => {
+    if (e.key !== "Tab") return;
+
+    const focusable = trackModalCard.querySelectorAll("a[href], button:not([disabled])");
+    if (focusable.length === 0) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+    }
+});
 
 function applyTrackSearch() {
     const term = trackSearchInput.value.trim().toLowerCase();
@@ -364,18 +459,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 testMatchesCheckbox.addEventListener("click", async function () {
-    await generateMatchStatsBox();
-});
-
-pointsDiffCheckbox.addEventListener("click", async function () {
-    await generateMatchStatsBox();
-});
-
-teamFrequencyCheckbox.addEventListener("click", async function () {
-    await generateMatchStatsBox();
-});
-
-daysPlayedCheckbox.addEventListener("click", async function () {
     await generateMatchStatsBox();
 });
 

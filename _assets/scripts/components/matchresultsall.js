@@ -3,7 +3,42 @@ import { getMatchData, normalizeMatchData, getMatchCache, setMatchCache } from '
 
 const allMatchesBox = document.getElementById("JSAllMatches");
 const seasonSelect = document.getElementById("season-select");
+const testMatchToggle = document.getElementById("results-test-match-toggle");
+const sortOrderToggle = document.getElementById("results-sort-order");
 let normalizedMatches = [];
+
+const showTestMatches = () => !testMatchToggle || testMatchToggle.checked;
+const newestFirst = () => !sortOrderToggle || sortOrderToggle.checked;
+
+function updateTestParam() {
+    const url = new URL(window.location);
+    if (showTestMatches()) {
+        url.searchParams.delete("test");
+    } else {
+        url.searchParams.set("test", "0");
+    }
+    window.history.replaceState({}, "", url);
+}
+
+function applyTestParam() {
+    if (!testMatchToggle) return;
+    testMatchToggle.checked = new URLSearchParams(window.location.search).get("test") !== "0";
+}
+
+function updateSortParam() {
+    const url = new URL(window.location);
+    if (newestFirst()) {
+        url.searchParams.delete("sort");
+    } else {
+        url.searchParams.set("sort", "oldest");
+    }
+    window.history.replaceState({}, "", url);
+}
+
+function applySortParam() {
+    if (!sortOrderToggle) return;
+    sortOrderToggle.checked = new URLSearchParams(window.location.search).get("sort") !== "oldest";
+}
 
 function getSeasonsFromMatches() {
     const seasons = [...new Set(normalizedMatches.map(match => Number(match.season)).filter(n => !Number.isNaN(n)))];
@@ -41,6 +76,9 @@ function generateAllMatches(selectedSeason) {
     if (selectedSeason) {
         filteredMatches = normalizedMatches.filter(match => String(match.season) === String(selectedSeason));
     }
+    if (!showTestMatches()) {
+        filteredMatches = filteredMatches.filter(match => match.testMatch !== true);
+    }
 
     if (filteredMatches.length === 0) {
         allMatchesBox.innerHTML = `<p>No matches found${selectedSeason ? ` for Season ${selectedSeason}` : ''}.</p>`;
@@ -50,7 +88,7 @@ function generateAllMatches(selectedSeason) {
     filteredMatches = filteredMatches.slice().sort((a, b) => {
         const aDate = new Date(`${a.matchDate}T${a.time || "00:00:00"}`);
         const bDate = new Date(`${b.matchDate}T${b.time || "00:00:00"}`);
-        return bDate - aDate;
+        return newestFirst() ? bDate - aDate : aDate - bDate;
     });
 
     const locale = localStorage.getItem("locale") || "en-GB";
@@ -160,6 +198,28 @@ async function renderAllMatches() {
 
     seasonSelect?.addEventListener("change", () => {
         generateAllMatches(getSelectedSeason());
+    });
+
+    applyTestParam();
+    testMatchToggle?.addEventListener("change", () => {
+        updateTestParam();
+        generateAllMatches(getSelectedSeason());
+    });
+
+    applySortParam();
+    sortOrderToggle?.addEventListener("change", () => {
+        updateSortParam();
+        generateAllMatches(getSelectedSeason());
+    });
+
+    window.addEventListener("popstate", () => {
+        const wasShowingTests = showTestMatches();
+        const wasNewestFirst = newestFirst();
+        applyTestParam();
+        applySortParam();
+        if (wasShowingTests !== showTestMatches() || wasNewestFirst !== newestFirst()) {
+            generateAllMatches(getSelectedSeason());
+        }
     });
 
     const cached = getMatchCache();

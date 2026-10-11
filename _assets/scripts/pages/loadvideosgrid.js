@@ -1,9 +1,9 @@
-import { loadMatchStartTimes, videoStatusIcon, VIDEO_STATUS_EXPIRED_EVENT } from '/_assets/scripts/utils/videostatus.js';
+import { loadMatchStartTimes, videoStatusIcon, isTestMatchVideo as isTestMatch, VIDEO_STATUS_EXPIRED_EVENT } from '/_assets/scripts/utils/videostatus.js';
 
 const API_URL = `https://api.umkl.co.uk/videos`;
 const SKELETON_CARD_COUNT = 12;
 
-const MAX_TAGS = 12;
+const MAX_TAGS = 15;
 const TEST_MATCH_TAG = "Test Match";
 
 let allVideos = [];
@@ -28,10 +28,6 @@ function getVideoSeason(item) {
 
 function isRoundReveal(item) {
     return !item.match && /Round\s*\d+/i.test(item.title || "");
-}
-
-function isTestMatch(item) {
-    return /\(Test Match\)/i.test(item.title || "");
 }
 
 function getRoundNumber(item) {
@@ -114,7 +110,7 @@ function precomputeSearchData(list) {
 function createDivider(label) {
     const div = document.createElement("div");
     div.className = "videos-divider";
-    div.innerHTML = label ? `<span class="videos-divider-label">${label}</span><hr>` : `<hr>`;
+    div.innerHTML = `<h2>${label}</h2>`;
     return div;
 }
 
@@ -140,7 +136,7 @@ function buildVideoCard(item, locale, searchTerm) {
     const dateStr = date ? date.toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" }) : "";
 
     const card = document.createElement("a");
-    card.className = "video-card";
+    card.className = isTestMatch(item) ? "video-card test-match-card" : "video-card";
     card.href = item.url;
     card.target = "_blank";
     card.rel = "noopener noreferrer";
@@ -164,7 +160,7 @@ function renderVideos(container, list, searchTerm = "") {
     list.forEach((item, index) => {
         const label = getSectionLabel(item);
 
-        if (index === 0 || label !== lastLabel) {
+        if (label && (index === 0 || label !== lastLabel)) {
             fragment.appendChild(createDivider(label));
         }
         lastLabel = label;
@@ -193,18 +189,28 @@ function matchesSearch(item, term) {
 
 function getAvailableTags(list, limit = MAX_TAGS) {
     const counts = new Map();
+    const seasons = new Set();
     const addCount = (tag) => counts.set(tag, (counts.get(tag) || 0) + 1);
 
     list.forEach(item => {
-        if (item._effectiveSeason != null) addCount(`Season ${item._effectiveSeason}`);
+        const season = Number(item._effectiveSeason);
+        if (item._effectiveSeason != null && !Number.isNaN(season)) seasons.add(season);
         if (isTestMatch(item)) addCount(TEST_MATCH_TAG);
         (item.match?.teams_involved || []).forEach(team => addCount(team));
     });
 
-    return Array.from(counts.entries())
+    // Seasons lead in numeric order and are never squeezed out by the tag
+    // limit - otherwise the newest season loses to whichever team has more videos.
+    const seasonTags = Array.from(seasons)
+        .sort((a, b) => a - b)
+        .map(season => `Season ${season}`);
+
+    const otherTags = Array.from(counts.entries())
         .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-        .slice(0, limit)
+        .slice(0, Math.max(0, limit - seasonTags.length))
         .map(([tag]) => tag);
+
+    return [...seasonTags, ...otherTags];
 }
 
 function renderTags(tagsContainer, tags) {
@@ -272,6 +278,12 @@ function setupVideoSearch(container) {
         const alreadyActive = btn.classList.contains("active");
         const term = alreadyActive ? "" : btn.dataset.tag;
         searchInput.value = term;
+
+        if (term === TEST_MATCH_TAG && !showTestMatches) {
+            showTestMatches = true;
+            if (testMatchToggle) testMatchToggle.checked = true;
+        }
+
         runSearch(term.toLowerCase());
         btn.blur();
     });
@@ -279,9 +291,7 @@ function setupVideoSearch(container) {
     testMatchToggle?.addEventListener("change", () => {
         showTestMatches = testMatchToggle.checked;
 
-        // Hiding test matches while the "Test Match" tag/search is active would otherwise
-        // wipe the grid to zero results, which reads as the toggle being broken rather than
-        // working as intended - clear the now-contradictory filter instead.
+        // hiding test matches whilst the test match filter is active isn't allowed
         if (!showTestMatches && searchInput.value.trim().toLowerCase() === TEST_MATCH_TAG.toLowerCase()) {
             searchInput.value = "";
         }

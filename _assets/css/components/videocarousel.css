@@ -27,6 +27,10 @@
     scroll-snap-align: start;
 }
 
+.video-card.test-match-card {
+    opacity: var(--test-match-opacity);
+}
+
 .video-more-thumb {
     display: flex;
     align-items: center;

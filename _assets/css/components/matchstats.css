@@ -1,16 +1,20 @@
 .stats-controls {
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 12px;
+    margin-top: var(--section-spacing);
     margin-bottom: var(--section-spacing);
 }
 
 #track-search-wrapper {
-    flex: 1;
+    flex: 1 1 160px;
+    min-width: 160px;
 }
 
 #track-sort {
     flex-wrap: nowrap;
-    overflow-x: auto;
+    flex-shrink: 0;
     white-space: nowrap;
 }
 
@@ -31,6 +35,18 @@
 @media screen and (max-width: 767px) {
     .stats-controls {
         flex-direction: column;
+    }
+
+    #track-search-wrapper {
+        flex: none;
+        min-width: 0;
+        width: 100%;
+    }
+
+    #track-sort {
+        flex-shrink: 1;
+        max-width: 100%;
+        overflow-x: auto;
     }
 
     #team-filter {
@@ -64,11 +80,32 @@
     border: 1px solid var(--translucent-color);
     border-radius: var(--border-radius);
     background-color: var(--box-area-bg-color);
-    transition: border-color 0.15s ease;
+    color: var(--text-color);
+    font-family: inherit;
+    font-size: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .track-item:hover {
     border-color: var(--opaque-color);
+}
+
+.track-item:active {
+    transform: scale(0.97);
+}
+
+.track-item:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion) {
+
+    .track-item:active {
+        transform: none;
+    }
 }
 
 .track-icon {
@@ -89,5 +126,128 @@
 @media screen and (max-width: 767px) {
     .track-frequency {
         grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    }
+}
+
+.modal-card.track-modal-card {
+    max-width: 640px;
+    padding: 20px 24px 22px;
+    gap: 14px;
+}
+
+.track-modal-header {
+    gap: 12px;
+}
+
+.track-modal-icon {
+    width: 56px;
+    aspect-ratio: 45 / 31;
+    object-fit: contain;
+    flex-shrink: 0;
+    border-radius: calc(var(--border-radius) * 0.6);
+    background-color: var(--translucent-color);
+}
+
+.track-modal-title {
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+}
+
+.track-modal-body {
+    display: grid;
+    gap: 24px;
+}
+
+/* Two columns once there is room for them */
+@media (min-width: 620px) {
+    .track-modal-body {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+    }
+
+    /* The stat strip spans the full width above both columns */
+    .track-modal-stats {
+        grid-column: 1 / -1;
+    }
+}
+
+.track-modal-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--translucent-color);
+}
+
+.track-modal-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.track-modal-stat+.track-modal-stat {
+    padding-left: 16px;
+    border-left: 1px solid var(--translucent-color);
+}
+
+.track-modal-stat-label {
+    font-weight: 600;
+    opacity: 0.75;
+}
+
+.track-modal-stat-value {
+    font-size: 1.6rem;
+    font-weight: 900;
+    line-height: 1.1;
+}
+
+.track-modal-section {
+    min-width: 0;
+    max-height: 42vh;
+    overflow-y: auto;
+}
+
+.track-modal-heading {
+    margin: 0 0 8px;
+    font-weight: 600;
+    opacity: 0.75;
+}
+
+.track-modal-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.92rem;
+}
+
+.track-modal-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.track-modal-team {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.track-modal-count {
+    font-weight: 700;
+    opacity: 0.75;
+}
+
+@media (max-width: 619px) {
+    .modal-card.track-modal-card {
+        max-width: 100%;
+    }
+
+    .track-modal-stats {
+        padding-bottom: 12px;
     }
 }

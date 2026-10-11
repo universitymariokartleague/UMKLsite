@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="/_assets/css/components/matchstats.css">
     <link rel="stylesheet" href="/_assets/css/components/toggle.css">
     <link rel="stylesheet" href="/_assets/css/components/searchbox.css">
+    <link rel="stylesheet" href="/_assets/css/components/modal.css">
     <link rel="stylesheet" href="/_assets/css/base/settings.css">
 
     <meta property="og:title" content="UMKL | Match Stats" />
@@ -66,37 +67,6 @@
             </nav>
         </div>
 
-        <div class="stats-options">
-            <label class="stats-option-row">
-                <span class="stats-option-label">Include test matches</span>
-                <span class="stats-toggle">
-                    <input type="checkbox" id="testMatches">
-                    <span class="stats-toggle-track"></span>
-                </span>
-            </label>
-            <label class="stats-option-row">
-                <span class="stats-option-label">Show the average points difference for a track</span>
-                <span class="stats-toggle">
-                    <input type="checkbox" id="pointsDiff">
-                    <span class="stats-toggle-track"></span>
-                </span>
-            </label>
-            <label class="stats-option-row">
-                <span class="stats-option-label">Show how often teams have played a track</span>
-                <span class="stats-toggle">
-                    <input type="checkbox" id="teamFrequency">
-                    <span class="stats-toggle-track"></span>
-                </span>
-            </label>
-            <label class="stats-option-row">
-                <span class="stats-option-label">Show the dates a track was played on</span>
-                <span class="stats-toggle">
-                    <input type="checkbox" id="daysPlayed">
-                    <span class="stats-toggle-track"></span>
-                </span>
-            </label>
-        </div>
-
         <div class="stats-controls">
             <div id="track-search-wrapper">
                 <input type="text" id="track-search" placeholder="Search tracks..." autocomplete="off">
@@ -112,12 +82,37 @@
                 <button type="button" class="bubble-link no-color-link" data-value="leastPlayed">Least played</button>
                 <button type="button" class="bubble-link no-color-link" data-value="alphabetical">A-Z</button>
             </div>
+            <label class="toggle">
+                <input type="checkbox" id="testMatches">
+                Show test matches
+            </label>
         </div>
 
         <div id="JSTeamBox" class="team-info"></div>
         <div id="track-no-results" style="display:none;">
             <p>No tracks found</p>
             <button id="track-clear-search">Clear search</button>
+        </div>
+
+        <div id="trackModal" class="modal-overlay hidden" role="dialog" aria-modal="true"
+            aria-labelledby="trackModalTitle">
+            <div id="trackModalCard" class="modal-card track-modal-card">
+                <div class="settings-header track-modal-header">
+                    <img id="trackModalIcon" class="track-modal-icon" alt="" loading="lazy">
+                    <h3 id="trackModalTitle" class="track-modal-title"></h3>
+                    <button type="button" id="trackModalClose" class="settings-close-btn"
+                        aria-label="Close track details">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+                            role="img">
+                            <title>Close track details</title>
+                            <path fill="currentColor"
+                                d="M13.48 12 19 17.52 17.52 19 12 13.48 6.48 19 5 17.52 10.52 12 5 6.48 6.48 5 12 10.52 17.52 5 19 6.48z"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="track-modal-body" id="trackModalBody"></div>
+            </div>
         </div>
     </main>
 
