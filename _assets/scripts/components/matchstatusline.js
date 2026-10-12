@@ -51,15 +51,21 @@ function clearAllCountdowns() {
     countdownIntervals = [];
 }
 
-function buildPill(match, index) {
+// Test matches are friendlies rather than competitive fixtures, so flag them in the pill text
+function matchLabel(match) {
     const [teamA, teamB] = match.teamsInvolved || ['TBC', 'TBC'];
+    return `${teamA} vs ${teamB}${match.testMatch ? ' (test match)' : ''}`;
+}
+
+function buildPill(match, index) {
+    const label = matchLabel(match);
     const matchTime = new Date(`${match.matchDate}T${match.time || '00:00:00'}`);
     const isLive = matchTime.getTime() <= Date.now();
     const href = `/schedule/?date=${match.matchDate}`;
 
     if (isLive) {
         return {
-            html: `<a href="${href}" class="bubble-link bubble-link-accent"><div class="live-dot"></div>Live now: ${teamA} vs ${teamB}</a>`,
+            html: `<a href="${href}" class="bubble-link bubble-link-accent"><div class="live-dot"></div>Live now: ${label}</a>`,
             matchTime,
             countdownId: null,
         };
@@ -69,7 +75,7 @@ function buildPill(match, index) {
     if (diffMs >= COUNTDOWN_WINDOW_MS) {
         const dayLabel = match.matchDate === formatDate(new Date()) ? 'today' : 'tomorrow';
         return {
-            html: `<a href="${href}" class="bubble-link bubble-link-accent">${icon('clock')}${teamA} vs ${teamB} ${dayLabel}</a>`,
+            html: `<a href="${href}" class="bubble-link bubble-link-accent">${icon('clock')}${label} ${dayLabel}</a>`,
             matchTime,
             countdownId: null,
             refreshAt: matchTime.getTime() - COUNTDOWN_WINDOW_MS,
@@ -78,7 +84,7 @@ function buildPill(match, index) {
 
     const countdownId = `matchStatusCountdown-${match.eventID || index}`;
     return {
-        html: `<a href="${href}" class="bubble-link bubble-link-accent">${icon('clock')}${teamA} vs ${teamB} in <span id="${countdownId}">${formatCountdown(diffMs)}</span></a>`,
+        html: `<a href="${href}" class="bubble-link bubble-link-accent">${icon('clock')}${label} in <span id="${countdownId}">${formatCountdown(diffMs)}</span></a>`,
         matchTime,
         countdownId,
     };

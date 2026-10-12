@@ -177,7 +177,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!currentMatch || !currentMatch['teamsinvolved']) {
             debugLog("No live match found");
         }
-        else{
+        else {
             const match_id = Number(currentMatch['match_id'])
             const team_info = currentMatch['teamsinvolved']
 
