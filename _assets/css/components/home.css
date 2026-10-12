@@ -288,13 +288,25 @@ img {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto;
     gap: 16px;
+    container-type: inline-size;
 }
 
 .small-card {
     cursor: pointer;
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    --card-title-lines: calc(2 * 1.3 * 0.9rem);
+    --card-desc-lines: calc(2 * 1.35 * 0.8rem);
+    --card-gaps: 16px;
+    --card-meta-rows: 35px;
+    min-height: calc(28.125cqw - 4.5px + var(--card-title-lines) + var(--card-desc-lines) + var(--card-gaps) + var(--card-meta-rows));
+}
 
+@container (max-width: 390px) {
+    .small-card {
+        --card-meta-rows: 53px;
+    }
 }
 
 article:hover h2,
@@ -360,9 +372,22 @@ article:hover h3 {
 
 .small-card-tags tag {
     border-radius: var(--border-radius-pill);
-    padding: 1px 6px;
-    font-size: 0.62rem;
+    padding: 2px 6px;
+    font-size: 0.68rem;
     font-weight: 500;
+}
+
+.skeleton-tag {
+    height: 14px;
+    border-radius: var(--border-radius-pill);
+}
+
+.small-card h3.skeleton {
+    height: var(--card-title-lines);
+}
+
+.small-card p.skeleton {
+    height: var(--card-desc-lines);
 }
 
 @media (max-width: 900px) {
@@ -397,6 +422,11 @@ article:hover h3 {
 
     .small-card-date {
         font-size: 0.65rem;
+    }
+
+    .small-card {
+        --card-desc-lines: calc(2 * 1.35 * 0.65rem);
+        --card-gaps: 12px;
     }
 }
 
