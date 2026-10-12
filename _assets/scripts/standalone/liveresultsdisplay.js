@@ -176,24 +176,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (!currentMatch || !currentMatch['teamsinvolved']) {
             debugLog("No live match found");
-            return;
+        }
+        else{
+            const match_id = Number(currentMatch['match_id'])
+            const team_info = currentMatch['teamsinvolved']
+
+            const team_ids = team_info.map(team => Object.keys(team)[0]);
+            const team_names = team_info.map(team => Object.values(team)[0]);
+
+            swapped = team_names[1] == team_name
+
+            matchData = await getMatchData();
+            raceresults = await getLiveResults(Number(match_id));
+
+            setScores(team_ids);
+            getLiveMatchTeams(team_names)
+            errorMessage.innerHTML = "";
+            window.lastMatchUpdate = Date.now();
         }
 
-        const match_id = Number(currentMatch['match_id'])
-        const team_info = currentMatch['teamsinvolved']
-
-        const team_ids = team_info.map(team => Object.keys(team)[0]);
-        const team_names = team_info.map(team => Object.values(team)[0]);
-
-        swapped = team_names[1] == team_name
-
-        matchData = await getMatchData();
-        raceresults = await getLiveResults(Number(match_id));
-
-        setScores(team_ids);
-        getLiveMatchTeams(team_names)
-        errorMessage.innerHTML = "";
-        window.lastMatchUpdate = Date.now();
     } catch (error) {
         console.error(error);
         errorMessage.innerHTML = `Connection lost...`;
