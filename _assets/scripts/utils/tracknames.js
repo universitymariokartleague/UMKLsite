@@ -450,7 +450,7 @@ export const TRACKS = {
         "Dandelion Depths → Sky-High Sundae",
         "Dandelion Depths → Starview Peak",
         "Dandelion Depths → Toad's Factory",
-        "Desert Hills → Crown CIty",
+        "Desert Hills → Crown City",
         "Desert Hills → Koopa Troopa Beach",
         "Desert Hills → Mario Bros. Circuit",
         "Desert Hills → Shy Guy Bazaar",

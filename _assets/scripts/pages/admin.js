@@ -1,13 +1,15 @@
 import {
-    accessNotice, adminFetch, emblem, escapeHtml, login, logout,
+    ADMIN_API, accessNotice, adminFetch, emblem, escapeHtml, login, logout,
     setMessage, statusLabel, statusTone, whoAmI
 } from '/_assets/scripts/utils/adminapi.js';
 
 const VIEWS = {
+    media: 'Media',
     matches: 'Matches',
     teams: 'Teams',
     seasons: 'Seasons',
     tickets: 'Tickets',
+    backups: 'Backups',
     audit: 'Audit',
     health: 'Health'
 };
@@ -18,6 +20,7 @@ const STATUS_FILTERS = {
 };
 
 const state = {
+    me: null,
     view: 'matches',
     page: 1,
     status: '',
@@ -77,8 +80,30 @@ function renderSignedIn(me) {
     setMessage(els.message, accessNotice(me), 'caution');
 }
 
+/** Views the current session isn't allowed to use, so their tab is hidden. */
+/**
+ * Views the current session isn't allowed to use, so their tab is hidden.
+ *
+ * Three independent gates: league data (Board/Manager/Developer), backup
+ * downloads (Board/Developer), and the media view everyone gets.
+ */
+function visibleViews() {
+    const me = state.me || {};
+    let views = { ...VIEWS };
+
+    if (me.can_view_league_data === false) {
+        const league = ['matches', 'teams', 'seasons', 'tickets', 'audit'];
+        for (const view of league) delete views[view];
+    }
+    if (me.can_download_backups === false) {
+        delete views.backups;
+    }
+    return views;
+}
+
 function renderNav() {
-    els.nav.innerHTML = Object.entries(VIEWS).map(([view, label]) => {
+    const views = visibleViews();
+    els.nav.innerHTML = Object.entries(views).map(([view, label]) => {
         const active = view === state.view;
         return `<a class="bubble-nav-item${active ? ' active' : ''}" href="?view=${view}"
             ${active ? 'aria-current="page"' : ''}>${label}</a>`;
@@ -327,11 +352,88 @@ async function renderHealth() {
     </div>`;
 }
 
+async function renderBackups() {
+    showFilters(null, null);
+    const body = await adminFetch('/backups');
+
+    els.body.innerHTML = `
+    <div class="admin-panel">
+        <div class="admin-panel-head">
+            <h2>Backups</h2>
+            <div class="admin-bar-spacer"></div>
+            <a class="admin-btn small" href="${ADMIN_API}/data/export" download>Download current data (.zip)</a>
+        </div>
+        <p class="admin-muted">
+            ${body.total} archive${body.total === 1 ? '' : 's'}, ${escapeHtml(body.total_size)} in total.
+            Download an archive to restore from it.
+        </p>
+        ${body.backups.length ? `
+        <div class="table-scroll-wrapper">
+            <table class="admin-table">
+                <thead><tr><th>Archive</th><th class="admin-hide-small">Taken</th><th class="admin-num">Size</th><th></th></tr></thead>
+                <tbody>${body.backups.map(backup => `<tr>
+                    <td class="admin-nowrap">${escapeHtml(backup.path)}</td>
+                    <td class="admin-hide-small admin-nowrap">${escapeHtml(backup.modified_display)}</td>
+                    <td class="admin-num">${escapeHtml(backup.size)}</td>
+                    <td class="admin-num"><a class="admin-btn small"
+                        href="${ADMIN_API}/backups/download?path=${encodeURIComponent(backup.path)}"
+                        download>Download</a></td>
+                </tr>`).join('')}</tbody>
+            </table>
+        </div>` : '<p class="admin-empty">No backups have been taken yet.</p>'}
+    </div>`;
+}
+
+async function renderMedia() {
+    showFilters(null, null);
+    const [media, health] = await Promise.all([adminFetch('/media'), adminFetch('/health')]);
+
+    const age = seconds => {
+        if (seconds === null || seconds === undefined) return 'never';
+        if (seconds < 3600) return `${Math.round(seconds / 60)} min ago`;
+        if (seconds < 86400) return `${Math.round(seconds / 3600)} h ago`;
+        return `${Math.round(seconds / 86400)} days ago`;
+    };
+
+    const card = (title, value, detail) => `<div class="admin-health-card">
+        <h4>${escapeHtml(title)}</h4>
+        <dl><dt>Cached</dt><dd>${value}</dd><dt>Refreshed</dt><dd>${escapeHtml(age(detail))}</dd></dl>
+    </div>`;
+
+    els.body.innerHTML = `<div class="admin-panel">
+        <div class="admin-panel-head"><h2>Media</h2></div>
+        <div class="admin-health-grid">
+            ${card('Videos', media.videos.count, media.videos.age_seconds)}
+            ${card('Avatars', media.avatars.count, media.avatars.age_seconds)}
+        </div>
+        <p class="admin-muted">Videos and avatars refresh on their own every
+            ${Math.round(media.cache_ttl_seconds / 60)} minutes and 24 hours.</p>
+    </div>
+
+    <div class="admin-panel">
+        <div class="admin-panel-head"><h2>System health</h2>
+            <div class="admin-bar-spacer"></div>
+            <span class="admin-pill ${health.ok ? 'positive' : 'caution'}">${health.ok ? 'All good' : 'Check issues'}</span>
+        </div>
+        <div class="admin-health-grid">
+            <div class="admin-health-card"><h4>Database</h4><dl>
+                <dt>Status</dt><dd>${health.checks.database.ok ? 'OK' : 'Error'}</dd>
+            </dl></div>
+            <div class="admin-health-card"><h4>Discord</h4><dl>
+                <dt>Bot connected</dt><dd>${health.checks.discord.connected ? 'Yes' : 'No'}</dd>
+                <dt>In UMKL server</dt><dd>${health.checks.discord.in_guild ? 'Yes' : 'No'}</dd>
+            </dl></div>
+        </div>
+    </div>`;
+}
+
 const RENDERERS = {
+    media: renderMedia,
     matches: renderMatches,
     teams: renderTeams,
     seasons: renderSeasons,
     tickets: renderTickets,
+    backups: renderBackups,
     audit: renderAudit,
     health: renderHealth
 };
@@ -439,6 +541,15 @@ async function init() {
     if (!me) {
         renderSignedOut();
         return;
+    }
+
+    state.me = me;
+
+    // A view the session can't use falls back to the default rather than
+    // erroring on a 403.
+    if (!Object.hasOwn(visibleViews(), state.view)) {
+        state.view = 'matches';
+        writeUrl();
     }
 
     renderSignedIn(me);

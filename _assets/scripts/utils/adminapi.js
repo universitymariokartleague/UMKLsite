@@ -1,5 +1,5 @@
 export {
-    adminFetch, getMe, clearMe, login, logout, whoAmI, canWrite, SignedOutError,
+    ADMIN_API, adminFetch, getMe, clearMe, login, logout, whoAmI, canWrite, SignedOutError,
     accessNotice, setMessage, plural, emblem, statusLabel, statusTone, escapeHtml
 };
 
