@@ -39,7 +39,6 @@ let refreshTimer = null;
 let startTime;
 
 async function getLiveResults(match_id) {
-    console.log(match_id)
     return fetch(`https://api.umkl.co.uk/live/${match_id}`, {
         method: 'GET',
         headers: {
@@ -79,8 +78,6 @@ function getLiveMatchTeams(team_names) {
     receivedValidLogos = Boolean(team_names && team_names[0] && team_names[1]);
 
     swapped = team_names[1] == team_name
-
-    console.log(team_names)
 
     if (team_names) {
         const [logoA, logoB] = swapped
@@ -126,6 +123,8 @@ function setScores(team_ids) {
             return sum;
         }, 0);
     }
+
+     raceresults = Array.isArray(raceresults) ? raceresults : [];
 
     let teamAPoints = raceresults.reduce((total, race) => {
         return total + calculatePoints(race[`${team_ids[0]}`] || []);
