@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="#bc0839" name="theme-color" />
+    <meta name="color-scheme" content="dark light">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-title" content="UMKL">
+    <title>Admin | UMKL</title>
+    <meta name="description" content="UMKL admin panel">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="/_assets/media/brand/favicon.jpg" type="image/png">
+    <link rel="apple-touch-icon" href="/_assets/media/brand/favicon.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
+    <link rel="stylesheet" href="/_assets/css/base/style.css">
+    <link rel="stylesheet" href="/_assets/css/base/settings.css">
+    <link rel="stylesheet" href="/_assets/css/pages/admin.css">
+    <link rel="modulepreload" href="/_assets/webcomponents/navbar.js">
+    <link rel="modulepreload" href="/_assets/webcomponents/footer.js">
+    <script type="module" src="/_assets/webcomponents/navbar.js" defer></script>
+    <script type="module" src="/_assets/webcomponents/footer.js" defer></script>
+    <script src="/_assets/scripts/base/theme.js"></script>
+    <script type="module" src="/_assets/scripts/base/settings.js" defer></script>
+    <script type="module" src="/_assets/scripts/pages/admin.js" defer></script>
+</head>
+
+<body id="top">
+    <umkl-navbar></umkl-navbar>
+
+    <main class="admin-main">
+        <div id="admin-signed-out" class="admin-signed-out">
+            <h2>UMKL admin panel</h2>
+            <p>This is where the board manages teams, matches, results and tickets. Sign in
+                with Discord - access is based on your roles in the UMKL server.</p>
+            <button class="bubble-link bubble-link-accent" id="admin-login">Sign in with Discord</button>
+        </div>
+
+        <div id="admin-panel" hidden>
+            <h1>Admin panel</h1>
+
+            <div class="admin-bar">
+                <nav class="bubble-nav admin-nav" id="admin-nav"></nav>
+                <div class="admin-bar-spacer"></div>
+                <div class="admin-who">
+                    <span class="admin-who-name" id="admin-who"></span>
+                    <span class="admin-role-list" id="admin-roles"></span>
+                    <button class="admin-btn small" id="admin-logout">Sign out</button>
+                </div>
+            </div>
+
+            <div id="admin-message" class="admin-message error" hidden></div>
+
+            <div class="admin-filter" id="admin-filters" hidden>
+                <input type="search" id="filter-search" placeholder="Search" aria-label="Search">
+                <select id="filter-status" aria-label="Filter by status"></select>
+            </div>
+
+            <div id="admin-view-body"></div>
+        </div>
+    </main>
+
+    <umkl-footer></umkl-footer>
+</body>
+
+</html>

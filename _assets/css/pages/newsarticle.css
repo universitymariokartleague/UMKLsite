@@ -229,8 +229,8 @@
 
 .small-card-tags tag {
     border-radius: var(--border-radius-pill);
-    padding: 1px 6px;
-    font-size: 0.62rem;
+    padding: 2px 6px;
+    font-size: 0.68rem;
     font-weight: 500;
 }
 

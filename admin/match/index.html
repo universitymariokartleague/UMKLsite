@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="#bc0839" name="theme-color" />
+    <meta name="color-scheme" content="dark light">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-title" content="UMKL">
+    <title>Match | Admin | UMKL</title>
+    <meta name="description" content="Edit a UMKL match">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="/_assets/media/brand/favicon.jpg" type="image/png">
+    <link rel="apple-touch-icon" href="/_assets/media/brand/favicon.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
+    <link rel="stylesheet" href="/_assets/css/base/style.css">
+    <link rel="stylesheet" href="/_assets/css/base/settings.css">
+    <link rel="stylesheet" href="/_assets/css/pages/admin.css">
+    <link rel="stylesheet" href="/_assets/css/pages/adminresults.css">
+    <link rel="modulepreload" href="/_assets/webcomponents/navbar.js">
+    <link rel="modulepreload" href="/_assets/webcomponents/footer.js">
+    <script type="module" src="/_assets/webcomponents/navbar.js" defer></script>
+    <script type="module" src="/_assets/webcomponents/footer.js" defer></script>
+    <script src="/_assets/scripts/base/theme.js"></script>
+    <script type="module" src="/_assets/scripts/base/settings.js" defer></script>
+    <script type="module" src="/_assets/scripts/pages/adminresults.js" defer></script>
+</head>
+
+<body id="top">
+    <umkl-navbar></umkl-navbar>
+
+    <main class="admin-main">
+        <div id="admin-signed-out" class="admin-signed-out" hidden>
+            <h2>Sign in required</h2>
+            <p>You need a board role in the UMKL server to edit matches.</p>
+            <button class="bubble-link bubble-link-accent" id="admin-login">Sign in with Discord</button>
+        </div>
+
+        <div id="admin-panel">
+            <div id="admin-message" class="admin-message error" hidden></div>
+
+            <div id="match-head"></div>
+
+            <div id="results-editor"></div>
+
+            <div class="match-actions" id="match-actions"></div>
+
+            <div id="live-score-panel" hidden></div>
+        </div>
+    </main>
+
+    <umkl-footer></umkl-footer>
+</body>
+
+</html>

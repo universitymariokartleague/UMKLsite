@@ -134,9 +134,9 @@
 
 .news-card .tags tag {
     border-radius: var(--border-radius-pill);
-    padding: 2px 10px;
-    font-size: 0.9em;
-    font-weight: 700;
+    padding: 2px 6px;
+    font-size: 1em;
+    font-weight: 500;
     flex-shrink: 1;
     min-width: 0;
     max-width: 100%;

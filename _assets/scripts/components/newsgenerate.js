@@ -45,7 +45,14 @@ function renderHomeNewsSkeleton() {
             </div>
             <h3 class="skeleton"></h3>
             <p class="skeleton"></p>
-            <div class="small-card-meta skeleton"></div>
+            <div class="small-card-meta">
+                <div class="skeleton skeleton-line" style="width:90px;height:14px;"></div>
+                <div class="small-card-tags">
+                    <div class="skeleton skeleton-tag" style="width:56px;"></div>
+                    <div class="skeleton skeleton-tag" style="width:46px;"></div>
+                    <div class="skeleton skeleton-tag" style="width:52px;"></div>
+                </div>
+            </div>
         </article>
     `;
 
