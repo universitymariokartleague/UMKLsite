@@ -11,6 +11,7 @@ const VIEWS = {
     tickets: 'Tickets',
     backups: 'Backups',
     audit: 'Audit',
+    commits: 'Commits',
     health: 'Health'
 };
 
@@ -92,7 +93,7 @@ function visibleViews() {
     let views = { ...VIEWS };
 
     if (me.can_view_league_data === false) {
-        const league = ['matches', 'teams', 'seasons', 'tickets', 'audit'];
+        const league = ['matches', 'teams', 'seasons', 'tickets', 'audit', 'commits'];
         for (const view of league) delete views[view];
     }
     if (me.can_download_backups === false) {
@@ -427,6 +428,61 @@ async function renderMedia() {
     </div>`;
 }
 
+async function renderCommits() {
+    const info = await adminFetch('/commits', { query: { page: state.page, per_page: 50 } });
+    showFilters(null, null);
+
+    const repos = info.repos || [];
+    const live = repos.filter(repo => repo.available);
+
+    const locale = localStorage.getItem('locale') || 'en-GB';
+    const when = iso => new Date(iso).toLocaleString(locale,
+        { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+    if (!live.length) {
+        els.body.innerHTML = `<div class="admin-panel">
+            <div class="admin-panel-head"><h2>Commits</h2></div>
+            ${emptyTable('No git checkouts were found, so there is no history to show.')}
+        </div>`;
+        return;
+    }
+
+    const pills = live.map(repo =>
+        `<span class="admin-pill">${escapeHtml(repo.name)} &middot; ${escapeHtml(repo.branch || 'detached')}</span>`
+    ).join('');
+
+    els.body.innerHTML = `<div class="admin-panel">
+        <div class="admin-panel-head"><h2>Commits</h2>
+            <div class="admin-bar-spacer"></div>
+            <span class="admin-role-list">${pills}</span></div>
+        ${info.commits.length ? `<div class="table-scroll-wrapper">
+            <table class="admin-table">
+                <thead><tr><th>When</th><th>Commit</th><th>Who</th>
+                    <th class="admin-hide-small">Message</th></tr></thead>
+                <tbody>${info.commits.map(commit => {
+                    const sha = commit.url
+                        ? `<a href="${escapeHtml(commit.url)}" target="_blank" rel="noopener noreferrer"
+                               class="no-underline-link"><code>${escapeHtml(commit.short_sha)}</code></a>`
+                        : `<code>${escapeHtml(commit.short_sha)}</code>`;
+                    const head = commit.is_head
+                        ? ' <span class="admin-pill accent">HEAD</span>' : '';
+                    const repo = repos.length > 1
+                        ? `<div class="admin-muted">${escapeHtml(commit.repo)}</div>` : '';
+                    const message = escapeHtml(commit.message)
+                        + (commit.body ? `<div class="admin-muted">${escapeHtml(commit.body)}</div>` : '');
+                    return `<tr>
+                        <td class="admin-nowrap">${escapeHtml(when(commit.committed_at))}</td>
+                        <td>${sha}${head}</td>
+                        <td class="admin-nowrap">${escapeHtml(commit.author)}${repo}</td>
+                        <td class="admin-hide-small">${message}</td>
+                    </tr>`;
+                }).join('')}</tbody>
+            </table>
+        </div>` : emptyTable('No commits found.')}
+        ${pager(info)}
+    </div>`;
+}
+
 const RENDERERS = {
     media: renderMedia,
     matches: renderMatches,
@@ -435,6 +491,7 @@ const RENDERERS = {
     tickets: renderTickets,
     backups: renderBackups,
     audit: renderAudit,
+    commits: renderCommits,
     health: renderHealth
 };
 
