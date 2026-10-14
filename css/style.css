@@ -22,6 +22,14 @@
 
     --mono-font: "JetBrains Mono", "Cascadia Code", FMono-Regular, Consolas, DejaVu Sans Mono, "Liberation Mono", Menlo, monospace;
     --body-font: "Montserrat", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+
+    --border-radius: 0;
+    --border-radius-pill: 0;
+    --section-spacing: 20px;
+    --brand-primary: #bc0839;
+    --brand-light: #FFF;
+    --translucent-color: #00000014;
+    --opaque-color: #fff;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -44,6 +52,10 @@
         --box-border: 1px solid #ffffff4d;
         --box-outline: 2px solid #ffffff99;
         --box-area-bg-color: #ffffff08;
+
+        --section-spacing: 10px;
+        --translucent-color: #ffffff14;
+        --opaque-color: #111111;
     }
 }
 
@@ -66,6 +78,10 @@
     --box-border: 1px solid #ffffff4d;
     --box-outline: 2px solid #ffffff99;
     --box-area-bg-color: #ffffff08;
+
+    --section-spacing: 10px;
+    --translucent-color: #ffffff14;
+    --opaque-color: #111111;
 }
 
 /*adjust mobile text inflation*/
@@ -176,7 +192,7 @@ h2:target,
 h3:target,
 h4:target {
     animation: anchor-highlight 2s ease-out;
-    border-radius: 4px;
+    border-radius: 0;
 }
 
 @keyframes anchor-highlight {
@@ -191,7 +207,7 @@ h4:target {
 
 .image {
     width: 100%;
-    border-radius: 10px;
+    border-radius: 0;
 }
 
 ::selection {
@@ -260,7 +276,7 @@ a[target="_blank"]::after {
 button {
     background-color: var(--accent-color);
     font-weight: 600;
-    border-radius: 5px;
+    border-radius: 0;
     font-size: 15px;
     color: #fff;
     border: 1px solid #ffffff15;
@@ -291,7 +307,7 @@ button:focus {
     color: var(--text-color);
     width: 35px;
     height: 35px;
-    border-radius: 50%;
+    border-radius: 0;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -321,7 +337,7 @@ code {
     padding: 1px 4px;
     background-color: var(--code-bg-color);
     border: var(--code-border);
-    border-radius: 5px;
+    border-radius: 0;
     -webkit-user-select: all;
     user-select: all;
 }
@@ -332,7 +348,7 @@ code {
     line-height: 1.6;
     background-color: #1e1e1e;
     outline: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
+    border-radius: 0;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
     color: #d4d4d4;
     overflow-x: auto;
@@ -371,7 +387,7 @@ code {
     line-height: 1.6;
     background-color: rgba(15, 15, 15, 0.5);
     outline: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
+    border-radius: 0;
     color: #fff;
 }
 
@@ -409,7 +425,7 @@ mention {
     padding: 2px 5px;
     background-color: rgba(88, 101, 242, 0.25);
     border: 1px solid rgba(152, 172, 255, 0.6);
-    border-radius: 5px;
+    border-radius: 0;
     -webkit-user-select: all;
     user-select: all;
 }
@@ -420,7 +436,7 @@ tag {
     border: 1px solid var(--accent-color);
     font-size: 15px;
     padding: 0px 5px;
-    border-radius: 5px;
+    border-radius: 0;
     transition: transform 0.1s, color 0.1s, background-color 0.1s;
     -webkit-user-select: all;
     user-select: all;
@@ -446,7 +462,7 @@ new {
     padding: 1px 6px;
     background-color: rgba(88, 101, 242, 0.6);
     border: 1px solid #FFF;
-    border-radius: 5px;
+    border-radius: 0;
     position: absolute;
     top: 0;
     left: 0;
@@ -481,7 +497,7 @@ blockquote {
     margin-right: 0px;
     background-color: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
+    border-radius: 0;
 }
 
 .miniquote {
@@ -607,7 +623,7 @@ blockquote {
     background-color: var(--accent-color);
     margin: auto 0;
     margin-left: 12px;
-    border-radius: 50%;
+    border-radius: 0;
     box-shadow: 0 0 0 0 rgba(188, 8, 57, 0.7);
     animation: live-dot-pulse 2.0s infinite;
 }
@@ -628,7 +644,7 @@ blockquote {
 
 .rule-category-box {
     border: 1px solid #cccccccc;
-    border-radius: 10px;
+    border-radius: 0;
     padding: 15px;
     margin-bottom: 10px;
 }
@@ -695,7 +711,7 @@ dialog.cookie-popup {
     margin: 0 15px 0 15px;
     bottom: 15px;
     max-width: 350px;
-    border-radius: 10px;
+    border-radius: 0;
     border: 1px solid #cccccccc;
     background-color: rgba(0, 0, 0, 0.5);
     -webkit-backdrop-filter: blur(15px);

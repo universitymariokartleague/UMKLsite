@@ -7,7 +7,7 @@
 
 .team-match-card {
     border: 1px solid #ccccccaa;
-    border-radius: 8px;
+    border-radius: 0;
     padding: 12px;
     
     display: flex;
@@ -17,7 +17,7 @@
 .test-match {
     opacity: 0.8;
     border: 1px dashed #ccccccaa;
-    border-radius: 8px
+    border-radius: 0;
 }
 
 .match-card-wrapper {
@@ -33,7 +33,7 @@
     margin-left: auto;
     height: 100%;
     padding: auto;
-    border-radius: 5px;
+    border-radius: 0;
 
     font-size: 15px;
     min-width: 100px;

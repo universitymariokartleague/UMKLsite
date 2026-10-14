@@ -14,7 +14,7 @@
     max-width: 100%;
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
-    border-radius: 10px;
+    border-radius: 0;
     margin-bottom: 5px;
 }
 
@@ -23,7 +23,7 @@
     flex-direction: row;
     border: 1px solid #ccccccaa;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 0;
     gap: 5px;
     width: 100%;
 }
@@ -40,7 +40,7 @@
     width: 184px;
     border: 1px solid #ccccccaa;
     transition: border 0.2s ease-in-out;
-    border-radius: 10px;
+    border-radius: 0;
     cursor: pointer;
     text-align: center;
 }

@@ -30,7 +30,7 @@
 .team-info .map {
     width: 100%;
     display: flex;
-    border-radius: 10px;
+    border-radius: 0;
     border: 1px solid #ccccccaa;
 }
 
@@ -45,13 +45,13 @@
 .current-season-info {
     margin-top: 10px;
     border: 1px solid #ccccccaa;
-    border-radius: 10px;
+    border-radius: 0;
     padding: 12px;
 }
 
 .team-info {
     border: 1px solid #ccccccaa;
-    border-radius: 10px;
+    border-radius: 0;
     display: flex;
     gap: 20px;
     padding: 20px;
@@ -70,7 +70,7 @@
 #team-season-select {
     padding: 2px 4px;
     font-size: 16px;
-    border-radius: 5px;
+    border-radius: 0;
     border: 2px solid var(--team-color, #ccccccaa);
     font-weight: bold;
     outline: none;
@@ -80,12 +80,12 @@
 #teamMapIFrame {
     height: 100%;
     width: 100%;
-    border-radius: 10px;
+    border-radius: 0;
     outline: 1px solid #ccccccaa;
 }
 
 .user-image {
-    border-radius: 10px;
+    border-radius: 0;
     opacity: 0;
     transition: opacity 0.2s ease-in;
     width: 150px;

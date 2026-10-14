@@ -4,7 +4,7 @@
 
 .event-container {
     margin: 0 0 10px 0;
-    border-radius: 10px;
+    border-radius: 0;
     overflow: hidden;
     border: 1px solid #ccccccaa;
     background-color: var(--bg-color);
@@ -117,7 +117,7 @@
     background-color: white;
     color: var(--accent-color);
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 0;
     font-size: 30px;
     font-weight: bold;
     white-space: nowrap;
@@ -144,7 +144,7 @@
     color: var(--accent-color);
     font-weight: 600;
     background-color: #fff;
-    border-radius: 5px;
+    border-radius: 0;
     z-index: 3;
 }
 
@@ -239,7 +239,7 @@
     background-color: var(--bg-color);
     border: var(--box-border);
     padding: 0 1px;
-    border-radius: 5px;
+    border-radius: 0;
     display: inline-block;
     line-height: 1;
 }
@@ -350,7 +350,7 @@
 .list-view-content .score-box {
     font-size: 22px;
     padding: 1vmin;
-    border-radius: 5px;
+    border-radius: 0;
 }
 
 .list-view-content .match-date-time-box {
@@ -406,7 +406,7 @@
 #calendarListView .score-box {
     font-size: 2.5vmin;
     padding: 1vmin;
-    border-radius: 5px;
+    border-radius: 0;
 }
 
 #calendarListView .match-date-time-box {
@@ -429,7 +429,7 @@
     background-color: var(--bg-color);
     border: var(--box-border);
     padding: 0 1px;
-    border-radius: 5px;
+    border-radius: 0;
     display: inline-block;
 }
 
@@ -450,7 +450,7 @@
     .score-box {
         font-size: 5vmin;
         padding: 2vmin;
-        border-radius: 5px;
+        border-radius: 0;
     }
 
     .match-detail-container {
@@ -474,7 +474,7 @@
     .local-time-clock::after {
         font-size: 5.5px;
         left: 4px;
-        border-radius: 5px;
+        border-radius: 0;
     }
 
     #calendarListView .event-box-team {

@@ -1,9 +1,9 @@
 /* news */
 .news-wrapper {
-    border-radius: 10px;
+    border-radius: 0;
     border: 1px solid #cccccccc;
     overflow: hidden;
-    /* This contains the scrollbar within the rounded corners */
+    /* keeps the horizontal scrollbar inside the box */
 }
 
 #news-search-wrapper {
@@ -11,7 +11,7 @@
     align-items: center;
     margin-bottom: 10px;
     border: 1.5px solid #ccccccaa;
-    border-radius: 10px;
+    border-radius: 0;
     padding: 0 4px 0 12px;
     gap: 6px;
     background-color: var(--bg-color);
@@ -57,7 +57,7 @@
     background-color: #bc0839;
     color: white;
     margin: 4px 0;
-    border-radius: 6px;
+    border-radius: 0;
     font-size: 13px;
     white-space: nowrap;
     flex-shrink: 0;
@@ -123,29 +123,38 @@
     gap: 5px;
 }
 
+/* the card flows: thumbnail, then text directly beneath it. Previously the
+   text was absolutely positioned against a fixed height, so any slack ended
+   up as a gap between the image and the title. */
 .news-box {
     border: 1px solid #ccccccaa;
-    padding: 10px;
+    padding: 0;
     margin: 0 5px 2px 5px;
     min-width: 200px;
     width: 200px;
-    height: 265px;
-    border-radius: 10px;
+    border-radius: 0;
     overflow: hidden;
     position: relative;
     isolation: isolate;
     contain: paint;
     background-color: var(--box-area-bg-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.news-box .news-image {
+    width: 100%;
+    /* fixed band so every thumbnail lines up across the row */
+    height: 108px;
+    flex: 0 0 auto;
+    overflow: hidden;
 }
 
 .news-box .news-image img,
-.news-box .news-image video,
 .news-box .news-image video {
-    width: 220px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
+    width: 100%;
+    height: 100%;
+    display: block;
     opacity: 0;
     transition: opacity 0.2s ease-in;
     object-fit: cover;
@@ -153,31 +162,62 @@
 
 .news-box .news-text {
     color: var(--text-color);
-    position: absolute;
-    bottom: 35px;
-    margin-right: 5px;
+    padding: 8px 10px 0;
+    flex: 0 0 auto;
+}
+
+/* the <br> after the title link adds a whole empty line on top of the
+   block spacing - drop it so the description sits under the title */
+.news-box .news-text br {
+    display: none;
 }
 
 .news-box .news-title {
-    font-size: 20px;
+    font-size: 15px;
     font-weight: bold;
-    line-height: 1;
+    line-height: 1.25;
+    /* long titles are clamped to 2 lines so card heights stay even */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .news-box .news-desc {
-    font-size: 15px;
-    line-height: 1.25;
-    display: inline-block;
+    font-size: 13px;
+    line-height: 1.3;
+    margin-top: 2px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
+/* the date follows the description directly; any slack from the row's
+   equal-height stretch collects below it as padding rather than opening a
+   gap in the middle of the text */
 .news-box .news-date {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    margin-left: 10px;
-    margin-bottom: 10px;
+    padding: 7px 10px 9px;
     opacity: 0.8;
-    width: max-content;
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+/* tags drop below the date so the date line stays short and the tags get
+   the full card width */
+.news-box .news-date .tags {
+    display: block;
+    margin-top: 3px;
+}
+
+.news-box .news-date tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 0 4px;
+    border-radius: 0;
+    vertical-align: baseline;
 }
 
 .news-credits {
@@ -190,7 +230,7 @@
     width: 100%;
     max-width: 900px;
     margin: 0 auto 15px auto;
-    border-radius: 10px;
+    border-radius: 0;
     overflow: hidden;
     position: relative;
     border: 1px solid #ccccccaa;
@@ -236,6 +276,8 @@
     pointer-events: none;
 }
 
+/* the card is a plain container, not an <a>: the tag links inside it must
+   stay independently clickable, and nested anchors are invalid HTML */
 .news-reel-card {
     position: relative;
     z-index: 2;
@@ -249,6 +291,19 @@
     box-sizing: border-box;
 }
 
+.news-reel-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.news-reel-link {
+    color: #fff !important;
+    text-decoration: none;
+}
+
 .news-reel-title {
     font-size: 1.5rem;
     text-decoration: underline;
@@ -260,6 +315,30 @@
 
 .news-reel-tags {
     margin-left: 2px;
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    vertical-align: middle;
+}
+
+.news-reel-tags:empty {
+    display: none;
+}
+
+/* the reel clones tag markup out of the cards, so re-apply the clickable
+   link styling here rather than inheriting the card's own tag rules */
+.news-reel-tags .tag-link {
+    display: inline-block;
+    text-decoration: none;
+}
+
+.news-reel-tags tag {
+    display: inline-block;
+    font-size: 12px;
+    padding: 1px 6px;
+    border-radius: 0;
+    line-height: 1.35;
+    cursor: pointer;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -276,7 +355,7 @@
     z-index: 5;
     width: 36px;
     height: 36px;
-    border-radius: 50%;
+    border-radius: 0;
     border: none;
     background: rgba(0, 0, 0, 0.35);
     color: #fff;
@@ -355,7 +434,7 @@
 .news-reel-dot {
     width: 6px;
     height: 6px;
-    border-radius: 50%;
+    border-radius: 0;
     background-color: rgba(255, 255, 255, 0.25);
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -404,8 +483,18 @@
         aspect-ratio: 16 / 9;
         margin: 0;
         padding: 0;
-        border-radius: 8px;
+        border-radius: 0;
         min-width: unset;
+        /* mobile cards overlay the text on the image, so the thumbnail
+           goes back to being an absolutely positioned backdrop */
+        display: block;
+    }
+
+    .news-container-full-page .news-box .news-image {
+        position: absolute;
+        inset: 0;
+        height: auto;
+        z-index: 0;
     }
 
     .news-container-full-page .news-box .news-image img,
@@ -428,11 +517,15 @@
     }
 
     .news-container-full-page .news-box .news-text {
+        position: absolute;
         z-index: 1;
         color: #fff;
         left: 10px;
-        bottom: 34px;
-        margin-right: 12px;
+        right: 10px;
+        /* extra room for the tags, which sit on their own line below the date */
+        bottom: 46px;
+        margin-right: 0;
+        padding: 0;
         text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
     }
 
@@ -459,13 +552,31 @@
     }
 
     .news-container-full-page .news-box .news-date {
+        position: absolute;
         z-index: 1;
         color: #ffffffcc;
+        left: 10px;
+        right: 10px;
+        bottom: 0;
         width: auto;
-        max-width: calc(100% - 20px);
+        margin: 0;
+        padding: 0 0 10px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
+    .news-container-full-page .news-box .news-date .tags {
+        white-space: normal;
+        overflow: visible;
+    }
+
+    .news-container-full-page .news-box .news-date tag {
+        font-size: 11px;
+        padding: 0 4px;
+        margin-right: 2px;
     }
 
     .news-reel-viewport {
@@ -474,6 +585,11 @@
 
     .news-reel-card {
         padding: 14px 16px;
+    }
+
+    .news-reel-tags tag {
+        font-size: 11px;
+        padding: 0 5px;
     }
 
 }

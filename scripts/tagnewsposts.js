@@ -88,7 +88,10 @@ function addNewsReelArea() {
             const dateEl = el.querySelector('.news-date');
             const descEl = el.querySelector('.news-desc');
 
-            const tagsHTML = Array.from(el.querySelectorAll('.news-date tag, .news-date .tag-link'))
+            // prefer the .tag-link anchors, which wrap the <tag>. Selecting both
+            // would emit each tag twice (once whole, once as its bare inner tag).
+            const tagEls = el.querySelectorAll('.news-date .tag-link');
+            const tagsHTML = Array.from(tagEls.length ? tagEls : el.querySelectorAll('.news-date tag'))
                 .map(tag => tag.outerHTML).join('');
 
             let date = '';
@@ -140,14 +143,16 @@ function addNewsReelArea() {
         slide.innerHTML = `
             <img class="news-reel-bg" src="${item.img}" alt="" onload="this.style.opacity=1" loading="lazy">
             <div class="news-reel-gradient"></div>
-            <a class="news-reel-card" href="${item.href}">
+            <div class="news-reel-card">
                 <div class="news-reel-meta">
                     ${item.date ? `<span class="news-reel-date">${item.date}</span>` : ''}
                     <span class="news-reel-tags">${item.tagsHTML}</span>
                 </div>
-                <h3 class="news-reel-title">${item.title}</h3>
-                <p class="news-reel-desc">${item.description}</p>
-            </a>
+                <a class="news-reel-link" href="${item.href}">
+                    <h3 class="news-reel-title">${item.title}</h3>
+                    <p class="news-reel-desc">${item.description}</p>
+                </a>
+            </div>
         `;
         fragment.appendChild(slide);
 
@@ -328,9 +333,11 @@ function addSearchBar() {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+    // must run first: the reel clones the tag markup, so the <tag> elements
+    // need to already be wrapped in their .tag-link anchors to stay clickable
+    addLinksToTags();
     if (newsReel) {
         addNewsReelArea();
         addSearchBar();
     }
-    addLinksToTags();
 });

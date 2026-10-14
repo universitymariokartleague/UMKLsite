@@ -29,7 +29,7 @@
     background-color: var(--standings-bg-color);
     border: 1px solid #ccccccaa;
     min-height: 100px;
-    border-radius: 10px;
+    border-radius: 0;
 
     font-family: "Montserrat";
 }
@@ -43,7 +43,7 @@
     background-color: var(--standings-box-bg-color);
     height: 50px;
     align-items: center;
-    border-radius: 10px;
+    border-radius: 0;
     transition: background-color 0.2s ease, outline 0.2s ease, color 0.2s ease;
 }
 
@@ -61,7 +61,7 @@
     display: flex;
     color: #fff;
     background-color: var(--accent-color);
-    border-radius: 5px;
+    border-radius: 0;
     align-items: center;
     justify-content: center;
     font-size: 35px;
@@ -76,7 +76,7 @@
 }
 
 .teamStandingsBox .teamColour {
-    border-radius: 5px;
+    border-radius: 0;
     margin-left: 2px;
     width: 12px;
     height: 50px;
@@ -139,7 +139,7 @@
     flex-direction: column;
     background-color: var(--box-area-bg-color);
     border: 1px solid #ccccccaa;
-    border-radius: 10px;
+    border-radius: 0;
     padding: 10px;
     margin: 20px 0;
 }
@@ -147,7 +147,7 @@
 #season-select {
     padding: 10px;
     font-size: 20px;
-    border-radius: 5px;
+    border-radius: 0;
     border: 1px solid #ccccccaa;
     font-weight: bold;
     margin-bottom: 5px;
@@ -162,7 +162,7 @@
 .team-sort-select {
     padding: 4px 6px;
     font-size: 13px;
-    border-radius: 5px;
+    border-radius: 0;
     background-color: var(--bg-color);
     color: var(--text-color);
     border: 1px solid #ccccccaa;
@@ -174,7 +174,7 @@
 .team-picker-dialog {
     padding: 0;
     border: 1px solid #ccccccaa;
-    border-radius: 12px;
+    border-radius: 0;
     background-color: var(--bg-color);
     color: var(--text-color);
     width: min(500px, 92vw);
@@ -245,7 +245,7 @@
     align-items: center;
     gap: 8px;
     padding: 10px 6px;
-    border-radius: 10px;
+    border-radius: 0;
     border: 1px solid #ccccccaa;
     color: inherit;
     text-decoration: none;
@@ -309,7 +309,7 @@
 
 .teamBox {
     border: 1px solid #cccccc;
-    border-radius: 10px;
+    border-radius: 0;
     padding: 20px;
     min-width: 300px;
     width: 100%;
@@ -368,12 +368,12 @@
     .teamStandingsBox .teamStanding {
         gap: clamp(0.25rem, 1.0vw, 5em);
         padding: 5px;
-        border-radius: 5px;
+        border-radius: 0;
         height: clamp(0.75rem, 7.5vw, 5em);
     }
 
     .teamStandingsBox .teamPosition {
-        border-radius: 2.5px;
+        border-radius: 0;
         font-size: clamp(0.5rem, 5.25vw, 5em);
         height: clamp(1rem, 7.5vw, 5em);
         width: clamp(1rem, 7.5vw, 5em);
