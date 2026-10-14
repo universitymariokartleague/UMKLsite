@@ -1208,11 +1208,48 @@ document.addEventListener("DOMContentLoaded", async () => {
     debugLog('Generating player info box');
 
     let showError = 0;
-    const urlParams = new URLSearchParams(window.location.search);
-    if (!urlParams.has('d')) window.location.href = "/";
-    const compressed = urlParams.get('d');
-    const json = LZString.decompressFromEncodedURIComponent(compressed);
-    data = JSON.parse(json);
+
+    const params = new URLSearchParams(window.location.search);
+    const signInError = params.get('error');
+    const PROFILE_API = 'https://api.umkl.co.uk/profile';
+
+    async function profileFetch(path) {
+        const response = await fetch(`${PROFILE_API}${path}`, { credentials: 'include' });
+        return { status: response.status, body: await response.json().catch(() => ({})) };
+    }
+
+    function showSignInPanel(message) {
+        const signedOut = document.getElementById('profile-signed-out');
+        const signedIn = document.getElementById('profile-signed-in');
+        if (!signedOut) return;
+        signedOut.hidden = false;
+        if (signedIn) signedIn.hidden = true;
+        if (message) {
+            const box = document.getElementById('profile-signin-error');
+            if (box) {
+                box.textContent = message;
+                box.hidden = false;
+            }
+        }
+        const button = document.getElementById('profile-signin');
+        if (button) button.addEventListener('click', () => {
+            window.location.href = `${PROFILE_API}/auth/login`;
+        });
+        debugLog('Showing the sign-in panel');
+        return;
+    }
+
+    // Signed in? If not, the panel explains why rather than showing an empty card.
+    const me = await profileFetch('/me');
+    if (!me.body.signed_in) {
+        return showSignInPanel(signInError);
+    }
+
+    const cardResponse = await profileFetch('/card');
+    if (cardResponse.status !== 200) {
+        return showSignInPanel(cardResponse.body.error || 'Could not load your card.');
+    }
+    data = cardResponse.body.card;
 
     // TODO: implement item unlocks via profile_items, right now every item is unlocked.
     let mappedProfileItems = [];
@@ -1261,6 +1298,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
     await generateProfileBox(data, showError);
+
+    // The card is ready, so reveal it
+    const signedOutPanel = document.getElementById('profile-signed-out');
+    const signedInPanel = document.getElementById('profile-signed-in');
+    if (signedOutPanel) signedOutPanel.hidden = true;
+    if (signedInPanel) signedInPanel.hidden = false;
 
     applyEquippedItemsToCard();
 
