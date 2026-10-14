@@ -2,6 +2,7 @@ import {
     ADMIN_API, accessNotice, adminFetch, emblem, escapeHtml, login, logout,
     setMessage, statusLabel, statusTone, whoAmI
 } from '/_assets/scripts/utils/adminapi.js';
+import { buildPost, DRAFT_STORAGE_KEY, slugify } from '/_assets/scripts/utils/umklpost.js';
 
 const VIEWS = {
     media: 'Media',
@@ -486,11 +487,60 @@ async function renderCommits() {
     </div>`;
 }
 
+/** The draft the Article Builder autosaves, if there is one. */
+function readBuilderDraft() {
+    try {
+        const raw = localStorage.getItem(DRAFT_STORAGE_KEY);
+        if (!raw) return null;
+        const draft = JSON.parse(raw);
+        return draft && (draft.title || draft.bodyHtml) ? draft : null;
+    } catch (error) {
+        console.error("Couldn't read the Article Builder draft:", error);
+        return null;
+    }
+}
+
+function draftPreview(draft) {
+    const title = draft.title?.trim();
+    const tags = (draft.tags || '').split(',').map(t => t.trim()).filter(Boolean);
+    const words = (draft.bodyHtml || '').replace(/<[^>]+>/g, ' ').trim().split(/\s+/).filter(Boolean).length;
+    // The builder stamps the draft; older ones predate that.
+    const saved = draft.savedAt ? new Date(draft.savedAt).toLocaleString() : 'at an unknown time';
+
+    if (!title) return '';
+
+    return `<div class="admin-panel">
+        <div class="admin-panel-head"><h2>Draft from the Article Builder</h2>
+            <div class="admin-bar-spacer"></div>
+            <span class="admin-muted">saved ${escapeHtml(saved)}</span></div>
+
+        <div class="article-draft">
+            ${draft.mainImageUrl ? `<img class="article-draft-image" src="${draft.mainImageUrl}" alt="">` : ''}
+            <div class="article-draft-body">
+                <h3>${escapeHtml(title)}</h3>
+                ${draft.subtitle ? `<p class="admin-muted">${escapeHtml(draft.subtitle)}</p>` : ''}
+                <dl class="article-draft-fields">
+                    <dt>Slug</dt><dd><code>${escapeHtml(slugify(title))}</code></dd>
+                    <dt>Author</dt><dd>${escapeHtml((draft.author || '').trim() || 'Anonymous')}</dd>
+                    <dt>Tags</dt><dd>${tags.map(t => `<span class="admin-pill">${escapeHtml(t)}</span>`).join(' ')}</dd>
+                    <dt>Body</dt><dd>${words} words${draft.mainImageUrl ? ' + main image' : ''}</dd>
+                    <dt>Publish date</dt><dd>the day you upload</dd>
+                </dl>
+                <div class="article-upload-row">
+                    <button class="admin-btn accent" id="article-draft-upload">Publish this draft</button>
+                    <a class="admin-btn" href="/tools/articlebuilder/" target="_blank" rel="noopener noreferrer">Back to the builder</a>
+                </div>
+                <span id="article-draft-status" class="admin-muted"></span>
+            </div>
+        </div>
+    </div>`;
+}
+
 async function renderArticles() {
     showFilters(null, null);
-    const info = await adminFetch('/articles', { query: { page: state.page, per_page: 50 } });
+    const [info, draft] = [await adminFetch('/articles', { query: { page: state.page, per_page: 50 } }), readBuilderDraft()];
 
-    els.body.innerHTML = `<div class="admin-panel">
+    els.body.innerHTML = (draft ? draftPreview(draft) : '') + `<div class="admin-panel">
         <div class="admin-panel-head"><h2>Articles</h2>
             <div class="admin-bar-spacer"></div>
             <span class="admin-muted">${info.total} published</span></div>
@@ -499,7 +549,8 @@ async function renderArticles() {
             <h3>Publish an article</h3>
             <p class="admin-muted">Write it in the <a class="no-underline-link"
                     href="/tools/articlebuilder/" target="_blank" rel="noopener noreferrer">Article
-                Builder</a>, then export the <code>.umklpost</code> it gives you and upload it here.</p>
+                Builder</a>, then publish the draft from here, or export the
+                <code>.umklpost</code> and upload that.</p>
             <div class="article-upload-row">
                 <button class="admin-btn" id="article-upload-choose">Choose file</button>
                 <input type="file" id="article-upload-file" accept=".umklpost,.zip" hidden>
@@ -541,22 +592,41 @@ async function renderArticles() {
         chooseBtn.textContent = picked ? picked.name : 'Choose file';
     });
 
-    document.getElementById('article-upload-go').addEventListener('click', async () => {
-        const file = fileInput.files[0];
-        if (!file) {
-            uploadStatus.textContent = 'Choose a .umklpost first.';
-            return;
-        }
+    async function publishPost(blob, status, button) {
         const form = new FormData();
-        form.append('file', file);
-        uploadStatus.textContent = 'Uploading…';
+        form.append('file', blob, 'article.umklpost');
+        status.textContent = 'Uploading…';
+        button.disabled = true;
         try {
             const saved = await adminFetch('/articles/import', { method: 'POST', form });
             setMessage(els.message, `Published "${saved.article.title}".`, 'success');
             state.page = 1;
             await renderArticles();
         } catch (error) {
-            uploadStatus.textContent = error.message;
+            status.textContent = error.message;
+            button.disabled = false;
+        }
+    }
+
+    document.getElementById('article-upload-go').addEventListener('click', async () => {
+        const file = fileInput.files[0];
+        if (!file) {
+            uploadStatus.textContent = 'Choose a .umklpost first.';
+            return;
+        }
+        await publishPost(file, uploadStatus, document.getElementById('article-upload-go'));
+    });
+
+    document.getElementById('article-draft-upload')?.addEventListener('click', async () => {
+        const button = document.getElementById('article-draft-upload');
+        const status = document.getElementById('article-draft-status');
+        try {
+            // Same .umklpost the builder's download button would have produced
+            const { blob } = await buildPost(draft);
+            await publishPost(blob, status, button);
+        } catch (error) {
+            console.error("Couldn't build the .umklpost:", error);
+            status.textContent = `Couldn't build the upload: ${error.message}`;
         }
     });
 

@@ -1,4 +1,5 @@
 import { createDebugLogger } from '/_assets/scripts/utils/debuglogger.js';
+import { buildPost, DRAFT_STORAGE_KEY } from '/_assets/scripts/utils/umklpost.js';
 
 const debugLog = createDebugLogger('articlebuilder.js', '#2dd4bf', '#99f6e4');
 
@@ -82,7 +83,7 @@ const editableElements = [
 
 // Config
 const MIN_WORDS = 200;
-const STORAGE_KEY = 'umkl_article_builder_draft';
+const STORAGE_KEY = DRAFT_STORAGE_KEY;  // the admin panel reads the same draft
 const LOCAL_STORAGE_LIMIT_BYTES = 5 * 1024 * 1024; // browsers typically cap each origin at ~5MB
 const MAX_IMAGE_DIMENSION = 800; // cap uploaded body images to this before AVIF-encoding them
 const MAX_MAIN_IMAGE_DIMENSION = 1000; // main image gets a bit more room since it's shown larger
@@ -94,110 +95,6 @@ const LINK_PRESETS = [
 ];
 const OG_PLACEHOLDER_IMAGE = '/_assets/media/brand/og-placeholder.svg';
 const savedState = localStorage.getItem('umkl_checklist_collapsed');
-
-// Exported article HTML template
-const outputDocument = ({ title, subtitle, mainImageUrl, mainCaption, bodyContent, date, author, tagsMarkup }) => `<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta content="#bc0839" name="theme-color" />
-    <meta name="color-scheme" content="dark light">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-title" content="UMKL">
-    <title>${title} | UMKL</title>
-    <meta name="description"
-        content="${subtitle}">
-    <link rel="icon" href="/_assets/media/brand/favicon.jpg" type="image/png">
-    <link rel="apple-touch-icon" href="/_assets/media/brand/favicon.jpg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
-    <link rel="stylesheet" href="/_assets/css/base/style.css">
-    <link rel="stylesheet" href="/_assets/css/base/settings.css">
-    <link rel="stylesheet" href="/_assets/css/pages/newsarticle.css">
-
-    <meta property="og:title" content="${title} | UMKL" />
-    <meta property="og:site_name" content="umkl.co.uk" />
-    <meta property="og:logo" content="https://umkl.co.uk/_assets/media/brand/guidelines/logo_transparent_standard.png" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://umkl.co.uk/news/" />
-    <meta property="og:image" content="${mainImageUrl}" />
-    <meta property="og:description"
-        content="${subtitle}" />
-
-    <meta name="twitter:card" content="summary_large_image">
-
-    <link rel="modulepreload" href="/_assets/webcomponents/navbar.js">
-    <link rel="modulepreload" href="/_assets/webcomponents/footer.js">
-    <script type="module" src="/_assets/webcomponents/navbar.js" defer></script>
-    <script type="module" src="/_assets/webcomponents/footer.js" defer></script>
-
-    <script src="/_assets/scripts/base/theme.js"></script>
-    <script type="module" src="/_assets/scripts/base/settings.js" defer></script>
-    <script defer src="/_assets/scripts/base/imagefade.js" type="module"></script>
-    <script type="module" src="/_assets/scripts/pages/codehighlight.js" defer></script>
-    <script type="module" src="/_assets/scripts/base/smartback.js" defer></script>
-    <script type="module" src="/_assets/scripts/pages/relatedarticles.js" defer></script>
-</head>
-
-<body id="top">
-    <umkl-navbar></umkl-navbar>
-
-    <main class="article-main">
-        <div class="bubble-link-wrapper">
-            <a href="/news/" class="bubble-link no-color-link" data-smart-back>
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24"
-                    role="presentation">
-                    <path fill="currentColor"
-                        d="M22 13H4.94l5.18 5.29-1.38 1.42-6.17-6.3a2 2 0 0 1 0-2.82l6.17-6.3 1.38 1.42L4.94 11H22z">
-                    </path>
-                </svg>
-                Back</a>
-        </div>
-
-        <div class="article-wrapper">
-            <div class="article-content">
-                <div class="article-header">
-                    <h1>${title}</h1>
-                    <span class="article-subtitle">${subtitle}</span>
-                    <div class="article-image-container">
-                        <div class="article-image-wrapper">
-                            <img loading="lazy" class="image article-header-image" height="auto" width="100%"
-                                src="${mainImageUrl}" />
-                            <span class="article-image-caption">${mainCaption}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="article-body">
-                    ${bodyContent}
-                </div>
-            </div>
-
-            <div class="article-meta">
-                <div class="article-meta-item">
-                    <span class="article-meta-heading">Date</span>
-                    <span class="article-meta-value">${date}</span>
-                </div>
-                <div class="article-meta-item">
-                    <span class="article-meta-heading">Author</span>
-                    <span class="article-meta-value">${author}</span>
-                </div>
-                <div class="article-meta-item">
-                    <span class="article-meta-heading">Tags</span>
-                    <div class="tag-container">
-                        ${tagsMarkup}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <umkl-footer></umkl-footer>
-</body>
-
-</html>`;
 
 function toggleChecklist() {
     const isCollapsed = checklistWidget.classList.toggle('collapsed');
@@ -377,7 +274,8 @@ function saveDraft() {
         isMainImageVisible: !mainImagePreview.classList.contains('hidden'),
         bodyHtml: bodyEditor.innerHTML,
         author: metaAuthor.value,
-        tags: metaTags.value
+        tags: metaTags.value,
+        savedAt: Date.now()
     };
 
     try {
@@ -1276,117 +1174,21 @@ homeLink.addEventListener('click', (e) => {
 });
 
 
-function dataURLtoBlob(dataurl) {
-    const arr = dataurl.split(',');
-    const mime = arr[0].match(/:(.*?);/)[1];
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new Blob([u8arr], { type: mime });
-}
-
-function slugify(text) {
-    return text
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
-}
-
 saveBtn.addEventListener('click', async () => {
-    // Derive the folder name from the article title instead of asking
-    const folderName = slugify(articleTitle.textContent.trim()) || 'untitled-article';
-
-    const zip = new JSZip();
-
-    // Format date for folder name and json date (YYYY-MM-DD)
-    const now = new Date();
-    const year = now.getUTCFullYear();
-    const month = String(now.getUTCMonth() + 1).padStart(2, '0');
-    const day = String(now.getUTCDate()).padStart(2, '0');
-    const dateFormattedString = `${year}-${month}-${day}`;
-
-    // Path format: news/YYYY-MM-DD/folder-name/
-    const targetFolder = zip.folder(`news/${dateFormattedString}/${folderName}`);
-
-    let imageCounter = 1;
-    let finalMainImageUrl = mainImageUrl;
-
-    // Main image
-    if (mainImageUrl.startsWith('data:image')) {
-        const extension = mainImageUrl.substring("data:image/".length, mainImageUrl.indexOf(";base64"));
-        const fileName = `main-image.${extension}`;
-        const blob = dataURLtoBlob(mainImageUrl);
-        targetFolder.file(fileName, blob);
-        finalMainImageUrl = `/news/${dateFormattedString}/${folderName}/${fileName}`;
-    }
-
-    // Body and body images
-    const bodyClone = bodyEditor.cloneNode(true);
-    bodyClone.querySelectorAll('.btn-remove-image').forEach(btn => btn.remove());
-
-    const bodyImages = bodyClone.querySelectorAll('img');
-    bodyImages.forEach(img => {
-        const src = img.getAttribute('src');
-        if (src && src.startsWith('data:image')) {
-            const extension = src.substring("data:image/".length, src.indexOf(";base64"));
-            const fileName = `image-${imageCounter++}.${extension}`;
-            const blob = dataURLtoBlob(src);
-            targetFolder.file(fileName, blob);
-            img.setAttribute('src', `/news/${dateFormattedString}/${folderName}/${fileName}`);
-        }
+    const { blob } = await buildPost({
+        title: articleTitle.textContent.trim(),
+        subtitle: articleSubtitle.textContent.trim(),
+        mainCaption: mainCaption.textContent.trim(),
+        mainImageUrl,
+        bodyHtml: bodyEditor.innerHTML,
+        author: metaAuthor.value,
+        tags: metaTags.value,
+        date: metaDate.value
     });
 
-    // Metadata
-    const title = articleTitle.textContent.trim() || 'Untitled Article';
-    const subtitle = articleSubtitle.textContent.trim();
-    const mainCapText = mainCaption.textContent.trim();
-    const author = metaAuthor.value.trim() || 'Anonymous';
-    const dateStr = metaDate.value.trim() || formatDate(lastValidDate);
-    const bodyContent = bodyClone.innerHTML.trim();
-
-    const rawTags = metaTags.value.split(',').map(t => t.trim()).filter(t => t.length > 0);
-    const tagsMarkup = rawTags.length > 0
-        ? rawTags.map(tag => `                        <tag translate="no">${tag}</tag>`).join('\n')
-        : '                        <tag translate="no">News</tag>';
-
-    // index.html file inside the .umklpost folder
-    const htmlContent = outputDocument({
-        title,
-        subtitle,
-        mainImageUrl: finalMainImageUrl,
-        mainCaption: mainCapText,
-        bodyContent,
-        date: dateStr,
-        author,
-        tagsMarkup
-    });
-    targetFolder.file("index.html", htmlContent);
-
-    // Create a json entry
-    // Travels inside the zip; the panel posts it to the news API on upload.
-    const articleLink = `/news/${dateFormattedString}/${folderName}/`;
-    const newsJsonEntry = {
-        title: title,
-        link: articleLink,
-        date: dateFormattedString,
-        image: finalMainImageUrl,
-        alt: mainCapText,
-        description: subtitle,
-        author: author,
-        tags: rawTags.length > 0 ? rawTags : ["News"]
-    };
-
-    zip.file("news_entry.json", JSON.stringify(newsJsonEntry, null, 4));
-
-    // Compile a .umklpost to be downloaded
-    const zipBlob = await zip.generateAsync({ type: "blob" });
     const downloadLink = document.createElement('a');
-    downloadLink.href = URL.revokeObjectURL(zipBlob);
-    downloadLink.href = URL.createObjectURL(zipBlob);
-    downloadLink.download = `${dateFormattedString}-${folderName}-article.umklpost`;
+    downloadLink.href = URL.createObjectURL(blob);
+    downloadLink.download = 'article.umklpost';
     downloadLink.click();
     URL.revokeObjectURL(downloadLink.href);
 });
