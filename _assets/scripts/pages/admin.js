@@ -355,7 +355,7 @@ async function renderHealth() {
 
 async function renderBackups() {
     showFilters(null, null);
-    const body = await adminFetch('/backups');
+    const info = await adminFetch('/backups', { query: { page: state.page, per_page: 50 } });
 
     els.body.innerHTML = `
     <div class="admin-panel">
@@ -365,14 +365,14 @@ async function renderBackups() {
             <a class="admin-btn small" href="${ADMIN_API}/data/export" download>Download current data (.zip)</a>
         </div>
         <p class="admin-muted">
-            ${body.total} archive${body.total === 1 ? '' : 's'}, ${escapeHtml(body.total_size)} in total.
+            ${info.total} archive${info.total === 1 ? '' : 's'}, ${escapeHtml(info.total_size)} in total.
             Download an archive to restore from it.
         </p>
-        ${body.backups.length ? `
+        ${info.backups.length ? `
         <div class="table-scroll-wrapper">
             <table class="admin-table">
                 <thead><tr><th>Archive</th><th class="admin-hide-small">Taken</th><th class="admin-num">Size</th><th></th></tr></thead>
-                <tbody>${body.backups.map(backup => `<tr>
+                <tbody>${info.backups.map(backup => `<tr>
                     <td class="admin-nowrap">${escapeHtml(backup.path)}</td>
                     <td class="admin-hide-small admin-nowrap">${escapeHtml(backup.modified_display)}</td>
                     <td class="admin-num">${escapeHtml(backup.size)}</td>
@@ -382,6 +382,7 @@ async function renderBackups() {
                 </tr>`).join('')}</tbody>
             </table>
         </div>` : '<p class="admin-empty">No backups have been taken yet.</p>'}
+        ${pager(info)}
     </div>`;
 }
 
