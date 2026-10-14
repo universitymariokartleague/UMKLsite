@@ -6,7 +6,7 @@
 import { createColorPicker } from '/_assets/scripts/components/colorpicker.js';
 import { getMatchData, getMatchCache } from '/_assets/scripts/utils/matchdata.js';
 import { readResultsScreenshot, groupPlayersByTag } from '/_assets/scripts/utils/resultsocr.js';
-import { TEAM_TAGS } from '/_assets/scripts/utils/teamtags.js';
+import { getTeamTags } from '/_assets/scripts/utils/teamtags.js';
 import { isWindowsOrLinux, copyImageToClipboard, shareImage, showImagePreview, setOriginalMessage, getOriginalMessage, getIsPopupShowing } from '/_assets/scripts/utils/shareAPIhelper.js';
 
 const TEAM_ICON_DIR = "https://api.umkl.co.uk/teamemblems/";
@@ -315,7 +315,8 @@ async function importScreenshot(file) {
         setImportStatus(null);
         const unreadScores = players.filter(p => p.score === null).length;
         const { teams } = groupPlayersByTag(
-            players.map(p => ({ name: p.name || "Unknown", score: p.score ?? 0 })), teamCount, TEAM_TAGS);
+            players.map(p => ({ name: p.name || "Unknown", score: p.score ?? 0 })),
+            teamCount, await getTeamTags());
 
         teams.forEach((team, i) => {
             const inputs = teamInputs[i];

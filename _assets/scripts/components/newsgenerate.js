@@ -13,7 +13,8 @@ function formatDate(isoDate) {
 }
 
 function escapeHTML(str) {
-    return str.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    if (str === null || str === undefined) return '';
+    return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
 function escapeRegExp(str) {
@@ -105,15 +106,15 @@ function renderHomeNews(news) {
     if (!hero) return;
 
     const smallCards = rest.slice(0, 4).map(item => {
-        const tagsHTML = item.tags.map(tag => `<tag translate="no">${tag}</tag>`).join("");
+        const tagsHTML = item.tags.map(tag => `<tag translate="no">${escapeHTML(tag)}</tag>`).join("");
         return `
         <article class="small-card">
-            <a href="${item.link}" class="small-card-link">
+            <a href="${escapeHTML(item.link)}" class="small-card-link">
                 <div class="img-wrapper">
-                    <img loading="lazy" src="${item.image}" alt="${item.alt}">
+                    <img loading="lazy" src="${escapeHTML(item.image)}" alt="${escapeHTML(item.alt)}">
                 </div>
-                <h3>${item.title}</h3>
-                <p>${item.description}</p>
+                <h3>${escapeHTML(item.title)}</h3>
+                <p>${escapeHTML(item.description)}</p>
                 <div class="small-card-meta">
                     <span class="small-card-date">${formatDate(item.date)}</span>
                     <div class="small-card-tags">${tagsHTML}</div>
@@ -123,15 +124,15 @@ function renderHomeNews(news) {
     `;
     }).join("");
 
-    const heroTagsHTML = hero.tags.map(tag => `<tag translate="no">${tag}</tag>`).join("");
+    const heroTagsHTML = hero.tags.map(tag => `<tag translate="no">${escapeHTML(tag)}</tag>`).join("");
 
     container.innerHTML = `
         <article class="hero-card">
-            <a href="${hero.link}" class="hero-card-link">
-                <img loading="lazy" src="${hero.image}" alt="${hero.alt}">
+            <a href="${escapeHTML(hero.link)}" class="hero-card-link">
+                <img loading="lazy" src="${escapeHTML(hero.image)}" alt="${escapeHTML(hero.alt)}">
                 <div class="hero-content">
-                    <h2>${hero.title}</h2>
-                    <p>${hero.description}</p>
+                    <h2>${escapeHTML(hero.title)}</h2>
+                    <p>${escapeHTML(hero.description)}</p>
                     <div class="hero-meta">
                         <span class="hero-date">${formatDate(hero.date)}</span>
                         <div class="hero-tags">${heroTagsHTML}</div>
@@ -146,16 +147,16 @@ function renderHomeNews(news) {
 }
 
 function buildNewsCard(item) {
-    const tagsHTML = item.tags.map(tag => `<tag translate="no">${tag}</tag>`).join("");
+    const tagsHTML = item.tags.map(tag => `<tag translate="no">${escapeHTML(tag)}</tag>`).join("");
     return `
         <article class="news-card">
-            <a href="${item.link}" class="news-card-link">
+            <a href="${escapeHTML(item.link)}" class="news-card-link">
                 <div class="news-card-image">
-                    <img alt="${item.alt}" loading="lazy" onload="this.style.opacity=1" src="${item.image}" />
+                    <img alt="${escapeHTML(item.alt)}" loading="lazy" onload="this.style.opacity=1" src="${escapeHTML(item.image)}" />
                 </div>
                 <div class="news-card-body">
-                    <span class="news-title">${item.title}</span>
-                    <span class="news-desc">${item.description}</span>
+                    <span class="news-title">${escapeHTML(item.title)}</span>
+                    <span class="news-desc">${escapeHTML(item.description)}</span>
                 </div>
             </a>
             <span class="news-date">${formatDate(item.date)}

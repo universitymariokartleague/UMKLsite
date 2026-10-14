@@ -1,21 +1,26 @@
 /*
-    Known in-game name tags for each team, used by the table maker's screenshot
-    import to group players and fill in team names.
+    teamtags.js
+    The in-game name tags that identify each team.
 */
-export { TEAM_TAGS };
 
-const TEAM_TAGS = {
-    "MKS": "Staffs",
-    "¥★": "York",
-    "BB★": "Bristol",
-    "GLA": "Glasgow",
-    "EDI★": "Edinburgh",
-    "UOS": "Sheffield",
-    "WAR": "Warwick",
-    "BHM": "Birmingham",
-    "LV♪": "Liverpool",
-    "CBG": "Cambridge",
-    "BTN": "Brighton",
-    "LUU": "Leeds",
-    "UOL": "Lincoln"
-};
+export { getTeamTags };
+
+const TEAM_TAGS_API = "https://api.umkl.co.uk/teamtags";
+
+let pending = null;
+
+async function getTeamTags() {
+    // Fetched once per page; the import button is pressed more than once.
+    pending ??= fetch(TEAM_TAGS_API)
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return response.json();
+        })
+        .then(data => data.team_tags)
+        .catch(error => {
+            console.error(`Failed to load team tags: ${error}`);
+            pending = null;  // let a later call retry rather than cache the failure
+            return {};
+        });
+    return pending;
+}

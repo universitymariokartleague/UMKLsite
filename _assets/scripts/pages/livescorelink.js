@@ -4,7 +4,6 @@
 */
 
 import { copyTextToClipboard } from '/_assets/scripts/utils/shareAPIhelper.js';
-import { TEAM_TAGS } from '/_assets/scripts/utils/teamtags.js';
 import { icon } from '/_assets/scripts/utils/icons.js';
 
 const STORAGE_KEY = 'livescoreTeam';
@@ -61,8 +60,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
         teams = (await getTeamcolors()).map(t => t.team_name);
     } catch (error) {
+        // Teams aren't bundled, so a failed fetch leaves us nothing to offer.
         console.error("Failed to fetch teams:", error);
-        teams = Object.values(TEAM_TAGS);
+        teamSelect.innerHTML = `<option value="" disabled selected>Couldn't load teams</option>`;
+        copyButton.disabled = true;
+        previewButton.hidden = true;
+        return;
     }
     teams = [...new Set(teams)].sort((a, b) => a.localeCompare(b));
 

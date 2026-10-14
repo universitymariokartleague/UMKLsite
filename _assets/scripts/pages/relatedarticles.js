@@ -1,5 +1,11 @@
 const normalizePath = (path) => path.endsWith('/') ? path : `${path}/`;
 
+function escapeHtml(value) {
+    if (value === null || value === undefined) return '';
+    return String(value).replace(/[&<>"']/g,
+        c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
 function formatDate(isoDate) {
     const locale = localStorage.getItem("locale") || "en-GB";
     return new Date(isoDate).toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" });
@@ -40,15 +46,15 @@ async function loadRelatedArticles() {
         <span class="article-meta-heading">Related Articles</span>
         <div class="related-article-list">
             ${related.map(a => `
-                <a class="related-article-item" href="${a.link}">
+                <a class="related-article-item" href="${escapeHtml(a.link)}">
                     <div class="related-article-thumb-wrapper">
-                        <img class="related-article-thumb" src="${a.image}" alt="${a.alt || ''}" loading="lazy">
+                        <img class="related-article-thumb" src="${escapeHtml(a.image)}" alt="${escapeHtml(a.alt)}" loading="lazy">
                     </div>
                     <div class="related-article-body">
-                        <span class="related-article-title">${a.title}</span>
+                        <span class="related-article-title">${escapeHtml(a.title)}</span>
                         <div class="small-card-meta">
                             <span class="small-card-date">${formatDate(a.date)}</span>
-                            <div class="small-card-tags">${(a.tags || []).map(t => `<tag translate="no">${t}</tag>`).join('')}</div>
+                            <div class="small-card-tags">${(a.tags || []).map(t => `<tag translate="no">${escapeHtml(t)}</tag>`).join('')}</div>
                         </div>
                     </div>
                 </a>

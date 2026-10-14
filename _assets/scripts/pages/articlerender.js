@@ -16,6 +16,12 @@ function setMeta(selector, content) {
     if (element && content) element.setAttribute('content', content);
 }
 
+function escapeHtml(value) {
+    if (value === null || value === undefined) return '';
+    return String(value).replace(/[&<>"']/g,
+        c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
 function renderMeta(article) {
     const meta = document.querySelector('.article-meta');
     if (!meta) return;
@@ -30,11 +36,11 @@ function renderMeta(article) {
 
     meta.innerHTML = items.map(([heading, value]) => `
         <div class="article-meta-item">
-            <span class="article-meta-heading">${heading}</span>
+            <span class="article-meta-heading">${escapeHtml(heading)}</span>
             ${value === null
             ? `<div class="tag-container">${article.tags.map(tag =>
-                `<tag translate="no">${tag}</tag>`).join('')}</div>`
-            : `<span class="article-meta-value">${value}</span>`}
+                `<tag translate="no">${escapeHtml(tag)}</tag>`).join('')}</div>`
+            : `<span class="article-meta-value">${escapeHtml(value)}</span>`}
         </div>`).join('');
 }
 
