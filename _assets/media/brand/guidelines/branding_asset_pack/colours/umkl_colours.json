@@ -14,19 +14,19 @@
       26
     ]
   },
-  "burnt-umber-void": {
-    "name": "Burnt Umber Void",
-    "hex": "#160702",
+  "void-black": {
+    "name": "Void Black",
+    "hex": "#090909",
     "rgb": [
-      22,
-      7,
-      2
+      9,
+      9,
+      9
     ],
     "cmyk": [
       0,
-      68,
-      91,
-      91
+      0,
+      0,
+      96
     ]
   },
   "white": {

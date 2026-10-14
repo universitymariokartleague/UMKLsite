@@ -262,7 +262,7 @@ function renderResults(width) {
                 const ctx = chart.ctx;
                 ctx.save();
                 ctx.globalCompositeOperation = 'destination-over';
-                ctx.fillStyle = isDarkMode ? "#160702" : "#FFFFFF";
+                ctx.fillStyle = isDarkMode ? "#090909" : "#FFFFFF";
                 ctx.fillRect(0, 0, chart.width, chart.height);
                 ctx.restore();
             }
