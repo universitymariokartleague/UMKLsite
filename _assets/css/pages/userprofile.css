@@ -83,7 +83,6 @@
     align-items: center;
     margin-bottom: 15px;
     gap: 15px;
-    padding-right: 105px;
 }
 
 .profile-card-avatar {
@@ -484,7 +483,6 @@
     .profile-card-header {
         gap: 16px;
         margin-bottom: 10px;
-        padding-right: 95px;
     }
 
     .profile-card-avatar {

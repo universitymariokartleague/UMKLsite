@@ -1199,18 +1199,13 @@ async function saveItemEquips() {
 
 function showToast(message, isError) {
     debugLog(message);
-    let toast = document.getElementById('profile-save-toast');
-    if (!toast) {
-        toast = document.createElement('div');
-        toast.id = 'profile-save-toast';
-        toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);'
-            + 'padding:10px 18px;border-radius:50px;font-size:0.9rem;font-weight:600;z-index:9999;'
-            + 'color:#fff;background:#160702;';
-        document.body.appendChild(toast);
-    }
+    const toast = document.getElementById('profileSaveToast');
+    if (!toast) return;
+
     toast.textContent = message;
-    toast.style.background = isError ? '#bc0839' : '#160702';
+    toast.classList.toggle('error', !!isError);
     toast.hidden = false;
+
     clearTimeout(window._profileToastTimer);
     window._profileToastTimer = setTimeout(() => { toast.hidden = true; }, 2600);
 }

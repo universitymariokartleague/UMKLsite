@@ -17,3 +17,8 @@
 .conversion-status[hidden] {
     display: none;
 }
+
+.conversion-status.error {
+    border-color: var(--brand-negative);
+    background: color-mix(in srgb, var(--brand-negative) 12%, var(--bg-color));
+}
