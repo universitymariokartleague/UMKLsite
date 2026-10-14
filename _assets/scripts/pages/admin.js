@@ -74,8 +74,9 @@ function renderSignedIn(me) {
     els.panel.hidden = false;
 
     els.who.textContent = me.name || 'Signed in';
+    const adminRoles = new Set(me.admin_roles || []);
     els.roles.innerHTML = (me.roles || [])
-        .filter(role => role !== '@everyone')
+        .filter(role => role !== '@everyone' && adminRoles.has(role))
         .map(role => `<span class="admin-pill">${escapeHtml(role)}</span>`)
         .join('');
 
@@ -499,8 +500,11 @@ async function renderArticles() {
             <p class="admin-muted">Write it in the <a class="no-underline-link"
                     href="/tools/articlebuilder/" target="_blank" rel="noopener noreferrer">Article
                 Builder</a>, then export the <code>.umklpost</code> it gives you and upload it here.</p>
-            <input type="file" id="article-upload-file" accept=".umklpost,.zip">
-            <button class="admin-btn accent" id="article-upload-go">Upload</button>
+            <div class="article-upload-row">
+                <button class="admin-btn" id="article-upload-choose">Choose file</button>
+                <input type="file" id="article-upload-file" accept=".umklpost,.zip" hidden>
+                <button class="admin-btn accent" id="article-upload-go">Upload</button>
+            </div>
             <span id="article-upload-status" class="admin-muted"></span>
         </div>
     </div>
@@ -529,6 +533,14 @@ async function renderArticles() {
 
     const fileInput = document.getElementById('article-upload-file');
     const uploadStatus = document.getElementById('article-upload-status');
+    const chooseBtn = document.getElementById('article-upload-choose');
+
+    chooseBtn.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', () => {
+        const picked = fileInput.files[0];
+        chooseBtn.textContent = picked ? picked.name : 'Choose file';
+    });
+
     document.getElementById('article-upload-go').addEventListener('click', async () => {
         const file = fileInput.files[0];
         if (!file) {

@@ -9,89 +9,6 @@
     display: none !important;
 }
 
-.admin-panel,
-.admin-health-card {
-    padding: 20px;
-    border: 1px solid var(--translucent-color);
-    border-radius: var(--border-radius);
-    background-color: var(--section-tint);
-}
-
-.admin-panel+.admin-panel {
-    margin-top: var(--admin-space);
-}
-
-.admin-panel-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-}
-
-.admin-panel-head h2,
-.admin-panel-head h3,
-.admin-panel-head h4 {
-    margin: 0;
-    line-height: 1.2;
-}
-
-.admin-panel-head h3,
-.admin-panel-head h4 {
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    opacity: 0.7;
-}
-
-.admin-bar-spacer {
-    flex: 1;
-}
-
-.admin-divider {
-    height: 1px;
-    margin: 16px 0;
-    border: none;
-    background-color: var(--translucent-color);
-}
-
-.admin-panel-foot {
-    margin: 16px 0 0;
-    font-size: 0.85rem;
-    opacity: 0.6;
-}
-
-.admin-empty {
-    margin: 0;
-    padding: 32px 12px;
-    text-align: center;
-    opacity: 0.6;
-}
-
-.admin-round {
-    margin: 0 0 8px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    opacity: 0.7;
-}
-
-.admin-muted {
-    opacity: 0.6;
-}
-
-.admin-nowrap {
-    white-space: nowrap;
-}
-
-.admin-num {
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-}
-
 .admin-signed-out {
     display: flex;
     flex-direction: column;
@@ -120,15 +37,69 @@
     opacity: 0.75;
 }
 
-.admin-bar {
+
+.admin-panel {
+    padding: 20px;
+    border: 1px solid var(--translucent-color);
+    border-radius: var(--border-radius);
+    background-color: var(--section-tint);
+}
+
+.admin-panel+.admin-panel {
+    margin-top: var(--admin-space);
+}
+
+.admin-panel-head {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.admin-panel-head h2,
+.admin-panel-head h3,
+.admin-panel-head h4 {
+    margin: 0;
+    line-height: 1.2;
+}
+
+.admin-panel-foot {
+    margin: 16px 0 0;
+    font-size: 0.85rem;
+    opacity: 0.6;
+}
+
+.admin-divider {
+    height: 1px;
+    margin: 16px 0;
+    border: none;
+    background-color: var(--translucent-color);
+}
+
+.admin-empty {
+    margin: 0;
+    padding: 32px 12px;
+    text-align: center;
+    opacity: 0.6;
+}
+
+.admin-bar {
+    display: flex;
+    flex-wrap: nowrap;
     align-items: center;
     gap: 12px;
     margin-bottom: var(--admin-space);
 }
 
+.admin-bar-spacer {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
 .admin-nav {
+    flex: 0 1 auto;
+    min-width: 0;
     max-width: 100%;
     overflow-x: auto;
     scrollbar-width: none;
@@ -163,6 +134,18 @@
     font-size: 0.9rem;
 }
 
+.admin-who-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 1px solid var(--translucent-color);
+    border-radius: var(--border-radius);
+    background-color: var(--translucent-color);
+    text-align: right;
+}
+
 .admin-who-name {
     font-weight: 700;
 }
@@ -170,10 +153,15 @@
 .admin-role-list {
     display: flex;
     flex-wrap: wrap;
+    justify-content: flex-end;
     gap: 6px;
     margin: 0;
     padding: 0;
     list-style: none;
+}
+
+.admin-role-list:empty {
+    display: none;
 }
 
 .admin-filter {
@@ -185,9 +173,7 @@
 }
 
 .admin-filter input,
-.admin-filter select,
-.result-score,
-.result-add-form input {
+.admin-filter select {
     min-width: 0;
     padding: 8px 12px;
     border: 1.5px solid var(--translucent-color);
@@ -203,57 +189,17 @@
     flex: 1 1 220px;
 }
 
+.admin-filter input:hover,
+.admin-filter select:hover {
+    border-color: var(--opaque-color);
+}
+
 .admin-filter input:focus-visible,
-.admin-filter select:focus-visible,
-.result-score:focus-visible,
-.result-add-form input:focus-visible {
+.admin-filter select:focus-visible {
     outline: 2px solid var(--accent-color);
     outline-offset: 1px;
 }
 
-.admin-filter input:hover,
-.admin-filter select:hover,
-.result-add-form input:hover {
-    border-color: var(--opaque-color);
-}
-
-.admin-pill {
-    display: inline-flex;
-    align-items: center;
-    padding: 3px 10px;
-    border-radius: var(--border-radius-pill);
-    font-size: 0.73rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-    color: var(--text-color);
-    background-color: var(--translucent-color);
-}
-
-.admin-pill.positive {
-    color: var(--brand-positive);
-    background-color: color-mix(in oklch, var(--brand-positive) 20%, transparent);
-}
-
-.admin-pill.caution {
-    color: var(--brand-caution);
-    background-color: color-mix(in oklch, var(--brand-caution) 20%, transparent);
-}
-
-.admin-pill.negative {
-    color: var(--brand-negative);
-    background-color: color-mix(in oklch, var(--brand-negative) 20%, transparent);
-}
-
-.admin-pill.accent {
-    color: #fff;
-    background-color: var(--accent-color);
-}
-
-.admin-btn:link,
-.admin-btn:visited {
-    color: var(--text-color);
-}
 
 .admin-btn {
     display: inline-flex;
@@ -273,6 +219,11 @@
     text-decoration: none;
     cursor: pointer;
     transition: background-color 0.1s, color 0.1s, transform 0.1s;
+}
+
+.admin-btn:link,
+.admin-btn:visited {
+    color: var(--text-color);
 }
 
 .admin-btn:hover:not(:disabled) {
@@ -324,6 +275,40 @@
     font-size: 0.8rem;
 }
 
+.admin-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: var(--border-radius-pill);
+    font-size: 0.73rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    color: var(--text-color);
+    background-color: var(--translucent-color);
+}
+
+.admin-pill.positive {
+    color: var(--brand-positive);
+    background-color: color-mix(in oklch, var(--brand-positive) 20%, transparent);
+}
+
+.admin-pill.caution {
+    color: var(--brand-caution);
+    background-color: color-mix(in oklch, var(--brand-caution) 20%, transparent);
+}
+
+.admin-pill.negative {
+    color: var(--brand-negative);
+    background-color: color-mix(in oklch, var(--brand-negative) 20%, transparent);
+}
+
+.admin-pill.accent {
+    color: #fff;
+    background-color: var(--accent-color);
+}
+
+/* --message-accent is what each variant overrides; everything else is shared. */
 .admin-message {
     --message-accent: var(--brand-negative);
     display: flex;
@@ -379,12 +364,12 @@
     transition: background-color 0.1s ease;
 }
 
-.admin-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
 .admin-table tbody tr:hover {
     background-color: var(--translucent-color);
+}
+
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
 }
 
 .admin-summary {
@@ -438,6 +423,9 @@
 
 .admin-health-card {
     padding: 16px;
+    border: 1px solid var(--translucent-color);
+    border-radius: var(--border-radius);
+    background-color: var(--section-tint);
 }
 
 .admin-health-card h4 {
@@ -478,8 +466,61 @@
     opacity: 0.8;
 }
 
-@media (prefers-reduced-motion: reduce) {
+.admin-round {
+    margin: 0 0 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    opacity: 0.7;
+}
 
+.admin-muted {
+    opacity: 0.6;
+}
+
+.admin-nowrap {
+    white-space: nowrap;
+}
+
+.admin-num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.article-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.article-upload h3 {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.article-upload p {
+    margin: 0;
+    max-width: 44rem;
+}
+
+.article-upload-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+#article-upload-choose {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
     .admin-btn:active:not(:disabled) {
         transform: none;
     }
@@ -490,7 +531,6 @@
 }
 
 @media screen and (max-width: 700px) {
-
     .admin-hide-small {
         display: none;
     }
@@ -508,7 +548,6 @@
 }
 
 @media screen and (max-width: 480px) {
-
     .admin-signed-out {
         margin: 20px auto;
         padding: 32px 18px;
@@ -521,20 +560,4 @@
     .admin-pager {
         justify-content: stretch;
     }
-}
-.article-upload {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    align-items: flex-start;
-}
-
-.article-upload h3 {
-    margin: 0;
-    font-size: 0.9rem;
-}
-
-.article-upload p {
-    margin: 0;
-    max-width: 44rem;
 }
