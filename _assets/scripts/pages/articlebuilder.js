@@ -1375,6 +1375,7 @@ saveBtn.addEventListener('click', async () => {
         image: finalMainImageUrl,
         alt: mainCapText,
         description: subtitle,
+        author: author,
         tags: rawTags.length > 0 ? rawTags : ["News"]
     };
 

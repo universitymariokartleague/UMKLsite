@@ -23,18 +23,17 @@ function escapeHtml(value) {
 }
 
 function renderMeta(article) {
-    const meta = document.querySelector('.article-meta');
-    if (!meta) return;
+    if (!document.querySelector('.article-meta-fields')) return;
 
     const date = new Date(article.published_date);
     const locale = localStorage.getItem('locale') || 'en-GB';
     const items = [
         ['Date', date.toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' })],
-        ['Author', article.author || 'UMKL']
-    ];
+        ['Author', article.author]
+    ].filter(([, value]) => value);  // no author set, no row
     if (article.tags?.length) items.push(['Tags', null]);
 
-    meta.innerHTML = items.map(([heading, value]) => `
+    document.querySelector('.article-meta-fields').innerHTML = items.map(([heading, value]) => `
         <div class="article-meta-item">
             <span class="article-meta-heading">${escapeHtml(heading)}</span>
             ${value === null
@@ -42,6 +41,8 @@ function renderMeta(article) {
                 `<tag translate="no">${escapeHtml(tag)}</tag>`).join('')}</div>`
             : `<span class="article-meta-value">${escapeHtml(value)}</span>`}
         </div>`).join('');
+
+    document.dispatchEvent(new CustomEvent('article:rendered'));
 }
 
 function renderArticle(article) {

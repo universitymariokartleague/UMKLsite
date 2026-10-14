@@ -87,7 +87,7 @@ async function loadRelatedArticles() {
 
 // Make the article's own tags clickable
 function linkifyArticleTags() {
-    document.querySelectorAll('.article-meta .tag-container tag').forEach(tag => {
+    document.querySelectorAll('.article-meta-fields .tag-container > tag').forEach(tag => {
         const anchor = document.createElement('a');
         anchor.href = `/news/?tag=${encodeURIComponent(tag.textContent.trim().toLowerCase())}`;
         anchor.className = 'no-color-link no-underline-link';
@@ -96,7 +96,5 @@ function linkifyArticleTags() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    loadRelatedArticles();
-    linkifyArticleTags();
-});
+document.addEventListener('DOMContentLoaded', loadRelatedArticles);
+document.addEventListener('article:rendered', linkifyArticleTags);

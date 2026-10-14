@@ -512,6 +512,7 @@ async function renderArticles() {
             ${row('title', 'Title')}
             ${row('date', 'Date')}
             ${row('description', 'Description')}
+            ${row('author', 'Author (e.g. "skjamm, zy (editing)")')}
             ${row('tags', 'Tags (comma separated)')}
             <label class="article-field"><span>Body HTML</span>
                 <textarea data-field="body" rows="8"></textarea></label>
@@ -578,6 +579,7 @@ async function renderArticles() {
                     title,
                     date: value('date') || new Date().toISOString().slice(0, 10),
                     description: value('description'),
+                    author: value('author'),
                     tags: value('tags').split(',').map(t => t.trim()).filter(Boolean),
                     body: value('body')
                 }
