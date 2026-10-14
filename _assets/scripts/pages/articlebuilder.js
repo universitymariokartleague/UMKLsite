@@ -1,5 +1,5 @@
 import { createDebugLogger } from '/_assets/scripts/utils/debuglogger.js';
-import { buildPost, DRAFT_STORAGE_KEY } from '/_assets/scripts/utils/umklpost.js';
+import { buildPost, DRAFT_STORAGE_KEY, isoDate } from '/_assets/scripts/utils/umklpost.js';
 
 const debugLog = createDebugLogger('articlebuilder.js', '#2dd4bf', '#99f6e4');
 
@@ -275,6 +275,7 @@ function saveDraft() {
         bodyHtml: bodyEditor.innerHTML,
         author: metaAuthor.value,
         tags: metaTags.value,
+        date: isoDate(lastValidDate),
         savedAt: Date.now()
     };
 
@@ -1183,7 +1184,7 @@ saveBtn.addEventListener('click', async () => {
         bodyHtml: bodyEditor.innerHTML,
         author: metaAuthor.value,
         tags: metaTags.value,
-        date: metaDate.value
+        date: isoDate(lastValidDate)
     });
 
     const downloadLink = document.createElement('a');

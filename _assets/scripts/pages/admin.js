@@ -2,7 +2,7 @@ import {
     ADMIN_API, accessNotice, adminFetch, emblem, escapeHtml, login, logout,
     setMessage, statusLabel, statusTone, whoAmI
 } from '/_assets/scripts/utils/adminapi.js';
-import { buildPost, DRAFT_STORAGE_KEY, slugify } from '/_assets/scripts/utils/umklpost.js';
+import { buildPost, DRAFT_STORAGE_KEY, ISO_DATE, slugify } from '/_assets/scripts/utils/umklpost.js';
 
 const VIEWS = {
     media: 'Media',
@@ -504,8 +504,8 @@ function draftPreview(draft) {
     const title = draft.title?.trim();
     const tags = (draft.tags || '').split(',').map(t => t.trim()).filter(Boolean);
     const words = (draft.bodyHtml || '').replace(/<[^>]+>/g, ' ').trim().split(/\s+/).filter(Boolean).length;
-    // The builder stamps the draft; older ones predate that.
     const saved = draft.savedAt ? new Date(draft.savedAt).toLocaleString() : 'at an unknown time';
+    const draftDate = ISO_DATE.test(draft.date || '') ? draft.date : '';
 
     if (!title) return '';
 
@@ -524,7 +524,7 @@ function draftPreview(draft) {
                     <dt>Author</dt><dd>${escapeHtml((draft.author || '').trim() || 'Anonymous')}</dd>
                     <dt>Tags</dt><dd>${tags.map(t => `<span class="admin-pill">${escapeHtml(t)}</span>`).join(' ')}</dd>
                     <dt>Body</dt><dd>${words} words${draft.mainImageUrl ? ' + main image' : ''}</dd>
-                    <dt>Publish date</dt><dd>the day you upload</dd>
+                    <dt>Publish date</dt><dd>${escapeHtml(draftDate || 'today, when you upload')}</dd>
                 </dl>
                 <div class="article-upload-row">
                     <button class="admin-btn accent" id="article-draft-upload">Publish this draft</button>

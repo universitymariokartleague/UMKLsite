@@ -2,7 +2,7 @@
     Builds the .umklpost an Article Builder export is made of.
 */
 
-export { buildPost, outputDocument, DRAFT_STORAGE_KEY, slugify };
+export { buildPost, outputDocument, DRAFT_STORAGE_KEY, ISO_DATE, slugify, isoDate };
 
 const DRAFT_STORAGE_KEY = 'umkl_article_builder_draft';
 
@@ -25,21 +25,26 @@ function dataURLtoBlob(dataurl) {
     return new Blob([u8arr], { type: mime });
 }
 
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+function isoDate(date) {
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${date.getFullYear()}-${month}-${day}`;
+}
+
 function todayISO() {
-    const now = new Date();
-    const month = String(now.getUTCMonth() + 1).padStart(2, '0');
-    const day = String(now.getUTCDate()).padStart(2, '0');
-    return `${now.getUTCFullYear()}-${month}-${day}`;
+    return isoDate(new Date());
 }
 
 async function buildPost(draft) {
     const {
         title = '', subtitle = '', mainCaption = '', mainImageUrl = '',
-        bodyHtml = '', author = '', tags = '',
+        bodyHtml = '', author = '', tags = '', date: requestedDate = '',
     } = draft;
 
     const slug = slugify(title) || 'untitled-article';
-    const date = todayISO();
+    const date = ISO_DATE.test(requestedDate) ? requestedDate : todayISO();
     const folderPath = `news/${date}/${slug}`;
 
     const zip = new JSZip();
