@@ -144,7 +144,7 @@ main {
     flex: 1;
     width: calc(100vw - var(--page-side-space));
     max-width: calc(var(--content-max-width) - env(safe-area-inset-left));
-    min-height: 50vh;
+    min-height: 90vh;
     margin-top: calc(var(--navbar-height) + var(--page-top-space));
     margin-bottom: 25px;
     font-size: 16px;
