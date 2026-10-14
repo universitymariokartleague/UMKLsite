@@ -70,6 +70,9 @@ const userCardBox = document.getElementById("userCardBox")
 const teamNameBox = document.getElementById("teamNameBox")
 
 let data, matchData, teamData;
+
+// Where the card and its customisations live
+const PROFILE_API = 'https://api.umkl.co.uk/profile';
 const currentSeason = 2;
 const shareResScale = 3;
 let cardImageBlob;
@@ -250,6 +253,9 @@ let card3DGlareMouseMoveHandler = null;
 let spGraphMouseMoveHandler = null;
 let spGraphMouseLeaveHandler = null;
 
+// How far outside the card the pointer can be before the card settles back to flat
+const CARD_3D_ACTIVE_MARGIN = 120;
+
 function cleanupCard3DEffect() {
     const handlers = [card3DMouseMoveHandler, card3DMouseLeaveHandler, card3DGlareMouseMoveHandler];
     const events = ["mousemove", "mouseleave", "mousemove"];
@@ -267,7 +273,7 @@ function cleanupCard3DEffect() {
         card3DAnimationId = null;
     }
 
-    document.querySelector(".profile-card > div[style*='mix-blend-mode: overlay']")?.remove();
+    document.querySelector(".profile-card")?.querySelector(".profile-card-glare")?.remove();
     card3DEffectActive = false;
 }
 
@@ -277,6 +283,13 @@ function addCard3DEffect() {
     const card = document.querySelector(".profile-card");
     if (!card) return;
 
+    // Nothing to animate if the user has asked for less motion
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (reducedMotion.matches) {
+        card.style.transform = 'none';
+        return;
+    }
+
     const MAX_ROT = 8;
     const SMOOTH = 0.04;
 
@@ -284,8 +297,24 @@ function addCard3DEffect() {
     let targetY = 0;
     let currentX = 0;
     let currentY = 0;
+    let pointerIsNear = false;
+
+    const pointerIsCloseTo = (clientX, clientY) => {
+        const rect = card.getBoundingClientRect();
+        return clientX >= rect.left - CARD_3D_ACTIVE_MARGIN &&
+            clientX <= rect.right + CARD_3D_ACTIVE_MARGIN &&
+            clientY >= rect.top - CARD_3D_ACTIVE_MARGIN &&
+            clientY <= rect.bottom + CARD_3D_ACTIVE_MARGIN;
+    };
 
     card3DMouseMoveHandler = (e) => {
+        pointerIsNear = pointerIsCloseTo(e.clientX, e.clientY);
+        if (!pointerIsNear) {
+            targetX = 0;
+            targetY = 0;
+            return;
+        }
+
         const rect = card.getBoundingClientRect();
 
         const cx = rect.left + rect.width / 2;
@@ -299,13 +328,20 @@ function addCard3DEffect() {
     };
 
     card3DMouseLeaveHandler = () => {
+        pointerIsNear = false;
         targetX = 0;
         targetY = 0;
     };
 
     function animate() {
-        currentX += (targetX - currentX) * SMOOTH;
-        currentY += (targetY - currentY) * SMOOTH;
+        const settled = Math.abs(targetX - currentX) < 0.01 && Math.abs(targetY - currentY) < 0.01;
+        if (settled && !pointerIsNear) {
+            currentX = 0;
+            currentY = 0;
+        } else {
+            currentX += (targetX - currentX) * SMOOTH;
+            currentY += (targetY - currentY) * SMOOTH;
+        }
 
         const rotateX = takingCardScreenshot ? 0 : currentX;
         const rotateY = takingCardScreenshot ? 0 : currentY;
@@ -323,13 +359,16 @@ function addCard3DEffect() {
 
     // Create and add glare element
     const glare = document.createElement("div");
+    glare.className = "profile-card-glare";
     glare.style.position = "absolute";
     glare.style.inset = "0";
-    glare.style.pointerEvents = "none";
-    glare.style.mixBlendMode = "overlay";
     card.appendChild(glare);
 
     card3DGlareMouseMoveHandler = (e) => {
+        if (!pointerIsNear) {
+            glare.style.background = 'none';
+            return;
+        }
         const rect = card.getBoundingClientRect();
         const x = ((e.clientX - rect.left) / rect.width) * 100;
         const y = ((e.clientY - rect.top) / rect.height) * 100;
@@ -472,20 +511,6 @@ async function createSPGraph(data) {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const padding = 22 * graphResScale;
-    const graphWidth = canvas.width - (padding * 2) - (5 * graphResScale);
-    const graphHeight = canvas.height - (padding * 2);
-
-    const maxValue = Math.max(...extendedValues);
-
-    ctx.strokeStyle = '#cccccc';
-    ctx.lineWidth = graphResScale;
-    ctx.beginPath();
-    ctx.moveTo(padding, padding);
-    ctx.lineTo(padding, canvas.height - padding);
-    ctx.lineTo(canvas.width - padding, canvas.height - padding);
-    ctx.stroke();
-
     const getGraphRoundNumber = (max) => {
         const exponent = Math.floor(Math.log10(max));
         const magnitude = Math.pow(10, exponent);
@@ -500,7 +525,32 @@ async function createSPGraph(data) {
         return rounded * magnitude;
     };
 
-    const gridMax = getGraphRoundNumber(maxValue);
+    const maxValue = Math.max(...extendedValues);
+    const gridMax = Math.max(1, getGraphRoundNumber(maxValue));
+
+    const formatAxisValue = (value) => value >= 1000 ? `${value / 1000}K` : `${value}`;
+
+    ctx.font = `${10 * graphResScale}px Montserrat`;
+    let yLabelWidth = 0;
+    for (let i = 0; i <= 5; i++) {
+        yLabelWidth = Math.max(yLabelWidth, ctx.measureText(formatAxisValue(Math.round(gridMax * (1 - i / 5)))).width);
+    }
+
+    const padLeft = Math.ceil(yLabelWidth) + 6 * graphResScale;
+    const padRight = 6 * graphResScale;
+    const padTop = 22 * graphResScale;
+    const padBottom = 26 * graphResScale;
+
+    const graphWidth = canvas.width - padLeft - padRight;
+    const graphHeight = canvas.height - padTop - padBottom;
+
+    ctx.strokeStyle = '#cccccc';
+    ctx.lineWidth = graphResScale;
+    ctx.beginPath();
+    ctx.moveTo(padLeft, padTop);
+    ctx.lineTo(padLeft, canvas.height - padBottom);
+    ctx.lineTo(canvas.width - padRight, canvas.height - padBottom);
+    ctx.stroke();
 
     // Draw graph and y-axis labels
     ctx.strokeStyle = '#cccccc';
@@ -510,21 +560,15 @@ async function createSPGraph(data) {
     ctx.setLineDash([2, 2]);
 
     for (let i = 0; i <= 5; i++) {
-        const y = padding + (graphHeight / 5) * i;
+        const y = padTop + (graphHeight / 5) * i;
         const value = Math.round(gridMax * (1 - i / 5));
 
         ctx.beginPath();
-        ctx.moveTo(padding, y);
-        ctx.lineTo(canvas.width - padding, y);
+        ctx.moveTo(padLeft, y);
+        ctx.lineTo(canvas.width - padRight, y);
         ctx.stroke();
 
-        let label;
-        if (value >= 1000) {
-            label = (value / 1000) + 'K';
-        } else {
-            label = value.toString();
-        }
-        ctx.fillText(label, padding - 2 * graphResScale, y + 3 * graphResScale);
+        ctx.fillText(formatAxisValue(value), padLeft - 4 * graphResScale, y + 3 * graphResScale);
     }
     ctx.setLineDash([]);
 
@@ -533,7 +577,7 @@ async function createSPGraph(data) {
     if (equippedColour) {
         const stops = gradientColourStops[equippedColour.name];
         if (stops) {
-            const gradient = ctx.createLinearGradient(padding, 0, canvas.width - padding, 0);
+            const gradient = ctx.createLinearGradient(padLeft, 0, canvas.width - padRight, 0);
             stops.forEach((colour, i) => gradient.addColorStop(i / (stops.length - 1), colour));
             lineColour = gradient;
         } else {
@@ -548,39 +592,51 @@ async function createSPGraph(data) {
 
     extendedDates.forEach((_, index) => {
         const timeRatio = (dateTimestamps[index] - fakeStartTime) / timeRange;
-        const x = padding + timeRatio * graphWidth;
-        const y = canvas.height - padding - (extendedValues[index] / gridMax) * graphHeight;
+        const x = padLeft + timeRatio * graphWidth;
+        const y = canvas.height - padBottom - (extendedValues[index] / gridMax) * graphHeight;
 
         ctx.lineTo(x, y);
     });
     ctx.stroke();
 
     // Draw dates on the x-axis
-    const maxLabels = 4;
-    const labelStep = Math.max(1, Math.floor(extendedDates.length / maxLabels));
+    const dateAngle = Math.PI / 10;
+    const dateFont = `${10 * graphResScale}px Montserrat`;
+    ctx.font = dateFont;
+    const dateLabelWidth = ctx.measureText('14/02/26').width * Math.cos(dateAngle)
+        + 10 * graphResScale * Math.sin(dateAngle);
+    const dateLabelGap = 12 * graphResScale;
+    const maxLabels = Math.max(2, Math.min(7, Math.floor(graphWidth / (dateLabelWidth + dateLabelGap))));
+
     const displayIndices = [];
-
-    for (let i = 1; i < extendedDates.length; i += labelStep) {
-        displayIndices.push(i);
+    if (extendedDates.length > 1) {
+        // spread the labels evenly between the first and last data point
+        const labelCount = Math.min(maxLabels, extendedDates.length - 1);
+        if (labelCount === 1) {
+            displayIndices.push(extendedDates.length - 1);
+        } else {
+            for (let i = 0; i < labelCount; i++) {
+                const index = 1 + Math.round(i * (extendedDates.length - 2) / (labelCount - 1));
+                if (!displayIndices.includes(index)) displayIndices.push(index);
+            }
+            displayIndices[displayIndices.length - 1] = extendedDates.length - 1;
+        }
     }
-    if (displayIndices[displayIndices.length - 1] !== extendedDates.length - 1) {
-        displayIndices.push(extendedDates.length - 1);
-    }
 
-    if (extendedDates.length > 0) {
+    if (displayIndices.length > 0) {
         ctx.fillStyle = '#666';
-        ctx.font = `${10 * graphResScale}px Montserrat`;
+        ctx.font = dateFont;
 
         displayIndices.forEach(index => {
             const timeRatio = (dateTimestamps[index] - fakeStartTime) / timeRange;
-            const x = padding + timeRatio * graphWidth;
+            const x = padLeft + timeRatio * graphWidth;
             const date = extendedDates[index];
             const dateObj = new Date(date);
             const formattedDate = `${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${dateObj.getFullYear().toString().slice(-2)}`;
 
             ctx.save();
-            ctx.translate(x, canvas.height - padding + 9 * graphResScale);
-            ctx.rotate(-Math.PI / 10);
+            ctx.translate(x, canvas.height - padBottom + 9 * graphResScale);
+            ctx.rotate(-dateAngle);
             ctx.textAlign = 'right';
             ctx.fillText(formattedDate, 0, 0);
             ctx.restore();
@@ -588,17 +644,17 @@ async function createSPGraph(data) {
     }
 
     // Draw values
-    if (extendedDates.length > 0) {
+    if (displayIndices.length > 0) {
         ctx.fillStyle = lineColour;
         ctx.font = `${11 * graphResScale}px Montserrat`;
         ctx.textAlign = 'center';
 
         displayIndices.forEach(index => {
             const timeRatio = (dateTimestamps[index] - fakeStartTime) / timeRange;
-            const x = padding + timeRatio * graphWidth;
-            const y = canvas.height - padding - (extendedValues[index] / gridMax) * graphHeight;
+            const x = padLeft + timeRatio * graphWidth;
+            const y = canvas.height - padBottom - (extendedValues[index] / gridMax) * graphHeight;
 
-            const topY = padding + 10 * graphResScale;
+            const topY = padTop + 10 * graphResScale;
             const textOffset = y - topY < 20 * graphResScale ? 15 * graphResScale : -8 * graphResScale;
             ctx.fillText(extendedValues[index], x, y + textOffset);
         });
@@ -609,8 +665,8 @@ async function createSPGraph(data) {
     ctx.fillStyle = lineColour;
     extendedDates.forEach((date, index) => {
         const timeRatio = (dateTimestamps[index] - fakeStartTime) / timeRange;
-        const x = padding + timeRatio * graphWidth;
-        const y = canvas.height - padding - (extendedValues[index] / gridMax) * graphHeight;
+        const x = padLeft + timeRatio * graphWidth;
+        const y = canvas.height - padBottom - (extendedValues[index] / gridMax) * graphHeight;
 
         if (index > 0) {
             ctx.beginPath();
@@ -648,7 +704,7 @@ async function createSPGraph(data) {
         if (!eventIcon) return;
 
         const timeRatio = (dateTimestamps[index] - fakeStartTime) / timeRange;
-        const x = padding + timeRatio * graphWidth;
+        const x = padLeft + timeRatio * graphWidth;
 
         if (x - lastIconX < minIconSpacing) return;
         lastIconX = x;
@@ -806,6 +862,8 @@ async function preloadCardImage() {
         const clonedProfileCard = clone.querySelector('.profile-card');
         const clonedButton = clone.querySelector('.customise-button');
         const clonedCardHelp = clone.querySelector('.card-help');
+
+        clone.querySelector('.profile-card-glare')?.remove();
 
         const originalCanvas = document.getElementById('spGraph');
         if (clonedCanvas && originalCanvas) {
@@ -1087,44 +1145,104 @@ function attachCategoryListeners() {
     });
 }
 
-function saveItemEquips() {
+async function saveItemEquips() {
     if (isFlipping) return;
 
+    // Names, not indices, so a catalogue reorder can't shift someone's choices.
     const equippedItemsData = {};
     Object.keys(currentEquippedItems).forEach(type => {
-        if (currentEquippedItems[type] !== null) {
-            equippedItemsData[type] = data.profile_items[currentEquippedItems[type]];
-        }
+        const item = data.profile_items[currentEquippedItems[type]];
+        if (item?.name) equippedItemsData[type] = item.name;
     });
 
-    equippedItemsData["username"] = data.username;
     cardChanged = true;
     debugLog(`Saving equipped items: ${JSON.stringify(equippedItemsData)}`);
 
-    localStorage.setItem("userProfileSettings", JSON.stringify(equippedItemsData));
+    // localStorage keeps the card correct if saving fails
+    localStorage.setItem("userProfileSettings", JSON.stringify({
+        ...equippedItemsData, username: data.username
+    }));
+
+    if (PROFILE_API) {
+        try {
+            const response = await fetch(`${PROFILE_API}/card`, {
+                method: 'PUT',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ equipped: equippedItemsData })
+            });
+            if (response.status === 401) {
+                showToast('Sign in with Discord to save your card.', true);
+                return;
+            }
+            if (!response.ok) {
+                showToast("Couldn't save your card, so it may not stick.", true);
+                return;
+            }
+            const saved = (await response.json())?.equipped || {};
+            for (const type of ['background', 'overlay', 'colour']) {
+                const index = saved[type]
+                    ? data.profile_items.findIndex(item => item.name === saved[type])
+                    : -1;
+                currentEquippedItems[type] = index >= 0 ? index : null;
+            }
+            showToast('Card saved.');
+        } catch (error) {
+            console.error('Error saving equipped items:', error);
+            showToast("Couldn't reach the server, so it may not stick.", true);
+            return;
+        }
+    }
 
     goBackToProfile()
+}
+
+function showToast(message, isError) {
+    debugLog(message);
+    let toast = document.getElementById('profile-save-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'profile-save-toast';
+        toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);'
+            + 'padding:10px 18px;border-radius:50px;font-size:0.9rem;font-weight:600;z-index:9999;'
+            + 'color:#fff;background:#160702;';
+        document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    toast.style.background = isError ? '#bc0839' : '#160702';
+    toast.hidden = false;
+    clearTimeout(window._profileToastTimer);
+    window._profileToastTimer = setTimeout(() => { toast.hidden = true; }, 2600);
 }
 
 // Make functions globally accessible for onclick handlers
 window.saveItemEquips = saveItemEquips;
 window.goBackToProfile = goBackToProfile;
 
-function loadEquippedItems() {
-    try {
-        const saved = localStorage.getItem("userProfileSettings");
-        if (!saved) return;
-
-        const equipped = JSON.parse(saved);
-        if (equipped.username !== data.username) return;
-
-        for (const type of ['background', 'overlay', 'colour']) {
-            if (equipped[type]) {
-                currentEquippedItems[type] = data.profile_items.findIndex(item => item.name === equipped[type].name);
-            }
+function loadEquippedItems(serverEquipped) {
+    // The server is the source of truth - localStorage is a fallback
+    let equipped = serverEquipped;
+    if (!equipped || !Object.keys(equipped).length) {
+        try {
+            const saved = localStorage.getItem("userProfileSettings");
+            if (!saved) return;
+            equipped = JSON.parse(saved);
+        } catch (e) {
+            console.error("Error loading equipped items:", e);
+            return;
         }
-    } catch (e) {
-        console.error("Error loading equipped items:", e);
+    }
+
+    for (const type of ['background', 'overlay', 'colour']) {
+        const name = typeof equipped[type] === 'string'
+            ? equipped[type]
+            : equipped[type]?.name;
+        const index = name
+            ? data.profile_items.findIndex(item => item.name === name)
+            : -1;
+        // -1 means the item is gone from the catalogue, so leave it unequipped
+        // rather than pointing the card at whatever now sits at that index.
+        if (index >= 0) currentEquippedItems[type] = index;
     }
 }
 
@@ -1211,7 +1329,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const params = new URLSearchParams(window.location.search);
     const signInError = params.get('error');
-    const PROFILE_API = 'https://api.umkl.co.uk/profile';
 
     async function profileFetch(path) {
         const response = await fetch(`${PROFILE_API}${path}`, { credentials: 'include' });
@@ -1251,19 +1368,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     data = cardResponse.body.card;
 
-    // TODO: implement item unlocks via profile_items, right now every item is unlocked.
-    let mappedProfileItems = [];
-    areProfileItems = true;
-    try {
-        const response = await fetch('/_assets/media/profile/profileunlockitems.json');
-        mappedProfileItems = await response.json();
-    } catch (error) {
-        console.error('Error fetching profile unlock items:', error);
-    }
+    // TODO: implement item unlocks; every item is currently available.
+    areProfileItems = Array.isArray(cardResponse.body.items) && cardResponse.body.items.length > 0;
+    data.profile_items = cardResponse.body.items || [];
 
-    data.profile_items = mappedProfileItems;
-
-    loadEquippedItems();
+    loadEquippedItems(cardResponse.body.equipped);
 
     fillInPageTitle(data);
 
