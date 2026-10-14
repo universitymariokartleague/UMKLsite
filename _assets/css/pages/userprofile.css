@@ -290,13 +290,11 @@
     position: sticky;
     top: 0;
     z-index: 10;
-    background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.92) 45%, #fff 75%);
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
 }
 
 .items-grid {
     flex: 1;
+    min-height: 0;
     overflow-y: auto;
     display: grid;
     padding: 0 10px;
@@ -307,12 +305,8 @@
 .items-footer {
     position: sticky;
     bottom: 0;
-    padding: 24px 0 0 0;
-    margin-top: -14px;
+    padding: 10px 0 0 0;
     z-index: 10;
-    background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.92) 45%, #fff 75%);
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
 }
 
 .items-title {

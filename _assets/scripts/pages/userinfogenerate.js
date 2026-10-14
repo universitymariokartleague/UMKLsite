@@ -189,7 +189,7 @@ async function umklFetch(url, body = null) {
 }
 
 function fillInPageTitle(data) {
-    document.title = `${makePossessive(data.username)} Profile`;
+    document.title = 'Profile | UMKL';
     teamNameBox.innerText = `${makePossessive(data.username)} Profile`;
 }
 
@@ -608,28 +608,41 @@ async function createSPGraph(data) {
     const dateLabelGap = 12 * graphResScale;
     const maxLabels = Math.max(2, Math.min(7, Math.floor(graphWidth / (dateLabelWidth + dateLabelGap))));
 
-    const displayIndices = [];
+    const lastIndex = extendedDates.length - 1;
+    const labelX = (index) => padLeft + ((dateTimestamps[index] - fakeStartTime) / timeRange) * graphWidth;
+
+    const candidates = [];
     if (extendedDates.length > 1) {
         // spread the labels evenly between the first and last data point
         const labelCount = Math.min(maxLabels, extendedDates.length - 1);
         if (labelCount === 1) {
-            displayIndices.push(extendedDates.length - 1);
+            candidates.push(lastIndex);
         } else {
             for (let i = 0; i < labelCount; i++) {
                 const index = 1 + Math.round(i * (extendedDates.length - 2) / (labelCount - 1));
-                if (!displayIndices.includes(index)) displayIndices.push(index);
+                if (!candidates.includes(index)) candidates.push(index);
             }
-            displayIndices[displayIndices.length - 1] = extendedDates.length - 1;
+            candidates[candidates.length - 1] = lastIndex;
         }
     }
+
+    const minLabelGap = dateLabelWidth + dateLabelGap;
+    const displayIndices = [];
+    candidates.forEach(index => {
+        const prev = displayIndices[displayIndices.length - 1];
+        if (prev !== undefined && labelX(index) - labelX(prev) < minLabelGap) {
+            if (index === lastIndex) displayIndices[displayIndices.length - 1] = index;
+            return;
+        }
+        displayIndices.push(index);
+    });
 
     if (displayIndices.length > 0) {
         ctx.fillStyle = '#666';
         ctx.font = dateFont;
 
         displayIndices.forEach(index => {
-            const timeRatio = (dateTimestamps[index] - fakeStartTime) / timeRange;
-            const x = padLeft + timeRatio * graphWidth;
+            const x = labelX(index);
             const date = extendedDates[index];
             const dateObj = new Date(date);
             const formattedDate = `${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${dateObj.getFullYear().toString().slice(-2)}`;
@@ -650,13 +663,17 @@ async function createSPGraph(data) {
         ctx.textAlign = 'center';
 
         displayIndices.forEach(index => {
-            const timeRatio = (dateTimestamps[index] - fakeStartTime) / timeRange;
-            const x = padLeft + timeRatio * graphWidth;
+            const x = labelX(index);
             const y = canvas.height - padBottom - (extendedValues[index] / gridMax) * graphHeight;
 
             const topY = padTop + 10 * graphResScale;
             const textOffset = y - topY < 20 * graphResScale ? 15 * graphResScale : -8 * graphResScale;
-            ctx.fillText(extendedValues[index], x, y + textOffset);
+
+            const label = `${extendedValues[index]}`;
+            const halfWidth = ctx.measureText(label).width / 2;
+            const textX = Math.min(Math.max(x, halfWidth), canvas.width - halfWidth);
+
+            ctx.fillText(label, textX, y + textOffset);
         });
     }
 
