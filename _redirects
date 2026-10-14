@@ -1,3 +1,12 @@
 # keep existing links working
-/news/:date/:slug/ /news/article.html 200
-/news/:date/:slug /news/article.html 200
+#
+# The destination is the clean URL, without .html. Cloudflare Pages normalises
+# `article.html` to `article` and answers a request for the .html form with a
+# 308, so naming it explicitly turns the rewrite into a redirect - the browser
+# ends up on /news/article with no slug in the path, and articlerender.js has
+# nothing to load.
+#
+# Two path segments are needed so these leave /news/, /news/article and
+# /news/index.html alone.
+/news/:date/:slug/ /news/article 200
+/news/:date/:slug /news/article 200
