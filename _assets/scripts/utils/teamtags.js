@@ -16,4 +16,6 @@ const TEAM_TAGS = {
     "LV♪": "Liverpool",
     "CBG": "Cambridge",
     "BTN": "Brighton",
+    "LUU": "Leeds",
+    "UOL": "Lincoln"
 };
