@@ -488,8 +488,6 @@ async function renderCommits() {
 async function renderArticles() {
     showFilters(null, null);
     const info = await adminFetch('/articles', { query: { page: state.page, per_page: 50 } });
-    const row = (name, shown) => `<label class="article-field">
-            <span>${shown || name}</span><input type="text" data-field="${name}"></label>`;
 
     els.body.innerHTML = `<div class="admin-panel">
         <div class="admin-panel-head"><h2>Articles</h2>
@@ -497,27 +495,13 @@ async function renderArticles() {
             <span class="admin-muted">${info.total} published</span></div>
 
         <div class="article-upload">
-            <h3>Upload from the Article Builder</h3>
-            <p class="admin-muted">Choose the <code>.umklpost</code> the builder exported.
-                It unpacks the page and its images, and publishes it here.</p>
+            <h3>Publish an article</h3>
+            <p class="admin-muted">Write it in the <a class="no-underline-link"
+                    href="/tools/articlebuilder/" target="_blank" rel="noopener noreferrer">Article
+                Builder</a>, then export the <code>.umklpost</code> it gives you and upload it here.</p>
             <input type="file" id="article-upload-file" accept=".umklpost,.zip">
             <button class="admin-btn accent" id="article-upload-go">Upload</button>
             <span id="article-upload-status" class="admin-muted"></span>
-        </div>
-    </div>
-
-    <div class="admin-panel">
-        <div class="admin-panel-head"><h2>Write one by hand</h2></div>
-        <div class="article-form">
-            ${row('title', 'Title')}
-            ${row('date', 'Date')}
-            ${row('description', 'Description')}
-            ${row('author', 'Author (e.g. "skjamm, zy (editing)")')}
-            ${row('tags', 'Tags (comma separated)')}
-            <label class="article-field"><span>Body HTML</span>
-                <textarea data-field="body" rows="8"></textarea></label>
-            <button class="admin-btn accent" id="article-save">Save article</button>
-            <span id="article-save-status" class="admin-muted"></span>
         </div>
     </div>
 
@@ -564,33 +548,6 @@ async function renderArticles() {
         }
     });
 
-    document.getElementById('article-save').addEventListener('click', async () => {
-        const value = name => document.querySelector(`[data-field="${name}"]`).value.trim();
-        const status = document.getElementById('article-save-status');
-        const title = value('title');
-        if (!title) {
-            status.textContent = 'It needs a title.';
-            return;
-        }
-        try {
-            const saved = await adminFetch(`/articles/${slugify(title)}`, {
-                method: 'PUT',
-                body: {
-                    title,
-                    date: value('date') || new Date().toISOString().slice(0, 10),
-                    description: value('description'),
-                    author: value('author'),
-                    tags: value('tags').split(',').map(t => t.trim()).filter(Boolean),
-                    body: value('body')
-                }
-            });
-            setMessage(els.message, `Saved "${title}".`, 'success');
-            await renderArticles();
-        } catch (error) {
-            status.textContent = error.message;
-        }
-    });
-
     els.body.querySelectorAll('[data-delete]').forEach(button => {
         button.addEventListener('click', async () => {
             if (!confirm(`Delete "${button.dataset.title}" and its images?`)) return;
@@ -603,11 +560,6 @@ async function renderArticles() {
             }
         });
     });
-}
-
-function slugify(title) {
-    return title.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '');
 }
 
 const RENDERERS = {

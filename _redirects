@@ -1,8 +1,4 @@
 # keep existing links working
-
-# The feed is generated from the articles table on the bot now, not in this
-# repo. 301 so readers that cached the old URL pick up the move. Static rules,
-# so they go above the wildcards.
 /news/feed.xml https://api.umkl.co.uk/feed.xml 301
 /news/feed https://api.umkl.co.uk/feed.xml 301
 
