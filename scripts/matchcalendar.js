@@ -106,20 +106,46 @@ document.addEventListener("DOMContentLoaded", async () => {
     debugLog(`Match data loaded in ${(performance.now() - startTime).toFixed(2)}ms`);
 });
 
-const fetchAPI = async (endpoint, body = {}) => {
+const fetchAPI = async (endpoint, { method = 'POST', body = {} } = {}) => {
     const response = await fetch(`${API_BASE}/${endpoint}`, {
-        method: 'POST',
+        method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+        ...(method === 'GET' ? {} : { body: JSON.stringify(body) })
     });
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     localStorage.setItem("apiReqsSent", (parseInt(localStorage.getItem("apiReqsSent")) || 0) + 1);
-    return response.json();
+    const raw = await response.text();
+    try {
+        return JSON.parse(raw);
+    } catch {
+        // the API serves an HTML 404 page with a 200 status for retired endpoints,
+        // so a failed JSON.parse here must not escape as an unhandled rejection
+        throw new Error(`Non-JSON response from ${endpoint}`);
+    }
 };
 
-const getMatchData = () => fetchAPI('matchdata', {});
-const getTeamColors = () => fetchAPI('teamcolors', {});
-const getLiveResults = () => fetchAPI('live', {});
+const getMatchData = () => fetchAPI('matchdata');
+const getTeamColors = () => fetchAPI('teamcolors');
+
+const getLiveResults = async (teamName) => {
+    const currentMatch = await fetchAPI(`match/current/${encodeURIComponent(teamName)}`, { method: 'GET' });
+    if (!currentMatch?.match_id) return [];
+    return fetchAPI(`live/${currentMatch.match_id}`, { method: 'GET' });
+};
+
+// The API keys live matches by a team name, not an eventID, so find whichever entry
+// in a day's log is currently in progress and hand back its first team.
+function findLiveMatchTeam(log, date) {
+    const now = new Date();
+    return log.find(entry => {
+        if (!entry.time || entry.endTime) return false;
+        const [hours, minutes] = entry.time.split(':');
+        const matchStart = new Date(date);
+        matchStart.setHours(Number(hours), Number(minutes), 0, 0);
+        const matchEnd = new Date(matchStart.getTime() + MATCH_LENGTH_MINS * 60 * 1000);
+        return now >= matchStart && now <= matchEnd;
+    })?.teamsInvolved?.[0];
+}
 
 const makePossessive = name => !name ? "" : (name.endsWith("s") || name.endsWith("S") ? `${name}'` : `${name}'s`);
 
@@ -662,7 +688,16 @@ async function showDailyLog(date, dayCell) {
     const log = matchDataToUse[date] || [];
 
     if (log.length) {
-        const liveResults = await getLiveResults();
+        let liveResults = [];
+        const liveTeam = findLiveMatchTeam(log, date);
+        if (liveTeam) {
+            try {
+                liveResults = await getLiveResults(liveTeam);
+            } catch (error) {
+                debugLog(`Failed to fetch live results: ${error.message}`);
+            }
+        }
+
         const sortedLog = sortMatchesByTime(log);
         const formattedDate = parseLocalDate(date).toLocaleString(locale, { dateStyle: "full" });
         const is12Hour = uses12HourClock(locale);
@@ -1029,17 +1064,17 @@ const handleKeyNavigation = (e) => {
 
 const updateFetch = async () => {
     try {
-        const liveResults = await getLiveResults();
         matchData = await getMatchData();
         matchDataToUse = overseasDateDisplay ? normalizeMatchData(matchData) : matchData;
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
         const liveIndicatorDiv = document.getElementById(`liveIndicator${eventliveIndicatorToUpdate}`);
         if (liveIndicatorDiv) {
-            const isLive = matchDataToUse[dateParam || Object.keys(matchDataToUse)[0]]?.some(entry => entry.eventID === eventliveIndicatorToUpdate && !entry.endTime) || false;
-            if (!isLive) {
+            const liveEntry = matchDataToUse[dateParam || Object.keys(matchDataToUse)[0]]?.find(entry => entry.eventID === eventliveIndicatorToUpdate && !entry.endTime);
+            if (!liveEntry) {
                 liveIndicatorDiv.innerHTML = '';
             } else {
+                const liveResults = await getLiveResults(liveEntry.teamsInvolved[0]);
                 const scoreMap = [15, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
                 const calculatePoints = (positions) => positions.reduce((sum, pos) => sum + (pos >= 1 && pos <= scoreMap.length ? scoreMap[pos - 1] : sum), 0);
                 const teamAPoints = liveResults.reduce((total, race) => total + calculatePoints(race["1"] || []), 0);
