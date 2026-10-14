@@ -637,11 +637,10 @@ urlModalInput.addEventListener('keydown', (e) => {
 });
 
 // Uploaded images - convert to AVIF (skip GIFs)
-// uses jSquash's WASM build https://github.com/jamsinclair/jSquash
 let avifEncoderPromise = null;
 function loadAvifEncoder() {
     if (!avifEncoderPromise) {
-        avifEncoderPromise = import('https://esm.sh/@jsquash/avif@2.1.1').then(mod => mod.encode);
+        avifEncoderPromise = import('/_assets/vendor/jsquash-avif/index.js').then(mod => mod.encode);
     }
     return avifEncoderPromise;
 }
@@ -696,7 +695,11 @@ async function convertImageToAvif(file, maxDimension = MAX_IMAGE_DIMENSION) {
         const encode = await loadAvifEncoder();
 
         const t0 = performance.now();
-        const avifBuffer = await encode(imageData, { speed: 8, quality: 80 });
+        // Speed 8 is AVIF's fastest preset, and quality barely moves the cost at it - measured
+        // at the 800px cap, q60 comes out ~17% smaller than q80 for slightly less time, while
+        // dropping to speed 6 would cost 8x the wait for only another 18% on file size. Bump
+        // this back toward 80 if article images start showing visible banding.
+        const avifBuffer = await encode(imageData, { speed: 8, quality: 60 });
         const encodeMs = Math.round(performance.now() - t0);
 
         debugLog(`AVIF conversion: ${formatBytes(file.size)} -> ${formatBytes(avifBuffer.byteLength)} in ${encodeMs}ms (${canvas.width}x${canvas.height})`);
@@ -1363,7 +1366,7 @@ saveBtn.addEventListener('click', async () => {
     targetFolder.file("index.html", htmlContent);
 
     // Create a json entry
-    // This is stored in a separate file but can be pasted into news.json
+    // Travels inside the zip; the panel posts it to the news API on upload.
     const articleLink = `/news/${dateFormattedString}/${folderName}/`;
     const newsJsonEntry = {
         title: title,

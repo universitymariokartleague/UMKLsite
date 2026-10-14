@@ -27,7 +27,7 @@ document.addEventListener('error', event => {
 
 let mePromise = null;
 
-async function adminFetch(path, { method = 'GET', body, query } = {}) {
+async function adminFetch(path, { method = 'GET', body, form, query } = {}) {
     const url = new URL(ADMIN_API + path);
     if (query) {
         Object.entries(query).forEach(([key, value]) => {
@@ -43,7 +43,10 @@ async function adminFetch(path, { method = 'GET', body, query } = {}) {
         headers: { 'Accept': 'application/json' }
     };
 
-    if (body !== undefined) {
+    if (form !== undefined) {
+        // FormData sets its own multipart boundary, so no Content-Type here.
+        options.body = form;
+    } else if (body !== undefined) {
         options.headers['Content-Type'] = 'application/json';
         options.body = JSON.stringify(body);
     }

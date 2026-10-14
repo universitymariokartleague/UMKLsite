@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="#bc0839" name="theme-color" />
+    <meta name="color-scheme" content="dark light">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-title" content="UMKL">
+    <title>Article | UMKL</title>
+    <meta name="description" content="The latest news and updates from the UMKL team.">
+    <link rel="icon" href="/_assets/media/brand/favicon.jpg" type="image/png">
+    <link rel="apple-touch-icon" href="/_assets/media/brand/favicon.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
+    <link rel="stylesheet" href="/_assets/css/base/style.css">
+    <link rel="stylesheet" href="/_assets/css/base/settings.css">
+    <link rel="stylesheet" href="/_assets/css/pages/newsarticle.css">
+
+    <meta property="og:title" content="UMKL" />
+    <meta property="og:site_name" content="umkl.co.uk" />
+    <meta property="og:logo"
+        content="https://umkl.co.uk/_assets/media/brand/guidelines/logo_transparent_standard.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://umkl.co.uk/news/" />
+    <meta property="og:description" content="The latest news and updates from the UMKL team." />
+    <meta property="og:image"
+        content="https://umkl.co.uk/_assets/media/brand/guidelines/logo_transparent_standard.png" />
+
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="modulepreload" href="/_assets/webcomponents/navbar.js">
+    <link rel="modulepreload" href="/_assets/webcomponents/footer.js">
+    <script type="module" src="/_assets/webcomponents/navbar.js" defer></script>
+    <script type="module" src="/_assets/webcomponents/footer.js" defer></script>
+
+    <script src="/_assets/scripts/base/theme.js"></script>
+    <script type="module" src="/_assets/scripts/base/settings.js" defer></script>
+    <script defer src="/_assets/scripts/base/imagefade.js" type="module"></script>
+    <script type="module" src="/_assets/scripts/pages/codehighlight.js" defer></script>
+    <script type="module" src="/_assets/scripts/base/smartback.js" defer></script>
+    <script type="module" src="/_assets/scripts/pages/relatedarticles.js" defer></script>
+    <script type="module" src="/_assets/scripts/pages/articlerender.js" defer></script>
+</head>
+
+<body id="top">
+    <umkl-navbar></umkl-navbar>
+
+    <main class="article-main">
+        <div class="bubble-link-wrapper">
+            <a href="/news/" class="bubble-link no-color-link" data-smart-back>
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24"
+                    role="presentation">
+                    <path fill="currentColor"
+                        d="M22 13H4.94l5.18 5.29-1.38 1.42-6.17-6.3a1 1 0 0 1 0-2.82l6.17-6.3 1.38 1.42L4.94 11H22z">
+                    </path>
+                </svg>
+                Back</a>
+        </div>
+
+        <!-- articlerender.js swaps .article-content for the body the API
+             returns, and fills in .article-meta below it. -->
+        <div class="article-wrapper">
+            <div class="article-content"></div>
+            <div class="article-meta"></div>
+        </div>
+    </main>
+
+    <umkl-footer></umkl-footer>
+</body>
+
+</html>

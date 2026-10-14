@@ -1313,9 +1313,10 @@
                     <h3 id="services-checkrss-py">5.10 <code translate="no">services/checkrss.py</code></h3>
                     <ul>
                         <li>
-                            Polls <code translate="no">https://umkl.co.uk/news/feed.xml</code> every 60s (using ETag
-                            caching to
-                            skip unchanged fetches)
+                            Polls <code translate="no">https://api.umkl.co.uk/feed.xml</code> every 60s (using
+                            ETag caching to
+                            skip unchanged fetches). The feed is generated from the articles table rather than
+                            being committed to the site repo.
                         </li>
                         <li>
                             Diffs new <code translate="no">&lt;item&gt;</code> links against

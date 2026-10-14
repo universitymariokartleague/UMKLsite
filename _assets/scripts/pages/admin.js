@@ -5,6 +5,7 @@ import {
 
 const VIEWS = {
     media: 'Media',
+    articles: 'Articles',
     matches: 'Matches',
     teams: 'Teams',
     seasons: 'Seasons',
@@ -156,9 +157,9 @@ async function renderMatches() {
                     <th class="admin-num">Sign-ups</th><th>Status</th><th></th>
                 </tr></thead>
                 <tbody>${info.matches.map(match => {
-                    const names = match.teams.map(team => team.team_name).join(' vs ');
-                    const when = `${match.tournament_date} ${String(match.start_time || '').slice(0, 5)}`;
-                    return `<tr>
+        const names = match.teams.map(team => team.team_name).join(' vs ');
+        const when = `${match.tournament_date} ${String(match.start_time || '').slice(0, 5)}`;
+        return `<tr>
                         <td>${teamsCell(match.teams)}
                             ${match.test_match ? '<span class="admin-pill neutral">Test</span>' : ''}
                             <div class="admin-muted admin-hide-small">#${match.match_id} · ${escapeHtml(names)}</div>
@@ -169,7 +170,7 @@ async function renderMatches() {
                         <td><span class="admin-pill ${statusTone(match.status)}">${escapeHtml(statusLabel(match.status))}</span></td>
                         <td class="admin-num"><a class="admin-btn small" href="/admin/match/?id=${match.match_id}">Edit</a></td>
                     </tr>`;
-                }).join('')}</tbody>
+    }).join('')}</tbody>
             </table>
         </div>` : emptyTable('No matches match those filters.')}
         ${pager(info)}
@@ -332,22 +333,22 @@ async function renderHealth() {
             <span class="admin-pill ${health.ok ? 'positive' : 'caution'}">${health.ok ? 'All good' : 'Check issues'}</span></div>
         <div class="admin-health-grid">
             ${card('Database', [
-                ['Status', database.ok ? '<span class="admin-pill positive">OK</span>' : '<span class="admin-pill negative">Error</span>'],
-                ['Writable', yesNo(database.writable)]
-            ])}
+        ['Status', database.ok ? '<span class="admin-pill positive">OK</span>' : '<span class="admin-pill negative">Error</span>'],
+        ['Writable', yesNo(database.writable)]
+    ])}
             ${card('Discord', [
-                ['Bot connected', yesNo(discord.connected)],
-                ['In UMKL server', yesNo(discord.in_guild)],
-                ['Members cached', discord.members_cached]
-            ])}
+        ['Bot connected', yesNo(discord.connected)],
+        ['In UMKL server', yesNo(discord.in_guild)],
+        ['Members cached', discord.members_cached]
+    ])}
             ${card('Calendar', [
-                ['Built', yesNo(calendar.ok, 'Missing')],
-                ['Age', escapeHtml(age(calendar.age_seconds))]
-            ])}
+        ['Built', yesNo(calendar.ok, 'Missing')],
+        ['Age', escapeHtml(age(calendar.age_seconds))]
+    ])}
             ${card('Last backup', [
-                ['Found', yesNo(backup.ok, 'None')],
-                ['Age', escapeHtml(age(backup.age_seconds))]
-            ])}
+        ['Found', yesNo(backup.ok, 'None')],
+        ['Age', escapeHtml(age(backup.age_seconds))]
+    ])}
         </div>
         <p class="admin-panel-foot">Season ${health.season}</p>
     </div>`;
@@ -461,31 +462,155 @@ async function renderCommits() {
                 <thead><tr><th>When</th><th>Commit</th><th>Who</th>
                     <th class="admin-hide-small">Message</th></tr></thead>
                 <tbody>${info.commits.map(commit => {
-                    const sha = commit.url
-                        ? `<a href="${escapeHtml(commit.url)}" target="_blank" rel="noopener noreferrer"
+        const sha = commit.url
+            ? `<a href="${escapeHtml(commit.url)}" target="_blank" rel="noopener noreferrer"
                                class="no-underline-link"><code>${escapeHtml(commit.short_sha)}</code></a>`
-                        : `<code>${escapeHtml(commit.short_sha)}</code>`;
-                    const head = commit.is_head
-                        ? ' <span class="admin-pill accent">HEAD</span>' : '';
-                    const repo = repos.length > 1
-                        ? `<div class="admin-muted">${escapeHtml(commit.repo)}</div>` : '';
-                    const message = escapeHtml(commit.message)
-                        + (commit.body ? `<div class="admin-muted">${escapeHtml(commit.body)}</div>` : '');
-                    return `<tr>
+            : `<code>${escapeHtml(commit.short_sha)}</code>`;
+        const head = commit.is_head
+            ? ' <span class="admin-pill accent">HEAD</span>' : '';
+        const repo = repos.length > 1
+            ? `<div class="admin-muted">${escapeHtml(commit.repo)}</div>` : '';
+        const message = escapeHtml(commit.message)
+            + (commit.body ? `<div class="admin-muted">${escapeHtml(commit.body)}</div>` : '');
+        return `<tr>
                         <td class="admin-nowrap">${escapeHtml(when(commit.committed_at))}</td>
                         <td>${sha}${head}</td>
                         <td class="admin-nowrap">${escapeHtml(commit.author)}${repo}</td>
                         <td class="admin-hide-small">${message}</td>
                     </tr>`;
-                }).join('')}</tbody>
+    }).join('')}</tbody>
             </table>
         </div>` : emptyTable('No commits found.')}
         ${pager(info)}
     </div>`;
 }
 
+async function renderArticles() {
+    showFilters(null, null);
+    const info = await adminFetch('/articles', { query: { page: state.page, per_page: 50 } });
+    const row = (name, shown) => `<label class="article-field">
+            <span>${shown || name}</span><input type="text" data-field="${name}"></label>`;
+
+    els.body.innerHTML = `<div class="admin-panel">
+        <div class="admin-panel-head"><h2>Articles</h2>
+            <div class="admin-bar-spacer"></div>
+            <span class="admin-muted">${info.total} published</span></div>
+
+        <div class="article-upload">
+            <h3>Upload from the Article Builder</h3>
+            <p class="admin-muted">Choose the <code>.umklpost</code> the builder exported.
+                It unpacks the page and its images, and publishes it here.</p>
+            <input type="file" id="article-upload-file" accept=".umklpost,.zip">
+            <button class="admin-btn accent" id="article-upload-go">Upload</button>
+            <span id="article-upload-status" class="admin-muted"></span>
+        </div>
+    </div>
+
+    <div class="admin-panel">
+        <div class="admin-panel-head"><h2>Write one by hand</h2></div>
+        <div class="article-form">
+            ${row('title', 'Title')}
+            ${row('date', 'Date')}
+            ${row('description', 'Description')}
+            ${row('tags', 'Tags (comma separated)')}
+            <label class="article-field"><span>Body HTML</span>
+                <textarea data-field="body" rows="8"></textarea></label>
+            <button class="admin-btn accent" id="article-save">Save article</button>
+            <span id="article-save-status" class="admin-muted"></span>
+        </div>
+    </div>
+
+    <div class="admin-panel">
+        <div class="admin-panel-head"><h2>Published</h2></div>
+        ${info.articles.length ? `<div class="table-scroll-wrapper">
+            <table class="admin-table">
+                <thead><tr><th>Date</th><th>Title</th><th>Slug</th>
+                    <th class="admin-hide-small">Tags</th><th></th></tr></thead>
+                <tbody>${info.articles.map(article => `<tr>
+                    <td class="admin-nowrap">${escapeHtml(article.published_date)}</td>
+                    <td><a class="no-underline-link" href="${escapeHtml(article.link)}"
+                            target="_blank" rel="noopener noreferrer">${escapeHtml(article.title)}</a></td>
+                    <td><code>${escapeHtml(article.slug)}</code></td>
+                    <td class="admin-hide-small">${(article.tags || []).map(tag =>
+        `<span class="admin-pill">${escapeHtml(tag)}</span>`).join(' ')}</td>
+                    <td class="admin-num"><button class="admin-btn small danger"
+                        data-delete="${escapeHtml(article.slug)}"
+                        data-title="${escapeHtml(article.title)}">Delete</button></td>
+                </tr>`).join('')}</tbody>
+            </table>
+        </div>` : emptyTable('No articles published yet.')}
+        ${pager(info)}
+    </div>`;
+
+    const fileInput = document.getElementById('article-upload-file');
+    const uploadStatus = document.getElementById('article-upload-status');
+    document.getElementById('article-upload-go').addEventListener('click', async () => {
+        const file = fileInput.files[0];
+        if (!file) {
+            uploadStatus.textContent = 'Choose a .umklpost first.';
+            return;
+        }
+        const form = new FormData();
+        form.append('file', file);
+        uploadStatus.textContent = 'Uploading…';
+        try {
+            const saved = await adminFetch('/articles/import', { method: 'POST', form });
+            setMessage(els.message, `Published "${saved.article.title}".`, 'success');
+            state.page = 1;
+            await renderArticles();
+        } catch (error) {
+            uploadStatus.textContent = error.message;
+        }
+    });
+
+    document.getElementById('article-save').addEventListener('click', async () => {
+        const value = name => document.querySelector(`[data-field="${name}"]`).value.trim();
+        const status = document.getElementById('article-save-status');
+        const title = value('title');
+        if (!title) {
+            status.textContent = 'It needs a title.';
+            return;
+        }
+        try {
+            const saved = await adminFetch(`/articles/${slugify(title)}`, {
+                method: 'PUT',
+                body: {
+                    title,
+                    date: value('date') || new Date().toISOString().slice(0, 10),
+                    description: value('description'),
+                    tags: value('tags').split(',').map(t => t.trim()).filter(Boolean),
+                    body: value('body')
+                }
+            });
+            setMessage(els.message, `Saved "${title}".`, 'success');
+            await renderArticles();
+        } catch (error) {
+            status.textContent = error.message;
+        }
+    });
+
+    els.body.querySelectorAll('[data-delete]').forEach(button => {
+        button.addEventListener('click', async () => {
+            if (!confirm(`Delete "${button.dataset.title}" and its images?`)) return;
+            try {
+                await adminFetch(`/articles/${button.dataset.delete}`, { method: 'DELETE' });
+                setMessage(els.message, `Deleted "${button.dataset.title}".`, 'success');
+                await renderArticles();
+            } catch (error) {
+                setMessage(els.message, error.message);
+            }
+        });
+    });
+}
+
+function slugify(title) {
+    return title.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '');
+}
+
 const RENDERERS = {
     media: renderMedia,
+    articles: renderArticles,
     matches: renderMatches,
     teams: renderTeams,
     seasons: renderSeasons,
@@ -584,7 +709,7 @@ function wireEvents() {
 
     els.login.addEventListener('click', () => login());
     els.logout.addEventListener('click', async () => {
-        await logout().catch(() => {});
+        await logout().catch(() => { });
         window.location.reload();
     });
 }

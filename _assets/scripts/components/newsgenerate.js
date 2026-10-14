@@ -1,11 +1,11 @@
 /*
     newsgenerate.js
-    Fetches news/news.json and renders article previews on the homepage
+    Fetches the news API and renders article previews on the homepage
     (hero + small cards) and the full news listing page. On the listing
     page it also wires up tag links and the search/filter box.
 */
 
-const NEWS_JSON_URL = "/news/news.json";
+const NEWS_API = "https://api.umkl.co.uk/articles";
 
 function formatDate(isoDate) {
     const locale = localStorage.getItem("locale") || "en-GB";
@@ -28,10 +28,21 @@ function highlightMatch(text, term) {
 }
 
 async function fetchNews() {
-    const response = await fetch(NEWS_JSON_URL);
+    const response = await fetch(NEWS_API);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const items = await response.json();
-    return items.slice().sort((a, b) => b.date.localeCompare(a.date));
+    const { articles } = await response.json();
+    return articles
+        .map(article => ({
+            title: article.title,
+            link: article.link,
+            date: article.published_date,
+            image: article.image_url,
+            alt: article.image_alt || '',
+            description: article.description || '',
+            tags: article.tags || []
+        }))
+        .filter(item => item.link)
+        .sort((a, b) => b.date.localeCompare(a.date));
 }
 
 function renderHomeNewsSkeleton() {
@@ -356,7 +367,7 @@ async function init() {
     try {
         news = await fetchNews();
     } catch (err) {
-        console.error(`%cnewsgenerate.js%c > %cFailed to load news.json: ${err}`, "color:#fcce27", "color:#fff", "color:#ffefb5");
+        console.error(`%cnewsgenerate.js%c > %cFailed to load articles: ${err}`, "color:#fcce27", "color:#fff", "color:#ffefb5");
         return;
     }
 

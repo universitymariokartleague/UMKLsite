@@ -1,0 +1,3 @@
+# keep existing links working
+/news/:date/:slug/ /news/article.html 200
+/news/:date/:slug /news/article.html 200

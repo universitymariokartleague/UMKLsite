@@ -9,9 +9,16 @@ async function loadRelatedArticles() {
     const articleMeta = document.querySelector('.article-meta');
     if (!articleMeta) return;
 
-    const response = await fetch('/news/news.json');
+    const response = await fetch('https://api.umkl.co.uk/articles');
     if (!response.ok) return;
-    const articles = await response.json();
+    const articles = (await response.json()).articles.map(article => ({
+        title: article.title,
+        link: article.link,
+        date: article.published_date,
+        image: article.image_url,
+        alt: article.image_alt,
+        tags: article.tags
+    }));
 
     const currentPath = normalizePath(window.location.pathname);
     const current = articles.find(a => normalizePath(a.link) === currentPath);
