@@ -102,7 +102,7 @@ function accessNotice(me) {
     if (me.can_write) return '';
     return me.writes_enabled
         ? `You're signed in as ${me.name}, but your roles only allow read-only access.`
-          + ' Ask the board for a write role to make changes.'
+        + ' Ask the board for a write role to make changes.'
         : 'This panel is read-only. Editing league data is turned off.';
 }
 
@@ -116,7 +116,7 @@ const plural = (count, word) => `${count} ${word}${count === 1 ? '' : 's'}`;
 
 function emblem(teamName) {
     const safe = encodeURIComponent((teamName || '').toUpperCase());
-    return `<img loading="lazy" class="admin-emblem" src="${EMBLEM_API}/${safe}?og" alt="">`;
+    return `<img loading="lazy" class="admin-emblem" src="${EMBLEM_API}/${safe}" alt="">`;
 }
 
 const STATUS_LABELS = {
