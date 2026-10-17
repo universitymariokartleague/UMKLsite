@@ -24,23 +24,44 @@ const TESSERACT_URL = "https://cdn.jsdelivr.net/npm/tesseract.js@7/dist/tesserac
 const ROW_X = 941;
 const ROW_WIDTH = 1301;
 const ROW_HEIGHT = 162;
+const ROW_RADIUS = 25;
 const ROW_SPACING = 192;
+const HOLE_INSET = 27;
+const HOLE_WIDTH = 107;
+const HOLE_HEIGHT = 108;
+const HOLE_RADIUS = 15;
 const POSITION_X = 1022;
+const POSITION_SIZE = 75;
 const PLAYER_NAME_X = 1110;
 const PLAYER_SCORE_X = 2200;
+const PLAYER_SIZE = 100;
 const PLAYER_MAX_WIDTH = 900;
+const PLAYER_TEXT_LIFT = 2;
 const TEAM_NAME_X = 465;
 const TEAM_NAME_MAX_WIDTH = 800;
 const TEAM_SCORE_X = 2765;
 const RIGHT_BOX_X = 2770;
 const PENALTY_HEIGHT = 100;
+const PENALTY_RADIUS = 12;
 const PENALTY_GAP = 45;
+
+const MIDDLE_OFFSET = 0.3585;
 
 // Sizes per team count, scaled down so each team's band still fits
 const LAYOUTS = {
     2: { emblem: 600, nameSize: 135, scoreSize: 425 },
     3: { emblem: 440, nameSize: 115, scoreSize: 340 },
     4: { emblem: 300, nameSize: 90, scoreSize: 260 },
+};
+
+const BOT_2TEAM = {
+    name: 945,
+    score: 620,
+    penalty: 825,
+    // First row box top and the text centre of the first row, per band
+    rows: [{ box: 37, text: 118 }, { box: 60, text: 143 }],
+    gapBox: 1131,
+    gap: 1215,
 };
 
 const DEFAULT_TEAMS = [
@@ -387,16 +408,27 @@ function drawText(text, x, y, size, color, align = "center", weight = 700, shado
     setFont(size, weight);
     ctx.fillStyle = color;
     ctx.textAlign = align;
-    ctx.textBaseline = "middle";
+    ctx.textBaseline = "alphabetic";
     if (shadow) {
         ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
         ctx.shadowBlur = 30;
         ctx.shadowOffsetY = 10;
     }
-    ctx.fillText(text, x, y);
+    ctx.fillText(text, x, y + size * MIDDLE_OFFSET);
     ctx.shadowColor = "transparent";
     ctx.shadowBlur = 0;
     ctx.shadowOffsetY = 0;
+}
+
+function measureInk(text, size, weight) {
+    setFont(size, weight);
+    ctx.textBaseline = "alphabetic";
+    const metrics = ctx.measureText(text);
+    return {
+        ascent: metrics.actualBoundingBoxAscent,
+        descent: metrics.actualBoundingBoxDescent,
+        height: metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent,
+    };
 }
 
 function drawRoundedRect(x, y, width, height, radius, fill) {
@@ -409,13 +441,14 @@ function drawRoundedRect(x, y, width, height, radius, fill) {
 // The position square is a see-through hole so the team colour shows behind the number
 function drawRowBox(top) {
     ctx.beginPath();
-    ctx.roundRect(ROW_X, top, ROW_WIDTH, ROW_HEIGHT, 24);
-    ctx.roundRect(ROW_X + 27, top + 27, 107, 108, 14);
+    ctx.roundRect(ROW_X, top, ROW_WIDTH, ROW_HEIGHT, ROW_RADIUS);
+    ctx.roundRect(ROW_X + HOLE_INSET, top + HOLE_INSET, HOLE_WIDTH, HOLE_HEIGHT, HOLE_RADIUS);
     ctx.fillStyle = "#fff";
     ctx.fill("evenodd");
 }
 
-function truncate(text, maxWidth) {
+function truncate(text, size, weight, maxWidth) {
+    setFont(size, weight);
     if (ctx.measureText(text).width <= maxWidth) return text;
     const ellipsisWidth = ctx.measureText("...").width;
     while (text && ctx.measureText(text).width + ellipsisWidth > maxWidth) {
@@ -442,9 +475,11 @@ async function render() {
     if (id !== renderId) return;
 
     const layout = LAYOUTS[teams.length];
+    const bot = teams.length === 2 ? BOT_2TEAM : null;
     const bandHeight = HEIGHT / teams.length;
     const playersPerTeam = getPlayersPerTeam();
     const rowGroupHeight = (playersPerTeam - 1) * ROW_SPACING + ROW_HEIGHT;
+    const rowsOffset = (bandHeight - rowGroupHeight) / 2;
     const positionOf = getPositions(teams);
 
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
@@ -459,10 +494,12 @@ async function render() {
         const bandTop = i * bandHeight;
         const bandCenter = bandTop + bandHeight / 2;
 
+        // Emblem and name sit as one block, either at the bot's offsets or centred on the band
         const nameOffset = layout.emblem + layout.nameSize * 0.74;
-        const blockTop = bandCenter - (nameOffset + layout.nameSize / 2) / 2;
+        const nameY = bot ? bandTop + bot.name
+            : bandCenter + nameOffset / 2 - layout.nameSize / 4;
         if (emblems[i]) {
-            ctx.drawImage(emblems[i], TEAM_NAME_X - layout.emblem / 2, blockTop, layout.emblem, layout.emblem);
+            ctx.drawImage(emblems[i], TEAM_NAME_X - layout.emblem / 2, nameY - nameOffset, layout.emblem, layout.emblem);
         }
 
         let nameSize = layout.nameSize;
@@ -471,48 +508,46 @@ async function render() {
             nameSize -= 5;
             setFont(nameSize, 700);
         }
-        drawText(team.name, TEAM_NAME_X, blockTop + nameOffset, nameSize, "#fff", "center", 700, true);
+        drawText(team.name, TEAM_NAME_X, nameY, nameSize, "#fff", "center", 700, true);
 
-        // Centre on the digits' real ink bounds, and centre the score and penalty together as one block
         const scoreText = `${team.total}`;
-        setFont(layout.scoreSize, 700);
-        ctx.textBaseline = "middle";
-        const scoreMetrics = ctx.measureText(scoreText);
-        const scoreInkHeight = scoreMetrics.actualBoundingBoxAscent + scoreMetrics.actualBoundingBoxDescent;
-        const blockHeight = scoreInkHeight + (team.penalty > 0 ? PENALTY_GAP + PENALTY_HEIGHT : 0);
-        const scoreInkTop = bandCenter - blockHeight / 2;
-        const scoreY = scoreInkTop + scoreMetrics.actualBoundingBoxAscent;
+        const ink = measureInk(scoreText, layout.scoreSize, 700);
+        const inkTop = bot ? 0
+            : bandCenter - (ink.height + (team.penalty > 0 ? PENALTY_GAP + PENALTY_HEIGHT : 0)) / 2;
+        const scoreY = bot ? bandTop + bot.score
+            : inkTop + ink.ascent - layout.scoreSize * MIDDLE_OFFSET;
         drawText(scoreText, TEAM_SCORE_X, scoreY, layout.scoreSize, "#fff", "center", 700, true);
 
         if (team.penalty > 0) {
-            const penaltyTop = scoreInkTop + scoreInkHeight + PENALTY_GAP;
-            drawRoundedRect(RIGHT_BOX_X - 250, penaltyTop, 500, PENALTY_HEIGHT, 12, "#fff");
-            drawText(`Penalty: -${team.penalty}`, RIGHT_BOX_X, penaltyTop + PENALTY_HEIGHT / 2 + 2, 70, ACCENT_COLOR, "center", 600);
+            const penaltyTop = bot ? bandTop + bot.penalty : inkTop + ink.height + PENALTY_GAP;
+            drawRoundedRect(RIGHT_BOX_X - 250, penaltyTop, 500, PENALTY_HEIGHT, PENALTY_RADIUS, "#fff");
+            drawText(`Penalty: -${team.penalty}`, RIGHT_BOX_X, penaltyTop + PENALTY_HEIGHT / 2, 70, ACCENT_COLOR, "center", 600);
         }
 
-        const rowsTop = bandTop + (bandHeight - rowGroupHeight) / 2;
+        const rowsTop = bandTop + (bot ? bot.rows[i].box : rowsOffset);
+        const rowTextY = bot ? bandTop + bot.rows[i].text : rowsTop + ROW_HEIGHT / 2;
         for (let j = 0; j < playersPerTeam; j++) {
             drawRowBox(rowsTop + j * ROW_SPACING);
         }
         team.players.forEach((player, j) => {
-            const rowY = rowsTop + j * ROW_SPACING + ROW_HEIGHT / 2;
-            drawText(`${positionOf(player.score)}`, POSITION_X, rowY, 75, "#fff");
-            setFont(100, 700);
-            drawText(truncate(player.name, PLAYER_MAX_WIDTH), PLAYER_NAME_X, rowY, 100, team.color, "left");
-            drawText(`${player.score}`, PLAYER_SCORE_X, rowY, 100, team.color, "right", 600);
+            const rowY = rowTextY + j * ROW_SPACING;
+            const statY = bot ? rowY - PLAYER_TEXT_LIFT : rowY;
+            drawText(`${positionOf(player.score)}`, POSITION_X, rowY, POSITION_SIZE, "#fff");
+            drawText(truncate(player.name, PLAYER_SIZE, 700, PLAYER_MAX_WIDTH), PLAYER_NAME_X, statY, PLAYER_SIZE, team.color, "left");
+            drawText(`${player.score}`, PLAYER_SCORE_X, statY, PLAYER_SIZE, team.color, "right", 600);
         });
     });
 
     if (teams.length === 2) {
-        drawRoundedRect(2596, bandHeight - 85, 353, 171, 16, "#fff");
-        drawText(`±${Math.abs(teams[0].total - teams[1].total)}`, RIGHT_BOX_X, bandHeight + 2, 100, ACCENT_COLOR);
+        drawRoundedRect(2596, BOT_2TEAM.gapBox, 353, 171, 15, "#fff");
+        drawText(`±${Math.abs(teams[0].total - teams[1].total)}`, RIGHT_BOX_X, BOT_2TEAM.gap, 100, ACCENT_COLOR);
     }
 
     if (testMatchInput.checked) {
         // Sit on a band boundary so it never covers a team's emblem or name
         const boundaryY = Math.floor(teams.length / 2) * bandHeight;
         drawRoundedRect(210, boundaryY - 65, 500, 125, 15, "#fff");
-        drawText("Test Match", 460, boundaryY - 3, 75, ACCENT_COLOR, "center", 600);
+        drawText("Test Match", 460, boundaryY - 5, 75, ACCENT_COLOR, "center", 600);
     }
 }
 
