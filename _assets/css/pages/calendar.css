@@ -299,23 +299,17 @@
     opacity: 0.6;
 }
 
-/* "Today" divider in the all-matches list */
-.today-marker {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 22px 0 12px;
-    text-align: center;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--accent-color);
+.list-view-date-header.today-header {
+    --today-marker-colour: var(--link-color);
+    background-color: color-mix(in srgb, var(--today-marker-colour) 10%, var(--bg-color));
+    z-index: 6;
 }
 
-.today-marker::before,
-.today-marker::after {
-    content: "";
-    flex: 1;
-    border-bottom: 2px solid color-mix(in srgb, var(--brand-primary) 45%, transparent);
+.list-view-date-header.date-selected {
+    background-image: linear-gradient(color-mix(in srgb, var(--brand-primary) 16%, transparent),
+            color-mix(in srgb, var(--brand-primary) 16%, transparent));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brand-primary) 70%, transparent);
+    z-index: 6;
 }
 
 @media screen and (max-width: 900px) {
@@ -341,7 +335,7 @@
     /* Cap height on mobile */
     .calendar-sidebar #calendarListView {
         position: static;
-        max-height: calc(100vh - 360px);
+        max-height: calc(100vh - 250px);
     }
 
     .calendar {

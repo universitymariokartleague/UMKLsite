@@ -8,7 +8,7 @@ import { bestTrack, worstTrack } from '/_assets/scripts/utils/trackrecord.js';
 import { createDebugLogger } from '/_assets/scripts/utils/debuglogger.js';
 
 const debugLog = createDebugLogger('teaminfogenerate.js', '#d152ff', '#e6a1ff');
-const UPDATEINVERVAL = 30000;
+const UPDATEINVERVAL = 300000;
 let refreshTimer = null;
 
 let viewingSeason = null;
@@ -57,26 +57,7 @@ const isLightColor = (color) => {
     return brightness > 172;
 };
 
-// Caching
-const getTeamCache = (team) => {
-    try {
-        const cached = (JSON.parse(localStorage.getItem(CACHE_KEY)) || {})[team];
-        if (cached) return cached;
-    } catch { }
-    try {
-        const teamDataCache = JSON.parse(localStorage.getItem('teamDataCache')) || [];
-        return teamDataCache.find(t => t.team_name === team) || null;
-    } catch { return null; }
-};
-
-const setTeamCache = (team, data) => {
-    try {
-        const cache = JSON.parse(localStorage.getItem(CACHE_KEY)) || {};
-        cache[team] = data;
-        localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
-    } catch { }
-};
-
+// Caching (per-season stats only - the team box itself is always built from live data)
 const getSeasonCache = (team, season) => {
     try { return (JSON.parse(localStorage.getItem(CACHE_KEY)) || {})[`${team}_s${season}`] || null; } catch { return null; }
 };
@@ -528,21 +509,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     let showError = 0;
     let playerData = [];
-    const cachedData = getTeamCache(currentTeam);
-
-    if (cachedData) {
-        debugLog(`Generating team info box (cache)...`);
-        generateTeamBox(cachedData, 0);
-    }
 
     try {
         playerData = await getPlayerdata(currentTeam);
-        setTeamCache(currentTeam, playerData[0]);
-        if (cachedData) {
-            editTeamBox(playerData[0]);
-        } else {
-            generateTeamBox(playerData[0], 0);
-        }
+        generateTeamBox(playerData[0], 0);
     } catch (error) {
         if (error?.error === "Team not found" || error?.error === "Team not enabled") {
             window.location.href = "/teams";
@@ -552,22 +522,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         showError = error?.message?.includes('429') ? 2 : 1;
 
-        if (!cachedData) {
-            if (refreshTimer) clearTimeout(refreshTimer);
-            const retryFetch = async () => {
-                try {
-                    window.retryCount = (window.retryCount ?? 0) + 1;
-                    playerData = await getPlayerdata(currentTeam);
-                    setTeamCache(currentTeam, playerData[0]);
-                    showError = 0;
-                    generateTeamBox(playerData[0], showError);
-                } catch {
-                    showErrorBox(showError);
-                    refreshTimer = setTimeout(retryFetch, 2000);
-                }
-            };
-            refreshTimer = setTimeout(retryFetch, 2000);
-        }
+        if (refreshTimer) clearTimeout(refreshTimer);
+        const retryFetch = async () => {
+            try {
+                window.retryCount = (window.retryCount ?? 0) + 1;
+                playerData = await getPlayerdata(currentTeam);
+                showError = 0;
+                generateTeamBox(playerData[0], showError);
+            } catch {
+                showErrorBox(showError);
+                refreshTimer = setTimeout(retryFetch, 2000);
+            }
+        };
+        refreshTimer = setTimeout(retryFetch, 2000);
 
         showErrorBox(showError);
     }
@@ -577,7 +544,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             debugLog(`Refreshing live data...`);
             playerData = await getPlayerdata(currentTeam);
-            setTeamCache(currentTeam, playerData[0]);
             showError = 0;
             editTeamBox(playerData[0]);
             showErrorBox(showError);

@@ -761,6 +761,7 @@ function generateCalendarListView() {
 
     const today = new Date();
     const formattedToday = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    const todayDate = parseLocalDate(formattedToday);
 
     matchDataToUse = overseasDateDisplay ? normalizeMatchData(matchData) : matchData;
     // Object.keys() only preserves insertion order for non-numeric-looking keys like
@@ -771,7 +772,6 @@ function generateCalendarListView() {
     const term = calendarSearchTerm;
 
     let HTMLOutput = "";
-    let todayMarkerInserted = false;
     let resultsCount = 0;
 
     for (const date of sortedDates) {
@@ -780,12 +780,12 @@ function generateCalendarListView() {
             .filter(entry => matchesCalendarSearch(entry, formattedDate.toLowerCase(), term));
         if (!sortedMatches.length) continue;
 
-        if (!todayMarkerInserted && formattedToday < date) {
-            HTMLOutput += `<div class="today-marker">Today - ${new Date(formattedToday).toLocaleDateString(locale, { dateStyle: 'long' })}</div>`;
-            todayMarkerInserted = true;
-        }
+        // Date keys from the API aren't reliably zero-padded, so compare the parsed
+        // dates rather than the raw strings.
+        const dateValue = parseLocalDate(date);
+        const isToday = dateValue.getTime() === todayDate.getTime();
 
-        HTMLOutput += `<h3 class="list-view-date-header" data-date="${date}">${formattedToday === date ? ' ☆ ' : ''}${formattedDate}</h3>`;
+        HTMLOutput += `<h3 class="list-view-date-header${isToday ? ' today-header' : ''}" data-date="${date}">${formattedDate}</h3>`;
         HTMLOutput += `<table class="standings-table"><tbody>`;
 
         for (const entry of sortedMatches) {
@@ -852,6 +852,8 @@ function generateCalendarListView() {
         HTMLOutput = `<div id="calendar-no-results"><p>No matches found</p><button id="calendar-clear-search" type="button">Clear search</button></div>`;
     }
     listViewContent.innerHTML = HTMLOutput;
+
+    highlightSelectedListDate();
 
     listViewContent.querySelectorAll('.list-view-date-header').forEach(header => {
         header.style.cursor = 'pointer';
@@ -935,11 +937,34 @@ function cancelListScrollAnimation() {
 document.getElementById('listViewContent')?.addEventListener('wheel', cancelListScrollAnimation, { passive: true });
 document.getElementById('listViewContent')?.addEventListener('touchstart', cancelListScrollAnimation, { passive: true });
 
+function findListDateHeader(listViewContent, dateParam) {
+    const exact = listViewContent.querySelector(`.list-view-date-header[data-date="${dateParam}"]`);
+    if (exact) return exact;
+
+    const targetDate = parseLocalDate(dateParam);
+    const allHeaders = [...listViewContent.querySelectorAll('.list-view-date-header[data-date]')];
+    return allHeaders.find(h => parseLocalDate(h.dataset.date) >= targetDate) || allHeaders.at(-1) || null;
+}
+
+function highlightSelectedListDate() {
+    const listViewContent = document.getElementById('listViewContent');
+    if (!listViewContent) return;
+
+    listViewContent.querySelectorAll('.list-view-date-header.date-selected')
+        .forEach(header => header.classList.remove('date-selected'));
+
+    const dateParam = new URLSearchParams(window.location.search).get('date');
+    if (!dateParam) return;
+    findListDateHeader(listViewContent, dateParam)?.classList.add('date-selected');
+}
+
 function scrollMatchList(smooth = false) {
     const listViewContent = document.getElementById('listViewContent');
     if (!listViewContent) return;
 
     const scrollTo = (top) => smooth ? animateScrollTo(listViewContent, top) : (listViewContent.scrollTop = top);
+
+    highlightSelectedListDate();
 
     const dateParam = new URLSearchParams(window.location.search).get('date');
     if (!dateParam) {
@@ -947,12 +972,7 @@ function scrollMatchList(smooth = false) {
         return;
     }
 
-    let target = listViewContent.querySelector(`.list-view-date-header[data-date="${dateParam}"]`);
-    if (!target) {
-        const targetDate = parseLocalDate(dateParam);
-        const allHeaders = [...listViewContent.querySelectorAll('.list-view-date-header[data-date]')];
-        target = allHeaders.find(h => parseLocalDate(h.dataset.date) >= targetDate) || allHeaders.at(-1);
-    }
+    const target = findListDateHeader(listViewContent, dateParam);
     if (!target) return;
 
     const originalPosition = target.style.position;
