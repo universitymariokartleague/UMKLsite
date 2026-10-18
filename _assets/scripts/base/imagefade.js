@@ -14,24 +14,16 @@ function fadeInOnLoad(img) {
     if (img.complete && img.naturalWidth !== 0) return;
 
     fadingImages.add(img);
-
-    const cssOpacity = parseFloat(getComputedStyle(img).opacity);
-
-    img.style.transition = "none";
     img.style.opacity = "0";
-    void img.offsetHeight;
     img.style.transition = "opacity 0.25s ease-in";
 
+    // Clear the inline styles once the fade finishes
     const reveal = () => {
         img.style.opacity = "1";
-
-        const cleanup = (event) => {
-            if (event.target !== img || event.propertyName !== "opacity") return;
-            img.removeEventListener("transitionend", cleanup);
+        img.addEventListener("transitionend", () => {
+            img.style.opacity = "";
             img.style.transition = "";
-            img.style.opacity = cssOpacity < 1 ? "1" : "";
-        };
-        img.addEventListener("transitionend", cleanup);
+        }, { once: true });
     };
     img.addEventListener("load", reveal, { once: true });
     img.addEventListener("error", reveal, { once: true });
