@@ -1,4 +1,4 @@
-import { loadMatchStartTimes, videoStatusIcon, isTestMatchVideo as isTestMatch, VIDEO_STATUS_EXPIRED_EVENT } from '/_assets/scripts/utils/videostatus.js';
+import { loadMatchStartTimes, videoStatusIcon, isTestMatchVideo as isTestMatch, VIDEO_STATUS_EXPIRED_EVENT, getScheduledStart } from '/_assets/scripts/utils/videostatus.js';
 
 const API_URL = `https://api.umkl.co.uk/videos`;
 const SKELETON_CARD_COUNT = 12;
@@ -132,8 +132,12 @@ function highlightMatch(text, term) {
 function buildVideoCard(item, locale, searchTerm) {
     const thumbnailUrl = `https://wsrv.nl/?height=300&q=50&output=webp&url=${item.thumbnail}`;
     const title = item.title || item.match?.title || "UMKL Video";
-    const date = item.published ? new Date(item.published) : null;
-    const dateStr = date ? date.toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" }) : "";
+    const dateOnly = /^\d{4}-\d{2}-\d{2}$/.test((item.published || "").trim());
+    const matchStart = dateOnly ? getScheduledStart(item) : null;
+    const date = item.published
+        ? new Date(matchStart != null ? matchStart : (dateOnly ? `${item.published}T00:00:00` : item.published))
+        : null;
+    const dateStr = date ? date.toLocaleString(locale, { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false }) : "";
 
     const card = document.createElement("a");
     card.className = isTestMatch(item) ? "video-card test-match-card" : "video-card";
@@ -242,6 +246,14 @@ function setupVideoSearch(container) {
 
     let showTestMatches = testMatchToggle ? testMatchToggle.checked : true;
 
+    const clearSearchUrlParam = () => {
+        const url = new URL(window.location.href);
+        if (url.searchParams.has("search")) {
+            url.searchParams.delete("search");
+            window.history.replaceState({}, "", url);
+        }
+    };
+
     const runSearch = (term) => {
         const filtered = allVideos.filter(item => {
             if (!showTestMatches && isTestMatch(item)) return false;
@@ -251,6 +263,7 @@ function setupVideoSearch(container) {
         if (noResultsMsg) noResultsMsg.style.display = filtered.length === 0 ? "block" : "none";
         if (tagsContainer) updateActiveTag(tagsContainer, term);
         inlineClearBtn?.classList.toggle("visible", term.length > 0);
+        if (!term) clearSearchUrlParam();
     };
 
     let debounceTimer;
@@ -262,12 +275,14 @@ function setupVideoSearch(container) {
     inlineClearBtn?.addEventListener("click", () => {
         searchInput.value = "";
         runSearch("");
+        clearSearchUrlParam();
         searchInput.focus();
     });
 
     clearSearchBtn?.addEventListener("click", () => {
         searchInput.value = "";
         runSearch("");
+        clearSearchUrlParam();
         searchInput.focus();
     });
 

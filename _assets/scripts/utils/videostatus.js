@@ -1,7 +1,7 @@
 import { icon } from '/_assets/scripts/utils/icons.js';
 import { getMatchData, normalizeMatchData, getMatchCache, setMatchCache } from '/_assets/scripts/utils/matchdata.js';
 
-export { getVideoStatus, loadMatchStartTimes, videoStatusIcon, isTestMatchVideo, VIDEO_STATUS_EXPIRED_EVENT };
+export { getVideoStatus, loadMatchStartTimes, videoStatusIcon, isTestMatchVideo, VIDEO_STATUS_EXPIRED_EVENT, getScheduledStart };
 
 const BADGE_CLASS = 'video-live-badge';
 const TICKING_BADGE_SELECTOR = `.${BADGE_CLASS}[data-live-at]`;

@@ -1,4 +1,4 @@
-import { loadMatchStartTimes, videoStatusIcon, isTestMatchVideo } from '/_assets/scripts/utils/videostatus.js';
+import { loadMatchStartTimes, videoStatusIcon, isTestMatchVideo, getScheduledStart } from '/_assets/scripts/utils/videostatus.js';
 
 const API_URL = `https://api.umkl.co.uk/videos`;
 const DEFAULT_VIDEO_COUNT = 12;
@@ -74,8 +74,12 @@ async function loadVideoCarousel() {
         videos.slice(0, videoCount).forEach(item => {
             const thumbnailUrl = item.thumbnail || `https://i.ytimg.com/vi/${item.video_id}/hqdefault.jpg`;
             const title = item.title || item.match?.title || "UMKL Video";
-            const date = item.published ? new Date(item.published) : null;
-            const dateStr = date ? date.toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" }) : "";
+            const dateOnly = /^\d{4}-\d{2}-\d{2}$/.test((item.published || "").trim());
+            const matchStart = dateOnly ? getScheduledStart(item) : null;
+            const date = item.published
+                ? new Date(matchStart != null ? matchStart : (dateOnly ? `${item.published}T00:00:00` : item.published))
+                : null;
+            const dateStr = date ? date.toLocaleString(locale, { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false }) : "";
 
             const card = document.createElement("a");
             card.className = isTestMatchVideo(item) ? "video-card test-match-card" : "video-card";
