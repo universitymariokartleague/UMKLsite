@@ -88,10 +88,10 @@ function renderNewsListingSkeleton() {
                 <div class="skeleton" style="position:absolute;inset:0;border-radius:10px;"></div>
             </div>
             <div class="news-card-body">
-                <div class="skeleton skeleton-line" style="width:90%;"></div>
-                <div class="skeleton skeleton-line" style="width:70%;"></div>
+                <div class="skeleton skeleton-line" style="width:90%;height:1.3rem;"></div>
+                <div class="skeleton skeleton-line" style="width:70%;height:calc(2 * 1.35 * 0.86rem);"></div>
             </div>
-            <div class="skeleton skeleton-line" style="width:90px;height:14px;margin-top:10px;"></div>
+            <div class="skeleton skeleton-line" style="width:90px;height:14px;margin-top:6px;"></div>
         </article>
     `;
 

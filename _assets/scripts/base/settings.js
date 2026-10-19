@@ -45,6 +45,10 @@ document.body.insertAdjacentHTML('beforeend', settingsBoxHTML);
 const settingsBox = document.getElementById('settingsBox');
 const settingsBoxJS = document.getElementById('settingsBoxJS');
 
+document.addEventListener('squEasterEggChange', () => {
+    if (settingsBox && settingsBox.open) generateSettingsPanel();
+});
+
 const weekdayNamesFull = ["Sunday", "Monday"];
 
 let easterEgg;
@@ -162,7 +166,7 @@ function generateSettingsPanel() {
                 <div class="setting-row">
                     <div class="setting-info">
                         <span translate="yes" class="setting-label">API Requests Sent</span>
-                        <span translate="yes" class="setting-desc">Total requests sent to Cheep Cheep (api.umkl.co.uk)</span>
+                        <span translate="yes" class="setting-desc">The number of requests you've made to Cheep Cheep</span>
                     </div>
                     <span>${apiReqsSent}</span>
                 </div>
@@ -174,6 +178,17 @@ function generateSettingsPanel() {
                     <button id="clearLocalStorage" class="settings-btn btn-danger">Reset</button>
                 </div>
             </section>
+            ${squEasterEggActive ? `
+            <section class="settings-group">
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <span translate="yes" class="setting-label">Square Mode</span>
+                        <span translate="yes" class="setting-desc">Toggled by pressing 's', 'q' and 'u' sequentially</span>
+                    </div>
+                    <button id="removeSquEasterEgg" class="settings-btn btn-danger">Remove</button>
+                </div>
+            </section>
+            ` : ''}
         `;
     } catch (error) {
         settingsBoxJS.innerHTML = `<div class="settings-error">Failed to load settings<br><code translate="no">${error.stack}</code></div>`;
@@ -261,6 +276,11 @@ function generateEventListeners() {
     document.querySelectorAll('#startDaySegmented button').forEach(btn => btn.addEventListener('click', () => setStartDay(btn.dataset.value)));
     document.querySelectorAll('#overseasSegmented button').forEach(btn => btn.addEventListener('click', () => setOverseasDateDisplay(btn.dataset.value)));
     document.getElementById('clearLocalStorage').addEventListener('click', clearLocalStorage);
+    const removeSquBtn = document.getElementById('removeSquEasterEgg');
+    if (removeSquBtn) removeSquBtn.addEventListener('click', () => {
+        undoSquEasterEgg();
+        generateSettingsPanel();
+    });
 }
 
 sendThemeChangeEvent();
@@ -343,8 +363,11 @@ let isKeyPressed = false;
 let keySequence = [];
 const easterCode = ['m', 'i', 'k', 'u'];
 const mkwEasterCode = ['m', 'k', 'w'];
+const squEasterCode = ['s', 'q', 'u'];
 
 let mkwEasterEggToggled = false;
+let mikuEasterEggApplied = false;
+let squEasterEggActive = false;
 let themeShortcutDisabled = false;
 let setttingsShortcutDisabled = false;
 
@@ -361,11 +384,14 @@ document.addEventListener('keydown', (event) => {
         keySequence.shift();
     }
 
-    if (keySequence.join('') == easterCode.join('')) {
+    if (keySequence.slice(-easterCode.length).join('') === easterCode.join('')) {
         mikuEasterEgg();
         keySequence = [];
-    } else if (keySequence.join('') == mkwEasterCode.join('')) {
+    } else if (keySequence.slice(-mkwEasterCode.length).join('') === mkwEasterCode.join('')) {
         mkwEasterEgg();
+        keySequence = [];
+    } else if (keySequence.slice(-squEasterCode.length).join('') === squEasterCode.join('')) {
+        squEasterEgg();
         keySequence = [];
     }
 
@@ -389,6 +415,9 @@ document.addEventListener('keyup', () => {
 });
 
 function mikuEasterEgg() {
+    if (mikuEasterEggApplied) return;
+    mikuEasterEggApplied = true;
+
     const style = document.createElement('style');
 
     style.textContent = `
@@ -450,6 +479,109 @@ function mkwEasterEgg() {
     document.head.appendChild(style);
 }
 
+const SQU_STORAGE_KEYS = ['squEasterEgg', 'squ'];
+const SQU_STYLE_TEXT = `* { border-radius: 0 !important; }
+.news-card-image,
+.small-card .img-wrapper,
+.video-thumb-wrapper {
+    clip-path: inset(0) !important;
+}`;
+
+squEasterEggActive = isSquStoredActive();
+
+function isSquStoredActive() {
+    return SQU_STORAGE_KEYS.some((k) => {
+        try { return localStorage.getItem(k) === '1' || localStorage.getItem(k) === 'true'; } catch (e) { return false; }
+    });
+}
+
+function setSquStored(active) {
+    SQU_STORAGE_KEYS.forEach((k) => {
+        try {
+            if (active) localStorage.setItem(k, '1');
+            else localStorage.removeItem(k);
+        } catch (e) { }
+    });
+}
+
+function getSquStyleRoots() {
+    const roots = [document];
+    document.querySelectorAll('*').forEach((el) => {
+        if (el.shadowRoot) roots.push(el.shadowRoot);
+    });
+    return roots;
+}
+
+function injectSquStyles() {
+    getSquStyleRoots().forEach((root) => {
+        if (root.querySelector && root.querySelector('style[data-squ-easter-egg]')) return;
+        const style = document.createElement('style');
+        style.setAttribute('data-squ-easter-egg', '');
+        style.textContent = SQU_STYLE_TEXT;
+        const target = root.head ? root.head : root;
+        target.appendChild(style);
+    });
+}
+
+function removeSquStyles() {
+    getSquStyleRoots().forEach((root) => {
+        if (!root.querySelectorAll) return;
+        root.querySelectorAll('style[data-squ-easter-egg]').forEach((s) => s.remove());
+    });
+}
+
+function applySquEasterEgg() {
+    if (squEasterEggActive) return;
+    squEasterEggActive = true;
+    setSquStored(true);
+    injectSquStyles();
+    document.dispatchEvent(new CustomEvent('squEasterEggChange'));
+}
+
+function undoSquEasterEgg() {
+    if (!squEasterEggActive) return;
+    squEasterEggActive = false;
+    setSquStored(false);
+    removeSquStyles();
+    document.dispatchEvent(new CustomEvent('squEasterEggChange'));
+}
+
+function squEasterEgg() {
+    if (squEasterEggActive) {
+        undoSquEasterEgg();
+    } else {
+        applySquEasterEgg();
+    }
+}
+
+function applySquOnLoad() {
+    if (isSquStoredActive()) {
+        squEasterEggActive = false;
+        applySquEasterEgg();
+    }
+    // Ensure shadow roots that upgrade later get the style.
+    injectIntoShadowWhenReady();
+}
+
+function injectIntoShadowWhenReady() {
+    // Wait for custom elements to upgrade
+    if (window.customElements) {
+        ['umkl-navbar', 'umkl-footer'].forEach((name) => {
+            if (customElements.get(name)) return;
+            customElements.whenDefined(name).then(() => {
+                if (squEasterEggActive) injectSquStyles();
+            }).catch(() => { });
+        });
+    }
+    // Also observe for shadow roots added later
+    const observer = new MutationObserver(() => {
+        if (squEasterEggActive) injectSquStyles();
+    });
+    if (document.body) {
+        observer.observe(document.body, { childList: true, subtree: true });
+    }
+}
+
 function localizeBlogDates() {
     const locale = localStorage.getItem("locale") || "en-GB";
     const dateRegex = /^(\s*)(\d{2})\/(\d{2})\/(\d{4})/;
@@ -503,4 +635,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     checkEasterEggs();
     // checkIfOutsideUK();
     localizeBlogDates();
+    applySquOnLoad();
 });
