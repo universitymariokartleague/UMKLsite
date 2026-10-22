@@ -41,7 +41,6 @@ let startTime;
 const testMatchesCheckbox = document.getElementById("testMatches");
 const trackSortWrapper = document.getElementById("track-sort");
 const trackModal = document.getElementById("trackModal");
-const trackModalCard = document.getElementById("trackModalCard");
 const trackModalClose = document.getElementById("trackModalClose");
 const trackModalTitle = document.getElementById("trackModalTitle");
 const trackModalIcon = document.getElementById("trackModalIcon");
@@ -259,7 +258,7 @@ function buildTrackModalBody(track, stats) {
 
 function openTrackModal(track) {
     const stats = trackStatsByTrack[track];
-    if (!stats) return;
+    if (!stats || trackModal.open) return;
 
     lastFocusedTrackItem = document.activeElement?.closest?.(".track-item") ?? null;
 
@@ -268,27 +267,26 @@ function openTrackModal(track) {
     trackModalIcon.alt = `The icon for ${track}`;
     trackModalBody.innerHTML = buildTrackModalBody(track, stats);
 
-    trackModal.classList.remove("hidden", "closing");
-    trackModalCard.classList.remove("closing");
+    trackModal.showModal();
     trackModalClose.focus();
 }
 
 function closeTrackModal() {
-    if (trackModal.classList.contains("hidden") || trackModal.classList.contains("closing")) return;
+    if (!trackModal.open || trackModal.classList.contains("closing")) return;
 
     trackModal.classList.add("closing");
-    trackModalCard.classList.add("closing");
 
-    const onAnimationEnd = () => {
-        trackModal.classList.add("hidden");
+    const onAnimationEnd = (e) => {
+        if (e.target !== trackModal || e.pseudoElement) return;
+
         trackModal.classList.remove("closing");
-        trackModalCard.classList.remove("closing");
         trackModal.removeEventListener("animationend", onAnimationEnd);
+        trackModal.close();
         lastFocusedTrackItem?.focus();
         lastFocusedTrackItem = null;
     };
 
-    trackModal.addEventListener("animationend", onAnimationEnd, { once: true });
+    trackModal.addEventListener("animationend", onAnimationEnd);
 }
 
 function findTrackName(searchKey) {
@@ -306,31 +304,14 @@ JSTeamBox.addEventListener("click", e => {
 trackModalClose.addEventListener("click", closeTrackModal);
 
 trackModal.addEventListener("click", e => {
-    if (e.target === trackModal) closeTrackModal();
+    const rect = trackModal.getBoundingClientRect();
+    const clickedInside = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+    if (!clickedInside) closeTrackModal();
 });
 
-document.addEventListener("keydown", e => {
-    if (e.key !== "Escape") return;
-    if (trackModal.classList.contains("hidden")) return;
+trackModal.addEventListener("cancel", e => {
+    e.preventDefault();
     closeTrackModal();
-});
-
-trackModal.addEventListener("keydown", e => {
-    if (e.key !== "Tab") return;
-
-    const focusable = trackModalCard.querySelectorAll("a[href], button:not([disabled])");
-    if (focusable.length === 0) return;
-
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-
-    if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-    }
 });
 
 function applyTrackSearch() {

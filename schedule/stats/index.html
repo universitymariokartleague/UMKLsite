@@ -94,26 +94,23 @@
             <button id="track-clear-search">Clear search</button>
         </div>
 
-        <div id="trackModal" class="modal-overlay hidden" role="dialog" aria-modal="true"
-            aria-labelledby="trackModalTitle">
-            <div id="trackModalCard" class="modal-card track-modal-card">
-                <div class="settings-header track-modal-header">
-                    <img id="trackModalIcon" class="track-modal-icon" alt="" loading="lazy">
-                    <h3 id="trackModalTitle" class="track-modal-title"></h3>
-                    <button type="button" id="trackModalClose" class="settings-close-btn"
-                        aria-label="Close track details">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
-                            role="img">
-                            <title>Close track details</title>
-                            <path fill="currentColor"
-                                d="M13.48 12 19 17.52 17.52 19 12 13.48 6.48 19 5 17.52 10.52 12 5 6.48 6.48 5 12 10.52 17.52 5 19 6.48z"></path>
-                        </svg>
-                    </button>
-                </div>
-
-                <div class="track-modal-body" id="trackModalBody"></div>
+        <dialog id="trackModal" class="track-modal-dialog" aria-labelledby="trackModalTitle">
+            <div class="settings-header track-modal-header">
+                <img id="trackModalIcon" class="track-modal-icon" alt="" loading="lazy">
+                <h3 id="trackModalTitle" class="track-modal-title"></h3>
+                <button type="button" id="trackModalClose" class="settings-close-btn"
+                    aria-label="Close track details">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+                        role="img">
+                        <title>Close track details</title>
+                        <path fill="currentColor"
+                            d="M13.48 12 19 17.52 17.52 19 12 13.48 6.48 19 5 17.52 10.52 12 5 6.48 6.48 5 12 10.52 17.52 5 19 6.48z"></path>
+                    </svg>
+                </button>
             </div>
-        </div>
+
+            <div class="track-modal-body" id="trackModalBody"></div>
+        </dialog>
     </main>
 
     <umkl-footer></umkl-footer>

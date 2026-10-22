@@ -272,7 +272,7 @@ h1 a,
 h2 a,
 h3 a,
 h4 a {
-    color: #fff;
+    color: var(--text-color) !important;
     text-decoration: none;
 }
 
@@ -287,6 +287,7 @@ h1 a:hover,
 h2 a:hover,
 h3 a:hover,
 h4 a:hover {
+    color: var(--text-color) !important;
     text-decoration: underline;
 }
 
@@ -650,7 +651,7 @@ hr {
 }
 
 blockquote {
-    --callout-accent: var(--brand-primary);
+    --callout-accent: var(--text-color);
 
     position: relative;
     overflow: hidden;
@@ -677,7 +678,7 @@ blockquote.success {
 }
 
 blockquote.info {
-    --callout-accent: var(--brand-secondary);
+    --callout-accent: #3b82f6;
 }
 
 blockquote.warning {

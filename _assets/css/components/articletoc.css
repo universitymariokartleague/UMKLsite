@@ -7,7 +7,7 @@
     scrollbar-width: thin;
 }
 
-.article-body :is(h2, h3, h4, section)[id] {
+.article-body :is(h2, h3, h4, section, .rule-section, .sub-rule-section)[id] {
     scroll-margin-top: calc(var(--navbar-height) + 35px);
 }
 
@@ -60,7 +60,7 @@
 }
 
 @media screen and (max-width: 900px) {
-    .article-body :is(h2, h3, h4, section)[id] {
+    .article-body :is(h2, h3, h4, section, .rule-section, .sub-rule-section)[id] {
         scroll-margin-top: calc(var(--navbar-height) + 75px);
     }
 
