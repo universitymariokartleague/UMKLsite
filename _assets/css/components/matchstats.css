@@ -177,7 +177,7 @@ dialog.track-modal-dialog.closing::backdrop {
 }
 
 .track-modal-icon {
-    width: 56px;
+    width: 96px;
     aspect-ratio: 45 / 31;
     object-fit: contain;
     flex-shrink: 0;
