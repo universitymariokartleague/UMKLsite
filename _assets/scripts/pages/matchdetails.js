@@ -140,7 +140,7 @@ function renderResults(width) {
         const colorClass = diff > 0 ? "pos" : diff < 0 ? "neg" : "neutral";
         return `
         <div class="track-item">
-            <a href="/matches/stats/" title="Click to open the match stats page">
+            <a href="/schedule/stats/" title="Click to open the match stats page">
                 <img class="track-icon" style="aspect-ratio:45/31" onload="this.style.opacity=1" loading="lazy" src="${getTrackIconPath(track)}" alt="The icon for ${track}" onerror="this.onerror=null; this.src='/_assets/media/courses/mk8dxicons/.unknown.avif';">
                 <span class="track-label">#${i + 1}<br><b>${track}</b><br>Difference: <span class="diff-${colorClass}">${diff > 0 ? "+" : ""}${diff}</span></span>
             </a>

@@ -108,6 +108,10 @@
     }
 }
 
+.track-item a {
+    color: var(--text-color) !important;
+}
+
 .track-icon {
     max-width: 100%;
     aspect-ratio: 45 / 31;
