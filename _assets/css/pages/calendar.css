@@ -312,6 +312,12 @@
     z-index: 6;
 }
 
+@media screen and (max-width: 1200px) {
+    .team-color-bar {
+        height: 1px;
+    }
+}
+
 @media screen and (max-width: 900px) {
     .arrow-keys-hint {
         display: none;
