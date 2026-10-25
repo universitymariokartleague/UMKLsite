@@ -648,7 +648,7 @@ function createMatchHTML(entry, index, date, locale, is12Hour, liveResults) {
         team2.youtubeLink = entry.ytLinks[1];
     }
 
-    const matchDetailsLink = resultsHTML && entry.detailedResults ? generate6v6ScoreCalculatorLink(entry, date) : '';
+    const matchDetailsLink = resultsHTML && Array.isArray(entry.detailedResults) && entry.detailedResults.length ? generate6v6ScoreCalculatorLink(entry, date) : '';
 
     if (isLive && !entry.endTime) eventliveIndicatorToUpdate = entry.eventID;
 

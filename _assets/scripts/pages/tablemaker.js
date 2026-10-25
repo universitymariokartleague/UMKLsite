@@ -208,7 +208,7 @@ function getPlaceholderScores(event, teamIndex, playerCount) {
     const [, points, penalty] = event.results[teamIndex];
     const rawTotal = points + penalty;
     const scores = Array(playerCount).fill(0);
-    const races = event.detailedResults || [];
+    const races = Array.isArray(event.detailedResults) ? event.detailedResults : [];
 
     races.forEach(race => {
         [...(race[teamIndex + 1] || [])].sort((a, b) => a - b).slice(0, playerCount)

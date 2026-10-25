@@ -206,7 +206,7 @@ async function generateMatchStatsBox(showError) {
     for (const date in matchData) {
         const matches = matchData[date];
         for (const match of matches) {
-            if (!match.detailedResults) continue;
+            if (!Array.isArray(match.detailedResults)) continue;
             if (!testMatchesCheckbox.checked && match.testMatch === true) continue;
 
             const teams = match.teamsInvolved || [];

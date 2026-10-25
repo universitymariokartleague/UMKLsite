@@ -16,7 +16,7 @@ export function trackRecord(data, teamName, opts = {}) {
 
     for (const matches of Object.values(data)) {
         for (const match of matches) {
-            if (!match.detailedResults) continue;
+            if (!Array.isArray(match.detailedResults)) continue;
             if (!includeTests && match.testMatch) continue;
 
             const seat = match.teamsInvolved.indexOf(teamName);

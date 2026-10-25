@@ -3,7 +3,7 @@ export { generate6v6ScoreCalculatorLink };
 function generate6v6ScoreCalculatorLink(entry, date) {
     const url = new URL("/tools/matchdetails/", window.location.origin);
 
-    if (!entry.detailedResults) return '';
+    if (!Array.isArray(entry.detailedResults) || entry.detailedResults.length === 0) return '';
 
     const positionsString = entry.detailedResults
         // only the first team's finishes are stored - the opponent's are the remaining positions
