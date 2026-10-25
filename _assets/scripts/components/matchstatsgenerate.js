@@ -4,6 +4,7 @@
 
 import { getMatchData } from '/_assets/scripts/utils/matchdata.js';
 import { createDebugLogger } from '/_assets/scripts/utils/debuglogger.js';
+import { TRACKS, resolveTrackName } from '/_assets/scripts/utils/tracknames.js';
 
 const debugLog = createDebugLogger('matchstatsgenerate.js', '#ff52dc', '#ffa3ed');
 
@@ -46,10 +47,12 @@ const trackModalTitle = document.getElementById("trackModalTitle");
 const trackModalIcon = document.getElementById("trackModalIcon");
 const trackModalBody = document.getElementById("trackModalBody");
 let currentTrackSort = "mostPlayed";
+let previousTrackSort = null;
 const teamFilterSelect = document.getElementById("team-filter");
 const trackSearchInput = document.getElementById("track-search");
 const trackSearchClear = document.getElementById("track-search-clear");
 const trackNoResults = document.getElementById("track-no-results");
+const unplayedTracksToggle = document.getElementById("unplayedTracks");
 
 function renderStatsSkeleton() {
     const skeletonItem = `
@@ -120,29 +123,72 @@ function updateTeamParam() {
     window.history.replaceState({}, "", url);
 }
 
-function buildTrackCountDiv(data, matchesCounted) {
-    const sorter = trackSorters[currentTrackSort] || trackSorters.mostPlayed;
-    const sorted = Object.entries(data).sort(sorter);
+function getUnplayedTracks() {
+    const playedTracks = new Set(Object.keys(trackStatsByTrack).map(track => track.toLowerCase()));
+    const unplayedTracks = [];
+    const unplayedTrackKeys = new Set();
 
-    const resultString = sorted
-        .map(([track, stats]) => `
-            <button type="button" class="track-item" data-track="${escapeHTML(track.toLowerCase())}">
-                <img class="track-icon" onload="this.style.opacity=1" loading="lazy" src="${getTrackIconUrl(track)}" alt="">
-                <span class="track-label">
-                    <b class="track-name">${escapeHTML(track)}</b><br>
-                    Played ${stats.count} ${stats.count === 1 ? "time" : "times"}
-                </span>
-            </button>
-        `)
-        .join("");
+    for (const entry of TRACKS.DX || []) {
+        const names = typeof entry === "object" ? [entry.us, entry.pal].filter(Boolean) : [entry];
+        for (const name of names) {
+            const resolvedName = resolveTrackName(name);
+            const key = name.toLowerCase();
+            const resolvedKey = resolvedName.toLowerCase();
 
-    const length = Object.keys(data).length;
-    const selectedTeam = teamFilterSelect.value;
+            const isPlayed = playedTracks.has(key) || playedTracks.has(resolvedKey);
+            const alreadyListed = unplayedTrackKeys.has(key) || unplayedTrackKeys.has(resolvedKey);
+            if (isPlayed || alreadyListed) continue;
+
+            unplayedTrackKeys.add(key);
+            unplayedTrackKeys.add(resolvedKey);
+            unplayedTracks.push(resolvedName);
+        }
+    }
+
+    return unplayedTracks.sort((a, b) => a.localeCompare(b));
+}
+
+function buildTrackItemHTML(track, stats) {
+    const playedLabel = stats
+        ? `Played ${stats.count} ${stats.count === 1 ? "time" : "times"}`
+        : "Not played yet";
 
     return `
-        <span>${length}/96 total tracks played across ${matchesCounted} ${matchesCounted === 1 ? "match" : "matches"}
+        <button type="button" class="track-item" data-track="${escapeHTML(track.toLowerCase())}">
+            <img class="track-icon" onload="this.style.opacity=1" loading="lazy" src="${getTrackIconUrl(track)}" alt="">
+            <span class="track-label">
+                <b class="track-name">${escapeHTML(track)}</b><br>
+                ${playedLabel}
+            </span>
+        </button>
+    `;
+}
+
+function buildTrackCountDiv(data, matchesCounted, unplayedTracks, showUnplayed) {
+    let entries;
+    if (showUnplayed) {
+        entries = unplayedTracks
+            .map(track => [track, null])
+            .sort((a, b) => a[0].localeCompare(b[0]));
+    } else {
+        entries = Object.entries(data).sort(trackSorters[currentTrackSort] || trackSorters.mostPlayed);
+    }
+
+    const resultString = entries
+        .map(([track, stats]) => buildTrackItemHTML(track, stats))
+        .join("");
+
+    const length = entries.length;
+    const selectedTeam = teamFilterSelect.value;
+
+    const headerText = showUnplayed
+        ? `<span>${length} ${length === 1 ? "track hasn't" : "tracks haven't"} been played yet across ${matchesCounted} ${matchesCounted === 1 ? "match" : "matches"}</span>`
+        : `<span>${length} of 96 total tracks played across ${matchesCounted} ${matchesCounted === 1 ? "match" : "matches"}
         ${selectedTeam ? `<span class="settings-extra-info">(involving ${escapeHTML(selectedTeam)})</span>` : ''}
-        ${testMatchesCheckbox.checked ? '<span class="settings-extra-info">(including test matches)</span>' : ''}</span>
+        ${testMatchesCheckbox.checked ? '<span class="settings-extra-info">(including test matches)</span>' : ''}</span>`;
+
+    return `
+        ${headerText}
         <div class="track-frequency">
             ${resultString}
         </div>
@@ -183,7 +229,8 @@ async function generateMatchStatsBox(showError) {
                         count: 0,
                         totalDiff: 0,
                         matchDates: [],
-                        teamCounts: {}
+                        teamCounts: {},
+                        teamDiffs: {}
                     };
                 }
 
@@ -199,6 +246,12 @@ async function generateMatchStatsBox(showError) {
                         trackStats[track].teamCounts[team] = 0;
                     }
                     trackStats[track].teamCounts[team]++;
+
+                    if (!trackStats[track].teamDiffs[team]) {
+                        trackStats[track].teamDiffs[team] = { count: 0, totalDiff: 0 };
+                    }
+                    trackStats[track].teamDiffs[team].count++;
+                    trackStats[track].teamDiffs[team].totalDiff += difference;
                 });
             }
         }
@@ -206,7 +259,9 @@ async function generateMatchStatsBox(showError) {
 
     trackStatsByTrack = trackStats;
 
-    const extraFields = buildTrackCountDiv(trackStats, matchesCounted);
+    const showUnplayed = unplayedTracksToggle.checked;
+    const unplayedTracks = showUnplayed ? getUnplayedTracks() : [];
+    const extraFields = buildTrackCountDiv(trackStats, matchesCounted, unplayedTracks, showUnplayed);
 
     let tempTeamBox = teamBoxFormatHTML
         .replace("{{trackCounts}}", extraFields);
@@ -226,7 +281,10 @@ function buildTrackModalBody(track, stats) {
         .map(([team, count]) => {
             const color = getTeamColor(team);
             const dot = color ? `<span class="team-color-dot" style="background-color:${color}"></span>` : "";
-            return `<li>${dot}<span class="track-modal-team">${escapeHTML(team)}</span><span class="track-modal-count">${count}</span></li>`;
+            const teamStats = stats.teamDiffs?.[team];
+            const avgDiff = teamStats ? (teamStats.totalDiff / teamStats.count).toFixed(1) : null;
+            const avgDiffText = avgDiff !== null ? ` <span class="track-modal-avg">(avg ${avgDiff})</span>` : "";
+            return `<li>${dot}<span class="track-modal-team">${escapeHTML(team)}${avgDiffText}</span><span class="track-modal-count">${count}</span></li>`;
         })
         .join("");
 
@@ -456,18 +514,38 @@ window.addEventListener("popstate", async function () {
     await generateMatchStatsBox();
 });
 
+function setTrackSortUI(value) {
+    trackSortWrapper.querySelectorAll("button").forEach(button => {
+        button.classList.toggle("bubble-link-accent", button.dataset.value === value);
+        button.classList.toggle("no-color-link", button.dataset.value !== value);
+    });
+}
+
 trackSortWrapper.querySelectorAll("button").forEach(button => {
     button.addEventListener("click", async function () {
+        if (unplayedTracksToggle.checked) return; // unplayed tracks are always listed alphabetically
+
         if (currentTrackSort === button.dataset.value) return;
         currentTrackSort = button.dataset.value;
 
-        trackSortWrapper.querySelectorAll("button").forEach(b => {
-            b.classList.toggle("bubble-link-accent", b === button);
-            b.classList.toggle("no-color-link", b !== button);
-        });
+        setTrackSortUI(button.dataset.value);
 
         await generateMatchStatsBox();
     });
+});
+
+unplayedTracksToggle.addEventListener("change", async function () {
+    if (unplayedTracksToggle.checked) {
+        if (currentTrackSort !== "alphabetical") previousTrackSort = currentTrackSort;
+        currentTrackSort = "alphabetical";
+        setTrackSortUI("alphabetical");
+    } else if (previousTrackSort) {
+        currentTrackSort = previousTrackSort;
+        setTrackSortUI(previousTrackSort);
+        previousTrackSort = null;
+    }
+
+    await generateMatchStatsBox();
 });
 
 trackSearchInput.addEventListener("input", () => applyTrackSearch());

@@ -69,7 +69,7 @@
 .track-frequency {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 160px));
-    gap: 12px;
+    gap: 16px;
     align-items: stretch;
 }
 
@@ -122,7 +122,7 @@
 }
 
 .track-label {
-    padding-top: 8px;
+    margin-top: 8px;
     font-size: 0.9rem;
     line-height: 1.4;
 }
@@ -272,6 +272,11 @@ dialog.track-modal-dialog.closing::backdrop {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.track-modal-avg {
+    font-weight: 600;
+    opacity: 0.75;
 }
 
 .track-modal-count {
