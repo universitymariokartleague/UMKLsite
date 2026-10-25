@@ -241,7 +241,7 @@ async function generateMatchStatsBox(showError) {
                     trackStats[track].matchDates.push(date);
                 }
 
-                teams.forEach(team => {
+                teams.forEach((team, index) => {
                     if (!trackStats[track].teamCounts[team]) {
                         trackStats[track].teamCounts[team] = 0;
                     }
@@ -251,7 +251,7 @@ async function generateMatchStatsBox(showError) {
                         trackStats[track].teamDiffs[team] = { count: 0, totalDiff: 0 };
                     }
                     trackStats[track].teamDiffs[team].count++;
-                    trackStats[track].teamDiffs[team].totalDiff += difference;
+                    trackStats[track].teamDiffs[team].totalDiff += index === 0 ? score1 - score2 : score2 - score1;
                 });
             }
         }
