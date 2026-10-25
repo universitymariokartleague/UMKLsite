@@ -282,8 +282,8 @@ function buildTrackModalBody(track, stats) {
             const color = getTeamColor(team);
             const dot = color ? `<span class="team-color-dot" style="background-color:${color}"></span>` : "";
             const teamStats = stats.teamDiffs?.[team];
-            const avgDiff = teamStats ? (teamStats.totalDiff / teamStats.count).toFixed(1) : null;
-            const avgDiffText = avgDiff !== null ? ` <span class="track-modal-avg">(avg ${avgDiff})</span>` : "";
+            const avgDiffValue = teamStats ? teamStats.totalDiff / teamStats.count : null;
+            const avgDiffText = avgDiffValue !== null ? ` <span class="track-modal-avg">(avg ${avgDiffValue > 0 ? "+" : ""}${avgDiffValue.toFixed(1)})</span>` : "";
             return `<li>${dot}<span class="track-modal-team">${escapeHTML(team)}${avgDiffText}</span><span class="track-modal-count">${count}</span></li>`;
         })
         .join("");
