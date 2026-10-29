@@ -7,6 +7,9 @@ export { halloweenEasterEgg, winterEasterEgg, newYearCountDown, newYearFireworks
 function injectMusic(path) {
     if (document.getElementById('audio')) return;
 
+    // The admin and profile panels are functional/administrative pages - keep the BGM player off them
+    if (/^\/(admin|profile)(\/|$)/.test(window.location.pathname)) return;
+
     const audioContainer = document.createElement('div');
     audioContainer.innerHTML = `
         <audio id="audio" src="${path}" preload="auto"></audio>
