@@ -495,8 +495,16 @@
 
 .article-upload {
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+}
+
+.article-upload-copy {
+    flex: 1 1 22rem;
+    display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 6px;
     align-items: flex-start;
 }
 
@@ -517,6 +525,190 @@
     align-items: center;
 }
 
+.article-upload>#article-upload-status {
+    flex: 1 1 100%;
+}
+
+/* --- Article cards, matching the public news listing --- */
+
+.article-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 20px;
+}
+
+.article-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--translucent-color);
+    border-radius: var(--border-radius);
+    background-color: var(--bg-color);
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.article-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--opaque-color);
+    box-shadow: 0 12px 26px color-mix(in oklch, var(--text-color) 10%, transparent);
+}
+
+.article-card:focus-within {
+    border-color: var(--accent-color);
+}
+
+.article-card-media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background-color: var(--box-area-bg-color);
+}
+
+.article-card-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    background-color: var(--box-area-bg-color);
+    opacity: 0.3;
+}
+
+.article-card-placeholder svg {
+    width: 42px;
+    height: 42px;
+}
+
+.article-card-media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.3s ease;
+}
+
+.article-card-media img.is-loaded {
+    opacity: 1;
+}
+
+.article-card-media img.is-broken {
+    display: none;
+}
+
+.article-card:hover .article-card-media img {
+    transform: scale(1.03);
+}
+
+.article-card-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px 16px 16px;
+}
+
+.article-card-eyebrow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    opacity: 0.65;
+}
+
+.article-card-author:not(:first-child)::before {
+    content: "·";
+    margin-right: 8px;
+    opacity: 0.7;
+}
+
+.article-card-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.3;
+    text-wrap: balance;
+}
+
+.article-card-title a,
+.article-card-title a:link,
+.article-card-title a:visited {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+/* Stretch the title link over the whole card so it all opens the article,
+   while the action buttons stay clickable above it. */
+.article-card-title a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.article-card:hover .article-card-title a {
+    text-decoration: underline;
+}
+
+.article-card-title a:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.article-card-desc {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    opacity: 0.7;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.article-card-foot {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid var(--translucent-color);
+}
+
+.article-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    min-width: 0;
+}
+
+.article-card-tags .admin-pill {
+    padding: 2px 8px;
+    font-size: 0.68rem;
+}
+
+.article-card-delete {
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+    opacity: 0.6;
+    transition: opacity 0.15s ease;
+}
+
+.article-card:hover .article-card-delete,
+.article-card:focus-within .article-card-delete {
+    opacity: 1;
+}
+
 .article-draft {
     display: flex;
     flex-wrap: wrap;
@@ -525,10 +717,17 @@
 }
 
 .article-draft-image {
-    width: 180px;
-    height: auto;
+    width: 220px;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
     border: 1px solid var(--translucent-color);
     border-radius: var(--border-radius);
+}
+
+.article-draft-image.article-card-placeholder {
+    position: relative;
+    inset: auto;
+    flex-shrink: 0;
 }
 
 .article-draft-body {
@@ -574,6 +773,20 @@
 
     .admin-table tbody tr {
         transition: none;
+    }
+
+    .article-card,
+    .article-card-media img,
+    .article-card-delete {
+        transition: none;
+    }
+
+    .article-card:hover {
+        transform: none;
+    }
+
+    .article-card:hover .article-card-media img {
+        transform: none;
     }
 }
 

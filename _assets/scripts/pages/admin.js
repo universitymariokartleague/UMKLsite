@@ -1,5 +1,5 @@
 import {
-    ADMIN_API, accessNotice, adminFetch, emblem, escapeHtml, login, logout,
+    ADMIN_API, accessNotice, adminFetch, emblem, escapeHtml, login, logout, plural,
     setMessage, statusLabel, statusTone, whoAmI
 } from '/_assets/scripts/utils/adminapi.js';
 import { buildPost, DRAFT_STORAGE_KEY, ISO_DATE, slugify } from '/_assets/scripts/utils/umklpost.js';
@@ -509,13 +509,23 @@ function draftPreview(draft) {
 
     if (!title) return '';
 
-    return `<div class="admin-panel">
+    return `<div class="admin-panel article-draft-panel">
         <div class="admin-panel-head"><h2>Draft from the Article Builder</h2>
+            <span class="admin-pill accent">Draft</span>
             <div class="admin-bar-spacer"></div>
             <span class="admin-muted">saved ${escapeHtml(saved)}</span></div>
 
         <div class="article-draft">
-            ${draft.mainImageUrl ? `<img class="article-draft-image" src="${draft.mainImageUrl}" alt="">` : ''}
+            ${draft.mainImageUrl
+                ? `<img class="article-draft-image" src="${escapeHtml(draft.mainImageUrl)}" alt="">`
+                : `<div class="article-draft-image article-card-placeholder" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 5h13v14H4z"></path>
+                        <path d="M17 8h3v9a2 2 0 0 1-2 2H4"></path>
+                        <path d="M7 8h7M7 11h7M7 14h4"></path>
+                    </svg>
+                </div>`}
             <div class="article-draft-body">
                 <h3>${escapeHtml(title)}</h3>
                 ${draft.subtitle ? `<p class="admin-muted">${escapeHtml(draft.subtitle)}</p>` : ''}
@@ -536,6 +546,63 @@ function draftPreview(draft) {
     </div>`;
 }
 
+/** "2026-10-07" -> "7 Oct 2026", matching the public news listing. */
+function formatArticleDate(value) {
+    if (!value) return '';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+    const locale = localStorage.getItem('locale') || 'en-GB';
+    return date.toLocaleDateString(locale, { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function articleImage(article) {
+    if (article.image_url) return article.image_url;
+    if (!article.image || !article.slug) return '';
+    if (/^https?:\/\//i.test(article.image)) return article.image;
+    return `https://api.umkl.co.uk/articles/${encodeURIComponent(article.slug)}/images/${encodeURIComponent(article.image)}`;
+}
+
+function articleCard(article) {
+    const tags = article.tags || [];
+    const image = articleImage(article);
+    const alt = article.image_alt || '';
+    const date = formatArticleDate(article.published_date);
+    const author = (article.author || '').trim();
+
+    return `<article class="article-card">
+        <div class="article-card-media">
+            <span class="article-card-placeholder" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 5h13v14H4z"></path>
+                    <path d="M17 8h3v9a2 2 0 0 1-2 2H4"></path>
+                    <path d="M7 8h7M7 11h7M7 14h4"></path>
+                </svg>
+            </span>
+            ${image ? `<img loading="lazy" src="${escapeHtml(image)}" alt="${escapeHtml(alt)}"
+                onload="this.classList.add('is-loaded')">` : ''}
+        </div>
+        <div class="article-card-body">
+            <div class="article-card-eyebrow">
+                <span class="article-card-date">${escapeHtml(date)}</span>
+                ${author ? `<span class="article-card-author">${escapeHtml(author)}</span>` : ''}
+            </div>
+            <h3 class="article-card-title">
+                <a href="${escapeHtml(article.link)}" target="_blank"
+                    rel="noopener noreferrer">${escapeHtml(article.title)}</a>
+            </h3>
+            ${article.description ? `<p class="article-card-desc">${escapeHtml(article.description)}</p>` : ''}
+            <div class="article-card-foot">
+                <div class="article-card-tags">${tags.map(tag =>
+                    `<span class="admin-pill">${escapeHtml(tag)}</span>`).join('')}</div>
+                <button class="admin-btn small danger article-card-delete"
+                    data-delete="${escapeHtml(article.slug)}"
+                    data-title="${escapeHtml(article.title)}">Delete</button>
+            </div>
+        </div>
+    </article>`;
+}
+
 async function renderArticles() {
     showFilters(null, null);
     const [info, draft] = [await adminFetch('/articles', { query: { page: state.page, per_page: 50 } }), readBuilderDraft()];
@@ -543,14 +610,16 @@ async function renderArticles() {
     els.body.innerHTML = (draft ? draftPreview(draft) : '') + `<div class="admin-panel">
         <div class="admin-panel-head"><h2>Articles</h2>
             <div class="admin-bar-spacer"></div>
-            <span class="admin-muted">${info.total} published</span></div>
+            <span class="admin-muted">${plural(info.total, 'published article')}</span></div>
 
         <div class="article-upload">
-            <h3>Publish an article</h3>
-            <p class="admin-muted">Write it in the <a class="no-underline-link"
-                    href="/tools/articlebuilder/" target="_blank" rel="noopener noreferrer">Article
-                Builder</a>, then publish the draft from here, or export the
-                <code>.umklpost</code> and upload that.</p>
+            <div class="article-upload-copy">
+                <h3>Publish an article</h3>
+                <p class="admin-muted">Write it in the <a class="no-underline-link"
+                        href="/tools/articlebuilder/" target="_blank" rel="noopener noreferrer">Article
+                    Builder</a>, then publish the draft from here, or export the
+                    <code>.umklpost</code> and upload that.</p>
+            </div>
             <div class="article-upload-row">
                 <button class="admin-btn" id="article-upload-choose">Choose file</button>
                 <input type="file" id="article-upload-file" accept=".umklpost,.zip" hidden>
@@ -561,26 +630,19 @@ async function renderArticles() {
     </div>
 
     <div class="admin-panel">
-        <div class="admin-panel-head"><h2>Published</h2></div>
-        ${info.articles.length ? `<div class="table-scroll-wrapper">
-            <table class="admin-table">
-                <thead><tr><th>Date</th><th>Title</th><th>Slug</th>
-                    <th class="admin-hide-small">Tags</th><th></th></tr></thead>
-                <tbody>${info.articles.map(article => `<tr>
-                    <td class="admin-nowrap">${escapeHtml(article.published_date)}</td>
-                    <td><a class="no-underline-link" href="${escapeHtml(article.link)}"
-                            target="_blank" rel="noopener noreferrer">${escapeHtml(article.title)}</a></td>
-                    <td><code>${escapeHtml(article.slug)}</code></td>
-                    <td class="admin-hide-small">${(article.tags || []).map(tag =>
-        `<span class="admin-pill">${escapeHtml(tag)}</span>`).join(' ')}</td>
-                    <td class="admin-num"><button class="admin-btn small danger"
-                        data-delete="${escapeHtml(article.slug)}"
-                        data-title="${escapeHtml(article.title)}">Delete</button></td>
-                </tr>`).join('')}</tbody>
-            </table>
-        </div>` : emptyTable('No articles published yet.')}
+        <div class="admin-panel-head"><h2>Published</h2>
+            <div class="admin-bar-spacer"></div>
+            <span class="admin-muted">Click a card to open the article</span></div>
+        ${info.articles.length
+            ? `<div class="article-grid">${info.articles.map(articleCard).join('')}</div>`
+            : emptyTable('No articles published yet.')}
         ${pager(info)}
     </div>`;
+
+    // Cached images can finish before the inline onload is parsed.
+    els.body.querySelectorAll('.article-card-media img').forEach(img => {
+        if (img.complete) img.classList.add('is-loaded');
+    });
 
     const fileInput = document.getElementById('article-upload-file');
     const uploadStatus = document.getElementById('article-upload-status');
