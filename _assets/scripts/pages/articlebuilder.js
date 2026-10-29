@@ -535,6 +535,90 @@ urlModalInput.addEventListener('keydown', (e) => {
     }
 });
 
+// Welcome / orientation modal - shows the user around whenever the builder is opened
+const introModal = document.getElementById('introModal');
+const introModalCard = introModal?.querySelector('.modal-card');
+const introCloseBtn = document.getElementById('introCloseBtn');
+const introDontShow = document.getElementById('introDontShow');
+const INTRO_DISMISSED_KEY = 'umkl_intro_modal_dismissed';
+
+// Strictly keyboard-driven users shouldn't tab behind the welcome modal
+function trapIntroFocus(e) {
+    if (e.key !== 'Tab' || introModal.classList.contains('hidden')) return;
+    const focusables = [introCloseBtn];
+    if (focusables.length === 0) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && (document.activeElement === first || !introModal.contains(document.activeElement))) {
+        e.preventDefault();
+        last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+    }
+}
+
+function closeIntroModal() {
+    if (introModal.classList.contains('hidden') || introModal.classList.contains('closing')) return;
+
+    // Only runs while the modal is closing, so a re-open on the same visit still shows it
+    if (introDontShow?.checked) {
+        localStorage.setItem(INTRO_DISMISSED_KEY, 'true');
+    } else {
+        localStorage.removeItem(INTRO_DISMISSED_KEY);
+    }
+
+    introModal.classList.add('closing');
+    introModalCard?.classList.add('closing');
+
+    const onAnimationEnd = () => {
+        introModal.classList.add('hidden');
+        introModal.classList.remove('closing');
+        introModalCard?.classList.remove('closing');
+
+        introModal.removeEventListener('animationend', onAnimationEnd);
+        document.removeEventListener('keydown', onIntroKeydown);
+    };
+
+    introModal.addEventListener('animationend', onAnimationEnd, { once: true });
+
+    // Once it's gone, put the caret somewhere useful: a saved body draft first, then the title.
+    // Selecting the placeholder title means typing starts over it right away.
+    requestAnimationFrame(() => {
+        if (bodyEditor.textContent.trim() && lastBodyRange) {
+            restoreBodySelection();
+        } else if (articleTitle.textContent === 'Click to edit title') {
+            articleTitle.focus({ preventScroll: true });
+            document.execCommand('selectAll', false, null);
+        }
+    });
+}
+
+function openIntroModal() {
+    if (!introModal) return;
+    // Respect "Don't show this again" from a previous visit
+    if (localStorage.getItem(INTRO_DISMISSED_KEY) === 'true') return;
+    // Fresh checkbox state each visit: unchecking it again is how you bring the tour back
+    if (introDontShow) introDontShow.checked = false;
+    introModal.classList.remove('hidden');
+    introModal.classList.remove('closing');
+    introModal.style.display = 'flex';
+    document.addEventListener('keydown', onIntroKeydown);
+    introCloseBtn?.focus();
+}
+
+function onIntroKeydown(e) {
+    if (e.key === 'Escape') {
+        closeIntroModal();
+    }
+    trapIntroFocus(e);
+}
+
+introCloseBtn?.addEventListener('click', closeIntroModal);
+introModal?.addEventListener('click', (e) => {
+    if (e.target === introModal) closeIntroModal();
+});
+
 // Uploaded images - convert to AVIF (skip GIFs)
 let avifEncoderPromise = null;
 function loadAvifEncoder() {
@@ -776,6 +860,7 @@ loadDraft();
 validateArticleRequirements();
 updateOgPreview();
 updateStorageUsage();
+openIntroModal();
 
 // Toolbar state & selection detection
 function updateToolbarState() {

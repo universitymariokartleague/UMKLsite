@@ -36,6 +36,37 @@
     opacity: 1;
 }
 
+/* Welcome modal contents */
+.modal-intro-list {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.modal-intro-note {
+    margin: 0;
+    padding: 10px 12px;
+    border: 1px solid var(--translucent-color, #e0e0e0);
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
+
+.modal-intro-note .intro-note-arrow {
+    vertical-align: -0.2em;
+    color: var(--brand-primary);
+    margin-right: 4px;
+}
+
+/* "Don't show again" sits inline with the Got it button in the welcome modal */
+.modal-actions-row .url-modal-checkbox {
+    margin-right: auto;
+    font-size: 0.82rem;
+    opacity: 0.85;
+}
+
 /* .builder-bar is always brand-red regardless of theme, so its bubble-link
    needs fixed light colours instead of the theme-aware defaults */
 .builder-bar .bubble-link {

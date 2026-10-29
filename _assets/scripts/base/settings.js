@@ -303,6 +303,9 @@ function generateCookiesPopup() {
 }
 
 function checkEasterEggs() {
+    // The Article Builder is a focused writing tool - keep all seasonal decorations off it
+    if (window.location.pathname.startsWith('/tools/articlebuilder')) return;
+
     function checkDate(day, month) {
         return currentDate.getMonth() + 1 === month && currentDate.getDate() === day;
     }

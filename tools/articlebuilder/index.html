@@ -302,6 +302,44 @@
 
     <input type="file" id="bodyFileInput" accept="image/*" class="hidden">
 
+    <!-- Welcome modal -->
+    <div id="introModal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h3>Welcome to the UMKL Article Builder</h3>
+            <span class="modal-subtitle">Here's a quick tour before you start</span>
+
+            <ul class="modal-intro-list">
+                <li>Write everything straight on the page - it autosaves as you type.</li>
+                <li>The toolbar gives you headings, bold/italic, links, images and YouTube videos (pasting a YouTube
+                    link embeds it automatically).</li>
+                <li>The sidebar holds the date, author and tags, plus the export requirements checklist and a preview of
+                    how the article looks when shared on social media platforms.</li>
+                <li>Export or import your work as a .umklpost file at any time, using the toolbar buttons.</li>
+            </ul>
+
+            <p class="modal-intro-note">
+                <svg class="intro-note-arrow" width="18" height="18" fill="currentColor" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path
+                        d="M22.08 13.08Q22.5 12.61 22.5 12Q22.5 11.39 22.08 10.92L14.58 3.42Q14.11 3 13.5 3Q12.89 3 12.42 3.42Q12 3.89 12 4.5Q12 5.11 12.42 5.58L17.39 10.5H3Q2.34 10.5 1.92 10.92Q1.5 11.34 1.5 12Q1.5 12.66 1.92 13.08Q2.34 13.5 3 13.5H17.39L12.42 18.42Q12 18.89 12 19.5Q12 20.11 12.42 20.58Q12.89 21 13.5 21Q14.11 21 14.58 20.58L22.08 13.08Z" />
+                </svg>
+                The arrow button takes you to the <strong>admin panel</strong>, where you can upload your finished
+                article to
+                the UMKL site (this is authenticated based on your Discord roles)...
+            </p>
+
+            <div class="modal-actions modal-actions-row">
+                <label class="url-modal-checkbox">
+                    <span>Don't show again</span>
+                    <span class="toggle">
+                        <input type="checkbox" id="introDontShow">
+                    </span>
+                </label>
+                <button id="introCloseBtn" class="btn-modal-option btn-modal-primary">Got it</button>
+            </div>
+        </div>
+    </div>
+
     <div id="imageModal" class="modal-overlay hidden">
         <div id="modalCard" class="modal-card">
             <h3>Insert Image</h3>

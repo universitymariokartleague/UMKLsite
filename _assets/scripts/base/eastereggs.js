@@ -10,7 +10,6 @@ function injectMusic(path) {
     const audioContainer = document.createElement('div');
     audioContainer.innerHTML = `
         <audio id="audio" src="${path}" preload="auto"></audio>
-        <script type="text/javascript" src="/_assets/scripts/components/audioplayer.js" id="audioPlayerScript" defer></script>
         <div id="audioStatus" data-playlist="bgm.txt" class="hidden">
             <span id="BGMName">Music</span><br>
             <div class="audioControls">
@@ -30,10 +29,13 @@ function injectMusic(path) {
     `;
     document.body.appendChild(audioContainer);
 
+    // audioplayer.js is an ES module (it imports the debug logger), so it must be
+    // injected with type="module" - a classic script would throw a SyntaxError.
+    // Note: a <script> written via innerHTML never executes, so it's appended manually.
     const script = document.createElement('script');
-    script.type = 'text/javascript';
+    script.type = 'module';
     script.src = '/_assets/scripts/components/audioplayer.js';
-    script.defer = true;
+    script.id = 'audioPlayerScript';
     document.body.appendChild(script);
 
     const link = document.createElement('link');
@@ -63,7 +65,8 @@ function halloweenEasterEgg() {
         '--accent-color': '#ff640a',
         '--link-color': '#ff640a',
         '--link-hover-color': '#ffcaab',
-        '--highlight-color': '#ff640ad0'
+        '--highlight-color': '#ff640ad0',
+        '--chequered-color': '#ff640a'
     };
     Object.entries(themeColors).forEach(([k, v]) => root.style.setProperty(k, v));
 
@@ -100,7 +103,7 @@ function halloweenEasterEgg() {
             createElementWithStyles('div', {
                 position: 'fixed',
                 [position]: `2px`,
-                [side]: `${Math.random() * 50}px`,
+                [side]: `${Math.random() * 100}px`,
                 width: `${size}px`,
                 height: `${size}px`,
                 background: `url("/_assets/media/eastereggs/halloween/${img}") no-repeat center/contain`,
@@ -158,7 +161,8 @@ function winterEasterEgg() {
         '--accent-color': '#d2bce8',
         '--link-color': '#d2bce8',
         '--link-hover-color': '#ffffff',
-        '--highlight-color': '#ffffff50'
+        '--highlight-color': '#ffffff50',
+        '--chequered-color': '#d2bce8'
     };
 
     for (const [key, value] of Object.entries(themeColors)) {
