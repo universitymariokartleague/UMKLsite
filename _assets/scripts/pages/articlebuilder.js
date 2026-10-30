@@ -264,6 +264,10 @@ function updateStorageUsage() {
     }
 }
 
+function stripZeroWidthSpaces(html) {
+    return String(html).split('\u200B').join('');
+}
+
 // Save all form and editor data to localStorage
 function saveDraft() {
     const draftData = {
@@ -272,7 +276,7 @@ function saveDraft() {
         mainCaption: mainCaption.innerHTML,
         mainImageUrl: mainImageUrl,
         isMainImageVisible: !mainImagePreview.classList.contains('hidden'),
-        bodyHtml: bodyEditor.innerHTML,
+        bodyHtml: stripZeroWidthSpaces(bodyEditor.innerHTML),
         author: metaAuthor.value,
         tags: metaTags.value,
         date: isoDate(lastValidDate),
@@ -318,7 +322,7 @@ function loadDraft() {
         if (draft.title) articleTitle.innerHTML = draft.title;
         if (draft.subtitle) articleSubtitle.innerHTML = draft.subtitle;
         if (draft.mainCaption) mainCaption.innerHTML = draft.mainCaption;
-        if (draft.bodyHtml) bodyEditor.innerHTML = draft.bodyHtml;
+        if (draft.bodyHtml) bodyEditor.innerHTML = stripZeroWidthSpaces(draft.bodyHtml);
         if (draft.author !== undefined) metaAuthor.value = draft.author;
         if (draft.tags !== undefined) metaTags.value = draft.tags;
 
@@ -764,7 +768,7 @@ function setItemState(element, isPassed) {
 function getBodyWordCount() {
     const clone = bodyEditor.cloneNode(true);
     clone.querySelectorAll('.article-image-caption, .btn-remove-image').forEach(el => el.remove());
-    const text = clone.innerText || clone.textContent || '';
+    const text = stripZeroWidthSpaces(clone.innerText || clone.textContent || '');
     return text.trim().split(/\s+/).filter(word => word.length > 0).length;
 }
 
@@ -876,7 +880,7 @@ function updateToolbarState() {
     }
 
     // Auto-select heading if editor is blank/empty
-    const cleanText = bodyEditor.innerText.replace(/\s/g, '');
+    const cleanText = stripZeroWidthSpaces(bodyEditor.innerText).replace(/\s/g, '');
     if (cleanText === '') {
         blockTypeSelect.value = 'h3';
     } else if (isBodyActive && sel && sel.rangeCount > 0) {
@@ -953,18 +957,94 @@ function restoreBodySelection() {
 
 // Rich text
 boldBtn.addEventListener('mousedown', (e) => e.preventDefault());
-boldBtn.addEventListener('click', () => {
-    restoreBodySelection();
-    document.execCommand('bold', false, null);
-    updateToolbarState();
-});
+boldBtn.addEventListener('click', () => toggleInlineStyle('bold'));
 
 italicBtn.addEventListener('mousedown', (e) => e.preventDefault());
-italicBtn.addEventListener('click', () => {
-    restoreBodySelection();
-    document.execCommand('italic', false, null);
+italicBtn.addEventListener('click', () => toggleInlineStyle('italic'));
+
+const ZERO_WIDTH_SPACE = '\u200B';
+
+function toggleInlineStyle(command) {
+    const tag = command === 'bold' ? 'b' : 'i';
+
+    if (!isSelectionInBody(window.getSelection())) restoreBodySelection();
+
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0 || !sel.isCollapsed) {
+        document.execCommand(command, false, null);
+        updateToolbarState();
+        return;
+    }
+
+    const anchor = sel.anchorNode;
+    const container = anchor && anchor.nodeType === 3 ? anchor.parentNode : anchor;
+    if (!container || !bodyEditor.contains(container)) {
+        document.execCommand(command, false, null);
+        updateToolbarState();
+        return;
+    }
+
+    if (document.queryCommandState(command)) {
+        const emptyFormat = findEmptyFormatElement(container, tag);
+        if (emptyFormat) {
+            removeEmptyFormatElement(emptyFormat, sel);
+        } else {
+            document.execCommand(command, false, null);
+        }
+        updateToolbarState();
+        return;
+    }
+
+    const el = document.createElement(tag);
+    el.appendChild(document.createTextNode(ZERO_WIDTH_SPACE));
+    sel.getRangeAt(0).insertNode(el);
+
+    sel.removeAllRanges();
+    const caret = document.createRange();
+    caret.setStart(el.firstChild, 1);
+    caret.collapse(true);
+    sel.addRange(caret);
     updateToolbarState();
-});
+}
+
+// The empty (placeholder-only) bold/italic element the caret is sitting inside
+function findEmptyFormatElement(container, tag) {
+    const el = container.closest(tag.toUpperCase());
+    if (!el) return null;
+    return el.textContent.split(ZERO_WIDTH_SPACE).join('') === '' ? el : null;
+}
+
+function removeEmptyFormatElement(el, sel) {
+    const parent = el.parentNode;
+    const offset = Array.from(parent.childNodes).indexOf(el);
+
+    // Nothing but the placeholder inside - drop the element entirely.
+    if (el.children.length === 0) {
+        parent.removeChild(el);
+        const caret = document.createRange();
+        caret.setStart(parent, Math.min(offset, parent.childNodes.length));
+        caret.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(caret);
+        return;
+    }
+
+    // Keep nested formatting (e.g. bold off while italic stays on) and the caret.
+    const anchor = sel.anchorNode;
+    const anchorOffset = sel.anchorOffset;
+    while (el.firstChild) parent.insertBefore(el.firstChild, el);
+    parent.removeChild(el);
+
+    const caret = document.createRange();
+    if (anchor && anchor.isConnected && parent.contains(anchor)) {
+        caret.setStart(anchor, anchorOffset);
+    } else {
+        caret.setStart(parent, Math.min(offset, parent.childNodes.length));
+    }
+    caret.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(caret);
+}
 
 linkBtn.addEventListener('click', () => {
     if (linkBtn.disabled) return;
@@ -1266,7 +1346,7 @@ saveBtn.addEventListener('click', async () => {
         subtitle: articleSubtitle.textContent.trim(),
         mainCaption: mainCaption.textContent.trim(),
         mainImageUrl,
-        bodyHtml: bodyEditor.innerHTML,
+        bodyHtml: stripZeroWidthSpaces(bodyEditor.innerHTML),
         author: metaAuthor.value,
         tags: metaTags.value,
         date: isoDate(lastValidDate)
