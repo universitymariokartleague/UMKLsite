@@ -50,6 +50,7 @@ const urlModalNewTab = document.getElementById('urlModalNewTab');
 const conversionStatusEl = document.getElementById('conversionStatus');
 
 const reqTitle = document.getElementById('reqTitle');
+const reqTitleCase = document.getElementById('reqTitleCase');
 const reqSubtitle = document.getElementById('reqSubtitle');
 const reqMainImage = document.getElementById('reqMainImage');
 const reqCaption = document.getElementById('reqCaption');
@@ -60,6 +61,7 @@ const reqWords = document.getElementById('reqWords');
 const checklistScore = document.getElementById('checklistScore');
 const checklistProgressBar = document.getElementById('checklistProgressBar');
 const widgetWordCount = document.getElementById('widgetWordCount');
+const titleCaseSuggestion = document.getElementById('titleCaseSuggestion');
 
 const articleTitle = document.getElementById('articleTitle');
 const articleSubtitle = document.getElementById('articleSubtitle');
@@ -84,9 +86,9 @@ const editableElements = [
 // Config
 const MIN_WORDS = 200;
 const STORAGE_KEY = DRAFT_STORAGE_KEY;  // the admin panel reads the same draft
-const LOCAL_STORAGE_LIMIT_BYTES = 5 * 1024 * 1024; // browsers typically cap each origin at ~5MB
-const MAX_IMAGE_DIMENSION = 800; // cap uploaded body images to this before AVIF-encoding them
-const MAX_MAIN_IMAGE_DIMENSION = 1000; // main image gets a bit more room since it's shown larger
+const LOCAL_STORAGE_LIMIT_BYTES = 5 * 1024 * 1024; // browsers cap each origin at 5MB
+const MAX_IMAGE_DIMENSION = 800; // cap body images to this before AVIF-encoding them
+const MAX_MAIN_IMAGE_DIMENSION = 1200; // main image is larger
 const LINK_PRESETS = [
     { label: 'Discord', url: 'https://discord.gg/jz3hKEmDss' },
     { label: 'YouTube', url: 'https://www.youtube.com/@universitymariokartleague' },
@@ -772,6 +774,70 @@ function getBodyWordCount() {
     return text.trim().split(/\s+/).filter(word => word.length > 0).length;
 }
 
+// Words that stay lowercase in a title-cased headline unless they open or close it:
+// articles, coordinating conjunctions and short prepositions.
+const TITLE_CASE_LOWER_WORDS = new Set([
+    'a', 'an', 'the',
+    'and', 'but', 'or', 'for', 'nor', 'yet', 'so',
+    'at', 'by', 'in', 'of', 'on', 'to', 'up', 'out', 'off', 'via', 'per', 'as'
+]);
+
+// Checks a single word (hyphenated compounds are checked part by part, acronyms pass as written).
+// Edge words - the first and last word of the title - must always open/close it capitalised.
+function isTitleCasedWord(word, isEdge) {
+    const core = word.trim().replace(/^[^A-Za-z]+|[^A-Za-z]+$/g, '');
+    if (!core) return true; // punctuation-only tokens like "-" or "..."
+
+    const isAllCaps = core === core.toUpperCase() && /[A-Z]/.test(core);
+    if (isAllCaps) return true; // acronyms like UMKL are acceptable as written
+
+    return core.split('-').every(part => {
+        if (!part) return true;
+        if (part === part.toUpperCase() && /[A-Z]/.test(part)) return true; // acronym part
+
+        const isMinorWord = !isEdge && TITLE_CASE_LOWER_WORDS.has(part.toLowerCase());
+        const isCapitalised = part[0] === part[0].toUpperCase();
+        if (isMinorWord) return !isCapitalised;
+        // Major words (and opening/closing words) must start with a capital and keep the rest lowercase,
+        // or use a camelCase styling (e.g. YouTube, iPhone) which is acceptable as written.
+        const rest = part.slice(1);
+        return isCapitalised && (rest === rest.toLowerCase() || /[a-z][A-Z]/.test(rest));
+    });
+}
+
+// Detects whether a headline/title is written in title case
+function isTitleCaseTitle(text) {
+    const title = (text || '').trim();
+    if (!title) return false;
+
+    const words = title.split(/\s+/);
+    const isEdgeWord = (i) => i === 0 || i === words.length - 1;
+    return words.every((word, i) => isTitleCasedWord(word, isEdgeWord(i)));
+}
+
+// Builds the correctly title-cased version of a title, using the same rules the detector checks.
+function toTitleCase(text) {
+    const words = (text || '').trim().split(/\s+/).filter(Boolean);
+    const isEdgeWord = (i) => i === 0 || i === words.length - 1;
+
+    return words.map((word, i) => {
+        const parts = word.split('-');
+        const processed = parts.map(part => {
+            if (!part) return part;
+            if (part === part.toUpperCase() && /[A-Z]/.test(part)) return part; // acronyms stay as written
+
+            const isMinorWord = !isEdgeWord(i) && TITLE_CASE_LOWER_WORDS.has(part.toLowerCase());
+            const isCapitalised = part[0] === part[0].toUpperCase();
+            const rest = part.slice(1);
+            const isProperlyCased = isCapitalised && (rest === rest.toLowerCase() || /[a-z][A-Z]/.test(rest));
+            if (isMinorWord) return part.toLowerCase();
+            if (isProperlyCased) return part;
+            return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+        }).join('-');
+        return processed;
+    }).join(' ');
+}
+
 function validateArticleRequirements() {
     const wordCount = getBodyWordCount();
 
@@ -785,6 +851,8 @@ function validateArticleRequirements() {
 
     const hasMainImage = !mainImagePreview.classList.contains('hidden') && mainImagePreview.getAttribute('src') !== '';
 
+    const hasTitleCase = hasTitle && isTitleCaseTitle(titleText);
+
     const captionText = mainCaption.innerText.trim();
     const hasCaption = captionText.length > 0 && captionText !== 'Click to edit caption';
 
@@ -794,6 +862,7 @@ function validateArticleRequirements() {
     const hasWords = wordCount >= MIN_WORDS;
 
     setItemState(reqTitle, hasTitle);
+    setItemState(reqTitleCase, hasTitleCase);
     setItemState(reqSubtitle, hasSubtitle);
     setItemState(reqMainImage, hasMainImage);
     setItemState(reqCaption, hasCaption);
@@ -803,7 +872,12 @@ function validateArticleRequirements() {
 
     if (widgetWordCount) widgetWordCount.innerText = `${wordCount}/${MIN_WORDS}`;
 
-    const checks = [hasTitle, hasSubtitle, hasMainImage, hasCaption, hasAuthor, hasTags, hasWords];
+    // When the title case check fails, offer the corrected title for the writer to compare against.
+    if (titleCaseSuggestion) {
+        titleCaseSuggestion.innerText = hasTitle && !hasTitleCase ? `Suggested: "${toTitleCase(titleText)}"` : '';
+    }
+
+    const checks = [hasTitle, hasTitleCase, hasSubtitle, hasMainImage, hasCaption, hasAuthor, hasTags, hasWords];
     const passedCount = checks.filter(Boolean).length;
     const totalChecks = checks.length;
     const percentage = (passedCount / totalChecks) * 100;
@@ -1394,7 +1468,14 @@ async function importArticleFromZip(file) {
         const entry = zip.file(relative) || zip.file(folderPath + relative.split('/').pop());
         if (!entry) return src;
 
-        const blob = await entry.async('blob');
+        const buffer = await entry.async('arraybuffer');
+        const extension = (entry.name.split('.').pop() || 'avif').toLowerCase();
+        const mime = extension === 'jpg' || extension === 'jpeg'
+            ? 'image/jpeg'
+            : extension === 'png'
+                ? 'image/png'
+                : 'image/avif';
+        const blob = new Blob([buffer], { type: mime });
         return readFileAsDataUrl(blob);
     }
 

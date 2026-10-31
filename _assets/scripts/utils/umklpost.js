@@ -25,6 +25,18 @@ function dataURLtoBlob(dataurl) {
     return new Blob([u8arr], { type: mime });
 }
 
+function getDataUrlImage(dataUrl) {
+    const commaIndex = dataUrl.indexOf(',');
+    if (commaIndex === -1) return null;
+
+    const meta = dataUrl.slice(0, commaIndex);
+    const mime = meta.slice(5, meta.indexOf(';')).trim();
+    const imageMime = mime.startsWith('image/') ? mime : 'image/avif';
+
+    const extension = imageMime.split('/')[1] || 'avif';
+    return { mime: imageMime, extension };
+}
+
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 function isoDate(date) {
@@ -53,9 +65,9 @@ async function buildPost(draft) {
     let imageCounter = 1;
     let heroUrl = mainImageUrl;
 
-    if (mainImageUrl.startsWith('data:image')) {
-        const extension = mainImageUrl.substring('data:image/'.length, mainImageUrl.indexOf(';base64'));
-        const fileName = `main-image.${extension}`;
+    const mainImage = getDataUrlImage(mainImageUrl);
+    if (mainImage) {
+        const fileName = `main-image.${mainImage.extension}`;
         folder.file(fileName, dataURLtoBlob(mainImageUrl));
         heroUrl = `/${folderPath}/${fileName}`;
     }
@@ -64,9 +76,9 @@ async function buildPost(draft) {
     body.innerHTML = bodyHtml;
     body.querySelectorAll('img').forEach(img => {
         const src = img.getAttribute('src');
-        if (src && src.startsWith('data:image')) {
-            const extension = src.substring('data:image/'.length, src.indexOf(';base64'));
-            const fileName = `image-${imageCounter++}.${extension}`;
+        const image = src ? getDataUrlImage(src) : null;
+        if (image) {
+            const fileName = `image-${imageCounter++}.${image.extension}`;
             folder.file(fileName, dataURLtoBlob(src));
             img.setAttribute('src', `/${folderPath}/${fileName}`);
         }

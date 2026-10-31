@@ -590,6 +590,13 @@
     color: var(--brand-positive);
 }
 
+.title-case-suggestion {
+    font-size: 0.7rem;
+    font-style: italic;
+    opacity: 0.75;
+    margin-left: auto;
+}
+
 .word-count-badge {
     margin-left: auto;
     font-size: 0.75rem;
