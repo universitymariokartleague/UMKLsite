@@ -294,7 +294,6 @@ async function renderAudit() {
     els.body.innerHTML = `<div class="admin-panel">
         <div class="admin-panel-head"><h2>Audit trail</h2>
             <div class="admin-bar-spacer"></div>
-            <span class="admin-muted">Who changed what, and when.</span></div>
         ${info.entries.length ? `<div class="table-scroll-wrapper">
             <table class="admin-table">
                 <thead><tr><th>When</th><th>Who</th><th>Action</th>
@@ -369,7 +368,6 @@ async function renderBackups() {
         </div>
         <p class="admin-muted">
             ${info.total} archive${info.total === 1 ? '' : 's'}, ${escapeHtml(info.total_size)} in total.
-            Download an archive to restore from it.
         </p>
         ${info.backups.length ? `
         <div class="table-scroll-wrapper">
@@ -513,12 +511,12 @@ function draftPreview(draft) {
         <div class="admin-panel-head"><h2>Draft from the Article Builder</h2>
             <span class="admin-pill accent">Draft</span>
             <div class="admin-bar-spacer"></div>
-            <span class="admin-muted">saved ${escapeHtml(saved)}</span></div>
+            <span class="admin-muted">Saved ${escapeHtml(saved)}</span></div>
 
         <div class="article-draft">
             ${draft.mainImageUrl
-                ? `<img class="article-draft-image" src="${escapeHtml(draft.mainImageUrl)}" alt="">`
-                : `<div class="article-draft-image article-card-placeholder" aria-hidden="true">
+            ? `<img class="article-draft-image" src="${escapeHtml(draft.mainImageUrl)}" alt="">`
+            : `<div class="article-draft-image article-card-placeholder" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="M4 5h13v14H4z"></path>
@@ -594,7 +592,7 @@ function articleCard(article) {
             ${article.description ? `<p class="article-card-desc">${escapeHtml(article.description)}</p>` : ''}
             <div class="article-card-foot">
                 <div class="article-card-tags">${tags.map(tag =>
-                    `<span class="admin-pill">${escapeHtml(tag)}</span>`).join('')}</div>
+        `<span class="admin-pill">${escapeHtml(tag)}</span>`).join('')}</div>
                 <button class="admin-btn small danger article-card-delete"
                     data-delete="${escapeHtml(article.slug)}"
                     data-title="${escapeHtml(article.title)}">Delete</button>
@@ -632,7 +630,6 @@ async function renderArticles() {
     <div class="admin-panel">
         <div class="admin-panel-head"><h2>Published</h2>
             <div class="admin-bar-spacer"></div>
-            <span class="admin-muted">Click a card to open the article</span></div>
         ${info.articles.length
             ? `<div class="article-grid">${info.articles.map(articleCard).join('')}</div>`
             : emptyTable('No articles published yet.')}
