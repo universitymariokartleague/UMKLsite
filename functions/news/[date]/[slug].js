@@ -79,10 +79,11 @@ ${ogImageTags}
             <a href="/news/" class="bubble-link no-color-link" data-smart-back>
                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24"
                     role="presentation">
-                    <path d="M22 13H4.94l5.18 5.29-1.38 1.42-6.17-6.3a1 1 0 0 1 0-2.82l6.17-6.3 1.38 1.42L4.94 11H22z">
+                    <path fill="currentColor"
+                        d="M22 13H4.94l5.18 5.29-1.38 1.42-6.17-6.3a1 1 0 0 1 0-2.82l6.17-6.3 1.38 1.42L4.94 11H22z">
                     </path>
                 </svg>
-                Back
+                Back</a>
             </a>
         </div>
 
