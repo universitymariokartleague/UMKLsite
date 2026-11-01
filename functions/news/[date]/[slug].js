@@ -68,7 +68,9 @@ ${ogImageTags}
     <script type="module" src="/_assets/scripts/pages/articlerender.js" defer></script>
 </head>
 
-<body>
+<body id="top">
+    <umkl-navbar></umkl-navbar>
+
     <main class="article-main">
         <div class="article-wrapper">
             <div class="article-content"></div>
@@ -77,6 +79,8 @@ ${ogImageTags}
             </div>
         </div>
     </main>
+
+    <umkl-footer></umkl-footer>
 </body>
 
 </html>`;
