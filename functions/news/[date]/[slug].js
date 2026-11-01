@@ -1,7 +1,6 @@
 /*
     Serves the news article pages with the Open Graph/Twitter tags filled in
     from the articles API, so link previews work without running JavaScript.
-
     Route: /news/<date>/<slug>  ->  functions/news/[date]/[slug].js
 */
 
@@ -33,9 +32,17 @@ function articleHead({ title, description, image_url, image_alt, link }) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>${escapeHtml(ogTitle)}</title>
     <meta name="description" content="${escapeHtml(ogDescription)}">
     <link rel="icon" href="/_assets/media/brand/favicon.jpg" type="image/png">
+    <link rel="apple-touch-icon" href="/_assets/media/brand/favicon.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
+    <link rel="stylesheet" href="/_assets/css/base/style.css">
+    <link rel="stylesheet" href="/_assets/css/base/settings.css">
+    <link rel="stylesheet" href="/_assets/css/pages/newsarticle.css">
+
     <meta property="og:title" content="${escapeHtml(ogTitle)}" />
     <meta property="og:site_name" content="umkl.co.uk" />
     <meta property="og:type" content="article" />
@@ -46,6 +53,19 @@ ${ogImageTags}
     <meta name="twitter:title" content="${escapeHtml(ogTitle)}" />
     <meta name="twitter:description" content="${escapeHtml(ogDescription)}" />
     ${ogImage ? `<meta name="twitter:image" content="${escapeHtml(ogImage)}" />` : ''}
+
+    <link rel="modulepreload" href="/_assets/webcomponents/navbar.js">
+    <link rel="modulepreload" href="/_assets/webcomponents/footer.js">
+    <script type="module" src="/_assets/webcomponents/navbar.js" defer></script>
+    <script type="module" src="/_assets/webcomponents/footer.js" defer></script>
+
+    <script src="/_assets/scripts/base/theme.js"></script>
+    <script type="module" src="/_assets/scripts/base/settings.js" defer></script>
+    <script defer src="/_assets/scripts/base/imagefade.js" type="module"></script>
+    <script type="module" src="/_assets/scripts/pages/codehighlight.js" defer></script>
+    <script type="module" src="/_assets/scripts/base/smartback.js" defer></script>
+    <script type="module" src="/_assets/scripts/pages/relatedarticles.js" defer></script>
+    <script type="module" src="/_assets/scripts/pages/articlerender.js" defer></script>
 </head>
 
 <body>
