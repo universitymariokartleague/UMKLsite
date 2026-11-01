@@ -1,6 +1,8 @@
 /*
     Serves the news article pages with the Open Graph/Twitter tags filled in
     from the articles API, so link previews work without running JavaScript.
+
+    Route: /news/<date>/<slug>  ->  functions/news/[date]/[slug].js
 */
 
 const ARTICLES_API = 'https://api.umkl.co.uk/articles';
@@ -61,12 +63,10 @@ ${ogImageTags}
 }
 
 export async function onRequestGet(context) {
-    const segments = (context.params.slug || []).filter(Boolean);
+    const date = Array.isArray(context.params.date) ? context.params.date[0] : context.params.date;
+    const slug = Array.isArray(context.params.slug) ? context.params.slug[0] : context.params.slug;
+    if (!date || !slug) return context.next();
 
-    // /news/<date>/<slug> is the article route
-    if (segments.length < 2) return context.next();
-
-    const slug = segments[1];
     const response = await fetch(`${ARTICLES_API}/${encodeURIComponent(slug)}`);
     if (response.status === 404) return new Response('Not Found', { status: 404 });
     const article = await response.json();
