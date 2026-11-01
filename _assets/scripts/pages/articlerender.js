@@ -16,6 +16,16 @@ function setMeta(selector, content) {
     if (element && content) element.setAttribute('content', content);
 }
 
+function upsertMeta(attr, key, content) {
+    let element = document.head.querySelector(`meta[${attr}="${key}"]`);
+    if (!element) {
+        element = document.createElement('meta');
+        element.setAttribute(attr, key);
+        document.head.appendChild(element);
+    }
+    if (content) element.setAttribute('content', content);
+}
+
 function escapeHtml(value) {
     if (value === null || value === undefined) return '';
     return String(value).replace(/[&<>"']/g,
@@ -51,7 +61,14 @@ function renderArticle(article) {
     setMeta('meta[property="og:title"]', `${article.title} | UMKL`);
     setMeta('meta[property="og:description"]', article.description);
     setMeta('meta[property="og:url"]', `https://umkl.co.uk${article.link}`);
-    if (article.image_url) setMeta('meta[property="og:image"]', article.image_url);
+    const ogImage = article.image_url ? new URL(article.image_url, 'https://umkl.co.uk').href : '';
+    if (ogImage) setMeta('meta[property="og:image"]', ogImage);
+    upsertMeta('property', 'og:image:alt', article.image_alt || article.title);
+    upsertMeta('property', 'og:type', 'article');
+    upsertMeta('name', 'twitter:card', 'summary_large_image');
+    upsertMeta('name', 'twitter:title', `${article.title} | UMKL`);
+    upsertMeta('name', 'twitter:description', article.description);
+    upsertMeta('name', 'twitter:image', ogImage);
 
     document.querySelector('.article-content').outerHTML = article.body_html;
     renderMeta(article);
