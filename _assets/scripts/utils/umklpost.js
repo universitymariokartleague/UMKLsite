@@ -83,6 +83,7 @@ async function buildPost(draft) {
             img.setAttribute('src', `/${folderPath}/${fileName}`);
         }
     });
+    body.querySelectorAll('.btn-remove-image').forEach(btn => btn.remove());
 
     const tagList = tags.split(',').map(t => t.trim()).filter(Boolean);
     const tagsMarkup = (tagList.length > 0 ? tagList : ['News'])
