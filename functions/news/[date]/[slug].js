@@ -31,7 +31,10 @@ function articleHead({ title, description, image_url, image_alt, link }) {
 
 <head>
     <meta charset="utf-8">
+    <meta content="#bc0839" name="theme-color" />
+    <meta name="color-scheme" content="dark light">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-title" content="UMKL">
     <meta name="description" content="${escapeHtml(ogDescription)}">
     <link rel="icon" href="/_assets/media/brand/favicon.jpg" type="image/png">
     <link rel="apple-touch-icon" href="/_assets/media/brand/favicon.jpg">
@@ -72,6 +75,17 @@ ${ogImageTags}
     <umkl-navbar></umkl-navbar>
 
     <main class="article-main">
+        <div class="bubble-link-wrapper">
+            <a href="/news/" class="bubble-link no-color-link" data-smart-back>
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24"
+                    role="presentation">
+                    <path d="M22 13H4.94l5.18 5.29-1.38 1.42-6.17-6.3a1 1 0 0 1 0-2.82l6.17-6.3 1.38 1.42L4.94 11H22z">
+                    </path>
+                </svg>
+                Back
+            </a>
+        </div>
+
         <div class="article-wrapper">
             <div class="article-content"></div>
             <div class="article-meta">
