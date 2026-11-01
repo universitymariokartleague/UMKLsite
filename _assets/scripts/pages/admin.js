@@ -536,6 +536,7 @@ function draftPreview(draft) {
                 </dl>
                 <div class="article-upload-row">
                     <button class="admin-btn accent" id="article-draft-upload">Publish this draft</button>
+                    <button class="admin-btn" id="article-draft-download">Download .umklpost</button>
                     <a class="admin-btn" href="/tools/articlebuilder/" target="_blank" rel="noopener noreferrer">Back to the builder</a>
                 </div>
                 <span id="article-draft-status" class="admin-muted"></span>
@@ -660,10 +661,11 @@ async function renderArticles() {
             const saved = await adminFetch('/articles/import', { method: 'POST', form });
             setMessage(els.message, `Published "${saved.article.title}".`, 'success');
             state.page = 1;
-            await renderArticles();
+            return true;
         } catch (error) {
             status.textContent = error.message;
             button.disabled = false;
+            return false;
         }
     }
 
@@ -673,7 +675,8 @@ async function renderArticles() {
             uploadStatus.textContent = 'Choose a .umklpost first.';
             return;
         }
-        await publishPost(file, uploadStatus, document.getElementById('article-upload-go'));
+        const published = await publishPost(file, uploadStatus, document.getElementById('article-upload-go'));
+        if (published) await renderArticles();
     });
 
     document.getElementById('article-draft-upload')?.addEventListener('click', async () => {
@@ -682,10 +685,39 @@ async function renderArticles() {
         try {
             // Same .umklpost the builder's download button would have produced
             const { blob } = await buildPost(draft);
-            await publishPost(blob, status, button);
+            const published = await publishPost(blob, status, button);
+            if (published) {
+                // The draft is live now, so clear it to stop it being published again.
+                localStorage.removeItem(DRAFT_STORAGE_KEY);
+                await renderArticles();
+            }
         } catch (error) {
             console.error("Couldn't build the .umklpost:", error);
             status.textContent = `Couldn't build the upload: ${error.message}`;
+        }
+    });
+
+    document.getElementById('article-draft-download')?.addEventListener('click', async () => {
+        const status = document.getElementById('article-draft-status');
+        try {
+            const { blob } = await buildPost({
+                title: draft.title,
+                subtitle: draft.subtitle,
+                mainCaption: draft.mainCaption,
+                mainImageUrl: draft.mainImageUrl,
+                bodyHtml: draft.bodyHtml,
+                author: draft.author,
+                tags: draft.tags,
+                date: draft.date
+            });
+            const downloadLink = document.createElement('a');
+            downloadLink.href = URL.createObjectURL(blob);
+            downloadLink.download = 'article.umklpost';
+            downloadLink.click();
+            URL.revokeObjectURL(downloadLink.href);
+            if (status) status.textContent = 'Downloaded the .umklpost.';
+        } catch (error) {
+            if (status) status.textContent = `Couldn't download the .umklpost: ${error.message}`;
         }
     });
 
