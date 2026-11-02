@@ -628,32 +628,6 @@
     text-wrap: balance;
 }
 
-.article-card-title a,
-.article-card-title a:link,
-.article-card-title a:visited {
-    color: var(--text-color);
-    text-decoration: none;
-}
-
-/* Stretch the title link over the whole card so it all opens the article,
-   while the action buttons stay clickable above it. */
-.article-card-title a::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-}
-
-.article-card:hover .article-card-title a {
-    text-decoration: underline;
-}
-
-.article-card-title a:focus-visible {
-    outline: 2px solid var(--accent-color);
-    outline-offset: 2px;
-    border-radius: 4px;
-}
-
 .article-card-desc {
     margin: 0;
     font-size: 0.85rem;

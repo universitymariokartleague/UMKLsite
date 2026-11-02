@@ -648,10 +648,7 @@ function articleCard(article) {
             <div class="article-card-eyebrow">
                 <span class="article-card-date">${escapeHtml(date)}</span>
             </div>
-            <h3 class="article-card-title">
-                <a href="${escapeHtml(article.link)}" target="_blank"
-                    rel="noopener noreferrer">${escapeHtml(article.title)}</a>
-            </h3>
+            <h3 class="article-card-title">${escapeHtml(article.title)}</h3>
             ${article.description ? `<p class="article-card-desc">${escapeHtml(article.description)}</p>` : ''}
             <div class="article-card-foot">
                 <div class="article-card-info">
@@ -661,6 +658,12 @@ function articleCard(article) {
                 <div class="article-card-tags">${tags.map(tag =>
         `<span class="admin-pill">${escapeHtml(tag)}</span>`).join('')}</div>
                 <div class="article-card-actions">
+                    <a class="admin-btn small" href="${escapeHtml(article.link)}" target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Open ${escapeHtml(article.title)}"
+                        title="Open article">
+                        ${icon('open', 'article-card-icon')}
+                    </a>
                     <button class="admin-btn small" type="button"
                         data-download="${escapeHtml(article.slug)}"
                         data-title="${escapeHtml(article.title)}"
