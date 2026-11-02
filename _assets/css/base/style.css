@@ -651,7 +651,7 @@ hr {
 }
 
 blockquote {
-    --callout-accent: var(--text-color);
+    --callout-accent: var(--brand-primary);
 
     position: relative;
     overflow: hidden;

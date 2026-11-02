@@ -509,7 +509,6 @@ function draftPreview(draft) {
 
     return `<div class="admin-panel article-draft-panel">
         <div class="admin-panel-head"><h2>Draft from the Article Builder</h2>
-            <span class="admin-pill accent">Draft</span>
             <div class="admin-bar-spacer"></div>
             <span class="admin-muted">Saved ${escapeHtml(saved)}</span></div>
 
@@ -609,7 +608,6 @@ async function renderArticles() {
     els.body.innerHTML = (draft ? draftPreview(draft) : '') + `<div class="admin-panel">
         <div class="admin-panel-head"><h2>Articles</h2>
             <div class="admin-bar-spacer"></div>
-            <span class="admin-muted">${plural(info.total, 'published article')}</span></div>
 
         <div class="article-upload">
             <div class="article-upload-copy">
