@@ -76,13 +76,6 @@ function renderArticle(article) {
 
 // Counts one view per browsing session
 function recordView(slug) {
-    const key = `article-viewed:${slug}`;
-    try {
-        if (sessionStorage.getItem(key)) return;
-        sessionStorage.setItem(key, '1');
-    } catch (error) {
-        // Storage can be unavailable (private mode); count the view anyway.
-    }
     fetch(`${ARTICLES_API}/${encodeURIComponent(slug)}/views`, { method: 'POST' })
         .catch(() => { });
 }
