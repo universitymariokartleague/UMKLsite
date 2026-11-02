@@ -2,6 +2,7 @@ import {
     ADMIN_API, accessNotice, adminFetch, emblem, escapeHtml, login, logout, plural,
     setMessage, statusLabel, statusTone, whoAmI
 } from '/_assets/scripts/utils/adminapi.js';
+import { icon } from '/_assets/scripts/utils/icons.js';
 import { buildPost, DRAFT_STORAGE_KEY, ISO_DATE, slugify } from '/_assets/scripts/utils/umklpost.js';
 
 const ARTICLES_API = 'https://api.umkl.co.uk/articles';
@@ -641,8 +642,7 @@ function articleCard(article) {
                     <path d="M7 8h7M7 11h7M7 14h4"></path>
                 </svg>
             </span>
-            ${image ? `<img loading="lazy" src="${escapeHtml(image)}" alt="${escapeHtml(alt)}"
-                onload="this.classList.add('is-loaded')">` : ''}
+            ${image ? `<img loading="lazy" src="${escapeHtml(image)}" alt="${escapeHtml(alt)}">` : ''}
         </div>
         <div class="article-card-body">
             <div class="article-card-eyebrow">
@@ -659,15 +659,27 @@ function articleCard(article) {
                 <div class="article-card-tags">${tags.map(tag =>
         `<span class="admin-pill">${escapeHtml(tag)}</span>`).join('')}</div>
                 <div class="article-card-actions">
-                    <button class="admin-btn small article-card-download"
+                    <button class="admin-btn small" type="button"
                         data-download="${escapeHtml(article.slug)}"
-                        data-title="${escapeHtml(article.title)}">Download</button>
-                    <button class="admin-btn small article-card-edit"
+                        data-title="${escapeHtml(article.title)}"
+                        aria-label="Download ${escapeHtml(article.title)}"
+                        title="Download .umklpost">
+                        ${icon('download', 'article-card-icon')}
+                    </button>
+                    <button class="admin-btn small" type="button"
                         data-edit="${escapeHtml(article.slug)}"
-                        data-title="${escapeHtml(article.title)}">Edit</button>
-                    <button class="admin-btn small danger article-card-delete"
+                        data-title="${escapeHtml(article.title)}"
+                        aria-label="Edit ${escapeHtml(article.title)}"
+                        title="Edit in Article Builder">
+                        ${icon('edit', 'article-card-icon')}
+                    </button>
+                    <button class="admin-btn small danger article-card-delete" type="button"
                         data-delete="${escapeHtml(article.slug)}"
-                        data-title="${escapeHtml(article.title)}">Delete</button>
+                        data-title="${escapeHtml(article.title)}"
+                        aria-label="Delete ${escapeHtml(article.title)}"
+                        title="Delete article">
+                        ${icon('delete', 'article-card-icon')}
+                    </button>
                 </div>
             </div>
         </div>
@@ -707,11 +719,6 @@ async function renderArticles() {
             : emptyTable('No articles published yet.')}
         ${pager(info)}
     </div>`;
-
-    // Cached images can finish before the inline onload is parsed.
-    els.body.querySelectorAll('.article-card-media img').forEach(img => {
-        if (img.complete) img.classList.add('is-loaded');
-    });
 
     const fileInput = document.getElementById('article-upload-file');
     const uploadStatus = document.getElementById('article-upload-status');
@@ -795,9 +802,7 @@ async function renderArticles() {
     els.body.querySelectorAll('[data-download]').forEach(button => {
         button.addEventListener('click', async () => {
             const slug = button.dataset.download;
-            const label = button.textContent;
             button.disabled = true;
-            button.textContent = 'Preparing…';
             try {
                 const article = await adminFetch(`/articles/${encodeURIComponent(slug)}`);
                 const { blob } = await buildPost(await articleToDraft(article));
@@ -808,7 +813,6 @@ async function renderArticles() {
                 setMessage(els.message, `Couldn't build the .umklpost: ${error.message}`);
             } finally {
                 button.disabled = false;
-                button.textContent = label;
             }
         });
     });
@@ -826,9 +830,7 @@ async function renderArticles() {
 
             const tab = window.open('', '_blank');
 
-            const label = button.textContent;
             button.disabled = true;
-            button.textContent = 'Preparing…';
             try {
                 const article = await adminFetch(`/articles/${encodeURIComponent(slug)}`);
                 const draft = await articleToDraft(article);
@@ -857,7 +859,6 @@ async function renderArticles() {
                 setMessage(els.message, `Couldn't load the article: ${error.message}`);
             } finally {
                 button.disabled = false;
-                button.textContent = label;
             }
         });
     });
