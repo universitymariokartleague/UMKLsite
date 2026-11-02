@@ -6,6 +6,7 @@ import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareImage, s
 import { resolveTrackName, getTrackIconPath } from '/_assets/scripts/utils/tracknames.js';
 import { icon } from '/_assets/scripts/utils/icons.js';
 import { videoStatusIcon } from '/_assets/scripts/utils/videostatus.js';
+import { getTeamColors } from '/_assets/scripts/utils/teamcolors.js';
 
 const inputArea = document.getElementById("inputArea");
 const positionsInput = document.getElementById("positions-input");
@@ -29,21 +30,7 @@ let currentPerspective = 0;
 let extraInfoOpened = false;
 
 async function getTeamcolors() {
-    return fetch('https://api.umkl.co.uk/teamcolors', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: "{}"
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-            return response.json();
-        });
+    return getTeamColors();
 }
 
 const makePossessive = name =>

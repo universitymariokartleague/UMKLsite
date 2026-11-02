@@ -4,29 +4,12 @@
 */
 
 import { createDebugLogger } from '/_assets/scripts/utils/debuglogger.js';
+import { getTeamColors } from '/_assets/scripts/utils/teamcolors.js';
 
 const debugLog = createDebugLogger('getteamcolors.js', '#fc52ff', '#fda6ff');
 const currentTeamColors = document.getElementById("currentTeamColors");
 let teamColors = [];
 let startTime;
-
-async function getTeamcolors() {
-    return fetch('https://api.umkl.co.uk/teamcolors', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: "{}"
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-        localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-        return response.json();
-    });
-}
 
 function createColorBox(name, color) {
     const colorDiv = document.createElement("div");
@@ -44,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     startTime = performance.now();
     debugLog(`Getting team colors...`);
     
-    teamColors = await getTeamcolors();
+    teamColors = await getTeamColors();
 
     teamColors.forEach(({ team_name: name, team_color: color }) => {
         createColorBox(name, color);

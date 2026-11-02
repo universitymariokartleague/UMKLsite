@@ -7,6 +7,8 @@
 
 import { createDebugLogger } from '/_assets/scripts/utils/debuglogger.js';
 import { getMatchData } from '/_assets/scripts/utils/matchdata.js';
+import { getTeamDataCache, setTeamDataCache } from '/_assets/scripts/utils/teamdata.js';
+import { getSeasonInfoCache, setSeasonInfoCache } from '/_assets/scripts/utils/seasoninfo.js';
 
 const debugLog = createDebugLogger('teamboxgenerate.js', '#9452ff', '#c29cff');
 const JSTeamBox = document.getElementById("JSTeamBox");
@@ -16,8 +18,6 @@ const currentSeasonText = document.getElementById("current-season");
 
 const START_YEAR = 2023;
 const API_BASE = 'https://api.umkl.co.uk';
-const CACHE_KEY = 'teamDataCache';
-const SEASON_CACHE_KEY = 'seasonInfoCache';
 
 let teamData = [];
 let currentSeason = 3;
@@ -32,18 +32,11 @@ const fetchAPI = async (endpoint, body) => {
         body: JSON.stringify(body)
     });
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    localStorage.setItem("apiReqsSent", (parseInt(localStorage.getItem("apiReqsSent")) || 0) + 1);
+    try {
+        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+        localStorage.setItem("apiReqsSent", apiReqsSent + 1);
+    } catch { }
     return response.json();
-};
-
-const getSeasonInfoCache = () => {
-    try { return JSON.parse(localStorage.getItem(SEASON_CACHE_KEY)) || {}; } catch { return {}; }
-};
-
-const setSeasonInfoCache = (season, data) => {
-    const cache = getSeasonInfoCache();
-    cache[season] = data;
-    localStorage.setItem(SEASON_CACHE_KEY, JSON.stringify(cache));
 };
 
 const fetchSeasonInfo = async (season = 0) => {
@@ -368,11 +361,21 @@ async function generateTeamBoxes(data) {
 }
 
 async function getTeamDataSafe(season) {
+    const cached = getTeamDataCache(season);
+    if (cached) {
+        teamData = cached;
+        JSTeamBoxLoading.innerHTML = "";
+        await generateTeamBoxes(cached);
+    }
+
     try {
         teamData = await fetchTeamData(season);
+        setTeamDataCache(season, teamData);
         JSTeamBoxLoading.innerHTML = "";
+        return true;
     } catch {
         JSTeamBoxLoading.innerHTML = `<blockquote class="fail"><b>API error</b><br>Failed to fetch team data from the API, the below information may not be up to date!</blockquote>`;
+        return false;
     }
 }
 
@@ -382,6 +385,7 @@ function scheduleRetry() {
         try {
             retryCount++;
             teamData = await fetchTeamData(currentSeason);
+            setTeamDataCache(currentSeason, teamData);
             JSTeamBoxLoading.innerHTML = "";
             await generateTeamBoxes(teamData);
             generateSeasonPicker();
@@ -395,24 +399,6 @@ function scheduleRetry() {
 
 document.addEventListener("DOMContentLoaded", async () => {
     const startTime = performance.now();
-    const cached = localStorage.getItem(CACHE_KEY);
-
-    if (cached) {
-        try {
-            const parsedCache = JSON.parse(cached);
-            if (parsedCache?.length > 0) {
-                JSTeamBoxLoading.innerHTML = "";
-                debugLog(`Generating team boxes (cache)...`);
-                teamData = parsedCache;
-                await generateTeamBoxes(parsedCache);
-                await populateAllTeamsTable();
-            } else {
-                localStorage.removeItem(CACHE_KEY);
-            }
-        } catch {
-            localStorage.removeItem(CACHE_KEY);
-        }
-    }
 
     const seasonInfoCache = getSeasonInfoCache();
     if (seasonInfoCache[0] != null) {
@@ -423,6 +409,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    const cached = getTeamDataCache(currentSeason);
+    if (cached) {
+        JSTeamBoxLoading.innerHTML = "";
+        debugLog(`Generating team boxes (cache)...`);
+        teamData = cached;
+        await generateTeamBoxes(cached);
+        await populateAllTeamsTable();
+    }
+
+    const requestedSeason = currentSeason;
     const [teamResult, seasonResult] = await Promise.allSettled([
         fetchTeamData(currentSeason),
         fetchSeasonInfo(0)
@@ -434,7 +430,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         await generateTeamBoxes(teamData);
         await populateAllTeamsTable();
         debugLog(`Generated updated team data in ${(performance.now() - startTime).toFixed(2)}ms`);
-        localStorage.setItem(CACHE_KEY, JSON.stringify(teamData));
+        setTeamDataCache(currentSeason, teamData);
     } else {
         const msg = teamResult.reason?.message;
         if (msg?.includes('429')) {
@@ -450,6 +446,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         setSeasonInfoCache(0, seasonResult.value);
         currentSeason = parseInt(seasonResult.value);
         maxSeason = currentSeason;
+        if (currentSeason !== requestedSeason) await handleSeasonChange();
     } else {
         debugLog(`API failed - using fallback information...`);
     }

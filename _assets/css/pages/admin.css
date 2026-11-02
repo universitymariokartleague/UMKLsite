@@ -683,6 +683,7 @@
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 10px;
     margin-top: auto;
     padding-top: 10px;
@@ -699,6 +700,20 @@
 .article-card-tags .admin-pill {
     padding: 2px 8px;
     font-size: 0.68rem;
+}
+
+.article-card-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+.article-card-actions .admin-btn {
+    position: relative;
+    z-index: 2;
 }
 
 .article-card-delete {

@@ -3,6 +3,9 @@
     Generates a condensed team standings view for the homepage.
 */
 
+import { getTeamDataCache, setTeamDataCache } from '/_assets/scripts/utils/teamdata.js';
+import { getSeasonInfoCache, setSeasonInfoCache } from '/_assets/scripts/utils/seasoninfo.js';
+
 const JSTeamTable = document.getElementById("HomeJSTeamTable");
 const JSTeamTableLoading = document.getElementById("HomeTeamTableLoading");
 const SeasonTop3 = document.getElementById("HomeSeasonTop3");
@@ -13,8 +16,6 @@ const HomeTeamGrid = document.getElementById("HomeTeamGrid");
 const toggleShowAllBtn = document.getElementById("toggleShowAll");
 
 const API_BASE = 'https://api.umkl.co.uk';
-const CACHE_KEY = 'teamDataCache';
-const SEASON_CACHE_KEY = 'seasonInfoCache';
 const FALLBACK_SEASON = 3;
 
 const SEASON_FLAVOUR_TEXT = {
@@ -132,17 +133,11 @@ const fetchAPI = async (endpoint, body) => {
         body: JSON.stringify(body)
     });
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    try {
+        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+        localStorage.setItem("apiReqsSent", apiReqsSent + 1);
+    } catch { }
     return response.json();
-};
-
-const getSeasonInfoCache = () => {
-    try { return JSON.parse(localStorage.getItem(SEASON_CACHE_KEY)) || {}; } catch { return {}; }
-};
-
-const setSeasonInfoCache = (season, data) => {
-    const cache = getSeasonInfoCache();
-    cache[season] = data;
-    localStorage.setItem(SEASON_CACHE_KEY, JSON.stringify(cache));
 };
 
 const fetchSeasonInfo = async (season = 0) => {
@@ -351,32 +346,31 @@ document.addEventListener("DOMContentLoaded", async () => {
         renderSeasonFlavourText(seasonCache[0]?.[1]);
     }
 
-    const cached = localStorage.getItem(CACHE_KEY);
-    if (cached) {
-        try {
-            const parsed = JSON.parse(cached);
-            if (parsed?.length > 0) renderHomeStandings(parsed);
-        } catch { }
-    }
+    const renderCachedTeamData = (season) => {
+        const cached = getTeamDataCache(season);
+        if (cached) renderHomeStandings(cached);
+    };
 
-    // Resolve the actual live season before fetching team data - the cache above
-    // may be stale or empty (e.g. a visitor's first-ever page is the homepage),
-    // and the hardcoded fallback above can point at a season with no data yet.
+    renderCachedTeamData(currentSeason);
+
+    // Resolve the actual live season before fetching team data
     try {
         const seasonInfo = await fetchSeasonInfo(0);
         const liveSeason = parseInt(seasonInfo);
         if (!isNaN(liveSeason)) {
+            const seasonChanged = liveSeason !== currentSeason;
             currentSeason = liveSeason;
             setSeasonInfoCache(0, seasonInfo);
             renderSeasonHeading(currentSeason);
             renderSeasonFlavourText(seasonInfo[1]);
+            if (seasonChanged) renderCachedTeamData(currentSeason);
         }
     } catch { }
 
     try {
         const teamData = await fetchTeamData(currentSeason);
         renderHomeStandings(teamData);
-        localStorage.setItem(CACHE_KEY, JSON.stringify(teamData));
+        setTeamDataCache(currentSeason, teamData);
     } catch (e) {
         if (!hasRenderedStandings) {
             SeasonTop3.innerHTML = "";

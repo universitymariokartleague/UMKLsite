@@ -8,6 +8,8 @@ import { generate6v6ScoreCalculatorLink } from '/_assets/scripts/utils/matchhelp
 import { isWindowsOrLinux, copyTextToClipboard, getIsPopupShowing, shareText, shareImage, showTextPopup, showImagePreview, setOriginalMessage } from '/_assets/scripts/utils/shareAPIhelper.js';
 import { createDebugLogger } from '/_assets/scripts/utils/debuglogger.js';
 import { icon } from '/_assets/scripts/utils/icons.js';
+import { getMatchCache, setMatchCache } from '/_assets/scripts/utils/matchdata.js';
+import { getCachedTeamColors, getTeamColors } from '/_assets/scripts/utils/teamcolors.js';
 
 const debugLog = createDebugLogger('matchcalendar.js', '#fffc45', '#fcfb9a');
 const WEEKDAY_NAMES = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
@@ -60,23 +62,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     setupCalendarSearch();
     initialDateParamOnLoad = !!new URLSearchParams(window.location.search).get('date');
 
-    if (localStorage.matchDataCache && localStorage.teamColorsCache) {
+    const cachedMatchData = getMatchCache();
+    const cachedTeamColors = getCachedTeamColors();
+    if (cachedMatchData && cachedTeamColors) {
         try {
             cached = true;
             debugLog(`Rendering calendar (cache)...`);
-            matchData = JSON.parse(localStorage.matchDataCache);
-            teamColors = JSON.parse(localStorage.teamColorsCache);
+            matchData = cachedMatchData;
+            teamColors = cachedTeamColors;
             makeTeamsColorStyles();
             await loadCalendarView();
         } catch {
-            localStorage.matchDataCache = "";
-            localStorage.teamColorsCache = "";
+            cached = false;
         }
     }
 
+    let fetched = false;
     try {
         matchData = await getMatchData();
         teamColors = await getTeamColors();
+        fetched = true;
     } catch (error) {
         if (error?.message?.includes('429')) {
             calendarError.innerHTML = `<blockquote class="fail"><b>API error</b><br>Your device or network is sending too many requests, so you have been rate-limited. Please try again later.</blockquote>`;
@@ -88,6 +93,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     retryCount++;
                     matchData = await getMatchData();
                     teamColors = await getTeamColors();
+                    setMatchCache(matchData);
                     calendarError.innerHTML = "";
                     makeTeamsColorStyles();
                     displayCalendar();
@@ -100,8 +106,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    localStorage.setItem("matchDataCache", JSON.stringify(matchData));
-    localStorage.setItem("teamColorsCache", JSON.stringify(teamColors));
+    if (fetched) setMatchCache(matchData);
     document.dispatchEvent(new CustomEvent('removeScrollbarFromCalendarListView'));
     cached = false;
     listViewToggledOnce = false;
@@ -128,7 +133,6 @@ const fetchAPI = async (endpoint, { method = 'POST', body = {} } = {}) => {
 };
 
 const getMatchData = () => fetchAPI('matchdata');
-const getTeamColors = () => fetchAPI('teamcolors');
 
 const getLiveResults = async (teamName) => {
     const currentMatch = await fetchAPI(`match/current/${encodeURIComponent(teamName)}`, { method: 'GET' });

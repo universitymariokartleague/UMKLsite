@@ -4,6 +4,8 @@
 */
 
 import { createDebugLogger } from '/_assets/scripts/utils/debuglogger.js';
+import { getTeamDataCache } from '/_assets/scripts/utils/teamdata.js';
+import { getSeasonInfoCache } from '/_assets/scripts/utils/seasoninfo.js';
 
 const debugLog = createDebugLogger('generateteamstandingsimage.js', '#fc52ff', '#fda6ff');
 export { generateTeamStandingsImage };
@@ -275,28 +277,16 @@ async function generateTeamStandingsImage(season) {
     try {
         seasonStatus = (await getCurrentSeason())[1];
     } catch {
-        try {
-            const sic = JSON.parse(localStorage.getItem('seasonInfoCache')) || {};
-            seasonStatus = (sic[season] ?? sic[0])?.[1] ?? "";
-        } catch {
-            seasonStatus = "";
-        }
+        const sic = getSeasonInfoCache();
+        seasonStatus = (sic[season] ?? sic[0])?.[1] ?? "";
     }
 
     let teamStandings;
     try {
         teamStandings = await getTeamdata("", season);
     } catch {
-        try {
-            const cached = JSON.parse(localStorage.getItem('teamDataCache'));
-            if (cached?.length > 0) {
-                teamStandings = cached;
-            } else {
-                return null;
-            }
-        } catch {
-            return null;
-        }
+        teamStandings = getTeamDataCache(season);
+        if (!teamStandings) return null;
     }
 
     debugLog(`Generated team standings image in ${(performance.now() - startTime).toFixed(2)}ms`);

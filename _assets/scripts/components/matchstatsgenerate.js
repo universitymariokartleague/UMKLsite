@@ -3,6 +3,7 @@
 */
 
 import { getMatchData } from '/_assets/scripts/utils/matchdata.js';
+import { getTeamColors } from '/_assets/scripts/utils/teamcolors.js';
 import { createDebugLogger } from '/_assets/scripts/utils/debuglogger.js';
 import { TRACKS, resolveTrackName } from '/_assets/scripts/utils/tracknames.js';
 
@@ -416,22 +417,10 @@ function calculateScore(position) {
     return scoreMap[position - 1] || 1; // Default to 1 if position is out of range
 }
 
+import { getTeamColors } from '/_assets/scripts/utils/teamcolors.js';
+
 async function getTeamcolors() {
-    return fetch('https://api.umkl.co.uk/teamcolors', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: "{}"
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-            return response.json();
-        });
+    return getTeamColors();
 }
 
 async function getCurrentSeason() {

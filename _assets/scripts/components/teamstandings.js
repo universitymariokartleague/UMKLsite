@@ -2,6 +2,9 @@
     This script generates a simple points standings table for each team in a given season.
 */
 
+import { getTeamDataCache, setTeamDataCache } from '/_assets/scripts/utils/teamdata.js';
+import { getSeasonInfoCache, setSeasonInfoCache } from '/_assets/scripts/utils/seasoninfo.js';
+
 const JSTeamTable = document.getElementById("JSTeamTable");
 const JSTeamTableLoading = document.getElementById("JSTeamTableLoading");
 const seasonPicker = document.getElementById("season-select");
@@ -9,8 +12,6 @@ const currentSeasonText = document.getElementById("current-season");
 
 const START_YEAR = 2023;
 const API_BASE = 'https://api.umkl.co.uk';
-const CACHE_KEY = 'teamDataCache';
-const SEASON_CACHE_KEY = 'seasonInfoCache';
 
 let teamData = [];
 let currentSeason = 3;
@@ -26,18 +27,11 @@ const fetchAPI = async (endpoint, body) => {
         body: JSON.stringify(body)
     });
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    localStorage.setItem("apiReqsSent", (parseInt(localStorage.getItem("apiReqsSent")) || 0) + 1);
+    try {
+        const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
+        localStorage.setItem("apiReqsSent", apiReqsSent + 1);
+    } catch { }
     return response.json();
-};
-
-const getSeasonInfoCache = () => {
-    try { return JSON.parse(localStorage.getItem(SEASON_CACHE_KEY)) || {}; } catch { return {}; }
-};
-
-const setSeasonInfoCache = (season, data) => {
-    const cache = getSeasonInfoCache();
-    cache[season] = data;
-    localStorage.setItem(SEASON_CACHE_KEY, JSON.stringify(cache));
 };
 
 const fetchSeasonInfo = async (season = 0) => {
@@ -138,11 +132,21 @@ JSTeamTable?.addEventListener('keydown', (e) => {
 
 
 async function getTeamDataSafe(season) {
+    const cached = getTeamDataCache(season);
+    if (cached) {
+        teamData = cached;
+        if (JSTeamTableLoading) JSTeamTableLoading.innerHTML = "";
+        await generateStandingsTable(cached);
+    }
+
     try {
         teamData = await fetchTeamData(season);
+        setTeamDataCache(season, teamData);
         if (JSTeamTableLoading) JSTeamTableLoading.innerHTML = "";
+        return true;
     } catch {
         showError(`<b>API error</b><br>Failed to fetch team data from the API, the below information may not be up to date!`);
+        return false;
     }
 }
 
@@ -152,6 +156,7 @@ function scheduleRetry() {
         try {
             retryCount++;
             teamData = await fetchTeamData(currentSeason);
+            setTeamDataCache(currentSeason, teamData);
             if (JSTeamTableLoading) JSTeamTableLoading.innerHTML = "";
             await generateStandingsTable(teamData);
             generateSeasonPicker();
@@ -216,22 +221,6 @@ async function updateSeasonText() {
 
 document.addEventListener("DOMContentLoaded", async () => {
     const startTime = performance.now();
-    const cached = localStorage.getItem(CACHE_KEY);
-
-    // Render cache immediately if available
-    if (cached) {
-        try {
-            const parsedCache = JSON.parse(cached);
-            if (parsedCache?.length > 0) {
-                if (JSTeamTableLoading) JSTeamTableLoading.innerHTML = "";
-                await generateStandingsTable(parsedCache);
-            } else {
-                localStorage.removeItem(CACHE_KEY);
-            }
-        } catch {
-            localStorage.removeItem(CACHE_KEY);
-        }
-    }
 
     // Set fallback current season from cache
     const seasonInfoCache = getSeasonInfoCache();
@@ -243,7 +232,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    // Render cache immediately if available
+    const cached = getTeamDataCache(currentSeason);
+    if (cached) {
+        if (JSTeamTableLoading) JSTeamTableLoading.innerHTML = "";
+        await generateStandingsTable(cached);
+    }
+
     // Fetch live data
+    const requestedSeason = currentSeason;
     const [teamResult, seasonResult] = await Promise.allSettled([
         fetchTeamData(currentSeason),
         fetchSeasonInfo(0)
@@ -254,7 +251,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (JSTeamTableLoading) JSTeamTableLoading.innerHTML = "";
         await generateStandingsTable(teamData);
         console.debug(`%cteamstandings.js %c> %cUpdated standings loaded in ${(performance.now() - startTime).toFixed(2)}ms`, "color:#9452ff", "color:#fff", "color:#c29cff");
-        localStorage.setItem(CACHE_KEY, JSON.stringify(teamData));
+        setTeamDataCache(currentSeason, teamData);
     } else {
         const msg = teamResult.reason?.message;
         if (msg?.includes('429')) {
@@ -269,6 +266,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         setSeasonInfoCache(0, seasonResult.value);
         currentSeason = parseInt(seasonResult.value);
         maxSeason = currentSeason;
+        if (currentSeason !== requestedSeason) await handleSeasonChange();
     }
 
     generateSeasonPicker();

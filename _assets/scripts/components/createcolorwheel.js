@@ -2,6 +2,8 @@
     Used on the team creation guidelines page to show the current team colors.
 */
 
+import { getTeamColors } from '/_assets/scripts/utils/teamcolors.js';
+
 const canvas = document.getElementById("colorWheel");
 const ctx = canvas.getContext("2d");
 
@@ -23,25 +25,6 @@ const radius = 100;
 
 let teamColors = [];
 
-async function getTeamcolors() {
-    return fetch('https://api.umkl.co.uk/teamcolors', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: "{}"
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-            localStorage.setItem("apiReqsSent", apiReqsSent + 1)
-            return response.json();
-        });
-}
-
-// Helper: Convert hex to HSL hue
 function hexToHue(hex) {
     let r = parseInt(hex.slice(1, 3), 16) / 255;
     let g = parseInt(hex.slice(3, 5), 16) / 255;
@@ -95,7 +78,7 @@ function resolveLabelOverlaps(labels) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-    teamColors = await getTeamcolors();
+    teamColors = await getTeamColors();
     await document.fonts.load(labelFont);
 
     ctx.beginPath();

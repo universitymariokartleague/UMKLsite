@@ -4,6 +4,8 @@ import {
 } from '/_assets/scripts/utils/adminapi.js';
 import { buildPost, DRAFT_STORAGE_KEY, ISO_DATE, slugify } from '/_assets/scripts/utils/umklpost.js';
 
+const ARTICLES_API = 'https://api.umkl.co.uk/articles';
+
 const VIEWS = {
     media: 'Media',
     articles: 'Articles',
@@ -560,6 +562,67 @@ function articleImage(article) {
     return `https://api.umkl.co.uk/articles/${encodeURIComponent(article.slug)}/images/${encodeURIComponent(article.image)}`;
 }
 
+function blobToDataUrl(blob) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(blob);
+    });
+}
+
+async function imageToDataUrl(url) {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return blobToDataUrl(await response.blob());
+}
+
+async function articleToDraft(article) {
+    const document_ = new DOMParser().parseFromString(article.body_html || '', 'text/html');
+    const body = document_.querySelector('.article-body') || document_.body;
+    const imagePrefix = `${ARTICLES_API}/${encodeURIComponent(article.slug)}/images/`;
+
+    for (const img of body.querySelectorAll('img')) {
+        const src = img.getAttribute('src') || '';
+        if (!src.startsWith(imagePrefix)) continue;
+        try {
+            img.setAttribute('src', await imageToDataUrl(src));
+        } catch (error) {
+            console.error(`Couldn't bundle "${src}":`, error);
+        }
+    }
+
+    let mainImageUrl = '';
+    if (article.image_url) {
+        try {
+            mainImageUrl = await imageToDataUrl(article.image_url);
+        } catch (error) {
+            console.error(`Couldn't bundle "${article.image_url}":`, error);
+        }
+    }
+
+    return {
+        title: article.title || '',
+        subtitle: article.description || '',
+        mainCaption: article.image_alt || '',
+        mainImageUrl,
+        isMainImageVisible: Boolean(mainImageUrl),
+        bodyHtml: body.innerHTML.trim(),
+        author: article.author || '',
+        tags: (article.tags || []).join(', '),
+        date: ISO_DATE.test(article.published_date || '') ? article.published_date : '',
+        savedAt: Date.now()
+    };
+}
+
+function downloadBlob(blob, name) {
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = name;
+    link.click();
+    URL.revokeObjectURL(link.href);
+}
+
 function articleCard(article) {
     const tags = article.tags || [];
     const image = articleImage(article);
@@ -595,9 +658,17 @@ function articleCard(article) {
             <div class="article-card-foot">
                 <div class="article-card-tags">${tags.map(tag =>
         `<span class="admin-pill">${escapeHtml(tag)}</span>`).join('')}</div>
-                <button class="admin-btn small danger article-card-delete"
-                    data-delete="${escapeHtml(article.slug)}"
-                    data-title="${escapeHtml(article.title)}">Delete</button>
+                <div class="article-card-actions">
+                    <button class="admin-btn small article-card-download"
+                        data-download="${escapeHtml(article.slug)}"
+                        data-title="${escapeHtml(article.title)}">Download</button>
+                    <button class="admin-btn small article-card-edit"
+                        data-edit="${escapeHtml(article.slug)}"
+                        data-title="${escapeHtml(article.title)}">Edit</button>
+                    <button class="admin-btn small danger article-card-delete"
+                        data-delete="${escapeHtml(article.slug)}"
+                        data-title="${escapeHtml(article.title)}">Delete</button>
+                </div>
             </div>
         </div>
     </article>`;
@@ -719,6 +790,76 @@ async function renderArticles() {
         } catch (error) {
             if (status) status.textContent = `Couldn't download the .umklpost: ${error.message}`;
         }
+    });
+
+    els.body.querySelectorAll('[data-download]').forEach(button => {
+        button.addEventListener('click', async () => {
+            const slug = button.dataset.download;
+            const label = button.textContent;
+            button.disabled = true;
+            button.textContent = 'Preparing…';
+            try {
+                const article = await adminFetch(`/articles/${encodeURIComponent(slug)}`);
+                const { blob } = await buildPost(await articleToDraft(article));
+                downloadBlob(blob, `${article.slug}.umklpost`);
+                setMessage(els.message, `Downloaded "${article.title}".`, 'success');
+            } catch (error) {
+                console.error("Couldn't build the .umklpost:", error);
+                setMessage(els.message, `Couldn't build the .umklpost: ${error.message}`);
+            } finally {
+                button.disabled = false;
+                button.textContent = label;
+            }
+        });
+    });
+
+    els.body.querySelectorAll('[data-edit]').forEach(button => {
+        button.addEventListener('click', async () => {
+            const slug = button.dataset.edit;
+            const title = button.dataset.title;
+            const existing = readBuilderDraft();
+            const warning = existing
+                ? `Loading "${title}" into the Article Builder will replace your current draft`
+                + `${existing.title ? ` ("${existing.title}")` : ''}. Continue?`
+                : `Load "${title}" into the Article Builder?`;
+            if (!confirm(warning)) return;
+
+            const tab = window.open('', '_blank');
+
+            const label = button.textContent;
+            button.disabled = true;
+            button.textContent = 'Preparing…';
+            try {
+                const article = await adminFetch(`/articles/${encodeURIComponent(slug)}`);
+                const draft = await articleToDraft(article);
+                try {
+                    localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+                } catch (error) {
+                    // Too big for localStorage: hand over the .umklpost instead.
+                    console.error("Couldn't store the draft:", error);
+                    tab?.close();
+                    const { blob } = await buildPost(draft);
+                    downloadBlob(blob, `${article.slug}.umklpost`);
+                    setMessage(els.message,
+                        `"${article.title}" is too big to load into the builder directly, so its ` +
+                        '.umklpost was downloaded instead — import it with the builder\'s Import button.');
+                    return;
+                }
+                if (tab) {
+                    tab.location.href = '/tools/articlebuilder/';
+                } else {
+                    window.location.href = '/tools/articlebuilder/';
+                }
+                setMessage(els.message, `Loaded "${article.title}" into the Article Builder.`, 'success');
+            } catch (error) {
+                tab?.close();
+                console.error("Couldn't load the article into the builder:", error);
+                setMessage(els.message, `Couldn't load the article: ${error.message}`);
+            } finally {
+                button.disabled = false;
+                button.textContent = label;
+            }
+        });
     });
 
     els.body.querySelectorAll('[data-delete]').forEach(button => {

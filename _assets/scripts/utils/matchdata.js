@@ -1,9 +1,14 @@
+import { getCache, setCache } from '/_assets/scripts/utils/cache.js';
+
 export { getMatchData, normalizeMatchData, getMatchCache, setMatchCache };
 
 const CACHE_KEY = 'matchDataCache';
 
-const getMatchCache = () => { try { return JSON.parse(localStorage.getItem(CACHE_KEY)) || null; } catch { return null; } };
-const setMatchCache = (data) => { try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch { } };
+const getMatchCache = () => {
+    const data = getCache(CACHE_KEY);
+    return data && typeof data === 'object' ? data : null;
+};
+const setMatchCache = (data) => { setCache(CACHE_KEY, data); };
 
 let inflightFetch = null;
 

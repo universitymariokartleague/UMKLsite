@@ -1,25 +1,13 @@
 import { loadMatchStartTimes, videoStatusIcon, isTestMatchVideo as isTestMatch, VIDEO_STATUS_EXPIRED_EVENT, getScheduledStart } from '/_assets/scripts/utils/videostatus.js';
+import { getCachedVideos, setCachedVideos } from '/_assets/scripts/utils/videodata.js';
 
 const API_URL = `https://api.umkl.co.uk/videos`;
 const SKELETON_CARD_COUNT = 12;
-const CACHE_KEY = "videosGridCache";
 
 const MAX_TAGS = 15;
 const TEST_MATCH_TAG = "Test Match";
 
 let allVideos = [];
-
-// Cache the raw API payload so repeat visits render instantly
-function getVideosCache() {
-    try {
-        const cached = JSON.parse(localStorage.getItem(CACHE_KEY));
-        return Array.isArray(cached?.data) ? cached.data : null;
-    } catch { return null; }
-}
-
-function setVideosCache(data) {
-    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ savedAt: Date.now(), data })); } catch { }
-}
 
 function renderVideosGridSkeleton(container) {
     const skeletonCard = `
@@ -363,7 +351,7 @@ async function loadVideosGrid() {
 
     const matchStartTimesPromise = loadMatchStartTimes();
 
-    const cachedData = getVideosCache();
+    const cachedData = getCachedVideos();
     const cachedSnapshot = cachedData ? JSON.stringify(cachedData) : null;
     if (cachedData && cachedData.length > 0) {
         applyVideos(container, cachedData, initialSearch, runSearch);
@@ -380,9 +368,8 @@ async function loadVideosGrid() {
             return;
         }
 
-        setVideosCache(data);
+        setCachedVideos(data);
 
-        // only touch the DOM when the fresh payload actually differs.
         if (JSON.stringify(data) !== cachedSnapshot) {
             applyVideos(container, data, initialSearch, runSearch);
         }

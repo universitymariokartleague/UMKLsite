@@ -1,5 +1,5 @@
 import { createDebugLogger } from '/_assets/scripts/utils/debuglogger.js';
-import { buildPost, DRAFT_STORAGE_KEY, isoDate } from '/_assets/scripts/utils/umklpost.js';
+import { buildPost, DRAFT_STORAGE_KEY, ISO_DATE, isoDate } from '/_assets/scripts/utils/umklpost.js';
 
 const debugLog = createDebugLogger('articlebuilder.js', '#2dd4bf', '#99f6e4');
 
@@ -327,6 +327,13 @@ function loadDraft() {
         if (draft.bodyHtml) bodyEditor.innerHTML = stripZeroWidthSpaces(draft.bodyHtml);
         if (draft.author !== undefined) metaAuthor.value = draft.author;
         if (draft.tags !== undefined) metaTags.value = draft.tags;
+
+        // Keep the published date when a draft was loaded from an existing article
+        if (ISO_DATE.test(draft.date || '')) {
+            const [year, month, day] = draft.date.split('-').map(Number);
+            lastValidDate = new Date(year, month - 1, day);
+            metaDate.value = formatDate(lastValidDate);
+        }
 
         // Restore the main image if it was saved
         if (draft.mainImageUrl && draft.isMainImageVisible) {

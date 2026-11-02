@@ -5,6 +5,7 @@
 
 import { copyTextToClipboard } from '/_assets/scripts/utils/shareAPIhelper.js';
 import { icon } from '/_assets/scripts/utils/icons.js';
+import { getTeamColors } from '/_assets/scripts/utils/teamcolors.js';
 
 const STORAGE_KEY = 'livescoreTeam';
 
@@ -17,15 +18,7 @@ const copyButtonLabel = `${icon('copy')} Copy link`;
 let copyResetTimer = null;
 
 async function getTeamcolors() {
-    const response = await fetch('https://api.umkl.co.uk/teamcolors', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: "{}"
-    });
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-    localStorage.setItem("apiReqsSent", apiReqsSent + 1);
-    return response.json();
+    return getTeamColors();
 }
 
 function buildLink(team) {

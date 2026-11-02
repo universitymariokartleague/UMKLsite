@@ -4,6 +4,7 @@
 */
 
 import { getMatchData, normalizeMatchData, getMatchCache } from '/_assets/scripts/utils/matchdata.js';
+import { getCache, setCache } from '/_assets/scripts/utils/cache.js';
 import { bestTrack, worstTrack } from '/_assets/scripts/utils/trackrecord.js';
 import { createDebugLogger } from '/_assets/scripts/utils/debuglogger.js';
 
@@ -59,15 +60,15 @@ const isLightColor = (color) => {
 
 // Caching (per-season stats only - the team box itself is always built from live data)
 const getSeasonCache = (team, season) => {
-    try { return (JSON.parse(localStorage.getItem(CACHE_KEY)) || {})[`${team}_s${season}`] || null; } catch { return null; }
+    const cache = getCache(CACHE_KEY);
+    return (cache && typeof cache === 'object' ? cache : {})[`${team}_s${season}`] || null;
 };
 
 const setSeasonCache = (team, season, data) => {
-    try {
-        const cache = JSON.parse(localStorage.getItem(CACHE_KEY)) || {};
-        cache[`${team}_s${season}`] = data;
-        localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
-    } catch { }
+    const cache = getCache(CACHE_KEY);
+    const next = cache && typeof cache === 'object' ? cache : {};
+    next[`${team}_s${season}`] = data;
+    setCache(CACHE_KEY, next);
 };
 
 // Formatting

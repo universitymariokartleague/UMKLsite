@@ -5,6 +5,7 @@
 */
 import { createColorPicker } from '/_assets/scripts/components/colorpicker.js';
 import { getMatchData, getMatchCache } from '/_assets/scripts/utils/matchdata.js';
+import { getTeamColors } from '/_assets/scripts/utils/teamcolors.js';
 import { readResultsScreenshot, groupPlayersByTag } from '/_assets/scripts/utils/resultsocr.js';
 import { getTeamTags } from '/_assets/scripts/utils/teamtags.js';
 import { isWindowsOrLinux, copyImageToClipboard, shareImage, showImagePreview, setOriginalMessage, getOriginalMessage, getIsPopupShowing } from '/_assets/scripts/utils/shareAPIhelper.js';
@@ -182,15 +183,7 @@ function getEmblem(name) {
 }
 
 async function getTeamcolors() {
-    const response = await fetch('https://api.umkl.co.uk/teamcolors', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: "{}"
-    });
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    const apiReqsSent = parseInt(localStorage.getItem("apiReqsSent")) || 0;
-    localStorage.setItem("apiReqsSent", apiReqsSent + 1);
-    return response.json();
+    return getTeamColors();
 }
 
 async function findEvent(eventID) {
