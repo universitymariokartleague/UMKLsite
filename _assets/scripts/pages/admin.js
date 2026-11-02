@@ -647,8 +647,6 @@ function articleCard(article) {
         <div class="article-card-body">
             <div class="article-card-eyebrow">
                 <span class="article-card-date">${escapeHtml(date)}</span>
-                ${author ? `<span class="article-card-author">${escapeHtml(author)}</span>` : ''}
-                <span class="article-card-views">${views.toLocaleString()} ${views === 1 ? 'view' : 'views'}</span>
             </div>
             <h3 class="article-card-title">
                 <a href="${escapeHtml(article.link)}" target="_blank"
@@ -656,6 +654,10 @@ function articleCard(article) {
             </h3>
             ${article.description ? `<p class="article-card-desc">${escapeHtml(article.description)}</p>` : ''}
             <div class="article-card-foot">
+                <div class="article-card-info">
+                    ${author ? `<span class="article-card-author">${escapeHtml(author)}</span>` : ''}
+                    <span class="article-card-views">${views.toLocaleString()} ${views === 1 ? 'view' : 'views'}</span>
+                </div>
                 <div class="article-card-tags">${tags.map(tag =>
         `<span class="admin-pill">${escapeHtml(tag)}</span>`).join('')}</div>
                 <div class="article-card-actions">
@@ -699,8 +701,7 @@ async function renderArticles() {
                 <h3>Publish an article</h3>
                 <p class="admin-muted">Write it in the <a class="no-underline-link"
                         href="/tools/articlebuilder/" target="_blank" rel="noopener noreferrer">Article
-                    Builder</a>, then publish the draft from here, or export the
-                    <code>.umklpost</code> and upload that.</p>
+                    Builder</a>.</p>
             </div>
             <div class="article-upload-row">
                 <button class="admin-btn" id="article-upload-choose">Choose file</button>
