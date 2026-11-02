@@ -74,6 +74,19 @@ function renderArticle(article) {
     renderMeta(article);
 }
 
+// Counts one view per browsing session
+function recordView(slug) {
+    const key = `article-viewed:${slug}`;
+    try {
+        if (sessionStorage.getItem(key)) return;
+        sessionStorage.setItem(key, '1');
+    } catch (error) {
+        // Storage can be unavailable (private mode); count the view anyway.
+    }
+    fetch(`${ARTICLES_API}/${encodeURIComponent(slug)}/views`, { method: 'POST' })
+        .catch(() => { });
+}
+
 async function loadArticle() {
     const slug = slugFromPath(window.location.pathname);
     if (!slug) return;
@@ -83,6 +96,7 @@ async function loadArticle() {
         if (response.status === 404) throw new Error('missing');
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         renderArticle(await response.json());
+        recordView(slug);
     } catch (error) {
         console.error(`%carticlerender.js%c > %cCouldn't load article "${slug}": ${error}`,
             'color:#fcce27', 'color:#fff', 'color:#ffefb5');

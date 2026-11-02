@@ -2,11 +2,24 @@ import { loadMatchStartTimes, videoStatusIcon, isTestMatchVideo as isTestMatch, 
 
 const API_URL = `https://api.umkl.co.uk/videos`;
 const SKELETON_CARD_COUNT = 12;
+const CACHE_KEY = "videosGridCache";
 
 const MAX_TAGS = 15;
 const TEST_MATCH_TAG = "Test Match";
 
 let allVideos = [];
+
+// Cache the raw API payload so repeat visits render instantly
+function getVideosCache() {
+    try {
+        const cached = JSON.parse(localStorage.getItem(CACHE_KEY));
+        return Array.isArray(cached?.data) ? cached.data : null;
+    } catch { return null; }
+}
+
+function setVideosCache(data) {
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ savedAt: Date.now(), data })); } catch { }
+}
 
 function renderVideosGridSkeleton(container) {
     const skeletonCard = `
@@ -317,6 +330,20 @@ function setupVideoSearch(container) {
     return runSearch;
 }
 
+function applyVideos(container, data, initialSearch, runSearch) {
+    allVideos = data;
+    precomputeSearchData(allVideos);
+
+    const tagsContainer = document.getElementById("videos-tags");
+    if (tagsContainer) renderTags(tagsContainer, getAvailableTags(allVideos));
+
+    const searchInput = document.getElementById("videos-search");
+    const term = (searchInput?.value || initialSearch).trim().toLowerCase();
+
+    if (runSearch) runSearch(term);
+    else renderVideos(container, allVideos, term);
+}
+
 async function loadVideosGrid() {
     const container = document.getElementById("videosGridContainer");
     if (!container) return;
@@ -334,26 +361,37 @@ async function loadVideosGrid() {
         runSearch ? runSearch(term) : renderVideos(container, allVideos, term);
     });
 
+    const matchStartTimesPromise = loadMatchStartTimes();
+
+    const cachedData = getVideosCache();
+    const cachedSnapshot = cachedData ? JSON.stringify(cachedData) : null;
+    if (cachedData && cachedData.length > 0) {
+        applyVideos(container, cachedData, initialSearch, runSearch);
+    }
+
     try {
-        const [response] = await Promise.all([fetch(API_URL), loadMatchStartTimes()]);
+        const [response] = await Promise.all([fetch(API_URL), matchStartTimesPromise]);
         const data = await response.json();
 
         if (!Array.isArray(data) || data.length === 0) {
-            container.innerHTML = `<p class="carousel-loading">No videos found.</p>`;
+            if (!cachedData || cachedData.length === 0) {
+                container.innerHTML = `<p class="carousel-loading">No videos found.</p>`;
+            }
             return;
         }
 
-        allVideos = data;
-        precomputeSearchData(allVideos);
+        setVideosCache(data);
 
-        const tagsContainer = document.getElementById("videos-tags");
-        if (tagsContainer) renderTags(tagsContainer, getAvailableTags(allVideos));
-
-        runSearch ? runSearch(initialSearch.toLowerCase()) : renderVideos(container, allVideos);
+        // only touch the DOM when the fresh payload actually differs.
+        if (JSON.stringify(data) !== cachedSnapshot) {
+            applyVideos(container, data, initialSearch, runSearch);
+        }
 
     } catch (error) {
         console.error("Error loading UMKL YouTube videos grid:", error);
-        container.innerHTML = `<p class="carousel-loading">Failed to load videos.</p>`;
+        if (!cachedData || cachedData.length === 0) {
+            container.innerHTML = `<p class="carousel-loading">Failed to load videos.</p>`;
+        }
     }
 }
 

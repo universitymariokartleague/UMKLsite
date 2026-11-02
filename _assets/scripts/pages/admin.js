@@ -566,6 +566,7 @@ function articleCard(article) {
     const alt = article.image_alt || '';
     const date = formatArticleDate(article.published_date);
     const author = (article.author || '').trim();
+    const views = Number(article.views) || 0;
 
     return `<article class="article-card">
         <div class="article-card-media">
@@ -584,6 +585,7 @@ function articleCard(article) {
             <div class="article-card-eyebrow">
                 <span class="article-card-date">${escapeHtml(date)}</span>
                 ${author ? `<span class="article-card-author">${escapeHtml(author)}</span>` : ''}
+                <span class="article-card-views">${views.toLocaleString()} ${views === 1 ? 'view' : 'views'}</span>
             </div>
             <h3 class="article-card-title">
                 <a href="${escapeHtml(article.link)}" target="_blank"

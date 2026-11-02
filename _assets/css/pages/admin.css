@@ -627,6 +627,12 @@
     opacity: 0.7;
 }
 
+.article-card-views:not(:first-child)::before {
+    content: "·";
+    margin-right: 8px;
+    opacity: 0.7;
+}
+
 .article-card-title {
     margin: 0;
     font-size: 1rem;
