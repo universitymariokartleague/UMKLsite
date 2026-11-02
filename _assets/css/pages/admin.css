@@ -659,8 +659,8 @@
 }
 
 .article-card-tags .admin-pill {
-    padding: 2px 8px;
-    font-size: 0.68rem;
+    padding: 2px 6px;
+    font-size: 0.64rem;
 }
 
 .article-card-actions {
@@ -679,6 +679,11 @@
     min-width: 32px;
     height: 32px;
     padding: 0;
+}
+
+.article-card-actions a[target="_blank"]::after {
+    content: none;
+    display: none;
 }
 
 .article-card-icon {

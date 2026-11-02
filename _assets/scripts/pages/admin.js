@@ -537,9 +537,9 @@ function draftPreview(draft) {
                     <dt>Publish date</dt><dd>${escapeHtml(draftDate || 'today, when you upload')}</dd>
                 </dl>
                 <div class="article-upload-row">
-                    <button class="admin-btn accent" id="article-draft-upload">Publish this draft</button>
-                    <button class="admin-btn" id="article-draft-download">Download .umklpost</button>
-                    <a class="admin-btn" href="/tools/articlebuilder/" target="_blank" rel="noopener noreferrer">Back to the builder</a>
+                    <button class="admin-btn accent" id="article-draft-upload">Publish to site</button>
+                    <button class="admin-btn" id="article-draft-download">Download</button>
+                    <a class="admin-btn" href="/tools/articlebuilder/" rel="noopener noreferrer">Edit</a>
                 </div>
                 <span id="article-draft-status" class="admin-muted"></span>
             </div>
