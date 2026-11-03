@@ -347,8 +347,7 @@ async function renderAudit() {
         { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
 
     els.body.innerHTML = `<div class="admin-panel">
-        <div class="admin-panel-head"><h2>Audit trail</h2>
-            <div class="admin-bar-spacer"></div>
+        <div class="admin-panel-head"><h2>Audit trail</h2></div>
         ${info.entries.length ? `<div class="table-scroll-wrapper">
             <table class="admin-table">
                 <thead><tr><th>When</th><th>Who</th><th>Action</th>
@@ -748,9 +747,7 @@ async function renderArticles() {
     const [info, draft] = [await adminFetch('/articles', { query: { page: state.page, per_page: 50 } }), readBuilderDraft()];
 
     els.body.innerHTML = (draft ? draftPreview(draft) : '') + `<div class="admin-panel">
-        <div class="admin-panel-head"><h2>Articles</h2>
-            <div class="admin-bar-spacer"></div>
-
+        <div class="admin-panel-head"><h2>Articles</h2></div>
         <div class="article-upload">
             <div class="article-upload-copy">
                 <h3>Publish an article</h3>
@@ -770,6 +767,8 @@ async function renderArticles() {
     <div class="admin-panel">
         <div class="admin-panel-head"><h2>Published</h2>
             <div class="admin-bar-spacer"></div>
+            <span class="admin-muted">${plural(info.total ?? info.articles.length, 'article')}</span>
+        </div>
         ${info.articles.length
             ? `<div class="article-grid">${info.articles.map(articleCard).join('')}</div>`
             : emptyTable('No articles published yet.')}
