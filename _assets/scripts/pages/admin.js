@@ -93,16 +93,28 @@ function renderSignedOut() {
     els.panel.hidden = true;
 }
 
+function rolePills(me) {
+    const key = role => String(role ?? '').trim().toLowerCase();
+    const adminRoles = new Set((me.admin_roles || []).map(key));
+    const seen = new Set();
+
+    return (me.roles || [])
+        .filter(role => {
+            const id = key(role);
+            if (!id || id === '@everyone' || !adminRoles.has(id) || seen.has(id)) return false;
+            seen.add(id);
+            return true;
+        })
+        .map(role => `<span class="admin-pill">${escapeHtml(String(role).trim())}</span>`)
+        .join('');
+}
+
 function renderSignedIn(me) {
     els.signedOut.hidden = true;
     els.panel.hidden = false;
 
     els.who.textContent = me.name || 'Signed in';
-    const adminRoles = new Set(me.admin_roles || []);
-    els.roles.innerHTML = (me.roles || [])
-        .filter(role => role !== '@everyone' && adminRoles.has(role))
-        .map(role => `<span class="admin-pill">${escapeHtml(role)}</span>`)
-        .join('');
+    els.roles.innerHTML = rolePills(me);
 
     setMessage(els.message, accessNotice(me), 'caution');
 }
