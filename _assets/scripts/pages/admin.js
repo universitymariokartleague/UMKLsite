@@ -20,6 +20,26 @@ const VIEWS = {
     health: 'Health'
 };
 
+/** Sidebar sections, so ten destinations don't need to fit on one line. */
+const NAV_GROUPS = [
+    { label: 'Content', views: ['articles', 'media'] },
+    { label: 'League', views: ['matches', 'teams', 'seasons', 'tickets'] },
+    { label: 'System', views: ['backups', 'audit', 'commits', 'health'] }
+];
+
+const NAV_ICONS = {
+    articles: 'news',
+    media: 'play',
+    matches: 'flag-checkered',
+    teams: 'trophy',
+    seasons: 'calendar',
+    tickets: 'open',
+    backups: 'download',
+    audit: 'table-list',
+    commits: 'clock',
+    health: 'flask'
+};
+
 const STATUS_FILTERS = {
     matches: ['open', 'awaiting_results', 'approved', 'complete'],
     tickets: ['open', 'closed']
@@ -87,9 +107,8 @@ function renderSignedIn(me) {
     setMessage(els.message, accessNotice(me), 'caution');
 }
 
-/** Views the current session isn't allowed to use, so their tab is hidden. */
 /**
- * Views the current session isn't allowed to use, so their tab is hidden.
+ * Views the current session isn't allowed to use, so their nav item is hidden.
  *
  * Three independent gates: league data (Board/Manager/Developer), backup
  * downloads (Board/Developer), and the media view everyone gets.
@@ -110,11 +129,32 @@ function visibleViews() {
 
 function renderNav() {
     const views = visibleViews();
-    els.nav.innerHTML = Object.entries(views).map(([view, label]) => {
-        const active = view === state.view;
-        return `<a class="bubble-nav-item${active ? ' active' : ''}" href="?view=${view}"
-            ${active ? 'aria-current="page"' : ''}>${label}</a>`;
-    }).join('');
+    const placed = new Set();
+
+    const groups = NAV_GROUPS.map(group => {
+        const items = group.views.filter(view => Object.hasOwn(views, view));
+        items.forEach(view => placed.add(view));
+        return { label: group.label, views: items };
+    });
+
+    // Any view added in future that isn't listed in NAV_GROUPS still shows up.
+    const unplaced = Object.keys(views).filter(view => !placed.has(view));
+    if (unplaced.length) groups.push({ label: 'More', views: unplaced });
+
+    els.nav.innerHTML = groups
+        .filter(group => group.views.length)
+        .map(group => `<div class="admin-nav-group">
+            <span class="admin-nav-label">${group.label}</span>
+            ${group.views.map(view => {
+            const active = view === state.view;
+            return `<a class="admin-nav-item${active ? ' active' : ''}" href="?view=${view}"
+                    ${active ? 'aria-current="page"' : ''}>
+                    ${icon(NAV_ICONS[view] || 'table-list', 'admin-nav-icon')}
+                    <span>${views[view]}</span>
+                </a>`;
+        }).join('')}
+        </div>`)
+        .join('');
 }
 
 function teamsCell(teams) {

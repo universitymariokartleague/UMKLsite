@@ -417,8 +417,6 @@ function calculateScore(position) {
     return scoreMap[position - 1] || 1; // Default to 1 if position is out of range
 }
 
-import { getTeamColors } from '/_assets/scripts/utils/teamcolors.js';
-
 async function getTeamcolors() {
     return getTeamColors();
 }

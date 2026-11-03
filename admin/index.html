@@ -41,31 +41,37 @@
         </div>
 
         <div id="admin-panel" hidden>
-            <h1>Admin panel</h1>
-            <p class="p-below-title">
-                The UMKL admin panel! Top secret!
-            </p>
-
-            <div class="admin-bar">
-                <nav class="bubble-nav admin-nav" id="admin-nav"></nav>
-                <div class="admin-bar-spacer"></div>
-                <div class="admin-who">
-                    <div class="admin-who-box">
+            <header class="admin-header">
+                <div class="admin-heading">
+                    <h1>Admin panel</h1>
+                    <p class="p-below-title">The UMKL admin panel! Top secret!</p>
+                </div>
+                <div class="admin-account">
+                    <div class="admin-account-info">
+                        <span class="admin-account-label">Signed in as</span>
                         <span class="admin-who-name" id="admin-who"></span>
                         <span class="admin-role-list" id="admin-roles"></span>
                     </div>
                     <button class="admin-btn small" id="admin-logout">Sign out</button>
                 </div>
+            </header>
+
+            <div class="admin-layout">
+                <aside class="admin-sidebar">
+                    <nav class="admin-nav" id="admin-nav" aria-label="Admin sections"></nav>
+                </aside>
+
+                <div class="admin-content">
+                    <div id="admin-message" class="admin-message error" hidden></div>
+
+                    <div class="admin-filter" id="admin-filters" hidden>
+                        <input type="search" id="filter-search" placeholder="Search" aria-label="Search">
+                        <select id="filter-status" aria-label="Filter by status"></select>
+                    </div>
+
+                    <div id="admin-view-body"></div>
+                </div>
             </div>
-
-            <div id="admin-message" class="admin-message error" hidden></div>
-
-            <div class="admin-filter" id="admin-filters" hidden>
-                <input type="search" id="filter-search" placeholder="Search" aria-label="Search">
-                <select id="filter-status" aria-label="Filter by status"></select>
-            </div>
-
-            <div id="admin-view-body"></div>
         </div>
     </main>
 
