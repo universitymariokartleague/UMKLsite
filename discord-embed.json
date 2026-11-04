@@ -16,6 +16,12 @@
           "media": { "url": "https://umkl.co.uk/_assets/media/brand/guidelines/logo_transparent_standard.png" }
         }
       },
+      {
+        "type": 12,
+        "items": [
+          { "media": { "url": "https://umkl.co.uk/_assets/media/brand/guidelines/wordmark_on_standard_background.png" } }
+        ]
+      },
       { "type": 14, "spacing": 1 },
       {
         "type": 1,
