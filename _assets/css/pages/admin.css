@@ -860,22 +860,7 @@
     padding: 24px;
     border: none;
     color: #fff;
-    background: linear-gradient(135deg,
-            color-mix(in oklch, var(--accent-color) 88%, #fff 12%) 0%,
-            var(--accent-color) 45%,
-            color-mix(in oklch, var(--accent-color) 48%, #000 52%) 100%);
-}
-
-.season-hero::after {
-    content: '';
-    position: absolute;
-    right: -120px;
-    bottom: -160px;
-    width: 360px;
-    height: 360px;
-    border-radius: 50%;
-    pointer-events: none;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.18) 0, transparent 70%);
+    background-color: var(--accent-color);
 }
 
 .season-hero-watermark {
@@ -908,16 +893,8 @@
     color: rgba(255, 255, 255, 0.68);
 }
 
-.season-hero-title {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 12px;
-    margin: 6px 0 10px;
-}
-
-.season-hero-title h2 {
-    margin: 0;
+.season-hero-heading h2 {
+    margin: 6px 0 4px;
     font-size: 2rem;
     line-height: 1.05;
     color: #fff;
@@ -925,7 +902,7 @@
 
 .season-hero-note {
     max-width: 52ch;
-    margin: 0;
+    margin: 10px 0 0;
     line-height: 1.5;
     color: rgba(255, 255, 255, 0.82);
 }
@@ -1001,52 +978,6 @@
     color: rgba(255, 255, 255, 0.65);
 }
 
-.season-stat-note {
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.72);
-}
-
-.season-meter {
-    display: block;
-    width: 100%;
-    max-width: 280px;
-    height: 6px;
-    overflow: hidden;
-    border-radius: var(--border-radius-pill);
-    background-color: var(--translucent-color);
-}
-
-.season-meter-fill {
-    display: block;
-    height: 100%;
-    border-radius: inherit;
-    background-color: var(--accent-color);
-    transition: width 0.3s ease;
-}
-
-.season-meter-on-dark {
-    max-width: none;
-    background-color: rgba(255, 255, 255, 0.22);
-}
-
-.season-meter-on-dark .season-meter-fill {
-    background-color: #fff;
-}
-
-.season-meter-inline {
-    width: 104px;
-    min-width: 104px;
-    max-width: none;
-}
-
-.season-played {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 6px;
-    white-space: nowrap;
-}
-
 .admin-table tbody tr.is-current td {
     background-color: color-mix(in oklch, var(--accent-color) 9%, transparent);
 }
@@ -1061,10 +992,6 @@
     }
 
     .admin-table tbody tr {
-        transition: none;
-    }
-
-    .season-meter-fill {
         transition: none;
     }
 }
@@ -1146,7 +1073,7 @@
         flex-direction: column;
     }
 
-    .season-hero-title h2 {
+    .season-hero-heading h2 {
         font-size: 1.6rem;
     }
 
@@ -1156,10 +1083,6 @@
 
     .season-stat-value {
         font-size: 1.8rem;
-    }
-
-    .season-played {
-        align-items: flex-start;
     }
 
     .admin-panel,
