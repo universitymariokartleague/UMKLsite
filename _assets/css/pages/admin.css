@@ -450,6 +450,31 @@
     gap: 6px;
 }
 
+.admin-pairings {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-pairing {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-pairing-side {
+    min-width: 0;
+}
+
+.admin-versus {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    opacity: 0.6;
+}
+
 .admin-team-cell {
     display: flex;
     align-items: center;
@@ -826,12 +851,239 @@
     white-space: nowrap;
 }
 
+.season-hero {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 24px;
+    border: none;
+    color: #fff;
+    background: linear-gradient(135deg,
+            color-mix(in oklch, var(--accent-color) 88%, #fff 12%) 0%,
+            var(--accent-color) 45%,
+            color-mix(in oklch, var(--accent-color) 48%, #000 52%) 100%);
+}
+
+.season-hero::after {
+    content: '';
+    position: absolute;
+    right: -120px;
+    bottom: -160px;
+    width: 360px;
+    height: 360px;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.18) 0, transparent 70%);
+}
+
+.season-hero-watermark {
+    position: absolute;
+    top: -0.22em;
+    right: 0.15em;
+    font-size: 9.5rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    color: rgba(255, 255, 255, 0.14);
+    pointer-events: none;
+    user-select: none;
+}
+
+.season-hero-top {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.season-hero-kicker {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.68);
+}
+
+.season-hero-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin: 6px 0 10px;
+}
+
+.season-hero-title h2 {
+    margin: 0;
+    font-size: 2rem;
+    line-height: 1.05;
+    color: #fff;
+}
+
+.season-hero-note {
+    max-width: 52ch;
+    margin: 0;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.season-hero-link.admin-btn {
+    flex-shrink: 0;
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.16);
+}
+
+.season-hero-link.admin-btn:hover:not(:disabled) {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.28);
+}
+
+.season-status {
+    --dot: #fff;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 4px 12px 4px 9px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: var(--border-radius-pill);
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    font-size: 0.73rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.season-status::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background-color: var(--dot);
+    box-shadow: 0 0 8px var(--dot);
+}
+
+.season-status.positive {
+    --dot: #4ade80;
+}
+
+.season-status.caution {
+    --dot: #fde047;
+}
+
+.season-status.negative {
+    --dot: #ff8a9a;
+}
+
+.season-stats {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px 28px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.season-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+}
+
+.season-stat-label {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.season-stat-value {
+    font-size: 2.3rem;
+    font-weight: 900;
+    line-height: 1;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+}
+
+.season-stat-total {
+    margin-left: 4px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.season-stat-note {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.season-meter {
+    display: block;
+    width: 100%;
+    max-width: 280px;
+    height: 6px;
+    overflow: hidden;
+    border-radius: var(--border-radius-pill);
+    background-color: var(--translucent-color);
+}
+
+.season-meter-fill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background-color: var(--accent-color);
+    transition: width 0.3s ease;
+}
+
+.season-meter-on-dark {
+    max-width: none;
+    background-color: rgba(255, 255, 255, 0.22);
+}
+
+.season-meter-on-dark .season-meter-fill {
+    background-color: #fff;
+}
+
+.season-meter-inline {
+    width: 104px;
+    min-width: 104px;
+    max-width: none;
+}
+
+.season-played {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.admin-table tbody tr.is-current td {
+    background-color: color-mix(in oklch, var(--accent-color) 9%, transparent);
+}
+
+.admin-table tbody tr.is-current td:first-child {
+    box-shadow: inset 3px 0 0 var(--accent-color);
+}
+
 @media (prefers-reduced-motion: reduce) {
     .admin-btn:active:not(:disabled) {
         transform: none;
     }
 
     .admin-table tbody tr {
+        transition: none;
+    }
+
+    .season-meter-fill {
         transition: none;
     }
 }
@@ -902,6 +1154,31 @@
 @media screen and (max-width: 700px) {
     .admin-hide-small {
         display: none;
+    }
+
+    .season-hero {
+        padding: 18px;
+        gap: 16px;
+    }
+
+    .season-hero-top {
+        flex-direction: column;
+    }
+
+    .season-hero-title h2 {
+        font-size: 1.6rem;
+    }
+
+    .season-hero-watermark {
+        font-size: 6rem;
+    }
+
+    .season-stat-value {
+        font-size: 1.8rem;
+    }
+
+    .season-played {
+        align-items: flex-start;
     }
 
     .admin-panel,

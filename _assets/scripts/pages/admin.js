@@ -179,6 +179,15 @@ function teamsCell(teams) {
         </div>`).join('')}</div>`;
 }
 
+function pairingSide(name) {
+    const team = String(name ?? '');
+    return `<span class="admin-team-cell admin-pairing-side">
+        ${emblem(team)}
+        <a class="no-underline-link"
+           href="/teams/details/?team=${encodeURIComponent(team)}">${escapeHtml(team)}</a>
+    </span>`;
+}
+
 function pager(info) {
     const current = info.page || 1;
     const pages = Math.max(1, Math.ceil((info.total || 0) / (info.limit || 1)));
@@ -264,6 +273,16 @@ async function renderTeams() {
     </div>`;
 }
 
+/** Progress bar for a season - completed out of total, clamped. */
+function seasonMeter(completed, total, className = '') {
+    const done = Number(completed) || 0;
+    const all = Number(total) || 0;
+    const pct = all ? Math.min(100, Math.round((done / all) * 100)) : 0;
+    return `<span class="season-meter${className ? ` ${className}` : ''}" role="progressbar"
+        aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Matches played">
+        <span class="season-meter-fill" style="width:${pct}%"></span></span>`;
+}
+
 async function renderSeasons() {
     const [list, current] = await Promise.all([
         adminFetch('/seasons'),
@@ -271,29 +290,73 @@ async function renderSeasons() {
     ]);
     showFilters(null, null);
 
-    const rounds = Object.entries(current.rounds || {});
-    const tone = current.status === 'completed' ? 'positive' : 'caution';
+    const rounds = Object.entries(current.rounds || {})
+        .sort(([a], [b]) => Number(a) - Number(b));
+    const done = Number(current.matches_completed) || 0;
+    const total = Number(current.matches_total) || 0;
+    const remaining = Math.max(0, total - done);
+    const currentRound = current.current_round;
+    const currentPairs = rounds.find(([round]) => Number(round) === Number(currentRound))?.[1]?.length ?? 0;
+    const isComplete = String(current.status || '').toLowerCase() === 'completed';
+
+    let summary;
+    if (isComplete) {
+        summary = 'Season complete.';
+    } else if (total > 0 && remaining === 0) {
+        summary = 'All matches have been played.';
+    } else if (remaining > 0) {
+        summary = `${remaining} match${remaining === 1 ? '' : 'es'} left`
+            + (currentRound != null ? ` &middot; round ${escapeHtml(String(currentRound))}` : '');
+    } else {
+        summary = 'No fixtures scheduled yet.';
+    }
 
     els.body.innerHTML = `
-    <div class="admin-panel">
-        <div class="admin-panel-head"><h2>Current season</h2></div>
-        <table class="admin-table admin-summary">
-            <tbody>
-                <tr><th>Season</th><td>#${current.season_id}</td></tr>
-                <tr><th>Status</th><td><span class="admin-pill ${tone}">${escapeHtml(current.status)}</span></td></tr>
-                <tr><th>Matches played</th><td class="admin-num">${current.matches_completed} / ${current.matches_total}</td></tr>
-                <tr><th>Current round</th><td class="admin-num">${current.current_round ?? '-'}</td></tr>
-            </tbody>
-        </table>
-    </div>
+    <section class="admin-panel season-hero" aria-labelledby="season-hero-title">
+        <span class="season-hero-watermark" aria-hidden="true">${escapeHtml(String(current.season_id ?? ''))}</span>
+        <div class="season-hero-top">
+            <div class="season-hero-heading">
+                <span class="season-hero-kicker">Current season</span>
+                <div class="season-hero-title">
+                    <h2 id="season-hero-title">Season #${escapeHtml(String(current.season_id ?? ''))}</h2>
+                    <span class="season-status ${statusTone(current.status)}">${escapeHtml(current.status)}</span>
+                </div>
+                <p class="season-hero-note">${summary}</p>
+            </div>
+            <a class="admin-btn small season-hero-link"
+                href="?view=matches&amp;season=${encodeURIComponent(current.season_id ?? '')}">View matches</a>
+        </div>
+        <div class="season-stats">
+            <div class="season-stat">
+                <span class="season-stat-label">Matches played</span>
+                <span class="season-stat-value">${done}<span class="season-stat-total">/ ${total}</span></span>
+                ${seasonMeter(done, total, 'season-meter-on-dark')}
+            </div>
+            <div class="season-stat">
+                <span class="season-stat-label">Current round</span>
+                <span class="season-stat-value">${currentRound ?? '-'}</span>
+                <span class="season-stat-note">of ${rounds.length || '?'} round${rounds.length === 1 ? '' : 's'} set up</span>
+            </div>
+            <div class="season-stat">
+                <span class="season-stat-label">Matches this round</span>
+                <span class="season-stat-value">${currentPairs}</span>
+                <span class="season-stat-note">${currentPairs === 1 ? 'fixture' : 'fixtures'}</span>
+            </div>
+        </div>
+    </section>
 
     <div class="admin-panel">
         <div class="admin-panel-head"><h3>Round pairings</h3></div>
-        ${rounds.length ? rounds.map(([round, pairs], index) => `${index ? '<hr class="admin-divider">' : ''}
-            <p class="admin-round">Round ${escapeHtml(round)}</p>
-            <div class="admin-teams">${pairs.map(pair => `<div class="admin-team-cell">
-                ${escapeHtml(pair.join(' vs '))}
-            </div>`).join('')}</div>`).join('') : emptyTable('No rounds set up yet.')}
+        ${rounds.length ? rounds.map(([round, pairs], index) => {
+        const isCurrent = Number(round) === Number(current.current_round);
+        return `${index ? '<hr class="admin-divider">' : ''}
+            <p class="admin-round">Round ${escapeHtml(round)}${isCurrent ? ' <span class="admin-pill accent">current</span>' : ''}</p>
+            <div class="admin-pairings">${pairs.map(pair => `<div class="admin-pairing">
+                ${pairingSide(pair[0])}
+                <span class="admin-versus">vs</span>
+                ${pairingSide(pair[1])}
+            </div>`).join('')}</div>`;
+    }).join('') : emptyTable('No rounds set up yet.')}
     </div>
 
     <div class="admin-panel">
@@ -301,10 +364,15 @@ async function renderSeasons() {
         <div class="table-scroll-wrapper">
             <table class="admin-table">
                 <thead><tr><th>Season</th><th>Status</th><th class="admin-num">Played</th></tr></thead>
-                <tbody>${list.seasons.map(season => `<tr>
+                <tbody>${list.seasons.map(season => `<tr class="${season.is_current ? 'is-current' : ''}">
                     <td>#${season.season_id}${season.is_current ? ' <span class="admin-pill accent">current</span>' : ''}</td>
                     <td><span class="admin-pill ${statusTone(season.status)}">${escapeHtml(season.status)}</span></td>
-                    <td class="admin-num">${season.matches_completed} / ${season.matches_total}</td>
+                    <td class="admin-num">
+                        <div class="season-played">
+                            <span>${season.matches_completed} / ${season.matches_total}</span>
+                            ${seasonMeter(season.matches_completed, season.matches_total, 'season-meter-inline')}
+                        </div>
+                    </td>
                 </tr>`).join('')}</tbody>
             </table>
         </div>
