@@ -273,6 +273,16 @@ async function renderTeams() {
     </div>`;
 }
 
+const SEASON_STATUS_TEXT = {
+    ongoing: 'Ongoing',
+    completed: 'Completed',
+    upcoming: 'Upcoming'
+};
+
+const seasonPlayedTotal = season => String(season.status || '').toLowerCase() === 'completed'
+    ? Number(season.matches_total) || 0
+    : (Number(season.matches_total) || 0) * 4;
+
 /** Progress bar for a season - completed out of total, clamped. */
 function seasonMeter(completed, total, className = '') {
     const done = Number(completed) || 0;
@@ -293,11 +303,10 @@ async function renderSeasons() {
     const rounds = Object.entries(current.rounds || {})
         .sort(([a], [b]) => Number(a) - Number(b));
     const done = Number(current.matches_completed) || 0;
-    const total = Number(current.matches_total) || 0;
+    const isComplete = String(current.status || '').toLowerCase() === 'completed';
+    const total = seasonPlayedTotal(current);
     const remaining = Math.max(0, total - done);
     const currentRound = current.current_round;
-    const currentPairs = rounds.find(([round]) => Number(round) === Number(currentRound))?.[1]?.length ?? 0;
-    const isComplete = String(current.status || '').toLowerCase() === 'completed';
 
     let summary;
     if (isComplete) {
@@ -318,8 +327,8 @@ async function renderSeasons() {
             <div class="season-hero-heading">
                 <span class="season-hero-kicker">Current season</span>
                 <div class="season-hero-title">
-                    <h2 id="season-hero-title">Season #${escapeHtml(String(current.season_id ?? ''))}</h2>
-                    <span class="season-status ${statusTone(current.status)}">${escapeHtml(current.status)}</span>
+                    <h2 id="season-hero-title">Season ${escapeHtml(String(current.season_id ?? ''))}</h2>
+                    <span class="season-status ${statusTone(current.status)}">${escapeHtml(SEASON_STATUS_TEXT[String(current.status || '').toLowerCase()] || statusLabel(current.status))}</span>
                 </div>
                 <p class="season-hero-note">${summary}</p>
             </div>
@@ -336,11 +345,6 @@ async function renderSeasons() {
                 <span class="season-stat-label">Current round</span>
                 <span class="season-stat-value">${currentRound ?? '-'}</span>
                 <span class="season-stat-note">of ${rounds.length || '?'} round${rounds.length === 1 ? '' : 's'} set up</span>
-            </div>
-            <div class="season-stat">
-                <span class="season-stat-label">Matches this round</span>
-                <span class="season-stat-value">${currentPairs}</span>
-                <span class="season-stat-note">${currentPairs === 1 ? 'fixture' : 'fixtures'}</span>
             </div>
         </div>
     </section>
@@ -369,8 +373,8 @@ async function renderSeasons() {
                     <td><span class="admin-pill ${statusTone(season.status)}">${escapeHtml(season.status)}</span></td>
                     <td class="admin-num">
                         <div class="season-played">
-                            <span>${season.matches_completed} / ${season.matches_total}</span>
-                            ${seasonMeter(season.matches_completed, season.matches_total, 'season-meter-inline')}
+                            <span>${season.matches_completed} / ${seasonPlayedTotal(season)}</span>
+                            ${seasonMeter(season.matches_completed, seasonPlayedTotal(season), 'season-meter-inline')}
                         </div>
                     </td>
                 </tr>`).join('')}</tbody>

@@ -943,42 +943,23 @@
 }
 
 .season-status {
-    --dot: #fff;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 4px 12px 4px 9px;
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    border-radius: var(--border-radius-pill);
-    background-color: rgba(255, 255, 255, 0.15);
-    color: #fff;
-    font-size: 0.73rem;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    --status-color: #fff;
+    color: var(--status-color);
+    font-size: 1rem;
+    font-weight: 700;
     white-space: nowrap;
 }
 
-.season-status::before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    background-color: var(--dot);
-    box-shadow: 0 0 8px var(--dot);
-}
-
 .season-status.positive {
-    --dot: #4ade80;
+    --status-color: #4ade80;
 }
 
 .season-status.caution {
-    --dot: #fde047;
+    --status-color: #fde047;
 }
 
 .season-status.negative {
-    --dot: #ff8a9a;
+    --status-color: #ff8a9a;
 }
 
 .season-stats {
