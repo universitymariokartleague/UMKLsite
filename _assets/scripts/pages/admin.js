@@ -315,7 +315,6 @@ async function renderSeasons() {
         <span class="season-hero-watermark" aria-hidden="true">${escapeHtml(String(current.season_id ?? ''))}</span>
         <div class="season-hero-top">
             <div class="season-hero-heading">
-                <span class="season-hero-kicker">Current season</span>
                 <h2 id="season-hero-title">Season ${escapeHtml(String(current.season_id ?? ''))}</h2>
                 <span class="season-status ${statusTone(current.status)}">${escapeHtml(SEASON_STATUS_TEXT[String(current.status || '').toLowerCase()] || statusLabel(current.status))}</span>
                 <p class="season-hero-note">${summary}</p>

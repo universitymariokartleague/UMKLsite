@@ -884,17 +884,8 @@
     gap: 16px;
 }
 
-.season-hero-kicker {
-    display: inline-block;
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.68);
-}
-
 .season-hero-heading h2 {
-    margin: 6px 0 4px;
+    margin: 0 0 4px;
     font-size: 2rem;
     line-height: 1.05;
     color: #fff;

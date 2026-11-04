@@ -40,6 +40,48 @@
     <!-- Include this to make the og:image larger -->
     <meta name="twitter:card" content="summary_large_image">
 
+    <!-- Discord component embed (link preview): https://docs.discord.com/developers/link-previews/component-embeds -->
+    <script id="discord:component-embed" type="application/json">
+    {
+      "component": {
+        "type": 17,
+        "accent_color": 12322873,
+        "components": [
+          {
+            "type": 9,
+            "components": [
+              {
+                "type": 10,
+                "content": "# **[UMKL](https://umkl.co.uk/)**\nThe UMKL is a Mario Kart esports championship that brings together students from universities around the UK to compete as teams of six in Mario Kart 8 Deluxe!"
+              }
+            ],
+            "accessory": {
+              "type": 11,
+              "media": { "url": "https://umkl.co.uk/_assets/media/brand/guidelines/logo_transparent_standard.png" }
+            }
+          },
+          { "type": 14, "spacing": 1 },
+          {
+            "type": 1,
+            "components": [
+              { "type": 2, "style": 5, "url": "https://umkl.co.uk/standings/", "label": "Standings" },
+              { "type": 2, "style": 5, "url": "https://umkl.co.uk/schedule/", "label": "Schedule" },
+              { "type": 2, "style": 5, "url": "https://umkl.co.uk/news/", "label": "News" }
+            ]
+          },
+          {
+            "type": 1,
+            "components": [
+              { "type": 2, "style": 5, "url": "https://umkl.co.uk/videos/", "label": "Videos" },
+              { "type": 2, "style": 5, "url": "https://umkl.co.uk/teams/", "label": "Teams" },
+              { "type": 2, "style": 5, "url": "https://umkl.co.uk/rules/joining/", "label": "Join UMKL" }
+            ]
+          }
+        ]
+      }
+    }
+    </script>
+
     <link rel="modulepreload" href="/_assets/webcomponents/navbar.js">
     <link rel="modulepreload" href="/_assets/webcomponents/footer.js">
     <script defer src="/_assets/webcomponents/navbar.js" type="module"></script>
