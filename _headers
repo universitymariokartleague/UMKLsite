@@ -6,3 +6,8 @@
 /_assets/vendor/*
   Cross-Origin-Embedder-Policy: require-corp
   Cross-Origin-Resource-Policy: same-origin
+
+# Already-gzipped ffmpeg wasm - don't let the CDN add Content-Encoding
+/_assets/vendor/ffmpeg/core/ffmpeg-core.wasm.gz
+  Content-Type: application/gzip
+  Cache-Control: no-transform

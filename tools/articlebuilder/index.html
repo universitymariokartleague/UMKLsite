@@ -222,6 +222,13 @@
                         placeholder="Click to add tags (comma separated)">
                 </div>
 
+                <div class="meta-group">
+                    <span class="meta-label">Writing Guidelines</span>
+                    <a class="sidebar-link" href="/rules/brand/#writing" target="_blank" rel="noopener noreferrer">
+                        Read the brand writing guide
+                    </a>
+                </div>
+
                 <div id="checklistWidget" class="checklist-widget">
                     <div class="checklist-header" id="checklistHeader">
                         <div class="checklist-title-group">
@@ -389,6 +396,31 @@
             <div class="modal-actions modal-actions-row">
                 <button id="urlModalCancelBtn" class="btn-modal-option btn-modal-secondary">Cancel</button>
                 <button id="urlModalConfirmBtn" class="btn-modal-option btn-modal-primary">Insert</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="gifModal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h3 id="gifModalTitle">GIFs aren't supported</h3>
+            <span id="gifModalMessage" class="modal-subtitle">
+                Convert this GIF to a WebP in your browser. This could take a little bit, so please be patient.
+            </span>
+
+            <div id="gifModalProgress" class="gif-modal-progress hidden">
+                <div class="gif-modal-progress-bar">
+                    <div id="gifModalProgressFill" class="gif-modal-progress-fill"></div>
+                </div>
+                <span id="gifModalStatus" class="gif-modal-status">Preparing converter...</span>
+            </div>
+
+            <div id="gifModalActions" class="modal-actions modal-actions-row">
+                <button id="gifModalCancelBtn" class="btn-modal-option btn-modal-secondary" type="button">
+                    Cancel
+                </button>
+                <button id="gifModalConvertBtn" class="btn-modal-option btn-modal-primary" type="button">
+                    Convert to WebP
+                </button>
             </div>
         </div>
     </div>

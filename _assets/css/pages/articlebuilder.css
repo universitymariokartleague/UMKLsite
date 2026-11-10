@@ -418,6 +418,61 @@
     outline: 1px solid var(--text-color);
 }
 
+.sidebar-link {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.gif-modal-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.gif-modal-progress.hidden {
+    display: none;
+}
+
+.gif-modal-progress-bar {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--translucent-color);
+    overflow: hidden;
+}
+
+.gif-modal-progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 3px;
+    background: var(--brand-primary);
+    transition: width 0.2s ease;
+}
+
+.gif-modal-progress-fill.indeterminate {
+    width: 35%;
+    animation: gifProgressIndeterminate 1.2s ease-in-out infinite;
+}
+
+.gif-modal-status {
+    font-size: 0.85rem;
+    opacity: 0.75;
+}
+
+#gifModal .btn-modal-option:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+@keyframes gifProgressIndeterminate {
+    from {
+        margin-left: -35%;
+    }
+
+    to {
+        margin-left: 100%;
+    }
+}
+
 .btn-modal-close {
     background: transparent;
     border: none;
