@@ -314,6 +314,31 @@ function saveDraft() {
 }
 
 
+function decorateBodyImages(root = bodyEditor) {
+    root.querySelectorAll('.article-image-wrapper').forEach(wrapper => {
+        if (!wrapper.querySelector('img') || wrapper.querySelector('.btn-remove-image')) return;
+        wrapper.insertAdjacentHTML('afterbegin',
+            '<button type="button" class="btn-remove-image" title="Remove image">&times;</button>');
+    });
+
+    root.querySelectorAll('img').forEach(img => {
+        if (img.closest('.article-image-wrapper')) return;
+
+        const container = document.createElement('div');
+        container.className = 'article-image-container';
+        container.setAttribute('contenteditable', 'false');
+        container.innerHTML = `
+            <div class="article-image-wrapper">
+                <button type="button" class="btn-remove-image" title="Remove image">&times;</button>
+                <span class="article-image-caption" contenteditable="true">Add a description for this image here!</span>
+            </div>
+        `;
+        img.replaceWith(container);
+        container.querySelector('.article-image-wrapper')
+            .insertBefore(img, container.querySelector('.article-image-caption'));
+    });
+}
+
 function loadDraft() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) return;
@@ -324,7 +349,10 @@ function loadDraft() {
         if (draft.title) articleTitle.innerHTML = draft.title;
         if (draft.subtitle) articleSubtitle.innerHTML = draft.subtitle;
         if (draft.mainCaption) mainCaption.innerHTML = draft.mainCaption;
-        if (draft.bodyHtml) bodyEditor.innerHTML = stripZeroWidthSpaces(draft.bodyHtml);
+        if (draft.bodyHtml) {
+            bodyEditor.innerHTML = stripZeroWidthSpaces(draft.bodyHtml);
+            decorateBodyImages();
+        }
         if (draft.author !== undefined) metaAuthor.value = draft.author;
         if (draft.tags !== undefined) metaTags.value = draft.tags;
 
@@ -1314,7 +1342,10 @@ bodyEditor.addEventListener('drop', (e) => {
     bodyEditor.classList.remove('drag-over');
 
     const files = Array.from(e.dataTransfer?.files || []).filter(f => f.type.startsWith('image/'));
-    if (files.length === 0) return; // not a file drop - let the browser handle it as normal
+    if (files.length === 0) {
+        setTimeout(decorateBodyImages, 0);
+        return;
+    }
 
     e.preventDefault();
 
@@ -1512,6 +1543,7 @@ async function importArticleFromZip(file) {
         }
         bodyEditor.innerHTML = bodyEl.innerHTML;
         stripInlineFormatting(bodyEditor);
+        decorateBodyImages();
     }
 
     if (dateText) {
