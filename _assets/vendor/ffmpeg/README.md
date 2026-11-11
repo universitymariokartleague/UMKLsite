@@ -1,6 +1,6 @@
 # ffmpeg.wasm (vendored)
 
-Used by the article builder to convert GIFs to animated 540p WebP in the browser.
+Used by the article builder to convert GIFs to animated WebP in the browser.
 
 - `@ffmpeg/ffmpeg` 0.12.15 (MIT) — see `LICENSE-ffmpeg-wasm.txt`
 - `@ffmpeg/core` 0.12.10, ESM single-thread build (GPL-2.0-or-later) — see `LICENSE-ffmpeg-core.txt`

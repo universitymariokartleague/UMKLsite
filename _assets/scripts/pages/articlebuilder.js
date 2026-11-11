@@ -774,7 +774,7 @@ function resetGifModalState() {
     if (gifModalMessage) {
         gifModalMessage.textContent = gifJobs.length > 1
             ? `Convert these ${gifJobs.length} GIFs to WebP in your browser. This could take a little bit so please be patient.`
-            : 'Convert this GIF to a 540p WebP in your browser. This could take a little bit so please be patient.';
+            : 'Convert this GIF to a WebP in your browser. This could take a little bit so please be patient.';
     }
 
     if (gifModalActions) gifModalActions.classList.remove('hidden');
