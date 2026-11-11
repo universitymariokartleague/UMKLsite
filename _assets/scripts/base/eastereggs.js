@@ -32,9 +32,6 @@ function injectMusic(path) {
     `;
     document.body.appendChild(audioContainer);
 
-    // audioplayer.js is an ES module (it imports the debug logger), so it must be
-    // injected with type="module" - a classic script would throw a SyntaxError.
-    // Note: a <script> written via innerHTML never executes, so it's appended manually.
     const script = document.createElement('script');
     script.type = 'module';
     script.src = '/_assets/scripts/components/audioplayer.js';

@@ -84,6 +84,7 @@ async function buildPost(draft) {
         }
     });
     body.querySelectorAll('.btn-remove-image').forEach(btn => btn.remove());
+    body.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
 
     const tagList = tags.split(',').map(t => t.trim()).filter(Boolean);
     const tagsMarkup = (tagList.length > 0 ? tagList : ['News'])

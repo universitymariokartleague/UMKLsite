@@ -71,6 +71,10 @@ function renderArticle(article) {
     upsertMeta('name', 'twitter:image', ogImage);
 
     document.querySelector('.article-content').outerHTML = article.body_html;
+
+    document.querySelectorAll('.article-content [contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+    document.querySelectorAll('.article-content').forEach(el => el.removeAttribute('contenteditable'));
+
     renderMeta(article);
 }
 
