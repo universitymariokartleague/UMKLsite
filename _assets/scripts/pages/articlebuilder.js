@@ -451,6 +451,7 @@ metaDate.addEventListener('blur', () => {
 function openImageModal(fileInput, callback) {
     activeFileInput = fileInput;
     activeImageCallback = callback;
+    warmAvifEncoder();
     imageModal.classList.remove('hidden');
     imageModal.classList.remove('closing');
     imageModal.style.display = 'flex';
@@ -672,14 +673,133 @@ introModal?.addEventListener('click', (e) => {
     if (e.target === introModal) closeIntroModal();
 });
 
-// Uploaded images - convert to AVIF (skip GIFs)
-let avifEncoderPromise = null;
-function loadAvifEncoder() {
-    if (!avifEncoderPromise) {
-        avifEncoderPromise = import('/_assets/vendor/jsquash-avif/index.js').then(mod => mod.encode);
-    }
-    return avifEncoderPromise;
+// Uploaded images - convert to AVIF (skip GIFs). Encoding runs in a worker.
+const AVIF_WORKER_URL = '/_assets/scripts/workers/avif-encoder.worker.js';
+const AVIF_IDLE_MS = 90_000;
+const AVIF_IDLE_LOW_MEMORY_MS = 30_000;
+
+let avifWorker = null;
+let avifSeq = 0;
+let avifWork = 0;
+let avifIdleTimer = null;
+const avifPending = new Map();
+
+function avifIdleDelay() {
+    const memory = navigator.deviceMemory;
+    return typeof memory === 'number' && memory <= 4
+        ? AVIF_IDLE_LOW_MEMORY_MS
+        : AVIF_IDLE_MS;
 }
+
+function scheduleAvifIdleUnload() {
+    if (avifWork > 0 || !avifWorker) return;
+    clearTimeout(avifIdleTimer);
+    avifIdleTimer = setTimeout(() => {
+        avifIdleTimer = null;
+        if (avifWork > 0) {
+            scheduleAvifIdleUnload();
+            return;
+        }
+        terminateAvifWorker('idle');
+    }, avifIdleDelay());
+}
+
+function beginAvifWork() {
+    avifWork++;
+    clearTimeout(avifIdleTimer);
+    avifIdleTimer = null;
+}
+
+function endAvifWork() {
+    avifWork = Math.max(0, avifWork - 1);
+    if (avifWork === 0) scheduleAvifIdleUnload();
+}
+
+function failPendingAvif(error) {
+    for (const pending of avifPending.values()) pending.reject(error);
+    avifPending.clear();
+}
+
+function ensureAvifWorker() {
+    if (avifWorker) return avifWorker;
+    if (typeof Worker === 'undefined') {
+        throw new Error('AVIF encoder unavailable');
+    }
+    const worker = new Worker(AVIF_WORKER_URL, {
+        type: 'module',
+        name: 'avif-encoder'
+    });
+    worker.onmessage = (event) => {
+        const { id, buffer, error } = event.data || {};
+        const pending = avifPending.get(id);
+        if (!pending) return;
+        avifPending.delete(id);
+        if (error) pending.reject(new Error(error));
+        else pending.resolve(buffer);
+    };
+    worker.onmessageerror = () => {
+        failPendingAvif(new Error('AVIF encoder message failed'));
+    };
+    worker.onerror = (event) => {
+        failPendingAvif(new Error(event.message || 'AVIF encoder failed'));
+        worker.terminate();
+        if (avifWorker === worker) avifWorker = null;
+    };
+    avifWorker = worker;
+    return worker;
+}
+
+function requestAvif(message, transfer = []) {
+    const worker = ensureAvifWorker();
+    const id = ++avifSeq;
+    return new Promise((resolve, reject) => {
+        avifPending.set(id, { resolve, reject });
+        worker.postMessage({ ...message, id }, transfer);
+    });
+}
+
+function terminateAvifWorker(reason) {
+    clearTimeout(avifIdleTimer);
+    avifIdleTimer = null;
+    if (!avifWorker) return;
+
+    const worker = avifWorker;
+    avifWorker = null;
+    worker.terminate();
+    failPendingAvif(new Error('AVIF encoder unloaded'));
+    debugLog(`Unloaded AVIF encoder (${reason}).`);
+}
+
+async function warmAvifEncoder() {
+    beginAvifWork();
+    try {
+        await requestAvif({ type: 'warm' });
+    } catch {
+        // Warm-up is best-effort
+    } finally {
+        endAvifWork();
+    }
+}
+
+async function encodeAvifImageData(imageData, options = {}) {
+    beginAvifWork();
+    try {
+        const { data } = imageData;
+        return await requestAvif({
+            type: 'encode',
+            width: imageData.width,
+            height: imageData.height,
+            pixels: data.buffer,
+            pixelsOffset: data.byteOffset,
+            pixelsLength: data.byteLength,
+            options
+        }, [data.buffer]);
+    } finally {
+        endAvifWork();
+    }
+}
+
+window.addEventListener('pagehide', () => terminateAvifWorker('page unload'));
 
 function readFileAsDataUrl(file) {
     return new Promise((resolve, reject) => {
@@ -963,14 +1083,13 @@ async function convertImageToAvif(file, maxDimension = MAX_IMAGE_DIMENSION) {
     try {
         const ctx = canvas.getContext('2d');
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const encode = await loadAvifEncoder();
 
         const t0 = performance.now();
         // Speed 8 is AVIF's fastest preset, and quality barely moves the cost at it - measured
         // at the 800px cap, q60 comes out ~17% smaller than q80 for slightly less time, while
         // dropping to speed 6 would cost 8x the wait for only another 18% on file size. Bump
         // this back toward 80 if article images start showing visible banding.
-        const avifBuffer = await encode(imageData, { speed: 8, quality: 60 });
+        const avifBuffer = await encodeAvifImageData(imageData, { speed: 8, quality: 60 });
         const encodeMs = Math.round(performance.now() - t0);
 
         debugLog(`AVIF conversion: ${formatBytes(file.size)} -> ${formatBytes(avifBuffer.byteLength)} in ${encodeMs}ms (${canvas.width}x${canvas.height})`);
