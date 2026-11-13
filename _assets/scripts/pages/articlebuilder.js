@@ -674,7 +674,9 @@ introModal?.addEventListener('click', (e) => {
 });
 
 // Uploaded images - convert to AVIF (skip GIFs). Encoding runs in a worker.
-const AVIF_WORKER_URL = '/_assets/scripts/workers/avif-encoder.worker.js';
+// Bump the query when the worker (or its required COEP/CORP headers) changes so
+// browsers don't reuse a previously cached copy.
+const AVIF_WORKER_URL = '/_assets/scripts/workers/avif-encoder.worker.js?v=2';
 const AVIF_IDLE_MS = 90_000;
 const AVIF_IDLE_LOW_MEMORY_MS = 30_000;
 
@@ -741,7 +743,9 @@ function ensureAvifWorker() {
         failPendingAvif(new Error('AVIF encoder message failed'));
     };
     worker.onerror = (event) => {
-        failPendingAvif(new Error(event.message || 'AVIF encoder failed'));
+        const detail = event.message || [event.filename, event.lineno].filter(Boolean).join(':');
+        console.error('AVIF encoder worker error:', detail || event);
+        failPendingAvif(new Error(detail ? `AVIF encoder failed: ${detail}` : 'AVIF encoder failed'));
         worker.terminate();
         if (avifWorker === worker) avifWorker = null;
     };
