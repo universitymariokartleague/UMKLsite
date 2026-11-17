@@ -829,6 +829,10 @@ function isGifFile(file) {
     return !!file && (file.type === 'image/gif' || /\.gif$/i.test(file.name || ''));
 }
 
+function isWebpFile(file) {
+    return !!file && (file.type === 'image/webp' || /\.webp$/i.test(file.name || ''));
+}
+
 function loadFfmpeg() {
     if (!ffmpegInstancePromise) {
         ffmpegInstancePromise = (async () => {
@@ -1050,7 +1054,8 @@ async function convertImageToAvif(file, maxDimension = MAX_IMAGE_DIMENSION) {
         return null;
     }
 
-    if (file.type === 'image/avif') {
+    // AVIF and WebP are already the formats the site wants, so keep them as-is.
+    if (file.type === 'image/avif' || isWebpFile(file)) {
         return readFileAsDataUrl(file);
     }
 
@@ -1898,7 +1903,9 @@ async function importArticleFromZip(file) {
             ? 'image/jpeg'
             : extension === 'png'
                 ? 'image/png'
-                : 'image/avif';
+                : extension === 'webp'
+                    ? 'image/webp'
+                    : 'image/avif';
         const blob = new Blob([buffer], { type: mime });
         return readFileAsDataUrl(blob);
     }
