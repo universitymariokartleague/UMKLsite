@@ -29,6 +29,8 @@
     --dark-highlight-color: color-mix(in oklch, var(--brand-dark) 50%, transparent);
 
     --test-match-opacity: 0.6;
+
+    --extra-info: color-mix(in oklch, var(--text-color) 60%, transparent);
 }
 
 @media screen and (max-width: 900px) {
@@ -261,6 +263,11 @@ li {
 
 .h-below-ul {
     margin-top: 1em;
+}
+
+.extra-info {
+    font-weight: 500;
+    color: var(--extra-info);
 }
 
 [id] {

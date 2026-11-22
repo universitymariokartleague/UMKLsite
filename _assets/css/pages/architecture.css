@@ -56,7 +56,7 @@
     font-family: var(--mono-font);
     font-size: 0.72rem;
     font-weight: 500;
-    color: var(--settings-extra-info);
+    color: var(--extra-info);
     white-space: nowrap;
 }
 

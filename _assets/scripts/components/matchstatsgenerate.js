@@ -185,8 +185,8 @@ function buildTrackCountDiv(data, matchesCounted, unplayedTracks, showUnplayed) 
     const headerText = showUnplayed
         ? `<span>${length} ${length === 1 ? "track hasn't" : "tracks haven't"} been played yet across ${matchesCounted} ${matchesCounted === 1 ? "match" : "matches"}</span>`
         : `<span>${length} of 96 total tracks played across ${matchesCounted} ${matchesCounted === 1 ? "match" : "matches"}
-        ${selectedTeam ? `<span class="settings-extra-info">(involving ${escapeHTML(selectedTeam)})</span>` : ''}
-        ${testMatchesCheckbox.checked ? '<span class="settings-extra-info">(including test matches)</span>' : ''}</span>`;
+        ${selectedTeam ? `<span class="extra-info">(involving ${escapeHTML(selectedTeam)})</span>` : ''}
+        ${testMatchesCheckbox.checked ? '<span class="extra-info">(including test matches)</span>' : ''}</span>`;
 
     return `
         ${headerText}
