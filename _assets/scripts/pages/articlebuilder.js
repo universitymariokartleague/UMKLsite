@@ -317,8 +317,8 @@ function saveDraft() {
             hasWarnedAboutStorage = true;
             alert(
                 textOnlySaved
-                    ? "Your draft's storage is full, most likely because of an uploaded image. Your text is still being saved, but the image will be lost on reload - please download your draft now to keep it safe."
-                    : "Your draft's storage is completely full and nothing more can be autosaved, including your text. Please download your draft now to avoid losing your work."
+                    ? "Your draft's storage is full, most likely because of an uploaded image. Your text is still being saved, but the image will be lost on reload - download your draft when you're done to keep it safe."
+                    : "Your draft's storage is full and nothing more can be autosaved, including text. Download your draft when you're done to avoid losing your work."
             );
         }
     }

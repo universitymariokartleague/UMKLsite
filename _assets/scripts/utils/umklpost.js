@@ -2,6 +2,8 @@
     Builds the .umklpost an Article Builder export is made of.
 */
 
+import { trimTrailingPadding } from '/_assets/scripts/utils/articlebody.js';
+
 export { buildPost, outputDocument, DRAFT_STORAGE_KEY, ISO_DATE, slugify, isoDate };
 
 const DRAFT_STORAGE_KEY = 'umkl_article_builder_draft';
@@ -85,6 +87,7 @@ async function buildPost(draft) {
     });
     body.querySelectorAll('.btn-remove-image').forEach(btn => btn.remove());
     body.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+    trimTrailingPadding(body);
 
     const tagList = tags.split(',').map(t => t.trim()).filter(Boolean);
     const tagsMarkup = (tagList.length > 0 ? tagList : ['News'])

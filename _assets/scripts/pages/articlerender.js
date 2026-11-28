@@ -2,6 +2,8 @@
     Fills the shared article template from the news API.
 */
 
+import { trimTrailingPadding } from '/_assets/scripts/utils/articlebody.js';
+
 const ARTICLES_API = "https://api.umkl.co.uk/articles";
 
 // /news/<date>/<slug>/ -> <slug>. Returns null on any other path.
@@ -71,6 +73,9 @@ function renderArticle(article) {
     upsertMeta('name', 'twitter:image', ogImage);
 
     document.querySelector('.article-content').outerHTML = article.body_html;
+
+    const content = document.querySelector('.article-content');
+    if (content) trimTrailingPadding(content.querySelector('.article-body') || content);
 
     document.querySelectorAll('.article-content [contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
     document.querySelectorAll('.article-content').forEach(el => el.removeAttribute('contenteditable'));
