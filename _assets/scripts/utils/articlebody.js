@@ -17,8 +17,6 @@ function isPaddingNode(node) {
     return [...node.childNodes].every(isPaddingNode);
 }
 
-// Empty paragraphs and line breaks at the end of an article render as a long
-// run of blank space, so drop them along with any trailing whitespace.
 function trimTrailingPadding(container) {
     let last = container.lastChild;
     while (last) {
