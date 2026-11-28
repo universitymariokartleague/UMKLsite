@@ -73,6 +73,12 @@
     opacity: 0.8;
 }
 
+/* Animated images upgraded from <img> to a silent looping <video> keep the
+   same layout as the image they replaced. */
+.article-content-video {
+    display: block;
+}
+
 .article-image-container {
     display: flex;
     flex-direction: column;

@@ -5,6 +5,48 @@
 import { trimTrailingPadding } from '/_assets/scripts/utils/articlebody.js';
 
 const ARTICLES_API = "https://api.umkl.co.uk/articles";
+const ANIMATED_VIDEO_ATTR = 'data-animated-mp4';
+
+let av1Supported;
+
+// Whether the browser can decode AV1
+function canPlayAv1() {
+    if (av1Supported !== undefined) return av1Supported;
+    const video = document.createElement('video');
+    av1Supported = [
+        'video/mp4; codecs="av01.0.05M.08"',
+        'video/mp4; codecs="av01.0.05M.10"'
+    ].some(type => video.canPlayType(type) !== '');
+    return av1Supported;
+}
+
+// Animated article images keep a WebP <img> in the HTML. Where AV1 works,
+// upgrade them to the smaller silent looping <video> the server remuxed.
+function upgradeAnimatedImages(root) {
+    if (!root || !canPlayAv1()) return;
+
+    root.querySelectorAll(`img[${ANIMATED_VIDEO_ATTR}]`).forEach(img => {
+        const mp4 = img.getAttribute(ANIMATED_VIDEO_ATTR);
+        if (!mp4) return;
+
+        const video = document.createElement('video');
+        for (const attr of ['class', 'alt', 'width', 'height', 'id', 'title', 'loading']) {
+            if (img.hasAttribute(attr)) video.setAttribute(attr, img.getAttribute(attr));
+        }
+        video.classList.add('article-content-video');
+        video.autoplay = true;
+        video.muted = true;
+        video.loop = true;
+        video.playsInline = true;
+        video.preload = 'metadata';
+        video.setAttribute('poster', img.currentSrc || img.src);
+        // Safari paints a blank first frame without a tiny media fragment.
+        video.setAttribute('src', mp4.includes('#') ? mp4 : `${mp4}#t=0.001`);
+
+        img.replaceWith(video);
+        video.play().catch(() => { });
+    });
+}
 
 // /news/<date>/<slug>/ -> <slug>. Returns null on any other path.
 function slugFromPath(pathname) {
@@ -76,6 +118,7 @@ function renderArticle(article) {
 
     const content = document.querySelector('.article-content');
     if (content) trimTrailingPadding(content.querySelector('.article-body') || content);
+    upgradeAnimatedImages(content);
 
     document.querySelectorAll('.article-content [contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
     document.querySelectorAll('.article-content').forEach(el => el.removeAttribute('contenteditable'));

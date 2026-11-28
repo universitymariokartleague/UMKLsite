@@ -47,16 +47,6 @@ const urlModalPresets = document.getElementById('urlModalPresets');
 const urlModalNewTabRow = document.getElementById('urlModalNewTabRow');
 const urlModalNewTab = document.getElementById('urlModalNewTab');
 
-const gifModal = document.getElementById('gifModal');
-const gifModalTitle = document.getElementById('gifModalTitle');
-const gifModalMessage = document.getElementById('gifModalMessage');
-const gifModalProgress = document.getElementById('gifModalProgress');
-const gifModalProgressFill = document.getElementById('gifModalProgressFill');
-const gifModalStatus = document.getElementById('gifModalStatus');
-const gifModalActions = document.getElementById('gifModalActions');
-const gifModalCancelBtn = document.getElementById('gifModalCancelBtn');
-const gifModalConvertBtn = document.getElementById('gifModalConvertBtn');
-
 const conversionStatusEl = document.getElementById('conversionStatus');
 
 const reqTitle = document.getElementById('reqTitle');
@@ -238,7 +228,6 @@ editableElements.forEach(el => {
         if (imageFile) {
             e.preventDefault();
             const range = captureBodyRange();
-            if (handleGifFile(imageFile, (url) => insertImageToBody(url, range))) return;
             convertImageToAvif(imageFile).then(url => insertImageToBody(url, range));
             return;
         }
@@ -673,7 +662,7 @@ introModal?.addEventListener('click', (e) => {
     if (e.target === introModal) closeIntroModal();
 });
 
-// Uploaded images - convert to AVIF (skip GIFs). Encoding runs in a worker.
+// Uploaded images - convert static images to AVIF (animations pass through). Encoding runs in a worker.
 // Bump the query when the worker (or its required COEP/CORP headers) changes so
 // browsers don't reuse a previously cached copy.
 const AVIF_WORKER_URL = '/_assets/scripts/workers/avif-encoder.worker.js?v=2';
@@ -814,248 +803,33 @@ function readFileAsDataUrl(file) {
     });
 }
 
-const GIF_TO_WEBP_URL = 'https://ezgif.com/gif-to-webp';
-const FFMPEG_BASE_URL = '/_assets/vendor/ffmpeg';
-const FFMPEG_CORE_BASE_URL = `${FFMPEG_BASE_URL}/core`;
-const GIF_MAX_HEIGHT = 540;
-
-let gifModalOpen = false;
-let gifModalState = 'idle'; // idle | converting | error
-let gifJobs = [];
-let gifProgressLabel = 'Converting GIF';
-let ffmpegInstancePromise = null;
-
-function isGifFile(file) {
-    return !!file && (file.type === 'image/gif' || /\.gif$/i.test(file.name || ''));
-}
-
 function isWebpFile(file) {
     return !!file && (file.type === 'image/webp' || /\.webp$/i.test(file.name || ''));
 }
 
-function loadFfmpeg() {
-    if (!ffmpegInstancePromise) {
-        ffmpegInstancePromise = (async () => {
-            const { FFmpeg } = await import(`${FFMPEG_BASE_URL}/index.js`);
-            const ffmpeg = new FFmpeg();
-
-            ffmpeg.on('progress', ({ progress }) => {
-                if (gifModalState !== 'converting' || !Number.isFinite(progress)) return;
-                setGifProgress(progress);
-            });
-
-            // The wasm is stored gzipped
-            setGifProgressIndeterminate('Downloading converter...');
-            const response = await fetch(`${FFMPEG_CORE_BASE_URL}/ffmpeg-core.wasm.gz`);
-            if (!response.ok) throw new Error(`Couldn't download the converter (${response.status}).`);
-
-            const downloaded = new Uint8Array(await response.arrayBuffer());
-            let wasmBytes = downloaded;
-            if (downloaded[0] === 0x1f && downloaded[1] === 0x8b) {
-                if (!('DecompressionStream' in window)) {
-                    throw new Error('This browser cannot decompress the WebP converter.');
-                }
-                wasmBytes = new Uint8Array(await new Response(
-                    new Blob([downloaded]).stream().pipeThrough(new DecompressionStream('gzip'))
-                ).arrayBuffer());
-            }
-
-            const wasmURL = URL.createObjectURL(new Blob([wasmBytes], { type: 'application/wasm' }));
-
-            try {
-                const origin = window.location.origin;
-                await ffmpeg.load({
-                    coreURL: `${origin}${FFMPEG_CORE_BASE_URL}/ffmpeg-core.js`,
-                    wasmURL
-                });
-            } finally {
-                URL.revokeObjectURL(wasmURL);
-            }
-            return ffmpeg;
-        })().catch((error) => {
-            ffmpegInstancePromise = null;
-            throw error;
-        });
-    }
-    return ffmpegInstancePromise;
-}
-
-function setGifProgressIndeterminate(label) {
-    if (!gifModalProgressFill) return;
-    gifModalProgressFill.classList.add('indeterminate');
-    gifModalProgressFill.style.width = '';
-    if (gifModalStatus) gifModalStatus.textContent = label;
-}
-
-function setGifProgress(progress) {
-    if (!gifModalProgressFill) return;
-    const percent = Math.max(0, Math.min(100, Math.round(progress * 100)));
-    gifModalProgressFill.classList.remove('indeterminate');
-    gifModalProgressFill.style.width = `${percent}%`;
-    if (gifModalStatus) gifModalStatus.textContent = `${gifProgressLabel}... ${percent}%`;
-}
-
-function resetGifModalState() {
-    gifModalState = 'idle';
-
-    if (gifModalTitle) gifModalTitle.textContent = "GIFs aren't supported";
-    if (gifModalMessage) {
-        gifModalMessage.textContent = gifJobs.length > 1
-            ? `Convert these ${gifJobs.length} GIFs to WebP in your browser. This could take some time, so please be patient.`
-            : 'Convert this GIF to a WebP in your browser. This could take some time, so please be patient.';
-    }
-
-    if (gifModalActions) gifModalActions.classList.remove('hidden');
-    if (gifModalProgress) gifModalProgress.classList.add('hidden');
-    if (gifModalProgressFill) {
-        gifModalProgressFill.classList.remove('indeterminate');
-        gifModalProgressFill.style.width = '0%';
-    }
-    if (gifModalCancelBtn) gifModalCancelBtn.disabled = false;
-    if (gifModalConvertBtn) {
-        gifModalConvertBtn.disabled = false;
-        gifModalConvertBtn.textContent = 'Convert to WebP';
-    }
-}
-
-function openGifModal() {
-    if (!gifModal || gifModalOpen) return;
-    gifModalOpen = true;
-    gifModal.classList.remove('hidden');
-    gifModal.style.display = 'flex';
-}
-
-function closeGifModal() {
-    if (!gifModal || !gifModalOpen || gifModalState === 'converting') return;
-    gifModalOpen = false;
-    gifJobs = [];
-    gifModal.classList.add('hidden');
-    gifModal.style.display = '';
-}
-
-async function convertGifToWebp(ffmpeg, file) {
-    const inputName = 'input.gif';
-    const outputName = 'output.webp';
-
-    await ffmpeg.writeFile(inputName, new Uint8Array(await file.arrayBuffer()));
-
-    try {
-        const t0 = performance.now();
-        const exitCode = await ffmpeg.exec([
-            '-i', inputName,
-            '-vf', `scale=-2:'min(${GIF_MAX_HEIGHT},ih)':flags=lanczos`,
-            '-c:v', 'libwebp',
-            '-quality', '75',
-            '-loop', '0',
-            '-preset', 'picture',
-            '-an',
-            outputName
-        ]);
-
-        if (exitCode !== 0) throw new Error(`ffmpeg exited with code ${exitCode}`);
-
-        const output = await ffmpeg.readFile(outputName);
-        const blob = new Blob([output], { type: 'image/webp' });
-        debugLog(`GIF conversion: ${formatBytes(file.size)} -> ${formatBytes(blob.size)} in ${Math.round(performance.now() - t0)}ms`);
-        return await readFileAsDataUrl(blob);
-    } finally {
-        await ffmpeg.deleteFile(inputName).catch(() => { });
-        await ffmpeg.deleteFile(outputName).catch(() => { });
-    }
-}
-
-async function startGifConversion() {
-    if (gifModalState === 'converting' || gifJobs.length === 0) return;
-
-    gifModalState = 'converting';
-    if (gifModalActions) gifModalActions.classList.add('hidden');
-    if (gifModalProgress) gifModalProgress.classList.remove('hidden');
-    if (gifModalTitle) gifModalTitle.textContent = 'Converting GIF';
-    if (gifModalMessage) gifModalMessage.textContent = 'Converting...';
-    if (gifModalCancelBtn) gifModalCancelBtn.disabled = true;
-    if (gifModalConvertBtn) gifModalConvertBtn.disabled = true;
-
-    const total = gifJobs.length;
-    let done = 0;
-
-    try {
-        setGifProgressIndeterminate('Loading converter...');
-        const ffmpeg = await loadFfmpeg();
-
-        while (gifJobs.length > 0) {
-            const job = gifJobs.shift();
-            done += 1;
-            gifProgressLabel = total > 1 ? `Converting GIF ${done} of ${total}` : 'Converting GIF';
-            setGifProgressIndeterminate(`${gifProgressLabel}...`);
-
-            const dataUrl = await convertGifToWebp(ffmpeg, job.file);
-            if (typeof job.onConverted === 'function') job.onConverted(dataUrl);
-
-            await new Promise(resolve => requestAnimationFrame(() => resolve()));
-        }
-
-        gifModalState = 'idle';
-        resetGifModalState();
-        closeGifModal();
-    } catch (error) {
-        console.error('GIF conversion failed:', error);
-        gifJobs = [];
-        gifModalState = 'error';
-        if (gifModalTitle) gifModalTitle.textContent = 'Conversion failed';
-        if (gifModalMessage) {
-            gifModalMessage.textContent = "Couldn't convert this GIF in your browser. You can try ezgif instead.";
-        }
-        if (gifModalProgress) gifModalProgress.classList.add('hidden');
-        if (gifModalActions) gifModalActions.classList.remove('hidden');
-        if (gifModalCancelBtn) gifModalCancelBtn.disabled = false;
-        if (gifModalConvertBtn) {
-            gifModalConvertBtn.disabled = false;
-            gifModalConvertBtn.textContent = 'Open ezgif';
+// Animations must reach the server untouched: drawing one to a canvas would
+// keep only its first frame. The server makes an AV1 MP4 and an animated WebP
+// fallback out of them. APNG and animated WebP need a peek at the file header;
+// GIF and AVIF are always passed through (the server decides if they animate).
+async function isAnimatedFile(file) {
+    const type = (file?.type || '').toLowerCase();
+    const name = (file?.name || '').toLowerCase();
+    if (type === 'image/gif' || name.endsWith('.gif')) return true;
+    if (type === 'image/avif' || name.endsWith('.avif')) return true;
+    if (type === 'image/webp' || name.endsWith('.webp') || type === 'image/png' || name.endsWith('.png')) {
+        const head = new Uint8Array(await file.slice(0, 1024).arrayBuffer());
+        const marker = type === 'image/png' || name.endsWith('.png') ? 'acTL' : 'ANIM';
+        for (let i = 0; i <= head.length - marker.length; i++) {
+            if (marker.split('').every((c, j) => head[i + j] === c.charCodeAt(0))) return true;
         }
     }
-}
-
-gifModal?.addEventListener('click', (e) => {
-    if (e.target === gifModal) closeGifModal();
-});
-gifModalCancelBtn?.addEventListener('click', closeGifModal);
-gifModalConvertBtn?.addEventListener('click', () => {
-    if (gifModalState === 'error') {
-        closeGifModal();
-        window.open(GIF_TO_WEBP_URL, '_blank', 'noopener');
-        return;
-    }
-    startGifConversion();
-});
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && gifModalOpen) closeGifModal();
-});
-
-// Queue a GIF for in-browser conversion and insert the resulting WebP when done
-function handleGifFile(file, onConverted) {
-    if (!isGifFile(file)) return false;
-
-    if (!gifModalOpen) gifJobs = [];
-    gifJobs.push({ file, onConverted });
-
-    if (!gifModalOpen) {
-        resetGifModalState();
-        openGifModal();
-    } else if (gifModalState !== 'converting') {
-        resetGifModalState();
-    }
-
-    return true;
+    return false;
 }
 
 async function convertImageToAvif(file, maxDimension = MAX_IMAGE_DIMENSION) {
-    if (isGifFile(file)) {
-        handleGifFile(file);
-        return null;
-    }
-
-    // AVIF and WebP are already the formats the site wants, so keep them as-is.
-    if (file.type === 'image/avif' || isWebpFile(file)) {
+    // Animated images (and formats already in a format the site uses) are
+    // uploaded as-is. Static images still get the smaller client-side AVIF.
+    if (await isAnimatedFile(file) || file.type === 'image/avif' || isWebpFile(file)) {
         return readFileAsDataUrl(file);
     }
 
@@ -1134,7 +908,6 @@ mainImageContainer.addEventListener('paste', (e) => {
     const imageFile = getImageFileFromClipboard(e);
     if (imageFile) {
         e.preventDefault();
-        if (handleGifFile(imageFile, setMainImage)) return;
         convertImageToAvif(imageFile, MAX_MAIN_IMAGE_DIMENSION).then(setMainImage);
     }
 });
@@ -1142,10 +915,6 @@ mainImageContainer.addEventListener('paste', (e) => {
 mainFileInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (file) {
-        if (handleGifFile(file, setMainImage)) {
-            e.target.value = '';
-            return;
-        }
         convertImageToAvif(file, MAX_MAIN_IMAGE_DIMENSION).then(setMainImage);
     }
 });
@@ -1166,7 +935,6 @@ mainImageContainer.addEventListener('drop', (e) => {
 
     const file = Array.from(e.dataTransfer?.files || []).find(f => f.type.startsWith('image/'));
     if (file) {
-        if (handleGifFile(file, setMainImage)) return;
         convertImageToAvif(file, MAX_MAIN_IMAGE_DIMENSION).then(setMainImage);
     }
 });
@@ -1688,10 +1456,6 @@ bodyFileInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (file) {
         const range = captureBodyRange();
-        if (handleGifFile(file, (url) => insertImageToBody(url, range))) {
-            e.target.value = '';
-            return;
-        }
         convertImageToAvif(file).then(url => insertImageToBody(url, range));
     }
 });
@@ -1742,14 +1506,9 @@ bodyEditor.addEventListener('drop', (e) => {
         sel.addRange(range);
     }
 
-    // GIFs open the conversion modal and insert their WebP once converted.
-    imageFiles.filter(isGifFile).forEach(file => handleGifFile(file, insertImageToBody));
-
-    const files = imageFiles.filter(f => !isGifFile(f));
-
     // Insert sequentially: insertBlockToBody relies on the current selection, so each
     // image needs to finish inserting (and settle the selection after it) before the next
-    files.reduce((chain, file) => {
+    imageFiles.reduce((chain, file) => {
         return chain.then(() => convertImageToAvif(file)).then(insertImageToBody);
     }, Promise.resolve());
 });
@@ -1899,13 +1658,11 @@ async function importArticleFromZip(file) {
 
         const buffer = await entry.async('arraybuffer');
         const extension = (entry.name.split('.').pop() || 'avif').toLowerCase();
-        const mime = extension === 'jpg' || extension === 'jpeg'
-            ? 'image/jpeg'
-            : extension === 'png'
-                ? 'image/png'
-                : extension === 'webp'
-                    ? 'image/webp'
-                    : 'image/avif';
+        const mimeTypes = {
+            jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png',
+            webp: 'image/webp', avif: 'image/avif', gif: 'image/gif'
+        };
+        const mime = mimeTypes[extension] || 'image/avif';
         const blob = new Blob([buffer], { type: mime });
         return readFileAsDataUrl(blob);
     }
