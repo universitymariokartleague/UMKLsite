@@ -279,9 +279,11 @@ const SEASON_STATUS_TEXT = {
     upcoming: 'Upcoming'
 };
 
+// Completed seasons report every match. Ongoing seasons only have the rounds
+// scheduled so far; with 16 teams over four rounds, season 3 has 32 matches.
 const seasonPlayedTotal = season => String(season.status || '').toLowerCase() === 'completed'
     ? Number(season.matches_total) || 0
-    : (Number(season.matches_total) || 0) * 4;
+    : (Number(season.matches_total) || 0) * 2;
 
 async function renderSeasons() {
     const [list, current] = await Promise.all([

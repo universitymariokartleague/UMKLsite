@@ -901,8 +901,8 @@ function resetGifModalState() {
     if (gifModalTitle) gifModalTitle.textContent = "GIFs aren't supported";
     if (gifModalMessage) {
         gifModalMessage.textContent = gifJobs.length > 1
-            ? `Convert these ${gifJobs.length} GIFs to WebP in your browser. This could take a little bit so please be patient.`
-            : 'Convert this GIF to a WebP in your browser. This could take a little bit so please be patient.';
+            ? `Convert these ${gifJobs.length} GIFs to WebP in your browser. This could take some time, so please be patient.`
+            : 'Convert this GIF to a WebP in your browser. This could take some time, so please be patient.';
     }
 
     if (gifModalActions) gifModalActions.classList.remove('hidden');
@@ -971,7 +971,7 @@ async function startGifConversion() {
     if (gifModalActions) gifModalActions.classList.add('hidden');
     if (gifModalProgress) gifModalProgress.classList.remove('hidden');
     if (gifModalTitle) gifModalTitle.textContent = 'Converting GIF';
-    if (gifModalMessage) gifModalMessage.textContent = 'This happens in your browser. Keep this tab open.';
+    if (gifModalMessage) gifModalMessage.textContent = 'Converting...';
     if (gifModalCancelBtn) gifModalCancelBtn.disabled = true;
     if (gifModalConvertBtn) gifModalConvertBtn.disabled = true;
 
